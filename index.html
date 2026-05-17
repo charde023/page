@@ -234,6 +234,8 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
 <nav class="toc" aria-label="목차">
   <h3>목차</h3>
   <ol>
+    <li><a href="#결론-tldr">결론 (TL;DR)</a></li>
+    <li><a href="#강의는-어떤-내용이었나">강의는 어떤 내용이었나</a></li>
     <li><a href="#0-한눈에-보는-설치-순서">0. 한눈에 보는 설치 순서</a></li>
     <li><a href="#1-antigravity-설치">1. Antigravity 설치</a></li>
     <li><a href="#2-에디터-세팅-auto-save">2. 에디터 세팅 — Auto Save</a></li>
@@ -253,8 +255,29 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
 원본: <code>지피터스-2026-05-17-안티그래비티-설치방법.mp4</code> (1시간 56분)</p>
 </blockquote>
 <hr>
+<h2 id="결론-tldr">결론 (TL;DR)</h2>
+<p><strong>Google의 AI 코드 에디터 Antigravity로 "AI가 영상을 만드는 환경"을 1회성으로 세팅하는 강의입니다.</strong>
+이번 강의에서 만든 환경은 앞으로 4주 동안의 스터디 실습에서 그대로 재사용됩니다.</p>
+<ul>
+<li><strong>이 페이지 한 장만 따라하면</strong> Windows / Mac 어느 쪽이든 30분~1시간 안에 설치 완료</li>
+<li><strong>꼭 챙겨야 하는 2가지</strong> ① Python 설치 시 <code>Add python.exe to PATH</code> 체크박스 ✅ ② Antigravity Settings에서 <code>Agent Non-Workspace File Access</code> ❌ (실제 D드라이브 포맷 사례 있음)</li>
+<li><strong>설치는 한 번만</strong>, 외울 필요 없음 — 다음 수업부터는 본격 영상 제작 실습</li>
+</ul>
+<h2 id="강의는-어떤-내용이었나">강의는 어떤 내용이었나</h2>
+<p>지피터스 22기 끌림 영상 스터디의 <strong>첫 수업(셋업 세션)</strong>으로, 80명 규모 줌 라이브로 1시간 56분 진행됐습니다.
+스터디장은 모든 수강생이 같은 출발선에 서도록 OS별(Windows → Mac) 화면을 두 번 반복하며 다음 6단계를 함께 설치했습니다.</p>
+<ol>
+<li><strong>Antigravity</strong> 에디터 다운로드 · 설치</li>
+<li><strong>에디터 자동 저장</strong> 설정</li>
+<li><strong>Antigravity 안전 설정</strong> (특히 파일 접근 권한 차단)</li>
+<li><strong>Node.js</strong> LTS 설치 + 터미널 검증</li>
+<li><strong>Python</strong> 3.11~3.14 설치 + PATH 체크</li>
+<li><strong>Live Server</strong> VS Code 확장 설치</li>
+</ol>
+<p>설치 외에도 (a) Google Ultra 6인 공유 요금제 안내, (b) 부산·서울 오프라인 스터디 안내가 함께 진행됐습니다.</p>
+<hr>
 <h2 id="0-한눈에-보는-설치-순서">0. 한눈에 보는 설치 순서</h2>
-<p>설치는 <strong>이날 한 번만</strong> 해두면 끝. 외울 필요 없습니다. 순서대로 5단계만 따라하면 OK.</p>
+<p>설치는 <strong>이날 한 번만</strong> 해두면 끝. 외울 필요 없습니다. 순서대로 6단계만 따라하면 OK.</p>
 <ol>
 <li><strong>Antigravity</strong> (Google이 만든 AI 코드 에디터) 다운로드 &amp; 설치</li>
 <li><strong>에디터 세팅</strong> — Auto Save = After Delay</li>
@@ -264,7 +287,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
 <li><strong>Live Server</strong> 확장 설치</li>
 </ol>
 <blockquote>
-<p>5번까지 끝나면 바이브 코딩 환경 준비 완료입니다.</p>
+<p>6번까지 끝나면 바이브 코딩 환경 준비 완료입니다.</p>
 </blockquote>
 <hr>
 <h2 id="1-antigravity-설치">1. Antigravity 설치</h2>
