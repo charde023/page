@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VS Code + Claude Code 설치 가이드</title>
+<meta name="description" content="지피터스 22기 끌림 영상 스터디 — VS Code + Claude Code 설치 가이드 (2026-05-18 라이브 정리본)">
+<meta property="og:title" content="VS Code + Claude Code 설치 가이드">
+<meta property="og:description" content="지피터스 22기 끌림 영상 스터디 — VS Code + Claude Code 설치 가이드 (2026-05-18 라이브 정리본)">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root {
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-soft: #f1f6ff;
+  --text: #1f2a44;
+  --text-soft: #5a6b87;
+  --text-muted: #8593ab;
+  --border: #e3e9f3;
+  --border-soft: #eef2f8;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-deep: #1d4ed8;
+  --shadow: 0 1px 2px rgba(31, 42, 68, 0.04), 0 8px 24px rgba(31, 42, 68, 0.06);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-feature-settings: 'tnum', 'ss03';
+  line-height: 1.75;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+h1, h2, h3, h4 {
+  line-height: 1.35;
+  margin-top: 2em;
+  margin-bottom: 0.65em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.18rem; color: var(--accent-deep); }
+h4 { font-size: 1.02rem; }
+p { margin: 0.85em 0; color: var(--text); }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+strong { color: var(--accent-deep); font-weight: 700; }
+em { color: var(--text-soft); }
+blockquote {
+  margin: 1.2em 0;
+  padding: 0.9em 1.2em;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+  border-radius: 10px;
+  font-size: 0.97em;
+}
+blockquote p { margin: 0.35em 0; }
+blockquote strong { color: var(--accent-deep); }
+ol, ul { padding-left: 1.5em; }
+li { margin: 0.4em 0; }
+code {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.88em;
+  background: var(--surface-soft);
+  color: var(--accent-deep);
+  padding: 0.15em 0.45em;
+  border-radius: 5px;
+  border: 1px solid var(--border-soft);
+}
+pre {
+  background: var(--surface);
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  line-height: 1.6;
+  margin: 1.2em 0;
+}
+pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.92em;
+  color: var(--text);
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.2em 0;
+  font-size: 0.96em;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft);
+}
+tr:last-child td { border-bottom: 0; }
+th {
+  background: var(--surface-soft);
+  font-weight: 600;
+  color: var(--accent-deep);
+  border-bottom: 1px solid var(--border);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
+.header-banner {
+  margin: -32px -24px 36px;
+  padding: 34px 28px 28px;
+  background: linear-gradient(160deg, #e0ecff 0%, #f1f6ff 55%, #ffffff 100%);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.header-banner .eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-soft);
+  margin-bottom: 14px;
+}
+.header-banner h1 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.header-banner .sub {
+  margin-top: 10px;
+  color: var(--text-soft);
+  font-size: 0.97rem;
+}
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 1.5em 0 2.4em;
+  box-shadow: var(--shadow);
+}
+.toc h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.toc ol {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--text-soft);
+}
+.toc li { margin: 0.3em 0; }
+.toc a { color: var(--text); font-weight: 500; }
+.toc a:hover { color: var(--accent); }
+.footer {
+  margin-top: 4em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--border);
+  font-size: 0.88em;
+  color: var(--text-muted);
+  text-align: center;
+}
+.footer code { font-size: 0.92em; }
+@media (max-width: 640px) {
+  body {
+    padding: 20px 18px 72px;
+    font-size: 16px;
+    line-height: 1.72;
+  }
+  .header-banner {
+    margin: -20px -18px 24px;
+    padding: 24px 20px 20px;
+    border-radius: 0;
+  }
+  .header-banner .eyebrow { font-size: 0.72rem; }
+  .header-banner h1 { font-size: 1.5rem; }
+  .header-banner .sub { font-size: 0.9rem; }
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.08rem; }
+  h4 { font-size: 1rem; }
+  blockquote { padding: 0.8em 1em; font-size: 0.95em; }
+  pre { padding: 14px 16px; font-size: 0.9em; }
+  table { font-size: 0.92em; }
+  th, td { padding: 10px 11px; }
+  .toc { padding: 14px 18px; }
+  ol, ul { padding-left: 1.3em; }
+}
+@media (max-width: 380px) {
+  body { font-size: 15.5px; padding: 18px 16px 64px; }
+  .header-banner h1 { font-size: 1.35rem; }
+  table { font-size: 0.88em; }
+  th, td { padding: 8px 9px; }
+}
+</style>
+</head>
+<body>
+<header class="header-banner">
+  <span class="eyebrow">지피터스 22기 · 끌림 영상 스터디</span>
+  <h1>VS Code + Claude Code 설치 가이드</h1>
+  <div class="sub">2026-05-18 라이브 강의 정리본</div>
+</header>
+
+<blockquote>
+<p>지피터스 22기 끌림 영상 스터디 · 2026-05-18 라이브 강의 정리본
+원본: <code>지피터스-2026-05-18-설치법.mp4</code> (52분 40초)</p>
+</blockquote>
+<hr>
+<h2 id="결론-tldr">결론 (TL;DR)</h2>
+<p><strong>비개발자도 Claude Code를 쓸 수 있도록 VS Code(책상) + Claude Code(비서)를 50분 안에 함께 세팅하는 강의입니다.</strong></p>
+<p>이번에 만든 환경은 앞으로 22기 끌림 영상 스터디 전 과정에서 그대로 재사용됩니다.</p>
+<ul>
+<li><strong>이 페이지 한 장만 따라하면</strong> Windows / Mac 어느 쪽이든 50분 안에 설치 완료</li>
+<li><strong>꼭 챙겨야 하는 2가지</strong> ① VS Code 확장 프로그램 <code>Claude Code for VS Code</code>도 같이 설치 (오류 시 캡쳐+질문으로 자가 해결용) ② CLI 설치 후 <strong>VS Code 완전 종료 후 재실행</strong>, 그리고 <code>claude --version</code>으로 검증</li>
+<li><strong>두 가지 방식</strong>으로 Claude를 부른다: ① VS Code 확장 프로그램 (GUI) ② 터미널 <code>claude</code> 명령 (CLI). 둘 다 깔아두면 입문자 친화 + 정석 둘 다 확보</li>
+<li><strong>설치는 한 번만</strong>, 외울 필요 없음 — 다음 수업부터는 본격 실습</li>
+</ul>
+<h2 id="강의는-어떤-내용이었나">강의는 어떤 내용이었나</h2>
+<p>지피터스 22기 끌림 영상 스터디의 <strong>첫 설치 세션</strong>으로, 약 50분간 줌 라이브로 진행됐습니다. 스터디장 <strong>타타</strong>가 비개발자 입문자도 따라올 수 있도록 OS별(Mac → Windows) 화면을 번갈아 보여주며 다음 6단계를 함께 설치했습니다.</p>
+<ol>
+<li><strong>VS Code</strong> + 한국어 언어팩 + 라이트 테마 + 자동 저장</li>
+<li><strong>폴더 열기</strong> + 터미널 열기</li>
+<li><strong>Claude Code for VS Code</strong> 확장 프로그램 설치 + 로그인</li>
+<li><strong>Homebrew</strong> 설치 (Mac만)</li>
+<li><strong>Git</strong> 설치</li>
+<li><strong>Claude Code CLI</strong> 설치 + <code>claude --version</code> 검증</li>
+</ol>
+<p>핵심 메시지는 <em>"확장 프로그램을 일부러 먼저 깔자 — 설치 중 오류가 나면 캡쳐해서 그 안의 Claude에게 물어보면 대부분 해결된다"</em>는 자가 해결 워크플로우였습니다.</p>
+<hr>
+<h2 id="0-한눈에-보는-설치-순서">0. 한눈에 보는 설치 순서</h2>
+<p>설치는 <strong>이날 한 번만</strong> 해두면 끝. 순서대로 6단계만 따라하면 OK.</p>
+<ol>
+<li><strong>VS Code</strong> 설치 → 한국어 언어팩 → 라이트 모던 테마 → Auto Save 켜기</li>
+<li><strong>폴더 열기</strong> + 터미널 새로 열기 (책상 완성)</li>
+<li><strong>Claude Code for VS Code</strong> 확장 프로그램 설치 + Subscription 로그인</li>
+<li><strong>Homebrew</strong> 설치 (Mac만, Windows는 건너뛰기)</li>
+<li><strong>Git</strong> 설치 (Mac: <code>brew install git</code>)</li>
+<li><strong>Claude Code CLI</strong> 설치 → VS Code 재시작 → <code>claude --version</code> 확인 → <code>claude</code> 실행 → "I trust this folder" → 테마 선택</li>
+</ol>
+<blockquote>
+<p>6단계까지 끝나면 폴더 + 터미널 + 확장 프로그램 세 가지가 모두 갖춰진 "완벽한 상태" 완성.</p>
+</blockquote>
+<hr>
+<h2 id="1-비유-책상과-비서">1. 비유 — 책상과 비서</h2>
+<p>본격 설치 전에 강사가 강조한 비유:</p>
+<table>
+<thead>
+<tr>
+<th>도구</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>VS Code</strong></td>
+<td>작업 책상</td>
+</tr>
+<tr>
+<td><strong>Claude Code</strong></td>
+<td>책상 옆에 앉은 똑똑한 비서</td>
+</tr>
+<tr>
+<td><strong>폴더</strong></td>
+<td>책상 위에 펼친 작업 공책</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Claude는 웹에서 채팅으로만 답을 주지만, <strong>Claude Code는 내 컴퓨터 폴더에 직접 들어가서 파일을 만들고 고치고 실행할 수 있다</strong>. 그래서 VS Code라는 책상에 비서를 앉혀두고 함께 일하는 구조.</p>
+</blockquote>
+<p>Claude [Cowork] 같은 다른 형태도 있지만, 가장 확장성 있게 작업할 수 있는 건 Claude Code.</p>
+<hr>
+<h2 id="2-vs-code-설치">2. VS Code 설치</h2>
+<h3>2-1. 다운로드</h3>
+<ol>
+<li>구글에서 <code>VS Code</code> 또는 <code>Visual Studio Code</code> 검색</li>
+<li>공식 사이트에서 본인 OS에 맞는 인스톨러 다운로드</li>
+<li>설치 후 실행하면 초기 화면이 뜸</li>
+</ol>
+<h3>2-2. 한국어 언어팩 설치</h3>
+<p>영어 화면이 부담스러운 입문자를 위해 <strong>가장 먼저</strong> 한국어 언어팩 설치.</p>
+<ol>
+<li>왼쪽 사이드바의 <strong>확장(Extensions, 블록 모양)</strong> 아이콘 클릭</li>
+<li>검색창에 <code>Korean Language Pack</code> 입력</li>
+<li><code>Korean Language Pack for Visual Studio Code</code> 설치</li>
+<li>설치 후 우측 하단 <strong>재시작(Restart)</strong> 클릭</li>
+</ol>
+<blockquote>
+<p>한국어가 안 되면 → VS Code를 완전히 종료 후 다시 열기.</p>
+</blockquote>
+<h3>2-3. 라이트 테마 (라이트 모던) — 선택</h3>
+<p>검은 화면이 부담스러우면 라이트 모드로 변경.</p>
+<table>
+<thead>
+<tr>
+<th>OS</th>
+<th>메뉴 경로</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mac</strong></td>
+<td>Code → 설정 → 테마 → 색 테마</td>
+</tr>
+<tr>
+<td><strong>Windows</strong></td>
+<td>File → 설정 → 테마 → 색 테마</td>
+</tr>
+</tbody>
+</table>
+<p>목록에서 <strong>Light Modern</strong>(라이트 모던) 선택.</p>
+<h3>2-4. 자동 저장 (Auto Save) 켜기</h3>
+<p>상단 메뉴 <strong>File → 자동 저장</strong> 토글 ON.</p>
+<blockquote>
+<p>당장 필수는 아니지만 이날 같이 켜두면 편함.</p>
+</blockquote>
+<hr>
+<h2 id="3-폴더-열기-터미널-열기">3. 폴더 열기 + 터미널 열기</h2>
+<h3>3-1. 폴더 열기</h3>
+<ol>
+<li><strong>File → 폴더 열기</strong> (또는 시작 화면의 "Open Folder")</li>
+<li>새 폴더 아무거나 만들어서 열기 (오늘은 빈 폴더로 충분)</li>
+</ol>
+<blockquote>
+<p>폴더를 여는 이유: AI 선생님(Claude Code)이 작업할 공간이 필요하기 때문. 앞으로의 모든 스터디 실습은 <strong>책상 열기 → 폴더 열기 → 작업</strong> 순서로 진행됨.</p>
+</blockquote>
+<h3>3-2. 터미널 열기</h3>
+<ol>
+<li>상단 메뉴 <strong>터미널 → 새 터미널</strong> (Mac: <code>Ctrl +</code> 백틱)</li>
+<li>아래쪽에 터미널 창 생성됨</li>
+<li>(선택) 터미널 창을 드래그해서 우측에 배치하면 편함</li>
+</ol>
+<blockquote>
+<p>이 단계에서 <strong>"폴더 + 터미널 + (다음 단계의) 확장 프로그램"</strong> 3종이 모두 보이는 화면이 강사가 말한 "완벽한 상태".</p>
+</blockquote>
+<hr>
+<h2 id="4-claude-code-확장-프로그램-설치">4. Claude Code 확장 프로그램 설치</h2>
+<p>VS Code 안에서 비개발자도 쉽게 Claude Code를 쓸 수 있게 만든 GUI.</p>
+<h3>4-1. 설치</h3>
+<ol>
+<li>사이드바의 <strong>확장(Extensions)</strong> 아이콘 클릭</li>
+<li>검색창에 <code>Claude Code</code> 입력</li>
+<li><strong>Claude Code for VS Code</strong> (제작: Anthropic) 설치</li>
+</ol>
+<h3>4-2. 로그인</h3>
+<ol>
+<li>설치 후 좌측 패널에 Claude Code 아이콘 등장 → 클릭</li>
+<li>로그인 화면이 뜨면 <strong>Subscription</strong>으로 로그인 (본인이 결제한 Claude 계정)</li>
+<li>브라우저로 인증 → VS Code로 돌아오기</li>
+</ol>
+<h3>4-3. 확장 프로그램의 진짜 용도</h3>
+<p><strong>터미널 CLI 설치 중 오류가 발생할 때 트러블슈팅 도구로 사용한다.</strong></p>
+<blockquote>
+<p>강사가 일부러 확장 프로그램부터 깐 이유:
+다음 단계인 CLI 설치는 변수가 많아서 입문자가 막히기 쉬움. 그때 오류 메시지를 캡쳐해서 확장 프로그램의 Claude에 붙여넣고 <em>"왜 안 돼? 알려줘"</em> 또는 <em>"해줘"</em> 라고 물어보면 대부분 해결책을 제시함.</p>
+</blockquote>
+<hr>
+<h2 id="5-homebrew-설치-mac만">5. Homebrew 설치 (Mac만)</h2>
+<blockquote>
+<p>Windows 사용자는 이 섹션 건너뛰기.</p>
+</blockquote>
+<h3>5-1. 설치 명령</h3>
+<p>터미널에 Homebrew 공식 설치 스크립트 붙여넣기:</p>
+<pre><code class="language-bash">/bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot;
+</code></pre>
+<h3>5-2. 비밀번호 입력</h3>
+<p>설치 도중 <strong>Mac 로그인 비밀번호</strong> 입력 요구 → 노트북 켤 때 쓰는 그 비밀번호 입력.</p>
+<h3>5-3. 검증</h3>
+<p>설치가 진행되는 동안 잠시 기다림. 끝나면 안내에 따라 <strong>엔터 몇 번</strong> 누르고:</p>
+<pre><code class="language-bash">brew --version
+</code></pre>
+<p>버전이 뜨면 완료.</p>
+<hr>
+<h2 id="6-git-설치">6. Git 설치</h2>
+<h3>Mac</h3>
+<pre><code class="language-bash">brew install git
+</code></pre>
+<p>설치 완료 시 맥주 이모지(🍺)가 출력되고 프롬프트에 <code>%</code>가 다시 나타나면 끝.</p>
+<h3>Windows</h3>
+<p>Homebrew가 없으므로 강의 자료에 명시된 Windows용 방식(예: Git for Windows 인스톨러)으로 진행.</p>
+<hr>
+<h2 id="7-claude-code-cli-설치">7. Claude Code CLI 설치</h2>
+<p>여기까지 오면 "선생님을 책상으로 부르는" 단계.</p>
+<h3>7-1. 설치</h3>
+<p>새 터미널을 열고 강의 자료에서 제공된 설치 명령을 복붙 (Mac/Windows 동일):</p>
+<pre><code class="language-bash">npm install -g @anthropic-ai/claude-code
+</code></pre>
+<blockquote>
+<p>Windows의 경우 새 터미널이 <strong>PowerShell</strong>로 열림. 그 화면에서 그대로 실행.</p>
+</blockquote>
+<h3>7-2. VS Code 재시작</h3>
+<p>설치가 끝나면 <strong>VS Code를 완전히 종료한 뒤 다시 열기</strong>. (재시작하지 않으면 <code>claude</code> 명령을 인식 못 함)</p>
+<h3>7-3. 버전 확인</h3>
+<p>새 터미널에서:</p>
+<pre><code class="language-bash">claude --version
+</code></pre>
+<p>버전 번호가 출력되면 설치 성공.</p>
+<blockquote>
+<p>버전이 너무 낮게 뜨면 확장 프로그램의 Claude에게 <em>"내 버전은 왜 이렇게 낮아?"</em> 라고 물어보면 됨.</p>
+</blockquote>
+<hr>
+<h2 id="8-claude-code-첫-실행">8. Claude Code 첫 실행</h2>
+<h3>8-1. <code>claude</code> 실행</h3>
+<p>터미널에서:</p>
+<pre><code class="language-bash">claude
+</code></pre>
+<h3>8-2. 첫 화면 분기</h3>
+<p><strong>"이 폴더를 신뢰합니까?"</strong> (<code>Do you trust this folder?</code>)
+→ <strong>Yes / 믿습니다</strong> 선택</p>
+<p>이후 <strong>테마 선택</strong> 화면이 뜨면 본인 취향에 맞게:
+- 검은 화면이 부담스러우면 <strong>Light / 라이트 모드</strong>
+- 눈이 피곤하면 <strong>Dark / 다크 모드</strong> (기본값)
+- 그 외 모든 옵션은 <strong>Recommend / 추천</strong>으로 진행</p>
+<h3>8-3. 대화 테스트</h3>
+<p>프롬프트에 한국어로 인사:</p>
+<pre><code>안녕?
+</code></pre>
+<p>Claude가 대답하면 설치 성공.</p>
+<blockquote>
+<p>로그인 화면이 뜨면 안내대로 <strong>Subscription</strong>으로 인증.</p>
+</blockquote>
+<hr>
+<h2 id="검증-체크리스트">검증 체크리스트</h2>
+<p>다음 3가지가 모두 정상이면 설치 완료:</p>
+<ul>
+<li>[ ] VS Code에서 <strong>폴더 → 터미널 → Claude 확장 프로그램 아이콘</strong>이 모두 보임</li>
+<li>[ ] 터미널에서 <code>claude --version</code> 입력 시 버전 번호 출력</li>
+<li>[ ] 터미널에서 <code>claude</code> 실행 후 한국어로 인사하면 Claude가 답변</li>
+</ul>
+<hr>
+<h2 id="자주-막히는-곳">자주 막히는 곳</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>한국어 언어팩 적용이 안 됨</td>
+<td>VS Code 완전 종료 → 다시 열기</td>
+</tr>
+<tr>
+<td><code>claude --version</code>이 안 됨</td>
+<td>VS Code 종료 → 다시 열기 → 새 터미널에서 재시도</td>
+</tr>
+<tr>
+<td><code>claude</code> 첫 실행이 멈춤</td>
+<td>터미널 종료 → 다시 열고 <code>claude</code> 재실행</td>
+</tr>
+<tr>
+<td>오류 코드가 빠바박 뜸</td>
+<td><strong>캡쳐 → Claude Code 확장 프로그램에 붙여넣기 → "왜 안 돼?" 또는 "해줘"</strong></td>
+</tr>
+<tr>
+<td>명령어가 안 떠요</td>
+<td>설치가 진행 중일 수 있음. 잠시 대기 후 재확인</td>
+</tr>
+<tr>
+<td>Mac 스크린샷 + 클립보드 복사</td>
+<td><code>Cmd + Shift + 4</code> 누른 뒤 <code>Ctrl</code> 누른 채로 드래그 → 클립보드에 캡쳐 → <code>Cmd + V</code>로 붙여넣기</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>혼자 해결이 안 되면 지피터스 네트워킹 방에서 <code>@타타</code> 태그하고 캡쳐 + 상황 설명 올리기.</p>
+</blockquote>
+<hr>
+<h2 id="부록-강의-중-인용">부록 — 강의 중 인용</h2>
+<ul>
+<li><em>"VS Code는 책상이고요. Claude Code는 책상 옆에 앉아 있는 똑똑한 비서예요."</em></li>
+<li><em>"오류 코드가 빠바박 떴을 때 캡쳐해 가지고 얘한테 붙여넣기 한 다음에 '왜 안 돼?' 이렇게 물어보시면 돼요."</em></li>
+<li><em>"Yes가 뜨면 그냥 Yes. 눌러주세요. 개발할 때 그렇게 하라고 하면 틀린 말이지만, 우리는 고작 Claude Code 설치니까."</em></li>
+<li><em>"두 가지 방식으로 Claude를 불러온 거죠"</em> — 확장 프로그램(GUI) + 터미널(CLI) 둘 다 설치한 이유.</li>
+</ul>
+<p>— <em>2026-05-18 라이브 정리본</em></p>
+<footer class="footer">
+  이 문서는 원본 강의 녹화본(<code>지피터스-2026-05-18-설치법.mp4</code>)을 Whisper로 전사한 뒤
+  주제별로 정리한 것입니다. 정확한 발화 흐름이 필요하면 원본 영상을 참조하세요.
+</footer>
+</body>
+</html>

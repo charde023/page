@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Antigravity 설치 가이드</title>
+<meta name="description" content="지피터스 22기 끌림 영상 스터디 — Antigravity 설치 가이드 (2026-05-17 라이브 정리본)">
+<meta property="og:title" content="Antigravity 설치 가이드">
+<meta property="og:description" content="지피터스 22기 끌림 영상 스터디 — Antigravity 설치 가이드 (2026-05-17 라이브 정리본)">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root {
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-soft: #f1f6ff;
+  --text: #1f2a44;
+  --text-soft: #5a6b87;
+  --text-muted: #8593ab;
+  --border: #e3e9f3;
+  --border-soft: #eef2f8;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-deep: #1d4ed8;
+  --shadow: 0 1px 2px rgba(31, 42, 68, 0.04), 0 8px 24px rgba(31, 42, 68, 0.06);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-feature-settings: 'tnum', 'ss03';
+  line-height: 1.75;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+h1, h2, h3, h4 {
+  line-height: 1.35;
+  margin-top: 2em;
+  margin-bottom: 0.65em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.18rem; color: var(--accent-deep); }
+h4 { font-size: 1.02rem; }
+p { margin: 0.85em 0; color: var(--text); }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+strong { color: var(--accent-deep); font-weight: 700; }
+em { color: var(--text-soft); }
+blockquote {
+  margin: 1.2em 0;
+  padding: 0.9em 1.2em;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+  border-radius: 10px;
+  font-size: 0.97em;
+}
+blockquote p { margin: 0.35em 0; }
+blockquote strong { color: var(--accent-deep); }
+ol, ul { padding-left: 1.5em; }
+li { margin: 0.4em 0; }
+code {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.88em;
+  background: var(--surface-soft);
+  color: var(--accent-deep);
+  padding: 0.15em 0.45em;
+  border-radius: 5px;
+  border: 1px solid var(--border-soft);
+}
+pre {
+  background: var(--surface);
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  line-height: 1.6;
+  margin: 1.2em 0;
+}
+pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.92em;
+  color: var(--text);
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.2em 0;
+  font-size: 0.96em;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft);
+}
+tr:last-child td { border-bottom: 0; }
+th {
+  background: var(--surface-soft);
+  font-weight: 600;
+  color: var(--accent-deep);
+  border-bottom: 1px solid var(--border);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
+.header-banner {
+  margin: -32px -24px 36px;
+  padding: 34px 28px 28px;
+  background: linear-gradient(160deg, #e0ecff 0%, #f1f6ff 55%, #ffffff 100%);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.header-banner .eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-soft);
+  margin-bottom: 14px;
+}
+.header-banner h1 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.header-banner .sub {
+  margin-top: 10px;
+  color: var(--text-soft);
+  font-size: 0.97rem;
+}
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 1.5em 0 2.4em;
+  box-shadow: var(--shadow);
+}
+.toc h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.toc ol {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--text-soft);
+}
+.toc li { margin: 0.3em 0; }
+.toc a { color: var(--text); font-weight: 500; }
+.toc a:hover { color: var(--accent); }
+.footer {
+  margin-top: 4em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--border);
+  font-size: 0.88em;
+  color: var(--text-muted);
+  text-align: center;
+}
+.footer code { font-size: 0.92em; }
+@media (max-width: 640px) {
+  body {
+    padding: 20px 18px 72px;
+    font-size: 16px;
+    line-height: 1.72;
+  }
+  .header-banner {
+    margin: -20px -18px 24px;
+    padding: 24px 20px 20px;
+    border-radius: 0;
+  }
+  .header-banner .eyebrow { font-size: 0.72rem; }
+  .header-banner h1 { font-size: 1.5rem; }
+  .header-banner .sub { font-size: 0.9rem; }
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.08rem; }
+  h4 { font-size: 1rem; }
+  blockquote { padding: 0.8em 1em; font-size: 0.95em; }
+  pre { padding: 14px 16px; font-size: 0.9em; }
+  table { font-size: 0.92em; }
+  th, td { padding: 10px 11px; }
+  .toc { padding: 14px 18px; }
+  ol, ul { padding-left: 1.3em; }
+}
+@media (max-width: 380px) {
+  body { font-size: 15.5px; padding: 18px 16px 64px; }
+  .header-banner h1 { font-size: 1.35rem; }
+  table { font-size: 0.88em; }
+  th, td { padding: 8px 9px; }
+}
+</style>
+</head>
+<body>
+<header class="header-banner">
+  <span class="eyebrow">지피터스 22기 · 끌림 영상 스터디</span>
+  <h1>Antigravity 설치 가이드</h1>
+  <div class="sub">2026-05-17 라이브 강의 정리본</div>
+</header>
+
+<blockquote>
+<p>지피터스 22기 끌림 영상 스터디 · 2026-05-17 라이브 강의 정리본
+원본: <code>지피터스-2026-05-17-안티그래비티-설치방법.mp4</code> (1시간 56분)</p>
+</blockquote>
+<hr>
+<h2 id="결론-tldr">결론 (TL;DR)</h2>
+<p><strong>Google의 AI 코드 에디터 Antigravity로 "AI가 영상을 만드는 환경"을 1회성으로 세팅하는 강의입니다.</strong>
+이번 강의에서 만든 환경은 앞으로 4주 동안의 스터디 실습에서 그대로 재사용됩니다.</p>
+<ul>
+<li><strong>이 페이지 한 장만 따라하면</strong> Windows / Mac 어느 쪽이든 30분~1시간 안에 설치 완료</li>
+<li><strong>꼭 챙겨야 하는 2가지</strong> ① Python 설치 시 <code>Add python.exe to PATH</code> 체크박스 ✅ ② Antigravity Settings에서 <code>Agent Non-Workspace File Access</code> ❌ (실제 D드라이브 포맷 사례 있음)</li>
+<li><strong>설치는 한 번만</strong>, 외울 필요 없음 — 다음 수업부터는 본격 영상 제작 실습</li>
+</ul>
+<h2 id="강의는-어떤-내용이었나">강의는 어떤 내용이었나</h2>
+<p>지피터스 22기 끌림 영상 스터디의 <strong>첫 수업(셋업 세션)</strong>으로, 80명 규모 줌 라이브로 1시간 56분 진행됐습니다.
+스터디장은 모든 수강생이 같은 출발선에 서도록 OS별(Windows → Mac) 화면을 두 번 반복하며 다음 6단계를 함께 설치했습니다.</p>
+<ol>
+<li><strong>Antigravity</strong> 에디터 다운로드 · 설치</li>
+<li><strong>에디터 자동 저장</strong> 설정</li>
+<li><strong>Antigravity 안전 설정</strong> (특히 파일 접근 권한 차단)</li>
+<li><strong>Node.js</strong> LTS 설치 + 터미널 검증</li>
+<li><strong>Python</strong> 3.11~3.14 설치 + PATH 체크</li>
+<li><strong>Live Server</strong> VS Code 확장 설치</li>
+</ol>
+<p>설치 외에도 (a) Google Ultra 6인 공유 요금제 안내, (b) 부산·서울 오프라인 스터디 안내가 함께 진행됐습니다.</p>
+<hr>
+<h2 id="0-한눈에-보는-설치-순서">0. 한눈에 보는 설치 순서</h2>
+<p>설치는 <strong>이날 한 번만</strong> 해두면 끝. 외울 필요 없습니다. 순서대로 6단계만 따라하면 OK.</p>
+<ol>
+<li><strong>Antigravity</strong> (Google이 만든 AI 코드 에디터) 다운로드 &amp; 설치</li>
+<li><strong>에디터 세팅</strong> — Auto Save = After Delay</li>
+<li><strong>Antigravity 세팅</strong> — 자동 실행 허용 + ⚠️ Workspace 외 파일 접근 차단</li>
+<li><strong>Node.js</strong> 설치 (LTS 버전)</li>
+<li><strong>Python</strong> 설치 (Windows는 "Add to PATH" 체크 필수)</li>
+<li><strong>Live Server</strong> 확장 설치</li>
+</ol>
+<blockquote>
+<p>6번까지 끝나면 바이브 코딩 환경 준비 완료입니다.</p>
+</blockquote>
+<hr>
+<h2 id="1-antigravity-설치">1. Antigravity 설치</h2>
+<h3>1-1. 다운로드</h3>
+<ol>
+<li>구글에서 <code>antigravity</code> 검색</li>
+<li>첫 번째 결과(공식 사이트)로 접속</li>
+<li>우측 상단 <strong>Download</strong> 클릭</li>
+</ol>
+<h3>1-2. OS별 설치 파일 선택</h3>
+<table>
+<thead>
+<tr>
+<th>OS</th>
+<th>선택</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Windows</strong></td>
+<td>Windows용 인스톨러 1개만 표시됨 → 그대로 다운로드</td>
+</tr>
+<tr>
+<td><strong>Mac (Apple Silicon)</strong></td>
+<td>M1 / M2 / M3 / M4 / M5 사용자 → <strong>Apple Silicon</strong> 빌드</td>
+</tr>
+<tr>
+<td><strong>Mac (Intel)</strong></td>
+<td>M1 이전 모델 → <strong>Intel</strong> 빌드</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>본인 Mac 칩 확인: <code>Apple 메뉴</code> → <code>이 Mac에 관하여</code> → "칩" 항목</p>
+</blockquote>
+<h3>1-3. 첫 실행</h3>
+<ul>
+<li>설치 완료 후 실행하면 환영 화면이 나옵니다.</li>
+<li><strong>Fresh Start</strong> 추천 (기존 설정 가져오지 않고 새로 시작).</li>
+<li>이후 옵션들(테마, 폰트 등)은 모두 <strong>Next</strong> 눌러 넘겨도 됩니다. 나중에 다 바꿀 수 있습니다.</li>
+</ul>
+<h3>1-4. (Mac만) 보안 권한 허용</h3>
+<p>설치 후 "허용되지 않은 앱" 같은 메시지가 뜨면:</p>
+<p><code>시스템 설정</code> → <code>개인정보 보호 및 보안</code> → <strong>Antigravity 허용</strong> 클릭</p>
+<hr>
+<h2 id="2-에디터-세팅-auto-save">2. 에디터 세팅 — Auto Save</h2>
+<p>좌측 하단 ⚙️(톱니바퀴) → <strong>Editor Settings</strong> → <strong>User</strong> 탭.</p>
+<ul>
+<li>맨 위 <strong>Auto Save</strong> 항목을 <strong>After Delay</strong> 로 변경</li>
+</ul>
+<blockquote>
+<p><strong>왜?</strong> AI가 여러 파일을 동시에 편집하기 때문에 수동 저장을 깜빡하면 작업 내용이 적용되지 않습니다. After Delay는 변경 후 거의 즉시 저장합니다.</p>
+<p>그 외 폰트, 사이즈 등은 모두 취향. 건드리지 않아도 됩니다.</p>
+</blockquote>
+<hr>
+<h2 id="3-antigravity-세팅-가장-중요한-단계">3. Antigravity 세팅 (가장 중요한 단계)</h2>
+<p>같은 ⚙️ 메뉴에서 파란 글씨 <strong>Antigravity Settings</strong> 클릭.</p>
+<h3>3-1. Agent 섹션</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>권장 설정</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stream Mode</td>
+<td><strong>끄기</strong></td>
+<td>강의 진행에 불필요</td>
+</tr>
+<tr>
+<td>Review Polit</td>
+<td><strong>Always</strong></td>
+<td>매번 확인 안 받고 자동 진행</td>
+</tr>
+<tr>
+<td>Terminal Command Auto Execution</td>
+<td><strong>Always</strong></td>
+<td>터미널 명령도 자동 실행</td>
+</tr>
+<tr>
+<td>Artifact (Auto-edit)</td>
+<td><strong>Always</strong></td>
+<td>코드 수정 자동 반영</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Review를 켜고 싶은 분은 코드를 읽을 수 있어야 의미가 있습니다. 안 읽을 거면 Always가 효율적입니다.</p>
+</blockquote>
+<h3>3-2. ⚠️ File Access — 반드시 끄기</h3>
+<p>스크롤 내려서 <strong>Agent Non-Workspace File Access</strong> 항목을 찾습니다.</p>
+<ul>
+<li><strong>이 항목은 무조건 OFF</strong> 로 두세요.</li>
+</ul>
+<blockquote>
+<p><strong>왜 꺼야 하나?</strong> 실제로 이 옵션을 켜둔 채 사용하다 <strong>D드라이브가 통째로 포맷된 사례</strong>가 있습니다.
+켜져 있으면 AI가 현재 작업 폴더 밖의 모든 파일(C, D 드라이브 등)에 접근 가능합니다.
+AI가 "D드라이브를 삭제할까요?"를 영어로 길게 묻는데, 무심코 Yes를 누르면 되돌릴 수 없습니다.
+끄더라도 작업 폴더 안에서는 자유롭게 동작하므로 실용성에 손해 없습니다.</p>
+</blockquote>
+<h3>3-3. 추가 권장</h3>
+<ul>
+<li><strong>Terminal Sandbox</strong> → 켜기 (격리 환경에서 명령 실행 → 안전성↑, 약간 느림)</li>
+<li><strong>Auto Open Edited Files</strong> → 켜기</li>
+<li><strong>Agent Auto Fix Lint</strong> → 켜기</li>
+</ul>
+<h3>3-4. 사이드 에이전트 패널 열기</h3>
+<p><code>Ctrl + L</code> (Mac: <code>⌘ + L</code>) → 우측에 에이전트 채팅 패널 토글</p>
+<blockquote>
+<p>메뉴에서도 가능: <code>View</code> → <code>Toggle Agent</code></p>
+</blockquote>
+<hr>
+<h2 id="4-nodejs-설치">4. Node.js 설치</h2>
+<h3>4-1. 다운로드</h3>
+<ul>
+<li>공식 사이트: <strong>https://nodejs.org</strong></li>
+<li>상단 <strong>Download</strong> 클릭</li>
+<li><strong>권장 버전: 22.x LTS</strong> 또는 <strong>24.15+ LTS</strong> 중 하나</li>
+<li>화면에 OS / 칩에 맞는 옵션이 자동 선택됨 (Windows x64, Mac Apple Silicon 등)</li>
+</ul>
+<blockquote>
+<p><strong>LTS = Long-Term Support</strong>, 안정 버전. 최신(Current) 버전은 호환성 이슈가 생길 수 있어 권장하지 않습니다.</p>
+</blockquote>
+<h3>4-2. 설치 검증</h3>
+<p>Antigravity 에서 터미널 열기:</p>
+<ul>
+<li>메뉴: <code>View</code> → <code>Terminal</code> → <code>New Terminal</code></li>
+<li>단축키: <code>Ctrl +</code> ` (백틱, 1 옆 키)</li>
+</ul>
+<p>터미널에 입력:</p>
+<pre><code>node -v
+</code></pre>
+<p><code>v22.19.0</code> 같은 버전 번호가 나오면 성공. 아무것도 안 나오거나 "command not found"면 4-3 참고.</p>
+<h3>4-3. 인식 안 될 때</h3>
+<ol>
+<li>Antigravity를 완전히 종료했다가 다시 실행</li>
+<li>그래도 안 되면 PC 재부팅</li>
+<li>그래도 안 되면 Node.js를 한 번 더 설치</li>
+</ol>
+<blockquote>
+<p>이미 설치되어 있던 분(<code>v22.05</code> 이상)은 그대로 사용. 새로 설치할 필요 없습니다.</p>
+</blockquote>
+<hr>
+<h2 id="5-python-설치">5. Python 설치</h2>
+<h3>5-1. 다운로드</h3>
+<ul>
+<li>공식 사이트: <strong>https://www.python.org/downloads</strong></li>
+<li><strong>권장 버전: 3.12</strong> (3.11 ~ 3.14 사이라면 모두 OK)</li>
+</ul>
+<blockquote>
+<p>❌ 2.x 버전(앞이 <code>2.</code>)은 <strong>절대 안 됨</strong>
+❌ 3.6 이하 너무 낮은 버전도 피하세요
+❌ 너무 최신(릴리스 직후) 버전도 호환성 이슈 가능</p>
+</blockquote>
+<h3>5-2. 🚨 Windows 사용자 — 가장 중요한 한 가지</h3>
+<p>설치 마법사 첫 화면 <strong>맨 아래</strong> 에 아주 작게 적힌 체크박스:</p>
+<pre><code>☑ Add python.exe to PATH
+</code></pre>
+<p><strong>반드시 체크하세요.</strong> 무심코 Next를 빨리 누르면 놓치기 쉽습니다.</p>
+<blockquote>
+<p><strong>놓치면 어떻게 되나?</strong> Python이 다운로드 받은 폴더에서만 동작하고, 다른 폴더에서는 명령이 인식되지 않습니다.
+Antigravity 터미널에서 <code>py --version</code> 했을 때 인식 안 되는 가장 흔한 원인입니다.</p>
+</blockquote>
+<h3>5-3. Mac 사용자</h3>
+<p>Mac은 PATH 체크박스 같은 게 없습니다. 그냥 다운로드 → 설치 → 끝.</p>
+<h3>5-4. 설치 검증</h3>
+<p>터미널에 입력:</p>
+<pre><code class="language-bash"># Windows
+py --version
+
+# Mac
+python3 --version
+</code></pre>
+<p><code>Python 3.12.x</code> 같은 결과가 나오면 성공.</p>
+<h3>5-5. 안 될 때</h3>
+<ul>
+<li><strong>Windows</strong>: "Add to PATH"를 체크 안 한 것. <strong>재설치하면서 체크박스 켜기</strong>가 가장 빠릅니다.</li>
+<li><strong>Antigravity 인식 못 함</strong>: 설치 직후 Antigravity를 껐다 다시 켜기.</li>
+</ul>
+<hr>
+<h2 id="6-live-server-확장-설치">6. Live Server 확장 설치</h2>
+<p>HTML 결과를 브라우저에서 바로 미리보기 위한 필수 확장.</p>
+<h3>6-1. 설치</h3>
+<ol>
+<li>좌측 사이드바에서 <strong>Extensions</strong> 아이콘 클릭 (블록 4개 모양)</li>
+<li>검색창에 <strong>Live Server</strong> 입력</li>
+<li>결과 맨 위 항목 클릭 → <strong>Install</strong> 클릭</li>
+</ol>
+<h3>6-2. 사용법 (스터디에서 본격 사용)</h3>
+<p>HTML 파일을 우클릭 → <strong>Open with Live Server</strong></p>
+<blockquote>
+<p>내 컴퓨터가 그 순간 작은 웹 서버가 되어, 브라우저로 HTML 결과를 실시간으로 확인할 수 있습니다.
+코드 저장하면 브라우저도 자동 새로고침 — AI가 만든 결과물을 즉시 눈으로 확인 가능.</p>
+</blockquote>
+<hr>
+<h2 id="7-마지막-검증-체크리스트">7. 마지막 검증 체크리스트</h2>
+<p>터미널에서 모두 정상 출력되면 설치 완료:</p>
+<table>
+<thead>
+<tr>
+<th>명령 (Windows)</th>
+<th>명령 (Mac)</th>
+<th>기대 출력</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node -v</code></td>
+<td><code>node -v</code></td>
+<td><code>v22.x.x</code></td>
+</tr>
+<tr>
+<td><code>py --version</code></td>
+<td><code>python3 --version</code></td>
+<td><code>Python 3.12.x</code> (또는 3.11~3.14)</td>
+</tr>
+<tr>
+<td>Extensions 탭</td>
+<td>Extensions 탭</td>
+<td>Live Server에 <strong>Uninstall</strong> 버튼 표시</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-자주-막히는-곳-정리">8. 자주 막히는 곳 정리</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>원인 / 해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node -v</code> 안 됨</td>
+<td>Antigravity 재시작 → 안 되면 재부팅 → 안 되면 Node 재설치</td>
+</tr>
+<tr>
+<td><code>py --version</code> 안 됨 (Windows)</td>
+<td>Python 설치 시 <strong>Add to PATH</strong> 미체크 → 재설치</td>
+</tr>
+<tr>
+<td>Mac에서 "허용되지 않은 앱"</td>
+<td>시스템 설정 → 개인정보 보호 및 보안 → 허용</td>
+</tr>
+<tr>
+<td>사이드 에이전트 패널 안 보임</td>
+<td><code>Ctrl/⌘ + L</code> 또는 <code>View → Toggle Agent</code></td>
+</tr>
+<tr>
+<td>AI가 자꾸 확인 요청</td>
+<td>Antigravity Settings의 Review/Terminal/Artifact를 <strong>Always</strong> 로</td>
+</tr>
+<tr>
+<td>어두운 테마라 글씨 안 보임</td>
+<td>Editor Settings → Theme → Light 계열 선택</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="9-부록-강의-중-안내된-부가-정보">9. 부록 — 강의 중 안내된 부가 정보</h2>
+<ul>
+<li><strong>Google Ultra 6인 공유</strong>: 6명이 묶이면 월 3만원으로 36만원짜리 Ultra 요금제(Veo 영상 무제한 + Nano Banana 등) 사용 가능. 별도 공지로 모집 예정.</li>
+<li><strong>오프라인 스터디</strong>: 매주 서울 역삼 팁스타운 19:00~. 1주차에 한해 부산역 앞에서도 진행.</li>
+<li><strong>녹화본</strong>: 지피터스 22기 끌림 영상 스터디 페이지에서 VOD 제공.</li>
+</ul>
+<hr>
+<h2 id="10-끝맺음">10. 끝맺음</h2>
+<blockquote>
+<p>"설치는 한 번만 하면 됩니다. 외울 필요 없고, 그냥 따라해서 내 컴퓨터에 깔리기만 하면 끝."</p>
+</blockquote>
+<p>여기까지 따라오셨다면, 다음 수업부터 본격적으로 AI 에이전트로 영상 만들기 실습이 진행됩니다.</p>
+<p>— <em>2026-05-17 라이브 정리본</em></p>
+<footer class="footer">
+  이 문서는 원본 강의 녹화본(<code>지피터스-2026-05-17-안티그래비티-설치방법.mp4</code>)을 Whisper로 전사한 뒤
+  주제별로 정리한 것입니다. 정확한 발화 흐름이 필요하면 원본 영상을 참조하세요.
+</footer>
+</body>
+</html>
