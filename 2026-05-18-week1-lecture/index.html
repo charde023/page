@@ -238,16 +238,78 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
 </blockquote>
 <hr>
 <h2 id="결론-tldr">결론 (TL;DR)</h2>
-<p><strong>"AI에게 대체될 것인가, AI를 동료로 만들 것인가" — 그리고 그 동료에게 일을 시키려면 디자인을 어떻게 시각화할 것인가.</strong></p>
-<p>22기 1주차 핵심 강의는 두 개의 50분 강의로 구성됐습니다. 정균님은 <em>왜</em> AI 에이전트로 일하는 방식이 바뀌어야 하는지, 인준님은 <em>어떻게</em> AI 도구로 빠르게 디자인하고 커뮤니케이션할지를 다뤘습니다.</p>
-<ul>
-<li><strong>AI는 3단계로 진화 중</strong> ① 챗봇(2022) → ② 바이브 코딩(2024) → ③ <strong>에이전트(2025~, 도구+메모리를 가진 동료)</strong></li>
-<li><strong>상시 동료를 만들려면</strong>: <strong>OpenCloud</strong>(팀·여러 도구 통합) 또는 <strong>Hermes Agent</strong>(혼자 반복 작업 자동화) — 둘 중 하나 골라 4주간 본인 동료 구축</li>
-<li><strong>영업비밀은 기록</strong>: 암묵지를 디지털화해야 AI가 <em>"나처럼"</em> 일함. 메모장·노션·옵시디언 어디든. <strong>예전 기록 절대 버리지 말 것</strong></li>
-<li><strong>디자인은 Claude Design으로 시작</strong>: 비디자이너도 PRD만 주면 시안 + 트윅스 옵션 자동 생성. 단, <strong>개발 도구 아님</strong> — 디자인 시스템 추출 후 펜슬·Claude Code로 구현 연결</li>
-<li><strong>도구는 상황에 맞게</strong>: Claude Design(시각화), AI Studio(MVP까지), 펜슬(디자이너 친화), Stitch(모바일)</li>
-<li><strong>Just Do It</strong> — 완벽주의자는 살아남기 어려운 시대</li>
-</ul>
+<blockquote>
+<p><strong>"AI에게 대체될 것인가, AI를 동료로 만들 것인가"</strong> — 그리고 그 동료에게 시킬 디자인을 어떻게 시각화할 것인가.</p>
+</blockquote>
+<p>22기 1주차 핵심 강의는 두 개의 50분 강의가 <strong><em>왜</em></strong> + <strong><em>어떻게</em></strong> 를 나눠 다뤘습니다.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>1부 — 정균님</strong></th>
+<th><strong>2부 — 인준님</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>주제</strong></td>
+<td>AI 에이전트 시대</td>
+<td>Claude Design 입문</td>
+</tr>
+<tr>
+<td><strong>핵심 질문</strong></td>
+<td><strong><em>왜</em></strong> 일하는 방식이 바뀌어야 하나</td>
+<td><strong><em>어떻게</em></strong> 빠르게 디자인·소통하나</td>
+</tr>
+<tr>
+<td><strong>한 줄 결론</strong></td>
+<td>4주 안에 <strong>본인의 AI 동료</strong>를 구축하라</td>
+<td>상황에 맞는 도구를 골라 <strong>디자인 시스템</strong>부터 잡아라</td>
+</tr>
+</tbody>
+</table>
+<h3>챙겨야 할 6가지</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>메시지</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>AI 진화 3단계</strong></td>
+<td>챗봇(2022) → 바이브 코딩(2024) → <strong>에이전트(2025~) = LLM + 도구 + 메모리</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>상시 동료 도구</strong></td>
+<td><code>OpenCloud</code> (팀·여러 도구 통합) · <code>Hermes Agent</code> (혼자 반복 자동화) — 하나만 골라 시작</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>영업비밀</strong></td>
+<td><strong>기록</strong> — 암묵지를 디지털화. 예전 기록 절대 버리지 말 것</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Claude Design</strong></td>
+<td><strong>디자인 도구일 뿐, 개발 X</strong> — 시안·시스템 추출 후 펜슬·Claude Code로 연결</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>도구 매트릭스</strong></td>
+<td>Claude Design (시각화) · AI Studio (MVP) · 펜슬 (디자이너 친화) · Stitch (모바일)</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>태도</strong></td>
+<td><strong>Just Do It</strong> — 완벽주의자는 살아남기 어려운 시대</td>
+</tr>
+</tbody>
+</table>
 <h2 id="강의는-어떤-내용이었나">강의는 어떤 내용이었나</h2>
 <p>지피터스 22기 끌림 영상 스터디의 <strong>1주차 핵심 강의</strong>로, 약 350명이 동시 라이브로 참석한 약 2시간 46분의 세션입니다 (운영 OT + 두 개의 50분 강의 + 후토크).</p>
 <table>
