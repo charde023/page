@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=780">
-<title>분수물총 v8 — 상세페이지 아웃라인 v8</title>
+<title>분수물총 v9 — 상세페이지 아웃라인 v9</title>
 
 <!-- Pretendard (SIL OFL) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
@@ -170,33 +170,62 @@ body {
   color: #1A1A1A;
 }
 
-/* Lead — 32px / 500 / lh 1.45 / ls +0.005em — 진한색 유지 (착지점) */
-.body-lead {
-  font-size: 32px;
-  font-weight: 500;
-  line-height: 1.45;
-  letter-spacing: 0.005em;
-  color: #1A1A1A;
-  margin-bottom: 20px;
+/* ===== v9 — 본문 묶음 줄 간격 통일 =====
+   본문 묶음(.body-cluster) 내부는 gap/margin을 쓰지 않고
+   단일 line-height로만 줄 간격을 만들어 br/p 구분 없이 완전 등간격으로 한다.
+   크기가 다르면 줄 높이가 달라지므로, 묶음 내 본문은 동일 크기(26px)로
+   통일하고 위계는 색·굵기·강조로만 표현한다.
+   26px × line-height 1.55 = 줄 높이 40.3px — br 줄과 p 줄이 동일.
+===== */
+.body-cluster {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.body-cluster > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
-/* 본문 일반 — v7: 26px / 400 / lh 1.45 / ls -0.003em / 회색 #787878 ★줄간격 축소★ */
+/* ===== 본문 클러스터 내부 공통 — 26px / lh 1.55 / ls -0.003em =====
+   body-lead, body-text, body-punch 모두 클러스터 내에서 동일 크기.
+   위계는 색(검정/회색)·굵기(볼드)·강조(핑크)로만 표현.
+===== */
+.body-cluster .body-lead,
+.body-cluster .body-text,
+.body-cluster .body-punch {
+  font-size: 26px;
+  line-height: 1.55;
+  letter-spacing: -0.003em;
+}
+
+/* 본문 첫 문장(착지점) — 클러스터 내: 26px + 검정 #1A1A1A */
+.body-lead {
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.003em;
+  color: #1A1A1A;
+}
+
+/* 본문 일반 — 26px / 400 / lh 1.55 / ls -0.003em / 회색 #787878 */
 .body-text {
   font-size: 26px;
   font-weight: 400;
-  line-height: 1.45;
+  line-height: 1.55;
   letter-spacing: -0.003em;
   color: #787878;
 }
-.body-text + .body-text {
+/* 클러스터 바깥에서 단독 쓰일 때만 margin-top 허용 */
+.body-text + .body-text:not(.body-cluster .body-text + .body-text) {
   margin-top: 20px;
 }
 
-/* 강조 본문(final-punch) — 26px / 700 / lh 1.45 / ls -0.01em / 진한 검정 */
+/* 강조 본문(final-punch) — 26px / 700 / lh 1.55 / ls -0.01em / 진한 검정 */
 .body-punch {
   font-size: 26px;
   font-weight: 700;
-  line-height: 1.45;
+  line-height: 1.55;
   letter-spacing: -0.01em;
   color: #1A1A1A;
 }
@@ -252,7 +281,7 @@ body {
 .dark-body {
   font-size: 26px;
   font-weight: 400;
-  line-height: 1.45;
+  line-height: 1.55;
   letter-spacing: -0.003em;
   color: rgba(255,255,255,0.80);
 }
@@ -388,16 +417,19 @@ body {
   letter-spacing: -0.02em;
   line-height: 1.35;
 }
-/* FAQ 답변 — 26px / 400 / lh 1.45 / ls -0.003em / 회색 ★줄간격 축소★ */
+/* FAQ 답변 — 26px / 400 / lh 1.55 / ls -0.003em / 회색
+   한 답변 내 여러 줄 모두 등간격: gap/margin 제거, line-height 단일 통일 */
 .faq-a {
   font-size: 26px;
   font-weight: 400;
   color: #787878;
-  line-height: 1.45;
+  line-height: 1.55;
   letter-spacing: -0.003em;
+  display: block;
 }
+/* 답변 여러 줄 사이 — 줄 높이로만 간격을 만들기 위해 margin 0 */
 .faq-a + .faq-a {
-  margin-top: 8px;
+  margin-top: 0;
 }
 
 /* ===== 스텝 번호 ===== */
@@ -441,11 +473,11 @@ body {
 }
 
 /* ===== 후기 ===== */
-/* review-quote — 본문급 / lh 1.45 / ls -0.003em / 회색 ★줄간격 축소★ */
+/* review-quote — 본문급 / lh 1.55 / ls -0.003em / 회색 */
 .review-quote {
   font-size: 26px;
   font-weight: 400;
-  line-height: 1.45;
+  line-height: 1.55;
   letter-spacing: -0.003em;
   color: #787878;
   font-style: normal;
@@ -487,22 +519,22 @@ body {
   line-height: 1.45;
   letter-spacing: 0.005em;
 }
-/* price-desc — 본문급 / lh 1.45 / ls -0.003em ★줄간격 축소★ */
+/* price-desc — 본문급 / lh 1.55 / ls -0.003em */
 .price-desc {
   font-size: 26px;
   font-weight: 400;
   color: rgba(255,255,255,0.55);
-  line-height: 1.45;
+  line-height: 1.55;
   letter-spacing: -0.003em;
   margin-top: 24px;
 }
-/* price-delivery — 본문급 / lh 1.45 / ls -0.003em ★줄간격 축소★ */
+/* price-delivery — 본문급 / lh 1.55 / ls -0.003em */
 .price-delivery {
   font-size: 26px;
   font-weight: 500;
   color: rgba(255,255,255,0.70);
   margin-top: 32px;
-  line-height: 1.45;
+  line-height: 1.55;
   letter-spacing: -0.003em;
 }
 /* price-guarantee — 캡션급 / lh 1.45 / ls 0 */
@@ -673,22 +705,6 @@ body {
 .mb32 { margin-bottom: 32px; }
 .mb40 { margin-bottom: 40px; }
 
-/* ===== v8 — 본문 묶음 등간격 리듬 =====
-   본문 묶음(.body-cluster) 내부에서 <br> 줄 간격과 <p> 문장 간격을 통일.
-   26px · lh 1.45 기준 줄 사이 빈 공간 = 26×(1.45−1) = 약 11.7px ≈ 12px.
-   flexbox gap: 12px으로 모든 자식 <p> 사이 간격을 동일하게 고정.
-   자식 요소의 margin-top/bottom은 전부 0으로 재설정하여 br/p 차이를 제거.
-===== */
-.body-cluster {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.body-cluster > * {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
 </style>
 </head>
 <body>
@@ -715,11 +731,11 @@ body {
     <div class="divider-short"></div>
 
     <!--
-      B1 미끄럼틀 위계:
-      - Lead(32px/#1A1A1A): 첫 문장, "사진이 달라져요" 핑크 강조
-      - body-text(26px/#787878): 중간 문장들, "그 5초" / "SNS에서 터지는" kw강조
+      B1 미끄럼틀 위계 (v9):
+      - body-lead(26px/#1A1A1A/500): 첫 문장 "사진이 달라져요" 핑크 강조 — 크기 위계 제거, 색으로 착지점 유지
+      - body-text(26px/#787878/400): 중간 문장들, "그 5초" / "SNS에서 터지는" kw 강조
       - body-punch(26px/700/#1A1A1A): 마지막 펀치라인
-      v8: body-cluster로 감싸 br 줄간격(12px)과 p 문장간격(12px) 통일
+      v9: body-cluster gap 0 + 자식 margin 0 + 모든 줄 26px·lh 1.55 통일 → br/p 완전 등간격
     -->
     <div class="body-cluster">
       <p class="body-lead">가로등 빛이 회오리 물줄기에 닿는 순간,<br><span class="pink">사진이 달라져요</span></p>
@@ -1016,7 +1032,7 @@ body {
           <div class="ph-size">1:1 · 220 × 220 px</div>
         </div>
         <div class="step-num mt16">STEP 1.</div>
-        <p class="body-text" style="font-size:22px; line-height:1.45; letter-spacing:0;">물총 앞쪽을 수면에 담그고 손잡이를 쭉 당겨 물을 채워요</p>
+        <p class="body-text" style="font-size:22px; line-height:1.55; letter-spacing:0;">물총 앞쪽을 수면에 담그고 손잡이를 쭉 당겨 물을 채워요</p>
       </div>
       <div class="grid-item">
         <div class="img-placeholder ph-1-1">
@@ -1024,7 +1040,7 @@ body {
           <div class="ph-size">1:1 · 220 × 220 px</div>
         </div>
         <div class="step-num mt16">STEP 2.</div>
-        <p class="body-text" style="font-size:22px; line-height:1.45; letter-spacing:0;">물이 채워진 물총을 하늘 위로 올려요</p>
+        <p class="body-text" style="font-size:22px; line-height:1.55; letter-spacing:0;">물이 채워진 물총을 하늘 위로 올려요</p>
       </div>
       <div class="grid-item">
         <div class="img-placeholder ph-1-1">
@@ -1032,7 +1048,7 @@ body {
           <div class="ph-size">1:1 · 220 × 220 px</div>
         </div>
         <div class="step-num mt16">STEP 3.</div>
-        <p class="body-text" style="font-size:22px; line-height:1.45; letter-spacing:0;">손잡이를 천천히 밀어 회오리 분수를 발사해요</p>
+        <p class="body-text" style="font-size:22px; line-height:1.55; letter-spacing:0;">손잡이를 천천히 밀어 회오리 분수를 발사해요</p>
       </div>
     </div>
 
@@ -1228,7 +1244,7 @@ body {
     <div class="faq-item">
       <!-- FAQ 질문 — 진한 #1A1A1A -->
       <div class="faq-q">Q1. 색상이 랜덤으로 오나요?</div>
-      <!-- FAQ 답변 — 회색 #787878 -->
+      <!-- FAQ 답변 — 26px / lh 1.55 / 회색 — 단일 line-height로 등간격 -->
       <p class="faq-a">아니요. 1+1 세트는 <span style="color:#1A1A1A; font-weight:600;">핑크 1자루 + 블루 1자루</span>로 구성돼요. 두 색이 함께 오니까 색상 고민이 없어요</p>
       <p class="faq-a">단품 구매 시에는 옵션에서 핑크 또는 블루를 직접 선택해 주세요</p>
       <p class="faq-a">모니터 해상도에 따라 실제 색상이 약간 다르게 보일 수 있어요</p>
