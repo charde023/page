@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=780">
-<title>분수물총 v9 — 상세페이지 아웃라인 v9</title>
+<title>분수물총 — 상세페이지 아웃라인 v10</title>
 
 <!-- Pretendard (SIL OFL) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
@@ -652,20 +652,6 @@ body {
   letter-spacing: 0;
 }
 
-/* ===== 블록 라벨 (검토용) ===== */
-.block-label {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.20em;
-  text-transform: uppercase;
-  color: rgba(0,168,204,0.35);
-  margin-bottom: 0;
-  padding: 6px 40px;
-  background: rgba(0,168,204,0.03);
-  border-left: 2px solid rgba(0,168,204,0.15);
-}
-
 /* ===== 섹션 전환 구분 ===== */
 .section-label-dark {
   font-family: 'Space Grotesk', sans-serif;
@@ -711,10 +697,7 @@ body {
 
 <div class="page">
 
-  <!-- ============================================================
-       B1 — Hero · SHOT: S (Scene)
-       ============================================================ -->
-  <div class="block-label">B1 · Hero · SHOT-S</div>
+  <!-- B1 — Hero -->
 
   <!-- V1 이미지 — 풀블리드 4:5 -->
   <div class="img-placeholder ph-4-5 img-placeholder-dark">
@@ -730,34 +713,25 @@ body {
 
     <div class="divider-short"></div>
 
-    <!--
-      B1 미끄럼틀 위계 (v9):
-      - body-lead(26px/#1A1A1A/500): 첫 문장 "사진이 달라져요" 핑크 강조 — 크기 위계 제거, 색으로 착지점 유지
-      - body-text(26px/#787878/400): 중간 문장들, "그 5초" / "SNS에서 터지는" kw 강조
-      - body-punch(26px/700/#1A1A1A): 마지막 펀치라인
-      v9: body-cluster gap 0 + 자식 margin 0 + 모든 줄 26px·lh 1.55 통일 → br/p 완전 등간격
-    -->
     <div class="body-cluster">
       <p class="body-lead">가로등 빛이 회오리 물줄기에 닿는 순간,<br><span class="pink">사진이 달라져요</span></p>
       <p class="body-text">일반 물총처럼 일자로 뿜지 않아요</p>
       <p class="body-text">빙글 돌면서 나가기 때문에,<br>빛이 물 입자에 산란되는 <span class="kw">그 5초</span>가 생겨요</p>
-      <p class="body-text">그게 <span class="kw">SNS에서 터지는</span> 장면이에요</p>
+      <p class="body-text">그게 <span class="kw">SNS에서 <span style="font-weight:700;">좋아요 터지는</span></span> 장면이에요</p>
       <p class="body-punch">그리고 그게 이 물총이에요</p>
     </div>
 
     <div class="mt40"></div>
 
-    <p class="body-text" style="font-size:26px; font-weight:600; color:#1A1A1A;"><span class="pink">9,000원</span> 1+1, 핑크+블루 한 자루씩</p>
-    <p class="body-text mt20">가로등만 있으면 SNS 야경샷 완성</p>
+    <!-- [E] B1 서브카피·가격 줄간격 — line-height 1.55 통일 -->
+    <p class="body-text" style="font-size:26px; font-weight:600; color:#1A1A1A; line-height:1.55;"><span class="pink">9,000원</span> 1+1, 핑크+블루</p>
+    <p class="body-text" style="line-height:1.55;">가로등만 있으면 SNS 야경샷 완성</p>
   </div>
 
   <div class="divider"></div>
 
 
-  <!-- ============================================================
-       B2 — 페인 (가벼운 공감) · SHOT: S→H
-       ============================================================ -->
-  <div class="block-label">B2 · 페인 공감 · SHOT-S→H</div>
+  <!-- B2 — 페인 공감 -->
 
   <div class="section">
     <!-- V2 이미지 — 가로등 밑 1인, before 무드 -->
@@ -775,19 +749,16 @@ body {
 
     <!-- Lead: 진한 착지점 / 본문: 회색, 핵심어 강조 -->
     <div class="body-cluster">
-      <p class="body-lead">이번 여름엔 <span class="pink">다른 한 컷</span>이 필요해요</p>
+      <p class="body-lead">이번 여름엔 <span class="pink">특별한</span> 한 컷이 필요해요</p>
       <p class="body-text">가로등 밑에서 페트병에 구멍 뚫어 찍던 인증샷</p>
-      <p class="body-text"><span class="kw">회오리 물줄기 한 줄기</span>로 업그레이드할 시간이예요</p>
+      <p class="body-text"><span class="kw">회오리 물총으로</span> 업그레이드할 시간이에요</p>
     </div>
   </div>
 
   <div class="divider"></div>
 
 
-  <!-- ============================================================
-       B3 — 변화 시각화 · SHOT: H
-       ============================================================ -->
-  <div class="block-label">B3 · 변화 시각화 · SHOT-H</div>
+  <!-- B3 — 변화 시각화 -->
 
   <!-- V6 이미지 — 클로즈업 분사, 빛 산란 -->
   <div class="img-placeholder ph-16-9 img-placeholder-dark">
@@ -800,15 +771,15 @@ body {
     <div class="eyebrow" style="text-transform:none; letter-spacing:0.05em;">비슷한 셀카 100장보다,</div>
 
     <!-- 섹션 제목 -->
-    <h2 class="headline-lg">회오리 한 컷으로 더 화려하게</h2>
+    <h2 class="headline-lg">회오리 한 컷으로 더 <span class="pink">화려하게</span></h2>
 
     <div class="divider-short"></div>
 
     <!-- Lead / 본문 회색 + 핵심어 강조 -->
     <div class="body-cluster">
       <p class="body-lead">인스타에서 그 회오리 컷 본 적 있죠?</p>
-      <p class="body-text">가로등 빛이 물줄기에 부서지는 그 한 장 — 그게 이 물총이예요</p>
-      <p class="body-text">물줄기가 빙글 도는 <span class="kw">그 0.3초</span></p>
+      <p class="body-text">가로등 빛이 물줄기에 부서지는 그 한 장<br><span style="color:#1A1A1A; font-weight:700;">— 그게 이 물총이에요</span></p>
+      <p class="body-text">물줄기가 빙글 도는 <span class="kw">그 5초</span></p>
       <p class="body-punch"><span class="pink">피드에서 혼자 살아남는</span> 한 장이 돼요</p>
     </div>
   </div>
@@ -816,13 +787,10 @@ body {
   <div class="divider"></div>
 
 
-  <!-- ============================================================
-       B4 — SP박스 5차별점 · SHOT: H
-       ============================================================ -->
-  <div class="block-label">B4 · 5차별점 · SHOT-H</div>
+  <!-- B4 — SP박스 5차별점 -->
 
   <div class="section-dark">
-    <div class="section-label-dark">이 회오리 물총, 이런 점이 달라요</div>
+    <div class="section-label-dark">에이폼 회오리 물총, 이런 점이 달라요</div>
 
     <!-- P4 이미지: 섹션 내부 좁게 배치 -->
     <div class="img-placeholder ph-1-1 img-placeholder-dark" style="max-width: 280px; margin: 0 auto 56px;">
@@ -833,37 +801,34 @@ body {
     <table class="sp-table" style="border-color: rgba(255,255,255,0.08);">
       <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); border-top: 1px solid rgba(255,255,255,0.08);">
         <td class="sp-num" style="color:#FF2D78;">01</td>
-        <td class="sp-feature" style="color:#FFFFFF;">빙글 도는 회오리 분사</td>
+        <td class="sp-feature" style="color:#FFFFFF;">빙글 도는<br>회오리 분사</td>
         <td class="sp-benefit" style="color:rgba(255,255,255,0.65);">일자로 뿜는 일반 물총과 차원이 다른 시각 무기, 빛이 산란되는 그 5초가 생겨요</td>
       </tr>
       <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
         <td class="sp-num" style="color:#FF2D78;">02</td>
-        <td class="sp-feature" style="color:#FFFFFF;">핑크+블루 1+1 페어</td>
+        <td class="sp-feature" style="color:#FFFFFF;">핑크+블루<br>1+1 페어</td>
         <td class="sp-benefit" style="color:rgba(255,255,255,0.65);">두 색 물줄기가 만나는 한 컷, 하나씩 들고 가면 우정샷·커플샷이 완성돼요</td>
       </tr>
       <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
         <td class="sp-num" style="color:#FF2D78;">03</td>
-        <td class="sp-feature" style="color:#FFFFFF;">100g 경량 + 40cm</td>
+        <td class="sp-feature" style="color:#FFFFFF;">100g 경량<br>40cm의 간편함</td>
         <td class="sp-benefit" style="color:rgba(255,255,255,0.65);">크로스백에 쏙, 오래 들고 있어도 손목 부담 없어 완벽한 타이밍을 놓치지 않아요</td>
       </tr>
       <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
         <td class="sp-num" style="color:#FF2D78;">04</td>
-        <td class="sp-feature" style="color:#FFFFFF;">펌프식 즉시 사용</td>
+        <td class="sp-feature" style="color:#FFFFFF;">펌프식<br>즉시 사용</td>
         <td class="sp-benefit" style="color:rgba(255,255,255,0.65);">충전·배터리 없이 물 채우고 바로 회오리 발사, 가로등 켜지는 그 1분을 그냥 쏴요</td>
       </tr>
       <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
         <td class="sp-num" style="color:#FF2D78;">05</td>
-        <td class="sp-feature" style="color:#FFFFFF;">가로등 빛 반사 효과</td>
+        <td class="sp-feature" style="color:#FFFFFF;">가로등<br>빛 반사 효과</td>
         <td class="sp-benefit" style="color:rgba(255,255,255,0.65);">노란 가로등 빛이 회오리 물입자에 산란되는 그 순간 — 사진이 달라져요</td>
       </tr>
     </table>
   </div>
 
 
-  <!-- ============================================================
-       B5 — 정체성 (가로등 물꽃놀이) · SHOT: H
-       ============================================================ -->
-  <div class="block-label">B5 · 정체성 · SHOT-H</div>
+  <!-- B5 — 정체성 (가로등 물꽃놀이) -->
 
   <div class="section">
     <!-- V6 (다른 컷) 이미지 — 중앙 배치 -->
@@ -876,7 +841,7 @@ body {
     <p class="subhead">물줄기가 가로등 빛에 산란되는 순간,</p>
 
     <!-- 섹션 제목 -->
-    <h2 class="headline-lg mt16">밤하늘 불꽃놀이 같은 한 컷<br>— 가로등 물꽃놀이</h2>
+    <h2 class="headline-lg mt16">밤하늘 불꽃놀이 같은 한 컷<br>— 가로등 <span class="pink">물꽃놀이</span></h2>
 
     <div class="divider-short"></div>
 
@@ -902,10 +867,7 @@ body {
   <div class="divider"></div>
 
 
-  <!-- ============================================================
-       B6 — 가로등 시나리오 (1인) · SHOT: O
-       ============================================================ -->
-  <div class="block-label">B6 · 가로등 시나리오 · SHOT-O</div>
+  <!-- B6 — 가로등 시나리오 (1인) -->
 
   <!-- V2 이미지 — 풀블리드 3:4 -->
   <div class="img-placeholder ph-3-4 img-placeholder-dark">
@@ -920,7 +882,7 @@ body {
     <h2 class="headline-lg">혼자 나간 밤 산책이<br>인생샷 한 컷이 되는 가로등 밑 30초</h2>
 
     <!-- subhead -->
-    <p class="subhead">40cm 가방에 쏙 — 가로등만 있으면 슬로모 인생샷 완성</p>
+    <p class="subhead">40cm 가방에 쏙 —<br>가로등만 있으면 슬로모 인생샷 완성</p>
 
     <div class="divider-short"></div>
 
@@ -937,10 +899,7 @@ body {
   <div class="divider"></div>
 
 
-  <!-- ============================================================
-       B7 — 한강 시나리오 (야경) · SHOT: O
-       ============================================================ -->
-  <div class="block-label">B7 · 한강 시나리오 · SHOT-O</div>
+  <!-- B7 — 한강 시나리오 (야경) -->
 
   <div class="section-alt">
     <div class="eyebrow">Scene 02 · 한강 야경</div>
@@ -973,10 +932,7 @@ body {
   <div class="divider"></div>
 
 
-  <!-- ============================================================
-       B8 — 1+1 페어 시나리오 · SHOT: O
-       ============================================================ -->
-  <div class="block-label">B8 · 페어 시나리오 · SHOT-O</div>
+  <!-- B8 — 1+1 페어 시나리오 -->
 
   <!-- P1 또는 V4 둘이 컷 이미지 -->
   <div class="img-placeholder ph-4-5">
@@ -1005,7 +961,7 @@ body {
 
     <!-- 소그룹 2 — 가격 정보 -->
     <div class="body-cluster">
-      <p class="body-text" style="font-size:26px; font-weight:600; color:#1A1A1A;"><span class="pink">핑크 1자루 + 블루 1자루</span> = 9,000원</p>
+      <p class="body-text" style="font-size:26px; font-weight:600; color:#1A1A1A;"><span class="pink">핑크 <strong>하나</strong> + 블루 <strong>하나</strong></span> = 9,000원</p>
       <p class="body-text">한 자루 하나씩 선물해도 원가 4,500원</p>
     </div>
   </div>
@@ -1013,10 +969,7 @@ body {
   <div class="divider"></div>
 
 
-  <!-- ============================================================
-       B9 — 사용법 3단계 · SHOT: O
-       ============================================================ -->
-  <div class="block-label">B9 · 사용법 3단계 · SHOT-O</div>
+  <!-- B9 — 사용법 3단계 -->
 
   <div class="section">
     <!-- 섹션 제목 -->
@@ -1048,7 +1001,7 @@ body {
           <div class="ph-size">1:1 · 220 × 220 px</div>
         </div>
         <div class="step-num mt16">STEP 3.</div>
-        <p class="body-text" style="font-size:22px; line-height:1.55; letter-spacing:0;">손잡이를 천천히 밀어 회오리 분수를 발사해요</p>
+        <p class="body-text" style="font-size:22px; line-height:1.55; letter-spacing:0;">손잡이를 천천히 밀며<br>빙글 돌아요</p>
       </div>
     </div>
 
@@ -1064,10 +1017,7 @@ body {
   <div class="divider"></div>
 
 
-  <!-- ============================================================
-       B10 — 촬영팁 · SHOT: O→T
-       ============================================================ -->
-  <div class="block-label">B10 · 촬영팁 · SHOT-O→T</div>
+  <!-- B10 — 촬영팁 -->
 
   <div class="section-alt">
     <!-- 섹션 제목 -->
@@ -1114,10 +1064,7 @@ body {
   <div class="divider"></div>
 
 
-  <!-- ============================================================
-       B11 — 후기 1 (가로등 1인) · SHOT: T
-       ============================================================ -->
-  <div class="block-label">B11 · 후기 1 · SHOT-T</div>
+  <!-- B11 — 후기 1 (가로등 1인) -->
 
   <div class="section">
     <!-- 소제목 — 34px / 400 / 회색 (서브 라벨) -->
@@ -1145,10 +1092,7 @@ body {
   <div class="divider"></div>
 
 
-  <!-- ============================================================
-       B12 — 후기 2·3·4 · SHOT: T
-       ============================================================ -->
-  <div class="block-label">B12 · 후기 2·3·4 · SHOT-T</div>
+  <!-- B12 — 후기 2·3·4 -->
 
   <div class="section">
     <!-- P2 + P3 이미지 가로 2분할 -->
@@ -1199,10 +1143,7 @@ body {
   <div class="divider"></div>
 
 
-  <!-- ============================================================
-       B13 — 가격·CTA · SHOT: T
-       ============================================================ -->
-  <div class="block-label">B13 · 가격·CTA · SHOT-T</div>
+  <!-- B13 — 가격·CTA -->
 
   <!-- V5 이미지 — 풀블리드 4:5 -->
   <div class="img-placeholder ph-4-5 img-placeholder-dark">
@@ -1230,10 +1171,7 @@ body {
   </div>
 
 
-  <!-- ============================================================
-       B14 — FAQ 6개 · SHOT: H→T
-       ============================================================ -->
-  <div class="block-label">B14 · FAQ · SHOT-H→T</div>
+  <!-- B14 — FAQ 6개 -->
 
   <div class="section">
     <!-- 섹션 제목 -->
@@ -1282,10 +1220,7 @@ body {
   </div>
 
 
-  <!-- ============================================================
-       B15 — 주의·배송·스펙 · SHOT: —
-       ============================================================ -->
-  <div class="block-label">B15 · 스펙·주의·배송</div>
+  <!-- B15 — 주의·배송·스펙 -->
 
   <div class="section-sm" style="background: #FAFAFA; opacity: 0.85;">
 
