@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=780">
-<title>분수물총 v6 — 상세페이지 아웃라인 v6</title>
+<title>분수물총 v7 — 상세페이지 아웃라인 v7</title>
 
 <!-- Pretendard (SIL OFL) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
@@ -180,11 +180,11 @@ body {
   margin-bottom: 20px;
 }
 
-/* 본문 일반 — v6: 26px / 400 / lh 1.6 / ls -0.003em / 회색 #787878 ★핵심변경★ */
+/* 본문 일반 — v7: 26px / 400 / lh 1.45 / ls -0.003em / 회색 #787878 ★줄간격 축소★ */
 .body-text {
   font-size: 26px;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.45;
   letter-spacing: -0.003em;
   color: #787878;
 }
@@ -252,7 +252,7 @@ body {
 .dark-body {
   font-size: 26px;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.45;
   letter-spacing: -0.003em;
   color: rgba(255,255,255,0.80);
 }
@@ -388,12 +388,12 @@ body {
   letter-spacing: -0.02em;
   line-height: 1.35;
 }
-/* FAQ 답변 — 26px / 400 / lh 1.6 / ls -0.003em / 회색 */
+/* FAQ 답변 — 26px / 400 / lh 1.45 / ls -0.003em / 회색 ★줄간격 축소★ */
 .faq-a {
   font-size: 26px;
   font-weight: 400;
   color: #787878;
-  line-height: 1.6;
+  line-height: 1.45;
   letter-spacing: -0.003em;
 }
 .faq-a + .faq-a {
@@ -441,11 +441,11 @@ body {
 }
 
 /* ===== 후기 ===== */
-/* review-quote — 본문급 / lh 1.6 / ls -0.003em / 회색 */
+/* review-quote — 본문급 / lh 1.45 / ls -0.003em / 회색 ★줄간격 축소★ */
 .review-quote {
   font-size: 26px;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.45;
   letter-spacing: -0.003em;
   color: #787878;
   font-style: normal;
@@ -487,22 +487,22 @@ body {
   line-height: 1.45;
   letter-spacing: 0.005em;
 }
-/* price-desc — 본문급 / lh 1.6 / ls -0.003em */
+/* price-desc — 본문급 / lh 1.45 / ls -0.003em ★줄간격 축소★ */
 .price-desc {
   font-size: 26px;
   font-weight: 400;
   color: rgba(255,255,255,0.55);
-  line-height: 1.6;
+  line-height: 1.45;
   letter-spacing: -0.003em;
   margin-top: 24px;
 }
-/* price-delivery — 본문급 / lh 1.6 / ls -0.003em */
+/* price-delivery — 본문급 / lh 1.45 / ls -0.003em ★줄간격 축소★ */
 .price-delivery {
   font-size: 26px;
   font-weight: 500;
   color: rgba(255,255,255,0.70);
   margin-top: 32px;
-  line-height: 1.6;
+  line-height: 1.45;
   letter-spacing: -0.003em;
 }
 /* price-guarantee — 캡션급 / lh 1.45 / ls 0 */
@@ -704,9 +704,9 @@ body {
       - body-text(26px/#787878): 중간 문장들, "그 5초" / "SNS에서 터지는" kw강조
       - body-punch(26px/700/#1A1A1A): 마지막 펀치라인
     -->
-    <p class="body-lead">가로등 빛이 회오리 물줄기에 닿는 순간, <span class="pink">사진이 달라져요</span></p>
+    <p class="body-lead">가로등 빛이 회오리 물줄기에 닿는 순간,<br><span class="pink">사진이 달라져요</span></p>
     <p class="body-text">일반 물총처럼 일자로 뿜지 않아요</p>
-    <p class="body-text">빙글 돌면서 나가기 때문에, 빛이 물 입자에 산란되는 <span class="kw">그 5초</span>가 생겨요</p>
+    <p class="body-text">빙글 돌면서 나가기 때문에,<br>빛이 물 입자에 산란되는 <span class="kw">그 5초</span>가 생겨요</p>
     <p class="body-text">그게 <span class="kw">SNS에서 터지는</span> 장면이에요</p>
     <p class="body-punch mt20">그리고 그게 이 물총이에요</p>
 
@@ -843,7 +843,7 @@ body {
 
     <!-- Lead / 본문 회색 + 핵심어 강조 -->
     <p class="body-lead">회오리 모양 분사 + 노란 가로등 빛</p>
-    <p class="body-text">물줄기 한 줄기가 빛에 부서지면서 만들어지는 <span class="kw">시각 효과</span>예요</p>
+    <p class="body-text">물줄기 한 줄기가 빛에 부서지면서<br>만들어지는 <span class="kw">시각 효과</span>예요</p>
 
     <div class="mt32"></div>
 
@@ -883,7 +883,7 @@ body {
     <!-- Lead / 본문 회색 + 핵심어 강조 -->
     <p class="body-lead">가방에 <span class="kw">40cm짜리</span> 하나 넣고 나갔어요</p>
     <p class="body-text">가로등 아래 멈춰서, 물 채우고, 빙글 한 번</p>
-    <p class="body-text">슬로모로 찍었더니 회오리가 노란 빛 안에서 살아났어요</p>
+    <p class="body-text">슬로모로 찍었더니<br>회오리가 노란 빛 안에서 살아났어요</p>
     <p class="body-text">인스타에 올렸더니 DM이 왔어요</p>
     <p class="body-punch mt20"><span class="pink">"이거 어디서 샀어?"</span></p>
   </div>
@@ -950,7 +950,7 @@ body {
 
     <!-- Lead / 본문 회색 + 핵심어 강조 -->
     <p class="body-lead">두 색 물줄기가 만나는 한 컷</p>
-    <p class="body-text">슬로모로 찍으면 둘이 같이 그리는 그림</p>
+    <p class="body-text">슬로모로 찍으면<br>둘이 같이 그리는 그림</p>
 
     <div class="mt32"></div>
 
@@ -1039,14 +1039,14 @@ body {
 
     <div class="tip-cat">위치</div>
     <p class="body-text"><span class="kw">가로등·밝은 조명 아래</span>에 서서 분사하세요</p>
-    <p class="body-text mt20">빛이 회오리에 부서지며 물꽃놀이 효과가 살아나요</p>
+    <p class="body-text mt20">빛이 회오리에 부서지며<br>물꽃놀이 효과가 살아나요</p>
 
     <div class="tip-cat">발사</div>
     <p class="body-text">손잡이를 <span class="kw">천천히</span> 밀어 회오리 모양을 만드세요</p>
     <p class="body-text mt20">빠르게 밀면 일자로 뿜어져요</p>
 
     <div class="tip-cat">영상</div>
-    <p class="body-text"><span class="kw">슬로모 모드</span>로 촬영하거나, 일반 촬영 후 1/4 배속으로 편집하세요</p>
+    <p class="body-text"><span class="kw">슬로모 모드</span>로 촬영하거나,<br>일반 촬영 후 1/4 배속으로 편집하세요</p>
     <p class="body-text mt20">회오리 한 줄기가 또렷이 살아나요</p>
     <p class="body-text mt20">촬영부터 릴스 업로드까지 <span class="kw">10분</span></p>
   </div>
