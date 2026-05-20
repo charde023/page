@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>헤르메스(Hermes) 설치 가이드 — 24시간 자가발전 에이전트</title>
+<meta name="description" content="강성준 강사의 헤르메스 설치 튜토리얼 — 윈도우 PowerShell 네이티브 설치, 초기 설정 마법사(프로바이더·모델·로컬·sudo) 선택값 한눈에, 무료 Nous Portal 등록, 실행까지 단계별 정리.">
+<meta property="og:title" content="헤르메스(Hermes) 설치 가이드 — 24시간 자가발전 에이전트">
+<meta property="og:description" content="강성준 강사의 헤르메스 설치 튜토리얼 — 윈도우 PowerShell 네이티브 설치, 초기 설정 마법사(프로바이더·모델·로컬·sudo) 선택값 한눈에, 무료 Nous Portal 등록, 실행까지 단계별 정리.">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root {
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-soft: #f1f6ff;
+  --text: #1f2a44;
+  --text-soft: #5a6b87;
+  --text-muted: #8593ab;
+  --border: #e3e9f3;
+  --border-soft: #eef2f8;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-deep: #1d4ed8;
+  --shadow: 0 1px 2px rgba(31, 42, 68, 0.04), 0 8px 24px rgba(31, 42, 68, 0.06);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-feature-settings: 'tnum', 'ss03';
+  line-height: 1.75;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+h1, h2, h3, h4 {
+  line-height: 1.35;
+  margin-top: 2em;
+  margin-bottom: 0.65em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.18rem; color: var(--accent-deep); }
+h4 { font-size: 1.02rem; }
+p { margin: 0.85em 0; color: var(--text); }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+strong { color: var(--accent-deep); font-weight: 700; }
+em { color: var(--text-soft); }
+blockquote {
+  margin: 1.2em 0;
+  padding: 0.9em 1.2em;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+  border-radius: 10px;
+  font-size: 0.97em;
+}
+blockquote p { margin: 0.35em 0; }
+blockquote strong { color: var(--accent-deep); }
+ol, ul { padding-left: 1.5em; }
+li { margin: 0.4em 0; }
+code {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.88em;
+  background: var(--surface-soft);
+  color: var(--accent-deep);
+  padding: 0.15em 0.45em;
+  border-radius: 5px;
+  border: 1px solid var(--border-soft);
+}
+pre {
+  background: var(--surface);
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  line-height: 1.6;
+  margin: 1.2em 0;
+}
+pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.92em;
+  color: var(--text);
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.2em 0;
+  font-size: 0.96em;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft);
+}
+tr:last-child td { border-bottom: 0; }
+th {
+  background: var(--surface-soft);
+  font-weight: 600;
+  color: var(--accent-deep);
+  border-bottom: 1px solid var(--border);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
+.header-banner {
+  margin: -32px -24px 36px;
+  padding: 34px 28px 28px;
+  background: linear-gradient(160deg, #e0ecff 0%, #f1f6ff 55%, #ffffff 100%);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.header-banner .eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-soft);
+  margin-bottom: 14px;
+}
+.header-banner h1 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.header-banner .sub {
+  margin-top: 10px;
+  color: var(--text-soft);
+  font-size: 0.97rem;
+}
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 1.5em 0 2.4em;
+  box-shadow: var(--shadow);
+}
+.toc h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.toc ol {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--text-soft);
+}
+.toc li { margin: 0.3em 0; }
+.toc a { color: var(--text); font-weight: 500; }
+.toc a:hover { color: var(--accent); }
+.footer {
+  margin-top: 4em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--border);
+  font-size: 0.88em;
+  color: var(--text-muted);
+  text-align: center;
+}
+.footer code { font-size: 0.92em; }
+@media (max-width: 640px) {
+  body {
+    padding: 20px 18px 72px;
+    font-size: 16px;
+    line-height: 1.72;
+  }
+  .header-banner {
+    margin: -20px -18px 24px;
+    padding: 24px 20px 20px;
+    border-radius: 0;
+  }
+  .header-banner .eyebrow { font-size: 0.72rem; }
+  .header-banner h1 { font-size: 1.5rem; }
+  .header-banner .sub { font-size: 0.9rem; }
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.08rem; }
+  h4 { font-size: 1rem; }
+  blockquote { padding: 0.8em 1em; font-size: 0.95em; }
+  pre { padding: 14px 16px; font-size: 0.9em; }
+  table { font-size: 0.92em; }
+  th, td { padding: 10px 11px; }
+  .toc { padding: 14px 18px; }
+  ol, ul { padding-left: 1.3em; }
+}
+@media (max-width: 380px) {
+  body { font-size: 15.5px; padding: 18px 16px 64px; }
+  .header-banner h1 { font-size: 1.35rem; }
+  table { font-size: 0.88em; }
+  th, td { padding: 8px 9px; }
+}
+</style>
+</head>
+<body>
+<header class="header-banner">
+  <span class="eyebrow">지피터스 22기 · 끌림 영상 스터디</span>
+  <h1>헤르메스(Hermes) 설치 가이드 — 24시간 자가발전 에이전트</h1>
+  <div class="sub">2026-05-19 라이브 강의 정리본</div>
+</header>
+
+<blockquote>
+<p>지피터스 22기 · 끌림 영상 스터디 · 2026-05-19 라이브
+원본: <code>2026-05-19 Hermes 설치(강성준).mp4</code> · 59분 32초
+강사: 강성준 (지피터스 파트너 · 前 신약개발·뇌과학 스터디장)</p>
+</blockquote>
+<hr>
+<h2 id="결론-tldr">결론 (TL;DR)</h2>
+<blockquote>
+<p><strong>윈도우는 이제 WSL 없이 PowerShell(관리자 권한)에 명령어 한 줄 붙여넣으면 끝. 설정 마법사는 거의 다 기본값(엔터), 프로바이더만 무료 Nous Portal(딥시크)로 고르면 된다. 마지막에 <code>hermes</code> 입력 → 노란 화면이 뜨면 성공.</strong></p>
+</blockquote>
+<h3>헤르메스 한 줄 정의</h3>
+<p>서버에서 24시간 돌아가는 <strong>자율 자가발전 에이전트</strong>. 작업하며 학습 → 해결 방식을 스킬로 저장 → 다음엔 더 잘함. 쓸수록 나에게 맞춰진다.</p>
+<h3>설정 마법사 — 선택값 한눈에</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>선택</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>오픈클로 설정 임포트?</td>
+<td><strong>n</strong></td>
+<td>설정 꼬임 방지</td>
+</tr>
+<tr>
+<td>퀵셋업 / 풀셋업</td>
+<td><strong>1 퀵셋업</strong></td>
+<td>오늘은 간단히</td>
+</tr>
+<tr>
+<td>프로바이더</td>
+<td><strong>1 Nous Portal</strong></td>
+<td>무료 티어 (헤르메스 제작사)</td>
+</tr>
+<tr>
+<td>모델</td>
+<td><strong>1 딥시크 V4 플래시</strong></td>
+<td>무료·무제한, 잡일용 토큰 절약</td>
+</tr>
+<tr>
+<td>터미널 백엔드</td>
+<td><strong>1 로컬</strong></td>
+<td>내 컴퓨터에 설치</td>
+</tr>
+<tr>
+<td>Gateway Working Dir</td>
+<td><strong>엔터</strong></td>
+<td>기본 경로</td>
+</tr>
+<tr>
+<td>Enable sudo support</td>
+<td><strong>N (무조건)</strong></td>
+<td>관리자 권한 — 위험, 처음엔 끄기</td>
+</tr>
+<tr>
+<td>툴 프로그레스</td>
+<td><strong>All / 엔터</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>컴프레션</td>
+<td><strong>0.5 / 엔터</strong></td>
+<td>기본값</td>
+</tr>
+<tr>
+<td>세션 리셋 모드</td>
+<td><strong>1 디폴트</strong></td>
+<td>24h 구동·새벽 4시 리셋</td>
+</tr>
+<tr>
+<td>인액티비티 타임아웃</td>
+<td><strong>1440분 / 엔터</strong></td>
+<td>=24시간</td>
+</tr>
+<tr>
+<td>메시징(텔레그램)</td>
+<td><strong>2 스킵</strong></td>
+<td>본 스터디에서</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>잘못 골라도 OK — <code>hermes setup</code>으로 언제든 처음부터 재설정 가능.</p>
+</blockquote>
+<h3>도구 비교 (한눈에)</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>클로드 코드</th>
+<th>헤르메스</th>
+<th>오픈클로</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주 용도</td>
+<td>프로젝트 단위 코드 개발</td>
+<td>자동화·크론잡·채팅 에이전트</td>
+<td>멀티 에이전트 관리</td>
+</tr>
+<tr>
+<td>핵심</td>
+<td>사람이 보며 개발</td>
+<td><strong>자가 발전</strong></td>
+<td>여러 에이전트</td>
+</tr>
+<tr>
+<td>궁합</td>
+<td>헤르메스와 <strong>충돌 없이 병행</strong></td>
+<td>클로드 코드와 병행 굿</td>
+<td>헤르메스와 약간 경쟁</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="강의는-어떤-내용이었나">강의는 어떤 내용이었나</h2>
+<p>지피터스 파트너 강성준 강사가, 22기 본 스터디 시작 전 모두를 위한 <strong>헤르메스 설치 공통 세션</strong>을 진행했습니다. 헤르메스가 무엇인지 짧게 짚고, 윈도우·맥을 양방향으로 보며 설치를 끝까지 따라가는 워크스루입니다. 강사는 맥에 <strong>VMWare Fusion</strong>으로 윈도우 가상 머신을 띄워(보안 격리) 윈도우 위주로 진행했습니다.</p>
+<table>
+<thead>
+<tr>
+<th>섹션</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개념</td>
+<td>헤르메스 = 24h 자가발전 에이전트, 도구 비교, 카파시 "병목론"</td>
+</tr>
+<tr>
+<td>환경</td>
+<td>맥 + VMWare 가상 윈도우 (보안 격리)</td>
+</tr>
+<tr>
+<td>실습</td>
+<td>명령어 복사 → PowerShell 관리자 실행 → 설정 마법사 → 실행</td>
+</tr>
+<tr>
+<td>마무리</td>
+<td>(시간 부족) 텔레그램 연동·활용은 본 스터디에서</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="0-한눈에-보는-설치-흐름">0. 한눈에 보는 설치 흐름</h2>
+<ol>
+<li>Nous Research 설치 페이지에서 OS별 명령어 복사</li>
+<li>PowerShell(관리자 권한) / 맥 터미널 열기</li>
+<li>명령어 붙여넣기 → uv가 파이썬 등 자동 설치</li>
+<li>설정 마법사 진행 (위 표대로)</li>
+<li>Nous Portal 무료($0) 로그인·연결</li>
+<li><code>hermes</code> 입력 → 노란 화면 = 설치 성공</li>
+</ol>
+<hr>
+<h2 id="1-헤르메스란-amp-왜-쓰나">1. 헤르메스란 &amp; 왜 쓰나</h2>
+<ul>
+<li><strong>24시간 자가발전 에이전트</strong>: 세팅하면 알아서 돌고, 스킬을 스스로 만들고 성장. 쓸수록 맞춤형이 되고 성능이 올라감.</li>
+<li><strong>원리</strong>: 작업 수행 → 학습 → 해결 방식을 스킬로 저장 → 다음에 더 나은 결과 → 반복.</li>
+</ul>
+<blockquote>
+<p>안드레 카파시: <strong>"내가 병목이 돼서는 안 된다."</strong> 사람이 프롬프트 사이에 껴 있으면 에이전트가 원활히 못 돈다. 헤르메스 같은 에이전트를 잘 쓰면 사람이 루프 밖으로 나와 <strong>슈퍼바이저(관리)</strong> 역할만 하게 된다.</p>
+</blockquote>
+<p>역할 분담 예시: 코드 작업은 <strong>클로드 코드</strong>, 딥리서치·모니터링·자동화·일정·이메일·LLM 위키는 <strong>헤르메스</strong>. 단 컨텍스트(맥락)는 서로 공유되게.</p>
+<hr>
+<h2 id="2-실습-설치-단계별">2. 실습 — 설치 단계별</h2>
+<h3>Step 1. 명령어 복사</h3>
+<p>Nous Research 공식 설치 페이지에서:
+- <strong>맥</strong>: <code>curl</code>로 시작하는 위쪽 명령어
+- <strong>윈도우</strong>: 아래쪽 명령어 (이제 <strong>WSL 없이 PowerShell 네이티브</strong> 설치 가능 — 베타라 약간 깨질 수 있으나 대체로 OK)</p>
+<h3>Step 2. 터미널 열기</h3>
+<ul>
+<li><strong>윈도우</strong>: 시작 → "파워쉘" 검색 → <strong>오른쪽 클릭 → 관리자 권한으로 실행</strong> → "디바이스 변경 허용" 예</li>
+<li><strong>맥</strong>: 스팟라이트에서 "터미널" 검색 → 실행</li>
+</ul>
+<h3>Step 3. 붙여넣기 → 설치</h3>
+<p>커서 위치에 명령어 붙여넣고 엔터. <strong>uv 패키지 매니저</strong>가 파이썬 등 필요한 것을 자동 설치(처음이면 시간이 더 걸림).</p>
+<h3>Step 4. 설정 마법사</h3>
+<p>위 TL;DR 표대로 진행. 핵심 포인트:</p>
+<ul>
+<li><strong>프로바이더 vs 모델</strong>: 프로바이더=회사(오픈AI·엔트로픽·구글), 모델=코덱스·클로드·제미나이.</li>
+<li><strong>무료로 시작</strong>: Nous Portal(1) → 로그인 → 구글 로그인 → <strong>Free($0)</strong> → <strong>Subscribe and Connect</strong>. 0원이지만 카드 정보는 요구(실제 결제 X). 헤르메스에 잡일을 많이 시키니 무료 딥시크가 토큰 절약에 유리.</li>
+<li><strong>구독자</strong>: 코덱스 구독자는 코덱스 선택(GPT 최상위), 클로드 코드 구독자는 엔트로픽. 단 <strong>클로드는 API라 비용 큼 → 헤르메스에선 비추천.</strong></li>
+</ul>
+<h3>Step 5. 실행</h3>
+<p>터미널에 <strong><code>hermes</code></strong> (또는 <code>HERMES</code>) 입력 → 노란색 에이전트 화면이 뜨면 <strong>설치 성공</strong>.</p>
+<hr>
+<h2 id="3-자주-막히는-곳">3. 자주 막히는 곳</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>파이썬 설치 오류</td>
+<td>오류 화면을 클로드/챗GPT에 주고 "파이썬 설치 코드 줘" 요청</td>
+</tr>
+<tr>
+<td>설치가 오래 걸림</td>
+<td>uv가 의존 패키지를 처음 까는 중 — 사양에 따라 다름, 대기</td>
+</tr>
+<tr>
+<td>로그인 캡차 에러</td>
+<td>브라우저 바꾸거나 새로 시도</td>
+</tr>
+<tr>
+<td>설정을 잘못 선택함</td>
+<td><code>hermes setup</code>으로 처음부터 재설정 (버셀 샌드박스 → 로컬 변경 가능)</td>
+</tr>
+<tr>
+<td>1번 로컬 vs 7번 로컬?</td>
+<td>차이 없음. 7번 = "이전 선택값 그대로"</td>
+</tr>
+<tr>
+<td>sudo 켜야 하나?</td>
+<td><strong>무조건 N</strong> (관리자 권한 = 위험, 처음엔 끄기)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>설정 완료 화면을 캡처해 두면 오늘 설정을 언제든 재현 가능. 다시보기도 제공됨.</p>
+</blockquote>
+<hr>
+<h2 id="4-다음-단계-텔레그램-연동-참고">4. 다음 단계 — 텔레그램 연동 (참고)</h2>
+<p>오늘은 설치까지가 목표라 텔레그램은 스킵. 연동 방법 두 가지:
+1. <code>hermes setup</code>의 메시징 단계에서 텔레그램 선택 → 안내대로
+2. 에이전트에게 직접 <strong>"텔레그램 연동 어떻게 하는지 스텝 바이 스텝 알려줘"</strong> 라고 질문</p>
+<p>자세한 연동·활용은 각 본 스터디에서 다룹니다.</p>
+<hr>
+<h2 id="부록-핵심-한-줄">부록 — 핵심 한 줄</h2>
+<blockquote>
+<p>"내가 병목이 돼서는 안 된다." — 안드레 카파시. 사람은 루프 밖으로 나와 관리자가 되고, 에이전트가 알아서 돌게 한다.</p>
+<p>클로드 코드 = 프로젝트 코드 개발 / 헤르메스 = 그 외 자동화·반복·채팅. 둘은 충돌 없이 함께 쓴다.</p>
+</blockquote>
+<footer class="footer">
+  이 문서는 원본 강의 녹화본(<code>2026-05-19 Hermes 설치(강성준).mp4</code>)을 Whisper로 전사한 뒤
+  주제별로 정리한 것입니다. 정확한 발화 흐름이 필요하면 원본 영상을 참조하세요.
+</footer>
+</body>
+</html>
