@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=780">
+<title>에이폼 분수물총 — 상페 아웃라인 v7</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose:#E8547A; --rose-light:#FDE8EE; --peach:#FDF0E8; --lavender:#F5F0FF;
+    --mint:#EDF8F4; --deep:#2A0E20; --text-dark:#1A1018; --text-mid:#6B5060; --text-soft:#9A7888;
+    --sec-pad-y:96px; --sec-pad-x:60px;
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#F4F4F6; font-family:'Pretendard',sans-serif; word-break:keep-all; color:var(--text-dark); }
+  .page { max-width:780px; margin:0 auto; background:#fff; }
+
+  /* 공통 타이포 */
+  .eyebrow { font-family:'Gowun Dodum',serif; font-size:22px; letter-spacing:0.1em; color:var(--rose); display:block; margin-bottom:32px; }
+  /* 엄마의 쉼 — 미들헤드 크기로 강조 */
+  .eyebrow-lg { font-family:'Gowun Dodum',serif; font-size:40px; letter-spacing:0.02em; color:var(--rose); display:block; margin-bottom:28px; }
+  .h1-gowun, .h2-sec { font-family:'Gowun Dodum',serif; font-size:56px; line-height:1.32; letter-spacing:-0.01em; color:var(--text-dark); }
+  .h2-sec { margin-bottom:44px; }
+  .mid-head { font-family:'Pretendard',sans-serif; font-size:40px; font-weight:500; line-height:1.55; color:var(--text-mid); margin-bottom:36px; }
+  .body-text { font-family:'Pretendard',sans-serif; font-size:32px; line-height:1.85; color:var(--text-mid); }
+  .body-text + .body-text { margin-top:40px; }
+  .transition-line { font-family:'Pretendard',sans-serif; font-size:30px; line-height:1.7; color:var(--text-soft); margin-top:44px; }
+  /* 물음표·느낌표 강조 (크게) */
+  .q-emph { display:inline-block; font-family:'Gowun Dodum',serif; font-size:64px; font-weight:700; color:var(--rose); line-height:1.1; margin-top:8px; }
+  /* 환기 피벗 (엄마 직접 호명·강조) */
+  .pivot-line { font-family:'Pretendard',sans-serif; font-size:40px; font-weight:700; line-height:1.5; color:var(--rose); margin-top:56px; }
+
+  .comma-top { text-align:center; padding:72px 0 8px; background:#fff; }
+  .divider { width:100%; height:1px; background:rgba(232,84,122,0.1); }
+  .divider-strong { width:100%; height:1px; background:rgba(232,84,122,0.18); }
+
+  .ph { width:100%; display:flex; align-items:center; justify-content:center; background:#EFEFEF; border:1px solid #E2E2E2; }
+  .ph .img-label { font-family:'Pretendard',sans-serif; font-size:18px; color:#9A9A9A; letter-spacing:0.01em; text-align:center; padding:0 40px; line-height:1.7; }
+  .ph-dark { width:100%; display:flex; align-items:center; justify-content:center; background:#2A2330; border:1px solid rgba(255,255,255,0.08); }
+  .ph-dark .img-label { font-family:'Pretendard',sans-serif; font-size:18px; color:rgba(255,255,255,0.4); text-align:center; padding:0 40px; line-height:1.7; }
+  .col2-wrap { display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; }
+  .col2-wrap .ph { min-height:360px; }
+
+  /* USP — 줄글 + 들여쓰기 (그리드 박스 없음) */
+  .usp-flow { margin-top:48px; text-align:left; }
+  .usp-row { padding:30px 0; border-bottom:1px solid rgba(232,84,122,0.12); }
+  .usp-row:last-child { border-bottom:none; }
+  .usp-t { font-size:36px; font-weight:700; color:var(--text-dark); line-height:1.35; }
+  .usp-no { font-family:'Gowun Dodum',serif; color:var(--rose); margin-right:14px; }
+  .usp-d { font-size:28px; color:var(--text-soft); line-height:1.5; margin-top:10px; padding-left:54px; }
+
+  /* 오퍼 카드 (가격 미표기) */
+  .offer-card { background:rgba(255,255,255,0.07); border-radius:20px; border:1px solid rgba(255,255,255,0.15); padding:48px 40px; text-align:center; margin-top:52px; }
+  .offer-card .offer-headline { font-family:'Gowun Dodum',serif; font-size:48px; line-height:1.25; color:#fff; margin-bottom:18px; }
+  .offer-card .offer-desc { font-family:'Pretendard',sans-serif; font-size:32px; line-height:1.7; color:rgba(255,220,230,0.9); margin-bottom:24px; }
+  .offer-card .offer-note { font-family:'Pretendard',sans-serif; font-size:28px; color:rgba(255,200,215,0.7); line-height:1.6; }
+
+  /* 후기 */
+  .solo-quote { background:var(--rose-light); border-left:3px solid var(--rose); border-radius:16px; padding:34px 34px 30px 36px; margin-bottom:24px; }
+  .solo-quote:last-of-type { margin-bottom:0; }
+  .solo-quote .quote-text { font-family:'Pretendard',sans-serif; font-size:30px; font-weight:500; line-height:1.7; color:var(--text-mid); margin-bottom:16px; }
+  .solo-quote .quote-foot { display:flex; align-items:center; gap:12px; }
+  .solo-quote .quote-stars { color:var(--rose); font-size:26px; letter-spacing:3px; }
+  .solo-quote .quote-nick { font-family:'Pretendard',sans-serif; font-size:24px; font-weight:600; color:var(--text-soft); }
+
+  /* FAQ 1열 */
+  .faq-list { display:flex; flex-direction:column; gap:40px; }
+  .faq-item .faq-q { font-family:'Pretendard',sans-serif; font-size:36px; font-weight:700; color:var(--text-dark); line-height:1.4; margin-bottom:14px; }
+  .faq-item .faq-a { font-family:'Pretendard',sans-serif; font-size:30px; color:var(--text-mid); line-height:1.6; }
+
+  /* 스펙 */
+  .spec-table { width:100%; border-collapse:collapse; font-family:'Pretendard',sans-serif; font-size:30px; }
+  .spec-table tr { border-bottom:1px solid rgba(232,84,122,0.08); }
+  .spec-table tr:last-child { border-bottom:none; }
+  .spec-table th { width:38%; padding:28px 20px 28px 0; color:var(--text-soft); font-weight:400; vertical-align:top; text-align:left; line-height:1.55; }
+  .spec-table td { padding:28px 0 28px 20px; color:var(--text-dark); vertical-align:top; line-height:1.55; }
+
+  .caption-rule { width:48px; height:1px; background:var(--rose); margin:0 auto 40px; opacity:0.45; }
+
+  .place-block { margin-top:56px; }
+  .place-block .pb-name { font-family:'Gowun Dodum',serif; font-size:40px; color:var(--text-dark); margin-bottom:12px; }
+  .place-block .pb-desc { font-family:'Pretendard',sans-serif; font-size:32px; line-height:1.7; color:var(--text-mid); margin-bottom:28px; }
+  .place-block .pb-image { min-height:560px; border-radius:14px; }
+
+  .overlay-wrap { width:100%; min-height:620px; position:relative; display:flex; flex-direction:column; justify-content:flex-end; background:#2A2330; }
+  .overlay-wrap::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 25%, rgba(10,4,16,0.72) 100%); }
+  .overlay-wrap .img-label-dark { position:absolute; top:42%; left:50%; transform:translate(-50%,-50%); font-family:'Pretendard',sans-serif; font-size:18px; color:rgba(255,255,255,0.38); text-align:center; z-index:2; pointer-events:none; padding:0 40px; line-height:1.7; }
+  .overlay-text { position:relative; z-index:3; padding:0 60px 64px; }
+  .overlay-text .eyebrow-dark { font-family:'Gowun Dodum',serif; font-size:22px; letter-spacing:0.1em; color:rgba(255,190,210,0.9); display:block; margin-bottom:24px; }
+  .overlay-text .h1-dark { font-family:'Gowun Dodum',serif; font-size:56px; line-height:1.32; letter-spacing:-0.01em; color:#fff; margin-bottom:22px; }
+  .overlay-text .mid-dark { font-family:'Pretendard',sans-serif; font-size:40px; font-weight:500; line-height:1.55; color:rgba(255,235,242,0.85); }
+
+  .b1-head { background:#fff; padding:48px var(--sec-pad-x) 64px; text-align:center; }
+  .b1-wide-image { min-height:720px; }
+  .b1-caption { background:var(--peach); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b2-image { min-height:560px; }
+  .b2-text { background:#fff; padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b3-section { background:var(--rose-light); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b4-head { background:var(--peach); padding:120px var(--sec-pad-x) 64px; text-align:center; }
+  .b4-wide-image { min-height:440px; }
+  .b4-caption { background:var(--peach); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b5-section { background:var(--lavender); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b6-section { background:var(--mint); padding:var(--sec-pad-y) var(--sec-pad-x); }
+  .b8-image { min-height:600px; }
+  .b8-text { background:var(--rose-light); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b9-section { background:#fff; padding:var(--sec-pad-y) var(--sec-pad-x); }
+  .b10-section { background:var(--deep); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b10-section .h2-deep { font-family:'Gowun Dodum',serif; font-size:56px; line-height:1.32; letter-spacing:-0.01em; color:#fff; margin-bottom:44px; }
+  .b10-section .mid-deep { font-family:'Pretendard',sans-serif; font-size:40px; font-weight:500; line-height:1.55; color:rgba(255,220,232,0.88); margin-bottom:36px; }
+  .b10-section .body-deep { font-family:'Pretendard',sans-serif; font-size:32px; line-height:1.85; color:rgba(255,210,225,0.78); }
+  .cta-block { margin-top:56px; }
+  .cta-text { display:inline-block; font-family:'Pretendard',sans-serif; font-size:32px; font-weight:700; color:#fff; background:var(--rose); border-radius:100px; padding:22px 52px; letter-spacing:0.03em; }
+  .b11-section { background:var(--peach); padding:var(--sec-pad-y) var(--sec-pad-x); }
+  .b12-section { background:#fff; padding:var(--sec-pad-y) var(--sec-pad-x); }
+  .b12-inner { padding-top:44px; }
+  .b12-title { font-family:'Gowun Dodum',serif; font-size:40px; line-height:1.3; color:var(--text-dark); margin-bottom:8px; }
+  .b12-caution-title { font-family:'Gowun Dodum',serif; font-size:32px; line-height:1.3; color:var(--text-dark); margin-bottom:0; }
+  .caution-list { list-style:none; padding:0; margin-top:40px; }
+  .caution-list li { font-family:'Pretendard',sans-serif; font-size:30px; line-height:1.55; color:var(--text-soft); padding:16px 0 16px 20px; border-bottom:1px solid rgba(232,84,122,0.06); position:relative; }
+  .caution-list li::before { content:'–'; position:absolute; left:0; color:var(--rose); opacity:0.5; }
+  .caution-list li:last-child { border-bottom:none; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- 쉼표 일러스트 (최상단 중앙) -->
+<div class="comma-top">
+  <svg width="108" height="138" viewBox="0 0 108 138" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M54 16C77 16 95 34 95 58C95 90 71 116 40 130C57 107 61 91 53 81C30 79 13 61 13 41C13 27 31 16 54 16Z" fill="#F4A6C2"/>
+  </svg>
+</div>
+
+<!-- B1 Hero -->
+<section class="b1-head">
+  <span class="eyebrow-lg">엄마의 쉼</span>
+  <h1 class="h1-gowun">이거 하나 쥐여주면<br>엄마를 한참 안 찾아요</h1>
+</section>
+
+<!-- IMG01 -->
+<div class="ph b1-wide-image">
+  <span class="img-label">이미지: 그늘 벤치 엄마 + 뒤에서 노는 아이 (와이드)<br>여름 공원, 따뜻한 오후 햇살, 라이프스타일 컷 (4:5)</span>
+</div>
+
+<!-- IMG02 + IMG03 -->
+<div class="col2-wrap">
+  <div class="ph"><span class="img-label">이미지: 물총 들고 환호하는 아이 클로즈업 (1:1)</span></div>
+  <div class="ph"><span class="img-label">이미지: 커피 들고 여유롭게 지켜보는 엄마 (1:1)</span></div>
+</div>
+
+<section class="b1-caption">
+  <div class="caption-rule"></div>
+  <p class="mid-head">아이가 물꽃에 푹 빠져 노는 동안<br>엄마는 그늘에 잠깐 앉아 있어도 돼요</p>
+  <p class="body-text">에이폼 분수물총 핑크+블루 두 자루<br>배터리도 충전도 없이,<br>물만 있으면 4세부터 혼자 놀아요</p>
+  <p class="transition-line">아이들이 왜 이렇게까지<br>좋아하는지부터 볼까요<br><span class="q-emph">?</span></p>
+</section>
+<!-- /B1 -->
+
+
+<!-- B2 물꽃놀이 정체성 -->
+<!-- IMG04 -->
+<div class="ph b2-image">
+  <span class="img-label">이미지: 회오리 방사형 분사 클로즈업 (물꽃)<br>햇빛에 반짝이는 물방울, 사방으로 동그랗게 퍼지는 분수 (4:3)</span>
+</div>
+
+<section class="b2-text">
+  <h2 class="h2-sec">아이들이 먼저<br>'물꽃놀이'라고 불러요</h2>
+  <p class="mid-head">직선으로 쏘는 물총이 아니라<br>사방으로 동그랗게 퍼지는 분수예요</p>
+  <p class="body-text">손잡이를 밀면 물이 빙 둘러 퍼지면서<br>햇빛에 닿는 순간 물방울이 반짝 흩어져요<br>처음 본 아이들이 "우와" 하면서<br>모여드는 데는 이유가 있어요</p>
+
+  <!-- IMG05 -->
+  <div class="ph" style="min-height:700px; margin-top:48px; border-radius:12px;">
+    <span class="img-label">이미지: 물꽃 보며 "우와" 좋아하는 아이 표정 (1:1)</span>
+  </div>
+
+  <p class="pivot-line">그런데!<br>엄마들이 더 좋아해요</p>
+</section>
+<!-- /B2 -->
+
+
+<!-- B3 공감 -->
+<!-- IMG06 -->
+<div class="ph" style="min-height:560px;">
+  <span class="img-label">(작년) 물가에서 아이 옆에 붙어 물 채워주다 지친 엄마<br>생활밀착 candid, 피로감 전달 컷 (4:3)</span>
+</div>
+
+<section class="b3-section">
+  <h2 class="h2-sec">작년 그 여름<br>물가에서 한 번도 못 앉으셨죠?</h2>
+  <p class="mid-head">"엄마 물 채워줘", "이거 봐봐", "같이 하자"<br>아이가 하루 종일 엄마아빠 찾았죠?</p>
+  <p class="body-text">정작 더 지치는 건 엄마예요<br>신나게 논 건 아이인데,<br>집에 오면 엄마가 더 녹초가 되던 그 여름</p>
+  <p class="transition-line">올해는 다를 거예요<br><span class="q-emph">!</span></p>
+</section>
+<!-- /B3 -->
+
+
+<!-- B3→B4 경계 -->
+<div class="divider-strong"></div>
+
+
+<!-- B4 변화+꿀잠 -->
+<section class="b4-head">
+  <h2 class="h2-sec">올해는<br>그늘에 앉아 지켜보기만 해도 돼요</h2>
+  <p class="mid-head">아이가 혼자 물 채우고 혼자 쏘면서<br>한참을 좋아하며 노니까요</p>
+</section>
+
+<!-- IMG07 -->
+<div class="ph b4-wide-image">
+  <span class="img-label">이미지: 그늘 벤치서 쉬는 엄마 + 멀리 혼자 노는 아이 (와이드)<br>라이프스타일, 따뜻한 오후 햇살 (16:9)</span>
+</div>
+
+<section class="b4-caption">
+  <div class="caption-rule"></div>
+  <p class="body-text">손잡이를 물에 담그고 쭉 당기면 끝이라,<br>4세도 혼자 채워요<br>"엄마 물 또 넣어줘" 하고 부르는 일이 줄어요</p>
+  <p class="body-text">그날 밤엔,<br>눕자마자 곯아떨어져요</p>
+
+  <!-- IMG08 -->
+  <div class="ph" style="min-height:560px; margin-top:48px; border-radius:12px;">
+    <span class="img-label">이미지: 실컷 논 뒤 곯아떨어진 아이, 포근한 저녁 분위기 (4:3)</span>
+  </div>
+
+  <p class="transition-line">이게 가능한 건, 에이폼 분수물총의 네 가지 덕분이에요</p>
+</section>
+<!-- /B4 -->
+
+
+<!-- B5 USP — 줄글 + 들여쓰기 -->
+<section class="b5-section">
+  <h2 class="h2-sec">에이폼 분수물총<br>이런 점이 달라요</h2>
+
+  <div class="usp-flow">
+    <div class="usp-row">
+      <p class="usp-t"><span class="usp-no">01</span>전동 금지 물놀이장도 OK</p>
+      <p class="usp-d">충전 없이 물만 있으면 돼요</p>
+    </div>
+    <div class="usp-row">
+      <p class="usp-t"><span class="usp-no">02</span>옆 아이와 놀아도 안전해요</p>
+      <p class="usp-d">퍼지는 분수형이라 덜 아파요</p>
+    </div>
+    <div class="usp-row">
+      <p class="usp-t"><span class="usp-no">03</span>두 자루가 와요</p>
+      <p class="usp-d">핑크 하나, 블루 하나</p>
+    </div>
+    <div class="usp-row">
+      <p class="usp-t"><span class="usp-no">04</span>어린 손에도 가벼워요</p>
+      <p class="usp-d">100g, 한 손에 쏙</p>
+    </div>
+  </div>
+
+  <!-- IMG09 -->
+  <div class="ph" style="min-height:700px; margin-top:56px; border-radius:12px;">
+    <span class="img-label">이미지: 4세가 펌프 손잡이 직접 당겨 물 채우는 손 디테일 (1:1)</span>
+  </div>
+
+  <p class="transition-line" style="margin-top:48px;">언제든 가지고 다니기 쉬워요</p>
+</section>
+<!-- /B5 -->
+
+
+<!-- B6 멀티 장소 (장소별 단독 사진) -->
+<section class="b6-section">
+  <h2 class="h2-sec">물만 있으면<br>어디서든 꺼내요</h2>
+  <p class="mid-head">아파트 물놀이장부터 목욕탕까지<br>여름 내내 가방에 따라다녀요</p>
+
+  <div class="place-block">
+    <p class="pb-name">아파트 물놀이장</p>
+    <p class="pb-desc">전동이 안 되는 단지 물놀이장에서도 그냥 꺼내서 놀아요</p>
+    <div class="ph pb-image"><span class="img-label">이미지: 아파트 단지 물놀이장에서 노는 아이 (전동 금지 맥락) (4:3)</span></div>
+  </div>
+  <div class="place-block">
+    <p class="pb-name">놀이터·계곡·캠핑</p>
+    <p class="pb-desc">가벼워서 가방에 쏙, 어디든 챙겨가요</p>
+    <div class="ph pb-image"><span class="img-label">이미지: 계곡·캠핑 야외에서 물놀이하는 아이 (4:3)</span></div>
+  </div>
+  <div class="place-block">
+    <p class="pb-name">수영장·풀빌라</p>
+    <p class="pb-desc">물 받아둔 곳이면 리필 걱정 없이 한참 놀아요</p>
+    <div class="ph pb-image"><span class="img-label">이미지: 수영장·풀빌라에서 신나게 노는 아이 (4:3)</span></div>
+  </div>
+  <div class="place-block">
+    <p class="pb-name">목욕탕</p>
+    <p class="pb-desc">목욕 싫다던 아이가 물총 든다고 먼저 욕실로 들어가요</p>
+    <div class="ph pb-image"><span class="img-label">이미지: 목욕탕에서 신나게 노는 아이 (4:3)</span></div>
+  </div>
+
+  <p class="transition-line" style="margin-top:56px;">낮에만 노는 게 아니에요</p>
+</section>
+<!-- /B6 -->
+
+
+<!-- B7 야간 보너스 -->
+<div class="overlay-wrap">
+  <span class="img-label-dark">이미지: 가로등·캠핑조명 아래 폭죽처럼 퍼지는 물줄기<br>다크톤, 드라마틱한 야간 컷 (4:5)</span>
+  <div class="overlay-text">
+    <span class="eyebrow-dark">야간 보너스</span>
+    <h2 class="h1-dark">낮엔 아이 손에<br>밤엔 사진 한 장이에요</h2>
+    <p class="mid-dark">어두운 데서 조명을 받으면<br>물줄기가 폭죽처럼 퍼져요</p>
+  </div>
+</div>
+
+<section style="background:var(--deep); padding:0 60px 96px; text-align:center;">
+  <p style="font-family:'Pretendard',sans-serif; font-size:32px; line-height:1.85; color:rgba(255,210,225,0.78);">
+    캠핑 조명이나 가로등 아래서 쏘면,<br>사방으로 흩어지는 물방울이 예쁘게 찍혀요<br>
+    아이 노는 김에 가족 사진 한 장 건지기 좋아요
+  </p>
+  <p style="font-family:'Pretendard',sans-serif; font-size:30px; line-height:1.7; color:rgba(255,190,210,0.55); margin-top:44px;">
+    이게 전부 1+1이에요
+  </p>
+</section>
+<!-- /B7 -->
+
+
+<!-- B8 1+1 구성 -->
+<div class="ph b8-image">
+  <span class="img-label">이미지: 핑크+블루 두 자루 제품 누끼/플랫레이<br>깔끔한 흰 배경 또는 파스텔 배경 (1:1)</span>
+</div>
+
+<section class="b8-text">
+  <h2 class="h2-sec">핑크 하나, 블루 하나<br>두 자루가 와요</h2>
+  <p class="mid-head">따로 살 필요 없이<br>한 번에 둘이에요</p>
+  <p class="body-text">둘이 함께 놀 때도,<br>하나는 두고 번갈아 쓸 때도 좋아요<br>한 자루는 집에,<br>한 자루는 가방에 넣어둬도 되고요</p>
+
+  <div class="ph" style="min-height:560px; margin-top:48px; border-radius:12px;">
+    <span class="img-label">이미지: 아이가 핑크·블루 각각 들고 환하게 (둘이 함께) (4:3)</span>
+  </div>
+
+  <p class="transition-line">이미 써본 엄마들 얘기를 들어볼까요</p>
+</section>
+<!-- /B8 -->
+
+
+<div class="divider"></div>
+
+<!-- B9 증거(후기) -->
+<section class="b9-section">
+  <h2 class="h2-sec" style="margin-bottom:48px;">써본 엄마들이<br>이렇게 말해요</h2>
+
+  <div class="ph" style="min-height:700px; margin-bottom:56px; border-radius:12px;">
+    <span class="img-label">이미지: UGC 실사용 candid — 엄마가 찍은 듯한 물놀이 한 컷 (1:1)</span>
+  </div>
+
+  <!-- 발행 시 자사 실후기로 교체 -->
+  <div class="solo-quote">
+    <p class="quote-text">"풀빌라에서 저녁 준비하는데, 아이가 노느라 엄마를 덜 찾아서 너무너무 만족했어요"</p>
+    <div class="quote-foot"><span class="quote-stars">★★★★★</span><span class="quote-nick">콩콩이맘</span></div>
+  </div>
+  <div class="solo-quote">
+    <p class="quote-text">"4살 아이도 혼자 잘 가지고 놀아요, 물 채우는 것도 혼자 해요"</p>
+    <div class="quote-foot"><span class="quote-stars">★★★★★</span><span class="quote-nick">하랑이맘</span></div>
+  </div>
+  <div class="solo-quote">
+    <p class="quote-text">"물놀이마다 챙겨갔는데, 둘 다 부서진 곳 없이 잘 놀고 가지고 왔어요"</p>
+    <div class="quote-foot"><span class="quote-stars">★★★★★</span><span class="quote-nick">튼튼이맘</span></div>
+  </div>
+  <div class="solo-quote">
+    <p class="quote-text">"목욕 귀찮아하던 애가 물총 한다고 신나서 욕실로 먼저 들어가더라고요"</p>
+    <div class="quote-foot"><span class="quote-stars">★★★★★</span><span class="quote-nick">별사랑맘</span></div>
+  </div>
+
+  <p class="transition-line" style="margin-top:44px;">이번 여름, 준비는 미리 해두는 게 좋아요</p>
+</section>
+<!-- /B9 -->
+
+
+<!-- B10 제안·CTA (가격 미표기) -->
+<section class="b10-section">
+  <h2 class="h2-deep">올여름, 지금 챙겨둬야<br>이번 여름에 써요</h2>
+
+  <div class="ph-dark" style="min-height:560px; margin-bottom:56px; border-radius:12px;">
+    <span class="img-label">이미지: 핑크+블루 1+1 패키지/구성 마무리 컷 (4:3)</span>
+  </div>
+
+  <p class="mid-deep">에이폼 분수물총 · 핑크+블루 1+1<br>40cm · 약 100g · 4세 이상 권장</p>
+  <p class="body-deep">로켓배송으로 내일 받아서,<br>이번 주말 물놀이부터 바로 써요<br>받아보고 마음에 안 들면 교환·반품도 돼요</p>
+
+  <div class="offer-card">
+    <p class="offer-headline">핑크 + 블루 1+1</p>
+    <p class="offer-desc">두 자루 구성<br>로켓배송 · 교환·반품 가능</p>
+    <p class="offer-note">40cm · 약 100g · 4세 이상 권장</p>
+  </div>
+
+  <div class="cta-block">
+    <span class="cta-text">지금 장바구니에 담아두세요</span>
+  </div>
+</section>
+<!-- /B10 -->
+
+
+<!-- B11 FAQ (1열) -->
+<section class="b11-section">
+  <h2 class="h2-sec" style="margin-bottom:44px;">자주 묻는 것들</h2>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <p class="faq-q">몇 살부터 쓸 수 있나요?</p>
+      <p class="faq-a">4세 이상 권장이에요<br>4세도 손잡이를 혼자 당겨요<br>더 어린 아이는 처음 몇 번만 도와주면 곧 혼자 해요</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">전동 금지 물놀이장에서도 되나요?</p>
+      <p class="faq-a">돼요<br>수동 펌프식이라 전동 워터건이 안 되는 곳에서도 써요</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">물은 어떻게 채우나요?</p>
+      <p class="faq-a">노즐을 물에 담그고 손잡이를 당기면 채워져요</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">색상을 고를 수 있나요?</p>
+      <p class="faq-a">핑크 하나 블루 하나, 두 자루 고정 구성이에요</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">쓰고 나서 보관은요?</p>
+      <p class="faq-a">물기를 빼고 그늘에 말려 두면 오래 써요</p>
+    </div>
+  </div>
+</section>
+<!-- /B11 -->
+
+
+<div class="divider"></div>
+
+<!-- B12 스펙·주의 -->
+<section class="b12-section">
+  <h2 class="b12-title">상품 정보</h2>
+  <div class="b12-inner">
+    <table class="spec-table">
+      <tbody>
+        <tr><th>품명</th><td>에이폼 분수물총</td></tr>
+        <tr><th>구성</th><td>핑크 1 + 블루 1 (1+1)</td></tr>
+        <tr><th>재질</th><td>플라스틱(ABS)</td></tr>
+        <tr><th>무게</th><td>약 100g (1자루 기준)</td></tr>
+        <tr><th>길이</th><td>약 40cm</td></tr>
+        <tr><th>사용연령</th><td>4세 이상 권장</td></tr>
+        <tr><th>인증</th><td>KC 어린이제품 인증 (인증서 보유 확인 후 표기)</td></tr>
+        <tr><th>원산지</th><td>중국</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:60px;">
+    <h2 class="b12-caution-title">주의사항</h2>
+    <ul class="caution-list">
+      <li>사람 얼굴·눈을 향해 직접 쏘지 마세요</li>
+      <li>사용 후 물기를 빼고 그늘에 말려 보관하세요</li>
+      <li>4세 이상 권장 제품이에요</li>
+    </ul>
+  </div>
+</section>
+<!-- /B12 -->
+
+</div><!-- /.page -->
+</body>
+</html>
