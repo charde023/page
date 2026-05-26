@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>인생 OS 2주차 — 사례 발표로 보는 북극성·투데이·클로즈데이</title>
+<meta name="description" content="인생 OS 2주차 라이브. 10명의 수강생 발표로 북극성 지표·투데이/클로즈데이·포커스 타이머·AI 에세이를 어떻게 쓰는지 보고, 강사의 북극성 코칭과 볼트 운영 비결을 정리한 보고서.">
+<meta property="og:title" content="인생 OS 2주차 — 사례 발표로 보는 북극성·투데이·클로즈데이">
+<meta property="og:description" content="인생 OS 2주차 라이브. 10명의 수강생 발표로 북극성 지표·투데이/클로즈데이·포커스 타이머·AI 에세이를 어떻게 쓰는지 보고, 강사의 북극성 코칭과 볼트 운영 비결을 정리한 보고서.">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root {
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-soft: #f1f6ff;
+  --text: #1f2a44;
+  --text-soft: #5a6b87;
+  --text-muted: #8593ab;
+  --border: #e3e9f3;
+  --border-soft: #eef2f8;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-deep: #1d4ed8;
+  --shadow: 0 1px 2px rgba(31, 42, 68, 0.04), 0 8px 24px rgba(31, 42, 68, 0.06);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-feature-settings: 'tnum', 'ss03';
+  line-height: 1.75;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+h1, h2, h3, h4 {
+  line-height: 1.35;
+  margin-top: 2em;
+  margin-bottom: 0.65em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.18rem; color: var(--accent-deep); }
+h4 { font-size: 1.02rem; }
+p { margin: 0.85em 0; color: var(--text); }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+strong { color: var(--accent-deep); font-weight: 700; }
+em { color: var(--text-soft); }
+blockquote {
+  margin: 1.2em 0;
+  padding: 0.9em 1.2em;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+  border-radius: 10px;
+  font-size: 0.97em;
+}
+blockquote p { margin: 0.35em 0; }
+blockquote strong { color: var(--accent-deep); }
+ol, ul { padding-left: 1.5em; }
+li { margin: 0.4em 0; }
+code {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.88em;
+  background: var(--surface-soft);
+  color: var(--accent-deep);
+  padding: 0.15em 0.45em;
+  border-radius: 5px;
+  border: 1px solid var(--border-soft);
+}
+pre {
+  background: var(--surface);
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  line-height: 1.6;
+  margin: 1.2em 0;
+}
+pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.92em;
+  color: var(--text);
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.2em 0;
+  font-size: 0.96em;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft);
+}
+tr:last-child td { border-bottom: 0; }
+th {
+  background: var(--surface-soft);
+  font-weight: 600;
+  color: var(--accent-deep);
+  border-bottom: 1px solid var(--border);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
+.header-banner {
+  margin: -32px -24px 36px;
+  padding: 34px 28px 28px;
+  background: linear-gradient(160deg, #e0ecff 0%, #f1f6ff 55%, #ffffff 100%);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.header-banner .eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-soft);
+  margin-bottom: 14px;
+}
+.header-banner h1 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.header-banner .sub {
+  margin-top: 10px;
+  color: var(--text-soft);
+  font-size: 0.97rem;
+}
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 1.5em 0 2.4em;
+  box-shadow: var(--shadow);
+}
+.toc h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.toc ol {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--text-soft);
+}
+.toc li { margin: 0.3em 0; }
+.toc a { color: var(--text); font-weight: 500; }
+.toc a:hover { color: var(--accent); }
+.footer {
+  margin-top: 4em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--border);
+  font-size: 0.88em;
+  color: var(--text-muted);
+  text-align: center;
+}
+.footer code { font-size: 0.92em; }
+@media (max-width: 640px) {
+  body {
+    padding: 20px 18px 72px;
+    font-size: 16px;
+    line-height: 1.72;
+  }
+  .header-banner {
+    margin: -20px -18px 24px;
+    padding: 24px 20px 20px;
+    border-radius: 0;
+  }
+  .header-banner .eyebrow { font-size: 0.72rem; }
+  .header-banner h1 { font-size: 1.5rem; }
+  .header-banner .sub { font-size: 0.9rem; }
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.08rem; }
+  h4 { font-size: 1rem; }
+  blockquote { padding: 0.8em 1em; font-size: 0.95em; }
+  pre { padding: 14px 16px; font-size: 0.9em; }
+  table { font-size: 0.92em; }
+  th, td { padding: 10px 11px; }
+  .toc { padding: 14px 18px; }
+  ol, ul { padding-left: 1.3em; }
+}
+@media (max-width: 380px) {
+  body { font-size: 15.5px; padding: 18px 16px 64px; }
+  .header-banner h1 { font-size: 1.35rem; }
+  table { font-size: 0.88em; }
+  th, td { padding: 8px 9px; }
+}
+</style>
+</head>
+<body>
+<header class="header-banner">
+  <span class="eyebrow">지피터스 22기 · 끌림 영상 스터디</span>
+  <h1>인생 OS 2주차 — 사례 발표로 보는 북극성·투데이·클로즈데이</h1>
+  <div class="sub">2026-05-26 라이브 강의 정리본</div>
+</header>
+
+<blockquote>
+<p>지피터스 22기 · 끌림 영상 스터디 · 2026-05-26 라이브 강의
+원본: <code>2026-05-26_2주차_인생OS.mp4</code> (2시간 46분) / 강사: 인생 OS 스터디장 (AI 파트너 "폴라"와 운영)</p>
+</blockquote>
+<hr>
+<h2 id="결론-tldr">결론 (TL;DR)</h2>
+<blockquote>
+<p><strong>인생 OS = 옵시디언 볼트 + AI(클로드 코드·안티그래비티)로 "북극성 하나"를 향해 하루를 열고(투데이) 닫는(클로즈데이) 개인 운영체제.</strong> 핵심은 더 열심히가 아니라 <strong>안 할 일을 걸러내는 것</strong>, 그리고 기록은 최소로 하고 <strong>나머지는 AI가 쓰게</strong> 하는 것.</p>
+</blockquote>
+<h3>인생 OS를 이루는 5개 부품</h3>
+<table>
+<thead>
+<tr>
+<th>부품</th>
+<th>무엇</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>북극성 지표</strong></td>
+<td>삶의 단 하나의 목표</td>
+<td>숫자 들어간 목표 <strong>하나만</strong>. 나머진 다음 턴으로</td>
+</tr>
+<tr>
+<td><strong>투데이 / 클로즈데이</strong></td>
+<td>하루 열기 / 닫기 스킬</td>
+<td>정해진 틀은 이 둘뿐. 소급 실행도 가능</td>
+</tr>
+<tr>
+<td><strong>포커스 타이머</strong></td>
+<td>10분 단위 집중 세션</td>
+<td>내보내기로 볼트에 기록. "실제 집중은 3~4시간"을 깨닫게 함</td>
+</tr>
+<tr>
+<td><strong>AI 에세이</strong></td>
+<td>하루 회고를 AI가 작성</td>
+<td>"클로즈데이 하고 에세이 써줘" 한 번 요청</td>
+</tr>
+<tr>
+<td><strong>승인 게이트</strong></td>
+<td>AI 쓰기 권한 통제</td>
+<td>AI 자유 폴더는 <code>07_scratch.ai</code> 하나뿐</td>
+</tr>
+</tbody>
+</table>
+<h3>강사가 강조한 7가지</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>메시지</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Not-to-do</strong></td>
+<td>"안 할 일"을 걸러내는 게 삶의 질을 높인다</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>북극성은 하나</strong></td>
+<td>후보에 순위 매겨 1번만 남기고 숫자 목표로</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>메타인지</strong></td>
+<td>8시간 일한 것 같아도 실제 집중은 3~4시간</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>결정이 빨라진다</strong></td>
+<td>두 달 쓰니 "할까 말까"를 바로 결정</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>갭을 AI가 지적</strong></td>
+<td>하고 싶은 것 vs 해야 할 것의 간극을 회고가 콕 짚어줌</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>기록은 최소로</strong></td>
+<td>선언·감사 몇 줄만, 나머진 AI가 작성</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>완벽 시스템 금지</strong></td>
+<td>2~3달 운영 후 자기 체계화. 처음부터 X</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="강의는-어떤-내용이었나">강의는 어떤 내용이었나</h2>
+<p>2주차부터 <strong>수강생 사례 발표</strong>가 시작됐다. PPT 없이 게시글을 띄우고, 1주차 셋업(옵시디언+AI 설치, 북극성 지표 세우기, 포커스 타이머·투데이·클로즈데이 실행) 경험을 공유하는 자리. 발표 후 투표로 <strong>우수사례 발표자</strong>를 뽑고, 마지막엔 초보자를 위한 <strong>Q&amp;A·보충 수업</strong>으로 강사가 볼트 운영 비결을 직접 시연했다.</p>
+<table>
+<thead>
+<tr>
+<th>구성</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>오프닝</td>
+<td>게시글의 중요성, 발표·투표 안내</td>
+</tr>
+<tr>
+<td>1·2부 발표</td>
+<td>수강생 10명 사례 + 강사 피드백</td>
+</tr>
+<tr>
+<td>투표</td>
+<td>우승: <strong>에리킴 (57%, 8표)</strong></td>
+</tr>
+<tr>
+<td>Q&amp;A·후토크</td>
+<td>북극성 코칭 + 볼트/타이머/에세이 데모</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="0-한눈에-보는-인생-os-하루-루프">0. 한눈에 보는 인생 OS 하루 루프</h2>
+<ol>
+<li><strong>투데이</strong> — 하루를 연다 (AI가 데일리 노트 생성: 우선순위·북극성 정렬·미완료)</li>
+<li><strong>포커스 타이머</strong> — 10/20분 세션으로 집중, 집중도·목표 부합 체크</li>
+<li>(타이머) <strong>내보내기</strong> — 오늘 데이터를 볼트 데일리 폴더에 저장</li>
+<li><strong>클로즈데이</strong> — 하루를 마감·정리</li>
+<li><strong>AI 에세이</strong> — AI 파트너가 하루 회고를 글로 써줌 → 다음 날 아침에 읽기</li>
+</ol>
+<hr>
+<h2 id="1-북극성-지표-하나의-별">1. 북극성 지표 — "하나의 별"</h2>
+<p>삶에서 가장 빛나는 <strong>단 하나의 방향성</strong>. 여러 수강생이 "북극성 정의가 가장 인상적/가치 있었다"고 꼽았다(에리킴은 반나절을 투자).</p>
+<ul>
+<li><strong>하나만 정하는 게 챌린지.</strong> 목표 2~3개는 잘 정하지만, 하나로 좁히기를 어려워한다.</li>
+<li><strong>방법:</strong> 후보에 순위를 매겨 2·3번은 <em>"안 한다"가 아니라 "다음 턴에 한다"</em>로 치워두고, 1번 하나만 북극성으로.</li>
+<li><strong>반드시 숫자가 들어간 목표</strong>로. (예: "4주 후 문서화된 업무 매뉴얼 6개")</li>
+<li>1차 지표를 <strong>언제까지</strong>로 잡느냐가 중요(스터디 4주든 유튜브 8주든 무관).</li>
+<li>AI(클로드 코드)와 <strong>문답</strong>으로 찾으면 막연했던 지향점을 구체화할 수 있다.</li>
+</ul>
+<blockquote>
+<p><strong>핵심 인사이트:</strong> "열심히 하지 않아서 더 열심히 해야 하는 게 아니라, <strong>하지 않아야 할 것</strong>을 확인하고 정리하는 게 중요하다." → 선택과 집중 → 심리적 안심 → 능률 → 선순환.</p>
+</blockquote>
+<hr>
+<h2 id="2-투데이-클로즈데이-정해진-틀은-이-둘뿐">2. 투데이 / 클로즈데이 — 정해진 틀은 이 둘뿐</h2>
+<ul>
+<li><strong>투데이</strong>: 하루의 시작. AI가 데일리 노트를 새로 생성.</li>
+<li><strong>클로즈데이</strong>: 하루의 마감·정리.</li>
+<li>같은 옵시디언 폴더를 <strong>안티그래비티·클로드 코드·코덱스·VS 코드</strong> 어디서 열어도 동작.</li>
+<li><strong>소급 실행 가능</strong>: 오늘이 26일이어도 <code>투데이 5월 16일</code> / <code>클로즈데이 5월 16</code>로 과거 날짜를 채울 수 있다. 빼먹은 날은 그냥 넘어가도 OK.</li>
+</ul>
+<hr>
+<h2 id="3-포커스-타이머-시간의-메타인지">3. 포커스 타이머 — 시간의 메타인지</h2>
+<p>10/15/20분 단위 집중 세션. 여러 수강생이 <strong>10분 단위의 위력</strong>에 놀랐다("10분이 트리거로 크게 작동, 보상이 바로 온다").</p>
+<ul>
+<li><strong>내보내기</strong> → 폴더 지정 → 오늘 날짜 볼트에 저장. (자정 넘기면 24시 기준으로 어제/오늘 구분.)</li>
+<li>며칠 빼먹었으면 <strong>주간 분석 → CSV 내보내기</strong>로 일주일치를 한 번에 복구.</li>
+<li><strong>가장 큰 깨달음:</strong> "8시간 일한 것 같은데 세션으로 재보면 3~4시간." 240분(24세션)이면 엄청 많이 한 날. → <strong>시간 효율 메타인지</strong> → 현실적 계획 → 북극성과 무관한 일을 안 하게 됨.</li>
+</ul>
+<hr>
+<h2 id="4-ai-에세이-amp-승인-게이트-기록은-최소로">4. AI 에세이 &amp; 승인 게이트 — 기록은 최소로</h2>
+<ul>
+<li>강사도 직접 쓰는 건 "오늘의 선언/기도/감사/하루를 여는 마음" <strong>몇 줄 + 코멘트</strong>가 전부. <strong>나머지는 AI가 작성.</strong></li>
+<li><strong>에세이</strong>: 매일 직접 쓰면 숙제가 되니, AI 파트너가 쓰게 한다. 안 써주면 <em>"클로즈데이 하고 에세이도 꼭 써줘"</em> 한 번 요청 → 기억하고 계속 작성. (강사는 <strong>하루키·김영하·이석원</strong> 작가의 담백한 문체로 요청.)</li>
+<li><strong>승인 게이트</strong>: AI가 읽기·쓰기 모두 자유로운 폴더는 <code>07_scratch.ai</code> <strong>하나뿐</strong>. 나머지는 허락해야만 쓴다(데일리 노트는 투데이/클로즈데이에서만 생성).</li>
+</ul>
+<blockquote>
+<p><strong>"내용이 풍부해지는 비결":</strong> 초기엔 아이디어·타이머 기록뿐이라 컨텍스트가 빈약하다. <strong>로그 파일("오늘의 생산물")을 한 군데로 모으기 시작</strong>하면 AI 컨텍스트가 쌓여, 회고·분석·에세이가 갈수록 풍부해진다.</p>
+</blockquote>
+<hr>
+<h2 id="5-볼트폴더-운영">5. 볼트·폴더 운영</h2>
+<ul>
+<li><strong>볼트는 하나든 여러 개든 자유.</strong> 단, <strong>인생 OS 볼트는 나머지와 완전히 분리</strong>해 두세 달 운영 후 자기 체계를 잡는 걸 추천.</li>
+<li>바이브코딩을 시작하면 폴더가 마구 늘어난다 → 폴더 정리를 잘하는 <strong>클로드 코드</strong>에 루트로 열어 "리뷰하고 구조 재편성해 줘".</li>
+<li>옵시디언은 다 MD라 각 프로젝트 폴더를 볼트로 열면 관리가 좋다.</li>
+<li><strong>처음부터 완벽한 시스템을 구축하려 하지 말 것</strong> — 출발이 어려워진다. 여러분 스타일로 과감히 커스터마이징.</li>
+</ul>
+<hr>
+<h2 id="6-발표-사례-한눈에-수강생-10명">6. 발표 사례 한눈에 (수강생 10명)</h2>
+<table>
+<thead>
+<tr>
+<th>발표자</th>
+<th>한 줄 사례</th>
+<th>핵심 키워드</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>건벨리</td>
+<td>흩어진 실행 계획을 북극성으로 정리</td>
+<td>옵시디언+안티그래비티, 승인 게이트</td>
+</tr>
+<tr>
+<td>신아림</td>
+<td>건축사, 북극성 정의가 가장 인상적</td>
+<td>클로즈데이·에세이 4회</td>
+</tr>
+<tr>
+<td><strong>에리킴(에리)</strong> ★우승</td>
+<td>10분 타임 트래킹으로 일상의 북극성 찾기</td>
+<td>블록체인→재취업, 반나절 북극성</td>
+</tr>
+<tr>
+<td>김영성</td>
+<td>인풋→아웃풋 전환, 플러그인 개발</td>
+<td>Tasks·Task Notes, 하나의 볼트</td>
+</tr>
+<tr>
+<td>강진태</td>
+<td>WSL 설치 오류 해결</td>
+<td>바이오스 SVM 가상화, 아이젠하워</td>
+</tr>
+<tr>
+<td>리젠화(이원규)</td>
+<td>초보자, 3시간 끝에 설치 완료</td>
+<td>제미나이로 설치, 딸기농부 학원</td>
+</tr>
+<tr>
+<td>김소영</td>
+<td>퇴직 후 프리랜서, Not-to-do</td>
+<td>업무 확장, 북극성으로 집중</td>
+</tr>
+<tr>
+<td>강수영</td>
+<td>5일 묵힌 인생 OS 재가동</td>
+<td>AI가 "딴 길로 새는 함정"을 지적</td>
+</tr>
+<tr>
+<td>정현진</td>
+<td>AI 활용에도 선택과 집중</td>
+<td>직장인 기록 시간 부족 → 1시간 코칭</td>
+</tr>
+<tr>
+<td>후노우</td>
+<td>하루 기록 구조 만들기</td>
+<td>웹 트래킹 위젯 자작(리플릿), 헤르메스</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>우승: 에리킴(에리) — 14명 중 8표(57%).</strong> 다음 주 월요일 베스트 발표 진행.</p>
+</blockquote>
+<hr>
+<h2 id="7-자주-막히는-곳">7. 자주 막히는 곳</h2>
+<table>
+<thead>
+<tr>
+<th>상황</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>북극성을 하나로 못 좁힘</td>
+<td>후보 순위 매겨 1번만, 2·3번은 "다음 턴"</td>
+</tr>
+<tr>
+<td>기록할 시간이 없음</td>
+<td>퇴근 후 30분~1시간만이라도 타이머 켜고 집중</td>
+</tr>
+<tr>
+<td>에세이를 AI가 안 써줌</td>
+<td>"클로즈데이 하고 에세이도 써줘" 한 번 요청</td>
+</tr>
+<tr>
+<td>하루를 빼먹음</td>
+<td>그냥 넘어가거나 <code>투데이/클로즈데이 + 날짜</code>로 소급</td>
+</tr>
+<tr>
+<td>포커스 데이터 누락</td>
+<td>주간 분석 → CSV 내보내기로 일주일치 복구</td>
+</tr>
+<tr>
+<td>폴더가 마구 늘어남</td>
+<td>클로드 코드에 루트로 열어 구조 재편성 요청</td>
+</tr>
+<tr>
+<td>WSL 설치 오류</td>
+<td>바이오스 가상화(AMD=SVM, Intel=VT-x) 활성화 확인</td>
+</tr>
+<tr>
+<td>안티그래비티 업데이트 혼란</td>
+<td>1주차(5/20 전후) 이슈 — 폴더 다시 열어 재연결</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="부록-강의-자료">부록 — 강의 자료</h2>
+<ul>
+<li>단톡방에 <strong>북극성 지표 간단 영상</strong>(짧은 버전)과 <strong>풀 강의 영상</strong>(8주 프로그램 첫 강의를 1시간으로 편집) 제공.</li>
+<li>영상 <strong>고정 댓글</strong>에 북극성 지표 워크북 · 북극성 코치 · 북극성 타이머 링크.</li>
+<li>응용: 스킬이 없어도 <em>"이번 주차 기록을 분석·리뷰해 줘"</em>처럼 말로 요청하면 충분히 동작 — <strong>나만의 스킬</strong>을 만들어 나가면 된다.</li>
+</ul>
+<footer class="footer">
+  이 문서는 원본 강의 녹화본(<code>2026-05-26_2주차_인생OS.mp4</code>)을 Whisper로 전사한 뒤
+  주제별로 정리한 것입니다. 정확한 발화 흐름이 필요하면 원본 영상을 참조하세요.
+</footer>
+</body>
+</html>
