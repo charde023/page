@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#f4f7fc" />
+<title>에이폼 — 연구소 신고 작성양식·예시 모음</title>
+<meta name="description" content="기업부설연구소 신고용 작성 템플릿과 에이폼 예시 (인사발령장·업무분장표·활동개요서·과제계획서·연구노트)" />
+<style>
+  :root{
+    --bg:#f4f7fc;--card:#fff;--card2:#f3f6fc;--line:#dde5f2;--line2:#e8eef8;
+    --text:#1c2740;--muted:#5b6b88;--soft:#7a8aa6;
+    --brand:#2f6bff;--brand2:#1f4fcc;--brandbg:#eaf1ff;
+    --ok:#0fa37f;--okbg:#e6f7f1;--okline:#bfe9da;
+    --warn:#d98300;--warnbg:#fff5e3;--warnline:#f3dcad;
+    --code:#0f1b33;--codetext:#e6edfb;
+    --shadow:0 2px 10px rgba(28,39,64,.06),0 1px 3px rgba(28,39,64,.05);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    line-height:1.75;-webkit-font-smoothing:antialiased;font-size:17px;}
+  a{color:var(--brand2);text-decoration:none;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 18px;}
+
+  header.hero{padding:calc(46px + env(safe-area-inset-top)) 18px 32px;text-align:center;
+    background:radial-gradient(740px 320px at 50% -40px,var(--brandbg),transparent 72%);
+    border-bottom:1px solid var(--line);}
+  .badge{display:inline-block;font-size:14px;font-weight:600;color:var(--brand2);
+    background:var(--brandbg);border:1px solid #cfe0ff;padding:7px 16px;border-radius:999px;margin-bottom:16px;}
+  .hero h1{font-size:clamp(25px,5.6vw,36px);margin:0 0 12px;line-height:1.3;letter-spacing:-.01em;}
+  .hero p{color:var(--muted);margin:0;font-size:16px;}
+
+  nav.toc{position:sticky;top:0;z-index:10;background:rgba(244,247,252,.92);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:10px 0;}
+  nav.toc .inner{max-width:880px;margin:0 auto;padding:0 12px;display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  nav.toc a{flex:none;font-size:14px;font-weight:600;color:var(--muted);
+    padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;}
+
+  section{padding:30px 0 6px;scroll-margin-top:60px;}
+  h2.sec{font-size:22px;margin:0 0 4px;display:flex;align-items:center;gap:10px;letter-spacing:-.01em;}
+  h2.sec .n{width:32px;height:32px;flex:none;display:grid;place-items:center;
+    background:var(--brand);color:#fff;border-radius:9px;font-size:15px;font-weight:700;}
+  .sub{color:var(--muted);margin:4px 0 14px;font-size:15px;}
+
+  .block{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+    overflow:hidden;margin:0 0 14px;}
+  .block .bar{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line2);background:var(--card2);}
+  .block .bar .t{font-weight:700;font-size:15px;}
+  .block .bar .sp{margin-left:auto;display:flex;gap:8px;}
+  .btn{font-size:13px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--brand2);
+    padding:6px 12px;border-radius:8px;cursor:pointer;}
+  .btn:active{transform:translateY(1px);}
+  .btn.done{color:var(--ok);border-color:var(--okline);background:var(--okbg);}
+  pre{margin:0;padding:16px;background:var(--code);color:var(--codetext);
+    font-family:"D2Coding","Consolas",ui-monospace,monospace;font-size:13.5px;line-height:1.6;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;}
+  .tip{background:var(--okbg);border:1px solid var(--okline);border-radius:12px;padding:13px 15px;font-size:14.5px;color:#0c5c47;margin:0 0 8px;}
+  .tip b{color:#0a7a5c;}
+  .warnbox{background:var(--warnbg);border:1px solid var(--warnline);border-radius:12px;padding:13px 15px;font-size:14.5px;color:#7a4d00;margin:8px 0 0;}
+
+  footer{margin-top:42px;padding:24px 18px calc(50px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line);text-align:center;color:var(--soft);font-size:13.5px;line-height:1.7;}
+  .backlink{display:inline-block;margin-top:6px;font-weight:600;}
+
+  @media(max-width:640px){.wrap{padding:0 16px;} h2.sec{font-size:20px;} pre{font-size:12.5px;}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">주식회사 에이폼 · APOm</span>
+    <h1>연구소 신고 작성양식 · 예시 모음</h1>
+    <p>복사해서 바로 쓰는 템플릿 + 에이폼 맞춤 예시 · 각 항목 복사/다운로드 가능</p>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="inner">
+    <a href="#order">인사발령장</a>
+    <a href="#duty">업무분장표</a>
+    <a href="#overview">활동개요서</a>
+    <a href="#plan">과제계획서</a>
+    <a href="#note">연구노트</a>
+    <a href="#dl">전체 다운로드</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <p class="sub" style="margin-top:20px">
+    아래 각 블록의 <b>복사</b> 버튼으로 내용을 클립보드에 담아 한글/워드에 붙여넣으세요.
+    공식 빈 양식(PDF)과 상세 가이드는 <a href="../2026-05-26-apom-rnd-filing-guide/">신고 실무 종합보고서</a>에 있습니다.
+  </p>
+
+  <!-- 1 인사발령장 -->
+  <section id="order">
+    <h2 class="sec"><span class="n">1</span>인사발령장</h2>
+    <p class="sub">연구전담요원·연구소장 각각 발령. <b>발령일자는 연구소 설립신고일 이전</b>으로.</p>
+    <div class="block">
+      <div class="bar"><span class="t">인사발령장 템플릿</span><span class="sp">
+        <button class="btn" data-copy="t-order">복사</button>
+        <a class="btn" href="files/인사발령장_템플릿.txt" download>다운로드</a></span></div>
+      <pre id="t-order">                        인 사 발 령
+
+문서번호: 에이폼 인사 제2026-○○호
+발령일자: 2026년 ○○월 ○○일
+
+  성    명 : ○ ○ ○ (생년월일 또는 사번)
+  현 소 속 : ○○팀
+  현 직 위 : ○○
+
+  위 사람을 아래와 같이 발령함.
+
+  ┌─────────────────────────────────────────┐
+  │ 발령사항 : 주식회사 에이폼 부설 ○○연구소        │
+  │            연구전담요원 (전임)으로 발령          │
+  │ 담당직무 : 연구개발 (○○ 분야)                  │
+  │ 발령일자 : 2026년 ○○월 ○○일                  │
+  └─────────────────────────────────────────┘
+
+              2026년 ○○월 ○○일
+
+          주식회사 에이폼
+          대표이사  윤 진 노  (인)</pre>
+    </div>
+    <div class="warnbox">대표님 본인 발령도 기록하되, 창업 3년(2027-03-01) 경과 전 변경신고로 제외 예정임을 내부 메모. 담당직무에 영업·생산 기재 금지.</div>
+  </section>
+
+  <!-- 2 업무분장표 -->
+  <section id="duty">
+    <h2 class="sec"><span class="n">2</span>업무분장표</h2>
+    <p class="sub">연구전담요원이 <b>연구개발만</b> 수행함을 입증(겸직 배제).</p>
+    <div class="block">
+      <div class="bar"><span class="t">업무분장표 템플릿</span><span class="sp">
+        <button class="btn" data-copy="t-duty">복사</button>
+        <a class="btn" href="files/업무분장표_템플릿.txt" download>다운로드</a></span></div>
+      <pre id="t-duty">          주식회사 에이폼 부설 ○○연구소 업무분장표
+                                        (2026. ○○. ○○ 기준)
+
+┌──────┬────────┬──────┬──────┬────────────────────────┬────────┐
+│ 구분  │ 소속    │ 성명  │ 직위  │ 담당업무                      │ 겸직여부 │
+├──────┼────────┼──────┼──────┼────────────────────────┼────────┤
+│연구소장│○○연구소 │윤진노 │ 소장  │연구기획·총괄, 과제관리,        │없음(전임)│
+│      │        │      │      │성형공정 연구개발               │        │
+├──────┼────────┼──────┼──────┼────────────────────────┼────────┤
+│연구전담│○○연구소 │○ ○ ○│선임   │플라스틱 성형조건 최적화 연구,   │없음(전임)│
+│요원   │        │      │연구원 │시제품 설계·물성시험·데이터분석   │        │
+├──────┼────────┼──────┼──────┼────────────────────────┼────────┤
+│(연구  │○○연구소 │○ ○ ○│연구   │실험 보조, 시험·측정 지원,       │없음     │
+│보조원)│        │      │보조원 │연구자료 정리 (해당 시)         │        │
+└──────┴────────┴──────┴──────┴────────────────────────┴────────┘
+
+  ※ 생산·영업·구매·품질관리·물류 등 연구 외 업무는
+     별도 상시종업원( ○○팀 등 )이 수행함.
+
+              주식회사 에이폼  대표이사  윤진노 (인)</pre>
+    </div>
+    <div class="warnbox">담당업무란에 생산·영업·품질·물류를 적으면 자격·세액공제가 부정됩니다. 연구개발 행위만 기재.</div>
+  </section>
+
+  <!-- 3 활동개요서 -->
+  <section id="overview">
+    <h2 class="sec"><span class="n">3</span>연구개발활동개요서 + 예시</h2>
+    <p class="sub">신규신고 필수. <b>전문연구분야는 과학기술 분류 명칭으로</b>, 분야 2~3개 집중.</p>
+    <div class="tip"><b>항목:</b> ① 회사개요 ② 연구조직 ③ 전문연구분야(과학기술 분류!) ④ 목표 ⑤ 과제목록 ⑥ 내용·방법 ⑦ 필요성 ⑧ 기대효과(기술·경제·지재)</div>
+    <div class="block">
+      <div class="bar"><span class="t">✅ 예시 A — 플라스틱 성형</span><span class="sp">
+        <button class="btn" data-copy="t-ovA">복사</button></span></div>
+      <pre id="t-ovA">① 회사 개요
+   주식회사 에이폼 / 포장용 플라스틱 성형용기·기타 플라스틱 제품 제조,
+   전자상거래, 창고·물류업 / KSIC C2220 등
+② 연구조직 개요
+   ○○연구소 — 자사 제조·물류 공정의 기술적 난제를 자체 연구개발로 해결
+③ 전문 연구분야 : 화학공학 / 고분자소재공학
+④ 연구개발 목표
+   식품안전 기준 충족하면서 원재료 12% 절감하는 경량화 설계와,
+   성형 온도·사출 속도 최적 구간을 과학적으로 도출
+⑤ 연구과제 목록
+   - (과제1) 식품포장용 HDPE 블로우 성형 용기의 두께 균일성 및
+     낙하충격 강도 향상을 위한 성형 공정조건 최적화
+     / 2026.07~2027.06 / 담당: ○○○ 연구원
+⑥ 연구개발 내용 및 방법
+   - 원재료(HDPE·PP) 물성변수(MI·밀도) 조합 실험설계(DOE)
+   - 성형온도(180~220℃)·블로우압력(4~8bar)·냉각시간 구간별
+     시제품 30배치 제작 및 두께편차 측정
+   - KS M 3100 기준 낙하충격·압축강도 시험
+   - 최적조건 파라미터 도출 및 재현성 검증
+⑦ 연구개발 필요성
+   현재 HDPE 용기 불량률 4.2%, 두께편차로 인한 충격파손이 전체
+   클레임의 38%. 성형 메커니즘이 미규명되어 경험적 조정에 의존 →
+   체계적 연구 필요
+⑧ 기대효과
+   - 기술적: 성형 불량률 1% 이하, 최적 공정 파라미터 DB 구축
+   - 경제적: 원재료비 연 약 3,200만원 절감
+   - 지식재산: 성형조건 최적화 노하우 특허 출원 검토</pre>
+    </div>
+    <div class="block">
+      <div class="bar"><span class="t">✅ 예시 B — 스마트 물류</span><span class="sp">
+        <button class="btn" data-copy="t-ovB">복사</button></span></div>
+      <pre id="t-ovB">③ 전문 연구분야 : 컴퓨터·소프트웨어 / 산업공학
+④ 연구개발 목표
+   자사 D2C 플랫폼 일 주문데이터(SKU 약 800종)를 학습데이터로,
+   수요예측 오차율(MAPE) 15% 이하, 피킹 이동거리 20% 단축을 달성하는
+   WMS 내장 알고리즘 자체 개발
+⑤ 연구과제 목록
+   - (과제2) 전자상거래 주문데이터 기반 AI 수요예측 알고리즘 및
+     피킹 동선 최적화 WMS 모듈 개발 / 2026.07~2027.06 / 담당: ○○○
+⑥ 연구개발 내용 및 방법
+   - 2년치 주문이력 전처리, 계절성·프로모션 변수 추출
+   - ARIMA·Prophet·LSTM 비교실험 및 앙상블 설계
+   - 창고 레이아웃 기반 그래프탐색(TSP 변형) 알고리즘 구현
+   - WMS 프로토타입 개발 → 실창고 파일럿 4주+ 테스트
+⑦ 연구개발 필요성
+   재고 발주가 담당자 경험에 의존, 과잉재고·품절 손실 월평균 약 280만원.
+   범용 WMS 수요예측 모듈이 자사 특성(이커머스 계절성·소용량 다품종)에
+   부적합 → 자체 알고리즘 연구 필요
+⑧ 기대효과
+   - 기술적: 수요예측 정확도 향상, 재고회전율 1.4→1.8배
+   - 경제적: 재고손실 연 약 3,360만원 절감 추정
+   - 지식재산: 물류 최적화 알고리즘 SW 저작권 등록</pre>
+    </div>
+    <div class="warnbox">❌ 나쁜 예: "전문연구분야: 제조업 전반 및 IT" → 과학기술 분야 미특정으로 반려. "기대효과: 매출 향상" → 기술적 성과 없음. <a href="files/연구개발활동개요서_템플릿_에이폼예시.txt" download>전체 다운로드</a></div>
+  </section>
+
+  <!-- 4 과제계획서 -->
+  <section id="plan">
+    <h2 class="sec"><span class="n">4</span>과제계획서 + 예시</h2>
+    <p class="sub">세무 세액공제·보관용(과제별, 5년). 공식서식 = 조특법 별지 제3호의2.</p>
+    <div class="block">
+      <div class="bar"><span class="t">✅ 예시 — HDPE 성형조건 최적화</span><span class="sp">
+        <button class="btn" data-copy="t-plan">복사</button>
+        <a class="btn" href="files/과제계획서_템플릿_에이폼예시.txt" download>다운로드</a></span></div>
+      <pre id="t-plan">1. 과제명 : 식품포장용 HDPE 블로우 성형 용기의 두께 균일성 및
+            낙하충격 강도 향상을 위한 성형 공정조건 최적화
+2. 연구소명 : 주식회사 에이폼 부설 ○○연구소
+3. 과제책임자 : ○○○ 선임연구원
+4. 연구기간 : 2026.07.01 ~ 2027.06.30 (12개월)
+5. 총 예산 : 80,000천원
+   - 인건비 55,000 / 재료비 18,000 / 기타(시험·외주) 7,000
+6. 연구개발 목표
+   - 두께편차 ±0.05mm 이내, 낙하충격 불량률 1% 이하
+   - 원재료 사용량 12% 절감 경량화 설계
+7. 연구개발 내용 및 방법
+   - DOE 기반 원재료·공정변수 조합 실험
+   - 성형온도/블로우압력/냉각시간 구간별 시제품 30배치 제작·측정
+   - KS M 3100 낙하충격·압축강도 시험, 최적조건 도출·재현성 검증
+8. 기대성과
+   - 기술적: 최적 공정 파라미터 DB, 성형 불량률 1% 이하
+   - 경제적: 원재료비 연 약 3,200만원 절감
+9. 연구 추진일정 (월별 WBS)
+   1~2월차  문헌조사·현황분석·실험설계(DOE)
+   3~5월차  원재료 조합 실험(시제품 1~3차)
+   6~8월차  물성시험(낙하충격·압축강도·두께)
+   9~10월차 최적조건 후보 3종 선별·검증
+   11월차   재현성 확인(양산 유사환경)
+   12월차   결과정리·보고서·특허 출원 검토
+10. 참여 연구원
+   - ○○○ 선임연구원 (책임, 80%)
+   - 윤진노 연구소장 (총괄, 30%)</pre>
+    </div>
+    <div class="warnbox">양산·일상 품질관리(QC)는 과제 등록 불가. 실패해도 보고서에 원인·대안 기재(세액공제 방어).</div>
+  </section>
+
+  <!-- 5 연구노트 -->
+  <section id="note">
+    <h2 class="sec"><span class="n">5</span>연구노트</h2>
+    <p class="sub">활동 당일 기록(소급 금지). 공식서식 = 조특법 별지 제3호의2. 5년 보관.</p>
+    <div class="block">
+      <div class="bar"><span class="t">연구노트 1페이지 템플릿</span><span class="sp">
+        <button class="btn" data-copy="t-note">복사</button>
+        <a class="btn" href="files/연구노트_템플릿.txt" download>다운로드</a></span></div>
+      <pre id="t-note">─────────────────────────────────────────────
+ 연구노트 No. ____            날짜: 2026. __. __ (   )
+ 연구소명 : 주식회사 에이폼 부설 ○○연구소
+ 과 제 명 : ____________________________________
+ 작 성 자 : ______ (서명)    확 인 자 : ______ (서명/날짜)
+─────────────────────────────────────────────
+[1] 금일 연구목표
+   -
+[2] 사용 재료·장비·SW (사양 포함)
+   -
+[3] 연구 방법·절차 (제3자가 재현 가능한 수준)
+   -
+[4] 수행 내용 / 측정값·데이터
+   -
+[5] 결과 및 고찰 (성공·실패 모두 기재)
+   -
+[6] 다음 연구 계획
+   -
+─────────────────────────────────────────────
+ ※ 수정 시: 사선(/) 후 옆에 정정내용 + 날짜 + 서명
+            (덧칠·수정테이프 금지)
+─────────────────────────────────────────────</pre>
+    </div>
+    <div class="warnbox">실패·오류 수정 과정이 "기술적 불확실성 극복"의 핵심 증거. 겸직자(대표님 포함)는 Time Sheet 병행 필수.</div>
+  </section>
+
+  <!-- 전체 다운로드 -->
+  <section id="dl">
+    <h2 class="sec"><span class="n">6</span>전체 파일 다운로드</h2>
+    <div class="tip">
+      작성 템플릿(텍스트) 5종:
+      <a href="files/인사발령장_템플릿.txt" download>인사발령장</a> ·
+      <a href="files/업무분장표_템플릿.txt" download>업무분장표</a> ·
+      <a href="files/연구개발활동개요서_템플릿_에이폼예시.txt" download>활동개요서+예시</a> ·
+      <a href="files/과제계획서_템플릿_에이폼예시.txt" download>과제계획서+예시</a> ·
+      <a href="files/연구노트_템플릿.txt" download>연구노트</a>
+    </div>
+    <p class="sub" style="margin-top:14px">
+      공식 빈 양식(PDF)과 2025 업무편람은 →
+      <a href="../2026-05-26-apom-rnd-filing-guide/#forms">신고 실무 종합보고서 · 서식 다운로드</a>
+    </p>
+    <a class="backlink" href="../2026-05-26-apom-rnd-filing-guide/">← 신고 실무 종합보고서로</a>
+  </section>
+
+</div>
+
+<footer>
+  주식회사 에이폼 (APOm) · 사업자등록번호 660-81-03093<br/>
+  ○○ 표시는 실제 정보로 교체하세요. 예시 수치는 가이드용이므로 자사 현황으로 수정 필요.
+</footer>
+
+<script>
+document.querySelectorAll('.btn[data-copy]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var el=document.getElementById(b.getAttribute('data-copy'));
+    var txt=el.innerText;
+    navigator.clipboard.writeText(txt).then(function(){
+      var o=b.textContent; b.textContent='복사됨 ✓'; b.classList.add('done');
+      setTimeout(function(){b.textContent=o;b.classList.remove('done');},1500);
+    });
+  });
+});
+</script>
+</body>
+</html>
