@@ -2,112 +2,133 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#f4f7fc" />
 <title>주식회사 에이폼 — 기업부설연구소 설립 조건</title>
 <meta name="description" content="주식회사 에이폼 기업부설연구소(R&D센터) 설립을 위한 인정 요건 정리" />
 <style>
   :root{
-    --bg:#0e1525; --card:#16203a; --card2:#1b2745; --line:#2a3a5e;
-    --text:#e8eef9; --muted:#9fb0cf; --brand:#4f8cff; --brand2:#7aa7ff;
-    --ok:#27c093; --warn:#f5a623; --danger:#ff6b6b;
-    --chip:#22325a;
+    --bg:#f4f7fc; --bg2:#eaf0fb; --card:#ffffff; --card2:#f3f6fc;
+    --line:#dde5f2; --line2:#e8eef8;
+    --text:#1c2740; --muted:#5b6b88; --soft:#7a8aa6;
+    --brand:#2f6bff; --brand2:#1f4fcc; --brandbg:#eaf1ff;
+    --ok:#0fa37f; --okbg:#e6f7f1; --okline:#bfe9da;
+    --warn:#d98300; --warnbg:#fff5e3; --warnline:#f3dcad;
+    --shadow:0 2px 10px rgba(28,39,64,.06), 0 1px 3px rgba(28,39,64,.05);
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%;}
   body{
-    margin:0; background:linear-gradient(180deg,#0b1120,#0e1525 40%);
-    color:var(--text);
+    margin:0; background:var(--bg); color:var(--text);
     font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
-    line-height:1.7; -webkit-font-smoothing:antialiased;
+    line-height:1.75; -webkit-font-smoothing:antialiased; font-size:17px;
   }
   a{color:var(--brand2); text-decoration:none;}
-  .wrap{max-width:920px; margin:0 auto; padding:0 20px;}
+  .wrap{max-width:860px; margin:0 auto; padding:0 18px;}
 
   header.hero{
-    padding:64px 20px 40px; text-align:center;
-    background:radial-gradient(900px 360px at 50% -60px, rgba(79,140,255,.22), transparent 70%);
+    padding:calc(52px + env(safe-area-inset-top)) 18px 38px; text-align:center;
+    background:radial-gradient(720px 320px at 50% -40px, var(--brandbg), transparent 72%);
     border-bottom:1px solid var(--line);
   }
   .badge{
-    display:inline-block; font-size:13px; letter-spacing:.06em;
-    color:var(--brand2); background:var(--chip); border:1px solid var(--line);
-    padding:6px 14px; border-radius:999px; margin-bottom:18px;
+    display:inline-block; font-size:14px; font-weight:600; letter-spacing:.04em;
+    color:var(--brand2); background:var(--brandbg); border:1px solid #cfe0ff;
+    padding:7px 16px; border-radius:999px; margin-bottom:18px;
   }
-  .hero h1{font-size:clamp(26px,4.5vw,40px); margin:0 0 12px; line-height:1.25;}
-  .hero p{color:var(--muted); margin:0; font-size:16px;}
-  .hero .meta{margin-top:18px; font-size:13px; color:var(--muted);}
+  .hero h1{font-size:clamp(28px,7vw,40px); margin:0 0 14px; line-height:1.28; letter-spacing:-.01em;}
+  .hero p{color:var(--muted); margin:0; font-size:17px;}
+  .hero .meta{margin-top:16px; font-size:14px; color:var(--soft);}
 
-  /* verdict */
   .verdict{
-    margin:34px auto 10px; max-width:920px;
-    background:linear-gradient(135deg,#16264a,#13203c);
-    border:1px solid var(--line); border-radius:18px; padding:26px 26px;
+    margin:30px auto 6px;
+    background:linear-gradient(135deg,#ffffff,#f3f7ff);
+    border:1px solid var(--line); border-radius:18px; padding:24px 22px; box-shadow:var(--shadow);
   }
-  .verdict h2{margin:0 0 8px; font-size:20px;}
-  .verdict .big{font-size:18px; color:var(--text);}
+  .verdict h2{margin:0 0 10px; font-size:21px;}
+  .verdict .big{font-size:17.5px; color:var(--text); margin:0;}
   .verdict .key{color:var(--brand2); font-weight:700;}
   .deadline{
-    margin-top:16px; display:flex; gap:12px; align-items:flex-start;
-    background:rgba(245,166,35,.1); border:1px solid rgba(245,166,35,.4);
-    border-radius:12px; padding:14px 16px; color:#ffd9a0; font-size:14px;
+    margin-top:18px; display:flex; gap:12px; align-items:flex-start;
+    background:var(--warnbg); border:1px solid var(--warnline);
+    border-radius:14px; padding:15px 16px; color:#7a4d00; font-size:15px;
   }
   .deadline b{color:var(--warn);}
 
-  section{padding:36px 0 8px;}
-  h2.sec{font-size:22px; margin:0 0 6px; display:flex; align-items:center; gap:10px;}
+  section{padding:34px 0 6px;}
+  h2.sec{font-size:23px; margin:0 0 8px; display:flex; align-items:center; gap:11px; letter-spacing:-.01em;}
   h2.sec .n{
-    width:30px;height:30px; flex:none; display:grid; place-items:center;
-    background:var(--brand); color:#fff; border-radius:9px; font-size:15px; font-weight:700;
+    width:34px;height:34px; flex:none; display:grid; place-items:center;
+    background:var(--brand); color:#fff; border-radius:10px; font-size:17px; font-weight:700;
   }
-  .sub{color:var(--muted); margin:0 0 18px; font-size:14px;}
+  .sub{color:var(--muted); margin:0 0 18px; font-size:15.5px;}
 
   .grid{display:grid; gap:14px;}
   .grid.cols-2{grid-template-columns:repeat(2,1fr);}
-  @media(max-width:640px){.grid.cols-2{grid-template-columns:1fr;}}
 
   .card{
-    background:var(--card); border:1px solid var(--line); border-radius:14px;
-    padding:18px 18px; position:relative;
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:18px 18px; position:relative; box-shadow:var(--shadow);
   }
-  .card h3{margin:0 0 6px; font-size:16px;}
-  .card p{margin:0; color:var(--muted); font-size:14px;}
+  .card h3{margin:0 0 7px; font-size:17.5px;}
+  .card p{margin:0; color:var(--muted); font-size:15.5px;}
   .card .tag{
-    position:absolute; top:14px; right:14px; font-size:11px; padding:3px 9px;
-    border-radius:999px; border:1px solid var(--line); color:var(--muted);
+    display:inline-block; margin-bottom:10px; font-size:12.5px; font-weight:600;
+    padding:4px 11px; border-radius:999px; border:1px solid var(--line); color:var(--soft);
   }
-  .tag.ok{color:var(--ok); border-color:rgba(39,192,147,.5); background:rgba(39,192,147,.1);}
-  .tag.check{color:var(--warn); border-color:rgba(245,166,35,.5); background:rgba(245,166,35,.1);}
+  .tag.ok{color:var(--ok); border-color:var(--okline); background:var(--okbg);}
+  .tag.check{color:var(--warn); border-color:var(--warnline); background:var(--warnbg);}
 
-  table{width:100%; border-collapse:collapse; font-size:14px; margin:6px 0 4px;}
-  th,td{padding:11px 12px; text-align:left; border-bottom:1px solid var(--line);}
+  .tablewrap{border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow);}
+  table{width:100%; border-collapse:collapse; font-size:15.5px;}
+  th,td{padding:13px 14px; text-align:left; border-bottom:1px solid var(--line2); vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
   th{color:var(--muted); font-weight:600; background:var(--card2);}
   tr td:first-child{font-weight:600;}
-  .tablewrap{border:1px solid var(--line); border-radius:12px; overflow:hidden;}
   .hl{color:var(--brand2); font-weight:700;}
 
-  ul.clean{margin:6px 0 0; padding-left:18px; color:var(--muted); font-size:14px;}
-  ul.clean li{margin:6px 0;}
+  ul.clean{margin:10px 0 0; padding-left:20px; color:var(--muted); font-size:15.5px;}
+  ul.clean li{margin:8px 0;}
+  ul.clean b{color:var(--text);}
 
-  /* checklist */
-  .check-row{
-    display:flex; gap:12px; align-items:flex-start; padding:13px 14px;
-    border-bottom:1px solid var(--line);
-  }
+  .check-card{padding:4px 4px;}
+  .check-row{display:flex; gap:13px; align-items:flex-start; padding:15px 14px; border-bottom:1px solid var(--line2);}
   .check-row:last-child{border-bottom:none;}
-  .dot{width:20px;height:20px;flex:none;border-radius:50%; margin-top:2px; display:grid;place-items:center; font-size:12px; font-weight:700;}
-  .dot.ok{background:rgba(39,192,147,.18); color:var(--ok); border:1px solid rgba(39,192,147,.5);}
-  .dot.check{background:rgba(245,166,35,.18); color:var(--warn); border:1px solid rgba(245,166,35,.5);}
-  .check-row .t{font-size:14px;}
-  .check-row .t b{display:block; margin-bottom:2px; font-size:15px; color:var(--text);}
+  .dot{width:24px;height:24px;flex:none;border-radius:50%; margin-top:2px; display:grid;place-items:center; font-size:14px; font-weight:700;}
+  .dot.ok{background:var(--okbg); color:var(--ok); border:1px solid var(--okline);}
+  .dot.check{background:var(--warnbg); color:var(--warn); border:1px solid var(--warnline);}
+  .check-row .t{font-size:15.5px;}
+  .check-row .t b{display:block; margin-bottom:3px; font-size:16.5px; color:var(--text);}
   .check-row .t span{color:var(--muted);}
 
   footer{
-    margin-top:48px; padding:28px 20px 60px; border-top:1px solid var(--line);
-    text-align:center; color:var(--muted); font-size:13px;
+    margin-top:46px; padding:26px 18px calc(54px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line); text-align:center; color:var(--soft); font-size:14px; line-height:1.7;
   }
-  .legend{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:14px; font-size:13px;}
-  .legend span{display:inline-flex; align-items:center; gap:6px;}
-  .sq{width:11px;height:11px;border-radius:3px;display:inline-block;}
+  .legend{display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-bottom:14px; font-size:14px; color:var(--muted);}
+  .legend span{display:inline-flex; align-items:center; gap:7px;}
+  .sq{width:13px;height:13px;border-radius:4px;display:inline-block;}
+
+  /* ---------- 모바일 최적화 ---------- */
+  @media(max-width:640px){
+    body{font-size:17px;}
+    .wrap{padding:0 16px;}
+    header.hero{padding:calc(40px + env(safe-area-inset-top)) 16px 32px;}
+    .grid.cols-2{grid-template-columns:1fr;}
+    h2.sec{font-size:21px;}
+    h2.sec .n{width:32px;height:32px;}
+    .verdict{padding:20px 17px; border-radius:16px;}
+    .verdict .big{font-size:17px;}
+    /* 모바일에서 표를 좌우 스크롤 가능하게 */
+    .tablewrap{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+    table{min-width:430px;}
+    th,td{padding:12px 12px; font-size:15px;}
+    .card{padding:17px 16px;}
+  }
+  @media(max-width:380px){
+    body{font-size:16.5px;}
+    table{min-width:360px;}
+  }
 </style>
 </head>
 <body>
@@ -115,7 +136,7 @@
 <header class="hero">
   <div class="wrap">
     <span class="badge">주식회사 에이폼 · APOm</span>
-    <h1>기업부설연구소(R&D센터)<br/>설립 조건</h1>
+    <h1>기업부설연구소(R&amp;D센터)<br/>설립 조건</h1>
     <p>경북 경산시 와촌면 사업장 기준 · 인정 요건 정리</p>
     <div class="meta">정리일 2026-05-26 · 사업자등록번호 660-81-03093 · 개업 2024-03-01</div>
   </div>
@@ -235,9 +256,9 @@
   <!-- 7 -->
   <section>
     <h2 class="sec"><span class="n">7</span>에이폼 충족 현황 체크리스트</h2>
-    <div class="card" style="padding:6px 6px;">
+    <div class="card check-card">
       <div class="check-row"><span class="dot ok">✓</span><div class="t"><b>물적 공간</b><span>부지 1,000평·공장 400평·사무동 33평 보유 — 공간 부족 없음</span></div></div>
-      <div class="check-row"><span class="dot ok">✓</span><div class="t"><b>R&D 연결 업종</b><span>제조업(플라스틱)·창고업·전자상거래 등록 — 연구주제 연결 용이</span></div></div>
+      <div class="check-row"><span class="dot ok">✓</span><div class="t"><b>R&amp;D 연결 업종</b><span>제조업(플라스틱)·창고업·전자상거래 등록 — 연구주제 연결 용이</span></div></div>
       <div class="check-row"><span class="dot ok">✓</span><div class="t"><b>창업 3년 이내</b><span>개업 2024-03-01 — 2명 기준 적용 가능 (2027-03-01 전)</span></div></div>
       <div class="check-row"><span class="dot ok">✓</span><div class="t"><b>비수도권 소재</b><span>경산시 — 지방세 감면(취득세·재산세) 검토 대상</span></div></div>
       <div class="check-row"><span class="dot check">?</span><div class="t"><b>연구전담요원 후보 수</b><span>최소 2명 확보 가능 여부 — 설립유형 결정의 핵심</span></div></div>
