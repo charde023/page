@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#f4f7fc" />
+<title>에이폼 — 기업부설연구소 설립 단계별 가이드</title>
+<meta name="description" content="주식회사 에이폼 기업부설연구소 설립 단계별 실행 가이드 (전담요원 2명 기준)" />
+<style>
+  :root{
+    --bg:#f4f7fc; --bg2:#eaf0fb; --card:#ffffff; --card2:#f3f6fc;
+    --line:#dde5f2; --line2:#e8eef8;
+    --text:#1c2740; --muted:#5b6b88; --soft:#7a8aa6;
+    --brand:#2f6bff; --brand2:#1f4fcc; --brandbg:#eaf1ff;
+    --ok:#0fa37f; --okbg:#e6f7f1; --okline:#bfe9da;
+    --warn:#d98300; --warnbg:#fff5e3; --warnline:#f3dcad;
+    --danger:#d64545; --dangerbg:#fdecec; --dangerline:#f4c9c9;
+    --shadow:0 2px 10px rgba(28,39,64,.06), 0 1px 3px rgba(28,39,64,.05);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    line-height:1.75; -webkit-font-smoothing:antialiased; font-size:17px;
+  }
+  a{color:var(--brand2); text-decoration:none;}
+  .wrap{max-width:860px; margin:0 auto; padding:0 18px;}
+
+  header.hero{
+    padding:calc(50px + env(safe-area-inset-top)) 18px 36px; text-align:center;
+    background:radial-gradient(720px 320px at 50% -40px, var(--brandbg), transparent 72%);
+    border-bottom:1px solid var(--line);
+  }
+  .badge{
+    display:inline-block; font-size:14px; font-weight:600; letter-spacing:.04em;
+    color:var(--brand2); background:var(--brandbg); border:1px solid #cfe0ff;
+    padding:7px 16px; border-radius:999px; margin-bottom:18px;
+  }
+  .hero h1{font-size:clamp(27px,6.5vw,38px); margin:0 0 14px; line-height:1.3; letter-spacing:-.01em;}
+  .hero p{color:var(--muted); margin:0; font-size:17px;}
+  .hero .meta{margin-top:16px; font-size:14px; color:var(--soft);}
+
+  /* 경고 박스 */
+  .alert{
+    margin:30px auto 8px; background:var(--dangerbg);
+    border:1px solid var(--dangerline); border-radius:18px; padding:22px 22px; box-shadow:var(--shadow);
+  }
+  .alert h2{margin:0 0 10px; font-size:20px; color:#9e2b2b; display:flex; gap:9px; align-items:center;}
+  .alert p{margin:0 0 10px; font-size:16px; color:#7a3030;}
+  .alert p:last-child{margin-bottom:0;}
+  .alert b{color:var(--danger);}
+  .alert .ok{color:var(--ok); font-weight:700;}
+
+  .cmp{margin:18px auto 0;}
+  .tablewrap{border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow); background:#fff;}
+  table{width:100%; border-collapse:collapse; font-size:15.5px;}
+  th,td{padding:13px 14px; text-align:left; border-bottom:1px solid var(--line2); vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  th{color:var(--muted); font-weight:600; background:var(--card2);}
+  tr td:first-child{font-weight:600;}
+
+  .note{
+    margin:18px auto 0; background:var(--brandbg); border:1px solid #cfe0ff;
+    border-radius:14px; padding:15px 17px; font-size:15.5px; color:#23448c;
+  }
+  .note b{color:var(--brand2);}
+
+  section{padding:30px 0 6px;}
+  h2.sec{font-size:23px; margin:0 0 18px; letter-spacing:-.01em;}
+
+  /* 스텝 타임라인 */
+  .steps{position:relative; margin-left:6px;}
+  .step{position:relative; padding:0 0 22px 56px;}
+  .step:before{
+    content:""; position:absolute; left:18px; top:6px; bottom:-6px; width:2px; background:var(--line);
+  }
+  .step:last-child:before{display:none;}
+  .step .num{
+    position:absolute; left:0; top:0; width:38px; height:38px; border-radius:11px;
+    background:var(--brand); color:#fff; display:grid; place-items:center; font-weight:700; font-size:16px;
+    box-shadow:0 2px 6px rgba(47,107,255,.35);
+  }
+  .step.s0 .num{background:#5b6b88;}
+  .step.sx .num{background:var(--danger); box-shadow:0 2px 6px rgba(214,69,69,.35);}
+  .step .box{
+    background:var(--card); border:1px solid var(--line); border-radius:15px;
+    padding:16px 17px; box-shadow:var(--shadow);
+  }
+  .step h3{margin:0 0 4px; font-size:18px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .step .lead{margin:0 0 10px; color:var(--muted); font-size:15px;}
+  .pill{font-size:12px; font-weight:600; padding:3px 9px; border-radius:999px; border:1px solid var(--line);}
+  .pill.first{color:var(--brand2); background:var(--brandbg); border-color:#cfe0ff;}
+  .pill.key{color:var(--warn); background:var(--warnbg); border-color:var(--warnline);}
+  .pill.danger{color:var(--danger); background:var(--dangerbg); border-color:var(--dangerline);}
+
+  ul.chk{list-style:none; margin:0; padding:0;}
+  ul.chk li{position:relative; padding:6px 0 6px 28px; font-size:15.5px; color:var(--text); border-top:1px solid var(--line2);}
+  ul.chk li:first-child{border-top:none;}
+  ul.chk li:before{
+    content:"☐"; position:absolute; left:0; top:5px; color:var(--brand); font-size:17px; font-weight:700;
+  }
+  ul.chk li.warn:before{content:"⚠"; color:var(--warn);}
+  ul.chk li b{color:var(--text);}
+  ul.chk li small{color:var(--soft); display:block; font-size:13.5px; margin-top:1px;}
+
+  /* 지금 할 일 */
+  .todo{background:linear-gradient(135deg,#ffffff,#f3f7ff); border:1px solid var(--line); border-radius:18px; padding:22px 22px; box-shadow:var(--shadow);}
+  .todo h2{margin:0 0 14px; font-size:21px;}
+  .todo ol{margin:0; padding-left:22px;}
+  .todo li{margin:9px 0; font-size:16px;}
+  .todo li b{color:var(--brand2);}
+
+  .backlink{display:inline-flex; align-items:center; gap:7px; margin-top:8px; font-size:15.5px; font-weight:600;}
+
+  footer{
+    margin-top:42px; padding:26px 18px calc(54px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line); text-align:center; color:var(--soft); font-size:14px; line-height:1.7;
+  }
+
+  @media(max-width:640px){
+    .wrap{padding:0 16px;}
+    header.hero{padding:calc(38px + env(safe-area-inset-top)) 16px 30px;}
+    h2.sec{font-size:21px;}
+    .alert{padding:19px 17px;} .alert h2{font-size:18px;} .alert p{font-size:15.5px;}
+    .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;} table{min-width:420px;}
+    .step{padding-left:50px;} .step .num{width:34px;height:34px;border-radius:10px;}
+    .step:before{left:16px;}
+    .todo{padding:19px 17px;} .todo li{font-size:15.5px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">주식회사 에이폼 · APOm</span>
+    <h1>기업부설연구소<br/>설립 단계별 가이드</h1>
+    <p>연구전담요원 2명 (대표님 + 정규직 1명) 기준</p>
+    <div class="meta">정리일 2026-05-26 · 개업 2024-03-01 · 창업 3년 이내 (2027-03-01 전)</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 경고: 대표 포함 함정 -->
+  <div class="alert">
+    <h2>⚠️ 먼저 알아야 할 것 — "대표님 포함"의 함정</h2>
+    <p><b>대표이사도 연구전담요원이 될 수 있습니다.</b> 단 ① 자격요건(자연계 학사 이상 또는 기사 이상) 충족 ② 실제 연구개발 수행 ③ <b>창업 3년 이내 소기업일 때만</b> 인정됩니다.</p>
+    <p><b>함정 —</b> 창업 3년(2027-03-01)이 지나면 <b>대표님은 변경신고로 연구전담요원에서 빠져야</b> 합니다. 그러면 정규직 1명만 남아 일반 소기업 기준(3명) 미달이 됩니다.</p>
+    <p>즉 <span class="ok">"대표님 + 정규직 1명" 구성은 지금 설립은 100% 가능</span>하지만, 2027-03 이후 유지하려면 연구원을 더 확보해야 합니다.</p>
+  </div>
+
+  <div class="cmp">
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>구성</th><th>지금 설립</th><th>2027-03 이후</th></tr></thead>
+        <tbody>
+          <tr><td>대표님 + 정규직 1명</td><td>✅ 가능</td><td>⚠️ 대표 제외 → 연구원 추가 필요</td></tr>
+          <tr><td>정규직 2명 (대표 제외)</td><td>✅ 더 안정적</td><td>벤처확인 받으면 2명 유지 가능</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      👉 일단 <b>대표님 + 정규직 1명으로 지금 설립</b>하고, 그 사이 연구원 1명을 더 채용하거나 벤처확인(연구개발유형)을 준비하는 것이 현실적입니다. 아래 단계는 이 전제로 정리합니다.
+    </div>
+  </div>
+
+  <!-- 단계 -->
+  <section>
+    <h2 class="sec">📋 설립 단계별 실행</h2>
+    <div class="steps">
+
+      <div class="step s0">
+        <div class="num">0</div>
+        <div class="box">
+          <h3>자격 사전 점검 <span class="pill first">가장 먼저</span></h3>
+          <p class="lead">신고 전, 두 분의 자격증명서부터 확인하세요. 여기서 막히면 다음 단계가 무의미합니다.</p>
+          <ul class="chk">
+            <li>대표님: 자연계(자연과학·공학·의학) <b>학사 이상</b> 졸업증명서 <b>또는</b> 기술·기능분야 <b>기사 이상</b> 자격증</li>
+            <li>정규직 A: 위와 동일한 자격</li>
+            <li>자격 미달자가 있으면 전공·경력 요건 재확인 <small>중소기업은 전문대 + 연구경력으로 가능한 경우도 있음</small></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div class="box">
+          <h3>기업 규모·유형 확정</h3>
+          <ul class="chk">
+            <li>중소기업확인서 발급 (소기업/중기업 구분)</li>
+            <li>창업 3년 이내 확인 — 개업 2024-03-01 → ✅ 2027-03-01 전</li>
+            <li>설립유형 = <b>기업부설연구소</b> (연구전담요원 2명 = 대표 + A)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">2</div>
+        <div class="box">
+          <h3>연구소 형태·명칭·소장 결정</h3>
+          <ul class="chk">
+            <li>연구소 명칭 확정 <small>예: 스마트 제조·물류 기술연구소 / 커머스 운영기술 연구소</small></li>
+            <li><b>연구소장 지정</b> — 통상 대표님 또는 정규직 A가 겸임 (소장도 연구원 자격 필요)</li>
+            <li>연구소 조직도 작성</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">3</div>
+        <div class="box">
+          <h3>독립 연구공간 확보 <span class="pill key">현장 핵심</span></h3>
+          <ul class="chk">
+            <li><b>사무동 2층을 연구소 본공간으로 지정</b></li>
+            <li>다른 공간과 분리: <b>고정 벽체 + 별도 출입문</b> (간이 파티션 ❌) <small>전용면적 50㎡ 이하면 일정 분리구역 방식도 예외 가능</small></li>
+            <li>연구원 좌석·PC·자료보관함·연구소 현판 배치</li>
+            <li>(선택) 공장 일부를 시제품·시험·측정 전용구역으로 별도 구획</li>
+            <li>층 전체 도면 + 연구소 내부 도면 준비</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">4</div>
+        <div class="box">
+          <h3>연구기자재 구비</h3>
+          <ul class="chk">
+            <li>연구전용 PC, 개발 소프트웨어</li>
+            <li>연구주제 관련 시험·측정·시제품 장비</li>
+            <li><b>연구소 공간 안에서</b> 기자재 사진 촬영 (창고·생산라인 분산 ❌)</li>
+            <li>연구기자재 목록 + 설치 위치표</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">5</div>
+        <div class="box">
+          <h3>인사발령·인력서류</h3>
+          <ul class="chk">
+            <li>두 분에 대한 <b>연구전담요원 발령장</b></li>
+            <li><b>업무분장표</b> — 연구 외 업무 겸직 배제 명시 (특히 대표님의 연구 전담 부분)</li>
+            <li>연구 외 업무(생산·영업·물류)를 맡을 <b>별도 상시종업원</b> 확인</li>
+            <li>4대보험·재직 증빙</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">6</div>
+        <div class="box">
+          <h3>연구개발활동 계획 수립</h3>
+          <ul class="chk">
+            <li><b>연구개발활동 개요서</b> 작성 (매출사업과 연결된 주제로)</li>
+            <li>1년 단위 과제계획서</li>
+            <li>연구노트·결과보고서 양식 준비</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">7</div>
+        <div class="box">
+          <h3>온라인 신고 <span class="pill first">선설립 후신고</span></h3>
+          <ul class="chk">
+            <li><b>KOITA 신고관리시스템</b>(rnd.or.kr) 접속</li>
+            <li>신청서 + 연구개발인력 현황 + 연구기자재 현황 + 활동 개요서 입력</li>
+            <li>조직도·도면·현판/출입구/내부 사진 첨부</li>
+            <li>신고 전 <b>자가진단</b>으로 요건 셀프 체크</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">8</div>
+        <div class="box">
+          <h3>심사·인정서 수령</h3>
+          <ul class="chk">
+            <li>서류 검토 → 필요 시 보완 → 인정서 발급</li>
+            <li>실사 대비: <b>도면 = 현판 = 실제 배치</b> 일치 최종 확인</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step sx">
+        <div class="num">9</div>
+        <div class="box">
+          <h3>사후관리 <span class="pill danger">대표님 필수</span></h3>
+          <ul class="chk">
+            <li><b>연구노트를 과제별로 작성</b> (세액공제 방어 핵심)</li>
+            <li>인건비·재료비·장비비 구분관리</li>
+            <li class="warn"><b>2027-03-01 전 변경신고 준비</b> — 대표님을 연구전담요원에서 제외하고 대체 연구원(정규직) 추가 등록. 이 시점 전에 채용 또는 벤처확인 준비 완료</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">10</div>
+        <div class="box">
+          <h3>혜택 신청</h3>
+          <ul class="chk">
+            <li>법인세 R&D 세액공제 (국세청 사전심사 제도 활용 권장)</li>
+            <li>지방세 감면 → <b>경산시 세무부서</b>에 연구소용 부동산 취득세·재산세 감면 문의</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 지금 할 일 -->
+  <section>
+    <div class="todo">
+      <h2>✅ 지금 당장 할 일 3가지</h2>
+      <ol>
+        <li><b>자격증명서 확보</b> — 대표님·정규직 A의 학위/자격증으로 0단계 통과 확인</li>
+        <li><b>사무동 2층 독립성 점검</b> — 벽체·출입문 여부, 33평이 전체인지 층별인지</li>
+        <li><b>2027-03 이후 대비</b> — 연구원 1명 추가 채용 계획 또는 벤처확인 일정</li>
+      </ol>
+      <a class="backlink" href="../2026-05-26-apom-rnd-institute/">← 설립 조건 요약 페이지 보기</a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  주식회사 에이폼 (APOm) · 사업자등록번호 660-81-03093 · 경북 경산시 와촌면 팔공로132길 38<br/>
+  내부 검토용 요약 자료 · 실제 신고 요건은 KOITA 신고관리시스템(rnd.or.kr) 기준을 확인하세요.
+</footer>
+
+</body>
+</html>
