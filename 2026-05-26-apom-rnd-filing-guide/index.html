@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#f4f7fc" />
+<title>에이폼 — 기업부설연구소 신고 실무 종합보고서</title>
+<meta name="description" content="주식회사 에이폼 기업부설연구소 설립·신고 실무 종합보고서 (절차·하드웨어·기자재·사진·양식·예시·주의사항)" />
+<style>
+  :root{
+    --bg:#f4f7fc;--card:#fff;--card2:#f3f6fc;--line:#dde5f2;--line2:#e8eef8;
+    --text:#1c2740;--muted:#5b6b88;--soft:#7a8aa6;
+    --brand:#2f6bff;--brand2:#1f4fcc;--brandbg:#eaf1ff;
+    --ok:#0fa37f;--okbg:#e6f7f1;--okline:#bfe9da;
+    --warn:#d98300;--warnbg:#fff5e3;--warnline:#f3dcad;
+    --danger:#d64545;--dangerbg:#fdecec;--dangerline:#f4c9c9;
+    --shadow:0 2px 10px rgba(28,39,64,.06),0 1px 3px rgba(28,39,64,.05);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    line-height:1.75;-webkit-font-smoothing:antialiased;font-size:17px;}
+  a{color:var(--brand2);text-decoration:none;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 18px;}
+
+  header.hero{padding:calc(48px + env(safe-area-inset-top)) 18px 34px;text-align:center;
+    background:radial-gradient(740px 320px at 50% -40px,var(--brandbg),transparent 72%);
+    border-bottom:1px solid var(--line);}
+  .badge{display:inline-block;font-size:14px;font-weight:600;color:var(--brand2);
+    background:var(--brandbg);border:1px solid #cfe0ff;padding:7px 16px;border-radius:999px;margin-bottom:16px;}
+  .hero h1{font-size:clamp(26px,6vw,38px);margin:0 0 12px;line-height:1.3;letter-spacing:-.01em;}
+  .hero p{color:var(--muted);margin:0;font-size:16.5px;}
+  .hero .meta{margin-top:14px;font-size:13.5px;color:var(--soft);}
+
+  /* nav */
+  nav.toc{position:sticky;top:0;z-index:10;background:rgba(244,247,252,.92);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:10px 0;}
+  nav.toc .inner{max-width:880px;margin:0 auto;padding:0 12px;display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  nav.toc a{flex:none;font-size:14px;font-weight:600;color:var(--muted);
+    padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;}
+  nav.toc a:hover{color:var(--brand2);border-color:#cfe0ff;}
+
+  section{padding:32px 0 6px;scroll-margin-top:60px;}
+  h2.sec{font-size:23px;margin:0 0 6px;display:flex;align-items:center;gap:11px;letter-spacing:-.01em;}
+  h2.sec .n{width:34px;height:34px;flex:none;display:grid;place-items:center;
+    background:var(--brand);color:#fff;border-radius:10px;font-size:16px;font-weight:700;}
+  .sub{color:var(--muted);margin:0 0 16px;font-size:15.5px;}
+
+  .verdict{margin:28px auto 6px;background:linear-gradient(135deg,#fff,#f3f7ff);
+    border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow);}
+  .verdict h2{margin:0 0 8px;font-size:20px;}
+  .verdict p{margin:0 0 8px;font-size:16.5px;}
+  .verdict .key{color:var(--brand2);font-weight:700;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chips span{font-size:13.5px;font-weight:600;padding:5px 11px;border-radius:999px;
+    background:var(--okbg);color:var(--ok);border:1px solid var(--okline);}
+
+  .tablewrap{border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);background:#fff;margin:6px 0;}
+  table{width:100%;border-collapse:collapse;font-size:15px;}
+  th,td{padding:12px 13px;text-align:left;border-bottom:1px solid var(--line2);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  th{color:var(--muted);font-weight:600;background:var(--card2);}
+  tr td:first-child{font-weight:600;}
+  .hl{color:var(--brand2);font-weight:700;}
+
+  ul.clean{margin:8px 0 0;padding-left:20px;color:var(--muted);font-size:15.5px;}
+  ul.clean li{margin:7px 0;}
+  ul.clean b{color:var(--text);}
+
+  .grid{display:grid;gap:14px;}
+  .grid.c2{grid-template-columns:repeat(2,1fr);}
+  .card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px;box-shadow:var(--shadow);}
+  .card h3{margin:0 0 6px;font-size:16.5px;}
+  .card p{margin:0;color:var(--muted);font-size:15px;}
+
+  .alert{background:var(--dangerbg);border:1px solid var(--dangerline);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);}
+  .alert h3{margin:0 0 8px;color:#9e2b2b;font-size:18px;}
+  .alert p{margin:0 0 8px;color:#7a3030;font-size:15.5px;}
+  .alert b{color:var(--danger);}
+
+  /* download */
+  .dl{display:grid;gap:10px;}
+  .dl a{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);
+    border-radius:13px;padding:14px 16px;box-shadow:var(--shadow);color:var(--text);font-weight:600;font-size:15.5px;}
+  .dl a:hover{border-color:#cfe0ff;}
+  .dl .ic{width:34px;height:34px;flex:none;display:grid;place-items:center;background:var(--dangerbg);
+    color:#c0392b;border-radius:9px;font-size:13px;font-weight:800;}
+  .dl small{display:block;color:var(--soft);font-weight:400;font-size:13px;margin-top:2px;}
+  .dl .arr{margin-left:auto;color:var(--brand2);}
+
+  footer{margin-top:44px;padding:26px 18px calc(54px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line);text-align:center;color:var(--soft);font-size:13.5px;line-height:1.7;}
+
+  @media(max-width:640px){
+    .wrap{padding:0 16px;}
+    header.hero{padding:calc(36px + env(safe-area-inset-top)) 16px 28px;}
+    h2.sec{font-size:21px;}
+    .grid.c2{grid-template-columns:1fr;}
+    .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;} table{min-width:440px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">주식회사 에이폼 · APOm</span>
+    <h1>기업부설연구소<br/>신고 실무 종합보고서</h1>
+    <p>절차 · 하드웨어 · 기자재 · 사진 · 양식 · 예시 · 주의사항 · 공식서식 다운로드</p>
+    <div class="meta">정리일 2026-05-26 · 연구전담요원 2명(대표님+정규직) · 창업 3년 이내 소기업</div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="inner">
+    <a href="#status">진단</a>
+    <a href="#proc">절차</a>
+    <a href="#space">연구공간</a>
+    <a href="#equip">기자재</a>
+    <a href="#photo">사진</a>
+    <a href="#hr">인사·양식</a>
+    <a href="#plan">계획서·노트</a>
+    <a href="#tax">혜택</a>
+    <a href="#caution">주의사항</a>
+    <a href="#forms">서식 다운로드</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="verdict" id="status">
+    <h2>✅ 에이폼 진단 — 설립 요건 충족</h2>
+    <p>자격(대표님·정규직 모두 가능), 중소기업, 창업 3년 이내가 모두 확인되어 <span class="key">연구전담요원 2명 기준 기업부설연구소 설립이 가능</span>합니다.</p>
+    <p>남은 일은 <span class="key">공간 독립화 → 기자재·현판 → 인사발령·서류 → 온라인 신고</span> 실행입니다.</p>
+    <div class="chips">
+      <span>✓ 연구원 자격</span><span>✓ 중소기업</span><span>✓ 창업 3년 이내</span><span>✓ 시설 보유</span><span>✓ 비수도권(지방세)</span>
+    </div>
+  </div>
+
+  <!-- 절차 -->
+  <section id="proc">
+    <h2 class="sec"><span class="n">1</span>신고 절차 (선설립 후신고)</h2>
+    <p class="sub">연구소를 실제로 갖춘 뒤 KOITA(rnd.or.kr)에 온라인으로만 신고. 수수료 무료, 법정 처리 10일.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>순서</th><th>단계</th><th>핵심</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>사전 준비</td><td>인사발령·독립공간·기자재·현판 (신고일 이전 완료)</td></tr>
+        <tr><td>2</td><td>공인인증서</td><td>사업자번호(본점) 기업용 인증서</td></tr>
+        <tr><td>3</td><td>자가진단</td><td>rnd.or.kr 체크리스트로 적격 점검</td></tr>
+        <tr><td>4</td><td>온라인 신청</td><td>기업→연구소→활동개요서→인력→기자재 입력</td></tr>
+        <tr><td>5</td><td>첨부 업로드</td><td>조직도·도면·사진·증명서 (모두 JPG)</td></tr>
+        <tr><td>6</td><td>심사·보완</td><td>보완요청 시 기한 내 제출 (초과 시 반려)</td></tr>
+        <tr><td>7</td><td>인정·출력</td><td>인정서 온라인 출력</td></tr>
+      </tbody>
+    </table></div>
+    <p class="sub" style="margin-top:12px"><b>제출서류 13종</b>: 신고서·활동개요서·사업자등록증·조직도·도면·사진·기자재현황·인사발령장·4대보험명부·학위/자격증·경력증명서·업무분장표·중소기업확인서.</p>
+  </section>
+
+  <!-- 연구공간 -->
+  <section id="space">
+    <h2 class="sec"><span class="n">2</span>하드웨어 — 독립 연구공간</h2>
+    <div class="grid c2">
+      <div class="card"><h3>핵심 원칙</h3><p>사방 <b>고정 벽체</b> + <b>별도 출입문</b>. 천장 시공 불가 시 바닥에서 2m 이상 벽체. 이동식 파티션만으론 불인정(50㎡ 이하 예외 제외). 유리벽도 사방 막히면 인정.</p></div>
+      <div class="card"><h3>50㎡ 이하 예외</h3><p>중소·벤처기업이 전용면적 50㎡ 이하면 파티션·책장·이격 구분도 인정 → 신고서 "분리구역". 단 50㎡ 초과 확보 불가한 경우만.</p></div>
+    </div>
+    <ul class="clean">
+      <li><b>에이폼 권장</b>: 사무동 2층 = 연구소 본공간. 33평은 50㎡ 초과 가능성 커서 <b>고정벽체+출입문 독립공간</b> 구성이 안전</li>
+      <li>실험실과 연구원 사무공간 <b>둘 다</b> 독립이어야 함 (실험실만 분리하면 불인정)</li>
+      <li><b>현판</b>: "(주)에이폼 ○○연구소" — 인정서 명칭과 일치, 반영구 재질, 연구소 출입문에 부착</li>
+      <li><b>도면</b>: 층 전체도면 + 내부도면(치수·면적계산식·좌석·기자재·출입문·현판 위치), A4, JPG</li>
+    </ul>
+  </section>
+
+  <!-- 기자재 -->
+  <section id="equip">
+    <h2 class="sec"><span class="n">3</span>연구기자재 구비</h2>
+    <div class="grid c2">
+      <div class="card"><h3>✅ 인정</h3><p>연구전용 PC·SW(CAD·시뮬·분석), 시험·측정 장비, 3D프린터·시제품 장비, 실험장비 — <b>연구소 내부에 전용</b> 배치.</p></div>
+      <div class="card"><h3>❌ 불인정</h3><p>사무용 PC·복합기·전화, 서버·허브, 범용 측정기(버니어캘리퍼스·전자저울), <b>타 부서 공동사용</b> 장비, 연구소 밖 장비.</p></div>
+    </div>
+    <ul class="clean">
+      <li>최소 금액·수량 법정기준 없음. 단 장비 거의 없는 회의실 형태는 불인정</li>
+      <li><b>기자재 현황표(별지3호)</b>: 연번/품명/모델/수량/제작사/도입일/취득금액/설치장소/사용구분 — 고가순, 엑셀 업로드</li>
+      <li><b>에이폼 예시</b>: (제조) 두께측정기·낙하충격 지그·인장압축시험기·시제품 금형 / (물류) 연구전용 PC+개발·분석 SW</li>
+    </ul>
+  </section>
+
+  <!-- 사진 -->
+  <section id="photo">
+    <h2 class="sec"><span class="n">4</span>필요한 사진 — 전체 목록</h2>
+    <p class="sub">모두 JPG. 도면과 사진 내용이 일치해야 함.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>사진</th><th>장수</th><th>촬영 요령</th></tr></thead>
+      <tbody>
+        <tr><td>현판 근접</td><td>1</td><td>문구가 선명히 읽히게 정면 근접</td></tr>
+        <tr><td>출입문(현판 포함)</td><td>1</td><td>출입문 전체 + 현판 함께</td></tr>
+        <tr><td>내부 전경 — 정면</td><td>1</td><td>넓은 각도, 벽체·파티션 경계 명확</td></tr>
+        <tr><td>내부 전경 — 후면</td><td>1</td><td>출입문 방향, 좌석 배치 보이게</td></tr>
+        <tr><td>내부 전경 — 좌측</td><td>1</td><td>좌측 벽체·공간 구분</td></tr>
+        <tr><td>내부 전경 — 우측</td><td>1</td><td>우측 벽체 + 주요 기자재 보이게</td></tr>
+        <tr><td>외부 전경(독립건물 시)</td><td>+1</td><td>건물 외관 전체</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="clean"><li>2실 이상이면 각 실별 세트. 기자재 별도 사진은 필수 아님 → 내부 전경 안에 기자재가 보이게</li></ul>
+  </section>
+
+  <!-- 인사 -->
+  <section id="hr">
+    <h2 class="sec"><span class="n">5</span>인사발령·증빙 양식</h2>
+    <ul class="clean">
+      <li><b>인사발령장</b>: 발령일자를 <b>설립신고일 이전</b>으로. "○○연구소 연구전담요원(전임) 발령". 회사 자체 양식</li>
+      <li><b>업무분장표</b>: 담당업무란에 <b>연구개발만</b> 기재(생산·영업·품질·물류 금지) → 겸직 배제 입증</li>
+      <li><b>자격 증빙</b>: 학위증명서/자격증, (경력자)경력증명서+<b>국민연금 가입내역</b>(기간 일치 필수), 4대보험 가입자명부</li>
+      <li><b>연구소장</b>: 전임=인원 포함·겸직 불가 / 겸임=인원 불포함</li>
+    </ul>
+    <div class="alert" style="margin-top:14px">
+      <h3>🔴 대표님 연구전담요원 — 3년 시한</h3>
+      <p>대표이사는 <b>창업 3년 이내 소기업일 때만</b> 인정. 개업 2024-03-01 → <b>2027-03-01 이후 변경신고로 제외</b> 필수. 제외 시 정규직 1명만 남아 소기업 기준(3명) 미달.</p>
+      <p><b>대응</b>: 2027-03 전 연구원 1명 추가 채용 또는 벤처확인(연구개발유형) 취득. 대표님 인건비는 Time Sheet·연구노트 없으면 세액공제 전액 부인.</p>
+    </div>
+  </section>
+
+  <!-- 계획서 -->
+  <section id="plan">
+    <h2 class="sec"><span class="n">6</span>활동개요서·과제계획서·연구노트</h2>
+    <div class="grid c2">
+      <div class="card"><h3>연구개발활동개요서</h3><p>신고용. <b>전문연구분야를 과학기술 분류로</b>("제조업 전반/IT"❌ → "화학공학·고분자/컴퓨터·SW·산업공학"✅). 분야 2~3개 집중, 기대효과에 기술적 성과 포함.</p></div>
+      <div class="card"><h3>과제계획서(별지3호의2)</h3><p>세무 세액공제·보관용(과제별, 5년). 과제명·기간·예산·목표·방법·기대성과·월별 WBS·참여율. 양산·QC는 과제 불가.</p></div>
+    </div>
+    <ul class="clean">
+      <li><b>연구노트</b>: 활동 당일 기록(소급 금지), 실패·오류수정 과정이 핵심 증거, 겸직자는 Time Sheet 병행</li>
+      <li>에이폼 권장 과제: "HDPE 블로우 성형 공정조건 최적화", "전자상거래 데이터 기반 수요예측+피킹 동선 WMS 모듈"</li>
+    </ul>
+  </section>
+
+  <!-- 혜택 -->
+  <section id="tax">
+    <h2 class="sec"><span class="n">7</span>혜택 & 사후관리</h2>
+    <ul class="clean">
+      <li><b>법인세 R&D 세액공제</b>: 중소기업 당기분 25%/증가분 50%. 별지1호 신청서+별지3호 명세서+총괄표. 국세청 <b>사전심사 제도</b> 권장</li>
+      <li><b>지방세 감면</b>: 비수도권(경산) 연구소용 부동산 취득세·재산세 감면 → 경산시 세무부서 확인. 4년 내 폐쇄·용도변경 시 추징</li>
+      <li><b>변경신고</b>: 연구원·소재지 변경 시 발생일로부터 14일 이내. <b>연구개발활동조사</b>: 매년 4월 온라인 제출</li>
+    </ul>
+  </section>
+
+  <!-- 주의사항 -->
+  <section id="caution">
+    <h2 class="sec"><span class="n">8</span>핵심 주의사항</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>함정</th><th>결과 → 회피</th></tr></thead>
+      <tbody>
+        <tr><td>연구원이 생산·영업 겸직(업무분장표 기재)</td><td>자격·공제 부정 → 연구업무만 기재</td></tr>
+        <tr><td>경력증명서 ≠ 국민연금 기간</td><td>경력 전체 불인정 → 사전 대조</td></tr>
+        <tr><td>실험실만 독립, 좌석은 공용</td><td>전면 불인정 → 둘 다 독립</td></tr>
+        <tr><td>장비를 타 부서와 공동사용</td><td>기자재 불인정 → 연구전용</td></tr>
+        <tr><td>활동개요서가 산업분류·광범위</td><td>반려 → 과학기술 분야 2~3개 집중</td></tr>
+        <tr><td>인사발령일이 설립일보다 늦음</td><td>보완/불인정 → 설립일 이전</td></tr>
+        <tr><td>보완요청 기한 초과</td><td>반려(재신고) → 담당자 수시 확인</td></tr>
+        <tr><td>변경신고·활동조사 미이행</td><td>인정 취소·추징 → 기한 준수</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 서식 다운로드 -->
+  <section id="forms">
+    <h2 class="sec"><span class="n">9</span>공식 서식 다운로드</h2>
+    <p class="sub">KOITA·국세청 공식 서식과 마스터 업무편람(모든 신고 별지서식 부록 포함).</p>
+    <div class="dl">
+      <a href="forms/handbook_2025.pdf"><span class="ic">PDF</span><span>2025 기업부설연구소 업무편람 <small>93쪽 마스터 — 신고서·활동개요서·기자재현황 등 전 서식 부록</small></span><span class="arr">↓</span></a>
+      <a href="forms/form_plan_report_note.pdf"><span class="ic">PDF</span><span>연구개발계획서·보고서·연구노트 <small>조특법 별지 제3호의2 — 과제계획서/연구노트 공식서식</small></span><span class="arr">↓</span></a>
+      <a href="forms/form_personnel.pdf"><span class="ic">PDF</span><span>연구개발인력 현황 <small>별지 제4호</small></span><span class="arr">↓</span></a>
+      <a href="forms/form_taxcredit_apply.pdf"><span class="ic">PDF</span><span>세액공제신청서 <small>조특법 별지 제1호 (2025.06)</small></span><span class="arr">↓</span></a>
+      <a href="forms/form_rd_expense.pdf"><span class="ic">PDF</span><span>일반연구·인력개발비 명세서 <small>조특법 별지 제3호</small></span><span class="arr">↓</span></a>
+      <a href="forms/form_project_summary.pdf"><span class="ic">PDF</span><span>연구과제 총괄표 <small>조특법 별지 제3호 부표(3)</small></span><span class="arr">↓</span></a>
+    </div>
+    <p class="sub" style="margin-top:16px">
+      📝 <b>작성용 템플릿</b>(인사발령장·업무분장표·활동개요서·과제계획서·연구노트, 에이폼 예시 포함)과 상세 md 문서는
+      로컬 <code>신고자료/</code> 폴더에 저장되어 있습니다.
+    </p>
+    <p class="sub">
+      공식 사이트: <a href="https://www.rnd.or.kr/user/newly/document.do">rnd.or.kr 신규신고서류</a> ·
+      <a href="https://www.koita.or.kr/conts/104003001000000.do">KOITA 조세지원 서식</a> ·
+      <a href="https://www.rnd.or.kr/user/info/popup_self.do">자가진단</a>
+    </p>
+  </section>
+
+</div>
+
+<footer>
+  주식회사 에이폼 (APOm) · 사업자등록번호 660-81-03093 · 경북 경산시 와촌면 팔공로132길 38<br/>
+  내부 검토용 종합보고서 · 별지서식 번호·운영기준은 2026.2.1 시행 신법으로 변경됐을 수 있어 신고 직전 rnd.or.kr 재확인 권장
+</footer>
+
+</body>
+</html>
