@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#f4f7fc" />
+<title>APOM 연구소·벤처 자료실 — 전체 인덱스</title>
+<meta name="description" content="주식회사 에이폼(APOM) 기업부설연구소 설립부터 벤처기업확인까지 전체 자료 인덱스" />
+<style>
+  :root{
+    --bg:#f4f7fc;--card:#fff;--card2:#f3f6fc;--line:#dde5f2;--line2:#e8eef8;
+    --text:#1c2740;--muted:#5b6b88;--soft:#7a8aa6;
+    --brand:#2f6bff;--brand2:#1f4fcc;--brandbg:#eaf1ff;
+    --ok:#0fa37f;--okbg:#e6f7f1;--okline:#bfe9da;
+    --warn:#d98300;--warnbg:#fff5e3;--warnline:#f3dcad;
+    --shadow:0 2px 10px rgba(28,39,64,.06),0 1px 3px rgba(28,39,64,.05);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    line-height:1.72;-webkit-font-smoothing:antialiased;font-size:17px;}
+  a{color:var(--brand2);text-decoration:none;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 18px;}
+
+  header.hero{padding:calc(52px + env(safe-area-inset-top)) 18px 32px;text-align:center;
+    background:radial-gradient(780px 340px at 50% -40px,var(--brandbg),transparent 72%);
+    border-bottom:1px solid var(--line);}
+  .badge{display:inline-block;font-size:14px;font-weight:600;color:var(--brand2);
+    background:var(--brandbg);border:1px solid #cfe0ff;padding:7px 16px;border-radius:999px;margin-bottom:16px;}
+  .hero h1{font-size:clamp(27px,6vw,40px);margin:0 0 12px;line-height:1.26;letter-spacing:-.01em;}
+  .hero p{color:var(--muted);margin:0;font-size:16.5px;}
+  .hero .meta{margin-top:14px;font-size:13.5px;color:var(--soft);}
+
+  .summary{margin:26px auto 4px;background:linear-gradient(135deg,#fff,#f3f7ff);
+    border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow);}
+  .summary h2{margin:0 0 8px;font-size:19px;}
+  .summary p{margin:0 0 12px;font-size:16px;}
+  .summary .key{color:var(--brand2);font-weight:700;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chips span{font-size:13.5px;font-weight:600;padding:5px 11px;border-radius:999px;
+    background:var(--okbg);color:var(--ok);border:1px solid var(--okline);}
+  .deadline{margin-top:14px;display:flex;gap:11px;align-items:flex-start;background:var(--warnbg);
+    border:1px solid var(--warnline);border-radius:12px;padding:13px 15px;color:#7a4d00;font-size:14.5px;}
+  .deadline b{color:var(--warn);}
+
+  section{padding:30px 0 6px;}
+  h2.sec{font-size:22px;margin:0 0 4px;letter-spacing:-.01em;}
+  .sub{color:var(--muted);margin:4px 0 16px;font-size:15px;}
+
+  /* 페이지 카드 */
+  .cards{display:grid;gap:14px;}
+  .pcard{display:block;background:#fff;border:1px solid var(--line);border-radius:16px;
+    padding:18px 18px 16px;box-shadow:var(--shadow);position:relative;transition:border-color .15s;}
+  .pcard:hover{border-color:#bcd2ff;}
+  .pcard .top{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+  .pcard .num{width:38px;height:38px;flex:none;display:grid;place-items:center;border-radius:11px;
+    background:var(--brand);color:#fff;font-size:17px;font-weight:700;}
+  .pcard.goal .num{background:linear-gradient(135deg,#f5a623,#e8820a);}
+  .pcard h3{margin:0;font-size:18.5px;color:var(--text);letter-spacing:-.01em;}
+  .pcard .role{font-size:13px;color:var(--soft);font-weight:600;margin-top:1px;}
+  .pcard p{margin:0 0 10px;color:var(--muted);font-size:15px;}
+  .pcard .inc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+  .pcard .inc span{font-size:12.5px;color:var(--brand2);background:var(--brandbg);
+    border:1px solid #d9e6ff;border-radius:999px;padding:3px 9px;}
+  .pcard .go{font-size:14.5px;font-weight:700;color:var(--brand2);}
+
+  .dl{display:grid;gap:10px;margin-top:4px;}
+  .dl a{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);
+    border-radius:13px;padding:13px 15px;box-shadow:var(--shadow);color:var(--text);font-weight:600;font-size:15px;}
+  .dl .ic{width:32px;height:32px;flex:none;display:grid;place-items:center;background:var(--brandbg);
+    color:var(--brand2);border-radius:9px;font-size:16px;}
+  .dl small{display:block;color:var(--soft);font-weight:400;font-size:13px;margin-top:1px;}
+  .dl .arr{margin-left:auto;color:var(--brand2);}
+
+  footer{margin-top:42px;padding:24px 18px calc(50px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line);text-align:center;color:var(--soft);font-size:13.5px;line-height:1.7;}
+
+  @media(max-width:640px){
+    .wrap{padding:0 15px;}
+    header.hero{padding:calc(40px + env(safe-area-inset-top)) 15px 28px;}
+    h2.sec{font-size:20px;}
+    .pcard h3{font-size:17px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">주식회사 에이폼 · APOM</span>
+    <h1>연구소·벤처 자료실</h1>
+    <p>기업부설연구소 설립부터 벤처기업확인까지 — 전체 자료 인덱스</p>
+    <div class="meta">사업자등록번호 660-81-03093 · 개업 2024-03-01 · 경북 경산시 와촌면</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="summary">
+    <h2>📌 한눈에 보기</h2>
+    <p>에이폼은 <span class="key">자격 가능한 연구원 2명(대표님·정규직) + 중소기업 + 창업 3년 이내 + 제조업 시설</span>로
+    기업부설연구소 설립 요건을 갖췄습니다. 연구소를 세운 뒤 <span class="key">연구개발유형 벤처기업확인</span>까지 확장하는 것이 목표 경로입니다.</p>
+    <div class="chips">
+      <span>✓ 연구원 2명</span><span>✓ 중소기업</span><span>✓ 창업 3년 이내</span><span>✓ 제조업 업종</span><span>✓ 시설 보유</span>
+    </div>
+    <div class="deadline">
+      <span>⏳</span>
+      <div><b>핵심 시한 2027-03-01</b> — 이 날짜 전까지는 대표님 포함 2명으로 연구소 설립 가능(창업 3년 이내). 연구소는 <b>2027년 2월 전 신고</b>가 안전하고, 같은 기간 안에 벤처확인까지 가면 매출 대비 R&amp;D비 5% 요건도 면제됩니다.</div>
+    </div>
+  </div>
+
+  <!-- 추천 순서 -->
+  <section>
+    <h2 class="sec">📚 자료 (추천 순서)</h2>
+    <p class="sub">"내가 자격이 되나?" → "어떤 순서로?" → "구체 요건·서식" → "실제 작성" → "그 다음 벤처까지" 흐름입니다.</p>
+    <div class="cards">
+
+      <a class="pcard" href="../2026-05-26-apom-rnd-institute/">
+        <div class="top"><span class="num">1</span><div><h3>설립 조건 요약</h3><div class="role">먼저 — 자격이 되는지 확인</div></div></div>
+        <p>기업부설연구소 4대 인정 요건과 에이폼 충족 현황. 한 장으로 보는 자격 진단.</p>
+        <div class="inc"><span>4대 요건</span><span>인원·자격 조건</span><span>충족 체크리스트</span></div>
+        <div class="go">열기 →</div>
+      </a>
+
+      <a class="pcard" href="../2026-05-26-apom-rnd-setup-guide/">
+        <div class="top"><span class="num">2</span><div><h3>설립 단계별 가이드</h3><div class="role">어떤 순서로 진행하나</div></div></div>
+        <p>0~10단계 실행 타임라인. "대표님 연구전담요원 3년 시한" 함정을 빨간 박스로 강조.</p>
+        <div class="inc"><span>단계별 체크박스</span><span>대표님 함정</span><span>지금 할 일 3가지</span></div>
+        <div class="go">열기 →</div>
+      </a>
+
+      <a class="pcard" href="../2026-05-26-apom-rnd-filing-guide/">
+        <div class="top"><span class="num">3</span><div><h3>신고 실무 종합보고서</h3><div class="role">구체 요건 + 공식서식 다운로드</div></div></div>
+        <p>절차·연구공간·기자재·사진·인사·계획서·혜택·주의사항 종합 + 공식 서식 PDF 6종.</p>
+        <div class="inc"><span>제출서류 13종</span><span>사진 목록</span><span>공식서식 PDF</span><span>업무편람</span></div>
+        <div class="go">열기 →</div>
+      </a>
+
+      <a class="pcard" href="../2026-05-26-apom-rnd-templates/">
+        <div class="top"><span class="num">4</span><div><h3>작성양식·예시 모음</h3><div class="role">실제 문서 작성 (복사·다운로드)</div></div></div>
+        <p>인사발령장·업무분장표·활동개요서·과제계획서·연구노트 템플릿 + 에이폼 예시. 복사 버튼 제공.</p>
+        <div class="inc"><span>5종 템플릿</span><span>에이폼 예시</span><span>복사/다운로드</span></div>
+        <div class="go">열기 →</div>
+      </a>
+
+      <a class="pcard goal" href="../2026-05-28-apom-venture-roadmap/">
+        <div class="top"><span class="num">5</span><div><h3>벤처기업 로드맵</h3><div class="role">그 다음 — 벤처기업까지</div></div></div>
+        <p>연구소를 거쳐 벤처기업확인까지 가는 단계별 설계도 + 벤처기업 자격 조건 + 두 경로 비교.</p>
+        <div class="inc"><span>로드맵 설계도</span><span>벤처 자격 조건</span><span>5% 비율 면제</span></div>
+        <div class="go">열기 →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- 바로 다운로드 -->
+  <section>
+    <h2 class="sec">⬇️ 바로 다운로드</h2>
+    <p class="sub">신고에 바로 쓰는 공식 서식과 작성 템플릿.</p>
+    <div class="dl">
+      <a href="../2026-05-26-apom-rnd-filing-guide/forms/handbook_2025.pdf"><span class="ic">📕</span><span>2025 기업부설연구소 업무편람 <small>93쪽 마스터 — 모든 신고 별지서식 부록 포함</small></span><span class="arr">↓</span></a>
+      <a href="../2026-05-26-apom-rnd-filing-guide/#forms"><span class="ic">📄</span><span>공식 서식 PDF 6종 <small>연구개발계획서·연구노트·인력현황·세액공제신청서 등</small></span><span class="arr">→</span></a>
+      <a href="../2026-05-26-apom-rnd-templates/#dl"><span class="ic">📝</span><span>작성 템플릿 5종(에이폼 예시) <small>인사발령장·업무분장표·활동개요서·과제계획서·연구노트</small></span><span class="arr">→</span></a>
+    </div>
+  </section>
+
+  <!-- 공식 사이트 -->
+  <section>
+    <h2 class="sec">🌐 공식 사이트</h2>
+    <p class="sub">
+      <a href="https://www.rnd.or.kr/user/newly/requirements.do">KOITA 신고관리시스템(연구소)</a> ·
+      <a href="https://www.rnd.or.kr/user/info/popup_self.do">자가진단</a> ·
+      <a href="https://www.smes.go.kr/venturein/">벤처확인종합관리시스템</a> ·
+      <a href="https://www.koita.or.kr/conts/104003001000000.do">KOITA 세액공제 서식</a> ·
+      <a href="https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2383&cntntsId=7749">국세청 사전심사</a>
+    </p>
+  </section>
+
+</div>
+
+<footer>
+  주식회사 에이폼 (APOM) · 사업자등록번호 660-81-03093 · 경북 경산시 와촌면 팔공로132길 38<br/>
+  내부 검토용 자료 인덱스 · 요건·수수료·기한은 신청 시점에 rnd.or.kr / smes.go.kr/venturein 에서 재확인 권장
+</footer>
+
+</body>
+</html>
