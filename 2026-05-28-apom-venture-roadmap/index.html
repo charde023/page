@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#f4f7fc" />
+<title>APOM — 벤처기업까지 가는 길 (설계도)</title>
+<meta name="description" content="주식회사 에이폼(APOM)이 기업부설연구소를 거쳐 벤처기업확인까지 가는 단계별 로드맵 설계도" />
+<style>
+  :root{
+    --bg:#f4f7fc;--card:#fff;--card2:#f3f6fc;--line:#dde5f2;--line2:#e8eef8;
+    --text:#1c2740;--muted:#5b6b88;--soft:#7a8aa6;
+    --brand:#2f6bff;--brand2:#1f4fcc;--brandbg:#eaf1ff;
+    --ok:#0fa37f;--okbg:#e6f7f1;--okline:#bfe9da;
+    --warn:#d98300;--warnbg:#fff5e3;--warnline:#f3dcad;
+    --danger:#d64545;--dangerbg:#fdecec;--dangerline:#f4c9c9;
+    --purple:#7c5cff;--purplebg:#efeaff;--purpleline:#d8ccff;
+    --shadow:0 2px 10px rgba(28,39,64,.06),0 1px 3px rgba(28,39,64,.05);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    line-height:1.72;-webkit-font-smoothing:antialiased;font-size:17px;}
+  a{color:var(--brand2);text-decoration:none;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 18px;}
+
+  header.hero{padding:calc(48px + env(safe-area-inset-top)) 18px 30px;text-align:center;
+    background:radial-gradient(760px 320px at 50% -40px,var(--brandbg),transparent 72%);
+    border-bottom:1px solid var(--line);}
+  .badge{display:inline-block;font-size:14px;font-weight:600;color:var(--brand2);
+    background:var(--brandbg);border:1px solid #cfe0ff;padding:7px 16px;border-radius:999px;margin-bottom:16px;}
+  .hero h1{font-size:clamp(26px,6vw,40px);margin:0 0 12px;line-height:1.26;letter-spacing:-.01em;}
+  .hero p{color:var(--muted);margin:0;font-size:16.5px;}
+
+  /* 현재 위치 */
+  .now{margin:26px auto 4px;background:linear-gradient(135deg,#fff,#f3f7ff);
+    border:1px solid var(--line);border-radius:18px;padding:20px 22px;box-shadow:var(--shadow);}
+  .now h2{margin:0 0 10px;font-size:19px;}
+  .now .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .now .chips span{font-size:13.5px;font-weight:600;padding:5px 11px;border-radius:999px;
+    background:var(--okbg);color:var(--ok);border:1px solid var(--okline);}
+
+  /* 범례 */
+  .legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:22px 0 4px;font-size:13.5px;color:var(--muted);}
+  .legend span{display:inline-flex;align-items:center;gap:7px;}
+  .ln{width:26px;height:4px;border-radius:3px;display:inline-block;}
+  .ln.main{background:var(--brand);}
+  .ln.alt{background:repeating-linear-gradient(90deg,var(--purple) 0 6px,transparent 6px 11px);height:3px;}
+
+  /* 로드맵 */
+  .road{position:relative;margin:18px 0 0;padding-left:60px;}
+  .road:before{content:"";position:absolute;left:23px;top:14px;bottom:60px;width:4px;
+    background:linear-gradient(var(--brand),#7aa7ff);border-radius:3px;}
+  .stop{position:relative;margin-bottom:20px;}
+  .stop .node{position:absolute;left:-60px;top:0;width:48px;height:48px;border-radius:14px;
+    background:var(--brand);color:#fff;display:grid;place-items:center;font-size:20px;font-weight:700;
+    box-shadow:0 3px 8px rgba(47,107,255,.32);}
+  .stop.start .node{background:var(--ok);box-shadow:0 3px 8px rgba(15,163,127,.3);}
+  .stop.goal .node{background:linear-gradient(135deg,#f5a623,#e8820a);box-shadow:0 3px 10px rgba(232,130,10,.4);}
+  .stop .box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);}
+  .stop .label{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.04em;
+    color:var(--brand2);background:var(--brandbg);border:1px solid #cfe0ff;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
+  .stop.start .label{color:var(--ok);background:var(--okbg);border-color:var(--okline);}
+  .stop.goal .label{color:#a85d00;background:var(--warnbg);border-color:var(--warnline);}
+  .stop h3{margin:0 0 4px;font-size:19px;letter-spacing:-.01em;}
+  .stop .when{font-size:13.5px;color:var(--soft);font-weight:600;margin-bottom:9px;}
+  .stop ul{margin:6px 0 0;padding-left:18px;color:var(--muted);font-size:15px;}
+  .stop ul li{margin:5px 0;}
+  .stop ul b{color:var(--text);}
+  .out{margin-top:11px;display:flex;gap:9px;align-items:flex-start;background:var(--okbg);
+    border:1px solid var(--okline);border-radius:11px;padding:9px 12px;font-size:14px;color:#0c5c47;}
+  .out b{color:#0a7a5c;}
+
+  /* 게이트(분기/시한) */
+  .gate{position:relative;margin:0 0 20px -2px;}
+  .gate .box{background:var(--dangerbg);border:1px dashed var(--danger);border-radius:14px;
+    padding:14px 16px;margin-left:0;}
+  .gate .box .h{display:flex;align-items:center;gap:8px;font-weight:700;color:#9e2b2b;font-size:16px;margin-bottom:4px;}
+  .gate .box p{margin:0;color:#7a3030;font-size:14.5px;}
+  .gate .box b{color:var(--danger);}
+
+  /* 지름길(대안) */
+  .alt{position:relative;margin:0 0 20px;padding-left:60px;}
+  .alt .conn{position:absolute;left:23px;top:-6px;bottom:-6px;width:3px;
+    background:repeating-linear-gradient(var(--purple) 0 6px,transparent 6px 12px);}
+  .alt .node{position:absolute;left:-60px;top:6px;width:48px;height:48px;border-radius:14px;
+    background:var(--purple);color:#fff;display:grid;place-items:center;font-size:18px;font-weight:700;
+    box-shadow:0 3px 8px rgba(124,92,255,.32);}
+  .alt .box{background:#fff;border:1px solid var(--purpleline);border-radius:16px;padding:15px 18px;box-shadow:var(--shadow);}
+  .alt .label{display:inline-block;font-size:12.5px;font-weight:700;color:#5b3cc4;background:var(--purplebg);
+    border:1px solid var(--purpleline);padding:3px 10px;border-radius:999px;margin-bottom:7px;}
+  .alt h3{margin:0 0 4px;font-size:18px;}
+  .alt p{margin:0;color:var(--muted);font-size:15px;}
+  .alt .warnline{margin-top:8px;font-size:13.5px;color:var(--warn);font-weight:600;}
+
+  /* 비교 */
+  section{padding:30px 0 6px;}
+  h2.sec{font-size:22px;margin:0 0 14px;letter-spacing:-.01em;}
+  .tablewrap{border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);background:#fff;}
+  table{width:100%;border-collapse:collapse;font-size:15px;}
+  th,td{padding:12px 13px;text-align:left;border-bottom:1px solid var(--line2);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  th{color:var(--muted);font-weight:600;background:var(--card2);}
+  tr td:first-child{font-weight:600;}
+
+  .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+  .links a{font-size:14.5px;font-weight:600;background:#fff;border:1px solid var(--line);
+    border-radius:10px;padding:9px 13px;box-shadow:var(--shadow);}
+
+  footer{margin-top:42px;padding:24px 18px calc(50px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line);text-align:center;color:var(--soft);font-size:13.5px;line-height:1.7;}
+
+  @media(max-width:640px){
+    .wrap{padding:0 15px;}
+    header.hero{padding:calc(36px + env(safe-area-inset-top)) 15px 26px;}
+    .road,.alt{padding-left:54px;}
+    .road:before{left:20px;} .alt .conn{left:20px;}
+    .stop .node,.alt .node{left:-54px;width:44px;height:44px;border-radius:12px;font-size:18px;}
+    h2.sec{font-size:20px;}
+    .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;} table{min-width:420px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">주식회사 에이폼 · APOM</span>
+    <h1>벤처기업까지 가는 길<br/><span style="color:var(--brand)">로드맵 설계도</span></h1>
+    <p>현재 위치에서 → 기업부설연구소 → 벤처기업확인까지</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="now">
+    <h2>📍 현재 위치 (2026.05)</h2>
+    <div class="chips">
+      <span>✓ 제조업 업종 보유</span><span>✓ 중소기업</span><span>✓ 창업 3년 이내</span>
+      <span>✓ 연구원 2명 가능</span><span>✓ 시설 보유</span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><i class="ln main"></i> 정공법 (추천 경로)</span>
+    <span><i class="ln alt"></i> 지름길 (대안 경로)</span>
+  </div>
+
+  <!-- 메인 로드맵 -->
+  <div class="road">
+
+    <!-- 출발 -->
+    <div class="stop start">
+      <div class="node">🚩</div>
+      <div class="box">
+        <span class="label">출발점 · NOW</span>
+        <h3>APOM 현재 상태</h3>
+        <div class="when">2026년 5월</div>
+        <ul>
+          <li>요건 충족: 자격 가능한 연구원 2명(대표님+정규직), 중소기업, 창업 3년 이내</li>
+          <li>아직 없음: 기업부설연구소, 벤처기업확인</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 시한 게이트 -->
+    <div class="gate">
+      <div class="box">
+        <div class="h">⏳ 핵심 시한 — 2027-03-01 (창업 3년)</div>
+        <p>이 날짜 <b>전</b>까지는 대표님을 연구전담요원에 넣어 <b>2명</b>으로 연구소 설립 가능. 이후엔 대표님 제외 → 연구원 추가 또는 <b>벤처확인</b> 필요. <b>연구소는 2027-02 전 신고가 안전.</b></p>
+      </div>
+    </div>
+
+    <!-- STAGE 1 -->
+    <div class="stop">
+      <div class="node">1</div>
+      <div class="box">
+        <span class="label">STAGE 1</span>
+        <h3>기업부설연구소 설립</h3>
+        <div class="when">지금 ~ 2027년 2월 (권장)</div>
+        <ul>
+          <li>사무동 2층 <b>독립 연구공간</b>(고정벽체+출입문)·현판</li>
+          <li>연구전담요원 <b>인사발령</b>(대표+정규직), 업무분장표</li>
+          <li>연구전용 기자재 배치, <b>연구개발활동개요서</b> 작성</li>
+          <li>KOITA <b>온라인 신고</b>(rnd.or.kr) → 심사(약 10일)</li>
+        </ul>
+        <div class="out">🎯 <span><b>산출: 기업부설연구소 인정서</b> — R&D 세액공제 시작 + 벤처 "연구개발유형" 자격의 문이 열림</span></div>
+      </div>
+    </div>
+
+    <!-- STAGE 2 -->
+    <div class="stop">
+      <div class="node">2</div>
+      <div class="box">
+        <span class="label">STAGE 2</span>
+        <h3>연구개발 실적 축적</h3>
+        <div class="when">연구소 인정 후 ~ 약 12개월</div>
+        <ul>
+          <li>과제 수행 + <b>연구노트</b>·계획서·보고서 증빙 누적</li>
+          <li><b>연간 연구개발비 5천만원 이상</b> + 매출 대비 비율 요건 확보</li>
+          <li>인건비·재료비·장비비 구분관리 (세액공제 연계)</li>
+        </ul>
+        <div class="out">🎯 <span><b>산출: 기술사업계획서·연구개발비 산정표의 근거</b> 완성</span></div>
+      </div>
+    </div>
+
+    <!-- STAGE 3 -->
+    <div class="stop">
+      <div class="node">3</div>
+      <div class="box">
+        <span class="label">STAGE 3</span>
+        <h3>벤처기업확인 신청 — 연구개발유형</h3>
+        <div class="when">실적 확보 후 (처리 약 45일)</div>
+        <ul>
+          <li><b>벤처확인종합관리시스템</b>(smes.go.kr/venturein) 온라인 신청</li>
+          <li>제출: 기술사업계획서 + 연구개발비 산정표 + <b>연구소 인정서</b> + 재무제표</li>
+          <li>수수료 25만원(기업 15만+정부 10만) → <b>기보/중진공 평가</b> → 위원회 의결</li>
+        </ul>
+        <div class="out">🎯 <span><b>산출: 벤처기업확인서 (유효기간 3년)</b></span></div>
+      </div>
+    </div>
+
+    <!-- 도착 -->
+    <div class="stop goal">
+      <div class="node">🏁</div>
+      <div class="box">
+        <span class="label">도착 · GOAL</span>
+        <h3>벤처기업 달성 🎉</h3>
+        <ul>
+          <li>법인세·취득세·재산세 추가 감면, 정책자금·보증 우대, 정부 R&D·판로 가점</li>
+          <li><b>연구소 2명 기준을 창업 3년 시한과 무관하게 유지</b> → 2027-03 시한 부담 해소</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 지름길 -->
+  <div class="alt">
+    <div class="conn"></div>
+    <div class="node">⚡</div>
+    <div class="box">
+      <span class="label">지름길 · 대안 경로</span>
+      <h3>혁신성장유형으로 바로 도전</h3>
+      <p>연구소·투자 없이 <b>지금도 신청 가능</b>. 기술보증기금 등이 기술 혁신성·사업 성장성을 평가해 통과 시 바로 벤처기업. STAGE 1~2를 건너뜀.</p>
+      <p class="warnline">⚠️ 평가 통과가 불확실하고 평가비용이 큼. 연구소·세액공제 혜택은 별도로 못 받음 → APOM은 정공법(연구소)을 본선으로, 혁신성장유형은 선택지로.</p>
+    </div>
+  </div>
+
+  <!-- 두 경로 비교 -->
+  <section>
+    <h2 class="sec">🧭 두 경로 비교</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>구분</th><th>정공법 (연구개발유형)</th><th>지름길 (혁신성장유형)</th></tr></thead>
+      <tbody>
+        <tr><td>선행 조건</td><td>기업부설연구소 + R&D비 5천만원↑</td><td>없음 (지금 신청 가능)</td></tr>
+        <tr><td>평가</td><td>기보/중진공 (요건 충족형)</td><td>기보 등 (혁신성·성장성 심사)</td></tr>
+        <tr><td>통과 안정성</td><td>요건 갖추면 높음</td><td>불확실</td></tr>
+        <tr><td>부가 효과</td><td>R&D 세액공제·지방세 감면 동반</td><td>벤처지위만</td></tr>
+        <tr><td>APOM 적합도</td><td>⭐ 본선 (이미 연구소 설립 진행 중)</td><td>보조 선택지</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 연결 -->
+  <section>
+    <h2 class="sec">🔗 함께 보기</h2>
+    <div class="links">
+      <a href="../2026-05-26-apom-rnd-filing-guide/">신고 실무 종합보고서 + 공식서식</a>
+      <a href="../2026-05-26-apom-rnd-templates/">작성양식·예시 모음</a>
+      <a href="../2026-05-26-apom-rnd-setup-guide/">설립 단계별 가이드</a>
+      <a href="../2026-05-26-apom-rnd-institute/">설립 조건 요약</a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  주식회사 에이폼 (APOM) · 사업자등록번호 660-81-03093 · 경북 경산시 와촌면 팔공로132길 38<br/>
+  내부 검토용 로드맵 · 요건·수수료·기한은 신청 시점에 rnd.or.kr / smes.go.kr/venturein 에서 재확인 권장
+</footer>
+
+</body>
+</html>
