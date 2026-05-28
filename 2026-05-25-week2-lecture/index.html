@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>하네스 엔지니어링 &amp; 멀티 에이전트 협업</title>
+<title>하네스 엔지니어링 &amp;amp; 멀티 에이전트 협업</title>
 <meta name="description" content="프롬프트 → 컨텍스트 → 하네스 엔지니어링으로 이어지는 흐름과, 클로드코드 서브 에이전트·멀티 에이전트 팀으로 AI와 협업하는 방법. 강사 허세임.">
-<meta property="og:title" content="하네스 엔지니어링 &amp; 멀티 에이전트 협업">
+<meta property="og:title" content="하네스 엔지니어링 &amp;amp; 멀티 에이전트 협업">
 <meta property="og:description" content="프롬프트 → 컨텍스트 → 하네스 엔지니어링으로 이어지는 흐름과, 클로드코드 서브 에이전트·멀티 에이전트 팀으로 AI와 협업하는 방법. 강사 허세임.">
 <meta property="og:type" content="article">
 <meta name="theme-color" content="#2563eb">
@@ -228,7 +228,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
 <body>
 <header class="header-banner">
   <span class="eyebrow">지피터스 22기 · 끌림 영상 스터디</span>
-  <h1>하네스 엔지니어링 &amp; 멀티 에이전트 협업</h1>
+  <h1>하네스 엔지니어링 &amp;amp; 멀티 에이전트 협업</h1>
   <div class="sub">2026-05-25 라이브 강의 정리본</div>
 </header>
 
@@ -382,7 +382,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
 <h3>1-1. 프롬프트 엔지니어링 (말하는 법)</h3>
 <p>"가비지 인, 가비지 아웃." 좋은 질문이 좋은 답을 만든다. 익숙한 기법들 — 롤 지정("너는 30년 차 실리콘밸리 개발자야"), 예시 제공, 출력 형식 지정. 강사가 가장 사랑하는 건 <strong>역질문</strong>: <em>"내가 너한테 묻는 게 아니라, 네가 나한테 질문해라."</em> 내 생각을 확장·구체화한다.</p>
 <blockquote>
-<p>💡 단, 지금 AI는 충분히 똑똑해서(사투리·오타도 이해) 프롬프트 엔지니어링의 비중은 예전보다 줄었다.</p>
+<p><strong>팁:</strong> 단, 지금 AI는 충분히 똑똑해서(사투리·오타도 이해) 프롬프트 엔지니어링의 비중은 예전보다 줄었다.</p>
 </blockquote>
 <h3>1-2. 컨텍스트 엔지니어링 (정보를 마련)</h3>
 <p><strong>왜 프롬프트를 길게 쓰는가?</strong> 나에 대한 정보를 보내 내 입맛에 맞는 결과를 얻으려고. 챗GPT·클로드는 똑똑하지만 <em>나를 모른다.</em> 반면 (지능은 낮아도) 나를 잘 아는 엄마는 더 입맛에 맞는 여행지를 추천한다.</p>
@@ -413,7 +413,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
 <h3>1-4. 하네스 엔지니어링 정의</h3>
 <p>하네스(harness) = 마구(馬具), 강아지 목줄. <strong>똑똑하지만 길들여지지 않은 경주마(AI)를 내 뜻대로 달리게 미리 세팅</strong>하는 것.</p>
 <blockquote>
-<p>⭐ <strong>목표는 단 둘</strong> — ① <strong>프롬프트의 재사용</strong> (매번 "무릎 아프다" 말하지 않기) ② <strong>정보의 재사용</strong> (나에 대한 정보를 미리 넣어 AI가 갖다 쓰게).</p>
+<p><strong>중요</strong> <strong>목표는 단 둘</strong> — ① <strong>프롬프트의 재사용</strong> (매번 "무릎 아프다" 말하지 않기) ② <strong>정보의 재사용</strong> (나에 대한 정보를 미리 넣어 AI가 갖다 쓰게).</p>
 </blockquote>
 <p><strong>기초 요소</strong>: <code>CLAUDE.md</code> · 슬래시 커맨드 · 스킬 · MCP · 훅 · 서브 에이전트. (오늘은 <strong>CLAUDE.md와 에이전트</strong> 위주.)</p>
 <hr>
@@ -494,7 +494,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
 <h3>4-1. 멀티 에이전트</h3>
 <p>메인이 <strong>여러 명을 고용</strong>, 병렬 동시 실행 후 각자 결과 제출. 설계 2가지 — <strong>용도별 분담</strong>(조사/예산/동선) 또는 <strong>같은 작업 동시 처리</strong>(포르투갈·스페인·이탈리아 동시 조사 → 시간 단축).</p>
 <blockquote>
-<p>🎬 <strong>사례 — AI 쇼츠 드라마</strong>: 4개월 전 멀티 에이전트로 만든 막장 드라마가 3화에서 37,000 조회수. 프로듀서·작가·캐릭터 디자이너·이미지 크리에이터 등에게 지침을 미리 적어두고 "드라마 한 편 하자"로 대본→이미지→영상→편집→업로드까지.</p>
+<p><strong>장면:</strong> <strong>사례 — AI 쇼츠 드라마</strong>: 4개월 전 멀티 에이전트로 만든 막장 드라마가 3화에서 37,000 조회수. 프로듀서·작가·캐릭터 디자이너·이미지 크리에이터 등에게 지침을 미리 적어두고 "드라마 한 편 하자"로 대본→이미지→영상→편집→업로드까지.</p>
 </blockquote>
 <h3>4-2. 멀티 에이전트 팀 — 서로 소통한다</h3>
 <p>한 명씩 따로가 아니라 <strong>한 팀으로 고용</strong>. 가장 큰 차이 = <strong>팀원끼리 회의·소통.</strong></p>
@@ -520,12 +520,12 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
 </tbody>
 </table>
 <blockquote>
-<p>💬 <em>"많은 기법을 켜켜이 쌓는 것보다, 이것(멀티 에이전트 팀)만 할 줄 알아도 큰 프로젝트에서 많은 진전이 있다."</em></p>
+<p><strong>발언:</strong> <em>"많은 기법을 켜켜이 쌓는 것보다, 이것(멀티 에이전트 팀)만 할 줄 알아도 큰 프로젝트에서 많은 진전이 있다."</em></p>
 </blockquote>
 <h3>4-3. 세팅 — AI는 최신 기능을 모른다</h3>
 <ul>
 <li><strong>환경 변수 = 1</strong> 이어야 작동.</li>
-<li>⚠️ 클로드코드는 이 기능이 <strong>있다는 걸 모른다</strong> (학습 시점까지만 앎). → <em>"없다고 하지 말고 공식 문서를 조사해서 제대로 해라"</em>라고 먼저 시키고, 이 지시를 <strong>CLAUDE.md에 명시</strong>.</li>
+<li><strong>주의:</strong> 클로드코드는 이 기능이 <strong>있다는 걸 모른다</strong> (학습 시점까지만 앎). → <em>"없다고 하지 말고 공식 문서를 조사해서 제대로 해라"</em>라고 먼저 시키고, 이 지시를 <strong>CLAUDE.md에 명시</strong>.</li>
 <li>종료 시 메인에게 <strong>"팀을 다 종료해줘"</strong>. 토큰 소모 큼(Max 요금제 권장).</li>
 </ul>
 <p><strong>플랫폼 제약</strong> — 실시간 화면 분할은 터미널 등 일부만. <strong>윈도우·데스크탑</strong>은 사이드바 "백그라운드 태스크"에 인원수로 확인. 윈도우는 <strong>git 설치</strong> 필요.</p>
@@ -552,7 +552,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
 </tr>
 <tr>
 <td>②</td>
-<td><strong>리뷰어를 꼭 넣어라</strong> ⭐</td>
+<td><strong>리뷰어를 꼭 넣어라</strong> <strong>중요</strong></td>
 <td>체크리스트로 피드백 주며 <strong>루프</strong>를 돌려 품질↑. 검증 페르소나도 가능</td>
 </tr>
 <tr>
@@ -563,7 +563,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
 </tbody>
 </table>
 <blockquote>
-<p>🎯 목적은 "화면이 쪼개지네" 구경이 아니라 <strong>AI와 함께 일을 끝내는 것.</strong> 끝까지 퀄리티를 지키려면 ②리뷰어와 ③중간 산출물을 반드시 챙겨라.</p>
+<p><strong>목표:</strong> 목적은 "화면이 쪼개지네" 구경이 아니라 <strong>AI와 함께 일을 끝내는 것.</strong> 끝까지 퀄리티를 지키려면 ②리뷰어와 ③중간 산출물을 반드시 챙겨라.</p>
 </blockquote>
 <hr>
 <h2 id="6-자주-나온-질문-qampa">6. 자주 나온 질문 (Q&amp;A)</h2>
