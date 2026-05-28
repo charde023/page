@@ -19,7 +19,9 @@
   html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
   body{margin:0;background:var(--bg);color:var(--text);
     font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
-    line-height:1.72;-webkit-font-smoothing:antialiased;font-size:17px;}
+    line-height:1.72;-webkit-font-smoothing:antialiased;font-size:17px;
+    overflow-x:hidden;word-break:keep-all;}
+  img,svg{max-width:100%;}
   a{color:var(--brand2);text-decoration:none;}
   .wrap{max-width:860px;margin:0 auto;padding:0 18px;}
 
@@ -77,10 +79,28 @@
     border-top:1px solid var(--line);text-align:center;color:var(--soft);font-size:13.5px;line-height:1.7;}
 
   @media(max-width:640px){
+    body{font-size:16.5px;}
     .wrap{padding:0 15px;}
-    header.hero{padding:calc(40px + env(safe-area-inset-top)) 15px 28px;}
+    header.hero{padding:calc(38px + env(safe-area-inset-top)) 15px 26px;}
+    .hero p{font-size:15.5px;}
+    .summary{padding:18px 16px;border-radius:16px;}
+    .summary p{font-size:15.5px;}
+    .deadline{font-size:14px;padding:12px 13px;}
     h2.sec{font-size:20px;}
-    .pcard h3{font-size:17px;}
+    .sub{font-size:14.5px;}
+    .pcard{padding:16px 15px 14px;}
+    .pcard .top{gap:10px;}
+    .pcard .num{width:34px;height:34px;border-radius:10px;font-size:16px;}
+    .pcard h3{font-size:16.5px;}
+    .pcard p{font-size:14.5px;}
+    .dl a{padding:12px 13px;font-size:14.5px;gap:11px;}
+    .dl .ic{width:30px;height:30px;}
+    .dl small{font-size:12.5px;}
+  }
+  @media(max-width:380px){
+    body{font-size:16px;}
+    .hero h1{font-size:24px;}
+    .pcard .inc span{font-size:12px;}
   }
 </style>
 </head>
