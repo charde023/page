@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>보스의 보고 방법론 — 주간회의 학습 정리</title>
+<meta name="description" content="보스가 설명한 QCDP 프레임워크, 주간 보고 구조, 파레토 원칙 — 실무자가 갖춰야 할 경영자 관점 보고 방법론 핵심 정리">
+<meta property="og:title" content="보스의 보고 방법론 — 주간회의 학습 정리">
+<meta property="og:description" content="보스가 설명한 QCDP 프레임워크, 주간 보고 구조, 파레토 원칙 — 실무자가 갖춰야 할 경영자 관점 보고 방법론 핵심 정리">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root {
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-soft: #f1f6ff;
+  --text: #1f2a44;
+  --text-soft: #5a6b87;
+  --text-muted: #8593ab;
+  --border: #e3e9f3;
+  --border-soft: #eef2f8;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-deep: #1d4ed8;
+  --shadow: 0 1px 2px rgba(31, 42, 68, 0.04), 0 8px 24px rgba(31, 42, 68, 0.06);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-feature-settings: 'tnum', 'ss03';
+  line-height: 1.75;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+h1, h2, h3, h4 {
+  line-height: 1.35;
+  margin-top: 2em;
+  margin-bottom: 0.65em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.18rem; color: var(--accent-deep); }
+h4 { font-size: 1.02rem; }
+p { margin: 0.85em 0; color: var(--text); }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+strong { color: var(--accent-deep); font-weight: 700; }
+em { color: var(--text-soft); }
+blockquote {
+  margin: 1.2em 0;
+  padding: 0.9em 1.2em;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+  border-radius: 10px;
+  font-size: 0.97em;
+}
+blockquote p { margin: 0.35em 0; }
+blockquote strong { color: var(--accent-deep); }
+ol, ul { padding-left: 1.5em; }
+li { margin: 0.4em 0; }
+code {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.88em;
+  background: var(--surface-soft);
+  color: var(--accent-deep);
+  padding: 0.15em 0.45em;
+  border-radius: 5px;
+  border: 1px solid var(--border-soft);
+}
+pre {
+  background: var(--surface);
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  line-height: 1.6;
+  margin: 1.2em 0;
+}
+pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.92em;
+  color: var(--text);
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.2em 0;
+  font-size: 0.96em;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft);
+}
+tr:last-child td { border-bottom: 0; }
+th {
+  background: var(--surface-soft);
+  font-weight: 600;
+  color: var(--accent-deep);
+  border-bottom: 1px solid var(--border);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
+.header-banner {
+  margin: -32px -24px 36px;
+  padding: 34px 28px 28px;
+  background: linear-gradient(160deg, #e0ecff 0%, #f1f6ff 55%, #ffffff 100%);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.header-banner .eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-soft);
+  margin-bottom: 14px;
+}
+.header-banner h1 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.header-banner .sub {
+  margin-top: 10px;
+  color: var(--text-soft);
+  font-size: 0.97rem;
+}
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 1.5em 0 2.4em;
+  box-shadow: var(--shadow);
+}
+.toc h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.toc ol {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--text-soft);
+}
+.toc li { margin: 0.3em 0; }
+.toc a { color: var(--text); font-weight: 500; }
+.toc a:hover { color: var(--accent); }
+.footer {
+  margin-top: 4em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--border);
+  font-size: 0.88em;
+  color: var(--text-muted);
+  text-align: center;
+}
+.footer code { font-size: 0.92em; }
+@media (max-width: 640px) {
+  body {
+    padding: 20px 18px 72px;
+    font-size: 16px;
+    line-height: 1.72;
+  }
+  .header-banner {
+    margin: -20px -18px 24px;
+    padding: 24px 20px 20px;
+    border-radius: 0;
+  }
+  .header-banner .eyebrow { font-size: 0.72rem; }
+  .header-banner h1 { font-size: 1.5rem; }
+  .header-banner .sub { font-size: 0.9rem; }
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.08rem; }
+  h4 { font-size: 1rem; }
+  blockquote { padding: 0.8em 1em; font-size: 0.95em; }
+  pre { padding: 14px 16px; font-size: 0.9em; }
+  table { font-size: 0.92em; }
+  th, td { padding: 10px 11px; }
+  .toc { padding: 14px 18px; }
+  ol, ul { padding-left: 1.3em; }
+}
+@media (max-width: 380px) {
+  body { font-size: 15.5px; padding: 18px 16px 64px; }
+  .header-banner h1 { font-size: 1.35rem; }
+  table { font-size: 0.88em; }
+  th, td { padding: 8px 9px; }
+}
+</style>
+</head>
+<body>
+<header class="header-banner">
+  <span class="eyebrow">주간회의 · 보고 방법론 학습</span>
+  <h1>보스의 보고 방법론 — 주간회의 학습 정리</h1>
+  <div class="sub">2026-06-02 주간회의 녹음 정리본</div>
+</header>
+
+<blockquote>
+<p>주간회의 · 보고 방법론 학습 · 2026-06-02
+원본: <code>주간회의.m4a</code> · 48분 07초</p>
+</blockquote>
+<hr>
+<h2 id="결론-tldr">결론 (TL;DR)</h2>
+<blockquote>
+<p><strong>보고는 보스가 궁금한 것을 가져오는 것이다. QCDP 관점에서 어떤 것이 문제인지 파악하고, 딜리버리 날짜는 반드시 선언하며, 완벽보다 급소 해결 후 출시를 우선한다.</strong></p>
+</blockquote>
+<h3>보고 핵심 원칙</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>원칙</th>
+<th>한 줄 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>보스의 머리를 알아야 한다</td>
+<td>보고는 내가 하고 싶은 말이 아니라 보스가 궁금한 것을 가져오는 것</td>
+</tr>
+<tr>
+<td>2</td>
+<td>QCDP 관점으로 본다</td>
+<td>Quality / Cost / Delivery / Productivity — 내 태스크가 어느 KPI를 위한 것인지 항상 인지</td>
+</tr>
+<tr>
+<td>3</td>
+<td>딜리버리 날짜는 선언이다</td>
+<td>D-day를 명시하는 순간 사람 뇌가 움직인다. 반드시 포함</td>
+</tr>
+<tr>
+<td>4</td>
+<td>파레토 — 급소부터 해결</td>
+<td>16개 중 1번 급소 해결하면 출시 가능. 완벽주의와 충돌하는 순간 파레토를 택한다</td>
+</tr>
+<tr>
+<td>5</td>
+<td>투입비 → 판가 → 이익/절감액</td>
+<td>코스트 보고의 기본 공식. 얼마 들어갔고, 얼마 만들었고, 얼마 세이브했는가</td>
+</tr>
+<tr>
+<td>6</td>
+<td>과거 + 현재가 있어야 복리</td>
+<td>주간 보고는 지난주 vs 이번 주 구분이 기본. 칸반·복리 관점</td>
+</tr>
+<tr>
+<td>7</td>
+<td>LLM = 맨아워 확장</td>
+<td>인력 채용 대신 LLM 추가 = 동일한 비즈니스 논리. 코스트 세이브로 보고 가능</td>
+</tr>
+</tbody>
+</table>
+<h3>챙겨야 할 7가지</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>메시지</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>궁금한 것을 가져와</td>
+<td>내가 아는 걸 가져오는 게 아니라 보스가 모르는 것·궁금한 것을 파악해서 가져온다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>QCDP 중 어디에 해당하냐</td>
+<td>내 태스크가 퀄리티 미션인지, 코스트 미션인지, 딜리버리 미션인지 먼저 규정한다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>딜리버리 D-day는 필수</td>
+<td>날짜 없는 보고는 반쪽. 선언이 없으면 실행도 없다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Plan vs Result 요약</td>
+<td>지난주 계획 대비 실적, 연장된 항목, 소진 재원을 한 줄로 요약</td>
+</tr>
+<tr>
+<td>5</td>
+<td>지속 + 신규 구분</td>
+<td>이번 주 계획은 지속되는 것과 새로 추가된 것을 명확히 나눈다</td>
+</tr>
+<tr>
+<td>6</td>
+<td>서포트 요청 명시</td>
+<td>혼자 해결 못하는 것은 보고에 넣고 서포트를 요청해야 한다</td>
+</tr>
+<tr>
+<td>7</td>
+<td>완벽 대신 급소 해결</td>
+<td>출시 전까지 완벽을 기다리면 재원이 먼저 소진된다. 급소만 해결하고 출시 후 수정</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="강의는-어떤-내용이었나">강의는 어떤 내용이었나</h2>
+<p>보스가 실무자에게 QCDP 기반 보고 방법론과 주간 보고 형식을 직접 코칭한 회의다. 물총 상품 판매, 데이터 수집 에이전트 구축, DB 설계 현황 등 실제 업무 사례를 보고 예시로 사용했으며, 실무자가 직접 재보고를 시연하는 방식으로 진행됐다.</p>
+<p>단순한 업무 현황 공유를 넘어, 실무자가 경영자 관점(버드뷰)을 내면화하도록 하는 것이 핵심 목적이다.</p>
+<table>
+<thead>
+<tr>
+<th>주제</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>QCDP 프레임워크</td>
+<td>퀄리티·코스트·딜리버리·프로덕티비티 관점으로 모든 태스크 분류</td>
+</tr>
+<tr>
+<td>보고 실패 사례</td>
+<td>보스가 궁금한 것 없이 온 보고 — "넌 뭐하러 왔니?"</td>
+</tr>
+<tr>
+<td>코스트 보고 공식</td>
+<td>투입비 → 판가 → 이익/절감액 계산 구조</td>
+</tr>
+<tr>
+<td>LLM = 맨아워</td>
+<td>ChatGPT+Claude 병행 = 인력 추가와 동일한 비즈니스 논리</td>
+</tr>
+<tr>
+<td>파레토 원칙</td>
+<td>16개 중 1번 급소 해결 → 출시 가능, 완벽주의 금지</td>
+</tr>
+<tr>
+<td>주간 보고 형식</td>
+<td>지난주 Plan vs Result + 이번 주 지속/신규 + D-day + Summary</td>
+</tr>
+<tr>
+<td>데이터 에이전트 현황</td>
+<td>로그인 세션 자가 치유 에이전트 구축 중, 2~3일 내 테스트 완료 예정</td>
+</tr>
+<tr>
+<td>DB 설계</td>
+<td>마스터 SKU 테이블 + 플랫폼별 맵핑 테이블, 뷰 레이어로 부하 분산</td>
+</tr>
+<tr>
+<td>이번 주 우선순위</td>
+<td>카페24 상품 등록 1개 → 쿠팡 부관리자 로그인 확인 → DB 마스터 테이블</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="0-한눈에-보는-보고-프레임워크">0. 한눈에 보는 보고 프레임워크</h2>
+<ol>
+<li><strong>보스가 궁금한 것 파악</strong> — 보고 전에 "보스는 지금 뭐가 모를까?"를 먼저 질문한다</li>
+<li><strong>태스크의 QCDP 분류</strong> — 이 태스크가 퀄리티·코스트·딜리버리·프로덕티비티 중 어느 미션인지 규정</li>
+<li><strong>투입비 → 판가 → 이익 계산</strong> — 코스트 관련 보고는 반드시 이 공식으로 구조화</li>
+<li><strong>딜리버리 D-day 선언</strong> — 완료 날짜를 명시하고 선언. 변동이 있더라도 날짜를 넣는다</li>
+<li><strong>지난주 Plan vs Result 요약</strong> — 계획 대비 실적, 연장 항목, 소진 재원을 한 줄로</li>
+<li><strong>이번 주 계획 구성</strong> — 지속되는 항목 + 새로 추가된 항목을 나눠서 제시</li>
+<li><strong>급소 파악 후 우선순위 결정</strong> — 파레토: 가장 중요한 1개 해결이 나머지 15개를 여는 열쇠</li>
+</ol>
+<hr>
+<h2 id="1-qcdp-모든-보고의-기준">1. QCDP — 모든 보고의 기준</h2>
+<p>보스가 반복해서 강조한 핵심 프레임워크. 모든 태스크와 보고는 이 4개 관점 중 하나(또는 여러 개)로 분류된다.</p>
+<table>
+<thead>
+<tr>
+<th>관점</th>
+<th>의미</th>
+<th>보고 질문</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Q — Quality</strong></td>
+<td>퀄리티·완결성·무결성</td>
+<td>이 태스크의 품질 기준은 무엇인가? 달성했는가?</td>
+</tr>
+<tr>
+<td><strong>C — Cost</strong></td>
+<td>비용·투입 자원</td>
+<td>얼마나 들어갔나? 얼마를 세이브했나? 판가 대비 이익은?</td>
+</tr>
+<tr>
+<td><strong>D — Delivery</strong></td>
+<td>일정·납기·출시일</td>
+<td>언제 완료되나? D-day는?</td>
+</tr>
+<tr>
+<td><strong>P — Productivity</strong></td>
+<td>생산성·반복성·정규화</td>
+<td>이 작업이 양산 가능한가? 반복 시 더 빠른가?</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>이 태스크는 어떤 걸 위한 태스크인지 항상 꿰고 있어야 된다.</strong></p>
+</blockquote>
+<p><strong>양산성(Productivity)의 기준:</strong> 퀄리티, 코스트, 딜리버리 세 가지가 동시에 안 흔들리는 상태. 하나라도 흔들리면 아직 양산 수준이 아니다.</p>
+<hr>
+<h2 id="2-보고-실패-패턴-넌-뭐하러-왔니">2. 보고 실패 패턴 — "넌 뭐하러 왔니"</h2>
+<p>보스가 직접 묘사한 보고 실패 시나리오:</p>
+<blockquote>
+<p><strong>"이렇게 질문 나오기 시작하면 끝이었는데 — 보고 개판되고 노트북 날아가는 거야."</strong>
+<strong>"넌 뭐하러 왔니? 내가 궁금한 거 안 가져왔는데 뭘 가져왔니?"</strong></p>
+</blockquote>
+<p>보고 실패의 공통 원인:</p>
+<table>
+<thead>
+<tr>
+<th>실패 패턴</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>보스 관점 부재</td>
+<td>내가 한 것만 나열. 보스가 모르는 것·궁금한 것 파악 안 됨</td>
+</tr>
+<tr>
+<td>날짜 없음</td>
+<td>딜리버리 D-day 없이 진행 상황만 보고</td>
+</tr>
+<tr>
+<td>코스트 없음</td>
+<td>얼마 들어갔는지, 얼마 남았는지, 언제 수익화되는지 없음</td>
+</tr>
+<tr>
+<td>KPI 연결 없음</td>
+<td>이 태스크가 왜 중요한지, QCDP 중 어디인지 설명 안 됨</td>
+</tr>
+<tr>
+<td>미확인 질문</td>
+<td>현황을 모르고 와서 즉석 질문에 "확인 안 해봤어요"</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="3-코스트-보고-공식">3. 코스트 보고 공식</h2>
+<p>보스가 직접 칠판에 그리며 설명한 코스트 보고 구조:</p>
+<pre><code>투입비 (A + B + C + ...)
+  ↓
+판가 (이 상품의 판매 가격)
+  ↓
+이익 or 절감액 (판가 - 투입비)
+  ↓
+수익화 시점 (언제부터 흑자 전환?)
+</code></pre>
+<p><strong>보고 예시:</strong> "100만 원 투입됐고, 판가는 X만 원이며, 2회까지는 적자지만 3회 반복 시 투입비 회수됩니다. 수익화 시점은 O월 O일입니다."</p>
+<blockquote>
+<p><strong>풀 리포트를 하라는 얘기는 아니야. 매번 하다 보면 코스트 측면은 이걸 얘기해야 되겠구나, 퀄리티 측면은 이걸 얘기해야 되겠구나 — 그런 토픽을 챙기라는 얘기야.</strong></p>
+</blockquote>
+<hr>
+<h2 id="4-주간-보고-형식-1장-구조">4. 주간 보고 형식 — 1장 구조</h2>
+<p>보스가 제시한 주간 보고의 표준 1장 구조:</p>
+<pre><code>[Summary]
+  - 지난주 Plan vs Result (계획 대비 실적, 연장 항목, 소진 재원)
+  - 이번 주 서포트 요청 사항
+
+[지난주 내용]
+  - 완료된 항목
+  - 이번 주로 이어지는 항목 (지속)
+
+[이번 주 계획]
+  - 지속: 지난주에서 이어지는 것
+  - 신규(New): 이번 주 새로 추가된 것
+
+[딜리버리 D-day]
+  - 각 태스크의 완료 예정일 명시
+</code></pre>
+<p><strong>왜 지난주·이번 주를 나누는가?</strong></p>
+<blockquote>
+<p><strong>"복리를 보려면 과거랑 현재가 있어야 돼."</strong> 칸반도 이 원리로 만들어졌다.</p>
+</blockquote>
+<p><strong>딜리버리 날짜가 중요한 이유:</strong></p>
+<blockquote>
+<p><strong>"딜리버리는 네가 하겠다는 생각으로 — 우리가 하겠다는 선언이잖아. 보고하는 순간 사람 뇌가 움직여요. 선언을 했기 때문에 하려고 해."</strong></p>
+</blockquote>
+<hr>
+<h2 id="5-파레토-원칙-급소부터-해결">5. 파레토 원칙 — 급소부터 해결</h2>
+<p>완벽주의와 경영자 관점의 가장 큰 충돌 지점.</p>
+<table>
+<thead>
+<tr>
+<th>실무자 관점</th>
+<th>경영자 관점</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"완벽하게 끝내고 출시한다"</td>
+<td>"급소만 해결하면 출시 가능하다"</td>
+</tr>
+<tr>
+<td>"다 준비되면 수익화한다"</td>
+<td>"빨리 출시하고 수익화하면서 수정한다"</td>
+</tr>
+<tr>
+<td>"품질이 완벽해야 한다"</td>
+<td>"지금 들어가는 재원이 얼마인 줄 아냐"</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>"완벽하게 해가지고 삼성도 안 높게 갔다니까. 급소만 해결해. 그러면 출시는 되잖아."</strong></p>
+</blockquote>
+<p><strong>파레토 적용 방법:</strong> 16개 항목이 있으면 → 1번 급소가 뭔지 파악 → 그것만 먼저 해결 → 나머지 15개는 수평 전개 가능.</p>
+<p><strong>업무 지시 패턴:</strong> 보스가 "로그인 빨리 풀어라"라고 하는 건 "급소를 해결하라"는 경영자 언어다.</p>
+<hr>
+<h2 id="6-llm-맨아워-확장-새로운-비즈니스-논리">6. LLM = 맨아워 확장 — 새로운 비즈니스 논리</h2>
+<p>보스가 설명한 AI 시대 맨아워 개념:</p>
+<p><strong>기존 맨아워:</strong> 사람 10명 투입 = 1/10로 시간 단축</p>
+<p><strong>AI 시대 맨아워:</strong> LLM N개 병행 = 동일한 논리로 생산성 확장</p>
+<blockquote>
+<p><strong>"인력 채용하겠습니다"하고 똑같은 얘기가 "LLM만 더 채용하겠습니다" — 세대가 바뀌어가지고 맨아워 개념이 바뀌었어."</strong></p>
+</blockquote>
+<p><strong>보고 언어로 바꾸는 법:</strong></p>
+<ul>
+<li>"맥 스튜디오를 추가 구매할 예정입니다" → "이걸 하면 기존 대비 딜리버리가 X% 줄어들고, 코스트를 세이브하는 거예요"</li>
+<li>"Claude + ChatGPT 병행합니다" → "맨아워 N배 확장 효과로 딜리버리를 O일 단축합니다"</li>
+</ul>
+<blockquote>
+<p><strong>"요거를 하면 요거 한 개 할 때보다 뭐가 좋아져요. 그래서 코스트를 세이브하는 거예요. 맥 스튜디오 사는 게 지출인 거 같지만, 사실은 버는 거예요."</strong></p>
+</blockquote>
+<hr>
+<h2 id="7-경영자-관점-트레이닝">7. 경영자 관점 트레이닝</h2>
+<p>보스가 이 회의 전체를 통해 전달한 메시지:</p>
+<blockquote>
+<p><strong>"나는 위에서 버드뷰를 쭉 보고 있는 사람이고요, 너는 실무하고 이제 중간에서 커넥션하는 그런 기능이고요."</strong></p>
+</blockquote>
+<p><strong>실무자가 연습해야 할 것:</strong></p>
+<ol>
+<li>완벽하려는 본능을 비즈니스 관점으로 교정하는 연습</li>
+<li>파레토 적용 — 같은 시간에 어느 것에 집중할지 결정</li>
+<li>보고 전 "보스 머릿속에 지금 뭐가 있지?" 질문</li>
+</ol>
+<blockquote>
+<p><strong>"고거에만 딱 집중해서 하면 클래스 환골이 된다."</strong></p>
+</blockquote>
+<hr>
+<h2 id="보고-체크리스트">보고 체크리스트</h2>
+<p>보고 전 반드시 확인:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>체크 항목</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>이 태스크가 QCDP 중 어느 미션인지 규정했는가</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>보스가 지금 궁금한 것이 무엇인지 파악했는가</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>딜리버리 D-day를 명시했는가</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>4</td>
+<td>투입비 → 판가 → 이익/절감액 구조가 있는가 (코스트 관련 시)</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>5</td>
+<td>지난주 Plan vs Result 요약을 포함했는가</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>6</td>
+<td>이번 주 지속 항목과 신규 항목을 나눴는가</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>7</td>
+<td>서포트 요청 사항을 명시했는가</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>8</td>
+<td>현황을 모르는 항목은 사전에 확인했는가</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>9</td>
+<td>급소(파레토 1번)가 무엇인지 파악했는가</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>10</td>
+<td>완벽보다 출시 가능 수준으로 판단했는가</td>
+<td>[ ]</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="자주-막히는-곳">자주 막히는 곳</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>보고했는데 "넌 뭐하러 왔니" 소리 들음</td>
+<td>보스가 궁금한 것을 파악하지 못한 것. 보고 전 "보스는 지금 뭐가 모를까?"를 먼저 질문</td>
+</tr>
+<tr>
+<td>D-day를 못 박기가 두려움</td>
+<td>날짜가 틀려도 선언하는 것이 중요. 변동 시 즉시 재보고가 낫다</td>
+</tr>
+<tr>
+<td>코스트 보고를 어떻게 구성할지 모름</td>
+<td>투입비 → 판가 → 이익/절감액 → 수익화 시점 순서로 구조화</td>
+</tr>
+<tr>
+<td>완벽하지 않으면 출시 못 한다고 생각함</td>
+<td>파레토 적용. 급소 1개 해결 시 출시 가능 수준인지 판단</td>
+</tr>
+<tr>
+<td>이번 주 계획이 지난주와 겹쳐 어떻게 써야 할지 모름</td>
+<td>지속(carry-over)과 신규(new)를 명확히 분리해서 작성</td>
+</tr>
+<tr>
+<td>LLM/장비 투자를 어떻게 보고해야 할지 모름</td>
+<td>"코스트 세이브" 또는 "딜리버리 단축 X일"로 비즈니스 언어로 번역해서 보고</td>
+</tr>
+<tr>
+<td>QCDP 중 어느 관점인지 모르겠음</td>
+<td>보스나 팀장이 이 태스크에서 가장 신경 쓰는 것이 무엇인지 먼저 확인</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="부록-명대사">부록 — 명대사</h2>
+<blockquote>
+<p><strong>"넌 뭐하러 왔니? 내가 궁금한 거 안 가져왔는데 뭘 가져왔니?"</strong></p>
+<p><strong>"보스의 머리를 알아야 돼. 생각을 알아야 돼."</strong></p>
+<p><strong>"이 태스크는 어떤 걸 위한 태스크인지 알겠어?"</strong></p>
+<p><strong>"완벽하게 해가지고 삼성도 안 높게 갔다니까. 급소만 해결해."</strong></p>
+<p><strong>"빨리 출시하고, 수익화하면서 돈 벌면서 수정해야지."</strong></p>
+<p><strong>"딜리버리는 네가 하겠다는 선언이잖아. 보고하는 순간 사람 뇌가 움직여요."</strong></p>
+<p><strong>"인력 채용하겠습니다 — 이게 LLM만 더 채용하겠습니다로 바뀐 거야. 세대가 바뀐 거지."</strong></p>
+<p><strong>"대기업 문턱도 안 닳았지만 거기에 준하는 트레이닝을 받을 거야."</strong></p>
+</blockquote>
+<footer class="footer">
+  이 문서는 원본 강의 녹화본(<code>주간회의.m4a</code>)을 Whisper로 전사한 뒤
+  주제별로 정리한 것입니다. 정확한 발화 흐름이 필요하면 원본 영상을 참조하세요.
+</footer>
+</body>
+</html>
