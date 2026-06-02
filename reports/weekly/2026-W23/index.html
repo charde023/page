@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026-W23 주간 보고</title>
+<meta name="description" content="데이터 수집 에이전트 테스트 진입 · 마스터 DB 설계 확정 · 쿠팡 2차인증 이슈 대응">
+<meta property="og:title" content="2026-W23 주간 보고">
+<meta property="og:description" content="데이터 수집 에이전트 테스트 진입 · 마스터 DB 설계 확정 · 쿠팡 2차인증 이슈 대응">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root {
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-soft: #f1f6ff;
+  --text: #1f2a44;
+  --text-soft: #5a6b87;
+  --text-muted: #8593ab;
+  --border: #e3e9f3;
+  --border-soft: #eef2f8;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-deep: #1d4ed8;
+  --badge-weekly-bg: #dbeafe;
+  --badge-weekly-text: #1d4ed8;
+  --badge-interim-bg: #fef3c7;
+  --badge-interim-text: #92400e;
+  --status-ok: #16a34a;
+  --status-warn: #d97706;
+  --status-bad: #dc2626;
+  --shadow: 0 1px 2px rgba(31,42,68,.04), 0 8px 24px rgba(31,42,68,.06);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-feature-settings: 'tnum', 'ss03';
+  line-height: 1.75;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+h1,h2,h3,h4 {
+  line-height: 1.35;
+  margin-top: 2em;
+  margin-bottom: 0.65em;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: var(--text);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 { font-size: 1.45rem; padding-bottom: .35em; border-bottom: 1px solid var(--border); }
+h3 { font-size: 1.15rem; color: var(--accent-deep); }
+h4 { font-size: 1.02rem; }
+p { margin: .85em 0; }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+strong { color: var(--accent-deep); font-weight: 700; }
+em { color: var(--text-soft); }
+blockquote {
+  margin: 1.2em 0;
+  padding: .9em 1.2em;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  font-size: .97em;
+}
+blockquote p { margin: .35em 0; }
+blockquote strong { color: var(--accent-deep); }
+ol,ul { padding-left: 1.5em; }
+li { margin: .4em 0; }
+code {
+  font-family: 'JetBrains Mono','SF Mono',Consolas,'Liberation Mono',monospace;
+  font-size: .88em;
+  background: var(--surface-soft);
+  color: var(--accent-deep);
+  padding: .15em .45em;
+  border-radius: 5px;
+  border: 1px solid var(--border-soft);
+}
+pre {
+  background: var(--surface);
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  line-height: 1.6;
+  margin: 1.2em 0;
+}
+pre code { background: transparent; border: 0; padding: 0; font-size: .92em; color: var(--text); }
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.2em 0;
+  font-size: .96em;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+th,td { padding: 11px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border-soft); }
+tr:last-child td { border-bottom: 0; }
+th { background: var(--surface-soft); font-weight: 600; color: var(--accent-deep); border-bottom: 1px solid var(--border); }
+hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
+
+/* ── Header banner ── */
+.header-banner {
+  margin: -32px -24px 36px;
+  padding: 32px 28px 26px;
+  background: linear-gradient(160deg, #e0ecff 0%, #f1f6ff 55%, #fff 100%);
+  border-bottom: 1px solid var(--border);
+}
+.badge {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 11px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  border: 1px solid transparent;
+}
+.badge-weekly  { background: var(--badge-weekly-bg);  color: var(--badge-weekly-text);  border-color: #bfdbfe; }
+.badge-interim { background: var(--badge-interim-bg); color: var(--badge-interim-text); border-color: #fde68a; }
+.badge-project { background: #f0fdf4; color: #166534; border-color: #bbf7d0; margin-left: 6px; }
+.header-banner h1 { margin: 0; font-size: 1.85rem; color: var(--text); line-height: 1.3; }
+.header-banner .meta { margin-top: 10px; color: var(--text-soft); font-size: .94rem; }
+
+/* ── TOC ── */
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 1.5em 0 2.4em;
+  box-shadow: var(--shadow);
+}
+.toc h3 { margin: 0 0 10px; font-size: .88rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.toc ol { margin: 0; padding-left: 1.4em; color: var(--text-soft); }
+.toc li { margin: .3em 0; }
+.toc a { color: var(--text); font-weight: 500; }
+.toc a:hover { color: var(--accent); }
+
+/* ── Footer ── */
+.footer { margin-top: 4em; padding-top: 1.4em; border-top: 1px solid var(--border); font-size: .88em; color: var(--text-muted); text-align: center; }
+.back-link { display: inline-block; margin-bottom: 1.2em; font-size: .9rem; color: var(--accent); }
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  body { padding: 20px 18px 72px; font-size: 16px; }
+  .header-banner { margin: -20px -18px 24px; padding: 24px 20px 20px; }
+  .header-banner h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.08rem; }
+  table { font-size: .9em; }
+  th,td { padding: 9px 10px; }
+}
+@media (max-width: 380px) {
+  body { font-size: 15.5px; padding: 18px 16px 64px; }
+  table { font-size: .86em; }
+  th,td { padding: 7px 8px; }
+}
+</style>
+</head>
+<body>
+<header class="header-banner">
+  <div>
+    <span class="badge badge-weekly">Weekly</span>
+    <span class="badge badge-project">APOM</span>
+  </div>
+  <h1>2026-W23 주간 보고</h1>
+  <div class="meta">2026-06-02 · 2026-W23 · 기간: 2026-06-02 ~ 2026-06-08 · 보고자: 인원</div>
+</header>
+<a class="back-link" href="https://charde023.github.io/page/reports/weekly/">← 목록으로</a>
+<nav class="toc" aria-label="목차">
+  <h3>목차</h3>
+  <ol>
+    <li><a href="#summary">Summary</a></li>
+    <li><a href="#지난주-plan-vs-result">지난주 — Plan vs Result</a></li>
+    <li><a href="#이번-주-계획">이번 주 계획</a></li>
+    <li><a href="#d-day-현황">D-day 현황</a></li>
+    <li><a href="#코스트-현황">코스트 현황</a></li>
+    <li><a href="#서포트-요청">서포트 요청</a></li>
+    <li><a href="#기타-이슈-리스크">기타 이슈 · 리스크</a></li>
+  </ol>
+</nav>
+
+<blockquote>
+<p>APOM 주간 보고 · 2026-06-02 · W23주차
+보고자: 인원 | 기간: 2026-06-02 ~ 2026-06-08</p>
+</blockquote>
+<hr>
+<h2 id="summary">Summary</h2>
+<blockquote>
+<p>로그인 세션 자가 치유 에이전트 구축 완료, 2~3일 테스트 돌입. 마스터 SKU DB 설계 확정. 쿠팡 2차인증 이슈는 시스템 장애로 확인 — 외부 요인.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plan vs Result</td>
+<td>3건 계획 중 1건 완료, 2건 지속 (67% 이월)</td>
+</tr>
+<tr>
+<td>연장 항목</td>
+<td>데이터 수집 정상화 — 쿠팡 2차인증 장애(외부)</td>
+</tr>
+<tr>
+<td>소진 재원</td>
+<td>맨아워 약 16hr (주말 포함) · LLM 미집계</td>
+</tr>
+<tr>
+<td>서포트 요청</td>
+<td>1건 — 쿠팡 부관리자 추가 승인</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="지난주-plan-vs-result">지난주 — Plan vs Result</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>태스크</th>
+<th>QCDP</th>
+<th>계획</th>
+<th>실적</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>로그인 세션 자가 치유 에이전트 구축</td>
+<td>D</td>
+<td>구축 완료</td>
+<td>구축 완료, 테스트 진입</td>
+<td>지속</td>
+</tr>
+<tr>
+<td>2</td>
+<td>데이터 수집 무결성 복구</td>
+<td>Q</td>
+<td>정상화</td>
+<td>쿠팡 2차인증 장애로 차단</td>
+<td>지연 (외부)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>마스터 SKU DB 설계</td>
+<td>P</td>
+<td>설계 확정</td>
+<td>설계 확정 + 컬럼 정의 완료</td>
+<td>완료</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="이번-주-계획">이번 주 계획</h2>
+<h3>지속 (Carry-over)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>태스크</th>
+<th>QCDP</th>
+<th>D-day</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>에이전트 테스트 (2~3 사이클)</td>
+<td>D</td>
+<td>2026-06-05</td>
+<td>각 사이클 후 교정 작업 포함</td>
+</tr>
+<tr>
+<td>2</td>
+<td>데이터 수집 정상화 확인</td>
+<td>Q</td>
+<td>2026-06-04</td>
+<td>쿠팡 시스템 장애 해소 전제</td>
+</tr>
+</tbody>
+</table>
+<h3>신규 (New)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>태스크</th>
+<th>QCDP</th>
+<th>D-day</th>
+<th>투입 예상</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>카페24 상품 1개 등록 (샵마마 심사 전제)</td>
+<td>D</td>
+<td>2026-06-03</td>
+<td>2hr</td>
+</tr>
+<tr>
+<td>2</td>
+<td>마스터 SKU DB 구축 착수</td>
+<td>P</td>
+<td>2026-06-07</td>
+<td>8hr</td>
+</tr>
+<tr>
+<td>3</td>
+<td>상세페이지 기획안 초안 (스케치 수준)</td>
+<td>Q</td>
+<td>2026-06-06</td>
+<td>4hr</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="d-day-현황">D-day 현황</h2>
+<table>
+<thead>
+<tr>
+<th>마일스톤</th>
+<th>D-day</th>
+<th>잔여</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>에이전트 테스트 완료</td>
+<td>2026-06-05</td>
+<td>D-3</td>
+<td>정상</td>
+</tr>
+<tr>
+<td>데이터 수집 정상화</td>
+<td>2026-06-04</td>
+<td>D-2</td>
+<td>주의 (외부 의존)</td>
+</tr>
+<tr>
+<td>마스터 SKU DB MVP</td>
+<td>2026-06-07</td>
+<td>D-5</td>
+<td>정상</td>
+</tr>
+<tr>
+<td>카페24 상품 등록</td>
+<td>2026-06-03</td>
+<td>D-1</td>
+<td>정상</td>
+</tr>
+<tr>
+<td>샵마마 심사 신청</td>
+<td>미정</td>
+<td>—</td>
+<td>카페24 등록 후 진행</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="코스트-현황">코스트 현황</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>투입비</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>맨아워 (주말 포함)</td>
+<td>약 16hr</td>
+<td>GPU 서버 포함</td>
+</tr>
+<tr>
+<td>LLM API</td>
+<td>미집계</td>
+<td>다음 주 정산 예정</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>이번 주 코스트 집계는 다음 보고 시 포함 예정</p>
+</blockquote>
+<hr>
+<h2 id="서포트-요청">서포트 요청</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>요청 내용</th>
+<th>요청 대상</th>
+<th>필요 시점</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>쿠팡 셀러 계정 부관리자 추가 권한 확인 (2차인증 우회 방법 문의)</td>
+<td>보스 or 쿠팡 CS</td>
+<td>2026-06-03</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="기타-이슈-리스크">기타 이슈 · 리스크</h2>
+<table>
+<thead>
+<tr>
+<th>이슈</th>
+<th>영향</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>쿠팡 2차인증 반복 (시스템 장애)</td>
+<td>데이터 수집 에이전트 전체 차단</td>
+<td>쿠팡 온라인 문의 접수 완료. 장애 해소 대기 + 부관리자 권한 방법 병행 확인</td>
+</tr>
+<tr>
+<td>상세페이지 KC인증 연동</td>
+<td>KC인증 전 상세페이지 의미 제한적</td>
+<td>KC인증 일정 확인 후 상세페이지 우선순위 재조정</td>
+</tr>
+</tbody>
+</table>
+<footer class="footer">
+  APOM · APOM 보고서 · 2026-06-02
+</footer>
+</body>
+</html>
