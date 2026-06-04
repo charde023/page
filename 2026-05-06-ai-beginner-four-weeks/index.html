@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 처음인데 4주 안에 진짜 뭔가 만들어볼 수 있을까</title>
+<meta name="description" content="AI 입문자가 4주 스터디에서 영상, 로컬 비즈니스, 개인 AI 에이전트 중 무엇을 만들 수 있는지 판단하는 설명회 정리본.">
+<meta property="og:title" content="AI 처음인데 4주 안에 진짜 뭔가 만들어볼 수 있을까">
+<meta property="og:description" content="AI 입문자가 4주 스터디에서 영상, 로컬 비즈니스, 개인 AI 에이전트 중 무엇을 만들 수 있는지 판단하는 설명회 정리본.">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root {
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-soft: #f1f6ff;
+  --text: #1f2a44;
+  --text-soft: #5a6b87;
+  --text-muted: #8593ab;
+  --border: #e3e9f3;
+  --border-soft: #eef2f8;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-deep: #1d4ed8;
+  --shadow: 0 1px 2px rgba(31, 42, 68, 0.04), 0 8px 24px rgba(31, 42, 68, 0.06);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-feature-settings: 'tnum', 'ss03';
+  line-height: 1.75;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+h1, h2, h3, h4 {
+  line-height: 1.35;
+  margin-top: 2em;
+  margin-bottom: 0.65em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.18rem; color: var(--accent-deep); }
+h4 { font-size: 1.02rem; }
+p { margin: 0.85em 0; color: var(--text); }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+strong { color: var(--accent-deep); font-weight: 700; }
+em { color: var(--text-soft); }
+blockquote {
+  margin: 1.2em 0;
+  padding: 0.9em 1.2em;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+  border-radius: 10px;
+  font-size: 0.97em;
+}
+blockquote p { margin: 0.35em 0; }
+blockquote strong { color: var(--accent-deep); }
+ol, ul { padding-left: 1.5em; }
+li { margin: 0.4em 0; }
+code {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.88em;
+  background: var(--surface-soft);
+  color: var(--accent-deep);
+  padding: 0.15em 0.45em;
+  border-radius: 5px;
+  border: 1px solid var(--border-soft);
+}
+pre {
+  background: var(--surface);
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  line-height: 1.6;
+  margin: 1.2em 0;
+}
+pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.92em;
+  color: var(--text);
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.2em 0;
+  font-size: 0.96em;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft);
+}
+tr:last-child td { border-bottom: 0; }
+th {
+  background: var(--surface-soft);
+  font-weight: 600;
+  color: var(--accent-deep);
+  border-bottom: 1px solid var(--border);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
+.header-banner {
+  margin: -32px -24px 36px;
+  padding: 34px 28px 28px;
+  background: linear-gradient(160deg, #e0ecff 0%, #f1f6ff 55%, #ffffff 100%);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.header-banner .eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-soft);
+  margin-bottom: 14px;
+}
+.header-banner h1 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.header-banner .sub {
+  margin-top: 10px;
+  color: var(--text-soft);
+  font-size: 0.97rem;
+}
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 1.5em 0 2.4em;
+  box-shadow: var(--shadow);
+}
+.toc h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.toc ol {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--text-soft);
+}
+.toc li { margin: 0.3em 0; }
+.toc a { color: var(--text); font-weight: 500; }
+.toc a:hover { color: var(--accent); }
+.footer {
+  margin-top: 4em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--border);
+  font-size: 0.88em;
+  color: var(--text-muted);
+  text-align: center;
+}
+.footer code { font-size: 0.92em; }
+@media (max-width: 640px) {
+  body {
+    padding: 20px 18px 72px;
+    font-size: 16px;
+    line-height: 1.72;
+  }
+  .header-banner {
+    margin: -20px -18px 24px;
+    padding: 24px 20px 20px;
+    border-radius: 0;
+  }
+  .header-banner .eyebrow { font-size: 0.72rem; }
+  .header-banner h1 { font-size: 1.5rem; }
+  .header-banner .sub { font-size: 0.9rem; }
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.08rem; }
+  h4 { font-size: 1rem; }
+  blockquote { padding: 0.8em 1em; font-size: 0.95em; }
+  pre { padding: 14px 16px; font-size: 0.9em; }
+  table { font-size: 0.92em; }
+  th, td { padding: 10px 11px; }
+  .toc { padding: 14px 18px; }
+  ol, ul { padding-left: 1.3em; }
+}
+@media (max-width: 380px) {
+  body { font-size: 15.5px; padding: 18px 16px 64px; }
+  .header-banner h1 { font-size: 1.35rem; }
+  table { font-size: 0.88em; }
+  th, td { padding: 8px 9px; }
+}
+</style>
+</head>
+<body>
+<header class="header-banner">
+  <span class="eyebrow">지피터스 22기 · 끌림 영상 스터디</span>
+  <h1>AI 처음인데 4주 안에 진짜 뭔가 만들어볼 수 있을까</h1>
+  <div class="sub">2026-05-06 라이브 강의 정리본</div>
+</header>
+
+<blockquote>
+<p>지피터스 22기 · 끌림 영상 스터디 · 2026-05-06 라이브
+원본: <code>2026-05-06 [지피터스] AI 처음인데, 4주 안에 진짜 뭔가 만들어볼 수 있을까요？.mp4</code> · 약 2시간 30분 16초
+진행: 타타 · 발표: 물결, 원희, 승현</p>
+</blockquote>
+<hr>
+<h2 id="결론-tldr">결론 (TL;DR)</h2>
+<blockquote>
+<p><strong>AI 입문자도 4주 안에 결과물을 만들 수 있지만, 핵심은 도구를 많이 아는 것이 아니라 자기 목적에 맞는 스터디와 실행 단위를 고르는 것이다.</strong></p>
+</blockquote>
+<h3>핵심 비교 — 세 입문 스터디가 약속하는 결과물</h3>
+<table>
+<thead>
+<tr>
+<th>스터디 축</th>
+<th>발표자</th>
+<th>4주 뒤 목표</th>
+<th>잘 맞는 사람</th>
+<th>주의할 점</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>끌림 영상</td>
+<td>물결</td>
+<td>이야기 구조를 잡고 Google Antigravity 중심으로 영상 결과물을 만든다</td>
+<td>영상, 스토리, 시각 결과물을 직접 만들고 싶은 사람</td>
+<td>영상은 도구보다 공정 이해가 먼저라 초반 설계가 중요하다</td>
+</tr>
+<tr>
+<td>당근마켓 바이브코딩</td>
+<td>원희</td>
+<td>아이디어를 사업계획, 제작 도구, 비즈프로필 실험까지 연결한다</td>
+<td>아이디어를 실제 판매나 서비스 테스트로 옮기고 싶은 사람</td>
+<td>돈 버는 결과보다 작은 검증을 반복할 준비가 필요하다</td>
+</tr>
+<tr>
+<td>오픈클로·헤르메스</td>
+<td>승현</td>
+<td>내 AI 에이전트를 세팅하고 텔레그램 등으로 대화 가능한 봇을 만든다</td>
+<td>나만의 AI 비서, 기록, 일정, 자동화에 관심 있는 사람</td>
+<td>설치보다 중요한 것은 에이전트에게 시킬 일을 계속 찾아주는 태도다</td>
+</tr>
+</tbody>
+</table>
+<h3>챙겨야 할 6가지</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>메시지</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>참여형 스터디</td>
+<td>지피터스는 일방향 강의보다 같이 만들고 사례를 공유하는 구조다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>수강과 청강</td>
+<td>수강은 내 주 스터디, 청강은 다른 스터디 라이브 참여와 조건부 다시보기로 이해하면 된다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4주 결과물</td>
+<td>완성의 기준은 거창한 서비스가 아니라 실제로 만지고 보여줄 수 있는 첫 결과물이다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>대시보드</td>
+<td>입문자는 AI의 작업 과정을 눈으로 볼 수 있게 만드는 편이 훨씬 덜 막힌다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>로컬 검증</td>
+<td>당근마켓 비즈프로필처럼 비용을 낮춘 실험장이 있으면 실패를 여러 번 해볼 수 있다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>애정과 사용량</td>
+<td>개인 에이전트는 설치 후 자주 말을 걸고 역할을 줘야 쓸모가 생긴다.</td>
+</tr>
+</tbody>
+</table>
+<h3>대상 독자</h3>
+<table>
+<thead>
+<tr>
+<th>독자</th>
+<th>지금 필요한 것</th>
+<th>추천 방향</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ChatGPT만 써본 입문자</td>
+<td>AI가 어떤 일을 대신할 수 있는지 감 잡기</td>
+<td>온보딩 성격의 입문 스터디와 청강을 같이 활용한다</td>
+</tr>
+<tr>
+<td>만들고 싶은 결과물이 있는 사람</td>
+<td>아이디어를 작게 쪼개 실행하기</td>
+<td>영상, 사업 실험, 에이전트 중 결과물 형태를 먼저 고른다</td>
+</tr>
+<tr>
+<td>기술 용어가 부담스러운 사람</td>
+<td>화면으로 보이는 구조와 반복 가이드</td>
+<td>대시보드, 템플릿, 사례글 중심으로 따라간다</td>
+</tr>
+<tr>
+<td>이미 조금 다뤄본 사람</td>
+<td>더 어려운 자동화나 업무 적용</td>
+<td>중급·고급 스터디 청강이나 수강 변경을 검토한다</td>
+</tr>
+</tbody>
+</table>
+<h3>추천 액션</h3>
+<table>
+<thead>
+<tr>
+<th>순서</th>
+<th>할 일</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>만들고 싶은 결과물을 한 문장으로 적는다</td>
+<td>스터디 선택 기준이 도구가 아니라 목적이 된다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>화수목 라이브 중 최소 하나는 실시간으로 참여한다</td>
+<td>질문과 피드백은 라이브에서 가장 빠르게 풀린다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>매주 사례글을 남긴다</td>
+<td>내 학습 기록이 되고 다른 스터디 다시보기 접근도 열린다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>오프라인 모임이나 모각에 가능하면 간다</td>
+<td>막힌 화면을 직접 보여주면 해결 속도가 빨라진다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>결과물을 작게 공개한다</td>
+<td>완성보다 검증과 다음 개선이 먼저다.</td>
+</tr>
+</tbody>
+</table>
+<h3>4주 스터디 참여 판단 기준</h3>
+<table>
+<thead>
+<tr>
+<th>질문</th>
+<th>참여 권장</th>
+<th>보류 권장</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주 1회 라이브나 다시보기를 소화할 수 있나</td>
+<td>최소 한 번은 시간을 낼 수 있다</td>
+<td>4주 동안 고정 학습 시간이 거의 없다</td>
+</tr>
+<tr>
+<td>만들고 싶은 것이 있나</td>
+<td>영상, 판매 실험, 개인 에이전트 중 하나가 끌린다</td>
+<td>아직 무엇을 만들지 전혀 모르겠다</td>
+</tr>
+<tr>
+<td>모르는 용어를 물어볼 수 있나</td>
+<td>GPT에게 다시 설명해 달라고 묻는 데 거부감이 없다</td>
+<td>모르는 말이 나오면 바로 멈춘다</td>
+</tr>
+<tr>
+<td>사례를 남길 수 있나</td>
+<td>실패 기록이라도 짧게 공유할 수 있다</td>
+<td>결과가 완벽하지 않으면 공유하기 어렵다</td>
+</tr>
+<tr>
+<td>비용과 도구를 감당할 수 있나</td>
+<td>필요한 구독이나 소액 API 비용을 실험비로 볼 수 있다</td>
+<td>비용 발생 자체가 큰 스트레스다</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="강의는-어떤-내용이었나">강의는 어떤 내용이었나</h2>
+<p>이 라이브는 지피터스 22기 입문 카테고리의 AI 토크다. 커뮤니티 매니저 타타가 지피터스의 참여형 스터디 구조와 수강·청강 방식을 소개하고, 입문 스터디장 세 명이 4주 안에 어떤 결과물을 만들 수 있는지 실제 사례 중심으로 설명했다.</p>
+<p>강의의 분위기는 설명회에 가깝지만, 단순 홍보보다 "처음인 사람이 무엇을 만들 수 있나"를 보여주는 데 초점이 있었다. 물결은 영상 스터디의 앞단인 하네스와 대시보드 설계를, 원희는 당근마켓 비즈프로필과 바이브코딩으로 만든 사업 실험을, 승현은 오픈클로·헤르메스 기반 개인 AI 에이전트 세팅을 시연했다.</p>
+<table>
+<thead>
+<tr>
+<th>섹션</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>오프닝</td>
+<td>지피터스 22기 일정, 입문·중급·고급 카테고리, 수강과 청강 안내</td>
+</tr>
+<tr>
+<td>물결 파트</td>
+<td>하네스, 대시보드, 웹소설 공정 예시, 영상 스터디의 결과물 방향</td>
+</tr>
+<tr>
+<td>원희 파트</td>
+<td>당근마켓 비즈프로필, 퍼스널 스티커북, 바이브코딩, 제로 리스크 검증</td>
+</tr>
+<tr>
+<td>승현 파트</td>
+<td>오픈클로·헤르메스, 개인 에이전트, 옵시디언·캘린더·텔레그램 활용</td>
+</tr>
+<tr>
+<td>Q&amp;A</td>
+<td>다시보기, 사례글, 오프라인 모임, 수강 변경, 청강 방식, 입문자 추천</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="0-한눈에-보는-4주-입문-스터디-선택법">0. 한눈에 보는 4주 입문 스터디 선택법</h2>
+<ol>
+<li>내가 원하는 결과물 형태를 고른다 — 영상, 사업 실험, 개인 AI 에이전트 중 하나를 먼저 정한다.</li>
+<li>도구보다 흐름을 본다 — 어떤 입력을 넣고, AI가 어떤 중간 산출물을 만들고, 사람이 어디서 판단하는지 확인한다.</li>
+<li>첫 결과물 기준을 낮춘다 — 4주 안에는 "완벽한 서비스"보다 "보여줄 수 있는 작동 결과"가 현실적이다.</li>
+<li>라이브와 청강을 같이 활용한다 — 내 수강 스터디를 중심으로 듣고, 궁금한 분야는 청강으로 넓힌다.</li>
+<li>사례글을 쓴다 — 성공, 실패, 막힘까지 기록해야 다시보기와 커뮤니티 학습 효과가 생긴다.</li>
+<li>오프라인에서 막힌 화면을 보여준다 — 입문자는 텍스트 설명보다 화면을 같이 보는 피드백이 빠르다.</li>
+<li>4주 뒤 다음 단계를 정한다 — 결과물을 더 다듬을지, 다른 스터디로 확장할지 판단한다.</li>
+</ol>
+<hr>
+<h2 id="1-지피터스-22기는-강의보다-참여형-스터디다">1. 지피터스 22기는 강의보다 참여형 스터디다</h2>
+<p>지피터스는 생성형 AI를 실제 업무와 개인 프로젝트에 적용하는 사례를 함께 연구하고 공유하는 온오프라인 커뮤니티로 소개됐다. 22기는 입문, 중급, 고급으로 나뉘며, 이 토크는 입문자를 위해 준비된 첫 AI 토크였다.</p>
+<p>운영 방식은 "수강"과 "청강"으로 나뉜다. 수강은 내가 정식으로 선택한 스터디에 들어가 스터디원으로 참여하는 방식이고, 청강은 다른 스터디 라이브와 카톡방에도 참여할 수 있는 보조 학습 방식이다. 다만 청강 스터디의 다시보기를 보려면 내 수강 스터디에서 매주 사례글을 제출해야 한다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>안내</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>수강 시작</td>
+<td>2026-05-18</td>
+</tr>
+<tr>
+<td>수강 종료</td>
+<td>2026-06-15</td>
+</tr>
+<tr>
+<td>오프라인 모임</td>
+<td>2026-05-23, 역삼역 근처</td>
+</tr>
+<tr>
+<td>기본 진행</td>
+<td>대부분 Zoom 온라인</td>
+</tr>
+<tr>
+<td>다시보기</td>
+<td>수강 스터디는 조건 없이 제공, 청강 다시보기는 사례글 제출과 연결</td>
+</tr>
+<tr>
+<td>수강 변경</td>
+<td>1주차에 빈자리가 생기면 변경 기회가 있음</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>핵심은 "내가 만든 것"을 가지고 와서 보여주고, 다른 사람의 사례를 보며 다음 시도를 찾는 구조다.</p>
+</blockquote>
+<hr>
+<h2 id="2-물결-파트-영상보다-먼저-만드는-것은-공정이다">2. 물결 파트 — 영상보다 먼저 만드는 것은 공정이다</h2>
+<p>물결은 영상 스터디장이지만, 이날 시연은 웹소설 제작 대시보드로 시작했다. 이유는 영상 제작의 전체 과정을 바로 보여주기보다, AI에게 일을 맡길 때 필요한 "공정 설계"를 더 쉽게 설명하기 위해서였다.</p>
+<p>그가 말한 하네스는 AI가 일을 잘하게 만드는 구조다. 웹소설을 예로 들면 캐릭터, 세계관, 회차 설계, 본문 작성, 검수 같은 단계를 공장처럼 나누고, 각 단계가 대시보드에 보이게 만든다. 입문자는 AI가 지금 무엇을 하고 있는지 눈으로 확인해야 원하는 것과 아닌 것을 구분할 수 있다.</p>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>설명</th>
+<th>입문자에게 중요한 이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>하네스</td>
+<td>AI가 일할 프로세스와 역할을 잡아주는 구조</td>
+<td>막연한 프롬프트보다 재현성이 높다</td>
+</tr>
+<tr>
+<td>대시보드</td>
+<td>진행 상태와 산출물을 한 화면에서 보는 장치</td>
+<td>AI 작업을 눈으로 보며 수정할 수 있다</td>
+</tr>
+<tr>
+<td>에이전트</td>
+<td>기획, 작성, 검수처럼 역할을 나눈 작업자</td>
+<td>한 번에 다 시키지 않고 단계별로 맡길 수 있다</td>
+</tr>
+<tr>
+<td>검수 루프</td>
+<td>결과를 바로 끝내지 않고 다시 확인하는 단계</td>
+<td>설정 붕괴나 품질 문제를 줄인다</td>
+</tr>
+</tbody>
+</table>
+<p>영상 스터디의 실제 결과물은 이야기 기반 영상이다. 다만 초반에는 스토리와 작업 흐름을 잡고, Google Antigravity 같은 한 가지 중심 도구 안에서 많이 만들어보는 방향으로 진행된다. 여러 툴을 오가는 부담을 줄이고, 입문자가 "내가 통제하고 있다"는 감각을 갖게 하는 것이 목표다.</p>
+<h3>물결 스터디에 맞는 사람</h3>
+<table>
+<thead>
+<tr>
+<th>맞는 사람</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>영상 결과물을 만들고 싶은 사람</td>
+<td>마지막 산출물이 영상으로 이어진다</td>
+</tr>
+<tr>
+<td>글, 이야기, 콘셉트 잡기가 필요한 사람</td>
+<td>영상 전 단계의 스토리 구조를 같이 다룬다</td>
+</tr>
+<tr>
+<td>화면을 보며 따라가야 이해가 되는 사람</td>
+<td>대시보드 중심 접근이 입문자에게 유리하다</td>
+</tr>
+<tr>
+<td>오프라인 피드백을 받고 싶은 사람</td>
+<td>화요일마다 온라인 전후로 오프라인 진행을 병행한다고 안내됐다</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="3-원희-파트-아이디어는-당근마켓에서-작게-팔아본다">3. 원희 파트 — 아이디어는 당근마켓에서 작게 팔아본다</h2>
+<p>원희는 당근마켓 비즈프로필을 "제로코스트로 사업 아이디어를 실험할 수 있는 플랫폼"으로 소개했다. 예시는 아이 얼굴과 여행 콘셉트를 넣은 퍼스널 스티커북이었다. 기존 방식이라면 디자이너, 웹사이트, 포장, 배송, 홍보가 필요하지만, 그는 AI와 바이브코딩으로 필요한 도구를 직접 만들었다.</p>
+<p>이 파트의 핵심은 "내가 필요한 도구를 내가 만든다"다. 주문 정보를 입력하면 프롬프트가 생성되고, 이미지 생성과 합성, 포장지 제작, 웹사이트 연결, SNS 홍보 문구 관리까지 이어지는 대시보드를 만들었다. 발표자는 개발 경험이 거의 없는 상태에서 시작했지만, Claude Code와 Codex를 활용해 실제 판매 실험까지 갔다고 설명했다.</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>한 일</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>아이템 발굴</td>
+<td>커스터마이징 스티커북 아이디어를 잡음</td>
+<td>생활 속 불편을 사업 가설로 바꿈</td>
+</tr>
+<tr>
+<td>사업계획</td>
+<td>AI로 사업계획서와 실행 순서를 만듦</td>
+<td>막연한 아이디어를 작업 목록으로 바꿈</td>
+</tr>
+<tr>
+<td>제작 도구</td>
+<td>프롬프트 생성기, 합성 도구, 포장지 생성기를 만듦</td>
+<td>반복 작업을 줄임</td>
+</tr>
+<tr>
+<td>판매 채널</td>
+<td>당근마켓 비즈프로필에 올림</td>
+<td>배송비와 초기 비용 부담을 낮춤</td>
+</tr>
+<tr>
+<td>홍보</td>
+<td>365일치 콘텐츠와 관리 웹앱을 생성</td>
+<td>마케팅도 실험 가능한 단위로 쪼갬</td>
+</tr>
+<tr>
+<td>검증</td>
+<td>0원에 가까운 비용으로 노출과 판매를 확인</td>
+<td>빠르게 실패하고 다시 시도할 수 있음</td>
+</tr>
+</tbody>
+</table>
+<p>원희는 "기술의 최종 목적을 돈벌이에 직접 연결한다"고 말했다. 다만 이 말은 단번에 큰 수익을 보장한다는 뜻이 아니라, 1달러라도 실제 고객 반응을 만들어보는 출발점을 강조한 것이다.</p>
+<h3>당근마켓 바이브코딩 스터디에 맞는 사람</h3>
+<table>
+<thead>
+<tr>
+<th>맞는 사람</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>팔아보고 싶은 아이디어가 있는 사람</td>
+<td>상품이든 서비스든 로컬에서 작게 검증할 수 있다</td>
+</tr>
+<tr>
+<td>코딩을 몰라서 막힌 사람</td>
+<td>바이브코딩으로 필요한 웹앱과 대시보드를 만든다</td>
+</tr>
+<tr>
+<td>직장이나 육아와 병행해야 하는 사람</td>
+<td>발표자는 시간 제약이 큰 상황에서도 런칭 사례를 만들었다</td>
+</tr>
+<tr>
+<td>결과보다 실행을 시작해야 하는 사람</td>
+<td>실패 비용을 낮추는 방식이라 첫 시도 부담이 작다</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>당근마켓 사례는 "스티커북을 팔자"보다 "내 아이디어를 0원에 가깝게 검증하자"에 가깝다.</p>
+</blockquote>
+<hr>
+<h2 id="4-승현-파트-나만의-ai-에이전트는-설치보다-관계가-중요하다">4. 승현 파트 — 나만의 AI 에이전트는 설치보다 관계가 중요하다</h2>
+<p>승현은 오픈클로와 헤르메스를 "내가 소유한 AI 비서 운영체제"에 가깝게 설명했다. ChatGPT나 Claude가 엔진이라면, 오픈클로와 헤르메스는 그 엔진을 가져와 내 입맛에 맞춘 차를 만드는 쪽에 가깝다는 비유를 들었다.</p>
+<p>시연에서는 텔레그램으로 대화하는 개인 에이전트들을 보여줬다. 파우스트는 기본 개인 비서, 베르단디는 옵시디언 노트 담당 사서, 레이는 구글 캘린더 일정 관리, 다른 에이전트는 기기 상태 확인이나 이미지 생성, 그룹 대화 실험을 맡았다. 모든 일을 하나의 봇에 몰아넣으면 맥락이 섞이므로, 역할별 에이전트를 나누는 것이 중요하다고 설명했다.</p>
+<table>
+<thead>
+<tr>
+<th>에이전트 활용</th>
+<th>예시</th>
+<th>배울 점</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개인 비서</td>
+<td>나를 알고 답하는 기본 에이전트</td>
+<td>AI를 내 환경에 맞게 세팅한다</td>
+</tr>
+<tr>
+<td>기록 사서</td>
+<td>옵시디언 노트 생성과 정리</td>
+<td>회의, 수업, 아이디어를 문서화한다</td>
+</tr>
+<tr>
+<td>일정 관리</td>
+<td>텔레그램에서 캘린더 등록</td>
+<td>기존 앱을 직접 열지 않고 일을 맡긴다</td>
+</tr>
+<tr>
+<td>상태 확인</td>
+<td>기기 상태를 주기적으로 체크</td>
+<td>단순 반복 업무도 에이전트의 일이다</td>
+</tr>
+<tr>
+<td>그룹 대화</td>
+<td>봇들끼리 순서대로 대화</td>
+<td>에이전트 협업의 기초를 체험한다</td>
+</tr>
+</tbody>
+</table>
+<p>승현의 입문 스터디 목표는 높지 않게 잡혔다. 30명 전원이 자기 오픈클로 또는 헤르메스를 세팅하고, 텔레그램에 연결해서 대화할 수 있는 봇 하나를 만드는 것이 1차 목표라고 했다. 그 이상은 각자 필요와 흥미에 따라 옵시디언, 일정, 캐릭터, 자동화로 확장하면 된다.</p>
+<h3>오픈클로·헤르메스 스터디에 맞는 사람</h3>
+<table>
+<thead>
+<tr>
+<th>맞는 사람</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>나만의 AI 비서를 갖고 싶은 사람</td>
+<td>텔레그램, 슬랙, 디스코드 등 여러 통로에서 부를 수 있다</td>
+</tr>
+<tr>
+<td>캐릭터나 역할을 입힌 AI가 흥미로운 사람</td>
+<td>애정을 붙이면 더 자주 쓰게 되고 쓸 일을 찾게 된다</td>
+</tr>
+<tr>
+<td>기록과 일정 정리를 맡기고 싶은 사람</td>
+<td>옵시디언, 캘린더 같은 개인 도구와 연결할 수 있다</td>
+</tr>
+<tr>
+<td>설치가 두려운 진짜 입문자</td>
+<td>목표가 "봇 하나 연결하기"로 낮게 잡혀 있다</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>승현이 반복해서 강조한 것은 대단한 자동화가 아니라, 먼저 말을 걸 수 있는 내 에이전트 하나를 만드는 일이다.</p>
+</blockquote>
+<hr>
+<h2 id="5-설명회-qampa에서-정리된-운영-기준">5. 설명회 Q&amp;A에서 정리된 운영 기준</h2>
+<p>강의 후반 Q&amp;A는 스터디 참여 방식에 집중됐다. 월요일은 공통 강의와 베스트 발표회가 있고, 각자 선택한 스터디는 화수목 중 하나에 배치된다. 수강 신청은 한 개만 가능하지만, 다른 스터디 라이브 청강은 가능하다.</p>
+<table>
+<thead>
+<tr>
+<th>질문</th>
+<th>답</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>다른 스터디도 들을 수 있나</td>
+<td>라이브 청강은 가능하다</td>
+</tr>
+<tr>
+<td>다른 스터디 다시보기도 볼 수 있나</td>
+<td>내 스터디 사례글을 제출하면 해당 주차 청강 다시보기가 열린다</td>
+</tr>
+<tr>
+<td>수강과 청강의 차이는 무엇인가</td>
+<td>수강 스터디는 다시보기와 오프라인 모임 우선권이 있고, 청강은 보조 참여다</td>
+</tr>
+<tr>
+<td>오프라인 모임은 왜 중요한가</td>
+<td>스터디장에게 직접 화면을 보여주고 피드백을 받을 수 있다</td>
+</tr>
+<tr>
+<td>입문자가 너무 어려우면 어떻게 하나</td>
+<td>더 쉬운 온보딩 스터디를 청강하거나 1주차 수강 변경을 검토한다</td>
+</tr>
+<tr>
+<td>윈도우 PC로 가능한가</td>
+<td>가능하다고 안내됐다</td>
+</tr>
+</tbody>
+</table>
+<p>특히 반복해서 나온 메시지는 "입문자는 혼자 버티지 말고 질문해야 한다"는 것이었다. GPT에게 어려운 설명을 더 쉽게 바꿔달라고 묻고, 스터디장과 버디에게 막힌 화면을 보여주고, 사례글로 실패까지 남기는 방식이 지피터스식 학습에 가깝다.</p>
+<hr>
+<h2 id="6-자주-막히는-곳">6. 자주 막히는 곳</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>어떤 스터디를 골라야 할지 모르겠다</td>
+<td>결과물 기준으로 고른다. 영상이면 물결, 로컬 사업 실험이면 원희, 개인 AI 에이전트면 승현 쪽이 가깝다.</td>
+</tr>
+<tr>
+<td>용어가 너무 어렵다</td>
+<td>GPT에게 "초등학생도 알 수 있게 다시 설명해줘"라고 묻고, 입문 온보딩 스터디 청강을 활용한다.</td>
+</tr>
+<tr>
+<td>수강하고 싶은 스터디가 마감됐다</td>
+<td>대기를 걸고, 1주차 수강 변경 기간과 청강을 활용한다.</td>
+</tr>
+<tr>
+<td>청강 다시보기가 헷갈린다</td>
+<td>라이브 청강은 가능하지만, 청강 다시보기는 내 수강 스터디 사례글 제출과 연결된다.</td>
+</tr>
+<tr>
+<td>4주 안에 완성 못 할까 걱정된다</td>
+<td>완성 기준을 낮춘다. 첫 봇, 첫 영상, 첫 판매 실험처럼 작동하는 최소 결과물을 목표로 잡는다.</td>
+</tr>
+<tr>
+<td>코딩을 몰라서 바이브코딩이 무섭다</td>
+<td>필요한 기능을 말로 쪼개고, AI에게 설명을 다시 시키며, 만든 화면을 스터디에서 검토받는다.</td>
+</tr>
+<tr>
+<td>오픈클로와 헤르메스 중 무엇부터 할지 모르겠다</td>
+<td>승현은 입문자에게 헤르메스를 더 쉽게 추천했지만, 가능하면 둘 다 설치해보고 입맛에 맞는 쪽을 고르라고 했다.</td>
+</tr>
+<tr>
+<td>비용이 걱정된다</td>
+<td>무료나 저비용 실험부터 시작하고, API나 구독 비용은 작은 실험비로 감당 가능한 범위에서만 쓴다.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>막히는 지점은 실력 부족의 증거가 아니라, 스터디에서 질문으로 바꿔야 할 재료다.</p>
+</blockquote>
+<hr>
+<h2 id="부록-기억할-문장">부록 — 기억할 문장</h2>
+<blockquote>
+<p>"내가 원하는 결과물은 있는데 그 결과물이 나오는 과정을 모를 때, AI에게 전문가의 공정을 만들어 달라고 요청한다." — 물결</p>
+<p>"AI는 도구를 만드는 비용을 낮추고, 당근마켓 비즈프로필은 실험 비용을 낮춘다." — 원희</p>
+<p>"처음 목표는 오픈클로든 헤르메스든 세팅하고 텔레그램으로 말할 수 있는 봇 하나를 만드는 것이다." — 승현</p>
+<p>"실패한 사례도 괜찮다. 그 사례들이 모여서 공부가 된다." — 타타</p>
+</blockquote>
+<footer class="footer">
+  이 문서는 원본 강의 녹화본(<code>2026-05-06 [지피터스] AI 처음인데, 4주 안에 진짜 뭔가 만들어볼 수 있을까요？.mp4</code>)을 Whisper로 전사한 뒤
+  주제별로 정리한 것입니다. 정확한 발화 흐름이 필요하면 원본 영상을 참조하세요.
+</footer>
+</body>
+</html>

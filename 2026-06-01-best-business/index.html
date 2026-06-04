@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>베스트 발표회 — 업무와 비즈니스 사례</title>
+<meta name="description" content="지피터스 22기 베스트 발표회에서 공유된 업무 자동화, 비즈니스 실험, 지식관리, AI 조직 운영 사례를 발표자별로 비교 정리한 가이드.">
+<meta property="og:title" content="베스트 발표회 — 업무와 비즈니스 사례">
+<meta property="og:description" content="지피터스 22기 베스트 발표회에서 공유된 업무 자동화, 비즈니스 실험, 지식관리, AI 조직 운영 사례를 발표자별로 비교 정리한 가이드.">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root {
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-soft: #f1f6ff;
+  --text: #1f2a44;
+  --text-soft: #5a6b87;
+  --text-muted: #8593ab;
+  --border: #e3e9f3;
+  --border-soft: #eef2f8;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-deep: #1d4ed8;
+  --shadow: 0 1px 2px rgba(31, 42, 68, 0.04), 0 8px 24px rgba(31, 42, 68, 0.06);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-feature-settings: 'tnum', 'ss03';
+  line-height: 1.75;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+h1, h2, h3, h4 {
+  line-height: 1.35;
+  margin-top: 2em;
+  margin-bottom: 0.65em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.18rem; color: var(--accent-deep); }
+h4 { font-size: 1.02rem; }
+p { margin: 0.85em 0; color: var(--text); }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+strong { color: var(--accent-deep); font-weight: 700; }
+em { color: var(--text-soft); }
+blockquote {
+  margin: 1.2em 0;
+  padding: 0.9em 1.2em;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+  border-radius: 10px;
+  font-size: 0.97em;
+}
+blockquote p { margin: 0.35em 0; }
+blockquote strong { color: var(--accent-deep); }
+ol, ul { padding-left: 1.5em; }
+li { margin: 0.4em 0; }
+code {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.88em;
+  background: var(--surface-soft);
+  color: var(--accent-deep);
+  padding: 0.15em 0.45em;
+  border-radius: 5px;
+  border: 1px solid var(--border-soft);
+}
+pre {
+  background: var(--surface);
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  line-height: 1.6;
+  margin: 1.2em 0;
+}
+pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.92em;
+  color: var(--text);
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.2em 0;
+  font-size: 0.96em;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft);
+}
+tr:last-child td { border-bottom: 0; }
+th {
+  background: var(--surface-soft);
+  font-weight: 600;
+  color: var(--accent-deep);
+  border-bottom: 1px solid var(--border);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
+.header-banner {
+  margin: -32px -24px 36px;
+  padding: 34px 28px 28px;
+  background: linear-gradient(160deg, #e0ecff 0%, #f1f6ff 55%, #ffffff 100%);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.header-banner .eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-soft);
+  margin-bottom: 14px;
+}
+.header-banner h1 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.header-banner .sub {
+  margin-top: 10px;
+  color: var(--text-soft);
+  font-size: 0.97rem;
+}
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 1.5em 0 2.4em;
+  box-shadow: var(--shadow);
+}
+.toc h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.toc ol {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--text-soft);
+}
+.toc li { margin: 0.3em 0; }
+.toc a { color: var(--text); font-weight: 500; }
+.toc a:hover { color: var(--accent); }
+.footer {
+  margin-top: 4em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--border);
+  font-size: 0.88em;
+  color: var(--text-muted);
+  text-align: center;
+}
+.footer code { font-size: 0.92em; }
+@media (max-width: 640px) {
+  body {
+    padding: 20px 18px 72px;
+    font-size: 16px;
+    line-height: 1.72;
+  }
+  .header-banner {
+    margin: -20px -18px 24px;
+    padding: 24px 20px 20px;
+    border-radius: 0;
+  }
+  .header-banner .eyebrow { font-size: 0.72rem; }
+  .header-banner h1 { font-size: 1.5rem; }
+  .header-banner .sub { font-size: 0.9rem; }
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.08rem; }
+  h4 { font-size: 1rem; }
+  blockquote { padding: 0.8em 1em; font-size: 0.95em; }
+  pre { padding: 14px 16px; font-size: 0.9em; }
+  table { font-size: 0.92em; }
+  th, td { padding: 10px 11px; }
+  .toc { padding: 14px 18px; }
+  ol, ul { padding-left: 1.3em; }
+}
+@media (max-width: 380px) {
+  body { font-size: 15.5px; padding: 18px 16px 64px; }
+  .header-banner h1 { font-size: 1.35rem; }
+  table { font-size: 0.88em; }
+  th, td { padding: 8px 9px; }
+}
+</style>
+</head>
+<body>
+<header class="header-banner">
+  <span class="eyebrow">지피터스 22기 · 끌림 영상 스터디</span>
+  <h1>베스트 발표회 — 업무와 비즈니스 사례</h1>
+  <div class="sub">2026-06-01 라이브 강의 정리본</div>
+</header>
+
+<blockquote>
+<p>지피터스 22기 · 끌림 영상 스터디 · 2026-06-01 라이브<br>
+원본: <code>2026-06-01 [지피터스] 22기 베스트 발표회 - 업무&amp;비즈니스.mp4</code> · 약 2시간 11분<br>
+발표: 야호심, 고호원, BK, 준, 골든 레비, 얼른 머스크, 인생 OS 영상 사례</p>
+</blockquote>
+<hr>
+<h2 id="결론-tldr">결론 (TL;DR)</h2>
+<blockquote>
+<p><strong>이번 발표회의 공통점은 “AI에게 맡겼다”가 아니라, 내 업무의 병목을 측정하고 작은 공정으로 쪼개 실사용까지 밀어붙였다는 점이다.</strong></p>
+</blockquote>
+<h3>발표자별 사례 비교</h3>
+<table>
+<thead>
+<tr>
+<th>발표자</th>
+<th>문제</th>
+<th>AI·자동화 투입 지점</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>야호심</td>
+<td>옵시디언 볼트가 연결되지 않음</td>
+<td>깨진 링크 진단, 허브 구조화, 반복 템플릿</td>
+<td>링크 사용률 6%에서 16%, 허브 5개에서 11개</td>
+</tr>
+<tr>
+<td>고호원</td>
+<td>공공기관 보고서 작성이 무겁고 반복적임</td>
+<td>HWP/PDF 변환, 지식 추출, 템플릿 선택, 초안·크리틱</td>
+<td>보고서 작성 흐름을 6개 스킬과 승인 게이트로 분해</td>
+</tr>
+<tr>
+<td>BK</td>
+<td>개인 위키 유지관리 비용이 큼</td>
+<td>raw 자료 ingest, 위키 생성, query, lint</td>
+<td>초보자도 하루 이틀 안에 개인 LLM 위키 구축 가능</td>
+</tr>
+<tr>
+<td>준</td>
+<td>당근 비즈프로필을 실제 수익 실험으로 연결해야 함</td>
+<td>녹음 전사, 사업계획서, 리서치, 슬라이드 구성</td>
+<td>로컬셀러 산지직송 커머스 플랫폼 아이디어로 확장</td>
+</tr>
+<tr>
+<td>골든 레비</td>
+<td>부동산 중개 업무와 앱 운영이 커짐</td>
+<td>공공데이터 앱, 통화 요약, COO 에이전트 조직</td>
+<td>매물·지도·메신저·운영 리포트를 서비스 체계로 묶음</td>
+</tr>
+<tr>
+<td>얼른 머스크</td>
+<td>로블록스 시간 관리가 잘 지켜지지 않음</td>
+<td>MVP 개발, 설정 저장, 우회 대응, 배포 디버깅</td>
+<td>하루 MVP 이후 29회 커밋으로 실사용 안정화</td>
+</tr>
+<tr>
+<td>인생 OS 영상</td>
+<td>AI 초보 디자이너가 새 커리어 루틴을 잡아야 함</td>
+<td>북극성 설정, 10분 타이머, 회고, 디자인 레퍼런스 분석</td>
+<td>2주 만에 포트폴리오 제작 루틴과 바이브 코딩 흐름 확보</td>
+</tr>
+</tbody>
+</table>
+<h3>챙겨야 할 7가지</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>메시지</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>측정 먼저</td>
+<td>사용률, 링크, 파일 수, 실행 시간처럼 현재 상태를 수치로 잡아라.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>공정 분해</td>
+<td>“보고서 써줘” 대신 변환, 추출, 조사, 초안, 검수로 나눠라.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>raw 입구</td>
+<td>사람이 정리하기 전에 AI가 읽을 자료 투입 지점을 먼저 만들어라.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>승인 게이트</td>
+<td>독자, 목적, 템플릿, 최종본은 사람이 선택하게 둬라.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>실사용 검증</td>
+<td>개발 환경에서 되는 것과 실제 사용자가 쓰는 것은 다르다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>운영 규칙</td>
+<td>키, 환경파일, 로컬 설치, 파일 소유권 같은 금지 규칙을 문서에 박아라.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>반복 자산화</td>
+<td>허브, 스킬, 위키 명령어, 10분 기록처럼 반복 가능한 단위를 남겨라.</td>
+</tr>
+</tbody>
+</table>
+<h3>적용 난이도별 추천</h3>
+<table>
+<thead>
+<tr>
+<th>난이도</th>
+<th>먼저 해볼 것</th>
+<th>필요한 준비</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>입문</td>
+<td>개인 LLM 위키, 10분 회고</td>
+<td>옵시디언, raw 폴더, 기본 명령어</td>
+</tr>
+<tr>
+<td>중급</td>
+<td>보고서 자동화, PKM 허브 정리</td>
+<td>문서 샘플, 템플릿, 품질 기준</td>
+</tr>
+<tr>
+<td>실전</td>
+<td>당근 비즈니스 실험, 부동산 업무 앱</td>
+<td>실제 고객 문제, 운영 데이터, 배포 환경</td>
+</tr>
+<tr>
+<td>운영</td>
+<td>AI 조직, 앱 안정화</td>
+<td>보안 규칙, 장애 보고, 테스트 루틴</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="강의는-어떤-내용이었나">강의는 어떤 내용이었나</h2>
+<p>지피터스 22기 베스트 발표회 중 업무와 비즈니스 사례를 모은 세션이다. 발표자들은 옵시디언 지식관리, 공공기관 보고서 자동화, 개인 LLM 위키, 당근 비즈프로필 사업화, 부동산 중개 서비스, 로블록스 타이머 앱, 인생 OS 루틴을 실제로 적용한 과정을 공유했다.</p>
+<p>핵심은 도구 이름보다 적용 방식이었다. 각 사례는 병목을 찾고, AI가 맡을 단위를 정하고, 사람이 검수할 지점을 만든 뒤, 실사용에서 깨지는 부분을 고치는 흐름으로 이어졌다.</p>
+<table>
+<thead>
+<tr>
+<th>섹션</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>오프닝</td>
+<td>발표 시간과 순서 안내</td>
+</tr>
+<tr>
+<td>PKM 볼트</td>
+<td>위키링크와 허브 구조를 측정하고 정리</td>
+</tr>
+<tr>
+<td>보고서 자동화</td>
+<td>HWP/PDF에서 지식·양식·초안을 분리</td>
+</tr>
+<tr>
+<td>개인 LLM 위키</td>
+<td>raw 자료를 위키로 만들고 교차 참조 관리</td>
+</tr>
+<tr>
+<td>당근 비즈니스</td>
+<td>녹음 대화에서 사업계획서와 슬라이드 생성</td>
+</tr>
+<tr>
+<td>부동산 AI 조직</td>
+<td>앱·공공데이터·통화요약·운영 에이전트 연결</td>
+</tr>
+<tr>
+<td>타이머 앱</td>
+<td>하루 MVP와 실사용 안정화의 차이 공유</td>
+</tr>
+<tr>
+<td>인생 OS</td>
+<td>북극성 지표와 10분 실행 기록으로 루틴 구축</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="0-한눈에-보는-업무비즈니스-ai-적용-패턴">0. 한눈에 보는 업무·비즈니스 AI 적용 패턴</h2>
+<ol>
+<li>반복되는 고통을 고른다 — 문서 변환, 링크 단절, 자료 정리, 매물 관리, 시간 통제처럼 자주 막히는 일을 찾는다.</li>
+<li>기준값을 잰다 — 사용률, 깨진 링크, 파일 수, 처리 시간, 오류 유형을 기록한다.</li>
+<li>AI 입구를 만든다 — raw 폴더, inbox 스킬, 녹음 파일, 공공데이터 API, COO 에이전트처럼 투입 지점을 정한다.</li>
+<li>단계를 쪼갠다 — ingest, extract, template, draft, critique, lint, deploy처럼 한 번에 하나씩 맡긴다.</li>
+<li>사람 승인 지점을 둔다 — 의도, 독자, 템플릿, 최종본, 배포 여부는 사람이 결정한다.</li>
+<li>실제 환경에서 부딪힌다 — PC 권한, 해상도, 앱 우회, 데이터 정확성, 컨텍스트 한계를 확인한다.</li>
+<li>템플릿과 규칙으로 남긴다 — 다음 실행이 5분 안에 시작될 수 있게 문서화한다.</li>
+</ol>
+<hr>
+<h2 id="1-pkm-볼트에-그물-짜기">1. PKM 볼트에 그물 짜기</h2>
+<p>야호심 발표는 강의를 그대로 따라 하기보다 자기 옵시디언 볼트의 “부채 청소”부터 시작한 사례였다. 964개 노트 중 위키링크가 있는 파일은 6%뿐이었고, 폴더 이동으로 깨진 링크도 22개 있었다.</p>
+<table>
+<thead>
+<tr>
+<th>지표</th>
+<th style="text-align: right;">전</th>
+<th style="text-align: right;">후</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>위키링크 사용률</td>
+<td style="text-align: right;">6%</td>
+<td style="text-align: right;">16%</td>
+</tr>
+<tr>
+<td>깨진 링크</td>
+<td style="text-align: right;">22개</td>
+<td style="text-align: right;">0개</td>
+</tr>
+<tr>
+<td>사용 파일</td>
+<td style="text-align: right;">50개</td>
+<td style="text-align: right;">153개</td>
+</tr>
+<tr>
+<td>허브 수</td>
+<td style="text-align: right;">5개</td>
+<td style="text-align: right;">11개</td>
+</tr>
+<tr>
+<td>외부 수집 자료 연결</td>
+<td style="text-align: right;">0%</td>
+<td style="text-align: right;">15%</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>측정 없는 PKM은 신앙이다.</strong></p>
+</blockquote>
+<p>핵심은 허브 템플릿을 만들되 영역별 중심축은 다르게 둔 점이다. 달리기는 시간, 업무는 부서, 독서는 책, 인맥은 사람을 중심축으로 삼아 “통일은 빠르고 차이는 정확한” 구조를 만들었다.</p>
+<hr>
+<h2 id="2-보고서-자동화는-6개-스킬과-승인-게이트로-만든다">2. 보고서 자동화는 6개 스킬과 승인 게이트로 만든다</h2>
+<p>고호원 발표는 공공기관 보고서 자동화 사례였다. HWP, HWPX, PDF를 MD로 바꾸고, 보고서의 구조·개념·사실관계·판단·양식을 분리해 다시 보고서 초안으로 조립했다.</p>
+<table>
+<thead>
+<tr>
+<th>스킬</th>
+<th>역할</th>
+<th>품질 기준</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inbox</td>
+<td>HWP/PDF를 MD로 변환</td>
+<td>페이지 이미지를 먼저 보고 헤딩 계층을 잡음</td>
+</tr>
+<tr>
+<td>Extract</td>
+<td>구조·개념·사실·판단 추출</td>
+<td>보고서를 요소 단위로 분해</td>
+</tr>
+<tr>
+<td>Template</td>
+<td>회사·부서·문서종·개인 문체 계층화</td>
+<td>공통 양식과 개인 표현 분리</td>
+</tr>
+<tr>
+<td>Wiki</td>
+<td>지식을 개념 카드로 전환</td>
+<td>보고서 간 재사용 가능</td>
+</tr>
+<tr>
+<td>Draft</td>
+<td>질문, 조사, 템플릿 선택, 초안 작성</td>
+<td>독자·목적·의도를 최소 8개 질문으로 확인</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>MD를 한글·워드로 변환</td>
+<td>프로세스는 있으나 만족도는 아직 낮음</td>
+</tr>
+</tbody>
+</table>
+<p>중요한 원칙은 “각 단계가 최소 품질 기준을 통과해야 다음 단계로 넘어간다”는 점이다. AI가 초안을 만들고, 양식·논리·정합성·상사 페르소나·최종 독자 관점으로 다시 크리틱한 뒤 사람이 승인한다.</p>
+<hr>
+<h2 id="3-ai-사서가-개인-llm-위키를-관리한다">3. AI 사서가 개인 LLM 위키를 관리한다</h2>
+<p>BK 발표는 안드레 카파시의 LLM 위키 아이디어를 클로드 코드와 옵시디언으로 구현한 사례였다. 기존 개인 위키가 실패하는 이유를 유지관리 비용으로 보고, 정리·교차 참조·링크 복구를 AI 사서에게 맡겼다.</p>
+<table>
+<thead>
+<tr>
+<th>구성</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>raw 폴더</td>
+<td>웹 자료, PDF, 개인 아이디어를 넣는 입구</td>
+</tr>
+<tr>
+<td><code>CLAUDE.md</code></td>
+<td>위키 명령과 운영 규칙</td>
+</tr>
+<tr>
+<td><code>schema.md</code></td>
+<td>위키 페이지 형식과 분류 기준</td>
+</tr>
+<tr>
+<td>ingest</td>
+<td>raw 자료를 위키 페이지로 생성·업데이트</td>
+</tr>
+<tr>
+<td>query</td>
+<td>지식베이스에 질문하고 글감 추출</td>
+</tr>
+<tr>
+<td>lint</td>
+<td>끊어진 링크, 누락 태그, 교차 참조 오류 복구</td>
+</tr>
+</tbody>
+</table>
+<p>사용자는 자료를 고르고 질문하고 창조적 산출물을 만드는 데 집중한다. AI는 새 페이지 작성, 기존 페이지 업데이트, 링크 연결, 태그 보정 같은 유지관리 비용을 줄인다.</p>
+<hr>
+<h2 id="4-당근-비즈프로필을-로컬셀러-플랫폼으로-확장하다">4. 당근 비즈프로필을 로컬셀러 플랫폼으로 확장하다</h2>
+<p>준 발표는 라이오와 나눈 사업 아이디어 녹음 파일을 코덱스에 넣어 사업계획서와 발표 자료로 발전시킨 사례였다. 출발점은 “AI 공부를 하면서 1달러라도 벌어보자”였고, 결과는 AI 기반 로컬셀러 산지직송 커머스 플랫폼 아이디어였다.</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>입력</th>
+<th>산출</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>녹음 투입</td>
+<td>아이디어 회의 파일</td>
+<td>전사와 요약</td>
+</tr>
+<tr>
+<td>사업계획 요청</td>
+<td>당근 비즈프로필과 산지직송 맥락</td>
+<td>플랫폼 초안</td>
+</tr>
+<tr>
+<td>리서치</td>
+<td>공식 자료와 딥리서치</td>
+<td>MD 정리</td>
+</tr>
+<tr>
+<td>슬라이드 구성</td>
+<td>사업계획서 초안</td>
+<td>피그마에서 다듬을 발표 자료</td>
+</tr>
+</tbody>
+</table>
+<p>핵심 구조는 산지 공급자와 동네 로컬셀러를 연결하고, 상품·주문·홍보·정산 같은 중앙 운영을 AI 에이전트가 보조하는 것이다. 코덱스는 전사 품질은 괜찮았지만 30분에서 1시간 사이 녹음 처리에 약 30분이 걸려, 빠른 전사만 필요할 때는 다른 도구와 병행하는 편이 현실적이었다.</p>
+<hr>
+<h2 id="5-부동산-중개업을-ai-조직으로-운영하다">5. 부동산 중개업을 AI 조직으로 운영하다</h2>
+<p>골든 레비 발표는 금토끼 부동산 업무에서 나온 서비스와 AI 조직 운영 사례였다. 공공데이터 앱, 매물장, 매물 지도, 재개발·재건축 지도, 통화 요약 메신저를 프롬넷이라는 서비스 틀 안에 묶었다.</p>
+<table>
+<thead>
+<tr>
+<th>서비스</th>
+<th>문제</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>부동산 백과</td>
+<td>공공데이터 검색이 번거로움</td>
+<td>앱에서 정보 검색</td>
+</tr>
+<tr>
+<td>매물장</td>
+<td>에어테이블 한도와 용량 문제</td>
+<td>자체 입력·관리 도구</td>
+</tr>
+<tr>
+<td>매물 지도</td>
+<td>광고 사이트와 지도 입력 중복</td>
+<td>매물 입력 후 지도 자동 표시</td>
+</tr>
+<tr>
+<td>정비구역 지도</td>
+<td>재개발 맥락 확인이 분리됨</td>
+<td>공공데이터 지도 시각화</td>
+</tr>
+<tr>
+<td>프로톡</td>
+<td>긴 통화 내용을 팀이 듣기 어려움</td>
+<td>통화 파일 자동 요약</td>
+</tr>
+</tbody>
+</table>
+<p>AI 조직은 CEO/COO가 지시를 받아 기획, 디자인, QA, 개발팀에 업무를 나누는 방식이다. <code>CLAUDE.md</code>에는 Whisper 로컬 설치 금지, 키와 환경파일 커밋 금지, 같은 파일 동시 수정 방지 같은 운영 규칙을 넣었다.</p>
+<hr>
+<h2 id="6-하루-mvp와-실사용-앱-사이의-거리를-배운다">6. 하루 MVP와 실사용 앱 사이의 거리를 배운다</h2>
+<p>얼른 머스크 발표는 로블록스 시간관리 앱을 만든 후기였다. Windows Family Safety가 자주 오작동했고, 아이가 시간을 우회하는 문제가 있어 직접 타이머 앱을 만들었다.</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>기능</th>
+<th>배운 점</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MVP</td>
+<td>타이머, 경고, 로블록스 종료</td>
+<td>하루 만에 그럴듯한 앱은 가능</td>
+</tr>
+<tr>
+<td>실사용</td>
+<td>세션 기록, 설정 저장, 평일·주말 시간</td>
+<td>요구사항이 급격히 늘어남</td>
+</tr>
+<tr>
+<td>방어</td>
+<td>앱 미실행, 강제 종료, 재부팅, 삭제 대응</td>
+<td>사용자는 규칙을 우회함</td>
+</tr>
+<tr>
+<td>배포</td>
+<td>GitHub 릴리즈, 설치·권한 이슈</td>
+<td>개발 환경과 사용자 PC는 다름</td>
+</tr>
+<tr>
+<td>안정화</td>
+<td>29회 커밋, 버전 0.6</td>
+<td>MVP 이후가 진짜 개발</td>
+</tr>
+</tbody>
+</table>
+<p>질의응답에서는 “시간 차단”뿐 아니라 “약속을 지키면 보상”하는 구조도 제안됐다. 기능을 통제 도구로만 보지 않고 행동 설계까지 확장해볼 수 있다는 관점이다.</p>
+<hr>
+<h2 id="7-인생-os는-북극성과-10분-기록에서-시작한다">7. 인생 OS는 북극성과 10분 기록에서 시작한다</h2>
+<p>마지막 영상 사례는 AI 초보 디자이너가 인생 OS 강의를 통해 북극성을 설정하고 포트폴리오 제작 루틴을 만든 과정이었다. 연봉, 포트폴리오 방문자, 전환 같은 수치형 지표를 잡고 매일 10분 단위로 실행을 기록했다.</p>
+<table>
+<thead>
+<tr>
+<th>루틴</th>
+<th>하는 일</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>북극성 설정</td>
+<td>커리어 목표를 수치형 지표로 바꿈</td>
+<td>막연한 불안을 실행 기준으로 전환</td>
+</tr>
+<tr>
+<td>Today 작성</td>
+<td>매일 날짜별 MD 생성</td>
+<td>하루 작업의 시작점 확보</td>
+</tr>
+<tr>
+<td>10분 타이머</td>
+<td>무엇을 했는지 짧게 기록</td>
+<td>부담을 낮추고 실행량을 측정</td>
+</tr>
+<tr>
+<td>Close Day</td>
+<td>하루 기록 병합과 에세이 생성</td>
+<td>회고와 다음 실행 연결</td>
+</tr>
+<tr>
+<td>디자인 레퍼런스 분석</td>
+<td>취향과 인터랙션을 AI에게 설명</td>
+<td>무에서 시작하지 않는 포트폴리오 제작</td>
+</tr>
+</tbody>
+</table>
+<p>무엇을 원하는지 모를 때도 레퍼런스를 넣고 취향을 역분석하게 한 점이 실용적이었다. 디자인 모음 MD, 먼저 계획을 세우고 적용하는 프로세스도 바이브 코딩 품질을 높이는 장치로 소개됐다.</p>
+<hr>
+<h2 id="8-자주-막히는-곳">8. 자주 막히는 곳</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI가 한 번에 문서를 처리하다 깨뜨림</td>
+<td>문서를 1개씩 처리하고, 이미지로 구조를 먼저 잡은 뒤 텍스트를 매칭한다.</td>
+</tr>
+<tr>
+<td>위키가 커질수록 연결 관리가 부담됨</td>
+<td>ingest와 lint 명령을 분리하고, 교차 참조 복구를 반복 명령으로 만든다.</td>
+</tr>
+<tr>
+<td>초안은 빨리 나오지만 실사용에서 오류가 터짐</td>
+<td>권한, 저장 위치, 해상도, 표준 계정, 설치 환경을 별도 체크리스트로 둔다.</td>
+</tr>
+<tr>
+<td>에이전트가 위험한 파일을 건드릴 수 있음</td>
+<td>키, 환경파일, 설치 금지, 파일 소유권 규칙을 <code>CLAUDE.md</code>에 명시한다.</td>
+</tr>
+<tr>
+<td>코덱스 전사가 오래 걸림</td>
+<td>빠른 전사는 전용 도구와 병행하고, 리서치·정리까지 묶을 때 코덱스를 쓴다.</td>
+</tr>
+<tr>
+<td>목표가 추상적이라 실행이 안 됨</td>
+<td>북극성 지표를 수치로 만들고 10분 단위 기록부터 시작한다.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>자주 막히는 지점은 도구 문제가 아니라 공정 문제인 경우가 많다. 입력, 품질 기준, 승인 지점, 운영 규칙을 분리하면 다음 시도가 쉬워진다.</p>
+</blockquote>
+<hr>
+<h2 id="부록-기억할-문장">부록 — 기억할 문장</h2>
+<blockquote>
+<p>“측정 없는 PKM은 신앙이다.” — 야호심</p>
+<p>“MVP까지는 쉬웠으나 실제 정상적인 실사용에서는 오류와 버그를 잡느라 고생했다.” — 얼른 머스크</p>
+<p>“사람은 어떤 지식을 읽을지, 어떤 질문을 할지, 어떤 창조적 생산을 할지에 집중할 수 있다.” — BK</p>
+</blockquote>
+<footer class="footer">
+  이 문서는 원본 강의 녹화본(<code>2026-06-01 [지피터스] 22기 베스트 발표회 - 업무&amp;비즈니스.mp4</code>)을 Whisper로 전사한 뒤
+  주제별로 정리한 것입니다. 정확한 발화 흐름이 필요하면 원본 영상을 참조하세요.
+</footer>
+</body>
+</html>

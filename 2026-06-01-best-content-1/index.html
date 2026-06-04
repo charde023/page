@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>베스트 발표회 — 콘텐츠와 지식 사례 1부</title>
+<meta name="description" content="콘텐츠와 지식 분야 발표자 7명의 AI 활용 사례를 문제, 도구, 산출물, 막힌 지점 중심으로 비교 정리한 1부.">
+<meta property="og:title" content="베스트 발표회 — 콘텐츠와 지식 사례 1부">
+<meta property="og:description" content="콘텐츠와 지식 분야 발표자 7명의 AI 활용 사례를 문제, 도구, 산출물, 막힌 지점 중심으로 비교 정리한 1부.">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root {
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-soft: #f1f6ff;
+  --text: #1f2a44;
+  --text-soft: #5a6b87;
+  --text-muted: #8593ab;
+  --border: #e3e9f3;
+  --border-soft: #eef2f8;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-deep: #1d4ed8;
+  --shadow: 0 1px 2px rgba(31, 42, 68, 0.04), 0 8px 24px rgba(31, 42, 68, 0.06);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-feature-settings: 'tnum', 'ss03';
+  line-height: 1.75;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+h1, h2, h3, h4 {
+  line-height: 1.35;
+  margin-top: 2em;
+  margin-bottom: 0.65em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.18rem; color: var(--accent-deep); }
+h4 { font-size: 1.02rem; }
+p { margin: 0.85em 0; color: var(--text); }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+strong { color: var(--accent-deep); font-weight: 700; }
+em { color: var(--text-soft); }
+blockquote {
+  margin: 1.2em 0;
+  padding: 0.9em 1.2em;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+  border-radius: 10px;
+  font-size: 0.97em;
+}
+blockquote p { margin: 0.35em 0; }
+blockquote strong { color: var(--accent-deep); }
+ol, ul { padding-left: 1.5em; }
+li { margin: 0.4em 0; }
+code {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.88em;
+  background: var(--surface-soft);
+  color: var(--accent-deep);
+  padding: 0.15em 0.45em;
+  border-radius: 5px;
+  border: 1px solid var(--border-soft);
+}
+pre {
+  background: var(--surface);
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  line-height: 1.6;
+  margin: 1.2em 0;
+}
+pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.92em;
+  color: var(--text);
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.2em 0;
+  font-size: 0.96em;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft);
+}
+tr:last-child td { border-bottom: 0; }
+th {
+  background: var(--surface-soft);
+  font-weight: 600;
+  color: var(--accent-deep);
+  border-bottom: 1px solid var(--border);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
+.header-banner {
+  margin: -32px -24px 36px;
+  padding: 34px 28px 28px;
+  background: linear-gradient(160deg, #e0ecff 0%, #f1f6ff 55%, #ffffff 100%);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.header-banner .eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-soft);
+  margin-bottom: 14px;
+}
+.header-banner h1 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.header-banner .sub {
+  margin-top: 10px;
+  color: var(--text-soft);
+  font-size: 0.97rem;
+}
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 1.5em 0 2.4em;
+  box-shadow: var(--shadow);
+}
+.toc h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.toc ol {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--text-soft);
+}
+.toc li { margin: 0.3em 0; }
+.toc a { color: var(--text); font-weight: 500; }
+.toc a:hover { color: var(--accent); }
+.footer {
+  margin-top: 4em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--border);
+  font-size: 0.88em;
+  color: var(--text-muted);
+  text-align: center;
+}
+.footer code { font-size: 0.92em; }
+@media (max-width: 640px) {
+  body {
+    padding: 20px 18px 72px;
+    font-size: 16px;
+    line-height: 1.72;
+  }
+  .header-banner {
+    margin: -20px -18px 24px;
+    padding: 24px 20px 20px;
+    border-radius: 0;
+  }
+  .header-banner .eyebrow { font-size: 0.72rem; }
+  .header-banner h1 { font-size: 1.5rem; }
+  .header-banner .sub { font-size: 0.9rem; }
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.08rem; }
+  h4 { font-size: 1rem; }
+  blockquote { padding: 0.8em 1em; font-size: 0.95em; }
+  pre { padding: 14px 16px; font-size: 0.9em; }
+  table { font-size: 0.92em; }
+  th, td { padding: 10px 11px; }
+  .toc { padding: 14px 18px; }
+  ol, ul { padding-left: 1.3em; }
+}
+@media (max-width: 380px) {
+  body { font-size: 15.5px; padding: 18px 16px 64px; }
+  .header-banner h1 { font-size: 1.35rem; }
+  table { font-size: 0.88em; }
+  th, td { padding: 8px 9px; }
+}
+</style>
+</head>
+<body>
+<header class="header-banner">
+  <span class="eyebrow">지피터스 22기 · 끌림 영상 스터디</span>
+  <h1>베스트 발표회 — 콘텐츠와 지식 사례 1부</h1>
+  <div class="sub">2026-06-01 라이브 강의 정리본</div>
+</header>
+
+<blockquote>
+<p>지피터스 22기 · 끌림 영상 스터디 · 2026-06-01 라이브
+원본: <code>2026-06-01 [지피터스] 22기 베스트 발표회 - 콘텐츠&amp;지식.mp4</code> · 2시간 16분 42초
+진행: 작가와 · 발표: 빙봉빙봉, 채원, 송주환, 자몽블랙티, 백구, 송세현, 엘리</p>
+</blockquote>
+<h2 id="결론-tldr">결론 (TL;DR)</h2>
+<blockquote>
+<p><strong>이번 발표의 공통점은 "AI에게 결과만 맡긴다"가 아니라, AI가 일할 수 있는 작업실, 게이트, 검토 루프를 먼저 만든다는 점이다.</strong></p>
+</blockquote>
+<h3>핵심 비교 — 7개 사례의 문제와 산출물</h3>
+<table>
+<thead>
+<tr>
+<th>발표자</th>
+<th>출발점</th>
+<th>쓴 도구</th>
+<th>나온 결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>빙봉빙봉</td>
+<td>공동 저자 글쓰기와 연구 플레이북 정리</td>
+<td>Claude, 하네스 프롬프트</td>
+<td>질문 게이트, 초고 충돌 진단표</td>
+</tr>
+<tr>
+<td>채원</td>
+<td>AI 입문자의 K리그 직관 영상 제작</td>
+<td>AntiGravity, GPT, Gemini</td>
+<td>캐릭터 이미지, 경기장 배경, 10초 영상</td>
+</tr>
+<tr>
+<td>송주환</td>
+<td>취업 공고 탐색의 탭 난립 문제</td>
+<td>Claude Code, GitHub, 크롤러</td>
+<td>설치 가능한 잡 크롤러 스킬과 엑셀</td>
+</tr>
+<tr>
+<td>자몽블랙티</td>
+<td>수험 영어 학습 웹앱과 콘텐츠 자동화</td>
+<td>Claude, Gemini, NotebookLM, Netlify</td>
+<td>40일 학습 페이지, 음성, 영상, 복습 자료</td>
+</tr>
+<tr>
+<td>백구</td>
+<td>모바일로 게임북 전자책 제작</td>
+<td>Hermes, Telegram, Claude Code</td>
+<td>모바일 작업실, 분기 흐름 검토실</td>
+</tr>
+<tr>
+<td>송세현</td>
+<td>AI 기반 주식 자동매매 실험</td>
+<td>API, Claude Code 에이전트</td>
+<td>재무, 테마, 차트, AI 판단 파이프라인</td>
+</tr>
+<tr>
+<td>엘리</td>
+<td>3분 37초 뮤직비디오 제작</td>
+<td>Suno, Claude Code, Grok, Gemini, CapCut</td>
+<td>노래, 캐릭터 시트, 씬 영상, 쇼츠 후보</td>
+</tr>
+<tr>
+<td>### 챙겨야 할 6가지</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>#</td>
+<td>메시지</td>
+<td>한 줄</td>
+<td></td>
+</tr>
+<tr>
+<td>---</td>
+<td>---</td>
+<td>---</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>게이트</td>
+<td>"바로 써줘"보다 "먼저 물어보고 조건을 통과해"가 결과를 안정시켰다.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>작업실</td>
+<td>긴 글, 게임북, 학습 앱은 별도 화면과 구조가 있어야 검토된다.</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>분리</td>
+<td>인물, 텍스트, 유니폼, 번호판처럼 AI가 섞는 요소는 나눠 지시한다.</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>배포</td>
+<td>GitHub, Netlify, 웹앱으로 묶으면 개인 실험도 남이 써볼 수 있다.</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>검토 루프</td>
+<td>실패 로그, 회고, 질문, 새 창 시작이 도구 사용 능력을 키웠다.</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>보수성</td>
+<td>자동매매처럼 위험한 영역은 수익보다 안전장치가 먼저다.</td>
+<td></td>
+</tr>
+<tr>
+<td>### 사례별 병목과 돌파 방식</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>병목</td>
+<td>대표 사례</td>
+<td>돌파 방식</td>
+<td></td>
+</tr>
+<tr>
+<td>---</td>
+<td>---</td>
+<td>---</td>
+<td></td>
+</tr>
+<tr>
+<td>AI가 원칙을 잊음</td>
+<td>빙봉빙봉</td>
+<td>본문 작성 전 질문, 진단 전용 모드, 단계별 권한 분리</td>
+<td></td>
+</tr>
+<tr>
+<td>생성 모델이 정책 차단</td>
+<td>채원</td>
+<td>실존 인물 묘사와 유니폼 텍스트를 분리해 설명</td>
+<td></td>
+</tr>
+<tr>
+<td>오류 원인을 사람이 다 보기 어려움</td>
+<td>송주환</td>
+<td>서브 에이전트가 로그를 읽고 우회안을 제안</td>
+<td></td>
+</tr>
+<tr>
+<td>모바일, 웹, OS별 동작 차이</td>
+<td>자몽블랙티</td>
+<td>배포 후 파일 누락과 음성 끊김을 직접 테스트</td>
+<td></td>
+</tr>
+<tr>
+<td>분기 구조가 커져 검토 불가</td>
+<td>백구</td>
+<td>노드 기반 흐름 검토실로 본문과 선택지를 연결</td>
+<td></td>
+</tr>
+<tr>
+<td>자동화가 너무 조심스러움</td>
+<td>송세현</td>
+<td>에이전트 회고로 전략을 조금씩 조정</td>
+<td></td>
+</tr>
+<tr>
+<td>긴 영상의 씬 일관성</td>
+<td>엘리</td>
+<td>캐릭터 시트, 그리드 생성, 씬 분할기로 반복 제작</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="강의는-어떤-내용이었나">강의는 어떤 내용이었나</h2>
+<p>콘텐츠와 지식 트랙의 베스트 발표회다. 한 명의 강사가 가르치는 강의라기보다, 스터디 참여자들이 실제로 만든 AI 활용 사례를 공유하고 서로 질문하며 배운 자리였다.
+발표는 영상 제작, 논문과 글쓰기, 취업 공고 크롤링, 학습 웹앱, 전자책 게임북, 주식 자동매매, 뮤직비디오 제작으로 이어졌다. 주제는 달랐지만 핵심은 비슷했다. AI를 도구 하나로 쓰기보다 역할을 나누고, 검토 지점을 만들고, 실패를 통해 프롬프트와 작업 환경을 고쳤다.
+| 섹션 | 내용 |
+|---|---|
+| 오프닝 | 베스트 발표회의 목적과 발표 규칙 안내 |
+| 글쓰기와 연구 | 하네스 개념을 공동 집필과 연구 플레이북에 적용 |
+| 영상 제작 | AI 이미지와 영상 생성으로 짧은 직관 영상 제작 |
+| 자동화 스킬 | 취업 공고 수집을 Claude Code 스킬로 패키징 |
+| 지식 웹앱 | Claude 프로젝트, PRD, NotebookLM 자료를 엮어 학습 페이지 제작 |
+| 전자책 게임북 | 모바일 환경과 분기 검토실로 게임북 제작 |
+| 투자 에이전트 | 재무, 테마, 차트, 에이전트 판단을 연결한 자동매매 실험 |
+| 뮤직비디오 | 음악, 이미지, 영상, 자막, 쇼츠 후보까지 제작 |</p>
+<h2 id="0-한눈에-보는-콘텐츠와-지식-사례">0. 한눈에 보는 콘텐츠와 지식 사례</h2>
+<ol>
+<li>문제를 좁힌다 — "영상 만들기"가 아니라 "선수 이름이 들어간 직관 영상"처럼 실제 막힌 작업을 잡는다.</li>
+<li>AI 역할을 나눈다 — 질문자, 진단자, 실행자, 검토자처럼 권한을 다르게 둔다.</li>
+<li>입력 구조를 만든다 — 지침, PRD, 캐릭터 시트, 목차, 재무 점수처럼 반복 가능한 재료를 준비한다.</li>
+<li>산출물을 본다 — 웹앱, 엑셀, 영상, 작업실처럼 눈으로 확인 가능한 형태로 뽑는다.</li>
+<li>실패 원인을 분리한다 — 정책 차단, 레이아웃, 데이터 누락, 자막, 번호판, 중복 공고를 따로 본다.</li>
+<li>다시 시도한다 — 새 창에서 시작하거나, AI에게 회고를 시키거나, 프롬프트를 분리한다.</li>
+<li>공유 가능한 형태로 묶는다 — 링크, GitHub, Netlify, 게시글로 다른 사람이 따라 할 수 있게 만든다.</li>
+</ol>
+<h2 id="1-글쓰기와-연구-빙봉빙봉">1. 글쓰기와 연구 — 빙봉빙봉</h2>
+<p>빙봉빙봉의 사례는 "공동 플레이북에 하네스를 걸어보기"였다. 다오랩의 Human Agent Teaming Lab 연구 맥락에서 여러 사람이 각자 쓴 글을 하나의 연구 플레이북으로 엮어야 했다.
+핵심은 AI에게 바로 통합본을 쓰게 하지 않는 것이다. 먼저 독자, 핵심 주장, 구체 사례, 톤을 물어보게 하고, 초고를 합칠 때도 "통합하지 말고 충돌만 진단하라"고 역할을 좁혔다.
+| 적용 지점 | 하네스 방식 | 기대 효과 |
+|---|---|---|
+| 개인 글쓰기 | 답변 전 독자, 주장, 사례, 톤을 질문 | 맥락 없는 일반론 방지 |
+| 공동 초고 통합 | 용어, 중복, 입장, 형식 충돌만 표로 진단 | 사람이 결정할 편집점 확보 |
+| 다음 단계 | 진단, 결정 기록, 통합 실행, 검수를 분리 | AI 권한을 단계마다 다르게 부여 |</p>
+<blockquote>
+<p>"진단만 하고 결정은 사람이 한다"가 이 사례의 가장 중요한 안전벨트다.</p>
+</blockquote>
+<h2 id="2-영상-입문-채원">2. 영상 입문 — 채원</h2>
+<p>채원은 AI 초보자 관점에서 K리그 직관 브이로그 영상을 만들었다. AntiGravity에서 프로젝트와 캐릭터, 장면 프롬프트를 정리하고, GPT로 이미지 두 장을 만든 뒤 Gemini에 넣어 10초 영상을 생성했다.
+처음 나온 영상은 자연스러웠지만, 유니폼 뒷면 이름이 외계어처럼 생성됐다. 실제 선수 이름과 등번호를 넣는 시도는 정책 차단에 걸렸고, 발표자는 "실존 인물 묘사"와 "텍스트가 프린트된 유니폼"을 분리해야 한다는 힌트를 얻었다.
+| 배운 점 | 내용 |
+|---|---|
+| 빠른 몰입 | 한 줄 프롬프트만으로도 영상이 나오면 학습 동기가 커진다. |
+| 정책 이해 | 이름, 얼굴, 유니폼이 섞이면 딥페이크 차단으로 해석될 수 있다. |
+| 시행착오 | 실패를 반복하며 AI에게 이유를 묻는 과정 자체가 학습이다. |</p>
+<h2 id="3-스킬-패키징-송주환">3. 스킬 패키징 — 송주환</h2>
+<p>송주환은 취업 공고를 모으는 작업을 Claude Code 스킬로 만들고 GitHub에 배포했다. 원티드, 점핏, 사람인 같은 플랫폼을 탭으로 열어보는 대신, 키워드와 플랫폼, 기간, 정렬 방식을 물어보고 결과를 엑셀로 여는 방식이다.
+의미 있었던 지점은 "나만 쓰는 자동화"에서 끝내지 않았다는 점이다. 스킬로 패키징해 다른 사람도 설치할 수 있게 만들었고, 기본값과 질문 흐름을 넣어 비슷한 사용자가 커스텀할 수 있게 했다.
+| 구성 | 설명 |
+|---|---|
+| 입력 | 키워드, 플랫폼, 등록 기간, 정렬, 출력 방식 |
+| 처리 | 플랫폼별 크롤링, 오류 우회, 결과 정리 |
+| 출력 | 상위 공고 미리보기, 필터가 있는 엑셀 파일 |
+| 남은 과제 | 플랫폼 간 동일 공고 중복 제거 |
+질문에서 흥미로웠던 부분은 오류 해결 방식이었다. 잡코리아 요청 차단이나 Playwright 전환 같은 문제를 발표자가 일일이 분석한 것이 아니라, 작업 세션 로그를 AI가 읽고 해결 과정을 남겼다.</p>
+<h2 id="4-지식-웹앱-자몽블랙티">4. 지식 웹앱 — 자몽블랙티</h2>
+<p>자몽블랙티는 수험 영어 학습을 위한 웹앱을 만들었다. Claude 프로젝트에 페르소나, 태스크, 컨텍스트, 포맷을 넣고, Gemini로 PRD 작성법을 배운 뒤, NotebookLM의 학습 자료를 연결했다.
+결과물은 Day 1부터 Day 40까지 확장할 수 있는 학습 페이지였다. 단어, 발음, 의미 구분, 오디오 복습, 복습 테스트, 영상 강의까지 한 화면에서 다루는 구조였다.
+| 만든 것 | 사용한 방식 | 막힌 점 |
+|---|---|---|
+| Claude 프로젝트 | 맞춤 지침과 사례 양식 파일 투입 | 일관성 유지 |
+| 학습 콘텐츠 | NotebookLM 자료를 수험용으로 재가공 | 불필요한 잡담 제거 |
+| 웹 배포 | Netlify 드래그 앤 드롭 | 파일 누락, 모바일별 동작 차이 |
+| 영상과 음성 | 기존 영상 스터디 경험, TTS 설정값 활용 | 음성 끊김과 플랫폼별 재생 문제 |
+이 사례는 사업 계획으로 이어질 수 있는 수준의 프로토타입이었다. 핵심은 한 번 만든 지침을 다음 Day 콘텐츠 생산의 자동화 기반으로 삼는다는 점이다.</p>
+<h2 id="5-모바일-게임북-작업실-백구">5. 모바일 게임북 작업실 — 백구</h2>
+<p>백구는 선택형 어드벤처 게임북을 만들고 있었다. 쌍둥이를 키우는 상황이라 컴퓨터 앞에 오래 앉기 어렵고, Telegram과 Hermes를 활용한 모바일 작업 환경이 필요했다.
+Telegram은 회의실로 쓰고, 본문은 별도 웹 작업실에서 검토했다. 게임북은 분기가 많아질수록 페이지와 선택지가 폭발하므로 모바일 본문 검토실, 큰 작업실, 흐름 검토실을 나눴다.
+| 작업 공간 | 역할 |
+|---|---|
+| Telegram | 아이디어, 장면, 캐릭터 대사 회의 |
+| Claude Code | 대규모 파일과 코드 작업, 본문 검토 화면 제작 |
+| 모바일 작업실 | 섹션별 본문 읽기 |
+| 흐름 검토실 | 선택지 노드와 이어지는 본문을 함께 확인 |
+현재 병목은 기획이었다. 세계관과 캐릭터 설정이 약하면 분기형 스토리는 빠르게 꼬인다. 그래서 새 장면을 더 쓰기보다 전체 체계와 전개 방향을 다시 잡는 단계였다.</p>
+<h2 id="6-자동매매-에이전트-송세현">6. 자동매매 에이전트 — 송세현</h2>
+<p>송세현은 AI를 활용한 코스피, 코스닥 자동매매 실험을 공유했다. 종목 선택이 중요하다고 보고 재무, 테마, 차트, AI 판단의 네 단계 필터를 만들었다.
+AI가 모든 것을 직접 매매하는 구조는 아니었다. 재무 점수와 테마 언급, 기술적 신호는 프로그램이 계산하고, 에이전트는 주어진 정보 안에서 살지 말지와 매수 강도를 판단했다.
+| 단계 | 판단 기준 |
+|---|---|
+| 재무 | 매출, 이익률, 장부가치 등으로 기본 안전성 필터링 |
+| 테마 | 경제 유튜브와 네이버 테마에서 언급량과 정서 확인 |
+| 차트 | 거래량, 추세, 매집 가능성 등 기술적 신호 확인 |
+| 에이전트 | 스카우트, 티커, 전략 에이전트가 관심 종목과 비중 조정 |
+결론은 솔직했다. 손실은 없지만 수익도 크지 않았다. 안전장치를 많이 넣어 너무 보수적으로 움직였기 때문이다. 다만 매매 뒤 회고를 시키며 전략과 코드를 계속 단단하게 만들고 있었다.</p>
+<h2 id="7-뮤직비디오-제작-엘리">7. 뮤직비디오 제작 — 엘리</h2>
+<p>엘리는 "굿바이 마이카" 뮤직비디오를 만들었다. 면허 반납과 오래 탄 차에 대한 정서를 포크 트로트풍 노래와 영상으로 풀었다.
+프로세스는 Claude Code로 스토리와 가사를 잡고, Suno로 음악을 만들고, Grok과 Gemini로 이미지와 영상을 생성한 뒤, CapCut으로 편집하는 방식이었다. 3분 37초 영상이라 6초에서 10초짜리 씬을 수십 개 만들어야 했다.
+| 작업 | 핵심 포인트 |
+|---|---|
+| 가사 | 리듬이 어색한 부분을 Claude Code로 여러 번 검토 |
+| 음악 | 트로트 팝, 포크 팝 중 포크 트로트 선택 |
+| 이미지 | 젊은 주인공, 나이 든 주인공, 자동차 캐릭터 시트 제작 |
+| 씬 제작 | 4x4 그리드로 여러 컷을 뽑고 마음에 드는 컷 선택 |
+| 편집 | 자막, 번호판, 쇼츠 구간 분석까지 후처리 |
+막힌 곳은 디테일이었다. 운전석 방향, 자동차 속도, 번호판 유지, 여러 인물 자세처럼 사람이 보면 쉬운 장면이 생성 모델에는 계속 흔들렸다.</p>
+<h2 id="8-발표자별-적용-포인트">8. 발표자별 적용 포인트</h2>
+<table>
+<thead>
+<tr>
+<th>독자 상황</th>
+<th>먼저 참고할 사례</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI로 글을 쓰지만 결과가 밋밋함</td>
+<td>빙봉빙봉</td>
+<td>쓰기 전에 질문하게 만드는 게이트가 있다.</td>
+</tr>
+<tr>
+<td>영상 생성이 처음임</td>
+<td>채원</td>
+<td>최소 입력으로 시작하고 실패를 학습으로 바꾸는 흐름이 좋다.</td>
+</tr>
+<tr>
+<td>반복 작업을 남도 쓰게 만들고 싶음</td>
+<td>송주환</td>
+<td>스킬 패키징과 배포 사례가 있다.</td>
+</tr>
+<tr>
+<td>학습 콘텐츠를 제품화하고 싶음</td>
+<td>자몽블랙티</td>
+<td>지침, PRD, 자료, 배포를 한 흐름으로 묶었다.</td>
+</tr>
+<tr>
+<td>모바일로 긴 창작을 해야 함</td>
+<td>백구</td>
+<td>Telegram과 웹 작업실의 역할 분리가 선명하다.</td>
+</tr>
+<tr>
+<td>판단 자동화가 궁금함</td>
+<td>송세현</td>
+<td>프로그램 계산과 에이전트 판단의 경계를 볼 수 있다.</td>
+</tr>
+<tr>
+<td>음악 영상까지 완성하고 싶음</td>
+<td>엘리</td>
+<td>노래, 씬, 편집, 쇼츠까지 전체 제작 루프가 있다.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-자주-막히는-곳">9. 자주 막히는 곳</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI가 바로 일반론을 써버림</td>
+<td>본문 작성 전에 독자, 주장, 사례, 톤을 먼저 질문하게 한다.</td>
+</tr>
+<tr>
+<td>생성 영상에서 이름이나 로고가 이상하게 나옴</td>
+<td>인물 묘사와 텍스트 출력 요청을 분리하고, 새 대화에서 다시 시도한다.</td>
+</tr>
+<tr>
+<td>같은 오류가 대화 아래쪽에서 계속 반복됨</td>
+<td>실패한 대화를 이어가지 말고 새 창에서 제로 베이스로 시작한다.</td>
+</tr>
+<tr>
+<td>여러 사람이 쓴 글을 합치면 중복과 충돌이 생김</td>
+<td>통합 전에 용어, 중복, 입장, 형식 충돌만 표로 뽑게 한다.</td>
+</tr>
+<tr>
+<td>웹앱이 PC에서는 되는데 모바일에서 깨짐</td>
+<td>Android, iOS, 브라우저별로 열어보고 파일 누락과 오디오 재생을 확인한다.</td>
+</tr>
+<tr>
+<td>게임북 분기가 커져 흐름을 못 따라감</td>
+<td>노드와 본문을 함께 보는 흐름 검토실을 만든다.</td>
+</tr>
+<tr>
+<td>자동매매가 너무 보수적으로 움직임</td>
+<td>거래 후 회고를 시키고, 안전장치와 매수 강도 기준을 분리한다.</td>
+</tr>
+<tr>
+<td>긴 뮤직비디오 씬이 서로 달라 보임</td>
+<td>캐릭터 시트, 번호판, 스타일 기준을 먼저 고정하고 씬 단위로 생성한다.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="부록-기억할-문장">부록 — 기억할 문장</h2>
+<blockquote>
+<p>"진단만 하고 결정은 사람이 한다." — 빙봉빙봉 사례의 하네스 원칙
+"삽질이라는 과정 덕분에 AI 툴을 익히는 데 가장 빠르게 도움이 됐다." — 채원
+"디테일하게 안 본 게 사실 중요하다." — 송주환의 스킬 자동화 설명
+"컴퓨터 앞에 아니어도 창작은 계속된다." — 백구 발표 자료의 문장</p>
+</blockquote>
+<footer class="footer">
+  이 문서는 원본 강의 녹화본(<code>2026-06-01 [지피터스] 22기 베스트 발표회 - 콘텐츠&amp;지식.mp4</code>)을 Whisper로 전사한 뒤
+  주제별로 정리한 것입니다. 정확한 발화 흐름이 필요하면 원본 영상을 참조하세요.
+</footer>
+</body>
+</html>
