@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=780">
+<title>에이폼 분수물총 — 상페 프롬프트뷰 v14</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose:#E8547A; --rose-light:#FDE8EE; --peach:#FDF0E8; --lavender:#F5F0FF;
+    --mint:#EDF8F4; --deep:#2A0E20; --text-dark:#1A1018; --text-mid:#6B5060; --text-soft:#9A7888;
+    --sec-pad-y:96px; --sec-pad-x:60px;
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#F4F4F6; font-family:'Pretendard',sans-serif; word-break:keep-all; color:var(--text-dark); }
+  .page { max-width:780px; margin:0 auto; background:#fff; }
+
+  .eyebrow-lg { font-family:'Gowun Dodum',serif; font-size:40px; letter-spacing:0.02em; color:var(--rose); display:block; margin-bottom:28px; }
+  .h1-gowun, .h2-sec { font-family:'Gowun Dodum',serif; font-size:56px; line-height:1.32; letter-spacing:-0.01em; color:var(--text-dark); }
+  .h2-sec { margin-bottom:44px; }
+  .mid-head { font-family:'Pretendard',sans-serif; font-size:40px; font-weight:500; line-height:1.55; color:var(--text-mid); margin-bottom:36px; }
+  .body-text { font-family:'Pretendard',sans-serif; font-size:32px; line-height:1.85; color:var(--text-mid); }
+  .body-text + .body-text { margin-top:40px; }
+  .transition-line { font-family:'Pretendard',sans-serif; font-size:30px; line-height:1.7; color:var(--text-soft); margin-top:44px; }
+  .q-emph { display:inline-block; font-family:'Gowun Dodum',serif; font-size:64px; font-weight:700; color:var(--rose); line-height:1.1; margin-top:8px; }
+  .pivot-line { font-family:'Pretendard',sans-serif; font-size:40px; font-weight:700; line-height:1.5; color:var(--rose); margin-top:56px; }
+  /* 핵심어 강조색 */
+  .em { color:var(--rose); font-weight:600; }
+
+  .comma-top { text-align:center; padding:72px 0 8px; background:#fff; }
+  .divider { width:100%; height:1px; background:rgba(232,84,122,0.1); }
+  .divider-strong { width:100%; height:1px; background:rgba(232,84,122,0.18); }
+
+  .ph { width:100%; display:flex; align-items:center; justify-content:center; background:#EFEFEF; border:1px solid #E2E2E2; }
+  .ph .img-label { font-family:'Pretendard',sans-serif; font-size:18px; color:#9A9A9A; letter-spacing:0.01em; text-align:center; padding:0 40px; line-height:1.7; }
+  .ph-dark { width:100%; display:flex; align-items:center; justify-content:center; background:#2A2330; border:1px solid rgba(255,255,255,0.08); }
+  .ph-dark .img-label { font-family:'Pretendard',sans-serif; font-size:18px; color:rgba(255,255,255,0.4); text-align:center; padding:0 40px; line-height:1.7; }
+  .col2-wrap { display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; }
+  .col2-wrap .ph { min-height:360px; }
+
+  .usp-flow { margin-top:48px; text-align:left; }
+  .usp-row { padding:30px 0; border-bottom:1px solid rgba(232,84,122,0.12); }
+  .usp-row:last-child { border-bottom:none; }
+  .usp-t { font-size:36px; font-weight:700; color:var(--text-dark); line-height:1.35; }
+  .usp-no { font-family:'Gowun Dodum',serif; color:var(--rose); margin-right:14px; }
+  .usp-d { font-size:28px; color:var(--text-soft); line-height:1.5; margin-top:10px; padding-left:54px; }
+
+  .offer-card { background:rgba(255,255,255,0.07); border-radius:20px; border:1px solid rgba(255,255,255,0.15); padding:48px 40px; text-align:center; margin-top:52px; }
+  .offer-card .offer-headline { font-family:'Gowun Dodum',serif; font-size:48px; line-height:1.25; color:#fff; margin-bottom:18px; }
+  .offer-card .offer-desc { font-family:'Pretendard',sans-serif; font-size:32px; line-height:1.7; color:rgba(255,220,230,0.9); margin-bottom:24px; }
+  .offer-card .offer-note { font-family:'Pretendard',sans-serif; font-size:28px; color:rgba(255,200,215,0.7); line-height:1.6; }
+
+  .solo-quote { background:var(--rose-light); border-left:3px solid var(--rose); border-radius:16px; padding:34px 34px 30px 36px; margin-bottom:24px; }
+  .solo-quote:last-of-type { margin-bottom:0; }
+  .solo-quote .quote-text { font-family:'Pretendard',sans-serif; font-size:30px; font-weight:500; line-height:1.7; color:var(--text-mid); margin-bottom:16px; }
+  .solo-quote .quote-foot { display:flex; align-items:center; gap:12px; }
+  .solo-quote .quote-stars { color:var(--rose); font-size:26px; letter-spacing:3px; }
+  .solo-quote .quote-nick { font-family:'Pretendard',sans-serif; font-size:24px; font-weight:600; color:var(--text-soft); }
+
+  .faq-list { display:flex; flex-direction:column; gap:40px; }
+  .faq-item .faq-q { font-family:'Pretendard',sans-serif; font-size:36px; font-weight:700; color:var(--text-dark); line-height:1.4; margin-bottom:14px; }
+  .faq-item .faq-a { font-family:'Pretendard',sans-serif; font-size:30px; color:var(--text-mid); line-height:1.6; }
+
+  .spec-table { width:100%; border-collapse:collapse; font-family:'Pretendard',sans-serif; font-size:30px; }
+  .spec-table tr { border-bottom:1px solid rgba(232,84,122,0.08); }
+  .spec-table tr:last-child { border-bottom:none; }
+  .spec-table th { width:38%; padding:28px 20px 28px 0; color:var(--text-soft); font-weight:400; vertical-align:top; text-align:left; line-height:1.55; }
+  .spec-table td { padding:28px 0 28px 20px; color:var(--text-dark); vertical-align:top; line-height:1.55; }
+
+  .caption-rule { width:48px; height:1px; background:var(--rose); margin:0 auto 40px; opacity:0.45; }
+
+  .place-block { margin-top:56px; }
+  .place-block .pb-name { font-family:'Gowun Dodum',serif; font-size:40px; color:var(--text-dark); margin-bottom:12px; }
+  .place-block .pb-desc { font-family:'Pretendard',sans-serif; font-size:32px; line-height:1.7; color:var(--text-mid); margin-bottom:28px; }
+  .place-block .pb-image { min-height:560px; border-radius:14px; }
+
+  .overlay-wrap { width:100%; min-height:620px; position:relative; display:flex; flex-direction:column; justify-content:flex-end; background:#2A2330; }
+  .overlay-wrap::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 25%, rgba(10,4,16,0.72) 100%); }
+  .overlay-wrap .img-label-dark { position:absolute; top:42%; left:50%; transform:translate(-50%,-50%); font-family:'Pretendard',sans-serif; font-size:18px; color:rgba(255,255,255,0.38); text-align:center; z-index:2; pointer-events:none; padding:0 40px; line-height:1.7; }
+  .overlay-text { position:relative; z-index:3; padding:0 60px 64px; }
+  .overlay-text .eyebrow-dark { font-family:'Gowun Dodum',serif; font-size:22px; letter-spacing:0.1em; color:rgba(255,190,210,0.9); display:block; margin-bottom:24px; }
+  .overlay-text .h1-dark { font-family:'Gowun Dodum',serif; font-size:56px; line-height:1.32; letter-spacing:-0.01em; color:#fff; margin-bottom:22px; }
+  .overlay-text .mid-dark { font-family:'Pretendard',sans-serif; font-size:40px; font-weight:500; line-height:1.55; color:rgba(255,235,242,0.85); }
+
+  .b1-head { background:#fff; padding:48px var(--sec-pad-x) 64px; text-align:center; }
+  .b1-wide-image { min-height:720px; }
+  .b1-caption { background:var(--peach); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  /* 히어로 카피 단일 섹션 (단일 배경) */
+  .b1-hero { background:var(--peach); padding:64px var(--sec-pad-x) 96px; text-align:center; }
+  .b1-hero .comma-in { margin-bottom:24px; }
+  .b1-hero .mid-head { margin-top:52px; }
+  .b2-image { min-height:560px; }
+  .b2-text { background:#fff; padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b3-section { background:var(--rose-light); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b4-head { background:var(--peach); padding:120px var(--sec-pad-x) 64px; text-align:center; }
+  .b4-wide-image { min-height:440px; }
+  .b4-caption { background:var(--peach); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b5-section { background:var(--lavender); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b6-section { background:var(--mint); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b8-image { min-height:600px; }
+  .b8-text { background:var(--rose-light); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b9-section { background:#fff; padding:var(--sec-pad-y) var(--sec-pad-x); }
+  .b10-section { background:var(--deep); padding:var(--sec-pad-y) var(--sec-pad-x); text-align:center; }
+  .b10-section .h2-deep { font-family:'Gowun Dodum',serif; font-size:56px; line-height:1.32; letter-spacing:-0.01em; color:#fff; margin-bottom:44px; }
+  .b10-section .mid-deep { font-family:'Pretendard',sans-serif; font-size:40px; font-weight:500; line-height:1.55; color:rgba(255,220,232,0.88); margin-bottom:36px; }
+  .b10-section .body-deep { font-family:'Pretendard',sans-serif; font-size:32px; line-height:1.85; color:rgba(255,210,225,0.78); }
+  .cta-block { margin-top:56px; }
+  .cta-text { display:inline-block; font-family:'Pretendard',sans-serif; font-size:32px; font-weight:700; color:#fff; background:var(--rose); border-radius:100px; padding:22px 52px; letter-spacing:0.03em; }
+  .b11-section { background:var(--peach); padding:var(--sec-pad-y) var(--sec-pad-x); }
+  .b12-section { background:#fff; padding:var(--sec-pad-y) var(--sec-pad-x); }
+  .b12-inner { padding-top:44px; }
+  .b12-title { font-family:'Gowun Dodum',serif; font-size:40px; line-height:1.3; color:var(--text-dark); margin-bottom:8px; }
+  .b12-caution-title { font-family:'Gowun Dodum',serif; font-size:32px; line-height:1.3; color:var(--text-dark); margin-bottom:0; }
+  .caution-list { list-style:none; padding:0; margin-top:40px; }
+  .caution-list li { font-family:'Pretendard',sans-serif; font-size:30px; line-height:1.55; color:var(--text-soft); padding:16px 0 16px 20px; border-bottom:1px solid rgba(232,84,122,0.06); position:relative; }
+  .caution-list li::before { content:'–'; position:absolute; left:0; color:var(--rose); opacity:0.5; }
+  .caution-list li:last-child { border-bottom:none; }
+</style>
+
+<style id="pmt-style">
+.pmt-card{display:flex;flex-direction:column;gap:11px;text-align:left;width:100%;}
+.pmt-id{font-family:'Pretendard',sans-serif;font-size:15px;font-weight:700;letter-spacing:.06em;color:var(--rose);}
+.pmt-shot{font-family:'Pretendard',sans-serif;font-size:24px;font-weight:700;color:var(--text-dark);line-height:1.4;}
+.pmt-ko{font-family:'Pretendard',sans-serif;font-size:19px;font-weight:400;color:var(--text-mid);line-height:1.72;}
+.pmt-en{font-family:'Pretendard',sans-serif;font-size:13px;font-weight:400;color:#B6A0AC;line-height:1.5;}
+.ph:has(.pmt-card),.ph-dark:has(.pmt-card),.overlay-wrap:has(.pmt-card){align-items:stretch !important;justify-content:flex-start !important;height:auto !important;min-height:0 !important;text-align:left !important;padding:30px 30px !important;position:relative !important;border-style:dashed !important;}
+.ph-dark:has(.pmt-card) .pmt-shot,.overlay-wrap:has(.pmt-card) .pmt-shot{color:#fff;}
+.ph-dark:has(.pmt-card) .pmt-ko,.overlay-wrap:has(.pmt-card) .pmt-ko{color:rgba(255,255,255,.85);}
+.ph-dark:has(.pmt-card) .pmt-en,.overlay-wrap:has(.pmt-card) .pmt-en{color:rgba(255,255,255,.5);}
+.ph-dark:has(.pmt-card) .pmt-id,.overlay-wrap:has(.pmt-card) .pmt-id{color:#F4A6C2;}
+.overlay-wrap:has(.pmt-card) .img-label-dark{position:static !important;transform:none !important;}
+#pmt-banner{position:fixed;top:0;left:0;right:0;z-index:9999;background:#E8547A;color:#fff;font:600 13px/1.5 'Pretendard',sans-serif;text-align:center;padding:7px;}
+</style>
+</head>
+<body><div id="pmt-banner">v14 고도화 프롬프트 뷰 (발행본 아님) · 연출제목 / 한글(검수) / 영문(완성작 밀도·A/B·모델별)</div>
+<div class="page">
+
+<!-- IMG01 히어로 와이드 (최상단) -->
+<div class="ph b1-wide-image">
+  <div class="pmt-card"><div class="pmt-id">IMG01 · 4:5 · NB</div><div class="pmt-shot">그늘 벤치 한숨·물꽃 아이</div><div class="pmt-ko">햇살 쏟아지는 공원 그늘 벤치에 막 앉아 숨 고르는 엄마, 뒤편에서 파스텔 핑크 물총 들고 신나게 물꽃 뿜는 아이. 엄마 얼굴엔 아직 긴장 안 풀린 미소가 남아 있고, 아이는 완전 자기만의 세계야. B 버전은 오후 늦게 황금빛 사이드라이트라 더 따뜻하고 나른한 느낌.</div><div class="pmt-en">Use: hero banner for a Korean mom-target detail page — the opening emotional beat, "mom finally exhales while child is happily occupied."<br>Scene: a sun-drenched Korean public park on a warm summer afternoon, around 4 PM. Foreground zone: a wide wooden bench sitting in deep leafy tree shade, dappled light patches on the concrete path. Mid-ground: an open, sunlit grassy splash-pad area about 4–6 metres behind the bench. Background: soft bokeh of distant playground equipment and other park-goers, density low enough to read as peaceful suburban park.<br>Subject: HERO — a young Korean mother in her 30s, seated on the bench, slightly reclined, weight shifted back, one arm resting on the bench back. She has just sat down; her posture carries the loosening of held tension — shoulders dropping, head tilted slightly, genuine half-smile forming. She is rendered with shallow DOF, slightly out of focus relative to the child behind her. Secondary — a young Korean child (age 4), in the sunny background, standing on grass, both hands gripping a pastel rose-pink plastic pump water toy, releasing a generous full-sphere dome of fine water threads upward and outward, completely absorbed in the act, not looking at camera.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Spray: a big, lush, voluminous round dome of fine water threads spraying evenly in every direction from a single nozzle — a generous full sphere like an oversized dandelion head / large firework burst — NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist.<br>Camera &amp; light: (A) 85mm prime, f/2.0, focused on the child in the middle distance, mother pleasantly blurred in the foreground. Warm golden afternoon sun streaming through leafy canopy from the upper-left, casting soft moving shadows on the bench. Color temperature ~5200K, skin tones warm amber-peach. Kodak Portra 400 film simulation: natural grain, gentle highlight rolloff, slightly lifted shadows, no clinical sharpness. (B) 85mm prime, f/2.0, same framing. Late-afternoon amber light dropping lower, a softer diffuse glow from the west filtering through thicker foliage — 4600K, longer shadows on the path, the mother's face lit by reflected warm fill from the wooden bench surface. Still Kodak Portra 400 grain, slightly cooler in the shade patches, warmer in the sunlit grass behind.<br>References: Image 1 = product shape/color ONLY; Image 2 = spray geometry ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.  [베스트 레퍼: dryrun_r08_01.jpg, r08_08.jpg, r742976558_03.jpg]<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist; People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; Aspect ratio: 4:5.<br>Output: 4:5. quality=low to explore, high for final.</div></div>
+</div>
+
+<!-- B1 Hero 카피 — 단일 섹션·단일 배경(피치) -->
+<section class="b1-hero">
+  <div class="comma-in">
+    <svg width="108" height="138" viewBox="0 0 108 138" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M54 16C77 16 95 34 95 58C95 90 71 116 40 130C57 107 61 91 53 81C30 79 13 61 13 41C13 27 31 16 54 16Z" fill="#F4A6C2"/>
+    </svg>
+  </div>
+  <span class="eyebrow-lg">엄마의 쉼</span>
+  <h1 class="h1-gowun">이거 하나 쥐여주면<br>엄마를 안 찾아요</h1>
+  <p class="mid-head">아이가 <span class="em">물꽃놀이</span>에 푸욱~ 빠져 노는 동안~<br>엄마는 그늘에서 잠깐 <span class="em">휴식</span>을~</p>
+  <p class="body-text">물만 있으면 <span class="em">아이 혼자</span> 놀아요</p>
+  <p class="transition-line">아이들이 왜 이렇게까지<br>좋아하는지부터 볼까요<br><span class="q-emph">?</span></p>
+</section>
+<!-- /B1 -->
+
+
+<!-- B2 물꽃놀이 정체성 -->
+<div class="ph b2-image">
+  <div class="pmt-card"><div class="pmt-id">IMG02 · 4:3 · NB·GPT</div><div class="pmt-shot">물꽃 돔 클로즈업</div><div class="pmt-ko">파스텔 핑크 물총 노즐 끝에서 민들레처럼 전방위로 퍼지는 물꽃 돔, 역광 받아 은은하게 빛나는 물실 한 땀 한 땀이 살아있어. 배경은 거의 보케 처리해서 물꽃 자체가 주인공. B 버전은 청명한 야외 그늘 역광으로 물실에 하이라이트가 더 선명하게 떠.</div><div class="pmt-en">Use: hero identity shot for B2 block — the product's defining visual signature, "what makes this water toy magical" in a single frame.<br>Scene: outdoor setting, midday to early afternoon. Background deliberately blown out to near-white with soft bokeh of sunlit greenery, giving the impression of a bright summer garden or park edge. No hard architectural lines — only diffuse warm-light ambience surrounds the spray. Depth of field is extremely shallow; only the spray sphere and the front 5cm of the nozzle tip are in sharp focus.<br>Subject: HERO — the spray itself. A generous full-sphere dome of fine water threads radiating evenly from the nozzle tip of a pastel rose-pink plastic pump water toy — resembling a large dandelion clock or a firework burst at peak expansion. Individual water threads are individually visible, each one catching rim light, creating a luminous crown of liquid filaments. The barrel of the toy is visible in the lower portion of the frame, held at an upward-tilted angle by unseen adult hands (only the forearm and hands visible, no face).<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Spray: a big, lush, voluminous round dome of fine water threads spraying evenly in every direction from a single nozzle — a generous full sphere like an oversized dandelion head / large firework burst — NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist.<br>Camera &amp; light: (A) 100mm macro, f/3.5, focused on the outermost filaments of the spray sphere. Natural backlight from behind and slightly above — bright summer sun at 5800K producing strong rim lighting along each water thread, glinting silver-white against the soft-focus warm green background. Kodak Portra 400, subtle grain, highlight bloom on the brightest water threads, deep pastel pink of the toy body rendered with full saturation. (B) 100mm macro, f/3.5, same framing. Subject repositioned so a patch of open shaded sky fills the background — diffuse blue-gray overcast at 6500K, water threads read as cooler translucent silver, the pastel pink toy body pops with stronger colour contrast. Still Portra 400 grain, no loss of thread detail.<br>References: Image 1 = product shape/color ONLY; Image 2 = spray geometry ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist; no text, no watermark, no logo; Aspect ratio: 4:3.<br>Output: 4:3. quality=low to explore, high for final.   (+GPT 대안 버전은 md 참조)</div></div>
+</div>
+
+<section class="b2-text">
+  <h2 class="h2-sec">아이들이 먼저<br>'물꽃놀이'라고 불러요</h2>
+  <p class="mid-head">앞쪽으로 쏘는 물총이 아니라<br>사방으로 동그랗게 퍼지는<br><span class="em">안전한 분수물총</span>이에요</p>
+  <p class="body-text">손잡이를 쭈욱 밀면 물길이 분수처럼 퍼지면서<br>햇빛에 닿은 <span class="em">물빛이 반짝반짝</span> 흩어져요<br>처음 본 아이들이 우와~ 하면서<br>모여드는 이유가 있어요</p>
+
+  <div class="ph" style="min-height:700px; margin-top:48px; border-radius:12px;">
+    <div class="pmt-card"><div class="pmt-id">IMG03 · 1:1 · NB</div><div class="pmt-shot">우와! 물꽃에 빠진 아이들</div><div class="pmt-ko">물꽃 돔 터지는 순간 첫 번째 아이 입이 떡 벌어지고, 옆에 있던 아이들이 하나둘 달려와서 손 뻗는 그 찰나. 눈빛이 다 "나도! 나도!" 야. B 버전은 부드러운 오후 사이드라이트라 아이들 표정에 따뜻한 주황빛이 감돌아.</div><div class="pmt-en">Use: B2 identity block — the social proof of wonder, "this toy stops kids in their tracks and pulls others in."<br>Scene: a sun-filled Korean neighbourhood splash pad or park water-play area, mid-afternoon around 3 PM. Ground surface: wet concrete or paving tile with shallow puddles reflecting sky. Background: blurred chain-link fence with greenery and a fragment of apartment building — soft bokeh at f/2.0. Depth of field keeps foreground children sharp, background children pleasantly soft. The scene feels spontaneous, crowd-in-motion, caught mid-action.<br>Subject: HERO — a young Korean child (age 4–5), crouching slightly, face in genuine open-mouthed awe — mouth forming an "O", eyes wide, both arms partially extended toward the spray. The child holds a pastel rose-pink plastic pump water toy, nozzle pointed slightly upward, releasing a generous full-sphere dome of fine water threads at peak bloom. SECONDARY — two to three other Korean children (ages 3–5), approaching from different angles in the middle distance: one running toward the spray, arms outstretched; one pausing mid-step, eyes fixed on the water dome, leaning forward; one reaching out a tentative hand toward the water threads. None of the secondary children are posing — they are caught mid-motion, unposed, genuinely reacting.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Spray: a big, lush, voluminous round dome of fine water threads spraying evenly in every direction from a single nozzle — a generous full sphere like an oversized dandelion head / large firework burst — NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist.<br>Camera &amp; light: (A) 50mm prime, f/2.0, focused on the hero child's face and the spray dome. Bright overhead summer sun at 5600K, harsh directional light softened by a thin cloud layer — creating even, bright, naturally exposed scene with minimal shadow blocking. Kodak Portra 400 film simulation: accurate skin tones, no overexposure on wet pavement highlights, natural grain throughout. (B) 50mm prime, f/2.0, same subject framing. Mid-afternoon sun swings to a 45-degree sidelight from the right at 4800K — warm golden rim light catching the water threads from the right side, giving the spray dome a luminous amber glow on one hemisphere. Children's faces lit with soft warm fill from open sky on the left. Still Portra 400 grain, slightly richer colour saturation.<br>References: Image 1 = product shape/color ONLY; Image 2 = spray geometry ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.  [베스트 레퍼: dryrun_r07_04.jpg, dryrun_r08_03.jpg, r07_05.jpg]<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist; People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; Aspect ratio: 1:1.<br>Output: 1:1. quality=low to explore, high for final.</div></div>
+  </div>
+
+  <p class="pivot-line"></p>
+</section>
+<!-- /B2 -->
+
+
+<!-- B3 공감 -->
+<div class="ph" style="min-height:560px;">
+  <div class="pmt-card"><div class="pmt-id">IMG04 · 4:3 · NB</div><div class="pmt-shot">지쳐버린 물 채우기 엄마</div><div class="pmt-ko">작년 여름 물가에서 쪼그려 앉아 물 채워주다 다리 다 풀린 그 장면 있잖아. 아이는 또 달라고 손 내밀고, 엄마는 페트병 들고 허리 굽혀 있는 그 피곤한 순간. 공감 유발 컷이라 세련미보단 진짜 지침이 느껴져야 해. 배경은 공원 수돗가나 계곡 물가, 한낮 강한 햇빛 아래.</div><div class="pmt-en">Use: B3 empathy anchor — documents the exhausting refill routine of last summer, setting up the "never again" relief payoff. Candid, unposed, emotionally raw.<br>Scene: a Korean public park water fountain area or shallow stream bank, harsh midday summer sun, 2–3pm. Background: sun-bleached concrete or rounded river stones, sparse trees offering no shade. Heat haze atmosphere — bright, flat, tiring light. Shallow depth of field blurs the background into a pale wash of beige and grey.<br>Subject(HERO): a young Korean mother in her 30s crouched on her haunches beside a low water spigot or shallow creek edge, arms fully extended downward, visibly fatigued — hunched shoulders, a strand of hair stuck to her cheek, expression caught between concentration and mild exhaustion. She holds an ordinary transparent plastic bottle under a trickle of water. Secondary: a young Korean child (age 3–5) standing impatiently beside her, small hand reaching toward the bottle, swimwear damp.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Camera &amp; light — A: 50mm f/2.2, harsh overhead summer sun casting short hard shadows directly beneath subjects, skin slightly reddened from heat, color temperature ~5800K, Kodak Portra 400 grain, slight overexposure on highlights giving that exhausted-summer-afternoon bleach.<br>Camera &amp; light — B: 85mm f/1.8, lower sun angle at 4pm creating longer shadows, warm amber sidelight that softens the exhaustion into a bittersweet memory tone, Fujifilm Pro 400H with slight cool shadow rolloff.<br>References: Image 1 = product shape/color ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.  [베스트 레퍼: dryrun_r08_01.jpg, r03_06_1.jpg, r743921463_03.jpg]<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; Aspect ratio: 4:3.<br>Output: 4:3. quality=low to explore, high for final.</div></div>
+</div>
+
+<section class="b3-section">
+  <h2 class="h2-sec">지난 여름 물놀이<br>한 번도 못 앉으셨죠?</h2>
+  <p class="mid-head">"엄마 물 채워줘~" "엄마 물총이 안 나와~"<br>하루 종일 <span class="em">엄마아빠</span>를 찾고...<br>물총 맞느라 옷은 다 젖고...</p>
+  <p class="body-text">집에 오면<br>아이보다 <span class="em">엄마아빠가 더 녹초</span>가 되던 지난 여름</p>
+  <p class="transition-line">이제는 분수물총으로<br>아이 <span class="em">스스로</span> 놀게 해주세요<br><span class="q-emph">!</span></p>
+</section>
+<!-- /B3 -->
+
+
+<div class="divider-strong"></div>
+
+
+<!-- B4 변화+꿀잠 -->
+<section class="b4-head">
+  <h2 class="h2-sec">이번 여름 물놀이는<br>그늘에 앉아 쉬셔도 돼요~</h2>
+  <p class="mid-head">아이가 <span class="em">스스로</span> 물 채우고 예쁜 분수 만들면서<br>안전하게 노니까요</p>
+</section>
+
+<div class="ph b4-wide-image">
+  <div class="pmt-card"><div class="pmt-id">IMG05 · 16:9 · NB</div><div class="pmt-shot">눈 감고 쉬는 엄마, 멀리서 혼자 노는 아이</div><div class="pmt-ko">B1 히어로보다 훨씬 넓고 여유로운 버전이야. 엄마는 벤치에 등 기대고 눈까지 감았고, 아이는 저 멀~리 배경 속에서 혼자 물꽃 터뜨리며 놀고 있어. 불안하지 않고 진짜 편안한 거리감이 핵심. 와이드 샷으로 공간을 많이 담아야 해.</div><div class="pmt-en">Use: B4 transformation payoff — the wide-frame emotional resolution shot, showing a mother who has fully let go; more spacious and settled than IMG01's tentative relief.<br>Scene: a sun-drenched Korean public park, open grassy lawn, warm late-afternoon, around 4–5pm. Foreground: a wooden park bench in partial tree shade. Mid-ground: open green lawn extending 10–15 meters. Background: a soft-bokeh blur of a splash-pad or open fountain area where the child plays. Atmosphere is unhurried and airy — generous negative space left and right of the bench, wide-open sky above.<br>Subject(HERO): a young Korean mother in her 30s reclining against the park bench backrest with both eyes gently closed, head tilted slightly upward, a faint relaxed expression on her face — genuinely at ease, not performing. One arm rests loosely on the bench arm, the other in her lap. She is the foreground anchor. Secondary: a young Korean child (age 3–5) in the far background, small silhouette visible against the bright lawn, holding a pastel pink-and-sky-blue plastic water toy, a round dome of fine water threads spraying outward around the child — the child is small, joyful, and self-sufficient.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Camera &amp; light — A: 35mm f/2.8, golden late-afternoon sun raking across the scene from camera-left at ~30-degree angle, warm 4500K color temperature, soft tree-filtered shadows on the bench, Kodak Portra 400 rendering with gentle skin warmth and luminous greens.<br>Camera &amp; light — B: 50mm f/2.0, softer ambient overcast afternoon light, cooler 5200K balanced tone, slight film grain from Fujifilm Pro 400H, shadows more diffused giving a quieter, more meditative mood.<br>References: Image 1 = product shape/color ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; Aspect ratio: 16:9.<br>Output: 16:9. quality=low to explore, high for final.</div></div>
+</div>
+
+<section class="b4-caption">
+  <div class="caption-rule"></div>
+  <p class="body-text">물에 담그고 쭈욱 당기면 끝이라,<br><span class="em">아이도 혼자</span> 채워요<br>"엄마 물 또 넣어줘" 하고 부르는 일이 없을 거예요</p>
+  <p class="body-text">스스로 맘껏 놀고 나면<br>그날 밤엔 눕자마자<br><span class="em">곯아떨어질 거예요</span></p>
+
+  <div class="ph" style="min-height:560px; margin-top:48px; border-radius:12px;">
+    <div class="pmt-card"><div class="pmt-id">IMG06 · 4:3 · NB</div><div class="pmt-shot">실컷 놀고 곯아떨어진 아이</div><div class="pmt-ko">물놀이 실컷 하고 집에 돌아온 저녁, 씻기지도 못하고 그냥 쿨쿨 잠든 아이 컷이야. 엄마 입장에서 '아, 오늘 진짜 잘 놀았구나' 하고 뿌듯한 그 감정. 아이 얼굴은 평화롭고, 베개 옆에 물총이 살짝 보이면 자연스럽게 연결돼. 조명은 따뜻하고 포근한 저녁 실내.</div><div class="pmt-en">Use: B4 emotional close — the payoff moment a mother silently celebrates: child fully exhausted by joyful play, finally asleep. Warmth and quiet pride are the message.<br>Scene: a Korean home interior, child's bedroom or living room floor mattress, early evening around 7–8pm. Background: softly out-of-focus bedroom wall in warm neutral beige or pale rose, a single table lamp casting a 2700K tungsten pool of amber light. Low, intimate atmosphere — curtains drawn, room dimly lit by the lamp alone. No clutter in frame, just the sleeping child and a single object near the pillow.<br>Subject(HERO): a young Korean child (age 3–5), fully asleep, lying on their side on a soft pillow, cheeks flushed pink from sun and play, hair slightly damp and tousled, lips lightly parted in peaceful deep sleep — authentically exhausted, not posed. Hands loosely curled near the face. Beside the pillow, partially visible and slightly out of focus: the pastel pink-and-sky-blue clear plastic water toy resting on its side — a quiet narrative prop linking the day's play to this rest.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Camera &amp; light — A: 85mm f/1.8, single 2700K table lamp from camera-right creating warm Rembrandt-style sidelight across the child's face — soft shadow on the far cheek, gentle highlight on the near cheekbone and shoulder, Kodak Portra 400 grain adds warmth and a faint filmic texture to skin and fabric.<br>Camera &amp; light — B: 50mm f/1.4, ambient evening light from a partially open hallway door, slightly cooler 3200K with a warm rim glow, deeper shadows in the background, Fujifilm Pro 400H rendering with muted shadow detail giving a more intimate, hushed mood.<br>References: Image 1 = product shape/color ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.  [베스트 레퍼: r759597934_05.jpg]<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; Aspect ratio: 4:3.<br>Output: 4:3. quality=low to explore, high for final.</div></div>
+  </div>
+
+  <p class="transition-line">이게 가능한 건, 에이폼 분수물총의 네 가지 덕분이에요</p>
+</section>
+<!-- /B4 -->
+
+
+<!-- B5 USP -->
+<section class="b5-section">
+  <h2 class="h2-sec">에이폼 분수물총<br>이런 점이 달라요</h2>
+
+  <div class="usp-flow">
+    <div class="usp-row">
+      <p class="usp-t"><span class="usp-no">01</span>전동 금지 물놀이장도 OK</p>
+      <p class="usp-d">전동물총은 위험해서 못 쓰는 곳이 많은데, 이건 충전 없이 물만 있으면 돼요</p>
+    </div>
+    <div class="usp-row">
+      <p class="usp-t"><span class="usp-no">02</span>다른 아이와 놀아도 안심돼요</p>
+      <p class="usp-d">앞으로 세게 쏘는 물총이 아니라 예쁘게 퍼지는 안전한 분수물총이라 덜 아파요</p>
+    </div>
+    <div class="usp-row">
+      <p class="usp-t"><span class="usp-no">03</span>1+1 두 자루를 드려요</p>
+      <p class="usp-d">색이 둘이라 섞이지 않게 핑크 하나, 블루 하나 보내드려요</p>
+    </div>
+    <div class="usp-row">
+      <p class="usp-t"><span class="usp-no">04</span>어린 손에도 가벼워요</p>
+      <p class="usp-d">100g, 한 손에 쏙</p>
+    </div>
+  </div>
+
+  <div class="ph" style="min-height:700px; margin-top:56px; border-radius:12px;">
+    <div class="pmt-card"><div class="pmt-id">IMG07 · 1:1 · NB·GPT</div><div class="pmt-shot">아이 손 펌프 디테일</div><div class="pmt-ko">욕조 물가에 무릎 꿇고 앉은 4살 아이가 조그만 손가락으로 물총 펌프 손잡이를 꼭 쥐고 힘껏 당기는 순간이야. 손목 안쪽 살결이랑 손가락 주름이 다 보일 만큼 가깝게 찍었어. 맑은 원통형 몸통 안에 물이 서서히 차오르는 게 보이고, 배경은 물놀이 타일이 살짝 보여.</div><div class="pmt-en">Use: B5 USP detail panel — prove the self-refill mechanism is child-operable; the takeaway is effortless independence.<br>Scene: shallow end of a Korean apartment splash-pad water feature, bright midday sun, pale concrete tiles glisten with scattered water droplets, background depth is minimal — blurred teal-wet tile, a hint of pastel pink towel folded at edge. No people in background.<br>Subject(HERO): a pair of small, chubby Korean child hands (age 4), skin tone warm beige, naturally damp and slightly wrinkled at the knuckles — left hand curled around the clear cylindrical barrel of a pastel pink water toy, right hand gripping and drawing back the flat-bottom pump handle; caught mid-pull, tendons lightly engaged, fingernails with faint dirt rim, natural and unmanicured. The clear barrel fills with water from below — visible water column rising inside the transparent body, air bubble at top. No other body parts visible; frame is tight from mid-forearm down.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Grip: the left hand wrapping fully around the WIDE clear transparent barrel (the long ~25cm thick cylinder body, NOT the thin inner plunger rod), the right hand pushing the flat bottom of the handle upward.<br>Camera &amp; light A (warm natural): 100mm macro equivalent, f/2.5, shutter 1/400 s — top-front natural sunlight at 10 o'clock angle, colour temperature 5800 K, soft fill from wet tile reflection below, Kodak Portra 400 simulation — slight film grain 15%, warm shadow roll-off, skin tones golden-peach, no beauty filter, shallow DOF keeps barrel mid-section in focus while foreground nozzle tip is softer.<br>Camera &amp; light B (diffused overcast): same 100mm macro, f/2.8, overcast studio-daylight 6500 K through translucent awning — flat even wrap light revealing water droplets on the barrel surface as fine spheres, no harsh shadows, slight cyan-cool cast to tiles, Fuji Pro 400H simulation — fine grain 10%, cooler skin tone rendering, sharpest focal plane on hands gripping junction between barrel and handle.<br>References: Image 1 = product shape/color ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.  [베스트 레퍼: r743000594_02.jpg, r743529581_03.jpg, r743627115_06.jpg]<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); no text, no watermark, no logo; Aspect ratio: 1:1.<br>Output: 1:1. quality=low to explore, high for final.   (+GPT 대안 버전은 md 참조)</div></div>
+  </div>
+
+  <p class="transition-line" style="margin-top:48px;">언제든 가지고 다니기 쉬워요</p>
+</section>
+<!-- /B5 -->
+
+
+<!-- B6 멀티 장소 -->
+<section class="b6-section">
+  <h2 class="h2-sec">물만 있으면<br>어디서든 꺼내요</h2>
+  <p class="mid-head">아파트 물놀이장부터 목욕탕까지<br>여름 내내 가방에 따라다녀요</p>
+
+  <div class="place-block">
+    <p class="pb-name">아파트 물놀이장</p>
+    <p class="pb-desc">전동물총은 물길이 너무 세고 배터리 사고도 위험해서<br>금지된 물놀이터가 생각보다 많아요<br>이건 <span class="em">수동이라 어디서든</span> 그냥 꺼내서 놀아요</p>
+    <div class="ph pb-image"><div class="pmt-card"><div class="pmt-id">IMG08 · 4:3 · NB</div><div class="pmt-shot">아파트 물놀이장 혼자 논다</div><div class="pmt-ko">아파트 단지 물놀이장에서 4살 아이가 분수 바닥 위에 서서 혼자 신나게 물총을 뿜고 있어. 분수 물줄기랑 아이가 쏜 물꽃이 겹쳐서 여름 한복판 느낌 물씬. 옆에 다른 엄마가 핸드폰 보며 기다리는 게 흐릿하게 보여.</div><div class="pmt-en">Use: B6 location scene — validate this toy in the most common Korean urban play context; message is 'fits the apartment splash-pad rule set, no batteries needed'.<br>Scene: an outdoor splash-pad plaza inside a Korean apartment complex (아파트 단지), warm summer afternoon around 3 PM. Setting: smooth grey granite pavement, flat water-spray jets built flush into the ground, water pooling in shallow rivulets. Background: soft bokeh of apartment tower facades (warm beige tone), a blurred line of trees, and the faint silhouette of a mother on a bench looking at her phone — no faces legible. Midground: light spray from ground jets catches sunlight, producing tiny rainbow fragments in air. Scene is airy and uncluttered — high-key Korean urban summer.<br>Subject(HERO): a young Korean child (age 4), wearing a pastel yellow rash-guard top and navy swim shorts, standing barefoot on the wet granite — caught mid-spray, arms extended holding a pastel pink water toy at waist height, mouth open in a laugh, squinting from the sun. Water dome erupts from nozzle: full round sphere of fine water threads, dandelion-head geometry. The child's face is fully lit, natural skin texture, damp hair stuck to forehead, no beauty filter. Composition: child is offset to the left third, spray dome blooms into centre-right, background apartment bokeh fills upper right.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Spray: a big, lush, voluminous round dome of fine water threads spraying evenly in every direction from a single nozzle — a generous full sphere like an oversized dandelion head / large firework burst — NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist.<br>Camera &amp; light A (golden afternoon): 50mm, f/2.0, shutter 1/1000 s to freeze water sphere — warm afternoon sun at 4 o'clock backlighting the spray into sparkle, golden colour temperature 4800 K, skin lit by bounce from wet pavement below, Kodak Portra 400 simulation, slight flare in upper-left corner from direct sun, grain 12%.<br>Camera &amp; light B (hazy overcast): 50mm, f/2.2, diffuse white cloud cover 7000 K — flat shadowless light renders every water thread in the spray sphere with equal clarity, cooler tones, higher perceived sharpness on spray geometry, Fuji Pro 400H simulation, grain 8%, more clinical editorial feel.<br>References: Image 1 = product shape/color ONLY; Image 2 = spray geometry ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.  [베스트 레퍼: dryrun_r08_04.jpg, dryrun_r08_05.jpg, r742365175_02.jpg]<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist; People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; Aspect ratio: 4:3.<br>Output: 4:3. quality=low to explore, high for final.</div></div></div>
+  </div>
+  <div class="place-block">
+    <p class="pb-name">놀이터·계곡·캠핑</p>
+    <p class="pb-desc">가벼워서 <span class="em">가방에 쏙</span>, 어디든 챙겨가요</p>
+    <div class="ph pb-image"><div class="pmt-card"><div class="pmt-id">IMG09 · 4:3 · NB</div><div class="pmt-shot">계곡 캠핑 야외 물놀이</div><div class="pmt-ko">맑은 계곡 얕은 물가에서 4살 아이가 물총 들고 물줄기를 뿜고 있어. 투명한 몸통 안에 계곡물이 찰랑 담긴 게 보이고, 물꽃이 크게 퍼지면서 역광에 반짝여. 배경엔 캠핑 텐트 그늘이랑 초록 나뭇잎이 흐릿하게 깔려.</div><div class="pmt-en">Use: B6 location scene — broaden the use-case from urban to nature; message is 'works everywhere you go this summer — stream, camping, any outdoor water source'.<br>Scene: a shallow, clear Korean mountain stream (계곡), mid-summer afternoon around 2 PM. Water is ankle-deep, creek-bed stones visible through the crystal-clear current — mossy grey and buff pebbles. Upstream: a soft-focus camping setup, an orange two-person dome tent under dense green canopy — leaves catching patches of direct sunlight, creating dappled light on the water surface. Air is slightly humid; light mist from where the stream runs over a small rock shelf. Background foliage dense and lush — mid-bokeh green with light leaks.<br>Subject(HERO): a young Korean child (age 4), wearing a light blue swim vest and beige board shorts, standing ankle-deep in the stream — feet on smooth rocks, slight wobble in stance (candid, not posed). Both hands hold the pastel sky-blue water toy: left hand around the clear barrel, right hand at the pump handle, mid-push — caught at the moment the spray dome erupts forward. Face caught in three-quarter view, wide grin, squinting in delight, damp hair, natural sunlit skin. The water sphere spray backlit by dappled stream light catches as individual droplet sparkle.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Grip: the left hand wrapping fully around the WIDE clear transparent barrel (the long ~25cm thick cylinder body, NOT the thin inner plunger rod), the right hand pushing the flat bottom of the handle upward.<br>Spray: a big, lush, voluminous round dome of fine water threads spraying evenly in every direction from a single nozzle — a generous full sphere like an oversized dandelion head / large firework burst — NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist.<br>Camera &amp; light A (dappled golden stream): 35mm, f/2.2, shutter 1/1000 s — sun breaking through canopy from directly above-left, dappled 5200 K golden patches on water surface and child's skin, Kodak Portra 400 simulation, warm shadow in the rock-pool foreground, spray sphere lit with backlight so individual threads glow, grain 13%, organic vignette at corners.<br>Camera &amp; light B (stream overcast / blue-hour): 35mm, f/2.0, overcast sky 6800 K — cooler, more even illumination of the stream, green foliage rendered richer and deeper, child's skin in cooler natural tones, Fuji Velvia 50 cross-process simulation for saturated greens and slightly lifted shadow — spray sphere visible as crisp defined threads against neutral sky reflection in water, grain 10%.<br>References: Image 1 = product shape/color ONLY; Image 2 = spray geometry ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.  [베스트 레퍼: dryrun_r08_01.jpg, dryrun_r08_03.jpg, r03_06_1.jpg]<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist; People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; Aspect ratio: 4:3.<br>Output: 4:3. quality=low to explore, high for final.</div></div></div>
+  </div>
+  <div class="place-block">
+    <p class="pb-name">수영장·풀빌라</p>
+    <p class="pb-desc">물 받아둔 곳이면 <span class="em">리필 걱정 없이</span> 한참 놀아요</p>
+    <div class="ph pb-image"><div class="pmt-card"><div class="pmt-id">IMG10 · 4:3 · NB</div><div class="pmt-shot">풀빌라 셀프리필</div><div class="pmt-ko">리조트 야외 수영장 물가에서 아이가 직접 물 채우고 또 쏘고 또 채우는 장면이야. 엄마가 옆에서 물 채워주러 쪼그려 앉을 필요 없이, 그냥 끝도 없이 노는 아이 모습. 반짝이는 풀 수면 빛 반사가 배경에 가득하고, 아이 얼굴엔 물이 튀어 있어.</div><div class="pmt-en">Use: supporting scene for B6 place section — communicating zero-refill-stress, child playing freely at pool's edge without needing adult intervention.<br>Scene: a bright midday Korean resort or villa outdoor pool setting, late morning into noon. Turquoise water fills the lower third of the frame, surface catching dappled sunlight and scattering caustic light patterns across the wet pool deck tiles — cream-coloured large-format stone, slick with water. Background: out-of-focus blue pool lane ropes and a blurred cabana umbrella in pale cream, low density, no clutter. Foreground: pool edge, wet feet on tile.<br>Subject(HERO): a young Korean child (age 3-5), crouched at the pool's edge in a rash-guard swimsuit (pastel colours — soft yellow or mint), dipping the nozzle end of a pastel rose pink plastic water toy into the pool water to self-refill — caught mid-motion, completely absorbed, not posing. The child's cheeks are flushed and wet from play, hair plastered to forehead. Secondary: a young Korean mother in her 30s seated loosely on a pool lounger one step behind and to the right, visible from the waist down only — bare feet, a straw hat resting on her knee — conveying relaxed, hands-off supervision.<br>Camera &amp; light (A): 85mm f/2.0, natural overhead midday sun filtered through a palm-frond edge creating soft dappled highlights on the wet tile, no harsh shadows on the child's face. Kodak Portra 400 emulation — warm peach skin tones, gentle grain. Shallow depth of field: child in sharp focus, pool water surface in front softly blurred, background cabana dissolved into creamy bokeh.<br>Camera &amp; light (B): 85mm f/2.2, mid-morning sidelight from the left at about 30 degrees, slightly cooler white balance (5800 K) giving the pool water a crisper cyan and the wet tile a more silvery sheen. Same Portra 400 grain, same shallow DOF. The child's wet hair catches a rim highlight along the top of the head.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>References: Image 1 = product shape/color ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.  [베스트 레퍼: dryrun_r07_04.jpg, r07_05.jpg, r08_01_1.jpg]<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; Aspect ratio: 4:3.<br>Output: 4:3. quality=low to explore, high for final.</div></div></div>
+  </div>
+  <div class="place-block">
+    <p class="pb-name">목욕탕</p>
+    <p class="pb-desc">목욕 싫다던 아이가 물총 든다고 <span class="em">먼저 욕실로</span> 들어가요</p>
+    <div class="ph pb-image"><div class="pmt-card"><div class="pmt-id">IMG11 · 4:3 · NB</div><div class="pmt-shot">목욕 싫다던 아이가 욕실에서 물총</div><div class="pmt-ko">목욕 싫다고 발버둥치던 아이가 물총 하나 손에 쥐어줬더니 언제 그랬냐는 듯 욕실에서 혼자 신나게 놀고 있는 장면이야. 타일 벽에 물꽃이 튀고, 아이는 물에 흠뻑 젖었는데 표정은 완전 행복해. 엄마 입장에서 씻기기 싫어하던 아이가 스스로 욕조 안에서 시간 가는 줄 모르고 노는 그 순간을 포착했어.</div><div class="pmt-en">Use: B6 place section scene — showing the product works in an everyday indoor bathroom setting, turning bath-refusal into willing play.<br>Scene: a Korean apartment bathroom, evening bath time. The setting is modest but clean — white ceramic subway tiles on the wall, a small plastic step stool beside the bathtub, a white bathtub half-filled with shallow warm water. Ambient light: warm incandescent ceiling light overhead casting a soft yellow-white glow (3000 K), no harsh overhead shadows. A thin layer of water droplets clings to the tile wall where the spray just hit. Steam barely visible near the tub surface, giving the scene intimacy and warmth. Background is tight and contained — just the tub edge, the tiled wall, and a corner of a yellow rubber duck on the ledge, soft and out of focus.<br>Subject(HERO): a young Korean child (age 3-5) standing in the bathtub, knee-deep in shallow water, wearing only a diaper or swim nappy, completely soaked — hair dripping, cheeks rounded and gleaming. The child holds a pastel rose pink plastic water toy in both hands, arms extended forward, mid-spray — a wide, round dome of fine water threads blooming from the nozzle and hitting the tiled wall. The child's expression is pure open-mouthed delight, entirely caught up in the moment, unposed and candid.<br>Camera &amp; light (A): 35mm f/2.4 equivalent, camera angle slightly above the child's eye level looking down at roughly 20 degrees — intimate, close, parental POV. Warm 3000 K bathroom incandescent: front-fill from ceiling creates soft roundness on the child's face, rim light on wet hair from a small vanity strip light to camera-left. Fujifilm Pro 400H emulation — warm peachy shadows, gentle fine grain, natural wet-skin sheen without specular blowout.<br>Camera &amp; light (B): 35mm f/2.8, camera angle at the child's eye level straight-on. Bathroom window to camera-right provides a sliver of cooler daylight (5500 K) as side fill, contrasting warmly with the ceiling incandescent. Rembrandt-style triangle of light on the far cheek. Kodak Portra 400 grain — slightly more dramatic wet-tile shadow depth, water drops on tiles catch the side window highlight as small sparkling points.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Grip: the left hand wrapping fully around the WIDE clear transparent barrel (the long ~25cm thick cylinder body, NOT the thin inner plunger rod), the right hand pushing the flat bottom of the handle upward.<br>Spray: a big, lush, voluminous round dome of fine water threads spraying evenly in every direction from a single nozzle — a generous full sphere like an oversized dandelion head / large firework burst — NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist.<br>References: Image 1 = product shape/color ONLY; Image 2 = spray geometry ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.  [베스트 레퍼: r742359724_01.jpg, r745104277_01.jpg, r758902684_09.jpg]<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist; People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; Aspect ratio: 4:3.<br>Output: 4:3. quality=low to explore, high for final.</div></div></div>
+  </div>
+
+  <p class="transition-line" style="margin-top:56px;">낮에만 노는 게 아니에요</p>
+</section>
+<!-- /B6 -->
+
+
+<!-- B7 야간 보너스 -->
+<div class="overlay-wrap">
+  <div class="pmt-card"><div class="pmt-id">IMG12 · 4:5 · HF</div><div class="pmt-shot">가로등 아래 물꽃 실루엣</div><div class="pmt-ko">저녁 가로등이나 캠핑 랜턴 빛 아래에서 아이가 물총을 하늘을 향해 들어올리면 물줄기가 폭죽처럼 빛에 반사되어 퍼지는 장면이야. 아이는 역광으로 실루엣 처리돼서 얼굴이 안 보이는데, 물꽃 자체가 빛을 받아 황금빛으로 빛나. 영화 같은 야경 분위기에 엄마 마음이 뭉클해지는 그 한 컷.</div><div class="pmt-en">Use: cinematic hero image for B7 night section — evoking wonder and warmth of an outdoor evening, water spray lit by street or camping light, child silhouette as emotional anchor.<br>Scene: outdoor nighttime setting, a Korean neighbourhood park or family campground, blue hour — sky deep navy with the last faint warmth of dusk at the horizon. One dominant warm-orange street lamp (or a camping lantern on a low wooden table) positioned directly behind and slightly above the child, approximately 2 metres behind, creating strong back-rim lighting. The air is humid and warm — summer night. Background: soft bokeh of scattered warm lamp points in deep shadow, dark foliage shapes, zero readable text or signage. Ground: damp concrete or grass, catching a faint reflection of the lamp.<br>Subject(HERO): a young Korean child (age 3-5) standing upright, arms raised overhead holding a pastel rose pink plastic water toy pointed skyward at roughly 70 degrees — a full voluminous round dome of fine water threads erupting from the nozzle and catching the street lamp's warm orange light, each droplet lit individually like suspended amber sparks — the spray globe reads like a firework burst against the dark sky. The child's body reads almost entirely as a silhouette against the back-light, only the edges of the arms and hair catching a bright golden rim. The child's posture conveys abandon and joy — weight on one foot, slight lean-back.<br>Style: cinematic still, Cinestill 800T pushed one stop — the deep blue shadows shift toward navy-teal, the warm lamp halo blooms with natural halation (a soft orange-red glow around the light source), medium grain visible in the dark zones. No plastic skin, no over-smoothed faces. Shadow detail preserved, no crushed blacks.<br>Camera &amp; light (A): 50mm f/1.8, handheld with slight motion sharpness — sharp on the spray sphere, rim of child's silhouette crisp, background lamp bokeh circular and warm. Primary light: single warm-orange back-key lamp. Secondary fill: none — embrace the darkness. Cinestill 800T, 1/125 s equivalent, ISO 800 pushed.<br>Camera &amp; light (B): 35mm f/2.0, wider field shows more of the dark park environment — a second faint campfire glow to the far left edge provides a subtle warm fill on the back of the child's hand and the far edge of the water toy barrel. The sky reads slightly brighter — deep indigo rather than full black — preserving a gentle gradient from navy at top to deep teal at bottom. Same Cinestill 800T halation on the primary lamp.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Spray: a big, lush, voluminous round dome of fine water threads spraying evenly in every direction from a single nozzle — a generous full sphere like an oversized dandelion head / large firework burst — NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist.<br>References: Image 1 = product shape/color ONLY; Image 2 = spray geometry ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); NOT a jet, NOT a spiral/pinwheel, NOT a fan, NOT a chaotic splash, NOT a fine mist; People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; no plastic skin; no over-smoothed faces; no AI artifacts; no extra fingers; no text/watermark; Aspect ratio: 4:5.<br>Output: 4:5. quality=low to explore, high for final.</div></div>
+  <div class="overlay-text">
+    <span class="eyebrow-dark">야간 보너스</span>
+    <h2 class="h1-dark">낮엔 아이 손에<br>밤엔 사진 한 장이에요</h2>
+    <p class="mid-dark">어두운 밤, 조명을 받으면<br>물줄기가 <span style="color:#F9A8C8; font-weight:600;">예쁜 폭죽처럼 퍼져요~</span></p>
+  </div>
+</div>
+
+<section style="background:var(--deep); padding:0 60px 96px; text-align:center;">
+  <p style="font-family:'Pretendard',sans-serif; font-size:32px; line-height:1.85; color:rgba(255,210,225,0.78);">
+    캠핑 조명이나 가로등 아래서 쏘면<br>사방으로 흩어지는 물빛이 예쁘게 찍혀요<br>밤에는 아이와 함께 예쁜 추억사진 남겨보세요~
+  </p>
+  <p style="font-family:'Pretendard',sans-serif; font-size:30px; line-height:1.7; color:rgba(255,190,210,0.55); margin-top:44px;">
+    이게 전부 1+1이에요
+  </p>
+</section>
+<!-- /B7 -->
+
+
+<!-- B8 1+1 구성 -->
+<div class="ph b8-image">
+  <div class="pmt-card"><div class="pmt-id">IMG13 · 1:1 · NB·GPT</div><div class="pmt-shot">핑크+블루 플랫레이 두 자루</div><div class="pmt-ko">깨끗한 흰 배경에 핑크랑 블루 물총 두 자루를 나란히 눕혀서 위에서 내려다본 컷이야. 제품 색이랑 형태가 딱 정갈하게 보이는 게 포인트고, 그림자도 부드럽게 깔려야 해. 잡지 플랫레이처럼 깔끔하고 군더더기 없는 톤으로.</div><div class="pmt-en">Use: product identity flat-lay for the B8 composition section of a Korean mom-target detail page — the goal is clean, trustworthy, and pastel-warm.<br>Scene: a seamless warm-white paper backdrop on a tabletop, flooded with soft directional studio light from upper-left at roughly 5500 K. No props, no fabric texture, no shadows harder than a gentle feathered edge. The background reads as #F9F5F2 — cream-white, not pure white, so the pastel bodies have room to breathe. Mid-morning studio atmosphere, still and precise.<br>Subject(HERO): two slim pump water-toy wands laid side by side, both fully assembled and horizontal — one in pastel rose pink (#FDC8C8 handle cap, clear barrel with pink-tinted water), one in pastel sky blue (#BDE8F7 handle cap, clear barrel with light-blue-tinted water). Wands are parallel, nozzle ends pointing toward the camera left, handles to the right, spaced about 6 cm apart. The clear transparent syringe barrels are the visual anchor — you can see the inner plunger column and the tinted water pooled at the nozzle tip. Both wands lie flat on the surface; no overlap, no tilt.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Camera &amp; light: (A) overhead 90-degree top-down, 60mm macro equivalent, f/8 for full sharpness across both wands, daylight-balanced LED panel at 5500 K raking from upper-left at 45 degrees — soft shadow falls toward lower-right, feathered not hard, Kodak Ektar 100 film simulation giving warm but precise color rendition, fine grain barely visible. (B) slight 3/4 overhead angle, 75 mm, f/5.6, single large diffused softbox at 4200 K directly above center — shadows nearly eliminated, giving a floaty product-catalog feel, slight highlight specular on the clear barrel, no grain.<br>References: Image 1 = product shape/color ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); no text, no watermark, no logo; Aspect ratio: 1:1.<br>Output: 1:1. quality=low to explore, high for final.   (+GPT 대안 버전은 md 참조)</div></div>
+</div>
+
+<section class="b8-text">
+  <h2 class="h2-sec">핑크 하나, 블루 하나<br>두 자루가 와요</h2>
+  <p class="mid-head">물놀이는 같이해야 재미죠!<br>따로 살 필요 없이 <span class="em">1+1</span></p>
+  <p class="body-text"><span class="em">둘이 함께</span> 놀 때도,<br>번갈아 쓸 때도 좋아요<br>한 자루는 예비용으로<br>가방에 넣어둬도 되고요</p>
+
+  <div class="ph" style="min-height:560px; margin-top:48px; border-radius:12px;">
+    <div class="pmt-card"><div class="pmt-id">IMG14 · 4:3 · NB</div><div class="pmt-shot">아이 둘이 각자 한 자루씩 들고 환하게</div><div class="pmt-ko">두 아이가 핑크랑 블루 물총을 하나씩 나눠 들고 서로 바라보며 해맑게 웃는 장면이야. 여름 야외 햇살 아래서 자연스럽게 찍은 것처럼 생동감 있고, 두 제품 색이 동시에 예쁘게 보여야 해.</div><div class="pmt-en">Use: B8 composition section — two-product pairing lifestyle shot for a Korean mom-target detail page; the core message is joyful sharing, each child owning one color.<br>Scene: a sunny Korean public park on a warm summer afternoon, roughly 3–4 pm. Foreground: trimmed grass with dappled sunlight filtering through broad-leafed trees — bokeh leaves visible at frame edges. Background: an open splash-pad area with gently blurred bright greens and blue sky. Light is generous golden afternoon, warm 5000–5500 K, sun coming from camera-right at about 30 degrees above horizon, creating soft rim light on the children's hair. The scene feels spacious and airy — no fencing, no crowd.<br>Subject(HERO): two young Korean children (age 3–5), standing facing each other in a relaxed mid-action pose — each holding one water toy at chest height in both hands. Child 1 (left): girl, short summer dress in light coral, holding the pastel rose pink wand. Child 2 (right): boy, light blue cotton shorts and white tee, holding the pastel sky blue wand. Both children are caught mid-laugh, heads slightly tilted toward each other, mouths open in a natural giggle — unposed, candid joy. The two wand colors anchor the horizontal composition: pink at frame-left, blue at frame-right.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Grip: the left hand wrapping fully around the WIDE clear transparent barrel (the long ~25cm thick cylinder body, NOT the thin inner plunger rod), the right hand pushing the flat bottom of the handle upward.<br>Camera &amp; light: (A) 35mm, f/2.2, golden afternoon sun from camera-right raking across the scene, natural skin texture with slight warm cast, Kodak Portra 400 film simulation — fine grain, lifted shadows, true-to-life skin tones; children in sharp focus, background grasses softly blurred at f/2.2. (B) slightly overcast soft sky, 55mm, f/2.8, diffused ambient at 6000 K — cooler and softer overall, even exposure on both faces, no harsh shadows, gentle Fujifilm Pro 400H simulation with slightly lifted greens.<br>References: Image 1 = product shape/color ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.  [베스트 레퍼: r730687332_01.jpg, r742287890_02.jpg, r744298551_04.jpg]<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; Aspect ratio: 4:3.<br>Output: 4:3. quality=low to explore, high for final.</div></div>
+  </div>
+
+  <p class="transition-line">이미 써본 엄마들 얘기를 들어볼까요</p>
+</section>
+<!-- /B8 -->
+
+
+<div class="divider"></div>
+
+<!-- B9 증거(후기) -->
+<section class="b9-section">
+  <h2 class="h2-sec" style="margin-bottom:48px; text-align:center;">써본 엄마들이<br>이렇게 말해요</h2>
+
+  <div class="ph" style="min-height:700px; margin-bottom:56px; border-radius:12px;">
+    <div class="pmt-card"><div class="pmt-id">IMG15 · 1:1 · NB</div><div class="pmt-shot">엄마폰 UGC 실사용 candid</div><div class="pmt-ko">엄마가 핸드폰으로 대충 찍은 것 같은 진짜 같은 실사용 컷이야. 아이가 물총으로 신나게 노는 순간을 포착한 거고, 뷰티 필터 없고 약간 흔들리거나 기울어진 느낌도 괜찮아. 발행 전 비식별 처리 전제로 얼굴이 자연스럽게 나와도 돼.</div><div class="pmt-en">Use: B9 review section — UGC-style candid photo simulating a real mom's casual smartphone snap, used as a social-proof lifestyle shot on a Korean mom-target detail page.<br>Scene: a casual outdoor setting — a Korean apartment complex splash-pad or small neighborhood park, bright summer midday. Ground is wet concrete with small puddles reflecting the sky. Background has typical Korean apartment buildings softly out of focus, with laundry lines and balconies as a recognizable domestic backdrop. Light is direct overhead summer sun, 5800 K, high-contrast with sharp short shadows — the kind of bright flat light you get when you just pull out your phone and snap without thinking about composition. One edge of the frame is slightly burned out; the opposite corner is deeper shade.<br>Subject(HERO): a young Korean child (age 4–5), caught mid-motion — arms raised, pastel sky blue pump water toy in both hands, body slightly turned away from camera as the child twists to spray. The child is NOT posing — body is in mid-turn, one foot lifted, expression caught between concentration and glee, mouth open. The wand's clear barrel is gripped with both hands, nozzle angling upward-left. The frame is slightly tilted ~3 degrees clockwise — the way a quick phone snap looks. No beauty filter on skin; natural wet hair, drops of water on arms and shirt visible.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Camera &amp; light: (A) iPhone-style snapshot, 26mm equivalent wide, f/1.8 auto-mode, HDR on — slightly over-exposed highlights on the wet ground, natural skin tones with no filter, slight JPEG sharpening artifact at edges, no bokeh (everything from child to background in relative focus as phone cameras handle depth of field); warm 5800 K midday sun, shadow under the child's chin is short and crisp. (B) slightly shaded moment — the child stepped under a tree or overhang mid-play; phone camera at 26mm, auto-exposure, 4800 K softer ambient, face better exposed, background slightly brighter than subject — the backlit quick-snap look where the camera exposed for the background, giving the child a slight warm-rim halo from diffused sunlight behind.<br>References: Image 1 = product shape/color ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.  [베스트 레퍼: dryrun_r07_04.jpg, dryrun_r08_01.jpg, dryrun_r08_03.jpg]<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); People: "young Korean mother in her 30s and/or young Korean child (age 3-5)"; no text, no watermark, no logo; natural skin texture, no beauty filter; Aspect ratio: 1:1.<br>Output: 1:1. quality=low to explore, high for final.</div></div>
+  </div>
+
+  <!-- 발행 시 자사 실후기로 교체 -->
+  <div class="solo-quote">
+    <p class="quote-text">"풀빌라에서 저녁 준비하는데, 아이가 노느라 엄마를 덜 찾아서 너무너무 만족했어요"</p>
+    <div class="quote-foot"><span class="quote-stars">★★★★★</span><span class="quote-nick">콩콩이맘</span></div>
+  </div>
+  <div class="solo-quote">
+    <p class="quote-text">"아이도 혼자 잘 가지고 놀아요, 물 채우는 것도 혼자 해요"</p>
+    <div class="quote-foot"><span class="quote-stars">★★★★★</span><span class="quote-nick">하랑이맘</span></div>
+  </div>
+  <div class="solo-quote">
+    <p class="quote-text">"물놀이마다 챙겨갔는데, 둘 다 부서진 곳 없이 잘 놀고 가지고 왔어요"</p>
+    <div class="quote-foot"><span class="quote-stars">★★★★★</span><span class="quote-nick">튼튼이맘</span></div>
+  </div>
+  <div class="solo-quote">
+    <p class="quote-text">"목욕 귀찮아하던 애가 물총 한다고 신나서 욕실로 먼저 들어가더라고요"</p>
+    <div class="quote-foot"><span class="quote-stars">★★★★★</span><span class="quote-nick">별사랑맘</span></div>
+  </div>
+
+  <p class="transition-line" style="margin-top:44px; text-align:center;">이번 여름, 준비는 미리 해두는 게 좋아요</p>
+</section>
+<!-- /B9 -->
+
+
+<!-- B10 제안·CTA (가격 미표기) -->
+<section class="b10-section">
+  <h2 class="h2-deep">올여름, 지금 챙겨둬야<br>이번 여름에 써요</h2>
+
+  <div class="ph-dark" style="min-height:560px; margin-bottom:56px; border-radius:12px;">
+    <div class="pmt-card"><div class="pmt-id">IMG16 · 4:3 · NB·GPT</div><div class="pmt-shot">1+1 마무리 — 다크 배경 두 자루</div><div class="pmt-ko">상세페이지 맨 마지막에 오는 CTA 컷이야. 어두운 배경 위에 파스텔 핑크랑 파스텔 블루 물총 두 자루가 나란히 놓여 있고, '이 가격에 두 자루' 느낌이 확 와야 해. 자루 하나하나 투명 바디 안에 물이 채워진 디테일까지 보여주면서도 전체 구성이 깔끔하고 감성적으로 마무리되는 컷.</div><div class="pmt-en">Use: closing 1+1 product composition shot for a Korean mom-target detail page B10 CTA section — the emotional final beat that seals the purchase decision, two identical water toys in contrasting pastel colors side by side.<br>Scene: a deep charcoal studio environment, near-black matte background (#1A1A1A to near-black), no distracting props, no reflective floor; single directional rim light from upper-left at roughly 45 degrees grazes across the barrel surface, casting a very thin highlight edge on the translucent cylinder; ambient fill from a large diffused softbox camera-right at low intensity keeps the shadows from going full black; colour temperature approximately 4500K, slightly cooler than daylight to let the pastel colours pop against the dark field.<br>Subject (HERO): two slim pump water toys (plastic summer water toys) placed in close parallel, separated by about one barrel-width of negative space; LEFT toy is pastel rose pink — delicate, warm; RIGHT toy is pastel sky blue — soft, cool; both laid slightly diagonally from lower-left to upper-right at roughly 15 degrees to the frame edge; the clear transparent barrel of each toy catches the rim light, revealing water pooled near the nozzle tip, the inner plunger visible inside; the flat-bottom handle of each toy sits at the near edge of the frame toward camera; composition is centred and symmetric, both nozzle tips pointing upper-right out of frame, handles anchoring the lower-left quadrant; negative space above and below is generous to allow text overlay in post.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Camera &amp; light: (A) 85mm macro lens, f/4.0, ISO 200, single rim strobe upper-left 45 degrees, large octabox fill camera-right, colour temperature 4500K, Kodak Portra 400 grain simulation, very slight vignette at frame corners to deepen the dark field, tack-sharp product edges, fine water texture visible inside barrel; (B) 85mm macro lens, f/2.8, ISO 320, only one narrow rim strobe from directly left creating a stronger specular slash across both barrels, no fill — deeper shadows, more dramatic contrast between the pastel bodies and the near-black ground, Fujifilm Pro 400H grain, the colour difference between pink and blue reads as stronger graphic contrast.<br>References: Image 1 = product shape/color ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); no text, no watermark, no logo; Aspect ratio: 4:3.<br>Output: 4:3. quality=low to explore, high for final.   (+GPT 대안 버전은 md 참조)</div></div>
+  </div>
+
+  <p class="mid-deep">에이폼 분수물총 · 핑크+블루 1+1<br>40cm · 약 100g</p>
+  <p class="body-deep">로켓배송으로 내일 받아서,<br><span style="color:#F9A8C8; font-weight:600;">이번 주말 물놀이부터 바로</span> 써요<br>받아보고 마음에 안 들면 교환·반품도 돼요</p>
+
+  <div class="offer-card">
+    <p class="offer-headline">핑크 + 블루 1+1</p>
+    <p class="offer-desc">두 자루 구성<br>로켓배송 · 교환·반품 가능</p>
+    <p class="offer-note">40cm · 약 100g</p>
+  </div>
+
+  <div class="cta-block">
+    <span class="cta-text">지금 장바구니에 담아두세요</span>
+  </div>
+</section>
+<!-- /B10 -->
+
+
+<!-- B11 FAQ -->
+<section class="b11-section">
+  <h2 class="h2-sec" style="margin-bottom:44px;">자주 묻는 것들</h2>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <p class="faq-q">몇 살부터 쓸 수 있나요?</p>
+      <p class="faq-a">어린아이도 혼자 당길 수 있어요<br>처음 몇 번만 도와주면 곧 혼자 해요</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">전동 금지 물놀이장에서도 되나요?</p>
+      <p class="faq-a">돼요<br>안전한 물총이라 어느 장소에서든 쓸 수 있어요</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">물은 어떻게 채우나요?</p>
+      <p class="faq-a">분사되는 앞쪽을 물에 담그고 손잡이를 당겨 주기만 하면 돼요</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">색상을 고를 수 있나요?</p>
+      <p class="faq-a">핑크 하나 블루 하나, 두 자루 고정 구성이에요</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">쓰고 나서 보관은요?</p>
+      <p class="faq-a">물기를 빼고 그늘에 말려 두면 오래 쓸 수 있어요</p>
+    </div>
+  </div>
+</section>
+<!-- /B11 -->
+
+
+<div class="divider"></div>
+
+<!-- IMG17: 상품 정보 바로 위 — 제품 치수(사이즈) 컷 (필수) -->
+<div class="ph" style="min-height:600px;">
+  <div class="pmt-card"><div class="pmt-id">IMG17 · 1:1 · GPT·NB</div><div class="pmt-shot">치수 컷 — 40cm 실측 다이어그램</div><div class="pmt-ko">상품정보 섹션 바로 위에 들어가는 치수 확인 컷이야. 물총 한 자루를 정면 또는 측면으로 똑바로 눕혀놓고, 전체 길이 약 40cm라는 게 한눈에 파악되도록 구성해. 배경은 밝고 깔끔하게, 실측 느낌이 나야 하고 제품 비율이 실제랑 정확히 맞아야 해.</div><div class="pmt-en">Use: product dimension reference image for B12 product-info section of a Korean mom-target detail page — a precise, clinical flat-lay that communicates exact proportions so a buyer can visualise the toy next to their child's hand before purchasing.<br>Scene: clean bright white studio background, hex #F8F8F6 slightly warm off-white, perfectly flat overhead top-down view, no shadows except a faint soft drop-shadow at 5% opacity under the toy to lift it off the ground; lighting from a large diffused softbox directly overhead, completely even illumination with no directional hot-spots, colour temperature 5500K daylight-balanced; no props, no hands, no water.<br>Subject (HERO): a single pastel rose pink pump water toy (plastic summer water toy) laid horizontally centred in frame, oriented left-to-right; handle section at far left of frame, nozzle tip at far right; the full ~40cm length of the toy spans roughly 80% of the horizontal frame width, leaving equal margins left and right; a clean double-arrow dimension line runs along the bottom edge of the toy from nozzle tip to handle end, labelled '약 40cm' in a simple sans-serif annotation; a secondary shorter dimension line indicates the barrel diameter '약 3cm'; the clear transparent barrel body shows the internal plunger at rest with water pooled at the nozzle end; the pastel pink handle section has a smooth matte texture that photographs evenly under the flat overhead light; the nozzle tip is in sharp focus; overall rendering style is clinical product photography consistent with technical documentation — no lifestyle context, no narrative.<br>Product scale: slim pump wand ~40cm in use (about 35-45cm), clear transparent syringe-style barrel ~25cm long, only ~3cm thick (about two fingers, NOT wider than the forearm), flat-bottom handle ~8cm wide, realistically proportioned to the hands, inner plunger pushed about halfway up the barrel, water pooled toward the front nozzle tip, seen through the clear body.<br>Camera &amp; light: (A) top-down overhead, 50mm equivalent lens, f/11 for razor-sharp full-length depth of field, ISO 100, large diffused overhead softbox 5500K, zero fill shadow, pure white background; the toy surface is evenly lit with no specular bloom — barrel transparency is visible but not glaring; (B) same overhead angle but single large window-light from upper-left at 6000K (cool daylight), soft directional shadow running along the right edge of the toy at 30% opacity, giving faint three-dimensionality while maintaining the flat diagrammatic quality; both versions render the dimension annotations clearly readable.<br>References: Image 1 = product shape/color ONLY; Image 3 = setting &amp; mood ONLY. Do NOT copy reference pose, angle, wardrobe, background, or composition.<br>Constraints: clearly a harmless plastic summer water toy, NOT a real firearm; normal handheld size (slim, NOT oversized, NOT wider than the torso/forearm); no text, no watermark, no logo; Aspect ratio: 1:1.<br>Output: 1:1. quality=low to explore, high for final.   (+NB 대안 버전은 md 참조)</div></div>
+</div>
+
+<!-- B12 스펙·주의 -->
+<section class="b12-section">
+  <h2 class="b12-title">상품 정보</h2>
+  <div class="b12-inner">
+    <table class="spec-table">
+      <tbody>
+        <tr><th>품명</th><td>에이폼 분수물총</td></tr>
+        <tr><th>구성</th><td>핑크 1 + 블루 1 (1+1)</td></tr>
+        <tr><th>재질</th><td>플라스틱(ABS)</td></tr>
+        <tr><th>무게</th><td>약 100g (1자루 기준)</td></tr>
+        <tr><th>길이</th><td>약 40cm</td></tr>
+        <tr><th>사용연령</th><td>4세 이상 권장</td></tr>
+        <!-- 인증행: KC 인증서 실물 보유 확인 후 추가(현재 미보유 → 본문 노출 금지). 예) <tr><th>인증</th><td>KC 어린이제품 인증</td></tr> -->
+        <tr><th>원산지</th><td>중국</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:60px;">
+    <h2 class="b12-caution-title">주의사항</h2>
+    <ul class="caution-list">
+      <li>사람 얼굴·눈을 향해 직접 쏘지 마세요</li>
+      <li>사용 후 물기를 빼고 그늘에 말려 보관하세요</li>
+      <li>4세 이상 권장 제품이에요</li>
+    </ul>
+  </div>
+</section>
+<!-- /B12 -->
+
+</div><!-- /.page -->
+</body>
+</html>
