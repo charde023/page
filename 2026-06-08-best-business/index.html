@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>베스트 발표회 — 업무와 비즈니스 사례</title>
+<meta name="description" content="지피터스 22기 4주차 베스트 발표회에서 공유된 디자인 시스템, 멀티 에이전트 전략 리포트, 특허 검색봇, 서류 자동화, 블로그 파이프라인, 북극성 지표, AI 개발팀 하네스 사례를 발표자별로 정리했다.">
+<meta property="og:title" content="베스트 발표회 — 업무와 비즈니스 사례">
+<meta property="og:description" content="지피터스 22기 4주차 베스트 발표회에서 공유된 디자인 시스템, 멀티 에이전트 전략 리포트, 특허 검색봇, 서류 자동화, 블로그 파이프라인, 북극성 지표, AI 개발팀 하네스 사례를 발표자별로 정리했다.">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root {
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-soft: #f1f6ff;
+  --text: #1f2a44;
+  --text-soft: #5a6b87;
+  --text-muted: #8593ab;
+  --border: #e3e9f3;
+  --border-soft: #eef2f8;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-deep: #1d4ed8;
+  --shadow: 0 1px 2px rgba(31, 42, 68, 0.04), 0 8px 24px rgba(31, 42, 68, 0.06);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-feature-settings: 'tnum', 'ss03';
+  line-height: 1.75;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+h1, h2, h3, h4 {
+  line-height: 1.35;
+  margin-top: 2em;
+  margin-bottom: 0.65em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+h1 { font-size: 2rem; margin-top: 0; }
+h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.18rem; color: var(--accent-deep); }
+h4 { font-size: 1.02rem; }
+p { margin: 0.85em 0; color: var(--text); }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+strong { color: var(--accent-deep); font-weight: 700; }
+em { color: var(--text-soft); }
+blockquote {
+  margin: 1.2em 0;
+  padding: 0.9em 1.2em;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+  border-radius: 10px;
+  font-size: 0.97em;
+}
+blockquote p { margin: 0.35em 0; }
+blockquote strong { color: var(--accent-deep); }
+ol, ul { padding-left: 1.5em; }
+li { margin: 0.4em 0; }
+code {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.88em;
+  background: var(--surface-soft);
+  color: var(--accent-deep);
+  padding: 0.15em 0.45em;
+  border-radius: 5px;
+  border: 1px solid var(--border-soft);
+}
+pre {
+  background: var(--surface);
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  line-height: 1.6;
+  margin: 1.2em 0;
+}
+pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.92em;
+  color: var(--text);
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.2em 0;
+  font-size: 0.96em;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft);
+}
+tr:last-child td { border-bottom: 0; }
+th {
+  background: var(--surface-soft);
+  font-weight: 600;
+  color: var(--accent-deep);
+  border-bottom: 1px solid var(--border);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: 2.6em 0; }
+.header-banner {
+  margin: -32px -24px 36px;
+  padding: 34px 28px 28px;
+  background: linear-gradient(160deg, #e0ecff 0%, #f1f6ff 55%, #ffffff 100%);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.header-banner .eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-soft);
+  margin-bottom: 14px;
+}
+.header-banner h1 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.header-banner .sub {
+  margin-top: 10px;
+  color: var(--text-soft);
+  font-size: 0.97rem;
+}
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 1.5em 0 2.4em;
+  box-shadow: var(--shadow);
+}
+.toc h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.toc ol {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--text-soft);
+}
+.toc li { margin: 0.3em 0; }
+.toc a { color: var(--text); font-weight: 500; }
+.toc a:hover { color: var(--accent); }
+.footer {
+  margin-top: 4em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--border);
+  font-size: 0.88em;
+  color: var(--text-muted);
+  text-align: center;
+}
+.footer code { font-size: 0.92em; }
+@media (max-width: 640px) {
+  body {
+    padding: 20px 18px 72px;
+    font-size: 16px;
+    line-height: 1.72;
+  }
+  .header-banner {
+    margin: -20px -18px 24px;
+    padding: 24px 20px 20px;
+    border-radius: 0;
+  }
+  .header-banner .eyebrow { font-size: 0.72rem; }
+  .header-banner h1 { font-size: 1.5rem; }
+  .header-banner .sub { font-size: 0.9rem; }
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.08rem; }
+  h4 { font-size: 1rem; }
+  blockquote { padding: 0.8em 1em; font-size: 0.95em; }
+  pre { padding: 14px 16px; font-size: 0.9em; }
+  table { font-size: 0.92em; }
+  th, td { padding: 10px 11px; }
+  .toc { padding: 14px 18px; }
+  ol, ul { padding-left: 1.3em; }
+}
+@media (max-width: 380px) {
+  body { font-size: 15.5px; padding: 18px 16px 64px; }
+  .header-banner h1 { font-size: 1.35rem; }
+  table { font-size: 0.88em; }
+  th, td { padding: 8px 9px; }
+}
+</style>
+</head>
+<body>
+<header class="header-banner">
+  <span class="eyebrow">지피터스 22기 · 끌림 영상 스터디</span>
+  <h1>베스트 발표회 — 업무와 비즈니스 사례</h1>
+  <div class="sub">2026-06-08 라이브 강의 정리본</div>
+</header>
+
+<blockquote>
+<p>지피터스 22기 · 끌림 영상 스터디 · 2026-06-08 라이브
+원본: <code>2026-06-08 [지피터스] 22기 4주차 베스트 발표회 - 업무&amp;비즈니스.mp4</code> · 약 2시간 00분 13초
+진행: 여행가재인님 스터디원 · 발표: 이예솔(요가씨), 라면님, 윤대중, 유쌤님, 류웅수(이한님), 박상현, 박찬호</p>
+</blockquote>
+<hr>
+<h2 id="결론-tldr">결론 (TL;DR)</h2>
+<blockquote>
+<p><strong>이번 발표회의 핵심은 AI에게 문제를 던지는 것이 아니라 AI가 잘 읽을 수 있도록 구조, 인풋, 규칙을 먼저 설계해야 한다는 것이다. 퀄리티를 먼저 확보하고 자동화는 그 다음이다.</strong></p>
+</blockquote>
+<h3>발표별 핵심 비교</h3>
+<table>
+<thead>
+<tr>
+<th>발표자</th>
+<th>사례</th>
+<th>해결하려는 문제</th>
+<th>핵심 설계</th>
+<th>가져갈 메시지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>이예솔(요가씨)</td>
+<td>커스텀 플래너 사이트</td>
+<td>AI가 만드는 결과물이 일관성 없이 촌스럽다</td>
+<td>레퍼런스 수집→토큰 추출→디자인 시스템 정의 순서로 먼저 기준을 잡는다</td>
+<td>AI한테 "예쁘게"가 아니라 디자인 시스템을 먼저 정의해줘라</td>
+</tr>
+<tr>
+<td>라면님</td>
+<td>사업 전략 리포트 + 경쟁사 40곳 딥리서치</td>
+<td>품질이 들쭉날쭉하고 AI 베이비시팅에 시간이 더 든다</td>
+<td>조사 에이전트 4~6명 병렬 + 리뷰어 게이트 + 고객 퍼소나 크리틱 + 임원 토론 3라운드 + 레드팀</td>
+<td>퀄리티가 먼저고 자동화는 그 다음이다</td>
+</tr>
+<tr>
+<td>윤대중</td>
+<td>사전 특허 검색 + 아이디어 정리봇</td>
+<td>아이디어가 여러 AI 세션에 흩어져 있고 특허 검색이 피상적이다</td>
+<td>Google Patents(웹서치)+USPTO(REST API) 서브 에이전트 2명 병렬, 결과를 Notion MCP로 저장</td>
+<td>검색 방법(웹서치/API/MCP)을 사이트마다 먼저 확인해야 품질이 올라간다</td>
+</tr>
+<tr>
+<td>유쌤님</td>
+<td>방과 후 서류 자동화</td>
+<td>한글 파일이 많아 자동화가 어렵고, 에이전트를 너무 많이 만들어 관리가 안 된다</td>
+<td>MD 파일로 변환→HWPX 재생성, 총괄쌤+조사쌤+창작쌤+검토쌤 팀 구성</td>
+<td>하나를 야무지게 테스트하고 나서 다음 것을 더해가야 한다</td>
+</tr>
+<tr>
+<td>류웅수(이한님)</td>
+<td>네이버 블로그 자동화 파이프라인</td>
+<td>블로그 작성·이미지·상위 분석이 각각 따로여서 번거롭다</td>
+<td>9단계 역할 분리(키워드→검색분석→근거수집→본문→품질검사→이미지→HTML→업로드), 텔레그램 키워드 알림</td>
+<td>역할을 작게 나눠야 문제 지점을 찾고 재사용이 가능하다</td>
+</tr>
+<tr>
+<td>박상현</td>
+<td>북극성 지표 단순화</td>
+<td>3가지 복합 지표를 6일 동안 하루도 못 달성한다</td>
+<td>지표를 "매일 블로그 포스팅 1개"로 단순화하고 AI 활용은 사이드 프로젝트로 재정의</td>
+<td>북극성 지표는 측정 가능하고 단 하나여야 의사결정 필터가 된다</td>
+</tr>
+<tr>
+<td>박찬호</td>
+<td>Claude Code 가상 개발팀 하네스</td>
+<td>세션마다 컨벤션을 다시 설명하고 AI 코드를 믿지 못해 이중으로 검수한다</td>
+<td>1워크스페이스 1프로젝트, 번호형 폴더, CLAUDE.md 고정 방침, 6인 에이전트 분업, Feature Workflow 승인 게이트</td>
+<td>구조를 먼저 만들면 AI 능력이 아니라 운영 방식이 품질을 결정한다</td>
+</tr>
+</tbody>
+</table>
+<h3>챙겨야 할 7가지</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>메시지</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>기준 먼저</td>
+<td>AI한테 "예쁘게"나 "잘 써줘" 전에 디자인 시스템, 인풋 문서, 컨벤션 파일을 먼저 만들어야 결과물이 일관된다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>퀄리티 우선</td>
+<td>자동화를 욕심내기 전에 수동으로 한 번 잘 만들어 두어야 반자동화가 그 수준을 유지할 수 있다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>검증 게이트</td>
+<td>리뷰어 에이전트, 고객 퍼소나 크리틱, 승인 게이트처럼 AI 결과를 중간에 한 번 막는 구조가 품질을 잡아준다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>역할 분리</td>
+<td>파이프라인을 하나로 묶지 말고 단계별로 쪼개야 문제가 터졌을 때 위치를 찾고 모듈을 재사용할 수 있다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>하나씩</td>
+<td>에이전트를 한꺼번에 여러 개 만들지 말고 하나를 야무지게 테스트하고 난 뒤 다음 것을 더해야 시스템이 살아있다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>지표 단수</td>
+<td>북극성 지표는 단 하나의 측정 가능한 숫자여야 의사결정 필터가 된다. 복합 지표는 필터가 아니라 스트레스가 된다.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>구조가 능력</td>
+<td>CLAUDE.md, 번호형 폴더, 워크스페이스 분리처럼 운영 구조를 먼저 갖추면 모델 능력이 그대로 발휘된다.</td>
+</tr>
+</tbody>
+</table>
+<h3>사례를 관통하는 설계 원리</h3>
+<table>
+<thead>
+<tr>
+<th>원리</th>
+<th>발표에서 보인 모습</th>
+<th>실무 적용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>인풋 설계</td>
+<td>디자인 시스템 정의, 마크다운 컨텍스트 주입, CLAUDE.md 고정 방침</td>
+<td>AI에게 잘 던지려면 내가 먼저 기준을 문서로 만들어야 한다</td>
+</tr>
+<tr>
+<td>검증 삽입</td>
+<td>리뷰어 게이트, 퍼소나 크리틱, 커밋 전 3인 병렬 검수, 단계별 승인</td>
+<td>자동화 흐름 중간에 한 번 막는 지점을 의도적으로 설계한다</td>
+</tr>
+<tr>
+<td>분리 설계</td>
+<td>9단계 스킬 분리, 1워크스페이스 1프로젝트, 번호형 폴더 아카이브</td>
+<td>연관된 것을 한 덩어리로 두면 고치는 범위가 통제 불능이 된다</td>
+</tr>
+<tr>
+<td>목표 단수</td>
+<td>북극성 지표 → 블로그 1개, 에이전트 팀 → 수십 개를 3~4명으로</td>
+<td>목표가 하나일 때 무엇을 먼저 할지 판단이 쉬워진다</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="강의는-어떤-내용이었나">강의는 어떤 내용이었나</h2>
+<p>지피터스 22기 4주차 베스트 발표회 중 업무와 비즈니스 사례를 모은 세션이다. 진행자는 각 스터디에서 나온 우수 발표를 12분 내외로 소개하도록 안내했고, 발표자들은 실제로 구축한 파이프라인, 에이전트 시스템, 운영 방법론, 목표 관리 방식을 공유했다.</p>
+<p>세션의 공통점은 "무엇을 만들었는가"보다 "어떻게 구조를 잡았는가"에 있었다. 디자인 시스템으로 AI 결과물 일관성을 잡고, 멀티 에이전트로 전략 리포트 품질을 높이고, 역할 분리로 파이프라인을 유지보수 가능하게 하고, 지표 단순화로 집중력을 회복하고, 하네스 설계로 AI를 팀처럼 운영한 사례들이 흐름을 이었다.</p>
+<table>
+<thead>
+<tr>
+<th>순서</th>
+<th>발표자</th>
+<th>주요 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>오프닝</td>
+<td>진행자</td>
+<td>베스트 발표회 안내, 발표자 소개, 15분 타임 규칙 안내</td>
+</tr>
+<tr>
+<td>1</td>
+<td>이예솔(요가씨)</td>
+<td>커스텀 플래너 사이트에서 디자인 시스템으로 밤티(촌스러움)를 없앤 사례</td>
+</tr>
+<tr>
+<td>2</td>
+<td>라면님</td>
+<td>B2B SaaS 사업 전략 리포트를 멀티 에이전트 반자동화로 만든 사례</td>
+</tr>
+<tr>
+<td>3</td>
+<td>윤대중</td>
+<td>서브 에이전트 2명으로 Google Patents·USPTO 병렬 검색하는 특허봇 사례</td>
+</tr>
+<tr>
+<td>4</td>
+<td>유쌤님</td>
+<td>방과 후 수업 서류 자동화와 유로그 에이전트 팀 구성 사례</td>
+</tr>
+<tr>
+<td>5</td>
+<td>류웅수(이한님)</td>
+<td>부동산 블로그 방문자 900명→13,000명으로 늘린 9단계 자동화 파이프라인</td>
+</tr>
+<tr>
+<td>6</td>
+<td>박상현</td>
+<td>북극성 지표 단순화로 6일 0달성→연속 달성으로 바뀐 목표 관리 사례</td>
+</tr>
+<tr>
+<td>7</td>
+<td>박찬호</td>
+<td>Claude Code를 1워크스페이스 1프로젝트 + 6인 에이전트 팀처럼 운영하는 하네스</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="0-한눈에-보는-업무와-비즈니스-사례">0. 한눈에 보는 업무와 비즈니스 사례</h2>
+<ol>
+<li>문제를 좁힌다. 밤티가 나는 이유, 경쟁사 분석의 들쭉날쭉함, 서류 자동화의 한글 파일 오류, 블로그 번거로움처럼 각 발표는 아주 구체적인 불편에서 시작했다.</li>
+<li>기준을 먼저 만든다. AI한테 결과를 요청하기 전에 디자인 시스템, 마크다운 컨텍스트, 고객 퍼소나, CLAUDE.md처럼 AI가 읽을 수 있는 기준 문서를 준비했다.</li>
+<li>역할을 나눈다. 조사·리뷰·퍼소나·임원 토론처럼 에이전트를 분리하거나, 키워드→본문→품질검사→이미지처럼 파이프라인 단계를 쪼갰다.</li>
+<li>검증을 중간에 삽입한다. 리뷰어 게이트, 고객 크리틱, 커밋 전 3인 검수, 단계별 승인처럼 자동화 결과를 그대로 믿지 않는 구조를 설계했다.</li>
+<li>하나씩 완성한다. 에이전트를 한꺼번에 많이 만들어서 껍데기만 남긴 경험들이 공통적으로 등장했고, 하나를 야무지게 한 뒤 다음 것을 더하는 방향으로 수렴됐다.</li>
+<li>지표를 단 하나로 만든다. 복합 목표는 의사결정 필터가 되지 못하고, 단순한 지표 하나가 집중력을 만들었다.</li>
+<li>구조가 결과를 결정한다. 워크스페이스 분리, 번호형 폴더, CLAUDE.md 고정 방침처럼 운영 인프라를 먼저 갖추면 AI 능력이 그대로 발휘된다.</li>
+</ol>
+<hr>
+<h2 id="1-이예솔요가씨-디자인-시스템으로-밤티-없애기">1. 이예솔(요가씨) — 디자인 시스템으로 "밤티" 없애기</h2>
+<p>이예솔(요가씨) 발표의 출발점은 프리랜서 콘텐츠 디자이너로서 AI가 만드는 결과물이 일관성 없이 촌스럽다는 문제였다. 당근 스터디에서 커스텀 플래너 사이트를 만들면서 Claude Code를 썼는데, 처음 결과물이 "밤티(촌스러움)"였다. AI한테 "예쁘게, 깔끔하게, 심플하게"라고 해도 자신이 생각하는 심플함과 달랐고, 같은 프롬프트를 넣어도 오늘과 내일의 색깔과 폰트가 달랐다.</p>
+<table>
+<thead>
+<tr>
+<th>문제</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>결과가 매번 달라 일관성이 없다</td>
+<td>AI한테 주관적 형용사만 줬다 (예쁘게, 심플하게)</td>
+<td>레퍼런스 링크로 디자인 시스템을 AI가 직접 정의하게 한다</td>
+</tr>
+<tr>
+<td>브랜드 아이덴티티가 없다</td>
+<td>방향성이 없으니 수정할 때마다 새로운 결과가 나온다</td>
+<td>메인 타이틀·서브 타이틀·버튼·색상 토큰을 한 번만 잡는다</td>
+</tr>
+<tr>
+<td>고쳐달라고 하면 또 밤티 나온다</td>
+<td>기준 없이 반복 수정하면 맥락 없이 변한다</td>
+<td>시스템 정의 후에는 그 위계 안에서만 수정 요청한다</td>
+</tr>
+</tbody>
+</table>
+<p>깨달음은 "AI의 문제가 아니라 내가 기준을 안 준 것"이었다. 접근 방식을 바꿔 디자인 에이전시 대표가 주니어 온보딩하듯이, 레퍼런스를 링크로 주고 AI가 직접 디자인 시스템을 정의하게 했다. 그 시스템 위계 안에서만 수정을 요청하자 결과물이 일관되게 바뀌었다.</p>
+<blockquote>
+<p>어느 순간 이게 AI의 문제가 아니라 내가 기준을 안 준 게 문제였구나라는 걸 깨닫게 됐다.</p>
+</blockquote>
+<p><strong>커스텀 플래너 결과물 구성</strong></p>
+<p>위클리·먼슬리·24시간 플래너를 조합해 커스텀한 뒤 PDF 다운로드, Notion 링크 연동, 인쇄 배송까지 가능한 사이트를 구축했다. 과금 구조는 500~1000원 기본, 커스텀 추가 시 과금 방식으로 설계했다.</p>
+<p>도구는 Claude 100%, 특히 Claude Code로 사이트 전체를 만들었다. 리서치는 Gemini, 기획도 Gemini, 디자인 시스템 기반 카드뉴스는 Claude, 최종 Figma 휴먼 터치로 마무리하는 분업 방식을 사용했다.</p>
+<p><strong>회고</strong>: 비개발자·디자이너도 바이브 코딩으로 서비스를 만들 수 있는 시대가 왔지만, 상용화까지는 넘어야 할 산이 많다. 디자이너는 AI 시대에 사용자 경험 감각을 더 발전시켜야 한다고 마무리했다.</p>
+<hr>
+<h2 id="2-라면님-멀티-에이전트-반자동화로-사업-전략-리포트-만들기">2. 라면님 — 멀티 에이전트 반자동화로 사업 전략 리포트 만들기</h2>
+<p>라면님 발표는 문서 자동화 스터디에서 B2B SaaS 사업 전략 리포트와 경쟁사 40곳 딥리서치를 멀티 에이전트 반자동화로 만든 사례였다. 스터디 디벨로퍼님이 강조한 한마디가 출발점이었다.</p>
+<blockquote>
+<p>퀄리티가 먼저고 자동화는 그 다음이다.</p>
+</blockquote>
+<p><strong>배경</strong></p>
+<p>사업 전략을 새로 수립해야 하는 상황에서 국내 경쟁사 현황, 해외 참고 사례, 통합 경쟁 분석, 전략 리포트 작성이 필요했다. 그때그때 프롬프팅으로 하면 품질이 들쭉날쭉하고, AI와 내가 보는 시장 잣대가 달라 피드백을 줄수록 베이비시팅 모드가 됐다.</p>
+<p><strong>핵심 설계</strong></p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>구성</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>컨텍스트 주입</td>
+<td>회사 소개서·서비스 소개서·경쟁사 리스트·과제 목록·시장 인사이트·고객 퍼소나 → 마크다운 변환</td>
+<td>AI가 이해하기 좋은 형태로 워크스페이스에 적재</td>
+</tr>
+<tr>
+<td>조사 에이전트</td>
+<td>4~6명 병렬</td>
+<td>경쟁사·해외 사례·재무·고용 데이터 동시 수집</td>
+</tr>
+<tr>
+<td>리뷰어 게이트</td>
+<td>사실 검증 전담 에이전트</td>
+<td>조사 결과의 사실 여부를 별도 검증</td>
+</tr>
+<tr>
+<td>고객 퍼소나 크리틱</td>
+<td>마케팅용 퍼소나 파일 → 에이전트로 탑재</td>
+<td>결론에 고객 입장의 찬반 크리틱</td>
+</tr>
+<tr>
+<td>임원 토론</td>
+<td>CEO·COO·CTO·CFO·CMO·레드팀</td>
+<td>3라운드 입장·반박·수렴 후 오케스트레이터가 종합</td>
+</tr>
+<tr>
+<td>리포트</td>
+<td>오케스트레이터</td>
+<td>전략 리포트만 최종 산출, 세부 과정은 열어볼 수 있게</td>
+</tr>
+</tbody>
+</table>
+<p>Claude Code의 다이나믹 워크플로우 기능을 활용해 병렬 과정이 포함된 전체 흐름을 한 번에 실행했다. <code>/effort ultra</code> 또는 "워크플로우로 구현해줘" 한 마디로 작동.</p>
+<p>유료 기업 정보 사이트에서 재무·고용 데이터를 캡처해 이미지로 직접 투입하는 번거로움도 있었지만, 덕분에 뉴스 기사만으로는 보이지 않던 인사이트(대부분 자본 잠식 임박)가 나왔다.</p>
+<blockquote>
+<p>AI가 자기 합리화 경향이 굉장히 많기 때문에 이런 식의 제3자적 시선으로 검증하는 게이트를 두면 결과물 품질이 좀 올라간다.</p>
+</blockquote>
+<p><strong>Obsidian 워크스페이스 관리</strong></p>
+<p>결과물이 Obsidian에 흩어지는 문제를 스터디장님 원리를 적용해 해결했다. 체인지 로그 없이 정본만 바꾸다가 좋은 버전을 잃는 경험 후, 정본을 유지하되 버전 폴더를 하위에 따로 만들어 이력 관리를 추가했다.</p>
+<p><strong>팀 공유 결과</strong>: 방법론을 설명하니 팀원들이 "와우"로 반응. 경영진 리뷰는 진짜 게이트라며 별도로 준비 중.</p>
+<hr>
+<h2 id="3-윤대중-claude-서브-에이전트를-이용한-사전-특허-검색-시스템">3. 윤대중 — Claude 서브 에이전트를 이용한 사전 특허 검색 시스템</h2>
+<p>윤대중 발표는 인터페이스 개발 스터디에서 서브 에이전트 두 명을 활용해 특허 검색 품질을 높이고, 흩어진 AI 채팅 아이디어를 Notion으로 한 곳에 모은 사례였다.</p>
+<p>동기는 두 가지였다. 허세임님이 소개한 서브 에이전트를 써보고 싶었고, 여러 AI 세션에 흩어진 아이디어를 정리할 방법이 필요했다.</p>
+<p><strong>특허 검색 플로우</strong></p>
+<pre><code>사용자 채팅 내용(아이디어)
+  → 메인 에이전트 (키워드 추출·파싱)
+    → 서브 에이전트 1 (Google Patents, 웹서치)
+    → 서브 에이전트 2 (USPTO, REST API) ← 병렬
+  → 조차 검증 + 아이디어 유사도 판단
+  → 결과 보고 (→ 회사 제출 또는 루프 반복)
+</code></pre>
+<p><strong>검색 방법 3가지</strong></p>
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>설명</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>웹서치</td>
+<td>AI가 일반 웹처럼 검색</td>
+<td>설정 없이 기본 동작. 상위 결과만 가져와 피상적</td>
+</tr>
+<tr>
+<td>REST API</td>
+<td>JSON 양식으로 정확한 요청</td>
+<td>공식 데이터 쿼리. 인증 토큰(Auth) 필요</td>
+</tr>
+<tr>
+<td>MCP 서버</td>
+<td>AI가 툴만 호출, MCP가 검색</td>
+<td>가장 정확하지만 특허 사이트 4곳 모두 MCP 미지원</td>
+</tr>
+</tbody>
+</table>
+<p>Google Patents는 API 없이 웹서치만 지원, USPTO는 REST API 제공 → 서브 에이전트 1은 Google Patents(웹서치), 서브 에이전트 2는 USPTO(API)로 분담.</p>
+<blockquote>
+<p>서브 에이전트는 동일한 메모리와 리소스를 로지컬하게만 나눠 쓰는 방식이라, 완벽한 레드팀을 만들려면 물리적 분리가 필요할 수 있다.</p>
+</blockquote>
+<p><strong>서브 에이전트 설정 팁</strong></p>
+<p>설정 JSON 파일에 서브 에이전트 쓰기 권한을 명시해야 작업 결과 파일이 생성된다. 서브 에이전트가 돌 때 터미널 창이 파란색으로 변하며, 각 불릿에서 에이전트별 조사 내용을 확인할 수 있다.</p>
+<p><strong>아이디어 통합 — Notion MCP</strong></p>
+<p>Claude Code, 폰 앱, 데스크탑 모두에 Notion MCP를 연결해 "Notion에 저장해줘" 한 마디로 어디서든 채팅 내용을 Notion으로 수렴했다. Notion이 Google Drive보다 토큰 효율이 좋다는 노하우도 얻었다.</p>
+<hr>
+<h2 id="4-유쌤님-에이전트로-방과-후-서류-자동화">4. 유쌤님 — 에이전트로 방과 후 서류 자동화</h2>
+<p>유쌤님 발표는 AI 온보딩 스터디에서 방과 후 수업 서류 자동화를 구축하며 겪은 시행착오와 "하나씩 야무지게"라는 교훈을 공유한 사례였다.</p>
+<p><strong>서류 자동화 진화 과정</strong></p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>방법</th>
+<th>문제</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>앱 스크립트</td>
+<td>로컬 앱</td>
+<td>한글 파일 에러, 이상한 글자, 양식 깨짐</td>
+</tr>
+<tr>
+<td>엑셀 변환 + CLI</td>
+<td>엑셀 파일로 전환 후 명령어 실행</td>
+<td>매번 복사·붙여넣기가 귀찮다</td>
+</tr>
+<tr>
+<td>Python + hwpx</td>
+<td>hwpx 라이브러리 활용</td>
+<td>잘 안 되고 귀찮음 지속</td>
+</tr>
+<tr>
+<td><strong>MD 파일 → HWPX</strong></td>
+<td>마크다운으로 작성 후 HWPX 변환</td>
+<td><strong>성공. 다른 발표자 사례에서 힌트 얻음</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>와, 이런 거를 이래서 같은 여러 명이 공유를 하고 스터디를 하는 것이 중요하구나라는 걸 다시 한번 느끼는 순간이었다.</p>
+</blockquote>
+<p><strong>유로그(유쌤님 업무 로그) — 일일 기록봇</strong></p>
+<p>스터디장님의 라이프 위키에서 힌트를 얻어 자신에게 맞는 업무 일지 봇을 만들었다. 텔레그램에서 <code>/유로그</code> 를 치면 세 가지 질문(오늘 남기고 싶은 것, 업무 중 최고, 수업 중 남기고 싶은 것)이 오고, 답변을 MD 파일로 저장, 한 달 치가 쌓이면 월간 블로그 글을 자동 생성한다.</p>
+<p><strong>멀티 에이전트 팀 구성 — 그리고 시행착오</strong></p>
+<p>총괄쌤·조사쌤·창작쌤·검토쌤으로 에이전트 팀을 구성했지만, 출석부 하나 요청했더니 교육청 전국 양식 조사까지 하는 오버스펙이 발생. 에이전트를 너무 많이 만들어 관리가 안 되는 경험도 반복됐다.</p>
+<p>진행자 코멘트: 빌더조시님도 10~100개 에이전트를 쓰다가 헤르메스 하나로 돌아왔다. 개인에게는 도메인별 2~3개면 충분하다.</p>
+<hr>
+<h2 id="5-류웅수이한님-네이버-블로그-방문자-900명13000명-자동화-파이프라인">5. 류웅수(이한님) — 네이버 블로그 방문자 900명→13,000명 자동화 파이프라인</h2>
+<p>류웅수 발표는 스타트업 실험실 스터디에서 부동산 분야 네이버 블로그를 자동화해 방문자를 약 13배 늘린 9단계 파이프라인 사례였다.</p>
+<p>처음에는 ChatGPT에 "주제로 블로그 써줘"로 시작했지만, 이미지 따로·업로드 따로·시장조사 따로인 번거로움에 한 번에 돌아가는 파이프라인을 만들게 됐다.</p>
+<p><strong>핵심 설계 — 역할 단계별 분리</strong></p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>역할</th>
+<th>핵심 포인트</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. 키워드 알림</td>
+<td>매일 새벽 6시 자동 실행</td>
+<td>상승도·블루오션·트렌드·내 블로그 조회수를 종합해 텔레그램으로 발송</td>
+</tr>
+<tr>
+<td>2. 검색 분석</td>
+<td>네이버 상위 글 분석</td>
+<td>제목·도입·본문 구조를 보고 내 글이 더 잘 되도록 설계</td>
+</tr>
+<tr>
+<td>3. 근거 수집</td>
+<td>호갱노노·KB 실거래가 + 법령 MCP</td>
+<td>부동산 글에 허황된 자료 없이 실제 데이터 삽입</td>
+</tr>
+<tr>
+<td>4. 본문 작성</td>
+<td>AI가 자연스러운 톤으로 작성</td>
+<td>"AI 같은 글 쓰지 마" 등 반복 다듬기로 저품질 방지</td>
+</tr>
+<tr>
+<td>5. 품질 검사</td>
+<td>AI 관용 표현 필터링</td>
+<td>AI 자주 쓰는 단어·요약체·잘난 척 표현 체크</td>
+</tr>
+<tr>
+<td>6. 이미지 생성</td>
+<td>Codex(기본) → Gemini API(폴백)</td>
+<td>바나나엑스 [?banana.x] 프롬프트 30개 저장, 글 톤에 맞는 것 자동 선택</td>
+</tr>
+<tr>
+<td>7. 이미지 삽입</td>
+<td>챕터별 1장씩, 같은 톤으로 통일</td>
+<td>장당 24원, 글 3개/일 기준 월 약 2만원</td>
+</tr>
+<tr>
+<td>8. HTML 변환</td>
+<td>네이버 복붙 그대로 적용</td>
+<td>HTML 그대로 복사하면 네이버에 디자인이 유지됨</td>
+</tr>
+<tr>
+<td>9. 업로드</td>
+<td>사람이 직접 (1분)</td>
+<td>네이버 자동 발행 시 밴 위험, 검수 후 수동 업로드</td>
+</tr>
+</tbody>
+</table>
+<p><strong>결과</strong></p>
+<p>3월부터 시작해 5월에 월 13,000명 달성. 원래는 2년 방치 후 월 900~1000명이었다.</p>
+<blockquote>
+<p>AI가 썼냐 안 썼냐가 중요한 게 아니고, 사용자가 읽었을 때 읽을 만한 좋은 글이냐 아니냐가 사실 중요한 거다.</p>
+</blockquote>
+<p><strong>Q&amp;A 팁</strong></p>
+<ul>
+<li>이미지 오류 시: Codex 2~3회 재시도 → 실패 시 Gemini API 폴백 설정</li>
+<li>다른 블로그 플랫폼 발행: 같은 글을 네이버·티스토리·구글에 동시 올리면 검색 로직에 중복으로 걸려 순위 하락 → 플랫폼 하나만 집중</li>
+<li>다양한 주제 운영: 발표자는 개인 창고 개념으로 운영해 관심사를 모두 넣었다</li>
+</ul>
+<hr>
+<h2 id="6-박상현-북극성-지표-단순화로-생산성-회복">6. 박상현 — 북극성 지표 단순화로 생산성 회복</h2>
+<p>박상현 발표는 인생 OS 스터디에서 북극성 지표 설정을 잘못해 6일 동안 하루도 달성 못 하다가, 지표를 단순화해 연속 달성으로 바뀐 목표 관리 사례였다. AI 활용 기술 사례가 아니라 목표 설정 방법론 공유라고 미리 밝혔다.</p>
+<p><strong>북극성 지표란</strong></p>
+<p>4주 동안 나를 끌고 갈 단 하나의 측정 가능한 숫자. 이것이 기준 필터가 되어 "이 업무를 할지 말지"를 결정하는 도구가 된다.</p>
+<p><strong>첫 번째 지표 → 실패</strong></p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>지표 구성</td>
+<td>장기 프로젝트 투두 + 단기 업무 투두 + 블로그 포스팅 1개 = 세 가지 모두 완료</td>
+</tr>
+<tr>
+<td>운영 결과</td>
+<td>6일 중 하루도 달성 못 함</td>
+</tr>
+<tr>
+<td>실패 원인</td>
+<td>지표가 복잡해 의사결정 필터 기능을 못 하고, 어떤 업무부터 해야 할지 알 수 없었다</td>
+</tr>
+</tbody>
+</table>
+<p><strong>두 번째 지표 → 성공</strong></p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>지표</td>
+<td>매일 블로그 포스팅 1개</td>
+</tr>
+<tr>
+<td>AI 활용</td>
+<td>사이드 프로젝트(보조 도구)로 재정의, 주 목적 아님</td>
+</tr>
+<tr>
+<td>운영 결과</td>
+<td>5월 31일부터 6월 6일까지 대부분 달성</td>
+</tr>
+<tr>
+<td>비결</td>
+<td>시간이 확보되면 무조건 블로그 먼저. 다른 AI 활용법 공부는 포커싱 분산 요인으로 보고 의도적으로 거름</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>시간이 한정되어 있기 때문에 제 목적하고 벗어난 AI 활용법 공부는 오히려 좀 시간 낭비 또는 포커싱이 좀 덜 되는 느낌이 있어서, 이거는 오히려 좀 주의해야 되지 않나라고 느꼈다.</p>
+</blockquote>
+<p>진행자 코멘트: AI가 다양한 분야에서 새로운 게 계속 나오다 보니 포모(FOMO)가 심하다. 목표 설정을 명확히 하고 목표에 맞는 것만 딱 학습하고, 다른 것은 놓을 수 있는 능력도 중요하다.</p>
+<hr>
+<h2 id="7-박찬호-claude-code를-한-팀처럼-일하게-만든-후기">7. 박찬호 — Claude Code를 한 팀처럼 일하게 만든 후기</h2>
+<p>박찬호 발표는 클코 끝판왕 스터디에서 Claude Code를 1대1 챗봇 방식에서 벗어나 기획·설계·개발·리뷰·QA까지 흐르는 가상 개발팀 하네스로 진화시킨 사례였다.</p>
+<p><strong>챗봇 방식의 4가지 한계</strong></p>
+<table>
+<thead>
+<tr>
+<th>한계</th>
+<th>증상</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>반복 설명 피로</td>
+<td>새 세션마다 코드 컨벤션·디자인 규칙을 처음부터 설명해야 함</td>
+</tr>
+<tr>
+<td>컨텍스트 유실</td>
+<td>대화가 길어지면 앞 약속을 잊고 엉뚱한 답변</td>
+</tr>
+<tr>
+<td>일관성 없는 커밋</td>
+<td>Git 히스토리 스타일 무시, 사람이 다시 수정</td>
+</tr>
+<tr>
+<td>검수 이중화</td>
+<td>AI 코드를 믿지 못해 사람이 일일이 검수 → 리소스 이중 투입</td>
+</tr>
+</tbody>
+</table>
+<p><strong>핵심 원칙 — 1워크스페이스 1프로젝트</strong></p>
+<p>하나의 폴더에 여러 프로젝트를 밀어넣으면 컨텍스트가 꼬인다. 워크스페이스 하나가 프로젝트 하나만 책임지게 분리하자 정확도가 수직 상승했다.</p>
+<p>번호형 폴더 구조:
+- 앞 번호: 마이그레이션 가이드, 시스템 방침 (에이전트가 먼저 읽어야 할 것)
+- 90번대: 낡은 문서 아카이브 (잘못된 맥락 학습 차단)
+- 한스 [?ENV] 파일: 로컬 전용, 프리 커밋 훅으로 Git 커밋 차단</p>
+<p><strong>6인 가상 에이전트 분업 체계</strong></p>
+<table>
+<thead>
+<tr>
+<th>역할</th>
+<th>담당</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>플래너</td>
+<td>요구사항 정의</td>
+</tr>
+<tr>
+<td>소프트웨어 아키텍트</td>
+<td>아키텍처·화면 흐름 설계</td>
+</tr>
+<tr>
+<td>UI 디자이너</td>
+<td>Figma 분석 후 명세 작성</td>
+</tr>
+<tr>
+<td>안드로이드 디벨로퍼</td>
+<td>신규 화면은 Compose, 기존 화면은 XML 레거시</td>
+</tr>
+<tr>
+<td>코드 리뷰어</td>
+<td>상호 검수</td>
+</tr>
+<tr>
+<td>QA 에이전트</td>
+<td>실패 케이스 집중 검증</td>
+</tr>
+</tbody>
+</table>
+<p>발표자는 PM 역할만 담당. 각 에이전트 결과를 컨펌하고 다음 단계로 토스.</p>
+<p><strong>CLAUDE.md — 규칙을 구조로 고정</strong></p>
+<p>매번 잔소리처럼 하던 지시를 <code>CLAUDE.md</code>에 박아뒀다. 시니어 앱의 폰트 DP 고정, Compose 우선 개발, 레거시 코드 유지 등 컨벤션을 명문화하니 매 세션 설명 피로가 80% 이상 사라졌다.</p>
+<p><strong>3가지 핵심 스킬</strong></p>
+<table>
+<thead>
+<tr>
+<th>스킬</th>
+<th>기능</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Figma Implementation Plan</td>
+<td>Figma 시안 → 구현 플랜 변환</td>
+</tr>
+<tr>
+<td>Commit Review</td>
+<td>커밋 전 리뷰어·QA·디자이너 3인 병렬 교차 검증</td>
+</tr>
+<tr>
+<td>Epic Story</td>
+<td>기획 → 에픽·스토리 카드 분해</td>
+</tr>
+</tbody>
+</table>
+<p><strong>스킬 작성 팁</strong>: 설정 파일이 너무 길면 AI가 맥락을 놓친다. 핵심 트리거와 규칙 위주로 컴팩트하게 작성해야 유기적으로 동작한다.</p>
+<p><strong>Feature Workflow — 승인 게이트</strong></p>
+<p>기획→설계→개발→리뷰→QA 단계별로 AI가 완료해도 자동으로 넘어가지 않고 반드시 PM의 승인을 기다리게 설계했다. 전자동이 아닌 통제권을 유지한 자동화.</p>
+<p><strong>마인드셋 변화</strong></p>
+<p>예전: "AI야, 이거 다 만들어줘, 알아서 해줘"
+지금: "한 줄씩 토론하면서 채워나가자, 내가 먼저 제안해줘"</p>
+<blockquote>
+<p>AI랑 티키타카를 나누면서 다듬었더니, 문서 작성이 쉬워졌고 오히려 전보다 문서가 훨씬 정교해졌다.</p>
+</blockquote>
+<hr>
+<h2 id="8-자주-막히는-곳">8. 자주 막히는 곳</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI가 만드는 디자인이 촌스럽고 요청할 때마다 달라진다</td>
+<td>"예쁘게"가 아니라 레퍼런스 링크→디자인 시스템 정의→그 위계 안에서 수정 요청 순서를 지킨다.</td>
+</tr>
+<tr>
+<td>멀티 에이전트 토큰이 너무 많이 든다</td>
+<td>한 번 할 때 인풋을 제대로 넣는다. 이터레이션 여러 번 돌리는 것보다 첫 인풋 품질이 전체 비용을 결정한다.</td>
+</tr>
+<tr>
+<td>특허 검색 결과가 피상적이다 (비슷하다 했는데 실제로 보면 아니다)</td>
+<td>검색 대상 사이트가 웹서치·API·MCP 중 무엇을 지원하는지 먼저 확인하고, 가능하면 API 방식으로 키워드를 정밀하게 요청한다.</td>
+</tr>
+<tr>
+<td>에이전트를 많이 만들었는데 관리가 안 되고 에러가 난다</td>
+<td>하나를 끝까지 완성하고 테스트한 뒤 다음 것을 더한다. 개인에게는 도메인별 2~3개면 충분하다.</td>
+</tr>
+<tr>
+<td>블로그 자동화 이미지가 일관성이 없다</td>
+<td>프롬프트 라이브러리 30개를 미리 저장하고 "글 톤에 맞는 프롬프트를 직접 골라서 써"라고 지시한다.</td>
+</tr>
+<tr>
+<td>블로그 이미지 생성이 Codex에서 자꾸 실패한다</td>
+<td>Codex 2~3회 재시도 → 실패 시 Gemini API 폴백으로 자동 전환하도록 파이프라인에 분기를 넣는다.</td>
+</tr>
+<tr>
+<td>북극성 지표를 설정했는데 하루도 달성을 못 한다</td>
+<td>지표가 복합적이면 의사결정 필터가 안 된다. 단 하나의 측정 가능한 행동으로 단순화한다.</td>
+</tr>
+<tr>
+<td>Claude Code 세션이 새로 열릴 때마다 컨벤션 설명을 반복한다</td>
+<td>CLAUDE.md에 핵심 규칙을 한 번만 박아두면 에이전트가 알아서 읽는다.</td>
+</tr>
+<tr>
+<td>AI가 만든 코드를 믿을 수가 없어 이중 검수한다</td>
+<td>커밋 전 리뷰어·QA 병렬 교차 검증 스킬을 만들고, Feature Workflow에 단계별 승인 게이트를 둔다.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>막히는 지점 대부분은 AI 능력 문제가 아니라 구조와 인풋 설계 문제다. 기준과 규칙을 먼저 만들면 AI가 그 틀 안에서 일관되게 움직인다.</p>
+</blockquote>
+<hr>
+<h2 id="부록-명대사">부록 — 명대사</h2>
+<blockquote>
+<p>"어느 순간 이게 AI의 문제가 아니라 내가 기준을 안 준 게 문제였구나라는 걸 깨닫게 됐다." — 이예솔(요가씨)</p>
+<p>"퀄리티가 먼저고 자동화는 그 다음이다." — 라면님이 스터디에서 배운 원칙</p>
+<p>"혼자서 사업 계획을 하면서도 팀 전체와 워크숍을 하는 그런 느낌을 받았다." — 라면님</p>
+<p>"사진을 찍었는데 대충 찍고 수정을 하는 것보다는 처음 찍을 때 아주 신경을 써서 잘 찍고 그걸 수정하는 게 훨씬 더 효과적이다." — 윤대중</p>
+<p>"AI가 썼냐 안 썼냐가 중요한 게 아니고, 사용자가 읽었을 때 읽을 만한 좋은 글이냐 아니냐가 사실 중요하다." — 류웅수</p>
+<p>"목표 설정을 명확히 하고서 목표에 맞는 거를 딱 학습하고, 다른 것은 좀 이렇게 놓을 수 있는 그런 것도 중요한 능력 중에 하나인 것 같다." — 진행자</p>
+<p>"AI랑 티키타카를 나누면서 다듬었더니, 문서 작성이 쉬워졌고 오히려 전보다 문서가 훨씬 정교해졌다." — 박찬호</p>
+</blockquote>
+<footer class="footer">
+  이 문서는 원본 강의 녹화본(<code>2026-06-08 [지피터스] 22기 4주차 베스트 발표회 - 업무&amp;비즈니스.mp4</code>)을 Whisper로 전사한 뒤
+  주제별로 정리한 것입니다. 정확한 발화 흐름이 필요하면 원본 영상을 참조하세요.
+</footer>
+</body>
+</html>
