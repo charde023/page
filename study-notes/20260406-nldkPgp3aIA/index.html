@@ -1,0 +1,359 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Andrej Karpathy 덕분에 모두의 Claude Code가 10배 강해졌습니다</title>
+<meta name="description" content="Andrej Karpathy의 LLM 위키 아이디어를 바탕으로, Claude Code + Obsidian만으로 RAG 인프라 없이 개인 지식 베이스를 5분 만에 구축하는 방법을 실전 시연"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Andrej Karpathy 덕분에 모두의 Claude Code가 10배 강해졌습니다</h1>
+<div class="meta">원작자 Nate Herk · AI Automation Society · 업로드 2026-04-06 · 19.0분 · <a href="https://www.youtube.com/watch?v=nldkPgp3aIA" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Andrej Karpathy 덕분에 모두의 Claude Code가 10배 강해졌습니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Karpathy의 LLM 위키 아이디어 + Claude Code + Obsidian = 벡터DB·임베딩 없이 마크다운만으로 검색·연결되는 개인 지식 시스템, 토큰 95% 절감도 가능.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Nate Herk · AI Automation Society · 추정 출처 https://uppitai.com/ · 업로드 2026-04-06 · 19분 · 전사 Whisper large-v3 (auto)
+아이디어 원출처: Andrej Karpathy — https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LLM 위키 (LM Wiki)</td>
+<td>RAG 없이 LLM이 마크다운 링크를 따라가며 지식을 검색하는 패러다임</td>
+<td>파일 묶음만으로 지식 그래프 구현</td>
+</tr>
+<tr>
+<td>Obsidian 볼트 구조</td>
+<td>RAW / wiki / index / log 4구조가 자동화의 기반</td>
+<td>구조가 없으면 Claude가 정리를 못 함</td>
+</tr>
+<tr>
+<td>hot cache (핫캐시)</td>
+<td>최근 대화 맥락 500단어를 별도 MD로 유지해 매번 위키 전체 크롤 방지</td>
+<td>executive assistant에서 토큰 절약 핵심</td>
+</tr>
+<tr>
+<td>linting (린팅)</td>
+<td>위키 전체 건강 점검 → 빠진 데이터 웹검색 보완 → 새 연결 후보 발굴</td>
+<td>지식 베이스가 스스로 성장하게 만드는 루프</td>
+</tr>
+<tr>
+<td>LLM 위키 vs 시맨틱 서치 RAG</td>
+<td>규모·비용·유지보수 트레이드오프를 명확히 이해해야 도구를 올바르게 선택 가능</td>
+<td>수백 페이지 → LLM 위키, 수백만 문서 → RAG</td>
+</tr>
+<tr>
+<td>Obsidian Web Clipper</td>
+<td>브라우저에서 바로 볼트 RAW 폴더로 클리핑</td>
+<td>수집 마찰을 거의 0으로 줄임</td>
+</tr>
+<tr>
+<td>청킹 by Claude</td>
+<td>하나의 문서를 5~25개 위키 페이지로 분해·상호 연결</td>
+<td>벡터DB 청킹과 유사하되 인간이 읽을 수 있는 형태</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>LLM 위키 (LM Wiki / LLM Knowledge Wiki)</strong>: Andrej Karpathy가 제안한 방식. 벡터 유사도 검색 대신 LLM이 인덱스 파일을 읽고 위키 링크를 따라가며 정보를 탐색.</li>
+<li><strong>hot cache</strong>: 최근 대화 요약 ~500단어를 <code>hot.md</code>로 유지. 매 대화마다 위키 전체를 재크롤하지 않아도 최신 맥락을 제공.</li>
+<li><strong>linting (위키 린팅)</strong>: 위키 전체를 주기적으로 돌려 일관성 없는 데이터, 빠진 링크, 보강이 필요한 노드를 발견하고 웹검색으로 채우는 과정.</li>
+<li><strong>Obsidian Web Clipper</strong>: 크롬 확장으로 웹페이지를 바로 Obsidian 볼트로 저장. 기본 저장 폴더를 <code>RAW</code>로 설정해두면 자동으로 수집 파이프라인에 진입.</li>
+<li><strong>AI2027 (ai-2027.com)</strong>: 영상에서 시연 예시로 사용된 장문 보고서. AI 2027년 전망을 다룬 글.</li>
+<li><strong>볼트 폴더 구조</strong>: <code>RAW/</code> (원본 투입) → <code>wiki/</code> (Claude가 정리한 위키 페이지) → <code>index.md</code> (허브 인덱스) → <code>log.md</code> (작업 이력).</li>
+<li><strong>semantic search RAG</strong>: 벡터 임베딩 + 벡터DB + 청킹 파이프라인 기반 검색. LLM 위키와 대조적인 전통적 접근.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>Karpathy의 원 트윗은 의도적으로 프롬프트를 <strong>모호하게</strong> 남겼다 — 각자 프로젝트에 맞게 커스터마이징하도록. Gist 주소: <code>https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f</code></li>
+<li>화자 본인은 유튜브 대본 <strong>36개</strong>를 한꺼번에 처리했고 소요 시간은 <strong>약 14분</strong>. 단일 AI2027 문서 처리는 <strong>약 10분</strong>, 결과 위키 페이지 <strong>23개</strong> 생성.</li>
+<li>AI2027 처리 후 생성된 항목: 위키페이지 23개, 소스 1개, 사람 6명, 조직 5개, AI 시스템 페이지 1개, 기술적 정렬·개념 등.</li>
+<li>한 사용자가 <strong>파일 383개 + 회의 녹취 100개 이상</strong>을 압축 위키로 만들고 Claude 검색 시 <strong>토큰 사용량 95% 절감</strong> 달성.</li>
+<li>Obsidian Web Clipper 설정 시 기본 저장 위치(Clippings)를 <strong>RAW</strong>로 변경하는 것이 핵심 — 안 하면 자동 파이프라인에 안 들어감.</li>
+<li><code>CLAUDE.md</code>가 필수: 프로젝트가 어떻게 돌아가는지, 어떻게 검색하고 업데이트하는지 Claude에게 설명하는 마크다운 파일.</li>
+<li>hot cache는 executive assistant 맥락에서 특히 유용. 유튜브 트랜스크립트 위키에서는 불필요.</li>
+<li>린팅은 매일 또는 매주 돌릴 수 있으며, 위키가 자기 스스로 빈칸을 찾아 웹검색으로 메우는 <strong>자기완성 루프</strong>를 만든다.</li>
+<li>벡터DB가 필요한 임계점: <strong>수백 페이지</strong>까지는 LLM 위키로 충분, <strong>수백만 문서</strong>부터는 전통 RAG가 유리 (2026년 4월 기준).</li>
+<li><code>claude</code> 코드는 터미널보다 VS Code 내 터미널에서 쓰는 것을 화자가 선호 — 상태 표시줄·부가 기능 때문.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>데모 소개</td>
+<td>유튜브 영상 36개를 정리한 지식 시스템 — 백링크·그래프 뷰로 패턴 파악 가능</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Karpathy 아이디어</td>
+<td>LLM 위키: PDF/문서를 Claude Code에 넣으면 자동 정리·연결, 휘발성 없는 지식 축적</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Obsidian 설치 및 볼트 설정</td>
+<td>무료 도구, RAW/wiki/index/log 4구조, 5분이면 완성</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Claude Code로 볼트 초기화</td>
+<td>Karpathy 프롬프트 복사 → "너는 LLM 위키 에이전트" 역할 지정 → 폴더 자동 생성</td>
+</tr>
+<tr>
+<td>5</td>
+<td>AI2027 문서 수집·처리 시연</td>
+<td>Web Clipper → RAW 투입 → Claude가 23개 위키 페이지 생성 (약 10분)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>검색 및 활용 방법</td>
+<td>볼트 내 검색 / 다른 프로젝트에 볼트 연결 / executive assistant에 위키 경로 참조</td>
+</tr>
+<tr>
+<td>7</td>
+<td>hot cache 설명</td>
+<td>최근 500단어 캐시 MD → 위키 전체 크롤 없이 맥락 제공</td>
+</tr>
+<tr>
+<td>8</td>
+<td>린팅</td>
+<td>주기적 건강 점검 → 빠진 데이터 보완 → 새 연결 발굴</td>
+</tr>
+<tr>
+<td>9</td>
+<td>LLM 위키 vs 시맨틱 RAG 비교</td>
+<td>토큰 비용·인프라·유지보수·확장성 비교</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 데모 소개 — 지식 시스템이 어떤 모습인가</h2>
+<p>화자는 유튜브 영상 대본 36개를 정리한 Obsidian 볼트를 보여준다. 그래프 뷰에서 노드 하나하나가 영상·도구·기법이고, 백링크를 타고 이동하면 Claude Code, Perplexity, VS Code, MCP 서버, WF 프레임워크, 권한 우회 모드, 사람 검토 체크포인트 등 연결망이 보인다. 중요한 점은 이 관계를 수동으로 만든 게 아니라, Claude Code에게 "대본 전부 정리해줘"라고만 했다는 것이다.</p>
+<p>개인 second brain도 별도로 운영 중: 사업·직원·분기 과제 등. 두 볼트를 합치거나 분리하거나, 다른 AI 에이전트에 연결하는 것도 가능.</p>
+<h2>2. Andrej Karpathy의 LLM 위키 아이디어</h2>
+<p>Karpathy가 X(트위터)에 올린 짧은 글이 수일 만에 엄청난 반응을 얻었다. 핵심 아이디어:</p>
+<ul>
+<li><strong>데이터 수집</strong>: 원본 문서(PDF, 기사 등)를 Claude Code에 투입</li>
+<li><strong>자동 정리·연결</strong>: Claude가 비교·정리 후 관계까지 맞춰 적절한 위치에 배치</li>
+<li><strong>검색</strong>: 빈칸 노드 발견 → 직접 리서치해 채움</li>
+<li><strong>지속성</strong>: 일반 AI 채팅은 대화 종료 시 지식이 사라지지만, LLM 위키는 지식이 <strong>은행 이자처럼 축적</strong></li>
+</ul>
+<p>X에서는 "게임 체인저", "지치지 않는 동료"라는 반응이 나왔다.</p>
+<h2>3. Obsidian 설치 및 볼트 구조 설정 (5분)</h2>
+<p>Obsidian은 완전 무료. 마크다운 파일을 시각적으로 보여주는 도구에 불과 — 이것이 핵심 (복잡한 인프라 불필요).</p>
+<p><strong>볼트 기본 구조</strong>:</p>
+<pre><code>MyWiki/
+├── RAW/          ← 원본 자료 투입 폴더
+├── wiki/         ← Claude가 정리한 위키 페이지들
+│   ├── analyses/
+│   ├── concepts/
+│   ├── entities/
+│   └── sources/
+├── index.md      ← 허브 인덱스
+├── log.md        ← 작업 이력 (Operation History)
+└── CLAUDE.md     ← 프로젝트 설명 (Claude용)
+</code></pre>
+<p><code>CLAUDE.md</code>는 필수: 프로젝트 목적, 검색 방법, 업데이트 방법을 Claude에게 설명.</p>
+<h2>4. Claude Code로 볼트 초기화</h2>
+<ol>
+<li>Obsidian에서 새 볼트 생성 (예: <code>DemoVault</code>)</li>
+<li>VS Code 터미널에서 해당 폴더를 열고 Claude Code 실행</li>
+<li>Karpathy 원문 프롬프트를 복사 + 앞에 역할 지정 추가:<blockquote>
+<p>"이제 당신은 LLM 위키 에이전트다. 이 아이디어 파일을 완전한 second brain으로 구현하라. CLAUDE.md를 만들고..."</p>
+</blockquote>
+</li>
+<li>Claude가 폴더 구조 자동 생성 → Obsidian에서 실시간 확인 가능</li>
+</ol>
+<p>Karpathy가 프롬프트를 의도적으로 모호하게 남긴 이유: 프로젝트마다 구조가 달라야 하기 때문. 유튜브용은 하위폴더 여러 개, 개인 second brain은 평평한 구조가 더 적합할 수 있음.</p>
+<h2>5. 문서 수집·처리 시연 — AI2027</h2>
+<p><strong>Obsidian Web Clipper 설정</strong>:
+1. Chrome에 Obsidian Web Clipper 확장 설치
+2. 옵션 → Location → 기본 저장 위치를 <code>Clippings</code> → <code>RAW</code>로 변경
+3. 원하는 웹페이지에서 확장 클릭 → 볼트 선택 → Add to Obsidian</p>
+<p>AI2027(ai-2027.com) 문서를 RAW에 넣고 Claude Code에 지시:</p>
+<blockquote>
+<p>"AI2027 글을 RAW에 넣었어. 이걸 가져와 정리해줘. 이 볼트는 AI 관련 리서치 공간이야."</p>
+</blockquote>
+<p>Claude가 맥락 질문(강조 포인트, 세부도, 계획)을 던지고 → 처리 후 결과:
+- 약 10분 소요
+- 위키 페이지 23개 생성
+- 사람 6명, 조직 5개, AI 시스템 1개, 기술적 정렬·지정화·분석 개념 포함
+- Obsidian 그래프 뷰에서 실시간으로 노드 생성 확인 가능</p>
+<h2>6. 검색 및 다용도 활용</h2>
+<p><strong>활용 방법 3가지</strong>:</p>
+<ol>
+<li><strong>볼트 내 Claude 검색</strong>: 클로드를 해당 프로젝트에서 실행, 인덱스+위키를 참조해 검색</li>
+<li><strong>다른 프로젝트에 볼트 연결</strong>: <code>CLAUDE.md</code>에 위키 경로 명시 → 해당 프로젝트의 Claude가 위키를 참조</li>
+<li><strong>Executive Assistant 연결</strong>: 비즈니스 지식 볼트를 EA Claude에 연결 — "모르면 허브레인 볼트로 가서 위키 읽어"</li>
+</ol>
+<p>화자 본인의 경우, 기존에는 프로젝트 안에 컨텍스트 파일을 넣어뒀는데, 볼트 방식으로 바꾼 후 실제 토큰 사용량이 줄었다고 함.</p>
+<h2>7. Hot Cache</h2>
+<ul>
+<li>파일명: <code>hot.md</code></li>
+<li>크기: 약 500단어/500자</li>
+<li>내용: Claude와 최근 나눈 대화 요약, 최신 업데이트 내용</li>
+<li>용도: 전체 위키를 매번 크롤하는 대신 최신 맥락만 빠르게 제공</li>
+<li>유튜브 트랜스크립트 볼트에서는 불필요, <strong>Executive Assistant 볼트에서 핵심</strong></li>
+</ul>
+<h2>8. 린팅 (Linting)</h2>
+<p>Karpathy가 제안한 기능. 주기적으로 실행:
+- 위키 전체 건강 점검 → 일관성 없는 데이터 찾기
+- 빠진 데이터 → 웹검색으로 자동 보완
+- 흥미로운 연결 후보 → 새 글 아이디어 발굴</p>
+<p>결과적으로 지식 베이스가 외부 입력 없이도 스스로 성장하는 루프를 형성.</p>
+<h2>9. LLM 위키 vs 시맨틱 서치 RAG 비교</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>LLM 위키</th>
+<th>시맨틱 RAG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>검색 방식</td>
+<td>인덱스 읽기 + 링크 탐색</td>
+<td>벡터 유사도 검색</td>
+</tr>
+<tr>
+<td>관계 이해</td>
+<td>링크 기반 → 깊은 맥락</td>
+<td>"이 청크가 비슷해 보임"</td>
+</tr>
+<tr>
+<td>인프라</td>
+<td>마크다운 파일만</td>
+<td>임베딩 모델 + 벡터DB + 청킹 파이프라인</td>
+</tr>
+<tr>
+<td>비용</td>
+<td>토큰 비용만 (거의 무료)</td>
+<td>지속 임베딩 + 저장 비용</td>
+</tr>
+<tr>
+<td>유지보수</td>
+<td>린팅 + 문서 추가</td>
+<td>변경 시 재임베딩 필요</td>
+</tr>
+<tr>
+<td>확장 한계</td>
+<td>수백 페이지까지 효율적</td>
+<td>수백만 문서도 가능</td>
+</tr>
+<tr>
+<td>2026년 기준 추천</td>
+<td>개인·팀 규모 지식 베이스</td>
+<td>기업 규모</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Obsidian 설치 + 새 볼트 생성 (RAW/wiki/index/log 구조)</li>
+<li>[ ] Karpathy Gist 프롬프트 + 역할 지정 문구로 Claude Code 초기화</li>
+<li>[ ] Obsidian Web Clipper 설치 → 기본 저장 위치를 RAW로 변경</li>
+<li>[ ] 첫 문서 RAW에 투입 → Claude에게 정리 요청 (맥락 충분히 줄 것)</li>
+<li>[ ] 그래프 뷰로 연결망 확인 → 노드 허브·고립 노드 파악</li>
+<li>[ ] 린팅 주기 결정 (매일/매주) → 빈칸 보완 루프 가동</li>
+<li>[ ] Executive Assistant 등 다른 프로젝트에 볼트 경로 연결 시도</li>
+<li>[ ] 토큰 사용량 비교 (볼트 연결 전후)</li>
+<li>[ ] 수백 페이지 초과 시점에 RAG 전환 여부 검토</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>Tech Bridge (TechBridge-KR) · Andrej Karpathy 덕분에 모두의 Claude Code가 10배 강해졌습니다 · https://www.youtube.com/watch?v=nldkPgp3aIA · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>지금 보시는 건 제 최근 유튜브 영상 36개를 보기 좋게 정리한 지식 시스템입니다. 오늘 영상에서는 이걸 5분 만에 설정하는 방법을 보여드리겠습니다. 정말 쉽습니다.</p>
+<p>여기 보시면 서로 다른 노드와 여러 패턴이 나타납니다. 더 확대해보면 이 작은 점 하나하나가 무엇을 뜻하는지 알 수 있습니다. 예를 들면 이건 제 영상 중 하나인 1만 달러짜리 에이전팅 워크플로우입니다. 태그도 있고 영상 링크도 있고 원본 파일도 있습니다. 이 영상이 뭔지, 핵심 포인트가 뭔지도 설명해줍니다. 가장 멋진 건 백링크를 따라가면서 원하는 곳까지 갈 수 있다는 점입니다. WF 프레임워크로 가는 백링크도 있고, Claude Code로 가는 백링크도 있고, 제가 말한 여러 도구로 가는 백링크도 있습니다. Perplexity, VS Code, 네이선 허크 (Nate Herk), 그리고 WF2 프레임워크, 권한 우회 모드, 사람 검토 체크포인트 같은 기법도 들어있습니다.</p>
+<p>이게 계속 쌓이면 각 노드 사이의 패턴과 관계가 보이기 시작합니다. 각 스킬과, 제가 유튜브에서 언급한 모든 MCP 서버 사이의 패턴과 관계가 보이기 시작합니다. 이런 시스템이 갖춰졌으니 아주 효율적으로 검색할 수 있습니다.</p>
+<p>더 놀라운 건 제가 그냥 이렇게 말했다는 겁니다: "Claude Code, 최근 영상들 대본을 가져와서 전부 정리해줘." 정말로 관계를 하나하나 직접 만들 필요가 전혀 없었습니다. 그냥 알아서 다 정리해줬거든요.</p>
+<p>그리고 더 작은 버전도 있는데 이건 제 개인 브레인에 가깝습니다. 제 개인적인 삶에서 일어나는 일들 — 사업, 유튜브 채널, 직원들, 2분기 과제 같은 것들. 지식 시스템 하나가 있는 셈이고, 이걸 합칠 수도, 따로 둘 수도 있습니다. 또 지식 시스템을 계속 더 만들고, 이 맥락이 필요한 다른 AI 에이전트들에 연결할 수도 있습니다.</p>
+<p>그래서 Andrej Karpathy가 LLM 지식 베이스에 대한 짧은 글을 올리면서 자기가 이걸 어떻게 쓰는지도 설명했습니다. 며칠 만에 X에서 엄청난 반응을 얻었습니다. 간단히 살펴보고, 이어서 이걸 거의 5분 만에 설정하는 방법을 보여드리겠습니다.</p>
+<p>제가 최근에 아주 유용하다고 느낀 건, LLM으로 관심 있는 주제별 개인 지식 베이스를 만드는 겁니다. 단계도 여러 개인데, 첫 번째는 <strong>데이터 수집</strong>입니다. 기본적으로 원본 문서를 넣는 단계입니다. PDF를 Claude Code에 넣으면 나머지는 Claude Code가 알아서 처리합니다.</p>
+<p>그는 IDE로 Obsidian을 씁니다. 사실 그렇게 획기적인 건 아닙니다. Obsidian은 마크다운 파일을 시각적으로 보여줄 뿐입니다. 이 Obsidian 프로젝트에 유튜브 대본 관련 자료가 전부 들어있습니다. 원본 유튜브 대본들이 있고, 위키도 있습니다. Claude Code가 유튜브 대본으로 만든 여러 폴더가 들어있죠.</p>
+<p>Q&amp;A 단계에서는 유튜브나 리서치에 대해 질문하면, 위키 전체를 훨씬 효율적으로 훑어서 아주 똑똑한 답을 줍니다. 그는 이렇게 말합니다: "처음엔 Pen&amp;Edge [?펜셀에지, 아마도 Perplexity나 특정 도구]까지 써야 하나 했는데, LLM이 꽤 잘해주더라." 모든 문서의 인덱스 파일과 간단한 요약을 꽤 잘 자동으로 관리해줍니다. 이 정도 규모에서는 중요한 관련 데이터를 꽤 쉽게 읽어냅니다. 지금은 기사 100개 정도.</p>
+<p>핵심은 원본 데이터를 Claude Code에 넘긴다는 겁니다. 그걸 비교하고 정리한 다음 관계까지 맞춰서 알맞은 곳에 넣어줍니다. 그러면 무엇이든 질문할 수 있죠. 노드나 관계에서 비어있는 부분을 찾아주고, 직접 리서치해서 그 빈칸까지 메워줍니다.</p>
+<p>자, 그럼 이게 왜 중요한 걸까요? 일반적인 AI 채팅은 휘발성이 있어서 대화가 끝나면 지식도 사라지기 때문입니다. 하지만 Karpathy의 LLM 위키를 쓰는 이 방식은 지식이 <strong>은행 이자처럼 쌓이게</strong> 만듭니다. X에서는 이걸 게임 체인저라고 부릅니다. AI가 모든 걸 기억하는 지치지 않는 동료처럼 느껴지고, 정리도 잘 유지되기 때문입니다. 설정하는 데 5분이면 됩니다.</p>
+<p>팬시한 벡터 데이터베이스도, 임베딩도, 복잡한 인프라도 필요 없습니다. 그냥 마크다운 파일이 들어있는 폴더 하나면 끝입니다. 볼트 하나만 있으면 됩니다. 이 예시에서는 이름이 <code>MyWiki</code>입니다. <code>RAW</code> 폴더에 모든 자료를 넣습니다. 그리고 <code>wiki</code> 폴더가 있는데, LLM이 RAW에서 가져온 걸 위키로 정리해 넣는 곳입니다. 인덱스와 로그도 따로 있습니다.</p>
+<p>제 유튜브 대본 볼트의 인덱스를 보시면 여러 도구가 있고, 클릭하면 바로 해당 페이지로 이동합니다. 그 아래에는 다양한 기법과 에이전트 팀, 서브 에이전트가 있습니다. Permission modes와 WF2 프레임워크도 있습니다. MCP 서버, Nex [?], 바이브 코딩 같은 여러 개념과 자료도 정리되어 있습니다. 사람이나 비교 항목이 생기면 그것들도 인덱스에 들어갑니다. 그리고 Operation History인 로그도 있습니다.</p>
+<p>유튜브 프로젝트에서는 아직 로그가 크지 않습니다. 영상 36개를 한꺼번에 돌렸기 때문입니다. 하지만 이제 새 영상이 생길 때마다 가져와서 위키에 넣으라고 시킬 수 있습니다.</p>
+<p>그리고 당연히 <code>CLAUDE.md</code>가 필요합니다. 프로젝트가 어떻게 돌아가는지, 어떻게 검색하는지, 어떻게 업데이트하는지 설명해주는 마크다운입니다.</p>
+<p>비용 측면에서도 크고, 토큰 효율과 장기적인 가치도 큽니다. 한 사용자가 흩어진 파일 383개와 회의 녹취 100개가 넘는 걸 압축된 위키로 만들고, Claude로 검색할 때 토큰 사용량을 <strong>95% 줄였습니다.</strong></p>
+<p>또 정말 좋은 점이 하나 더 있습니다. Git 저장소를 복사해 와야 하는 것도 아니고, 복잡한 설정도 없다는 점입니다. 그냥 Claude Code에게 Andrej Karpathy의 이 아이디어를 읽고 구현하라고 말하면 됩니다.</p>
+<p>X에서는 이런 식으로 2026년에 에이전트형 소프트웨어와 제품이 만들어질 거라고들 이야기합니다. 큰 아이디어만 주면 알아서 만들어준다는 거죠. Karpathy도 이렇게 말했습니다: "이 프롬프트를 일부러 좀 모호하게 남겨뒀습니다. 여러분이 프로젝트에 맞게 직접 바꿔 쓸 수 있도록요."</p>
+<p>좋습니다. 방금 보여드린 게 원래 트윗이고, 그 다음에 그가 이렇게 덧붙였습니다: "이건 바이럴이 됐네요? 그래서 아이디어를 간단히 정리해보겠습니다." 이걸 열어보면 어떻게 작동하는지, 왜 이런 아키텍처와 인덱싱이 필요한지에 대한 핵심 설명이 나옵니다.</p>
+<p>그런데 먼저 할 준비 단계가 하나 있습니다. 필수는 아니지만, 관계를 보기 좋은 프론트엔드가 있으면 좋아서 Obsidian을 설치할 겁니다. 완전히 무료인 도구입니다. 운영체제에 맞는 걸 받아서 설치하고 앱을 실행하면, 볼트 관리로 가서 새로 만들고 이름만 정하면 됩니다. 저는 이걸 Demo Vault라고 부르겠습니다. 데스크톱에 저장하고, 이 볼트를 만들겠습니다.</p>
+<p>그 다음에는 Claude Code를 실행합니다. 저는 VS Code 안에서 터미널로 실행하는 걸 선호합니다. 상태 표시줄도 볼 수 있고 기능도 조금 더 많아서요. Claude Code를 열고, Karpathy가 올린 LLM 위키 아이디어를 전부 복사해서 붙여넣습니다. 그러니까 이게 바로 프롬프트예요. 그걸 보내기 전에, 이것도 먼저 넣을 거예요: "이제 당신은 LLM 위키 에이전트다. 이 아이디어 파일을 그대로, 재완전한 second brain으로 구현하라. CLAUDE.md를 만들고..." 즉, 방금 Karpathy에게서 얻은 이 아이디어로 무엇을 해야 하는지 알려주는 겁니다.</p>
+<p>오른쪽에는 Claude Code가 돌아가고 있고, 왼쪽에는 Obsidian 볼트가 있어요. 방금 두 폴더가 만들어진 게 보이죠? 위키도 만들어졌습니다. 기본으로는 폴더 4개를 넣어놨어요. Analyses, Concepts, Entities, Sources가 들어갔습니다.</p>
+<p>이제 내용을 채워가면서 이 구조가 정말 맞는지 다시 얘기해볼 수 있어요. 제 개인 second brain에서는 위키가 그냥 마크다운 파일뿐이에요. 구조가 따로 없죠. Karpathy도 이렇게 말했어요: "가끔은 정말 단순하고 평평하게, 즉 하위 폴더 없이, 너무 과하게 정리하지 않는 방식을 좋아한다고요." 그런데 제 유튜브 대본 예시에서는 서로 다른 하위 폴더들이 있었죠. 그리고 <code>CLAUDE.md</code>도 만들어졌습니다. 인덱스와 로그를 만들고 위키 안에 몇 개 폴더도 만들어놨어요.</p>
+<p>이제 이렇게 말하네요: "자, 한번 해보자고요. 첫 번째 소스를 RAW 폴더에 넣고 가져오라고 말하라는 거예요." 좋아요. 저는 지금 AI2027이라는 웹사이트에 와있어요. 아직 안 읽어보셨다면 꽤 흥미롭게 읽을만한 글이에요. 이걸 제 볼트에 넣고 싶다고 해볼게요.</p>
+<p>그냥 페이지 전체를 복사할 수도 있어요. 아니면 Obsidian 확장 프로그램을 쓰면 됩니다. 웹에서 바로 글을 가져와서 볼트에 넣을 수 있습니다. 이 확장 프로그램은 <strong>Obsidian Web Clipper</strong>예요. 크롬에 추가하면 됩니다. 원하는 글에 들어가서 확장 프로그램을 클릭하고, Obsidian Web Clipper를 연 다음, 그냥 볼트에 넣으면 됩니다. 여기서는 RAW로 설정해야 해요. 실제로 들어갈 폴더가 거기거든요. 그 다음 Add to Obsidian을 누르고 Obsidian을 열면 됩니다.</p>
+<p>이제 RAW 섹션을 보면 AI2027 소스가 들어와 있어요. 클로드 코드를 열고 이렇게 말할 거예요: "방금 AI2027이라는 글을 RAW에 넣었어요. 이걸 가져와 정리해주실 수 있나요? 참고로 이 프로젝트는 제 second brain 용도예요. 여기에는 제가 배우고 싶은 글이랑 알고 있는 것들을 다 넣을 거예요."</p>
+<p>Claude는 이 글을 읽으면서 위키 어디에 넣을지 판단합니다. 그냥 MD 파일 하나로만 만들지는 않아요. 5개를 만들 수도 있고 10개를 만들 수도 있어요. 만들어진 각 섹션끼리 서로 연결도 생길 거예요. 즉, 나름대로 청킹을 하고 있는 셈이죠.</p>
+<p>참고로 Obsidian Web Clipper 설정에서 옵션을 열어보면 기본으로 파일이 저장되는 위치를 바꿀 수 있어요. Location 섹션에 있습니다. 기본값은 <code>Clippings</code>인데, 그냥 <code>RAW</code>로 바꿔주세요.</p>
+<p>그러면 Claude가 여러 질문이 돌아와요. 예를 들면, "이 글의 핵심 요점은 이렇습니다. 이 글에서 뭘 강조하고 싶나요? 초점은 뭐죠? 어느 정도까지 세세하게 볼 건가요?" 저는 이렇게 답해요: "AI가 어디로 가는지 보는 게 제 관심사예요. 이 볼트에 만드는 이 프로젝트는 기본적으로 AI 관련 리서치를 쏟아넣는 제 공간이 될 거예요. 이걸 잘 정리해줘서 내가 검색도 할 수 있고 생각도 계속 이어갈 수 있게 해주세요."</p>
+<p>저는 여기서 그래프 뷰로 바꿔볼 텐데, 위키 파일들이 하나씩 만들어지는 과정을 보면 재미있을 것 같아요. 관련된 연결들이 전부 만들어질 거고, 그걸 실시간으로 볼 수 있습니다.</p>
+<p>이 인제스트(ingestion)에는 약 10분 정도 걸렸습니다. 위키페이지 23개를 만들었고: 소스 1개, 사람 6명 (Eliezer, Thomas, Daniel 같은 이름들), 조직 5개, AI 시스템 페이지 1개, 기술적 정렬·지정화·분석 같은 개념도 들어있습니다.</p>
+<p>참고로 제 유튜브 대본 36개를 한꺼번에 올렸을 때는 약 14분 걸렸습니다.</p>
+<p>그럼 이제 궁금한 건 여기서 뭘 하느냐는 거죠. 이 환경 안에서 바로 검색할 수도 있고, 다른 곳에서 검색할 수도 있습니다. 예를 들어 제 유튜브 프로젝트에서는 이 볼트에 있는 채로 Claude에게 질문합니다. 또 필요하면 다른 프로젝트를 이 폴더에 연결할 수도 있습니다.</p>
+<p>제 second brain에는 회의 녹음, 클리퍼 채널, 요약 같은 것들을 다 넣어두는데, 이걸 <strong>Executive Assistant</strong>에 쓰고 싶습니다. 제 Executive Assistant의 <code>CLAUDE.md</code>를 보면 위키패스가 있는 걸 볼 수 있습니다. 제 이야기나 제 비즈니스에 대해 아직 모르는 게 있으면 허브레인(Hub Brain [?]) 볼트로 가서 위키를 읽는 방식입니다. 인덱스도 읽을 수 있고, 도메인 서브인덱스도 읽을 수 있고, 전부 검색할 수도 있습니다. 정말 필요할 때만 위키를 읽으라고 했습니다. 굳이 안 읽어도 되는 작업들도 있으니까요.</p>
+<p>혹시 제 Executive Assistant 설정 영상을 보신 분들은 아시겠지만, 예전에는 프로젝트 안에서 컨텍스트 파일로 이렇게 했습니다. 그런데 이 방식으로 바꾸고 나서는 이 프로젝트에서 실제로 쓰는 토큰 수가 줄어드는 걸 봤습니다.</p>
+<p><strong>Hot cache</strong> 얘기를 하자면, 제 유튜브 쪽에는 이게 없었습니다. 하지만 허브레인으로 가면 <code>hot.md</code>가 있는 걸 볼 수 있습니다. 대략 500단어 또는 500자 정도를 저장하는 캐시인데, Claude와 방금 나눈 최신 정보나 최근 대화 같은 걸 담아둡니다. 제 Executive Assistant 맥락에서는 이게 정말 유용합니다. 여러 위키 페이지를 일일이 크롤링하지 않아도 되게 해주니까요. 하지만 유튜브 대본 프로젝트 같은 경우에는 hot cache가 크게 필요하지 않습니다.</p>
+<p>그리고 제가 언급만 하고 자세히는 안 한 게 하나 더 있는데, 바로 <strong>린팅(linting)</strong>입니다. Karpathy는 위키 전체의 건강 점검을 돌려서 일관성 없는 데이터를 찾고, 빠진 데이터를 웹검색으로 메우고, 새 글 후보가 될 만한 흥미로운 연결도 찾는다고 말합니다. 그러니까 매일이든 매주든 원할 때 린트를 돌려서 모든 게 확장 가능하고 올바른 구조로 정리되어 있는지 확인해주는 겁니다. 심지어 다시 와서 "이걸 완전히 이해하지 못하겠어요. 조금 더 정보를 주실 수 있나요?"라고 말할 수도 있습니다.</p>
+<p>그래서 마지막으로 다루고 싶은 질문은, 이게 <strong>시맨틱 서치 RAG</strong>를 없애버리느냐는 겁니다. 답은 아니지만 어느 정도는 맞습니다. 프로젝트의 목표와 컨텍스트의 목표, 그리고 얼마나 많은 컨텍스트를 갖고 있느냐의 문제입니다.</p>
+<p>그래서 Claude Code로 간단한 비교표를 하나 만들었습니다. 카우퍼시의 [?Karpathy의] LLM 지식 아이디어를 잔뜩 넣어두고, 최대한 쉽게 설명해달라고 했어요. 데이터베이스 대신 잘 정리된 마크다운 파일만 LLM에게 주는 방식이고, 여기서는 실제 시맨틱 서치 RAG와 비교하고 있습니다.</p>
+<p>즉, <strong>유사도 검색이 아니라 인덱스를 읽고 링크를 따라가며 찾는 방식</strong>입니다. 그래서 단순히 "이 청크들이 비슷해 보이네"가 아니라, 링크라서 관계를 더 깊이 이해하게 됩니다.</p>
+<p>인프라 관점에서는 말 그대로 마크다운만 있으면 됩니다. Obsidian도 필요 없습니다. 이 마크다운 파일들만 있으면 됩니다. 반면 시맨틱 서치를 쓰려면 임베딩 모델, 벡터 데이터베이스, 청킹 파이프라인이 필요합니다.</p>
+<p>비용 측면: LLM 위키 쪽은 거의 공짜 (토큰 비용 정도). 반면 RAG 쪽은 지속적인 임베딩과 저장 비용이 들 수 있습니다. 유지보수할 때도 그냥 린트 돌리고 정리하고 글을 더 추가하면 됩니다. 무언가 바뀌면 다시 임베딩하는 대신 그냥 컨텍스트를 더 넣어주면 됩니다.</p>
+<p>하지만 지금 LLM 위키의 약점은, 당연히 기업 규모로 크게 확장되기 어렵다는 겁니다. 결국 파일 묶음일 뿐이니까요. 인덱스가 잘 된 수백 페이지 정도라면 LLM 위키 그래프로 충분합니다. 하지만 문서가 수백만 개로 늘어나면, 적어도 2026년 4월 기준으로 지금의 모델 상태를 생각했을 때는, 전통적인 RAG 파이프라인을 쓰는 쪽이 좋습니다.</p>
+<p>오늘은 여기까지 하겠습니다. 새로운 걸 배우셨거나 영상이 즐거우셨길 바랍니다. 그랬다면 좋아요 부탁드립니다. 그리고 이 영상 다음으로, 직접 나만의 Executive Assistant를 만들고 이 Obsidian 볼트에 연결하는 방법이 궁금하다면 꼭 위에 있는 영상을 보세요. 거기서 뵙겠습니다.</p>
+</details>
+</body></html>

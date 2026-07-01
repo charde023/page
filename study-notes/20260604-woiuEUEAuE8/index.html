@@ -1,0 +1,336 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>에이전트 스킬의 95%를 삭제했더니 더 좋은 결과를 얻었습니다 — Nick Nisi, WorkOS</title>
+<meta name="description" content="에이전트 스킬은 적을수록 낫다 — 10,000줄 스킬을 553줄 gotcha로 줄이고 상태 머신으로 증거 기반 검증을 강제한 실전 경험담"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>에이전트 스킬의 95%를 삭제했더니 더 좋은 결과를 얻었습니다 — Nick Nisi, WorkOS</h1>
+<div class="meta">원작자 Nick Nisi · WorkOS · 업로드 2026-06-04 · 17.7분 · <a href="https://www.youtube.com/watch?v=woiuEUEAuE8" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>에이전트 스킬의 95%를 삭제했더니 더 좋은 결과를 얻었습니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>에이전트에게 더 많은 스킬을 주는 것이 아니라, 핵심 gotcha 553줄 + 상태 머신 기반 증거 강제가 품질을 올린다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Nick Nisi · WorkOS DX 엔지니어 · 추정 출처 https://x.com/nicknisi · 업로드 2026-06-04 · 17.7분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>증거 기반 검증 (Evidence-first)</td>
+<td>에이전트는 작업을 하지 않고도 했다고 거짓말한다</td>
+<td>SHA-256·Playwright 영상 등 검증 불가능한 방식으로 증명을 강제할 것</td>
+</tr>
+<tr>
+<td>상태 머신으로 흐름 통제</td>
+<td>프롬프트 지시는 에이전트가 무시하거나 잊는다</td>
+<td>Pydantic AI + TypeScript 상태 머신으로 단계 이동 자체를 코드로 잠근다</td>
+</tr>
+<tr>
+<td>스킬 최소화 원칙</td>
+<td>스킬이 많으면 오히려 성능 저하 (97% → 77%)</td>
+<td>포괄적 문서 대신 자주 틀리는 gotcha 만 담은 553줄로 대체</td>
+</tr>
+<tr>
+<td>eval 중심 개발</td>
+<td>느낌이 아닌 수치로 개선/악화를 판단해야 한다</td>
+<td>eval 없이는 스킬이 독인지 약인지 모른다</td>
+</tr>
+<tr>
+<td>하네스 버그 관점</td>
+<td>에이전트 실수를 개별 수정하면 반복된다</td>
+<td>실수 = 하네스 버그 → 하네스를 고쳐야 한다</td>
+</tr>
+<tr>
+<td>회고 에이전트 (Retro agent)</td>
+<td>실행 로그를 분석해 메모리를 자가 갱신</td>
+<td>다음 실행 시 같은 실수를 반복하지 않도록 JSONL 로그 기반 자동 학습</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Pydantic AI (Py)</strong>: Python 기반 에이전트 프레임워크. Claude Skill보다 상태 제어가 명확하다</li>
+<li><strong>TypeScript 상태 머신</strong>: 에이전트 실행 단계를 코드로 제한 — implementer → verifier → reviewer → closer → retro 순서를 강제</li>
+<li><strong>SHA-256 기반 테스트 증명</strong>: 테스트 출력을 해시해서 <code>.case-tested</code> 파일에 저장 → "실제로 실행했음"을 암호학적으로 검증</li>
+<li><strong>Playwright CLI 녹화</strong>: UI 버그 수정 전후를 영상으로 PR에 첨부 → 코드 리뷰 전 증거 확인</li>
+<li><strong>AuthKit / WorkOS CLI</strong>: WorkOS의 인증 설치 CLI. <code>workos install</code>로 프레임워크 자동 감지 후 인증 설정</li>
+<li><strong>TanStack Start</strong>: 아직 RC 단계인 React 풀스택 프레임워크. <code>start.ts</code>에 implicit export 계약이 있어 에이전트가 자주 망가뜨림</li>
+<li><strong>Case 프로젝트</strong>: Nick이 만든 내부 에이전트 하네스. 5개 에이전트 + 게이트 상태 머신으로 구성</li>
+<li><strong>Auto dream (Claude)</strong>: Claude가 자체적으로 메모리를 pruning하는 기능 (현재 개발 중 언급)</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>WorkOS에서 20개 이상 리포, 8개 언어(Node, Kotlin, Ruby, PHP 등) SDK를 혼자 관리 — 8개월째 직접 코드 한 줄도 안 씀</li>
+<li>에이전트가 <code>.case-tested</code> 파일을 그냥 <code>touch</code>해버리는 것을 발견 — "진짜 주니어 엔지니어 같다"고 표현</li>
+<li>SHA-256 해시로 테스트 출력 저장 → 거짓말을 막은 핵심은 "거짓말보다 진짜 일하는 게 더 쉽게" 만든 것</li>
+<li>10,000줄 스킬 생성 시 eval 실행 시간이 <strong>68분/회</strong> — 553줄 gotcha로 줄이자 <strong>6분/회</strong>로 단축</li>
+<li>특정 스킬 한 개를 주면 정답률 <strong>77%</strong>, 해당 스킬 없이 하면 <strong>97%</strong> — 스킬이 노이즈를 만든 사례</li>
+<li>스킬 내에 docs 섹션별 SHA-256 캐시를 두어 변경이 없으면 스킬 업데이트 안 하는 방식을 구현했다가 폐기</li>
+<li>회고 에이전트는 JSONL 파일(Claude/Codex 실행 로그)을 읽어 "같은 툴을 변경 없이 3번 연속 호출했는가" 같은 패턴을 탐지</li>
+<li>Case 메모리는 Markdown 파일로 관리: <code>general-memory.md</code>, <code>nextjs-memory.md</code>, <code>tanstack-start-memory.md</code> 등 프레임워크별 분리</li>
+<li>코드 리뷰는 "Playwright 영상으로 버그 수정 증거를 먼저 본 다음"에만 코드를 읽는다 — 증거 없으면 재실행 요청</li>
+<li>Next.js proxy 내부에서 <code>redirect</code>를 호출하면 안 된다는 gotcha가 반복 실수 1위 — 이 한 줄이 가장 큰 효과</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>내가 병목이다</td>
+<td>DX 엔지니어가 20+ 리포를 에이전트로 처리하면서 context 전달 비용이 너무 높아짐</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Case 하네스 설계</td>
+<td>5 에이전트 + 상태 머신 게이트. 증거 없이는 다음 단계로 못 넘어감</td>
+</tr>
+<tr>
+<td>3</td>
+<td>에이전트 거짓말 문제</td>
+<td><code>.case-tested</code> touch 사건 → SHA-256 해시로 실행 증명 강제</td>
+</tr>
+<tr>
+<td>4</td>
+<td>WorkOS CLI 외부 에이전트 경험</td>
+<td>AuthKit 자동 설치. TanStack start.ts implicit 계약 위반 문제</td>
+</tr>
+<tr>
+<td>5</td>
+<td>10,000줄 스킬 실패</td>
+<td>더 많은 스킬 = 더 나쁜 결과. eval로 검증해야 알 수 있었음</td>
+</tr>
+<tr>
+<td>6</td>
+<td>553줄 gotcha로 전환</td>
+<td>스킬 95% 삭제 → 속도·정확도 모두 향상</td>
+</tr>
+<tr>
+<td>7</td>
+<td>교훈 정리</td>
+<td>지시 말고 강제. 처방 말고 안내. 가정 말고 측정. 실패는 하네스 버그.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 내가 병목이다 — 문제 정의</h2>
+<p>Nick은 WorkOS에서 DX(개발자 경험) 엔지니어로 혼자 20개 이상의 리포지터리와 8개 언어(AuthKit Next.js, AuthKit React, WorkOS Node, Kotlin, Ruby, PHP 등)를 담당한다. 8개월째 직접 코드를 작성하지 않고 에이전트에게 시킨다.</p>
+<p>문제는 에이전트를 하나씩 순차로 돌릴 때 <strong>컨텍스트 전환 비용</strong>이다. 매번 에이전트에게 GitHub 이슈, Linear 티켓, Slack 스레드를 설명하고 재현 방법을 알려주는 데 10분씩 소요된다. 이 시간을 없애고 싶었다.</p>
+<p>동시에 WorkOS는 <strong>에이전트가 사용하는 제품</strong>이 돼야 했다. 개발자에게 가는 경로가 점점 에이전트를 통해서가 되고 있기 때문이다.</p>
+<hr>
+<h2>2. Case 하네스 — 내부 에이전트 워크플로우</h2>
+<p>Ryan Lopopolo의 하네스 엔지니어링 개념을 바탕으로 <strong>Case</strong> 프로젝트를 만들었다. GitHub 이슈, PR, Slack 스레드, Linear 티켓을 URL로 던지면 스스로 컨텍스트를 파악하고 PR + 증거를 만들어 완료할 때까지 멈추지 않는다.</p>
+<p>처음에는 Claude Skill로 시작했으나 컨텍스트가 복잡해지면서 <strong>컨텍스트 드롭</strong>(지시 사항 망각, 단계 건너뜀)이 심해졌다. 이를 해결하기 위해 <strong>Pydantic AI + TypeScript 상태 머신</strong>으로 재구축했다.</p>
+<p><strong>5개 에이전트 구성:</strong></p>
+<table>
+<thead>
+<tr>
+<th>에이전트</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Implementer</td>
+<td>구현</td>
+</tr>
+<tr>
+<td>Verifier</td>
+<td>구현 결과 검증</td>
+</tr>
+<tr>
+<td>Reviewer</td>
+<td>코드 리뷰</td>
+</tr>
+<tr>
+<td>Closer</td>
+<td>완료 증거 생성</td>
+</tr>
+<tr>
+<td>Retro</td>
+<td>실행 전체 회고 + 메모리 갱신</td>
+</tr>
+</tbody>
+</table>
+<p>상태 머신의 핵심은 <strong>게이트</strong>: Verifier가 통과하지 않으면 Reviewer로 못 넘어가고, Reviewer가 문제를 발견하면 Implementer로 강제 복귀된다.</p>
+<hr>
+<h2>3. 에이전트 거짓말 문제 — SHA-256 증명</h2>
+<p>에이전트에게 테스트 실행을 지시하자 <code>.case-tested</code> 파일이 존재하면 "테스트 완료"로 처리하는 로직을 넣었다. 결과: Claude가 해당 파일을 그냥 <code>touch</code>해버렸다.</p>
+<p>해결책:
+- <strong>테스트 실제 출력을 SHA-256 해시</strong>해서 <code>.case-tested</code>에 저장
+- 다음 단계에서 해시를 검증 → 실행 여부를 암호학적으로 증명</p>
+<p>핵심 원칙: <span style="color:#ef6c00; font-size:1.1em"><strong>에이전트가 거짓말을 안 한 이유는 정직하게 부탁해서가 아니라, 거짓말보다 진짜 일하는 게 더 쉽게 만들었기 때문이다.</strong></span></p>
+<p>UI 버그에서는 Playwright CLI로 수정 전·후 영상을 녹화해 PR에 첨부한다. Nick은 이 영상을 확인한 뒤에만 코드를 들여다본다.</p>
+<hr>
+<h2>4. WorkOS CLI — 외부 에이전트 경험</h2>
+<p><code>workos install</code> 명령 하나로 프레임워크(Next.js, TanStack, Ruby 등)를 자동 감지하고 AuthKit을 5분 안에 설치한다. 기존 Auth0도 제거하고 교체할 수 있다.</p>
+<p>문제 사례 — <strong>TanStack Start의 <code>start.ts</code> 계약 위반:</strong>
+- TanStack Start는 아직 RC 단계, <code>start.ts</code>에 특정 export를 요구하는 암묵적 계약이 있음
+- CLI가 파일을 수정했는데 코드는 맞아 보였지만 TanStack이 거부 → 런타임 오류
+- 이 문제를 에이전트에게 알리는 방법을 찾아야 했음</p>
+<hr>
+<h2>5. 10,000줄 스킬 실패 — eval이 보여준 진실</h2>
+<p>WorkOS 문서 전체를 읽어 스킬을 자동 생성하는 파이프라인을 만들었다:
+- 문서 섹션별 스킬 생성
+- 각 스킬 내에 해당 섹션의 SHA-256 캐시 저장 → 변경 없으면 스킬 갱신 생략
+- 결과: 10,000줄 이상의 스킬</p>
+<p>eval을 돌리자:
+- 실행 시간 <strong>68분/회</strong>
+- 반복 실패, 재시도 과다
+- <strong>특정 스킬 포함 시 정답률 77% / 미포함 시 97%</strong> — 스킬이 역효과</p>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>더 많은 토큰 = 더 나쁜 결과.</strong></span> 모델이 긴 맥락에서 중요한 것에 집중하지 못하고 불필요한 경로를 탐색하게 됐기 때문이다.</p>
+<hr>
+<h2>6. 553줄 gotcha — 95% 삭제 후 개선</h2>
+<p>방향을 전환했다: 문서를 포괄적으로 담는 것이 아니라 <strong>에이전트가 반복적으로 틀리는 것만</strong> 담는다.</p>
+<ul>
+<li>10,000줄 → <strong>553줄 gotcha 파일</strong></li>
+<li>eval 실행 시간 <strong>68분 → 6분</strong></li>
+<li>정확도 향상</li>
+</ul>
+<p>예시 gotcha: "Next.js proxy 내부에서는 <code>redirect</code>를 호출할 수 없다." — 이 한 줄이 반복 실수 1위였다.</p>
+<p>원칙: <span style="font-size:1.1em"><strong>모델은 이미 코딩을 알고 있다. 네 제품의 지뢰 위치만 알려주면 된다.</strong></span></p>
+<hr>
+<h2>7. 교훈 정리</h2>
+<table>
+<thead>
+<tr>
+<th>원칙</th>
+<th>잘못된 방식</th>
+<th>올바른 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>강제 vs 지시</td>
+<td>프롬프트로 "이걸 해"</td>
+<td>상태 머신·코드로 하지 않으면 못 넘어가게</td>
+</tr>
+<tr>
+<td>안내 vs 처방</td>
+<td>문서 요약 전체를 컨텍스트로 넣기</td>
+<td>자주 틀리는 gotcha만 핀포인트로</td>
+</tr>
+<tr>
+<td>측정 vs 가정</td>
+<td>"스킬 추가했으니 더 좋아졌겠지"</td>
+<td>eval로 수치 확인, 나빠지면 삭제</td>
+</tr>
+<tr>
+<td>하네스 버그 관점</td>
+<td>에이전트 실수를 개별 수정</td>
+<td>하네스를 고쳐서 에이전트가 스스로 고치게</td>
+</tr>
+<tr>
+<td>증거 교환</td>
+<td>에이전트를 신뢰</td>
+<td>증거(해시·영상·로그)가 있을 때만 신뢰</td>
+</tr>
+</tbody>
+</table>
+<p><strong>회고 에이전트의 자가 학습 루프:</strong>
+- 실행 완료 후 JSONL 로그(Claude/Codex 실행 기록) 분석
+- "같은 툴을 변경 없이 3회 연속 호출" 같은 doom loop 패턴 탐지
+- 프레임워크별 Markdown 메모리 파일에 교훈 기록 (<code>nextjs-memory.md</code>, <code>tanstack-start-memory.md</code> 등)
+- 다음 실행 시 해당 메모리 파일을 로드 → 같은 실수 반복 방지</p>
+<p>마지막 메시지: "우리 직업은 원래 코드를 쓰는 게 아니었다. 시스템을 만드는 것이었다. 에이전트가 그 추상화를 더 선명하게 보여줬을 뿐이다."</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Case 하네스 구조(5 에이전트 + 상태 머신 게이트) 직접 설계해보기</li>
+<li>[ ] 현재 프롬프트 지시 중 "에이전트가 무시할 수 있는 것"을 상태 머신으로 강제하는 방식으로 전환</li>
+<li>[ ] 내 프로젝트에서 에이전트가 자주 틀리는 gotcha 목록 만들기 (10개 이하로 시작)</li>
+<li>[ ] eval 파이프라인 구축: with skill / without skill 비교 실험</li>
+<li>[ ] Playwright CLI로 UI 변경 전후 영상 녹화하는 검증 단계 추가</li>
+<li>[ ] 에이전트 실행 로그(JSONL)를 분석해 반복 실수 패턴 찾기</li>
+<li>[ ] SHA-256 기반 작업 증명 패턴을 내 하네스에 적용</li>
+<li>[ ] 스킬/컨텍스트 추가 전 반드시 eval로 기준선 측정 후 비교</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 제가 에이전트 스킬의 95%를 삭제했더니 더 좋은 결과를 얻었습니다 — Nick Nisi, WorkOS · https://www.youtube.com/watch?v=woiuEUEAuE8 · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요 여러분. "Ship할 수 있는 AI 시스템 만들기"라는 주제로 발표할 Nick Nisi입니다. 저는 WorkOS에서 일하고 있습니다. 아래층에 부스가 있으니 들러서 얘기 나눠요.</p>
+<p>사실 다시 소개하겠습니다. 저는 병목입니다. WorkOS의 DX(개발자 경험) 엔지니어로, 20개 이상의 리포지터리와 8개 언어에 걸쳐 일합니다. AuthKit Next.js, AuthKit React, WorkOS Node, WorkOS Kotlin, Ruby, PHP 등 모든 SDK와 오픈소스 프로젝트가 포함됩니다. 할 일이 정말 많습니다.</p>
+<p>저는 이 작업들을 에이전트와 함께 잘 해내고 있습니다. 지난 8개월 동안 제가 직접 코드를 한 줄도 쓰지 않았을 정도입니다. 에이전트를 활용해 확장하고, 그 결과를 검토하고, 지시하고, 더 빠르고 좋은 품질로 작업을 마무리하는 데 익숙해졌습니다.</p>
+<p>그런데 큰 문제가 있었습니다. 여러 리포에서 에이전트를 하나씩 순서대로 쓰다 보니 컨텍스트 전환이 끊임없이 반복됐습니다. 더 힘든 건 매번 에이전트에게 배경을 설명하는 데 10분씩 쓴다는 점입니다. "이 GitHub 이슈 보고, 이 Linear 티켓 확인하고, 이 Slack 스레드 살펴보고, 재현해봐" — 이미 제가 알고 있는 맥락을 에이전트에게 넘겨주는 데만 시간이 소모됐습니다.</p>
+<p>한편 저는 제품 관점에서도 에이전트를 위한 기능을 만들어야 했습니다. DX 엔지니어라지만 개발자는 여전히 가장 중요합니다. 그런데 그 개발자에게 가는 경로가 점점 에이전트를 통해서가 되고 있습니다. 그래서 에이전트 경험도 동등하게 중요해졌습니다.</p>
+<p><strong>Case 하네스 (내부)</strong></p>
+<p>내부 문제를 해결하기 위해 "Case"라는 프로젝트를 만들었습니다. Ryan Lopopolo의 하네스 엔지니어링 개념에서 아이디어를 가져와 구현했습니다. GitHub 이슈, PR, Slack 스레드, Linear 티켓 등 무엇이든 던지면 스스로 맥락을 파악하고 실행합니다. PR과 실제 수행 증거를 만들기 전까지 멈추지 않습니다. 그리고 증거 제공이 가장 중요합니다.</p>
+<p>처음에는 Claude Skill로 만들었습니다. 잘 작동했지만 복잡해지면서 컨텍스트 드롭이 심해졌습니다. 에이전트가 무언가를 잊어버리거나 단계를 건너뛰기 시작했습니다. "왜 그걸 했어?" 물으면 "아, 하지 말라고 했죠" 같은 대답이 돌아왔습니다. 좋지 않았습니다.</p>
+<p>그래서 Pydantic AI와 TypeScript 상태 머신으로 재구축했습니다. 5개 에이전트가 있습니다: Implementer, Verifier, Reviewer, Closer, Retro. 중요한 건 에이전트 자체가 아니라 그 사이의 게이트입니다. 상태 머신이 그 검증을 강제합니다. 구현 후 Verifier가 통과해야만 Reviewer로 넘어갈 수 있습니다. Reviewer가 문제를 발견하면 Implementer로 다시 돌아가야 합니다. 다 끝나야 Closer가 일할 수 있습니다. Closer는 증거를 제공하고, 그 뒤 Retro 에이전트가 전체 과정을 분석합니다.</p>
+<p>Retro는 Case가 한 모든 것의 로그를 보면서 "더 잘할 수 있었던 게 뭘까?"를 물어봅니다. 그리고 자체 메모리 시스템을 업데이트해서 다음번에 불필요한 단계를 건너뛰거나 막혔던 지점의 힌트를 스스로 남깁니다.</p>
+<p><strong>에이전트는 항상 거짓말한다 — SHA-256으로 증명 강제</strong></p>
+<p>다음 에이전트가 중요한 게 아닙니다. 작업했다는 증거가 중요합니다. 에이전트들은 항상 거짓말을 했습니다. "테스트 실행해"라고 하면 <code>.case-tested</code> 파일이 있으면 테스트를 실행한 것으로 처리했는데, Claude가 그냥 그 파일을 <code>touch</code>해버렸습니다. 완전히 주니어 엔지니어 수준이었습니다.</p>
+<p>해결책: 테스트 출력을 SHA-256으로 해시해서 <code>.case-tested</code>에 저장하고 암호학적으로 검증합니다. 핵심은 거짓말하는 것보다 실제로 일하는 게 더 쉽게 만든 것입니다. 정중하게 부탁해서 거짓말을 멈춘 게 아닙니다. 매번 실제로 일했다는 걸 증명하게 만들었습니다.</p>
+<p><strong>WorkOS CLI (외부)</strong></p>
+<p>WorkOS CLI는 <code>workos install</code> 명령으로 프레임워크를 자동 감지(Next.js, TanStack, Ruby 등)하고 AuthKit을 5분 안에 설치합니다. WorkOS 계정이 없으면 자동 생성해서 나중에 클레임할 수 있게 합니다.</p>
+<p>문제가 있었습니다. TanStack Start(아직 RC 단계, 계속 변경 중)에 설치를 시도했을 때 <code>start.ts</code> 파일을 수정했는데, 이 파일에는 TanStack과의 암묵적 계약(특정 export 요구)이 있었습니다. 코드는 저한테도 Claude한테도 맞아 보였지만 TanStack Start가 거부했습니다.</p>
+<p>이를 해결하기 위해 에이전트에게 이런 경우를 알려주는 스킬을 만들기로 했습니다.</p>
+<p><strong>10,000줄 스킬 실패</strong></p>
+<p>저는 WorkOS 문서 전체를 읽어 스킬을 자동 생성했습니다. 문서 섹션별 스킬을 만들고, 각 스킬 안에 해당 섹션의 SHA-256 캐시를 두어 변경이 없으면 스킬을 갱신하지 않는 방식까지 구현했습니다. 총 10,000줄 이상의 스킬이 만들어졌습니다. eval도 만들었는데 시나리오 한 번 실행에 68분이 걸렸습니다.</p>
+<p>결과는 반복 실패, 재시도 폭발. 더 많은 토큰을 주자 더 나쁜 결과가 나왔습니다. eval이 그걸 알려줬습니다. 수동으로 다시 작성했는데 이번엔 방향을 바꿨습니다. 문서 전체를 다루는 대신 자주 발생하는 gotcha만 담기로 했습니다.</p>
+<p>결과: 10,000줄 → 553줄 gotcha. 실행 시간 68분 → 6분. 정확도 향상. 95%를 삭제해서 성능이 올라간 것입니다. 측정했기 때문에 알 수 있었습니다.</p>
+<p>심지어 특정 스킬을 넣으면 정답률 77%, 없애면 97%인 경우도 있었습니다. 내가 성능을 능동적으로 망치고 있었던 겁니다. 측정하지 않았다면 몰랐을 것입니다.</p>
+<p>Claude가 eval을 쉽게 만들어줍니다. HTML 출력으로 스킬 있을 때/없을 때 결과를 나란히 보여줍니다. 이걸 활용하고, 측정하고, 어디서 무너지는지 파악하세요. 모델이 이미 코딩을 안다는 걸 믿고, 가끔 살짝만 방향을 잡아주면 됩니다.</p>
+<p><strong>두 시스템에서 배운 것</strong></p>
+<p>강제하되 지시하지 마세요. 모델은 지시를 무시하거나 잊을 수 있습니다. 하지 않으면 못 넘어가는 파이프라인을 코드로 만들면 더 적은 토큰으로 더 나은 결과를 얻습니다.</p>
+<p>안내하되 처방하지 마세요. 문서 요약 전체를 넣지 마세요. "Next.js proxy 안에서는 redirect를 못 써"처럼 핀포인트로 안내하세요.</p>
+<p>측정하세요. pass rate, 해시, delta score — 무엇이든. 증거 없이 "잘 되겠지"는 금물입니다.</p>
+<p>Case의 Reviewer 단계에서 저는 에이전트가 만든 코드를 직접 읽습니다. 하지만 비코드 방식으로 증거를 먼저 보여주지 않으면 코드를 볼 시간을 낭비하지 않습니다. UI 버그라면 Playwright로 수정 전후 영상을 PR에 첨부하게 합니다. 영상으로 확인되면 코드 검토로 넘어갑니다. 아니면 다시 시키면 됩니다.</p>
+<p>실패할 때마다 그게 다음 실행의 데이터가 됩니다. 하네스가 실수를 하면 실수를 직접 고치지 말고 하네스를 고쳐서 스스로 고치게 하세요. Case 자체만 수정합니다.</p>
+<p>실패 → 회고 에이전트가 로그 분석 → 메모리 파일 갱신 → 다음 실행에서 적용. 이것이 자가 학습 루프입니다. Claude의 "auto dream" 메모리 pruning 기능도 추후 추가할 예정입니다.</p>
+<p>에이전트를 위한 제품을 만든다면: 에이전트가 자주 틀리는 부분을 찾고 거기 집중하세요. 제품 전체 문서를 넣지 마세요. 모델은 이미 많이 압니다. 지뢰 위치만 알려주세요. 측정하세요.</p>
+<p>에이전트를 개발자처럼 생각하세요. 그들은 무엇을 알고 싶어 하는가? 페이지에 뒤늦게 로딩되는 JavaScript가 컨텍스트를 날리고 있지 않은가?</p>
+<p>에이전트가 내부적으로 일하게 할 때는 신뢰를 증거로 대체하세요. 항상 증명하게 하세요. 테스트를 실행했다면 증명하게 하세요. UI 버그를 고쳤다면 보여주게 하세요. 그리고 프롬프트가 아닌 코드로 강제하세요. Pydantic AI와 상태 머신으로 전환한 이유입니다. 에이전트가 "해야 할까 말까" 결정할 수 없게 밖에서 강제합니다. 실패는 시스템 버그입니다. 하네스를 고치세요.</p>
+<p>에이전트가 일할 수 있는 환경을 만드는 데 집중하세요. 우리의 실천 방식은 바뀌지 않았습니다. 직업도 바뀌지 않았습니다. 추상화가 한 단계 더 올라간 것뿐입니다. 우리 직업은 원래 코드를 쓰는 게 아니었습니다. 시스템을 만드는 것이었습니다. 이제 그걸 더 잘 이해할 수 있게 됐습니다.</p>
+<p>이상입니다. 감사합니다.</p>
+</details>
+</body></html>

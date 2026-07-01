@@ -1,0 +1,194 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Google의 새 릴리스가 AI 시스템 문제를 해결했습니다</title>
+<meta name="description" content="Google의 Open Knowledge Format(OKF) — 세컨드 브레인·에이전트 지식베이스의 비표준 문제를 concept·index.md·YAML front matter로 표준화. Karpathy의 LLM wiki 패턴을 표준화한 것. 토큰↓·검색속도↑."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Google의 새 릴리스가 AI 시스템 문제를 해결했습니다</h1>
+<div class="meta">원작자 AI Labs (채널) · AI Labs (소프트웨어 회사 / AI Labs Pro 커뮤니티) · 업로드 2026-06-28 · 12분 · <a href="https://youtu.be/ZCutcOL5lXE" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Google의 새 릴리스가 AI 시스템 문제를 해결했습니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>사람마다 제멋대로 만들어 공유·탐색이 안 되는 세컨드 브레인 문제를, Google의 <strong>Open Knowledge Format(OKF)</strong>이 concept·index.md·YAML front matter라는 표준 구조로 풀어 — 에이전트가 키워드 매칭 대신 메타데이터를 먼저 읽어 토큰을 덜 쓰고 더 빨리 검색하게 한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 AI Labs (소프트웨어 회사 채널) · 추정 출처 ailabspro.io · 업로드 2026-06-28 · 12분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>세컨드 브레인의 비표준 문제</td>
+<td>만든 사람 방식대로 구조화돼 공유·탐색 불가</td>
+<td>표준이 없어 새 팀원·에이전트가 헤맴</td>
+</tr>
+<tr>
+<td>Claude의 검색 한계</td>
+<td>적극 검색할 때만 정보를 찾음, 있는 줄 모름</td>
+<td>중첩 폴더에서 키워드 매칭 → 시간·토큰 낭비, 엉뚱한 폴더 신설</td>
+</tr>
+<tr>
+<td>OKF = 표준화</td>
+<td>MCP·skills·design.md처럼 "지식"을 표준화</td>
+<td>concept 객체 + index.md + YAML front matter 번들</td>
+</tr>
+<tr>
+<td>LLM wiki 패턴</td>
+<td>OKF의 뿌리, Karpathy 제안</td>
+<td>RAG(매번 재구성) 대신 markdown으로 점진적 문맥 축적</td>
+</tr>
+<tr>
+<td>index.md 우선 읽기</td>
+<td>에이전트가 폴더에서 가장 먼저 읽음</td>
+<td>메타 먼저 → 필요한 것만 로드 = 토큰↓ 속도↑</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>OKF (Open Knowledge Format)</strong> — Google이 낸 지식 베이스 표준 포맷. concept(개념 객체)들을 토픽 폴더 + index.md + YAML 메타로 묶은 번들. 사람도 에이전트도 내용을 알 수 있고 시스템 간 이식 가능(portable).</li>
+<li><strong>concept(개념 객체)</strong> — 지식 베이스의 모든 것을 표현하는 단위. 데이터·markdown·YAML 등 무엇이든 될 수 있음. 원칙: <strong>하나의 concept = 하나의 것</strong>(minimalism).</li>
+<li><strong>YAML front matter</strong> — 파일 맨 위 작은 블록(name·description·type). 에이전트가 본문 열기 전에 "이 파일이 뭔지"부터 파악. skills의 YAML 블록과 같은 역할.</li>
+<li><strong>LLM wiki 패턴</strong> — Andrej Karpathy가 제안. RAG의 한계(질문마다 정보를 처음부터 재구성, 지식이 누적 안 됨)를 markdown 파일 기반으로 대체 — 에이전트가 파일시스템을 탐색하며 문맥을 축적. → andrej-karpathy-skills</li>
+<li><strong>RAG (Retrieval-Augmented Generation)</strong> — 문서를 벡터로 변환해 질의 의미와 매칭해 관련 조각을 반환. 의미 매칭엔 좋지만 매번 재구성·비누적이 약점.</li>
+<li><strong>llms.txt</strong> — 웹사이트가 모델용으로 사이트 정보를 담아두는 파일. 화자는 사이트들이 앞으로 OKF 번들도 함께 붙일 수 있다고 전망(agentic search 대비).</li>
+<li><strong>BigQuery</strong> — Google의 대형 데이터 저장 DB. OKF 공식 enrichment agent가 BigQuery 데이터를 concept 문서로 변환하게 설계됨(= 비-BigQuery 사용자는 우회 필요).</li>
+<li><strong>Mobbin (스폰서)</strong> — 62.1만 실제 앱 화면 + 14.2만 플로우 라이브러리를 MCP로 AI 도구에 연결. 화면 복사가 아니라 검증된 플로우·상태·위계를 코드 작성 전 에이전트에 줌. "AI slop" 디자인 방지.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정·명령어·뉘앙스.</p>
+</blockquote>
+<ol>
+<li><strong>AI Labs 자체 세컨드 브레인 운영</strong> — 전략·리서치·가이드라인을 Git 버전관리 + GitHub 푸시로 팀 공유. 신규 입사자는 pull만 하면 맥락 획득. <code>claude.md</code>(전사 <code>clod.md</code>로 오인식)가 에이전트 탐색을 가이드, 각 폴더마다 전용 <code>claude.md</code>도 둠.</li>
+<li><strong>Claude의 반복 실수</strong> — 파일을 엉뚱한 위치에 두고, 지적하면 비슷한 정보가 다른 이름의 폴더에 이미 있는 줄 몰라 <strong>새 폴더를 또 만듦</strong>. 작은 KB에선 안 보이지만 큰 KB에서 두드러짐.</li>
+<li><strong>표준화 계보</strong> — 외부 리소스 연결 필요 → <strong>MCP</strong>, 재사용 지시 패키징 → <strong>skills</strong>, 디자인 의도 전달 → Google의 <strong>design.md</strong>. 같은 흐름으로 지식 표준화 → <strong>OKF</strong>.</li>
+<li><strong>agentic search 가설</strong> — Google이 웹검색을 agentic search로 바꾸려는 만큼, OKF는 사이트가 llms.txt를 넘어 구조화 정보를 제공하게 하는 포석일 수 있음. (현재는 internal use 한정.)</li>
+<li><strong>OKF 3종 구성</strong> — ① enrichment agent(BigQuery 데이터 → OKF concept 문서 변환 + LLM 검수) ② HTML 시각화 도구(번들 → 인터랙티브 그래프 뷰) ③ 올바른 OKF 데이터 예시(에이전트 참조용).</li>
+<li><strong>테스트 방식</strong> — main 브랜치 안 건드리려고 <strong>새 브랜치</strong>(별도 복사본)에서 작업. 공식 변환 도구가 BigQuery 전용이라, <strong><code>markdown to okf</code>라는 skill을 직접 제작</strong>해 우회.</li>
+<li><strong>script-first 설계</strong> — skill이 대부분 코드로 처리하고 판단이 필요한 일부만 에이전트가 담당 → 에이전트 부하·토큰 절감. 변환 스크립트 + 변환 정확성 검증용 evals(출력에 대해 에이전트가 돌리는 프롬프트) 포함.</li>
+<li><strong>Obsidian 유사성</strong> — 변환 결과 루트 + 각 하위폴더마다 <code>index.md</code> 생성, 하위폴더를 링크로 참조. Obsidian이 페이지를 잇고 그래프 뷰를 만드는 방식과 동일.</li>
+<li><strong>결정적 한 수</strong> — 변환만으론 Claude가 여전히 기존 패턴 매칭으로 검색(OKF가 신규라 존재를 모름). <strong><code>claude.md</code>에 OKF 탐색법·각 파일 역할·구조 사용법 섹션을 추가</strong>하자 그제서야 index.md들을 타고 탐색, 훨씬 빠르고 토큰 적게 사용(YAML 메타 먼저 읽고 열지 말지 판단).</li>
+<li><strong>현재 결론(중요)</strong> — 모델이 이미 패턴 매칭·터미널 명령에 충분히 유능하므로, 에이전트들이 기본 지원하는 오픈 표준이 되기 전까지 OKF는 "필수"가 아니라 <strong>최적화(optimization)</strong> 수준이다.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>세컨드 브레인의 문제</td>
+<td>비표준 → 공유·탐색 불가, Claude가 헤매고 엉뚱한 폴더 신설</td>
+</tr>
+<tr>
+<td>2</td>
+<td>OKF란?</td>
+<td>지식 표준화 — MCP·skills 계보를 잇는 Google 포맷</td>
+</tr>
+<tr>
+<td>3</td>
+<td>뿌리</td>
+<td>Karpathy의 LLM wiki 패턴(RAG 대안)을 표준화한 것</td>
+</tr>
+<tr>
+<td>4</td>
+<td>작동 방식</td>
+<td>concept + 토픽 폴더 + index.md + YAML, 원칙은 minimalism·분리</td>
+</tr>
+<tr>
+<td>5</td>
+<td>실전 테스트</td>
+<td>BigQuery 전용 한계 → markdown-to-okf skill 자작, 새 브랜치 검증</td>
+</tr>
+<tr>
+<td>6</td>
+<td>결과·평가</td>
+<td>토큰↓·검색↑, 단 claude.md 안내 필수. 아직은 최적화 수준</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 세컨드 브레인의 진짜 문제</h2>
+<p>사람들이 Claude Code를 코딩 에이전트가 아니라 OS처럼 써서 세컨드 브레인을 구축한다. 하지만 각자 자기 방식대로 구조화해 <strong>표준이 없어</strong> 탐색·공유가 어렵다. AI Labs도 Git+GitHub로 팀 공유 브레인을 운영하지만, Claude가 파일을 엉뚱한 곳에 두거나, 이미 있는 정보를 모르고 새 폴더를 만든다. 근본 원인: Claude는 <strong>적극적으로 검색할 때만</strong> 정보를 찾고, 중첩 폴더를 키워드 매칭으로 뒤지느라 시간·토큰을 낭비한다.</p>
+<h2>2. OKF = 지식의 표준화</h2>
+<p>MCP(외부 리소스 연결), skills(재사용 지시), design.md(디자인 의도)처럼 늘 표준화 수요가 있었고, 지식도 마찬가지다. Google의 Open Knowledge Format이 그 답 — 누구나 생산·해독 가능하고 시스템 간 이식되는 표준 포맷이다. 새로운 개념을 발명한 게 아니라 <strong>형식을 표준화</strong>했다.</p>
+<h2>3. 뿌리 — Karpathy의 LLM Wiki</h2>
+<p>OKF는 Andrej Karpathy의 LLM wiki 패턴에 기반한다. 그 이전엔 RAG(문서를 벡터화해 의미 매칭)에 의존했는데, Karpathy는 RAG가 질문마다 정보를 처음부터 재구성할 뿐 <strong>지식을 누적하지 못한다</strong>고 지적했다. 대신 markdown 파일로 지식 베이스를 만들면 에이전트가 파일시스템을 탐색하며 문맥을 축적한다. 다만 각자 개인 워크플로 중심이라 공유가 안 됐고, OKF가 이 표준화 공백을 메운다.</p>
+<h2>4. OKF 작동 방식</h2>
+<ul>
+<li>지식 베이스의 모든 것을 <strong>concept(개념 객체)</strong>로 표현(데이터·markdown·YAML 등).</li>
+<li>토픽별 폴더, 각 폴더엔 <strong>index.md</strong>(에이전트가 가장 먼저 읽어 폴더 내용 파악).</li>
+<li>각 concept 문서엔 <strong>YAML 블록</strong>(name·description·type) — 에이전트가 메타부터 읽고 필요한 것만 로드.</li>
+<li>원칙 ① <strong>minimalism</strong>: 1 concept = 1 thing(토픽 섞이면 정확한 로드 불가). ② <strong>분리</strong>: 지식 베이스를 소비자(에이전트·사람·팀)와 플랫폼에서 독립시켜 어디서나 사용 가능.</li>
+</ul>
+<h2>5. 실전 테스트 (AI Labs)</h2>
+<p>main을 안 건드리려 새 브랜치에서 작업. OKF는 enrichment agent·HTML 시각화·예시 3종을 제공하지만 공식 변환 도구가 <strong>BigQuery 전용</strong>이라, Git으로 이미 관리 중인 그들은 <code>markdown to okf</code> skill을 자작했다. script-first(코드 위주 + 판단만 에이전트)로 토큰을 아끼고, evals로 변환 정확성을 검증. 변환 결과는 루트·하위폴더마다 index.md가 생기는 Obsidian식 구조였고, 시각화 명령으로 인터랙티브 그래프 HTML도 생성됐다.</p>
+<h2>6. 결과와 솔직한 평가</h2>
+<p>처음엔 Claude가 OKF를 몰라 기존 패턴 매칭으로 검색했다. <code>claude.md</code>에 OKF 탐색법을 명시하자 그제서야 index.md를 타고 들어가 <strong>더 빠르고 토큰을 덜</strong> 썼다(YAML 메타 먼저 읽고 열지 판단). 장점은 두 가지 — <strong>낮은 토큰 사용 + 빠른 검색</strong>. 구조가 claude.md에 문서화돼 파일 위치도 안 잊는다. 다만 모델이 이미 충분히 유능하므로, 에이전트 기본 지원 오픈 표준이 되기 전까진 <strong>필수가 아닌 최적화</strong>라는 게 화자의 결론.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 차드의 charde_n 볼트 / wisper-page brain에 비표준 탐색 문제(엉뚱 폴더·중복)가 실제로 있는지 점검</li>
+<li>[ ] 각 폴더 index.md + YAML front matter 패턴을 일부 폴더에 시험 적용</li>
+<li>[ ] CLAUDE.md에 "탐색법·폴더 역할" 섹션이 명시돼 있는지 확인 (이게 OKF 효과의 핵심)</li>
+<li>[ ] RAG vs markdown-wiki: 우리 지식 파이프라인이 어느 쪽인지 정리 → techbridge-pipeline</li>
+<li>[ ] OKF가 오픈 표준으로 에이전트 기본 지원될 때까지는 도입 보류(최적화 수준)</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Google의 새 릴리스가 AI 시스템 문제를 해결했습니다 · https://youtu.be/ZCutcOL5lXE · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>세컨드 브레인과 Claude OS에 대한 온갖 화제를 들어봤을 겁니다. 사람들은 Claude Code로 시스템 전체를 세팅해, 단순 코딩 에이전트가 아니라 운영체제처럼 돌리고 있죠. 하지만 이 시스템들엔 그들만의 문제가 있습니다. 세컨드 브레인을 만들 때 사람들은 자기 용도로, 자기가 최선이라 생각하는 방식으로 구조화합니다. 표준 방식이 없어 탐색이 어렵고 공유도 안 됩니다. 이를 풀려고 Google이 방금 Open Knowledge Format을 냈습니다 — AI로 그런 운영체제를 어떻게 만들지 Google 나름의 방식을 제시한 거죠.</p>
+<p>처음 오셨다면, 저희는 소프트웨어 회사이고 이 채널은 AI Labs입니다. 저희가 한 것처럼 여러분의 프로세스를 AI로 최적화하는 법을 보여드립니다. 이 영상에선 이 포맷이 뭔지, 어떻게 문제를 풀고, 왜 여러분 워크플로에 중요한지 다룹니다.</p>
+<p>Google이 뭘 했는지 보기 전에 진짜 문제부터 이해하죠. 이전 영상에서 세컨드 브레인 유지에 대해 다뤘고, 저희도 하나 운영합니다 — 전략·리서치·가이드라인을 다 보관하죠. Git으로 버전 관리하고 GitHub에 푸시해 팀 전원이 접근합니다. 새 사람이 들어오면 pull만 하면 저희가 일하는 맥락을 얻죠. 앞서 말했듯 이 세컨드 브레인은 <code>claude.md</code> 파일이 제어합니다. 그 파일이 에이전트에게 브레인 탐색법을 안내하죠. 각 폴더마다 전용 <code>claude.md</code>도 둬서 그 디렉터리 작업 지시를 줍니다. 하지만 Claude가 파일에서 맥락을 꽤 잘 얻어도 여전히 자주 실수합니다. 파일을 엉뚱한 곳에 둔 적이 셀 수 없이 많고, 그러면 어디로 가야 하는지 다시 알려줘야 했죠. 그 후엔 그냥 새 폴더를 만들어버립니다 — 비슷한 정보가 다른 이름으로 이미 다른 폴더에 있다는 걸 모르니까요. 진짜 문제는 Claude가 필요한 정보가 지식 베이스에 이미 있다는 걸 모른다는 겁니다. 적극적으로 검색할 때만 찾죠. 특정 파일을 보라고 하지 않으면 그 파일이 있는지도 모릅니다. 작은 지식 베이스에선 잘 안 보이지만 큰 걸 다루면 훨씬 두드러집니다. Claude의 검색 방식은 키워드를 파일 내용에 매칭하고 파일명도 단서로 씁니다. 그래서 깊게 중첩된 폴더 구조를 뒤지라 하면 맞는 파일을 찾기까지 여러 번 시도해야 하죠. 시간 낭비일 뿐 아니라 토큰도 많이 먹습니다.</p>
+<p>그래서 Google이 Open Knowledge Format을 냈고, 푸는 문제는 표준화입니다. 이건 에이전트 전반에서 여러 번 봐온 일이죠. 에이전트가 터미널 밖 외부 리소스와 대화할 필요가 생기자 MCP가 나왔고 모든 에이전트가 채택한 프로토콜이 됐습니다. 같은 식으로 재사용 지시를 패키징하는 건 skills로 나와 MCP처럼 퍼졌죠. 디자인 의도 전달을 표준화할 필요가 생기자 Google은 design.md 표준도 냈습니다. 늘 표준화 수요가 있듯 지식도 표준화가 필요했고, 그게 바로 OKF입니다.</p>
+<p>이 아이디어가 새로운 건 아닙니다. Andrej Karpathy가 만든 LLM wiki 패턴에 기반하고, 한동안 정말 유행했죠. 그 전엔 사람들이 RAG 방식에 의존했습니다 — 거대 문서를 전부 벡터로 변환하는 거죠. 벡터는 모든 걸 모델이 이해하는 형태로 넣어주니 도움이 됩니다. 거기서 시스템이 질의 의미를 기존 데이터와 매칭해 가장 관련 있는 걸 반환하죠. 하지만 Karpathy는 이게 문제를 일으킨다고 짚었습니다. 질문할 때마다 에이전트가 정보를 처음부터 재구성하는 셈이라, 답은 주지만 시간이 지나도 지식이 쌓이지 않습니다. 그래서 대신 markdown 파일로 지식 베이스를 만들라고 제안했죠 — 그래야 에이전트가 진행하며 맥락을 모읍니다. 그의 방식은 모델의 파일시스템 탐색 능력을 활용했습니다. 그가 공유한 뒤 많은 사람이 자기 세컨드 브레인을 만들기 시작했죠. 문제는 각자 제작자의 개인 워크플로 중심이라, 정리한 사람은 각 폴더에 뭐가 있는지 알고 에이전트로 쉽게 탐색하지만, 새 사람은 에이전트가 폴더를 탐색하며 지식 베이스에 뭐가 있는지 알아내는 데 시간을 써야 했습니다. OKF는 파일을 정리하는 표준 방식을 만들어 이를 풉니다 — 에이전트뿐 아니라 사람도 안에 뭐가 있는지 이해하게요. 지식을 번들로 패키징해 공유 가능하게 만들죠. 이 번들엔 실제 정보를 담은 markdown 파일이 들어가고, 각 파일엔 YAML front matter — 파일 맨 위의 작은 블록으로 안에 뭐가 있는지 설명 — 가 있어 에이전트가 그 파일이 뭘 담는지 압니다. 그러니 OKF는 새 걸 도입하기보다, 누구나 만들고 읽을 수 있는 표준 포맷을 줘서 지식을 시스템 간 이식 가능하게 만듭니다.</p>
+<p>처음 듣고 살펴봤을 때 한 가지 생각이 들었습니다. Google이 웹검색을 agentic search로 바꾸려는 만큼, 이건 그 전환을 뒷받침하려는 시도일 수도 있겠다고요. 지금 웹사이트들은 llms.txt 파일을 추가하는데, 모델용으로 맞춰진 사이트 정보를 담아 에이전트 시스템에 사이트 맥락을 줍니다. 그러니 llms.txt에만 의존하지 않고, 사이트가 결국 OKF 번들도 추가하기 시작할 수 있죠. 그러면 에이전트가 콘텐츠를 더 효율적으로 질의하고 구조화 정보 기반으로 더 나은 검색 결과를 줄 수 있습니다. 지금은 internal use 전용이지만 일어날 수 있는 일입니다.</p>
+<p>어떻게 돕는지 이해하려면 OKF가 내부적으로 어떻게 작동하는지 봅시다. 이 시스템은 지식 베이스의 모든 부분을 concept이라는 객체로 표현합니다. 데이터·markdown 문서·YAML 파일, 들어가는 무엇이든 될 수 있죠. 구조는 이렇습니다. 정리하려는 모든 정보를 토픽 이름의 폴더에 넣고, 각 폴더는 그 한 토픽 콘텐츠만 담습니다. 모든 폴더 안엔 index.md 파일이 있는데, 에이전트가 가장 먼저 읽기에 가장 중요합니다 — 그 폴더 안에 뭐가 있는지 맥락을 주죠. 각 concept 문서엔 name과 description을 담은 작은 YAML 블록이 있어, 에이전트가 그게 정확히 뭐고 안에 뭐가 있는지 압니다. skills가 비슷한 YAML 블록을 갖는 것과 똑같은 목적이죠 — 맥락을 조금씩 먹여, 이 description을 먼저 읽고 필요한 것만 정확히 로드하게 합니다. OKF가 세워진 핵심 원칙은 minimalism입니다. 각 concept은 단 하나만 표현해야 하고, 문서 안 type 필드가 그게 뭔지 알려줍니다. 여러 무관한 것을 담으면 안 됩니다 — concept이 토픽을 섞는 순간 에이전트는 필요한 정확한 정보를 로드하는 능력을 잃으니까요. 또 다른 원칙은 지식 베이스를 소비자와 분리하는 것입니다. 에이전트든 사람이든 팀원이든, 지식 자체는 독립적으로 유지되죠. 특정 플랫폼에도 묶이지 않아 거의 무엇과도 쓸 수 있습니다.</p>
+<p>시스템을 실제로 보기 전에 스폰서 Mobbin 한마디. Cursor·Lovable·Claude Code로 UI를 만들어봤다면 다 똑같은 걸 뱉는다는 걸 눈치챘을 겁니다 — 같은 히어로 섹션, 카드 레이아웃, 같은 뻔한 온보딩. AI slop처럼 보이죠. 이유는 간단합니다 — 이 도구들은 좋은 디자인이 뭔지 실제로 본 적이 없습니다. 하지만 Mobbin은 봤죠. Mobbin이 MCP 서버를 출시해, AI 도구를 Revolut·Uber·Wyze 같은 출시 제품의 62.1만 실제 앱 화면과 14.2만 플로우 라이브러리에 직접 연결합니다. 제가 쓴 법 — 체크아웃 플로우를 만들며 에이전트에게 최고 앱들이 이걸 어떻게 다루는지 참고하라 했죠. 핵심은 화면 복사가 아니라, Mobbin이 코드 작성 전 그 디자인 뒤의 실제 플로우·상태·위계를 에이전트에 줘서 추측 대신 검증된 패턴으로 만든다는 겁니다. 세팅 1분 미만, Claude·cursor·v0 등에서 작동. 고정 댓글 링크로 Mobbin MCP 써보세요.</p>
+<p>이 시스템이 실제 세팅에서 어떻게 작동하는지 보고 싶었습니다. 이미 GitHub로 팀 공유 세컨드 브레인을 운영 중이라 거기에 OKF를 테스트했죠. 단 잘 안 될 경우를 대비해 main 브랜치는 안 건드리고, 새 브랜치(프로젝트의 별도 복사본)를 만들어 거기서 모든 변경을 했습니다. OKF는 세 가지와 함께 옵니다. 첫째 enrichment agent — BigQuery(Google의 데이터 저장용 대형 DB)에 있는 데이터를 OKF concept 문서로 변환한 뒤 LLM 검수를 돌립니다. 둘째 HTML 시각화 도구 — OKF 번들을 탐색하기 쉬운 인터랙티브 그래프 뷰로 바꾸고, 올바르게 포맷된 OKF 데이터 예시도 함께 와 에이전트가 참조할 수 있습니다. 저흰 BigQuery를 안 써서 첫 부분은 필요 없었습니다 — Google Cloud에 프로젝트를 통째로 세팅해야 했을 텐데, 프로젝트가 이미 Git으로 추적돼 불필요했죠. 그런데 데이터를 OKF 포맷으로 바꾸는 동봉 도구가 BigQuery 전용이라, 우회책으로 <code>markdown to okf</code>라는 skill을 만들었습니다. 이 skill은 어떤 markdown 폴더든 스펙에 따라 OKF 번들로 변환합니다. 설계상 코드가 대부분을 하고, 판단이 필요한 일부만 에이전트가 맡죠. script-first 접근인데, 코드로 처리하면 에이전트 부하가 줄고 토큰을 덜 쓰기 때문입니다. skill엔 markdown을 OKF로 바꾸는 스크립트가 있고, 변환을 신뢰성 있게 테스트하는 evals도 있습니다 — 출력에 대해 에이전트가 돌려 제대로 변환됐는지 확인하는 프롬프트죠. 그래서 새 브랜치로 바꿔 변환을 시켰습니다. 모든 스크립트를 돌려 지시대로 파일을 변환했고, 하위폴더들을 참조하는 링크가 담긴 index.md 파일을 만들었죠. Obsidian을 써봤다면 이게 페이지를 잇는 방식과 정말 비슷하다는 걸 알 겁니다 — Obsidian이 그래프 뷰를 만드는 것도 이거죠. index.md는 루트에만 있는 게 아니라 각 하위폴더 안에도 있습니다. 각각 그 폴더 안의 모든 걸 나열해 에이전트가 거기 어떤 콘텐츠가 있는지 알게요. 말했듯 OKF는 시각화 도구와 함께 오니, 터미널에서 visualize 명령으로 번들에 돌렸더니 전체 지식 베이스를 표현하는 HTML 문서가 생성됐습니다. 브라우저로 열면 모든 노드와 파일 간 연결을 펼쳐 보여줘, 전체 시스템과 연결을 이해하는 인터랙티브한 방법을 줍니다.</p>
+<p>모든 문서를 OKF 구조로 변환했으니 검색 성능을 테스트했습니다. 처음 파일을 찾으라 했을 땐 그냥 평소 방식(패턴 매칭)으로 돌아가버렸죠. OKF가 아직 널리 채택된 표준이 아니고 최근에 나와 Claude가 존재를 몰랐기 때문입니다. 고치려고 claude.md 파일에 시스템 탐색법, 각 파일의 역할, 구조 사용법을 설명하는 섹션을 추가했습니다. 그러자 특정 파일로 가라 했을 때 이번엔 저희가 만든 index.md들을 타고 들어갔고, 평소 Claude가 전체 지식 베이스를 뒤지는 것보다 훨씬 빠르게 결과를 줬습니다. YAML 메타데이터를 먼저 로드해 각 파일이 뭘 담는지 파악한 뒤 실제로 열지 결정했기에 토큰도 덜 썼죠. 그래서 얻는 주요 이점은 두 가지 — 낮은 토큰 사용과 빠른 검색입니다. 앞서 말한 오류 가능성을 줄이며 더 빠르게 정보를 끌어오는 방법이죠. 구조가 claude.md에 문서화돼 파일이 어디 속하는지 안 잊고, index.md에 명시돼 각 파일이 뭘 하는지도 압니다. 다만 지금 모델들은 이미 패턴 매칭과 자체 터미널 명령 실행에 꽤 유능합니다. 그래서 에이전트가 기본 지원하는 오픈 표준이 되기 전까진, 이건 꼭 필요한 것이라기보다 최적화에 가깝습니다.</p>
+<p>저희가 만든 skill들은 커뮤니티인 AI Labs Pro에서 찾을 수 있습니다 — 리소스·스타터팩과 함께 저희 팀을 포함한 비슷한 너드들과 교류할 곳이죠. 저희 작업이 가치 있었고 채널을 응원하고 싶다면 이게 최고의 방법입니다. 링크는 설명란에. 이걸로 영상을 마칩니다. 채널을 응원하고 싶으면 아래 Super Thanks 버튼을 써주세요. 늘 그렇듯 시청 감사하고, 다음 영상에서 뵙겠습니다.</p>
+</details>
+</body></html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Claude Code의 지난 1년을 돌아봅니다</title>
+<meta name="description" content="Claude Code 팀 내부자 Boris Cherny·Cat Wu가 출시 1년을 돌아보며 검증·auto mode·routines·context minimalism 등 에이전트 코딩의 실전 패턴을 공유한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Claude Code의 지난 1년을 돌아봅니다</h1>
+<div class="meta">원작자 Boris Cherny, Cat Wu · Anthropic (Claude Code 팀) · 업로드 2026-06-10 · 18.1분 · <a href="https://www.youtube.com/watch?v=6MaErueDH24" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Claude Code의 지난 1년을 돌아봅니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Claude Code 팀의 Boris Cherny와 Cat Wu가 1년간의 변화를 회고하며, 단일 에이전트 → 수천 에이전트 트리, auto mode, routines, context minimalism으로 이어지는 에이전트 코딩의 진화 방향을 직접 설명한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Boris Cherny · Cat Wu · Anthropic Claude Code 팀 · 추정 출처 https://x.com/ClaudeDevs · 업로드 2026-06-10 · 18분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLAUDE.md / Skill 파일로 실수 축적</td>
+<td>에이전트가 같은 실수를 반복하지 않게 지식을 코드베이스에 쌓는 핵심 패턴</td>
+<td>실수 발생 시 <code>claude.md</code> 또는 skill 파일에 기록 → 에이전트가 영구 학습</td>
+</tr>
+<tr>
+<td>Auto mode (권한 자동 판단)</td>
+<td>권한 프롬프트를 일일이 승인하면 집중력이 분산됨 — 보조 모델이 안전 여부를 분류하는 방식이 더 안전</td>
+<td>허용/거부를 라우팅 모델에 위임, 의심스러운 것만 인터럽트</td>
+</tr>
+<tr>
+<td>Routines (상시 실행 에이전트)</td>
+<td>GitHub 이슈·버그 리포트를 자동 픽업해 PR까지 올리는 "백그라운드 엔지니어" 역할</td>
+<td>특정 이벤트를 감시하다 조건 충족 시 수정 PR 자동 생성</td>
+</tr>
+<tr>
+<td>Loop / Agent View</td>
+<td>에이전트를 직접 프롬프팅하는 단계를 넘어 "루프가 에이전트를 프롬프팅" 하는 메타 레이어</td>
+<td>터미널 탭 6개 → 에이전트 뷰 1탭 + 워크트리 자동 생성</td>
+</tr>
+<tr>
+<td>Context Minimalism</td>
+<td>컨텍스트 과잉 = 모델 마이크로매니지먼트 → 최소한만 주고 나머지는 모델이 탐색하게</td>
+<td>시스템 프롬프트·도구를 최소로 주고 모델이 컨텍스트를 스스로 pull 하게</td>
+</tr>
+<tr>
+<td>Computer Use를 통한 자기 검증</td>
+<td>에이전트가 데스크탑 앱을 직접 클릭해 UX를 테스트하는 루프</td>
+<td><code>desktop development skill</code> 주입 → 에이전트가 로컬 앱 실행·클릭·엣지케이스 검증</td>
+</tr>
+<tr>
+<td>조직 전환: 컴퓨터 도입 유추</td>
+<td>AI 도입도 메인프레임→PC 전환처럼 "업무 중심에 놓아야" 생산성이 나옴</td>
+<td>종이 파일 캐비넷을 버리고 PC를 중심에 놓았듯, 모든 업무 흐름에 Claude를 삽입</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>CLAUDE.md</strong> — 프로젝트 루트에 위치하는 에이전트 지시 문서. 실수·제약·컨벤션을 축적하는 "영구 메모리" 역할.</li>
+<li><strong>Skill 파일</strong> — Claude Code에서 특정 작업 절차를 문서화한 재사용 가능 지침. <code>desktop development skill</code>처럼 에이전트에게 능력을 "가르치는" 단위.</li>
+<li><strong>Auto mode</strong> — 권한 프롬프트를 별도 분류 모델(classifier)에 라우팅해 자동 허용/거부하는 Claude Code 모드. 플랜 모드보다 최신 모델에 더 적합.</li>
+<li><strong>Plan mode</strong> — 실행 전 계획을 먼저 출력하는 Claude Code 모드. Opus 4~4.5 시대에는 유용했으나 4.6+ 부터는 auto mode가 대체.</li>
+<li><strong>Routines</strong> — 특정 이벤트(GitHub 이슈 생성, 버그 리포트 등)를 상시 감시해 자동으로 작업을 실행하는 상주 에이전트 패턴.</li>
+<li><strong>Agent View</strong> — 여러 에이전트를 한 화면에서 관리하는 Claude Code UI. 여러 터미널 탭을 대체.</li>
+<li><strong>Remote Control</strong> — 모바일(폰)에서 데스크탑 에이전트를 원격 조작하는 기능. 컴퓨터 없이 커피 마시며 에이전트 지시 가능.</li>
+<li><strong>Loop</strong> — 에이전트가 에이전트를 프롬프팅하는 메타 레이어. "나 → 에이전트" 다음 단계인 "루프 → 에이전트 → 에이전트".</li>
+<li><strong>Work tree (Git worktree)</strong> — 같은 리포지토리를 여러 디렉토리에 체크아웃하는 Git 기능. Claude Code 데스크탑 앱이 자동 생성.</li>
+<li><strong>Red teaming / Pen testing</strong> — 의도적으로 공격·프롬프트 인젝션을 시도해 시스템 취약점을 찾는 보안 검증 방법.</li>
+<li><strong>Prompt injection</strong> — 외부 입력(웹 페이지, 파일 내용 등)에 숨겨진 지시로 에이전트를 조작하려는 공격.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<ol>
+<li>Claude Code 최초 릴리스 시 슬랙 반응이 단 두 명이었다 — 지금의 규모와 대비되는 출발점.</li>
+<li>Boris는 현재 "수천 에이전트 트리"를 운영 중 — 에이전트가 에이전트를 프롬프팅하는 다단계 구조.</li>
+<li><strong>실수 발생 시 직접 수정하지 않고 반드시 CLAUDE.md 또는 skill에 기록</strong> — 이것이 에이전트가 "영원히 달릴 수 있는" 핵심 조건.</li>
+<li>Opus 4로 Claude Code가 자기 자신을 테스트한 최초 순간: bash 안에서 Claude CLI를 열어 직접 피처를 검증 — 당시엔 충격적, 지금은 당연.</li>
+<li>Plan mode는 Opus 4~4.5까지 유용했고, <strong>4.6부터는 auto mode가 더 낫다</strong> (계획 단계 불필요). 4.7에서 완전히 대체.</li>
+<li>Auto mode 출시 전 수천 개의 에이전트 궤적 + 권한 프롬프트 전사(transcript) 데이터를 수집해 분류 모델 학습 → 레드팀 테스트 → 내부 프롬프트 인젝션 시도 → eval 생성의 3단계 검증 과정.</li>
+<li>한 엔지니어가 voice mode 관련 모든 GitHub 이슈를 감시하는 routine을 구축 → 5시간 내 미응답 버그를 자동 수정 PR로 처리. Boris가 직접 배포한 피처의 엣지케이스를 이 routine이 먼저 고쳐버린 실제 사례.</li>
+<li>이전 방식: Git 체크아웃 6개 + 터미널 탭 6개 병렬 운영. 현재: 탭 1개 + Agent View + 데스크탑 앱 (워크트리 자동 생성).</li>
+<li>엔지니어링의 절반 이상을 이제 <strong>폰으로</strong> 처리 — Remote Control로 커피 마시며 에이전트 감독, Voice mode로 새 아이디어 즉석 시작.</li>
+<li>컨텍스트 최소주의 원칙: "모델에게 필요한 것만 알려주고 나머지는 모델이 알아서 하게" — 과도한 컨텍스트는 마이크로매니지먼트와 같다.</li>
+<li>AI 조직 전환이 PC 전환(10~15년)보다 훨씬 빠른 이유: 이미 업무가 디지털화되어 있고, Claude가 컴퓨터를 사용하고 코드를 작성·실행할 수 있기 때문.</li>
+<li>Anthropic 내부 온보딩: 신규 입사자가 사람에게 질문하지 않고 <strong>Claude에게 질문</strong> — Claude가 조직 중심에 있음을 보여주는 문화 지표.</li>
+<li>디자이너·PM·파이낸스팀까지 Claude Code 사용 중 (파이낸스팀이 프로젝션·데이터 사이언스에 활용).</li>
+<li>앞으로 1년 뒤 사용 방식은 지금과 완전히 다를 것 — 팀이 사용자와 함께 발견해 나가는 과정이라는 열린 자세 강조.</li>
+</ol>
+</blockquote>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>출발점 회고</td>
+<td>슬랙 반응 2명 → 수천 에이전트 트리 운영으로 성장</td>
+</tr>
+<tr>
+<td>2</td>
+<td>검증(Verification)</td>
+<td>유닛 테스트 이상의 것 — 에이전트가 실제로 앱을 실행·클릭해 검증</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CLAUDE.md &amp; Skill</td>
+<td>실수를 파일에 기록해 에이전트가 영구 학습하는 메커니즘</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Auto mode</td>
+<td>권한 프롬프트를 분류 모델에 위임 — Plan mode 대체, 3단계 보안 검증 후 출시</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Routines</td>
+<td>이벤트 감시 상주 에이전트 — 5시간 내 버그 자동 수정 PR 사례</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Loop &amp; Agent View</td>
+<td>에이전트 → 루프 → 에이전트 메타 레이어, 터미널 탭 6개 → 1탭</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Context Minimalism</td>
+<td>컨텍스트 과잉 = 마이크로매니지먼트, 최소 주고 모델이 pull</td>
+</tr>
+<tr>
+<td>8</td>
+<td>조직 변화</td>
+<td>역할 경계 붕괴, Claude를 중심에 두는 기업이 생산성 실현</td>
+</tr>
+<tr>
+<td>9</td>
+<td>미래 형태</td>
+<td>폰+Remote Control+Voice mode, 1년 뒤는 또 완전히 다를 것</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 출발점 회고 — 슬랙 두 명의 반응에서 수천 에이전트로</h2>
+<p>Claude Code가 처음 공개됐을 때 내부 슬랙 반응은 단 두 명이었다. Cat은 "특히 쉬운 엔지니어링 작업에는 꽤 괜찮았다"고 했고, Boris는 "그게 못한다는 점잖은 표현"이라며 웃었다. 지금은 에이전트가 에이전트를 프롬프팅하는 수천 개의 트리 구조로 완전히 달라졌다.</p>
+<h2>2. 검증(Verification) — 단위 테스트보다 훨씬 넓은 개념</h2>
+<p>개발자와 기업들이 "검증"을 언급할 때 대부분 유닛 테스트, Lint, 타입 체크를 떠올린다. 이것들은 이미 자동화돼 있다. 에이전트 시대의 검증은 다르다: <strong>에이전트가 실제로 그 것을 실행할 수 있는가?</strong></p>
+<p>Cat의 실제 방식: <code>desktop development skill</code>을 에이전트에게 주입 → 에이전트가 로컬 데스크탑 앱을 스핀업 → Computer Use로 직접 클릭·UX 탐색 → 엣지케이스 테스트 → 버그 수정 후 재검증. 스테이징 환경 문제가 발생하면 Slack을 읽어 "지금 스테이징 다운인지" 확인하는 것도 에이전트 몫이다. 디버깅 완료 후에는 반드시 <code>desktop development skill</code> 파일을 업데이트 — 다음 에이전트가 같은 실수를 반복하지 않게.</p>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>핵심 원칙: Claude가 실수할 때마다 직접 고치지 말고, CLAUDE.md 또는 skill 파일에 기록해 Claude가 스스로 달릴 수 있게 만들어라.</strong></span></p>
+<p>Opus 4 시절 Claude가 bash 안에서 Claude CLI를 열어 자신의 피처를 직접 테스트하는 것을 처음 봤을 때는 충격적이었다. 지금은 iOS 시뮬레이터, 안드로이드 시뮬레이터, 데스크탑 컴퓨터 루프 등 표준이 됐다.</p>
+<h2>3. 역할 경계의 붕괴</h2>
+<p>디자이너 Megan이 PR을 올리는 것을 처음 봤을 때 Boris는 당황했다. "왜 Megan이 PR을 올리는 거지?" — 그런데 코드를 보니 문제없었다. "버튼 고치는 거야"라는 Megan의 말처럼, Claude Code가 코드 작성을 담당하면 <strong>무엇을 만들 것인가</strong> 라는 아이디어가 더 중요해진다. 제품 맥락·비즈니스 맥락을 가진 사람이 더 좋은 아이디어를 낸다.</p>
+<p>Cat의 팀 현황: 파이낸스팀이 Claude Code로 프로젝션과 데이터 사이언스를 처리한다. PM·디자이너가 직접 앱을 수정한다. 엔지니어는 아이디어부터 법무·마케팅 소통·보안까지 전체 과정을 혼자 완주한다.</p>
+<h2>4. Auto Mode — Plan Mode의 종말과 보안 설계</h2>
+<p><strong>Plan mode는 4.5까지 유용했다. 4.6부터는 auto mode가 낫다. 4.7에서 완전히 대체.</strong></p>
+<p>과거 권한 프롬프트 모델은 1.5년 전 분류기(classifier)도 없고 모델 정렬도 지금보다 부족한 상황에서 최선의 방법이었다. 하지만 인간은 99%가 "예스"인 요청들을 읽다 보면 집중력이 흐려진다(eyes glaze over). Auto mode는 이런 요청을 별도 모델에 라우팅 — 안전하면 자동 허용, 의심스러우면 차단.</p>
+<p><span style="font-size:1.1em"><strong>auto mode가 권한 프롬프트를 일일이 읽는 것보다 더 안전한 이유: 가장 중요한 것에만 집중할 수 있기 때문.</strong></span></p>
+<p><strong>Auto mode 출시 전 3단계 검증 과정:</strong>
+1. 수천 개의 에이전트 궤적 + 권한 프롬프트 전사 데이터 수집 → 분류 모델 학습
+2. 레드팀이 프롬프트 인젝션·해킹 시도 → 이를 eval로 만들어 전부 차단 확인
+3. 내부 팀이 Claude Code auto mode를 직접 공격 → 추가 개선</p>
+<p>보안은 항상 threat model을 갖고 "어떻게 공격받을 것인가"를 먼저 생각해야 한다.</p>
+<h2>5. Routines — 잠들지 않는 백그라운드 엔지니어</h2>
+<p>한 엔지니어가 voice mode 관련 GitHub 이슈·버그 리포트를 전부 감시하는 routine을 구축했다. Claude가 자동으로 픽업해 수정 PR을 올리고 본인에게 핑을 보낸다. 이를 다른 미응답 이슈로 확장: <strong>5시간 내 응답 없는 버그 리포트는 자동으로 수정 PR 생성, 검증이 쉬운 것은 직접 머지.</strong></p>
+<p>Boris가 직접 배포한 피처에서 엣지케이스가 발생했을 때, 그날 밤 자신이 보려던 버그를 이 routine이 이미 고쳐놨다. "어떻게 이렇게 빨리 고쳤어?"라고 물으니 routine이 했다는 답. "그 사람에게 이 피처에 대해 말한 적도 없는데."</p>
+<p>Agent SDK가 처음 나왔을 때는 routines의 용도가 불분명했다. 지금은 가장 명확한 첫 번째 응용: 코드 리뷰 전담, PR 관리, CI 수정, 리베이스 — 이것들을 Boris는 "오래전부터 하지 않게 됐다."</p>
+<h2>6. Loop &amp; Agent View — 다음 도약</h2>
+<p>에이전트 코딩의 진화 단계:
+- 1단계: 소스 코드를 직접 작성
+- 2단계: 에이전트에게 말하면 에이전트가 소스 코드를 작성
+- 3단계(현재): 루프나 routine에 말하면 루프가 에이전트를 프롬프팅</p>
+<p>이전 방식은 Git 체크아웃 6개 + 터미널 탭 6개를 오가는 것이었다. 지금은 Agent View 1탭 + 데스크탑 앱(워크트리 자동 생성). 에이전트의 절반 이상은 폰으로 시작 — Remote Control로 걸어다니며 에이전트 체크인, Voice mode로 새 아이디어 즉석 지시. 컴퓨터 없이 랩탑을 사무실에 두고 퇴근해 집 소파에서 PR을 머지하는 일이 일상이 됐다.</p>
+<h2>7. Context Minimalism — 컨텍스트 공학의 진화</h2>
+<ul>
+<li>sonnet 3.5 시대: 프롬프트 엔지니어링</li>
+<li>Opus 4 시대: 컨텍스트 엔지니어링</li>
+<li>현재 모델: <strong>컨텍스트 미니멀리즘</strong></li>
+</ul>
+<p>"모델에게 필요한 것만 알려주고, 컨텍스트를 끌어오는 방법만 주면 나머지는 모델이 알아서 한다." 과도한 컨텍스트는 마이크로매니지먼트다 — 모델이 더 좋은 방법을 알고 있을 수 있는데 그 자유를 빼앗는 것. Claude Code 하네스도 더 린(lean)하게 만들어 사용자 프롬프트 공간을 늘리는 방향으로 개선 중.</p>
+<h2>8. 조직 전환 — AI를 중심에 두는 기업이 생산성을 얻는다</h2>
+<p>Harvard Business Review 1990년대 사례: "컴퓨터가 도입됐는데 왜 생산성이 안 오르나?" — 종이 파일 캐비넷 옆에 컴퓨터를 두는 것으로는 안 됐다. 파일 캐비넷을 버리고 모든 업무 프로세스를 컴퓨터 중심으로 재설계했을 때 생산성이 나왔다.</p>
+<p>AI도 동일하다. <span style="color:#ef6c00; font-size:1.1em"><strong>Claude를 옆에 두지 말고 모든 것의 중심에 두어야 한다.</strong></span></p>
+<p>Anthropic 내부: 신규 입사자가 사람에게 온보딩 질문을 하지 않고 Claude에게 한다. 코드 작성, 코드 리뷰, 보안 리뷰, 양식 작성 — 모두 Claude. "AI 전환이 PC 전환(10~15년)보다 빠른 이유: 업무가 이미 디지털화되어 있고, Claude가 컴퓨터를 직접 쓰고 코드를 실행하기 때문."</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 실수가 발생하면 Claude에게 직접 다시 시키지 말고 CLAUDE.md 또는 skill 파일에 기록하는 습관 들이기</li>
+<li>[ ] Plan mode 대신 Auto mode 사용 (현재 모델 기준)</li>
+<li>[ ] 반복되는 이벤트성 작업(이슈 응답, PR 리뷰, CI 수정)을 Routine으로 전환 검토</li>
+<li>[ ] 컨텍스트는 최소로 — 모델이 pull할 방법만 제공</li>
+<li>[ ] Agent View + 데스크탑 앱 + Remote Control 조합으로 멀티에이전트 워크플로 구성</li>
+<li>[ ] "Claude가 내 업무의 중심에 있는가?" 조직 수준에서 점검</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Claude Code의 지난 1년을 돌아봅니다 · https://www.youtube.com/watch?v=6MaErueDH24 · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>처음 Claude Code를 출시했을 때 내부 슬랙에 올린 영상에 반응한 사람이 딱 두 명이었다. 그래도 다들 흥분해 있었다. 나는 특히 아주 쉬운 엔지니어링 작업에 꽤 잘 돼서 인상적이었다.</p>
+<p>— 그게 못 한다는 점잖은 표현이네요.</p>
+<p>Claude Code를 처음 런칭한 지 겨우 1년밖에 안 됐다는 게 믿기지 않는다. 그때와 지금은 너무 달라서 기억하기도 어렵다. 지금 나는 수천 개의 에이전트 트리를 운영 중이다 — 에이전트가 에이전트를 프롬프팅하고, 그 에이전트가 또 다른 에이전트를 프롬프팅하는 구조다.</p>
+<p>이 분야에서 가장 중요한 아이디어 하나: Claude가 실수할 때마다 직접 다시 시키지 않는다. 대신 CLAUDE.md나 skill 파일에 기록해서 다르게 행동하도록 만든다. 이렇게 하면 Claude가 그냥 영원히 달릴 수 있다.</p>
+<p>또 깨달은 것은 검증(verification)의 중요성이다. 개발자·기업들과 대화하면서 많이 듣는 주제인데, "어떻게 검증을 잘 시키나요?"라는 질문을 자주 받는다.</p>
+<p>이게 사람들이 오해하는 부분이다. 검증이라고 하면 유닛 테스트, Lint, 타입 체크를 떠올린다. 이것들은 이미 자동화돼 있던 것들이다. 에이전트에서 검증은 약간 다르다: 에이전트가 실제로 그것을 실행할 수 있는가? 어떻게 하는지 파악하는 데 약간의 정신적 노력이 필요하고 보통 직관적이지 않다.</p>
+<p>Opus 4 시절에는 Claude가 자기 자신을 테스트했다. Opus 4에 연결하고 "기능을 구현하고 bash로 직접 테스트해봐"라고 했더니 작은 Claude CLI를 열어 자기 기능을 테스트하는 걸 보고 "와" 했다. 지금은 iOS 시뮬레이터, 안드로이드 시뮬레이터, 데스크탑 루프까지 당연한 것이 됐다.</p>
+<p>[Cat] 요즘은 주로 데스크탑 앱을 해킹하고 있다. 팀 엔지니어 한 명이 <code>desktop development skill</code>을 추가해서 Claude에게 로컬 데스크탑 앱 실행 방법을 가르쳤다. 버그나 상태 문제가 생기면 Slack을 읽어서 스테이징이 다운됐는지, 다른 사람이 이미 발견했는지 확인하게 한다. 전체 이슈를 디버깅하고 나면 <code>desktop development skill</code>을 업데이트하도록 지시한다.</p>
+<p>이 skill이 하는 것: Claude가 로컬 데스크탑 앱을 스핀업하고 Computer Use로 클릭하며 새 UX를 탐색하고 엣지케이스도 테스트한다. 문제가 있으면 수정하고 재확인한다.</p>
+<p>[Boris] 이 팀이 마음에 드는 이유 중 하나가 모두가 코드를 짠다는 것이다. PM도 코드를 짜는 팀은 처음이다. 하지만 Claude Code가 대부분 코드를 쓰는 세상에서는 더 중요한 게 아이디어다 — 제품·비즈니스·디자인·사용자 맥락을 가진 사람이 더 좋은 아이디어를 낸다. 역할이 합쳐지고 있다.</p>
+<p>디자이너 Megan의 PR을 처음 봤을 때 경악했다. "왜 Megan이 PR을 올리지?" — 그런데 "버튼 고치는 거야"라고 하고 코드도 괜찮아서 "뭐, 괜찮네" 싶었다. 지금은 완전히 당연한 일이다.</p>
+<p>[Cat] 기업들을 만나보면 엔지니어가 먼저 도입하고, 인접 역할들이 어깨 너머로 보다가 "이게 정말 강력하네"라며 시도한다. 디자이너는 엔지니어에게 맡기는 것보다 직접 프로토타입 만들고 수정하는 게 더 생산적이다. PM이 앱을 직접 고친다. 파이낸스팀도 Claude Code로 프로젝션과 데이터 사이언스를 한다.</p>
+<p><strong>한계를 밀어붙이는 사용 사례는? — Routines.</strong></p>
+<p>[Boris] 한 엔지니어가 voice mode 관련 GitHub 이슈와 버그 리포트를 전부 감시하는 routine을 구축했다. Claude가 자동으로 픽업해 수정 PR을 올리고 핑을 보낸다. 이걸 다른 미응답 이슈로도 확장했다.</p>
+<p>내가 배포한 피처에 엣지케이스가 생겼다. 그날 밤 처리하려고 했는데 내 Claude가 작업하다가 "잠깐, 이미 다른 Claude가 고쳤다"라고 했다. "뭐?" — 그 엔지니어에게 물어보니, 5시간 내 미응답 버그 리포트를 자동 수정 PR로 올리는 routine이었다. 검증 쉬운 것은 직접 머지. 지금은 이런 알림을 Claude한테 항상 받는다: "다른 Claude가 이미 처리했어요."</p>
+<p>이전에는 routines를 어떻게 쓸지 몰랐다. Agent SDK도 처음엔 용도가 불분명했다. 지금은 routines가 가장 명확한 첫 번째 응용이다. 코드 리뷰, PR 관리, CI 수정, 리베이스 — 오래전부터 안 하게 됐다.</p>
+<p><strong>CLI에서 go-to 기능은?</strong></p>
+<p>[Boris] 예전엔 Plan mode였는데 이젠 쓰지 않는다. 지금은 Auto mode. Plan mode 대신에. 신형 모델들은 계획 단계가 필요 없다. Opus 4~4.5까지는 유용했는데, 4.6부터, 특히 4.7에서는 계획 단계가 불필요하다. 일부는 아티팩트로 남기고 싶어 계속 쓰지만 나는 Auto mode로 시작하고 다음 에이전트로 넘어간다.</p>
+<p>초창기엔 권한 프롬프트 모델이 있었다 — 도구를 실행할 때마다 "괜찮아요?"라고 물었다. 당시엔 분류기도 없고 모델 정렬도 지금보다 약했으니 최선이었다. Auto mode는 엄청난 도약이었다 — 99%가 "예스"인 요청들을 읽다 보면 집중력이 흐려지기 때문이다. 다른 모델에 라우팅해 보안 확인하는 방식이 훨씬 낫다. 의심스러운 건 모델이 거부하고 나중에 직접 허용할 수 있다.</p>
+<p>Auto mode가 권한 프롬프트를 일일이 읽는 것보다 더 안전한 이유: 가장 중요한 것에만 집중할 수 있어서다.</p>
+<p>[Cat] 보안은 말로 하는 것과 실제로 올바르게 구현하는 것이 전혀 다르다. 항상 threat model을 갖고 "어떻게 공격받을 것인가, 프롬프트 인젝션은 어떻게 들어오는가"를 생각해야 한다. 팀이 이에 집착하기 때문에 나는 에이전트를 신뢰하고 다른 에이전트로 넘어갈 수 있다. 신뢰하지 못했으면 불가능했다.</p>
+<p>Auto mode 출시 전: 수천 개 에이전트 궤적 + 권한 프롬프트 전사 수집 → 분류 모델 학습 확인. 레드팀에게 프롬프트 인젝션·해킹 시도 → eval 생성·차단. 내부 팀이 Claude Code Auto mode 직접 공격 → Auto mode 개선. 외부 야생에서 돌아다니는 취약점 + 우리가 구성할 수 있는 가장 지능적인 공격 모두 방어.</p>
+<p>[Boris] 지난 1년간 "첫 제안 들었을 때 '절대 안 될 것 같아'라고 했다가 경험적으로 잘 되는 것"이 계속 나왔다. 모델 위에서 빌딩하는 건 이전 엔지니어링 지식을 많이 버려야 한다. Auto mode가 대표적이다 — "프롬프트를 모델에 라우팅한다고? 말도 안 돼"라고 했는데 실제로 아주 잘 됐다.</p>
+<p><strong>Loop는 어떻게 쓰나?</strong></p>
+<p>[Boris] 1년 반 전에 전환점이 있었다 — "실제로 엔지니어가 상호작용해야 할 것은 소스 코드가 아니라 에이전트"라는 도약. 지금은 그 다음 도약 중이다: 에이전트에게도 직접 말하지 않는다. 루프나 routine에게 말하면 그것이 Claude를 프롬프팅한다. 1년 반 만에 두 번의 큰 도약.</p>
+<p><strong>조직 전체 변화는?</strong></p>
+<p>[Boris] Harvard Business Review 90년대 케이스 스터디: "컴퓨터가 도입됐는데 왜 생산성이 안 나오나?" 당시 스냅샷이다. 메인프레임에서 PC로 전환했고 기업들이 어떻게 쓸지 고민하던 때 — 지금 AI와 똑같다. 결론: 종이 파일 캐비넷을 버리고 모든 업무 프로세스를 컴퓨터 중심으로 재편해야 생산성이 나왔다.</p>
+<p>Anthropic 내부: 신규 입사자가 사람에게 온보딩 질문을 하지 않고 Claude에게 한다. Claude가 모든 것의 중심에 있다. 코드 작성, 코드 리뷰, 보안 리뷰, 양식 작성 모두 Claude. "AI 전환이 PC 전환보다 빠른 이유: 이미 디지털화되어 있고 Claude가 컴퓨터를 직접 사용하며 코드를 작성·실행할 수 있기 때문."</p>
+<p>이제 사람들에게 뭔가를 "부탁"할 필요가 없어졌다. 사람과의 상호작용은 순수하게 즐겁거나 함께 만드는 것이다. 엔지니어로서 이렇게 즐거운 적이 없었다 — 지루한 부분은 Claude가 하고, 나는 아이디어를 내고 고객을 만난다. 더 이상 할 일 목록도 없다. Claude가 다 만들어준다.</p>
+<p><strong>미래는 PM인가 엔지니어인가?</strong></p>
+<p>[Cat] 둘 다다. 역할이 합쳐지고 있다. 우리 팀 제품·개발 릴레이션·디자인팀 모두 코드를 작성한다. 엔지니어들은 아이디어부터 빌딩, 법무·마케팅 소통, 안전·보안까지 전체를 완주한다. AI는 호기심 많고 제품 감각 있으며 엔드투엔드 오너십을 좋아하는 사람에게 크게 유리하다.</p>
+<p><strong>멀티 에이전트 전환 시 채택할 제품은?</strong></p>
+<p>[Boris] 예전엔 Git 체크아웃 6개 + 터미널 탭 6개였다. 지금은 탭 1개 + Agent View + 데스크탑 앱(워크트리 자동 생성). 엔지니어링의 절반 이상을 폰으로 한다. Remote Control로 커피 마시며 에이전트 체크인, 새 아이디어가 생기면 Voice mode로 즉석 지시. 컴퓨터를 사무실에 두고 퇴근해 소파에서 PR을 머지하는 일이 일상이 됐다.</p>
+<p>[Cat] Remote Control이 정말 좋아진 그 주에 그게 일어났다.</p>
+<p><strong>컨텍스트 엔지니어링은?</strong></p>
+<p>[Boris] sonnet 3.5 시대엔 프롬프트 엔지니어링, Opus 4 시대엔 컨텍스트 엔지니어링, 지금 모델은 그 어느 것도 필요 없다. 최소한의 시스템 프롬프트, 최소한의 도구만 주고 모델이 알아서 하게. 컨텍스트를 pull하는 방법만 제공하면 된다.</p>
+<p>[Cat] 나도 같은 생각이다. 나는 컨텍스트 미니멀리스트다. 모델에게 필요한 것만 알려주고 나머지는 모델이 알아서 하게. 컨텍스트를 너무 많이 주면 마이크로매니지먼트다. 모델이 더 나은 방법을 알 수도 있는데 그 자유를 빼앗는 것이다. 하네스도 더 린하게 만들어 사용자 프롬프트 공간을 늘리고 있다.</p>
+<p>1년 뒤에는 완전히 다른 방식을 쓰고 있을 것이다. 에이전트가 더 오래, 더 자율적으로 실행된다. 지금은 거의 항상 여러 에이전트를 동시에 돌린다. 이 형태가 어떻게 바뀔지는 모른다. 팀이 사용자와 함께 발견해 나가는 것이라고 생각한다.</p>
+</details>
+</body></html>

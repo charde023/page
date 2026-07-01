@@ -1,0 +1,377 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Anthropic이 장시간 실행되는 AI 에이전트의 새 청사진을 공개했습니다.</title>
+<meta name="description" content="Anthropic이 공개한 장시간 에이전트 하네스 설계 청사진 — 컨텍스트 불안·자기평가 오류 두 실패 패턴과, Planner-Generator-Evaluator 삼자 구조로 DAW·게임 엔진을 4시간 125달러에 만든 실험 보고"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Anthropic이 장시간 실행되는 AI 에이전트의 새 청사진을 공개했습니다.</h1>
+<div class="meta">업로드 2026-04-01 · 17.9분 · <a href="https://www.youtube.com/watch?v=TY96cXzS2cg" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Anthropic이 장시간 실행되는 AI 에이전트의 새 청사진을 공개했습니다.</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>하네스 없는 AI 에이전트는 컨텍스트가 차면 일찍 포기한다 — Planner·Generator·Evaluator 삼자 구조와 적대적 평가 루프가 장시간 자율 실행의 품질 임계치를 높인다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 The AI Automators 채널 화자 · 소속 불명확(theaiautomators.com 커뮤니티 운영) · Anthropic 엔지니어링 블로그 해설 · 업로드 2026-04-01 · 17.9분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>컨텍스트 불안 (Context Anxiety)</td>
+<td>컨텍스트 창이 찰수록 모델이 조기 종료·단계 생략을 함</td>
+<td>하네스 설계의 가장 큰 변수</td>
+</tr>
+<tr>
+<td>하네스 에볼루션</td>
+<td>모델이 개선되면 하네스 구성요소도 덜어낼 수 있음</td>
+<td>하네스는 가정의 코드화 → 가정이 낡으면 단순화</td>
+</tr>
+<tr>
+<td>Planner-Generator-Evaluator 삼자 구조</td>
+<td>역할 분리로 계획·생성·검증 각각 최적화 가능</td>
+<td>솔로 에이전트 대비 완성도 대폭 향상</td>
+</tr>
+<tr>
+<td>적대적 평가 (Adversarial Evaluation)</td>
+<td>GAN 발상 — 전용 Evaluator가 Generator 결과를 의심함</td>
+<td>자기평가 편향 해소</td>
+</tr>
+<tr>
+<td>Definition of Done 선협상</td>
+<td>스프린트 시작 전 완료 기준을 Generator·Evaluator가 합의</td>
+<td>목표 슬금슬금 바꾸기 방지</td>
+</tr>
+<tr>
+<td>컨텍스트 컴팩션 (Context Compaction)</td>
+<td>대화 스레드를 요약해 실제 활용 컨텍스트 공간 확보</td>
+<td>Claude Agent SDK 내장 기능</td>
+</tr>
+<tr>
+<td>주관적 품질의 점수화</td>
+<td>"예쁜가?" 대신 "우리 디자인 원칙을 따르는가?"로 기준 정의</td>
+<td>Evaluator가 제대로 피드백하려면 수치화 기준 필수</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Lef Wigdham Loop</strong> ([?원문] "레프 위드검 루프" → Geoffrey Huntley의 아이디어) — 에이전트를 루프 안에서 돌리며 린터·타입체크 같이 거짓말 못하는 객관 검증으로 종료 조건 판단</li>
+<li><strong>Spec-Driven Development</strong> — 베메드(Bemedev?)·SpecHit·OpenSpec 같은 프레임워크. 실제 구현 전에 구조화된 요구사항을 먼저 만듦</li>
+<li><strong>Context Compaction</strong> — Claude Agent SDK에 내장. 대화 스레드를 요약해 남은 컨텍스트 공간을 늘리는 기법. Reset과 달리 새 창이 아님</li>
+<li><strong>AI Slop 패턴</strong> — AI가 자주 뽑아내는 뻔하고 밋밋한 결과물. 감점 기준으로 넣어야 할 만큼 실제 문제</li>
+<li><strong>Playwright MCP</strong> — Evaluator 에이전트가 직접 브라우저 앱을 탐색·스크린샷·사용자처럼 테스트하도록 연결하는 MCP 도구 Harness-하네스</li>
+<li><strong>Stripe Minions</strong> — 코드 변경마다 300만 테스트 중 일부를 골라 검증하는 배포 파이프라인 하드코딩 검증 개념 (Evaluator 에이전트와 구분)</li>
+<li><strong>DAW</strong> — Digital Audio Workstation (디지털 오디오 워크스테이션). 브라우저 안에서 Web Audio API로 구현 가능</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>"하네스의 각 구성요소는 모델이 그 일을 스스로 못할 거라는 가정을 코드로 박아 넣은 것이다."</p>
+</blockquote>
+<ol>
+<li><span style="color:#ef6c00; font-size:1.1em"><strong>Claude Sonnet 4.5는 컨텍스트 불안을 보였고, Opus 4는 크게 문제 없었다 — Opus 4.6으로 넘어가면서 컨텍스트 리셋 자체가 불필요해졌다</strong></span></li>
+<li>컨텍스트 컴팩션을 써도 Sonnet 4.5는 여전히 조기 종료 경향이 있었음 ("깨끗한 새 출발이 아니라 빨리 끝내려 했다")</li>
+<li><span style="font-size:1.1em"><strong>기본 상태의 Claude는 QA 에이전트로 성능이 좋지 않았다</strong> — 초반 실행에서 실제 문제를 찾고도 "큰 문제 아님"으로 그냥 통과시킴</span></li>
+<li>Evaluator는 피상적 테스트·엣지 케이스 누락 경향이 있어 여러 차례 반복 조정 필요 — 플러그앤플레이 아님</li>
+<li>평가 지표 4가지: <strong>디자인 품질</strong>, <strong>독창성(AI Slop 회피)</strong>, <strong>기술적 완성도(Craft)</strong>, <strong>기능성</strong> — 이 중 독창성·슬랍 방지 가중치를 높임</li>
+<li>Planner 에이전트는 Opus 3([?원문] "오퍼스 3D") → Sonnet 4.5를 썼다고 언급</li>
+<li>2D 게임 메이커 실험: <strong>솔로 하네스는 겉보기만 괜찮고 실제 플레이 불가</strong>, 풀 하네스(Planner+Generator+Evaluator)는 실제 동작</li>
+<li>DAW 실험 비용 상세: Planner 5분 50초 / 첫 빌드 2시간 71달러 / QA 에이전트 10분 / 2차 빌드 1시간 / 3차 빌드 10분 → <strong>총 약 4시간, 125달러</strong></li>
+<li>Claude Agent SDK에는 컨텍스트 컴팩션이 내장됨 — 직접 구현도 가능하며 SDK 강제 사항은 아님</li>
+<li>Opus 4.6의 100만 토큰 컨텍스트 창 마케팅에 대해 화자는 회의적: "토큰 처리할수록 돈을 더 받으니까" — 컨텍스트 리셋 설계가 완전히 끝났다고 보지 않음</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>하네스란 무엇인가</td>
+<td>모델(엔진)을 신뢰할 수 있는 시스템으로 바꾸는 외부 구조 — 프롬프트·도구·피드백루프·검증 포함</td>
+</tr>
+<tr>
+<td>2</td>
+<td>장기 실행 에이전트의 근본 문제</td>
+<td>컨텍스트 소진·조기 완료 선언·목표 축소 — 하네스 없으면 반복 발생</td>
+</tr>
+<tr>
+<td>3</td>
+<td>두 가지 실패 패턴</td>
+<td>컨텍스트 불안 / 자기평가 편향</td>
+</tr>
+<tr>
+<td>4</td>
+<td>초기 해법: 초기화+코딩 에이전트 분리</td>
+<td>기능 단위 분할, 진행 파일, 컨텍스트 리셋</td>
+</tr>
+<tr>
+<td>5</td>
+<td>적대적 평가 구조</td>
+<td>GAN 발상 — Generator vs. Evaluator 긴장이 품질 상승 유도</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Evaluator 작동 조건 3가지</td>
+<td>점수화 기준 / 가중치 조정 / Playwright MCP로 실제 상호작용</td>
+</tr>
+<tr>
+<td>7</td>
+<td>실험 1 — 네덜란드 미술관 웹사이트</td>
+<td>피드백 10회 반복 → 단일 패스로 불가능한 창의적 도약</td>
+</tr>
+<tr>
+<td>8</td>
+<td>실험 2 — 2D 게임 메이커</td>
+<td>솔로(값싸고 빠름, 작동 불가) vs 풀 하네스(느리고 비쌈, 실제 동작)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Opus 4.6 이후 단순화</td>
+<td>스프린트·계약협상·컨텍스트 리셋 제거 → 컨텍스트 컴팩션 + 빌드 후 Evaluator</td>
+</tr>
+<tr>
+<td>10</td>
+<td>실험 3 — 브라우저 DAW</td>
+<td>4시간 125달러, 핵심 기능 포함, 전문 DAW 수준은 아님</td>
+</tr>
+<tr>
+<td>11</td>
+<td>하네스 에볼루션 개념</td>
+<td>모델 능력이 올라가면 낡은 하네스 가정을 제거 — 설계는 지속 반복</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 하네스란 무엇인가</h2>
+<p><strong>하네스(Harness)</strong>는 AI 모델이 길을 잃지 않게 감싸는 소프트웨어 구조다. 모델이 엔진이면, 하네스는 그 엔진을 원하는 방향으로 달리게 하는 자동차 전체다. 더 정확한 비유는 말(야생마=모델)과 마구(하네스) — 하네스가 힘을 통제하고 방향을 잡아준다.</p>
+<p>구성 요소: 프롬프트, 도구, 피드백 루프, 제약 조건, 검증. 즉 모델을 신뢰할 수 있는 시스템으로 바꾸는 주변의 모든 요소.</p>
+<p>핵심 통찰: <span style="color:#ef6c00; font-size:1.1em"><strong>복잡하고 오래 걸리는 작업에서는 하네스 설계가 모델 자체만큼 중요하다.</strong></span></p>
+<hr>
+<h2>2. 장기 실행 에이전트의 근본 문제</h2>
+<p>AI 에이전트에게 복잡한 목표를 주고 몇 시간~며칠 동안 스스로 일하게 만들려면 어떻게 해야 하는가. 하네스 없이 방치하면:</p>
+<ul>
+<li>앱 전체를 한 번에 만들려다 컨텍스트 소진</li>
+<li>빨리 끝내려고 일이 끝났다고 선언</li>
+<li>기능 범위를 지나치게 작게 잡음</li>
+</ul>
+<hr>
+<h2>3. 두 가지 대표 실패 패턴</h2>
+<h3>3-1. 컨텍스트 불안 (Context Anxiety)</h3>
+<p>컨텍스트 창이 차오르면 단순히 일관성만 잃는 게 아니라 행동 자체가 바뀐다:
+- 대화를 너무 일찍 마무리
+- 단계를 대충 넘김
+- 끝나지 않은 일을 끝났다고 선언</p>
+<p>컨텍스트 컴팩션을 써도 <strong>Sonnet 4.5는 이 증상을 보였다.</strong> Opus 4.6에서는 컨텍스트 리셋 없이 컴팩션만으로도 충분했다.</p>
+<h3>3-2. 자기평가 편향 (Poor Self-Evaluation)</h3>
+<p>에이전트에게 자기 일을 평가하라고 하면 <strong>자기 편을 든다.</strong> 인간이 보기에 밋밋한 결과물도 스스로는 높게 평가한다. Anthropic이 솔직하게 인정한 부분 — 클로드가 프론트엔드 디자인에서 밋밋한 결과를 자주 냈다.</p>
+<hr>
+<h2>4. 초기 해법 — 에이전트 분리 + 컨텍스트 리셋</h2>
+<p>Anthropic의 초기 2단계 시스템:
+1. <strong>초기화 에이전트</strong>: 환경 세팅, 기능 단위 분할, 진행 파일 생성
+2. <strong>코딩 에이전트</strong>: 기능 하나씩 구현, 각 덩어리마다 git 커밋, 구조화된 핸드오프 작성</p>
+<p>→ 다음 에이전트가 새 컨텍스트로 이어받는 <strong>컨텍스트 리셋</strong> 구조.</p>
+<p>Geoffrey Huntley의 <strong>Lef Wigdham Loop</strong>: 에이전트를 루프 안에서 돌리며 린터·타입체크 같은 객관 검증으로 종료 조건 판단. Spec-Driven Development(SpecHit, OpenSpec 등 프레임워크)와 결합하면 더 강력.</p>
+<hr>
+<h2>5. 적대적 평가 구조</h2>
+<p>GAN에서 영감. Generator는 코드·콘텐츠를 만들고, <strong>Evaluator 에이전트가 그 결과를 의심하며 점수 매겨 피드백을 돌려준다.</strong></p>
+<p>단일 에이전트에게 "더 회의적으로 평가하라"고 시키는 것보다, 전용 Evaluator를 별도로 두는 것이 훨씬 효과적이었다. Evaluator가 피드백을 주면 Generator는 무엇을 고칠지 명확해진다.</p>
+<p>차이점: 일회성 평가 도구가 아니라 <strong>실제 프로덕션 루프 안에 묶여있다.</strong></p>
+<hr>
+<h2>6. Evaluator를 제대로 작동시키는 세 가지 조건</h2>
+<ol>
+<li><strong>주관적 품질의 점수화</strong>: "예쁜가?" 대신 "우리 디자인 원칙을 따르는가?" 로 기준 먼저 정의. 평가 지표: 디자인 품질 / AI Slop 회피(독창성) / 기술적 완성도(Craft) / 기능성</li>
+<li><strong>가중치 조정</strong>: 4가지 기준이 동등하지 않음. 실험 끝에 AI Slop 방지 가중치를 높임</li>
+<li><strong>실제 상호작용</strong>: Playwright MCP로 Evaluator가 직접 앱을 탐색·스크린샷·사용자처럼 테스트</li>
+</ol>
+<hr>
+<h2>7. 실험 1 — 프론트엔드 디자인 (네덜란드 미술관)</h2>
+<p>구조: 한 문장 프롬프트 → Generator(HTML/CSS/JS 생성) → Evaluator(Playwright MCP) → 피드백 5~15회 반복</p>
+<p>결과: 초반 결과물에서 피드백 10회 이후, 체크무늬 바닥의 3D 공간 같은 완전히 독특한 결과물. "단일 패스 생성에서는 보기 어려운 창의적 도약."</p>
+<hr>
+<h2>8. 실험 2 — 2D 레트로 게임 메이커 (풀스택)</h2>
+<p>프롬프트: 레벨 에디터, 스프라이트 에디터, 엔트 동작, 플레이테스트 모드 포함 2D 레트로 게임 메이커 제작.</p>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>솔로 하네스</th>
+<th>풀 하네스 (Planner+Generator+Evaluator)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>비용·시간</td>
+<td>값싸고 빠름</td>
+<td>비싸고 오래 걸림</td>
+</tr>
+<tr>
+<td>결과물</td>
+<td>겉보기 괜찮음, 실제 플레이 불가</td>
+<td>실제 동작함</td>
+</tr>
+</tbody>
+</table>
+<p>스프린트별 과정: Planner가 명세 확장 → Generator·Evaluator가 Definition of Done 선협상 → 구현 → Evaluator 평가 → 컨텍스트 리셋 + 핸드오프</p>
+<hr>
+<h2>9. Opus 4.6 이후 — 하네스 단순화</h2>
+<p>Opus 4.6 출시 후 제거한 것들:
+- ~~스프린트 구조~~
+- ~~계약 협상 (Definition of Done 선협상)~~
+- ~~컨텍스트 리셋~~</p>
+<p>남긴 것:
+- 컨텍스트 컴팩션 (Claude Agent SDK 내장)
+- Planner(명세 확장) → Generator(전체 앱, 긴 단일 세션) → 빌드 완료 후 Evaluator → 재개선</p>
+<hr>
+<h2>10. 실험 3 — 브라우저 DAW (Digital Audio Workstation)</h2>
+<p>Web Audio API로 브라우저에서 동작하는 풀기능 DAW 제작.</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>소요 시간</th>
+<th>비용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Planner</td>
+<td>5분 50초</td>
+<td>-</td>
+</tr>
+<tr>
+<td>1차 전체 빌드</td>
+<td>2시간</td>
+<td>71달러</td>
+</tr>
+<tr>
+<td>QA Evaluator</td>
+<td>10분</td>
+<td>-</td>
+</tr>
+<tr>
+<td>2차 빌드</td>
+<td>1시간</td>
+<td>-</td>
+</tr>
+<tr>
+<td>3차 빌드</td>
+<td>10분</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>합계</strong></td>
+<td><strong>약 4시간</strong></td>
+<td><strong>약 125달러</strong></td>
+</tr>
+</tbody>
+</table>
+<p>결과: 전문 음악 제작 프로그램 수준은 아니지만, 100달러 선에서 핵심 기능이 동작하는 DAW.</p>
+<hr>
+<h2>11. 하네스 에볼루션 개념</h2>
+<blockquote>
+<p>"하네스의 각 구성요소는 모델이 그 일을 스스로 못할 거라는 가정을 코드로 박아 넣은 것이다. 모델이 좋아지면 이 가정도 낡아버린다."</p>
+</blockquote>
+<ul>
+<li>Sonnet 4.5 → 컨텍스트 리셋 필요</li>
+<li>Opus 4.6 → 컨텍스트 컴팩션만으로 충분, 구조 단순화</li>
+<li>Evaluator의 효용도 모델 능력에 달림 — 모델이 잘 못하는 영역일수록 Evaluator가 필수, 잘하는 영역이면 불필요할 수도</li>
+</ul>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>하네스 설계는 한 번 세팅하고 끝나는 문제가 아니다. 계속 다듬고 반복해야 한다.</strong></span></p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 내 에이전트 시스템에서 컨텍스트 불안 증상이 있는지 확인 (조기 종료, 단계 생략)</li>
+<li>[ ] Evaluator 에이전트를 별도로 분리하고, 평가 기준을 점수화 가능하게 정의</li>
+<li>[ ] 주관적 품질 영역(디자인, 글쓰기, 분석)에 AI Slop 방지 가중치 기준 만들기</li>
+<li>[ ] Playwright MCP 또는 유사 도구로 Evaluator가 실제 앱과 상호작용하도록 연결</li>
+<li>[ ] 스프린트 시작 전 Generator·Evaluator 간 Definition of Done 협상 구조 추가</li>
+<li>[ ] 현재 사용 모델 기준으로 하네스 구성요소 중 낡은 가정은 무엇인지 점검</li>
+<li>[ ] Context Compaction을 직접 구현하거나 Claude Agent SDK 내장 기능 활용 검토</li>
+<li>[ ] 전체 비용 추적 (Planner/Generator/Evaluator 각 단계별로)</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR (Tech Bridge 채널) "Anthropic이 장시간 실행되는 AI 에이전트의 새 청사진을 공개했습니다." · https://www.youtube.com/watch?v=TY96cXzS2cg · 전사: Whisper large-v3 (auto)
+원문 참고: https://www.anthropic.com/engineering/harness-design-long-running-apps</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>어제 Anthropic이 장시간 실행되는 에이전트용 하네스 설계에 대한 흥미로운 글을 공개했습니다.
+그 안에는 특화된 에이전트 시스템을 만들 때 모두에게 도움이 될 만한 인사이트와 솔직한 고백이 담겨 있습니다.
+이들은 6시간 동안 자율 코딩을 돌려 2D 레트로 게임 엔진을 만든 과정을 보여줬습니다.
+또 4시간 동안 브라우저에서 돌아가는 디지털 오디오 워크스테이션(DAW)도 만들었습니다.</p>
+<p>이런 장시간 자율 에이전트 사례는 코딩에 초점이 맞춰져 있지만, 원리는 컴플라이언스 감사·리스크 분석·콘텐츠 파이프라인·영향 평가 같은 특화 에이전트 시스템 전반에 적용됩니다.</p>
+<p>지난주 이 채널에서는 특화 에이전트 하네스를 커스텀 Python·React 앱에 넣는 영상을 올렸습니다.
+그런 커스텀 하네스도 Anthropic 글에서 나온 인사이트를 적용하면 더 좋아질 수 있습니다.</p>
+<p><strong>하네스(Harness)</strong> 가 아직 감이 안 잡히신다면, 쉽게 말해 AI 모델이 길을 잃지 않게 감싸는 소프트웨어 구조입니다. 모델이 엔진이고, 하네스가 자동차 전체인 셈입니다. 더 좋은 비유는 말과 마구(하네스) — 야생마는 힘이 세지만 마음대로 움직이고, 하네스가 그 힘을 통제해 원하는 방향으로 이끕니다. 구성 요소: 프롬프트, 도구, 피드백 루프, 제약 조건, 검증.</p>
+<p>이 글의 핵심 인사이트 중 하나: <strong>오래 걸리고 복잡한 작업에서는 하네스 설계가 모델 자체만큼 중요하다.</strong></p>
+<p>이번 글은 지난해 11월에 나온 "장시간 실행 에이전트용 효과적인 하네스" 글의 연장선이며, 업계 전체가 풀려고 하는 근본 문제를 다룹니다. AI 에이전트에게 복잡한 목표를 주고 몇 시간~며칠 동안 스스로 일하게 만드는 방법입니다. 개발 관점에서는 큰 기능이나 앱 하나를 통째로 만드는 일, 다른 업계에서는 한 달짜리 컴플라이언스 감사를 대신하는 일일 수 있습니다.</p>
+<p>하네스 없으면: 앱 전체를 한 번에 만들려다 컨텍스트 소진, 빨리 끝내려고 완료 선언.</p>
+<p>Anthropic의 초기 해법은 두 부분짜리 시스템이었습니다. 초기화 에이전트가 환경을 세팅하고 기능 단위로 분할한 뒤 진행 파일을 만들고, 코딩 에이전트가 기능 하나씩 구현하며 각 덩어리마다 git 커밋, 다음 에이전트를 위한 구조화된 핸드오프를 남기는 방식입니다.</p>
+<p>Anthropic이 이 아이디어를 처음 생각해낸 건 아닙니다. Geoffrey Huntley는 몇 달 앞서 <strong>Lef Wigdham Loop</strong> 아이디어를 내놨습니다. 에이전트를 루프 안에서 돌리며 린터·타입체크 같이 거짓말 못하는 검증으로 종료 조건을 판단하는 방식입니다. 여기에 Spec-Driven Development(SpecHit, OpenSpec 같은 프레임워크)를 묶으면 더 강력해집니다 — 실제 개발 전에 구조화된 요구사항을 먼저 만들어 에이전트가 미리 정한 기준을 따라 움직이게 됩니다. 다만 외부 객관 검증이 반드시 필요하고, 자기 일을 평가하는 것도 에이전트 자신이라는 한계가 있습니다.</p>
+<p>이런 배경에서 Anthropic은 하네스와 Lef Wigdham Loop를 써도 두 가지 공통 실패 패턴을 발견했습니다.</p>
+<p><strong>첫 번째 — 컨텍스트 불안(Context Anxiety)</strong>: 컨텍스트 창이 차오르면 모델의 태도가 달라집니다. 단순히 일관성을 잃는 게 아니라 행동 자체가 바뀝니다 — 대화를 너무 일찍 마무리, 단계 생략, 끝나지 않은 일을 끝났다고 선언. 직접 긴 대화 스레드를 써봤다면 느껴보셨을 겁니다 — 시간이 갈수록 답이 짧아집니다.</p>
+<p>컨텍스트 컴팩션(대화 스레드를 요약해 활용 가능한 컨텍스트 공간을 늘리는 기법)을 써도 Sonnet 4.5는 여전히 컨텍스트 불안을 보였다고 Anthropic은 말합니다. 깨끗한 새 출발이 아니라 빨리 끝내려는 경향이 있었습니다. 그래서 11월 원래 해법이 컨텍스트 리셋이었습니다 — 새 컨텍스트 창에서 시작해 진행 파일에서 최신 기능을 읽고, 이미 만든 기능을 테스트한 뒤 현재 작업을 구현하고, 완료 후 구조화된 핸드오프를 남기는 방식.</p>
+<p>반면 Opus 4는 이 문제가 그 정도로 크지 않았습니다. 이번 글에서는 Opus 4.6으로 넘어가면서 컨텍스트 리셋이 아예 필요 없었다고 합니다 — 컨텍스트 컴팩션만으로도 충분했고, 조기 포기 증상도 보이지 않았다고.</p>
+<p>Anthropic이 Opus 4.6의 100만 토큰 컨텍스트 창 성능을 강하게 주장하지만, 저는 냉정하게 볼 필요가 있다고 생각합니다 — 토큰을 처리할수록 돈을 더 받으니까요. 그래서 저는 컨텍스트 리셋 설계가 완전히 끝났다고 보진 않습니다.</p>
+<p><strong>두 번째 — 자기평가 편향</strong>: 에이전트에게 자기 일을 평가하라고 하면 대체로 자기 편을 듭니다. Anthropic이 예전에는 잘 하지 않던 솔직한 고백입니다. 클로드가 프론트엔드 디자인에서 밋밋한 결과물을 자주 냈다고 합니다. 그래서 이 시스템 안에서 흔한 AI Slop 패턴에는 감점을 줬습니다.</p>
+<p>자기평가는 주관적 작업과 객관적 작업에서 접근이 다릅니다. 코딩이 AI 에이전트에서 가장 먼저 성장한 이유가 있습니다 — 린터·타입체커·회귀 테스트·브라우저 테스트처럼 검증 가능한 출력이 있어서 AI가 자기 결과를 스스로 반복 개선할 수 있기 때문입니다. 원래 주관적이던 품질을 점수화하면 AI도 더 객관적으로 평가할 수 있습니다.</p>
+<p><strong>적대적 평가(Adversarial Evaluation)</strong>: GAN에서 영감 — Generator 에이전트와 Evaluator 에이전트가 맞붙는 구조. Generator는 코드·콘텐츠를 만들고, Evaluator가 결과를 평가하며 가능하면 객관 기준으로 점수 매겨 피드백을 돌려줍니다. 단일 에이전트에게 더 회의적으로 평가하라고 만드는 것보다, 전용 Evaluator를 두는 것이 훨씬 효과적이었습니다. Evaluator가 피드백을 주면 Generator는 무엇을 고쳐야 할지 명확해집니다.</p>
+<p>이 아이디어 자체는 새롭지 않습니다 — 멀티 에이전트 시스템은 여러 해 전부터 있었고, Evaluator 에이전트 개념도 LLM as a Judge와 크게 다르지 않습니다. 다른 점은 일회성 평가 도구가 아니라 <strong>실제 프로덕션 루프 안에 묶여 있다</strong>는 점입니다.</p>
+<p>기본 상태의 클로드는 QA 에이전트로 성능이 좋지 않았습니다 — 초반 실행에서 실제 문제를 찾고도 큰 문제 아님으로 그냥 통과, 피상적 테스트로 엣지 케이스를 놓쳤습니다. 여러 차례 반복과 개선이 필요했고, 플러그앤플레이가 아니었습니다.</p>
+<p><strong>Evaluator 작동 조건 3가지</strong>:
+1. 주관적 품질 점수화 — "예쁜가?" 대신 "우리 디자인 원칙을 따르는가?"로 기준 정의. 지표: 디자인 품질, AI Slop 회피(독창성), 기술적 완성도(Craft), 기능성
+2. 가중치 조정 — 4가지 기준이 동등하지 않았음. 반복 실험 끝에 AI Slop 방지 가중치를 높임
+3. 실제 상호작용 — Playwright MCP를 붙여 Evaluator가 직접 앱을 탐색·스크린샷·테스트</p>
+<p>(더 결정론적인 테스트도 필요합니다 — Stripe Minions처럼 배포 시스템에 하드코딩된 검증은 별개입니다.)</p>
+<p><strong>실험 1 — 네덜란드 미술관 웹사이트 (프론트엔드 디자인)</strong>: 한 문장 프롬프트 → Generator(HTML/CSS/JS) → Evaluator(Playwright MCP) → 피드백 5~15회. 결과: 체크무늬 바닥의 3D 공간 같은 완전히 독특한 결과물 — "단일 패스로는 보기 어려운 창의적 도약."</p>
+<p><strong>실험 2 — 2D 레트로 게임 메이커 (풀스택)</strong>: 레벨 에디터, 스프라이트 에디터, 엔티티 동작, 플레이테스트 모드 포함. 솔로 하네스(값싸고 빠름) vs 풀 하네스(Planner+Generator+Evaluator). 솔로 결과: 겉보기는 괜찮으나 실제 플레이 불가. 풀 하네스 결과: 실제 동작. Planner는 Opus 3([?원본]) → Sonnet 4.5 사용. 스프린트별 Definition of Done 선협상 — Generator가 목표를 슬금슬금 바꾸지 못하게 했습니다. 이 실험 도중 Opus 4.6이 출시됐습니다.</p>
+<p><strong>Opus 4.6 이후 단순화</strong>: 스프린트·계약 협상·컨텍스트 리셋 제거. 한 문장 프롬프트 → Planner가 명세 확장 → Generator가 전체 앱을 한 번의 긴 세션으로 제작 (컨텍스트 컴팩션 내장) → 빌드 완료 후 Evaluator → 재개선. Anthropic이 Opus 4.6 성능을 꽤 과감하게 과시하는 면도 있습니다 — 100만 토큰 창에서 하네스 없이 앱 전체를 만들 수 있다는 이야기니까요.</p>
+<p><strong>실험 3 — 브라우저 DAW</strong>: Web Audio API 기반 브라우저 내 DAW. Planner 5분 50초, 1차 빌드 2시간 71달러, QA 에이전트 10분, 2차 빌드 1시간, 3차 빌드 10분. 합계: 약 4시간, 125달러. 전문 음악 제작 프로그램 수준은 아니지만, 100달러 선에서 핵심 기능이 동작. 모두 컨텍스트 컴팩션이 내장된 Claude Agent SDK 위에서 동작. SDK를 써야만 하는 건 아니고, 직접 구현도 가능합니다.</p>
+<p><strong>하네스 에볼루션</strong>: 하네스의 각 구성요소는 모델이 그 일을 스스로 못할 거라는 가정을 코드로 박아 넣은 것입니다. Sonnet 4.5에는 컨텍스트 불안이 있었으니 컨텍스트 리셋 구조가 필요했습니다. 모델이 좋아지면 이런 가정도 낡아버립니다 — Opus 4.6에서 직접 확인했습니다. Evaluator의 성능도 모델 자체가 얼마나 좋은지에 달려있습니다. 모델이 못하는 영역이라면 Evaluator 필수, 잘하는 영역이라면 불필요할 수도. 결국 하네스와 컨텍스트 엔지니어링은 한 번 세팅하고 끝나는 문제가 아닙니다 — 계속 다듬고 반복해야 합니다.</p>
+</details>
+</body></html>

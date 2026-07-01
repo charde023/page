@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>기조연설 - 리누스 토르발스와 Dirk Hohndel - AI와 오픈소스의 미래</title>
+<meta name="description" content="리누스 토르발스가 AI 도구의 부상이 리눅스 커널 개발과 오픈소스 생태계에 미치는 긍정·부정 영향을 솔직하게 털어놓은 30회 기념 파이어사이드 챗"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>기조연설 - 리누스 토르발스와 Dirk Hohndel - AI와 오픈소스의 미래</h1>
+<div class="meta">원작자 Linus Torvalds · Linux Foundation / 리눅스 커널 창시자 · 업로드 2026-06-08 · 30.9분 · <a href="https://www.youtube.com/watch?v=i6gVDcx54FY" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>기조연설 - 리누스 토르발스와 Dirk Hohndel - AI와 오픈소스의 미래</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>AI는 컴파일러처럼 생산성을 높이는 강력한 도구지만, 결국 시스템을 이해하는 개발자만이 그 결과물을 장기적으로 유지·관리할 수 있다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Linus Torvalds · Linux 커널 창시자 / Git 창시자 · Linux Foundation 행사 · 업로드 2026-06-08 · 약 31분 · 전사 Whisper large-v3 (auto)
+진행: Dirk Hohndel (DH Consulting 설립자, 전 VMware Chief Open Source Officer)
+이 대담은 Linux Foundation 행사에서 30회를 맞은 파이어사이드 챗 시리즈의 기념 편이다.</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI = 도구, 컴파일러와 동급</td>
+<td>AI가 코드를 써도 "AI가 코딩"이 아님</td>
+<td>컴파일러처럼 개발자를 대체하지 않고 추상화 레이어를 하나 더 올린 것</td>
+</tr>
+<tr>
+<td>시스템 이해력이 선행 조건</td>
+<td>AI 결과물을 검증·유지하려면 저수준 이해 필요</td>
+<td>프롬프트를 잘 짜도 어셈블리까지 확인하는 것이 리누스의 방식</td>
+</tr>
+<tr>
+<td>AI 버그 리포트의 폭증</td>
+<td>리눅스 보안 메일링리스트가 중복 리포트로 마비됨</td>
+<td>여러 명이 같은 AI 툴로 같은 버그를 동시에 발견해 수백 개 중복 발생</td>
+</tr>
+<tr>
+<td>'AI 발견 버그 = 공개로 취급' 정책</td>
+<td>비밀 공시(CNA)의 실효성 상실</td>
+<td>AI가 찾은 버그는 이미 100명이 동시에 찾은 것이므로 시크릿 처리 의미 없음</td>
+</tr>
+<tr>
+<td>비바이버 코딩(vibe coding)의 한계</td>
+<td>장기 유지보수가 필요한 프로젝트에는 부적합</td>
+<td>일회성 프로젝트엔 좋지만 35년 유지 소프트웨어엔 코드 이해가 필수</td>
+</tr>
+<tr>
+<td>오픈소스 보안 공시 문화 문제</td>
+<td>취약점 브랜딩·조기 공개로 패치 기회 박탈</td>
+<td>Heartbleed 이후 반복되는 "버그에 로고 달기" 관행이 유지보수자 해친다</td>
+</tr>
+<tr>
+<td>AI가 클로즈드소스 취약점도 찾아낸다</td>
+<td>폐쇄 소스가 더 안전하다는 믿음 붕괴</td>
+<td>리버스 엔지니어링에도 AI 활용 가능 → 클로즈드소스는 수정조차 어려워 더 위험</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>AGPL v3 논쟁</strong>: 3D 프린팅 오픈소스 생태계에서 AGPL v3 적용 범위를 둘러싼 커뮤니티 갈등 — 라이선스가 하드웨어 설계까지 영향 미치는지 여부</li>
+<li><strong>OpenSCAD</strong>: 코드로 3D 모델을 작성하는 오픈소스 CAD 툴. 비주얼 도구 대신 프로그래밍 방식으로 설계</li>
+<li><strong>Subsurface</strong>: 리누스가 제3의 프로젝트로 시작해 현재는 Dirk가 유지보수하는 다이브 로그(스쿠버 기록) 프로그램</li>
+<li><strong>Shishiko(시시코)</strong>: Google이 만든 패치 자동 리뷰 AI 툴 — 리눅스 커널 메일링리스트의 패치를 분석해 피드백 제공 (정확한 명칭은 Whisper 오인식 가능성 있음)</li>
+<li><strong>로컬 AI 추론</strong>: 빅테크 의존 없이 자체 하드웨어에서 LLM을 실행하는 방식 — 리누스가 주류 개발자들에게 권장</li>
+<li><strong>CNA / 보안 공시 프로세스</strong>: CVE 발급 기관(CNA)이 패치 준비 전에 취약점을 공개 발표하는 문제 — LPE(로컬 권한 상승) 버그 4건 중 2건이 이 방식으로 공개되어 제로데이 패치 기회 박탈</li>
+<li><strong>LDA, hex A9, 6502</strong>: 모스 테크놀로지 6502 CPU의 기계어 — LDA (Load Accumulator) 명령의 opcode가 0xA9. 리누스 세대의 시작점</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>리누스가 흘리듯 말한 수치·경험·설정·의견. 이 섹션이 핵심.</p>
+</blockquote>
+<ol>
+<li>이번 파이어사이드 챗은 <strong>30회 기념</strong> — 수십 년째 이어온 시리즈.</li>
+<li>리눅스 커널 <strong>최근 2개 릴리즈에서 커밋 수 약 20% 증가</strong> — AI 도구 보급이 기여도 상승의 원인으로 추정. 처음엔 7.0 출시 효과로 착각했으나 AI가 진짜 이유.</li>
+<li><strong>RC4 공지</strong>에 AI 관련 버그 리포트 보안 정책 변경 내용 직접 포함 — 공개 정책화.</li>
+<li>리누스 본인은 <strong>공개 강연을 오래 하지 않아</strong> 직접 Q&amp;A 형식만 유지한다고 명시.</li>
+<li>보안 메일링리스트에 <strong>같은 AI 툴이 발견한 중복 리포트 수백 건</strong> 쏟아짐 — 소수 관리자가 전부 포워딩해야 하는 상황.</li>
+<li>최근 LPE(로컬 권한 상승) 버그 <strong>4건</strong> — 이 중 <strong>2건이 조기 공개(패치 제로 상태)</strong> 방식으로 공개됨.</li>
+<li>버그 픽스 후 <strong>3시간 만에 보안 블로그 포스트</strong> 게재된 사례 — AI가 패치 내용을 역분석해 취약점 자동 파악.</li>
+<li>리누스는 현재도 <strong>마이크로컨트롤러 프로젝트</strong>를 취미로 진행 — AI 생성 코드를 사용하면서도 <strong>어셈블리 레벨 출력 직접 검토</strong>.</li>
+<li><strong>컴파일러 대비 생산성 비교</strong>: 컴파일러 → ~1,000배 생산성 향상 / AI → ~10배 생산성 향상 — 리누스 본인의 수치 추정.</li>
+<li><strong>GitHub 480만 개 공개 리포지터리</strong> (당시 주간 공지 기준), 기업 엔터프라이즈에서 중요·핵심으로 분류된 프로젝트 <strong>60만 개</strong> — Dirk가 인용.</li>
+<li>리누스의 4번째 프로젝트: <strong>기타 이펙터 페달</strong> — PCB 설계·소프트웨어·3D 프린터 하우징 모두 오픈소스. GitHub: <code>github.com/torvalds/guitar-pedal</code>(Whisper: <code>Torvalds guitar pedal</code>로 언급).</li>
+<li>코드 규모: <strong>리눅스 커널 약 3,500만 라인</strong>. 버그는 일상적 발생 — 충격적인 일이 아님.</li>
+<li>AI가 코딩에 미치는 영향에 대한 리누스의 포지션: <strong>"AI는 프로그래밍을 바꾸지 않는다. 다른 영역은 모르겠지만 나는 프로그래머라 신경 안 쓴다."</strong></li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>오프닝 &amp; 3D 프린팅</td>
+<td>30회 기념 챗 / 리누스의 취미 3D 프린팅과 코드 기반 CAD 선호</td>
+</tr>
+<tr>
+<td>2</td>
+<td>기타 페달 프로젝트</td>
+<td>4번째 오픈소스 프로젝트 공개 — 하드웨어+소프트웨어 전부 오픈소스</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Linux 7.1 RC4 &amp; AI 커밋 증가</td>
+<td>최근 6개월 커밋 20% 증가, AI 도구가 진입 장벽 낮춘 효과</td>
+</tr>
+<tr>
+<td>4</td>
+<td>AI 버그 리포트 범람 &amp; 보안 정책 변경</td>
+<td>보안 ML 중복 폭증 → "AI 발견 버그는 공개 취급" 정책화</td>
+</tr>
+<tr>
+<td>5</td>
+<td>오픈소스 보안 공시 문화</td>
+<td>버그 브랜딩·조기 공개 관행 비판 / 패치 없이 발표하는 회사와 일 안 함</td>
+</tr>
+<tr>
+<td>6</td>
+<td>AI가 클로즈드소스에도 더 위험한 이유</td>
+<td>리버스 엔지니어링 가능, 수정은 더 어려움</td>
+</tr>
+<tr>
+<td>7</td>
+<td>유지보수자 번아웃</td>
+<td>1,000명+ 기여자 / 소규모 프로젝트 관리자는 더 심각</td>
+</tr>
+<tr>
+<td>8</td>
+<td>AI와 커리어 조언</td>
+<td>AI = 컴파일러와 동급 도구 / 좋은 개발자가 좋은 프롬프터 됨</td>
+</tr>
+<tr>
+<td>9</td>
+<td>바이브 코딩의 한계</td>
+<td>일회성엔 OK, 장기 유지보수엔 코드 이해 필수</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 오프닝 &amp; 취미 프로젝트</h2>
+<p>Dirk Hohndel과 Linus Torvalds의 30회 기념 파이어사이드 챗. 리누스는 공개 강연을 거의 하지 않기 때문에 이 Q&amp;A 형식을 유지한다고 밝혔다.</p>
+<p>두 사람의 공통 취미: <strong>3D 프린팅</strong>. 특히 리누스는 비주얼 CAD 도구보다 <strong>OpenSCAD</strong> 같은 코드 기반 3D 모델링을 선호 — "3D 프린팅을 프로그래밍으로 다룬다"는 표현.</p>
+<p>오픈소스 3D 프린팅 생태계의 특징: 소프트웨어 스택 전체가 오픈소스. AGPL v3 관련 커뮤니티 갈등도 언급.</p>
+<p>리누스 취미 프로젝트 연대기:
+1. <strong>Linux</strong> (주요 프로젝트)
+2. <strong>Git</strong>
+3. <strong>Subsurface</strong> (스쿠버 다이브 로그 프로그램 — 현재 Dirk가 유지)
+4. <strong>기타 이펙터 페달</strong> (최근 공개) — PCB 제조 파일·소프트웨어·3D 프린터 하우징 전부 오픈소스</p>
+<p>기타 페달은 직접 SMD 부품을 손으로 납땜하다가 "전문가에게 맡기는 게 낫겠다"고 결론. Dirk가 베타테스터.</p>
+<h2>2. Linux 7.1 RC4와 AI 커밋 급증</h2>
+<p>리눅스 커널 개발 프로세스는 <strong>20년째 동일</strong> (Git 전환 이후). 그런데 최근 6개월간 변화 발생:</p>
+<ul>
+<li>커밋 수 <strong>약 20% 증가</strong> (최근 두 릴리즈 기준)</li>
+<li>처음엔 7.0 버전 번호 변경 효과로 착각했으나, 실제 원인은 <strong>AI 도구의 성숙</strong></li>
+<li>AI 도구가 리눅스 커널 패치 진입 장벽을 낮췄고, 더 많은 사람이 실제로 기여하고 있음</li>
+</ul>
+<p>리누스: <em>"도구가 초기 진입 장벽을 낮췄다. 이제 도구가 작업의 큰 부분을 대신 한다."</em></p>
+<h2>3. AI 버그 리포트 범람과 보안 정책 변경</h2>
+<p>AI 도구의 긍정 효과만 있는 게 아니다. RC4 공지에 새 보안 정책을 명시할 만큼 <strong>심각한 사회적 문제</strong> 발생.</p>
+<p><strong>문제</strong>: 여러 명이 동일한 AI 툴로 동일한 버그를 발견 → 보안 메일링리스트에 <strong>중복 리포트 수백 건</strong> 유입. 보안 ML은 소수 인원만 접근하는 비공개 리스트인데, 관리자들이 포워딩에 모든 시간을 소비하게 됨.</p>
+<p><strong>정책 변경</strong>: <span style="color:#ef6c00; font-size:1.1em"><strong>"AI 도구로 발견한 버그는 공개로 취급하라."</strong></span> 이미 100명이 동시에 발견했을 가능성이 높으므로 비밀 공시의 실효성이 없다.</p>
+<p>단, 실제 익스플로잇 방법은 여전히 공개하지 말 것 — "이 방법으로 이 회사를 다운시킬 수 있다"고 자랑하는 행위는 자제 요청.</p>
+<h2>4. 오픈소스 보안 공시 문화 비판</h2>
+<p>Heartbleed 이후 반복되는 <strong>버그 브랜딩</strong> 패턴 (도메인·로고 만들기) 비판. 최근 LPE 버그 4건 중 2건이 유지보수자 통보 없이 바로 공개 발표됨.</p>
+<p>결과: 리눅스 커널 개발자가 LPE 취약점을 알게 되는 시점과 전 세계가 아는 시점의 차이 = <strong>0분</strong>.</p>
+<p><span style="font-size:1.1em"><strong>"패치 없이 발표한 회사와는 일하지 않겠다. 그런 행위는 누구에게나 한다는 뜻이다."</strong></span></p>
+<p>리누스의 입장: 안타깝지만 이 상황을 피할 방법이 없다. AI로 발견된 버그는 공개 취급이 현실적.</p>
+<h2>5. 오픈소스 vs 클로즈드소스 보안</h2>
+<p>직관과 반대되는 리누스의 주장:</p>
+<ul>
+<li><strong>클로즈드소스가 더 위험하다</strong>: AI는 리버스 엔지니어링도 할 수 있음 → 버그 발견은 마찬가지</li>
+<li>오픈소스는 AI가 버그 수정도 도울 수 있음 → 클로즈드소스는 발견만 되고 수정은 더 어려움</li>
+</ul>
+<p>AI로 인해 <strong>"보안을 위한 클로즈드소스"</strong> 논리가 한층 더 약해짐.</p>
+<h2>6. 유지보수자 번아웃</h2>
+<p>리눅스 커널 자체는 건강하다 — 릴리즈당 1,000명+ 기여자, 잘 보상받는 핵심 유지보수자 그룹 존재.</p>
+<p>문제는 <strong>수십만 개의 소규모 프로젝트</strong>: 1~3명이 10년 이상 운영하다가 AI 생성 버그 리포트 홍수를 맞으면서 번아웃. 특히 추가 질문을 해도 드라이브바이 리포터(drive-by reporter)가 응답하지 않는 경우.</p>
+<p>GitHub 현황 (2026 기준):
+- 공개 리포지터리 <strong>4억 8천만 개</strong>
+- 기업 엔터프라이즈에서 중요·핵심으로 분류한 오픈소스 프로젝트 <strong>60만 개</strong></p>
+<h2>7. AI, 컴파일러, 그리고 커리어 조언</h2>
+<p>리누스의 핵심 비유:</p>
+<blockquote>
+<p><em>"내 코드의 100%는 컴파일러가 작성한다. 하지만 아무도 그렇게 말하지 않는다. AI도 마찬가지다."</em></p>
+</blockquote>
+<p>AI 도구의 역사적 위치:</p>
+<pre><code>기계어 직접 입력 → 어셈블러 → 컴파일러 → AI 보조 코딩
+</code></pre>
+<p>각 단계는 개발자를 대체한 게 아니라 추상화 레이어를 추가한 것.</p>
+<p>생산성 배수 (리누스 추정):
+- 컴파일러: ~1,000배
+- AI: ~10배</p>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>"AI는 프로그래밍을 바꾸지 않는다. 기초는 그대로다."</strong></span></p>
+<p><strong>좋은 개발자 = 좋은 프롬프터</strong>: 시스템을 이해하는 사람이 AI를 잘 활용하고, 모르는 사람이 AI를 써도 결국 코드가 깨진다.</p>
+<p>리누스 본인의 작업 방식: AI로 코드 생성 → 직접 코드 검토 → 어셈블리 출력까지 확인 (마이크로컨트롤러 프로젝트 기준).</p>
+<h2>8. 바이브 코딩의 한계</h2>
+<p><strong>바이브 코딩(vibe coding)</strong>: AI 프롬프트만으로 코드를 생성하고 동작 원리를 이해하지 않는 방식.</p>
+<ul>
+<li>일회성·단기 프로젝트엔 효과적</li>
+<li>장기 유지보수가 필요한 프로젝트엔 부적합</li>
+</ul>
+<p><span style="font-size:1.1em"><strong>"35년 유지할 소프트웨어라면 프롬프트 그 이상이 필요하다. 결과물을 이해해야 한다."</strong></span></p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] OpenSCAD 실습 — 코드로 3D 모델 작성해보기</li>
+<li>[ ] 리누스의 기타 페달 리포 확인 (github.com/torvalds/guitar-pedal)</li>
+<li>[ ] Shishiko(시시코) 또는 구글의 커널 패치 리뷰 AI 툴 조사</li>
+<li>[ ] 로컬 AI 추론 환경 세팅 검토 — 빅테크 클라우드 의존 줄이기</li>
+<li>[ ] AI 생성 코드를 컴파일러 출력처럼 취급하는 습관 들이기 — 생성 후 반드시 검토</li>
+<li>[ ] 오픈소스 프로젝트 기여 시 AI 발견 버그 → 공개 채널 먼저 (보안 ML 지양)</li>
+<li>[ ] 장기 프로젝트와 일회성 프로젝트의 AI 활용 전략 분리</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 기조연설: 리눅스와 Git의 창시자 리누스 토르발스, DH Consulting 설립자 Dirk Hohndel과 함께합니다 · https://www.youtube.com/watch?v=i6gVDcx54FY · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요 여러분. 제 이름은 Dirk Hohndel입니다. 저는 아주 오랫동안 리눅스와 오픈소스, 그리고 많은 다른 것들을 해왔고, 이 친구와 이야기할 기회가 항상 즐겁습니다.</p>
+<p>(리누스) 네, 저는 Linus입니다. 오랫동안 공개 강연을 하지 않아서, 이런 Q&amp;A 파이어사이드 챗 형식으로만 진행하고 있습니다. 오늘이 실제로 30번째라 우리만의 소소한 기념일이기도 합니다.</p>
+<p><strong>[3D 프린팅과 취미 프로젝트]</strong></p>
+<p>(Dirk) 3D 프린팅 얘기를 해볼까요. 우리 둘 다 같은 3D 프린터를 쓰고 있고, 비주얼 도구보다 코드로 작성하는 방식을 선호하는 것도 공통점이죠. OpenSCAD는 직접 코드에 기여하신 건가요, 아니면 그냥 사용자신가요?</p>
+<p>(리누스) 그냥 사용자입니다. 3D 프린팅 소프트웨어에 직접 참여하고 싶지는 않습니다 — 제가 익숙한 코딩 방식과 너무 다르거든요. 코드를 봐도 어떻게 고쳐야 할지 전혀 모르겠습니다. 훌륭한 학습 경험이죠 — 내가 모르는 것이 얼마나 많은지 새삼 깨닫게 해줍니다. 흥미로운 점은, 오픈소스 도구가 예전엔 다소 거친 느낌이었는데, 이제는 그 인식이 많이 바뀌었다는 것입니다.</p>
+<p>(Dirk) 리누스가 사실 두 개가 아니라 세 개의 프로젝트를 했다고 오랫동안 농담해왔는데요 — Linux, Git, 그리고 다이브 로그 프로그램인 Subsurface. 몇 주 전부터는 네 번째 프로젝트도 생겼습니다.</p>
+<p>(리누스) 네, 기타 이펙터 페달입니다. 직접 제조할 수 있도록 PCB 제조 파일도 모두 오픈소스로 공개했습니다. 부품을 손으로 납땜하다가 너무 번거로워서 전문가에게 맡기는 게 낫겠다고 판단했습니다. 기타에 관심 있거나 정말 형편없는 기타 페달을 원한다면 직접 만들 수 있습니다. 하드웨어와 소프트웨어 설계 파일 모두 포함됩니다. GitHub: torvalds/guitar-pedal 에서 확인하세요.</p>
+<p><strong>[리눅스 7.1 RC4와 AI의 영향]</strong></p>
+<p>(Dirk) 최근 Linux 7.1 RC4를 발표하셨는데, 무슨 일이 있었나요?</p>
+<p>(리누스) 약 20년째 같은 방식으로 개발 프로세스를 유지해왔는데, 약 반 년 전부터 변화가 생겼습니다. 최근 두 릴리즈에서 커밋 수가 이전보다 약 20% 증가했습니다. 처음엔 7.0 메이저 버전 변경 효과라고 생각했는데, 알고 보니 AI 도구가 충분히 좋아져서 많은 개발자들의 생산성이 실질적으로 향상된 덕분이었습니다. 개발 진입 장벽이 낮아진 것이죠.</p>
+<p>긍정적인 영향만 있는 건 아닙니다. RC4 공지에 AI 관련 보안 공시 가이드라인을 새로 넣었습니다.</p>
+<p>AI와의 관계는 애증이 있습니다. 기술적으로는 정말 좋아하고 유용하게 씁니다. 하지만 분명히 문제 지점들이 있습니다. 리눅스에서 가장 큰 고통 지점은 코드 자체가 아니라 <strong>일하는 방식을 강제로 바꿔야 할 때</strong>입니다. 25년 전 Git 전환 때도 비슷한 고통이 있었고, 지금 AI로 인해 비슷한 변화를 겪고 있습니다.</p>
+<p><strong>[AI 버그 리포트 범람과 보안 정책]</strong></p>
+<p>특히 보안 메일링리스트가 심각했습니다. 수십, 수백 명이 같은 AI 툴을 실행해 비슷한 결과를 얻고, 중복 리포트를 보안 ML에 보내기 시작했습니다. 보안 ML은 소수 인원만 접근하는데, 우리는 포워딩에 모든 시간을 썼습니다.</p>
+<p>그래서 정책을 바꿨습니다: <strong>AI로 발견한 버그는 공개로 취급하라.</strong> AI로 찾았다면 이미 100명이 같은 걸 찾은 것입니다. 물론 실제 익스플로잇 방법까지 공개할 필요는 없습니다. 어떤 소프트웨어든, 취약점을 발견했을 때 "이 회사를 이렇게 다운시킬 수 있다"고 자랑하는 사람이 되지 마세요.</p>
+<p>AI는 기술적으로 나쁘지 않습니다. 문제는 아직 해결되지 않은 사회적 마찰들입니다. 35년치 코드에서 우리가 못 찾은 버그들을 AI가 찾아내고 있습니다 — 이건 단기적 고통이지만 장기적으로는 좋은 일입니다.</p>
+<p><strong>[오픈소스 보안 공시 문화와 AI]</strong></p>
+<p>(Dirk) 최근 몇 주간 눈에 띈 점은, 기업들이 버그를 찾는 데 많은 토큰을 쓰면서도 패치는 전혀 제공하지 않는다는 겁니다.</p>
+<p>(리누스) 사실 찾는 것보다 고치는 게 더 어려울 수 있습니다. 그건 이해합니다. 하지만 AI가 버그를 찾는다는 건 단기 고통이지 장기적으로는 좋은 일입니다. 버그를 찾고 고쳤다 — 결과는 더 좋아집니다.</p>
+<p>AI를 좋아하는 진짜 이유 중 하나가 이겁니다. 갈등은 AI가 나쁘다는 게 아니라, 새 도구와 함께 오는 사회적 마찰이 아직 해결 중이라는 것입니다.</p>
+<p>오픈소스 보안 공시 문제: Heartbleed 이후로 버그에 도메인과 로고를 붙이는 기업들이 생겼고, 그들은 유지보수자(피해자)에게 먼저 알리지도 않고 발표합니다. 최근 LPE 버그 4건 중 2건이 이런 방식으로 공개됐습니다. 제 반응은 항상 같습니다: "그런 회사와는 일하지 않겠습니다."</p>
+<p>(Dirk) 커널 개발자가 LPE 취약점을 아는 시점과 세상이 아는 시점의 차이가 0분이라면, 유지보수자는 항상 뒤처지는 상황 아닌가요?</p>
+<p>(리누스) 안타깝지만 피할 방법이 없습니다. 리눅스 커널에는 3,500만 라인의 코드가 있고, 버그는 일상적으로 발생합니다. 예전엔 버그를 고치면서 정확한 보안 이슈를 설명하지 않고 "업그레이드하라"고만 해도 됐습니다 — 대부분 아무도 무슨 일인지 파악하지 못했습니다. 지금은 버그 픽스 후 3시간 만에 블로그 포스트가 올라옵니다. AI가 패치 내용을 역분석하기 때문입니다.</p>
+<p>이게 앞으로도 이렇게 될 것 같습니다. 클로즈드소스가 해결책이라고 생각하신다면 오산입니다 — AI는 리버스 엔지니어링도 할 수 있습니다. 오히려 클로즈드소스는 AI가 버그 발견은 도와도 수정은 도울 수 없어서 더 위험합니다.</p>
+<p><strong>[유지보수자 번아웃과 AI 도구]</strong></p>
+<p>(Dirk) 유지보수자 번아웃 얘기를 드레스룸에서 나눴는데요, AI가 오히려 번아웃을 악화시키는 것 같습니다. 유지보수자를 돕는 AI 도구는 있나요?</p>
+<p>(리누스) 리눅스 커널은 사실 상황이 좋습니다. 릴리즈마다 1,000명 이상 기여하고, 핵심 유지보수자들은 대부분 보상도 잘 받습니다. 진짜 문제는 수많은 소규모 프로젝트들입니다 — 혼자 또는 소수가 10년 넘게 운영하다가 AI 버그 리포트 홍수를 맞고, 추가 질문해도 드라이브바이 리포터가 사라져버리는 상황.</p>
+<p>도구 측면에서는: Google이 만든 패치 리뷰 AI 툴(Shishiko [?시시코])이 메일링리스트 패치를 분석해 피드백을 줍니다. 완벽하지는 않지만 이슈를 찾아내기도 합니다. 그리고 요즘 많은 핵심 개발자들이 <strong>로컬 AI</strong>를 사용합니다 — 빅테크 클라우드에 완전히 의존하지 않으려는 이유로. 언젠가 그 회사들도 수익화 결정을 내릴 수 있으니까요.</p>
+<p><strong>[AI와 커리어 조언]</strong></p>
+<p>(Dirk) 커리어 초반에 있는 사람에게 어디에 집중하라고 하시겠어요?</p>
+<p>(리누스) 제 생각은 항상 같습니다 — AI는 훌륭한 도구, 하지만 도구입니다. "코드의 99%를 AI가 작성한다"는 말을 들으면 화가 납니다. 그 사람들 코드의 100%는 컴파일러가 작성하지만 그렇게 말하지 않잖아요. 완전히 같은 문제입니다.</p>
+<p>저는 6502 기계어(LDA = hex A9)부터 시작했습니다. 어셈블러가 나왔을 때, 그리고 컴파일러가 나왔을 때 각각 익혔습니다. 지금 AI 도구도 마찬가지입니다. 저는 여전히 코드를 쓰고 있고, 방법이 다를 뿐입니다.</p>
+<p>100% 확신하는 것: AI는 프로그래밍을 바꾸고 있지만 <strong>기초는 바꾸지 않습니다.</strong> 모든 사람이 컴파일러를 쓰듯, 많은 사람이 AI를 사용해 코드를 생성하고, 컴파일러로 컴파일하고, 어셈블러로 기계어를 만들 것입니다. 이건 혁명이지만 우리가 이미 겪어본 종류의 혁명입니다.</p>
+<p>컴파일러가 생산성을 1,000배 높였다면 AI는 10배 정도 높일 것입니다. AI는 훌륭하지만 프로그래밍을 바꾸지 않습니다.</p>
+<p>좋은 개발자가 좋은 프롬프터가 됩니다. 시스템을 이해하는 사람은 AI를 활용해 좋은 코드를 만들고, 모르는 사람은 AI를 써도 코드가 깨집니다. 결국 코드가 무엇을 하는지 이해해야 합니다.</p>
+<p>저는 지금도 취미 마이크로컨트롤러 프로젝트에서 AI를 씁니다. 하지만 생성된 코드를 직접 보고, 어셈블리 출력도 확인합니다 — 그게 제 편안함의 영역이자 실제로 원하는 동작을 하는지 확인하는 방법입니다.</p>
+<p>바이브 코딩(vibe coding): 일회성 프로젝트엔 훌륭합니다. 하지만 35년 유지할 소프트웨어라면 프롬프트 그 이상이 필요합니다. 장기적으로 유지하려면 결과물을 이해해야 합니다.</p>
+<p>(Dirk) 시간이 다 됐네요. 내년 밴쿠버에서 만나요. 감사합니다.</p>
+</details>
+</body></html>

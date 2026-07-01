@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Anthropic 엔지니어들이 실제로 Claude Code에 프롬프트하는 방법</title>
+<meta name="description" content="Claude Code를 잘 쓰는 핵심은 긴 프롬프트가 아니라 재사용 가능한 스킬(Skills)을 설계·개선하는 데 있으며, Anthropic 엔지니어들이 실제로 따르는 4가지 규칙을 소개한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Anthropic 엔지니어들이 실제로 Claude Code에 프롬프트하는 방법</h1>
+<div class="meta">원작자 Austin Marchese · The AI Playbook / The Incubator · 업로드 2026-05-19 · 10.8분 · <a href="https://www.youtube.com/watch?v=0QsCi1vFcuM" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Anthropic 엔지니어들이 실제로 Claude Code에 프롬프트하는 방법</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Anthropic 엔지니어들은 매번 새 프롬프트를 쓰지 않고, 재사용 가능한 <strong>스킬(Skills)</strong>을 만들고 매 세션마다 개선하는 복리 루프를 구축한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Austin Marchese · The AI Playbook / The Incubator · 추정 출처 https://the-ai-playbook.com/4rules · 업로드 2026-05-19 · 10.8분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>스킬(Skills)에 프롬프트하기</strong></td>
+<td>반복 작업마다 새 프롬프트를 쓰면 세션 종료 시 소멸</td>
+<td><code>/draft-email</code> 같은 슬래시 명령어 = 재사용 가능한 절차 지식</td>
+</tr>
+<tr>
+<td><strong>스킬의 3계층 구조</strong></td>
+<td>어디에 힘을 써야 하는지 이해해야 효과적 스킬 설계 가능</td>
+<td>설명(Description) → 지시사항(Instructions) → 도구(Tools)</td>
+</tr>
+<tr>
+<td><strong>도구(Tools) 계층의 중요성</strong></td>
+<td>대부분의 사람이 계층2(지시사항)에서 멈춤 — 계층3에 레버리지 있음</td>
+<td>스크립트·API·참조 파일을 스킬에 포함해야 진짜 파워가 생긴다</td>
+</tr>
+<tr>
+<td><strong>조합 가능한(Composable) 스킬</strong></td>
+<td>거대한 단일 스킬은 유지보수 불가, 버그 위치 파악 곤란</td>
+<td>작고 집중된 스킬 여러 개가 서로를 호출하는 구조</td>
+</tr>
+<tr>
+<td><strong>스킬 안에 스크립트 저장</strong></td>
+<td>AI는 매 세션마다 같은 코드를 다시 생성 — 토큰 낭비</td>
+<td>한 번 만든 Python 스크립트를 스킬 폴더에 저장 → 재실행만 하면 됨</td>
+</tr>
+<tr>
+<td><strong>user_invocable / disable_model_invocation 플래그</strong></td>
+<td>스킬 호출 권한을 사람 vs. 에이전트로 분리할 수 있음</td>
+<td>배포·전송 같은 고위험 스킬은 사람만 실행하도록 잠금 가능</td>
+</tr>
+<tr>
+<td><strong>매 세션 스킬 업데이트 루프</strong></td>
+<td>프롬프트는 창 닫으면 사라지지만 스킬은 누적·복리 개선</td>
+<td>출력이 기대와 다르면 "이게 영구 규칙인가?"를 물어 스킬에 반영</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Claude Skills (클로드 스킬)</strong>: Claude Code에서 슬래시(<code>/</code>) 명령어로 호출 가능한 파일 묶음. Anthropic 공식 용어로 "agents를 위한 조합 가능한 절차 지식 패키지(composable procedural knowledge for agents)".</li>
+<li><strong>user_invocable 플래그</strong>: 스킬 메타데이터 설정값. <code>false</code>로 설정 시 슬래시 메뉴에서 숨겨지고 에이전트만 내부적으로 호출 가능.</li>
+<li><strong>disable_model_invocation 플래그</strong>: 반대로 모델(AI)이 자동 호출 못하게 잠금. 사람만 명시적으로 실행 가능.</li>
+<li><strong>결정론적 코드(Deterministic code)</strong>: 같은 입력 → 항상 같은 출력. AI 추론과 달리 토큰 소모 없이 빠르고 일관됨. 스킬 안에 스크립트를 두면 "AI 토큰을 코드 연산으로 교체"하는 효과.</li>
+<li><strong>composability (조합성)</strong>: 여러 스킬이 자동으로 서로를 호출해 체이닝(chaining)될 수 있는 특성. Anthropic 블로그에서 강조한 스킬 설계 원칙.</li>
+<li><strong>AI Code Summit</strong>: 영상이 인용하는 Anthropic 엔지니어 발표 행사. Barry, Eric 등 엔지니어가 등장.</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li><strong>Barry(Anthropic)의 발언</strong>: Claude가 슬라이드 스타일링용 Python 스크립트를 "매 세션마다 새로 작성"하고 있었다. 이를 발견하고 스크립트를 스킬 폴더에 저장하게 했더니 일관성과 효율이 크게 올랐다.</li>
+<li><strong>Eric(Anthropic)의 발언</strong>: 사람들이 프롬프트에는 엄청난 공을 들이면서, 스킬에 주는 도구(tools)는 파라미터 이름이 <code>A</code>, <code>B</code>처럼 아무 의미 없는 형태로 만든다. "엔지니어가 이런 함수를 받았다면 쓸 수 없을 것"이라고 직접 비판.</li>
+<li><strong>도메인 체크 예시</strong>: 화자가 AI가 추천한 도메인의 실제 구매 가능 여부를 매번 수동 확인하던 과정을 스킬 + 도메인 조회 API 도구로 자동화. 10개 서브에이전트가 10,000개 이상의 도메인을 병렬 탐색 가능해졌다고 언급.</li>
+<li><strong>콘텐츠 엔진 스킬 분리 경험</strong>: 처음에 <code>slash content creation</code> 하나로 아이디어 생성·스크립트 작성·SNS 초안을 모두 처리했다가 관리 불가 상태에 빠짐. YouTube 아이디어 리서치 / YouTube 스크립트 작성 / LinkedIn 포스트 — 3개로 분리하자 각 스킬이 서로를 호출해 체이닝됨.</li>
+<li><strong>스킬 개선 루프의 구체적 방법</strong>: 세션 종료 후 채팅 히스토리를 그대로 붙여넣고 "이 대화를 보고 스킬을 개선해줘. 이 문제가 자동으로 처리되도록"이라고 Claude에게 요청하면 됨.</li>
+<li><strong>Layer 3 계층 설명</strong>: 스킬의 3번째 계층(도구)이 "모든 레버리지가 사는 곳(where most of the leverage lives)"이라고 명시. 그러나 대부분의 사람은 Layer 2(지시사항)에서 멈춤.</li>
+<li><strong>30일 효과 언급</strong>: Anthropic 엔지니어 인용 — "Claude가 당신과 30일 함께 일했을 때, Day 1보다 훨씬 나은 성능을 낼 수 있어야 한다"는 것이 스킬 누적 설계의 목표.</li>
+<li><strong>스킬 설명(Description)의 역할</strong>: Claude는 사용자가 명시적으로 스킬을 호출하지 않아도, Description이 잘 작성되어 있으면 문맥에 맞는 스킬을 자동으로 선택해 사용함. 레이블이 모호하면 Claude가 언제 쓸지 모름.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>도입</td>
+<td>AI 코드 서밋에서 발견 — 대부분의 사람이 Claude를 잘못 프롬프트함</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Rule 1: 스킬에 프롬프트하라</td>
+<td>반복 작업은 슬래시 스킬로. 레이어 3(스킬)이 앱 레이어</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Rule 2: 스킬은 프롬프트 이상이다</td>
+<td>3계층(설명·지시사항·도구). 도구 계층이 핵심인데 대부분 무시</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Rule 3: 조합 가능한 스킬을 만들어라</td>
+<td>작고 집중된 스킬 여러 개 &gt; 거대한 단일 스킬. 두 가지 고급 패턴 포함</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Rule 4: 스킬은 매 세션마다 스마트해진다</td>
+<td>출력 후 스킬 업데이트 루프 — 복리 효과</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 도입 — 대부분의 사람이 Claude를 잘못 쓴다</h2>
+<p>화자는 Anthropic 엔지니어들의 AI Code Summit 발표를 청취한 뒤, 거의 모든 사람이 Claude Code를 잘못 프롬프트하고 있다는 것을 발견했다. Anthropic 엔지니어들의 발표 자료와 블로그를 종합해 4가지 규칙을 도출했으며, 기술 경험이 없어도 적용 가능하다고 강조한다.</p>
+<hr>
+<h2>2. Rule 1 — Claude가 아니라 스킬(Skills)에 프롬프트하라</h2>
+<p>AI를 처음 쓰기 시작하면 매번 새 프롬프트를 작성하게 된다. 하지만 현실에서 대부분의 작업은 반복적이다. Anthropic 엔지니어들은 이 반복 작업을 해결하기 위해 <strong>Claude Skills</strong>를 만들었다.</p>
+<p>스킬은 "agents를 위한 조합 가능한 절차 지식 패키지"다. 쉽게 말해 특정 작업을 수행하는 방법이 담긴 폴더다.</p>
+<p><strong>레이어 모델</strong> (Anthropic 엔지니어 발표에서 인용):
+- <strong>Layer 1</strong>: AI 모델 자체 (Anthropic이 만드는 부분)
+- <strong>Layer 2</strong>: AI 에이전트 + 프롬프트 (대부분의 사람이 머물러 있는 곳)
+- <strong>Layer 3</strong>: 스킬 (애플리케이션 레이어 — <strong>차드가 만들어야 하는 부분</strong>)</p>
+<p>스마트폰에 비유하면 Anthropic은 폰을 만들고, 차드는 앱(스킬)을 만드는 역할이다.</p>
+<p>실제 예시: 이메일 답장을 쓸 때 복잡한 프롬프트를 매번 입력하는 대신, <code>/draft-email</code>을 입력하고 이메일을 붙여넣으면 된다.</p>
+<hr>
+<h2>3. Rule 2 — 스킬은 프롬프트 이상이다 (도구 계층이 핵심)</h2>
+<p>스킬을 만드는 행위 자체는 쉽다(<code>build me a skill for X</code>라고 하면 Claude가 만들어줌). 하지만 효과적으로 쓰려면 내부 구조를 이해해야 한다.</p>
+<p><strong>스킬의 3계층:</strong></p>
+<table>
+<thead>
+<tr>
+<th>계층</th>
+<th>이름</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layer 1</td>
+<td><strong>설명 (Description)</strong></td>
+<td>Claude가 이 스킬을 언제 써야 하는지 판단하는 기준. 폴더 레이블 같은 것. 모호하면 Claude가 자동 선택 못함</td>
+</tr>
+<tr>
+<td>Layer 2</td>
+<td><strong>지시사항 (Instructions)</strong></td>
+<td>작업 수행을 위한 단계별 플레이북</td>
+</tr>
+<tr>
+<td>Layer 3</td>
+<td><strong>도구 (Tools)</strong></td>
+<td>코드 스크립트, API 호출, 참조 파일. <strong>실제 레버리지가 여기에 있음</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Eric(Anthropic)의 직접 비판: 사람들이 프롬프트에는 엄청난 공을 들이면서 도구 파라미터 이름을 <code>A</code>, <code>B</code>로 짓는다. 이렇게 만든 스킬로는 모델이 제대로 작동할 수 없다.</p>
+<p>화자의 도메인 체크 스킬 사례: AI가 추천한 도메인이 실제로 구매 가능한지 매번 수동 확인하는 대신, 도메인 조회 API를 도구로 추가한 스킬을 만들었다. 결과적으로 10개 서브에이전트가 10,000개 이상의 도메인을 자동 탐색하는 수준으로 확장됐다.</p>
+<hr>
+<h2>4. Rule 3 — 조합 가능한(Composable) 스킬을 만들어라</h2>
+<p>Anthropic 블로그에 명시된 스킬의 특성: <strong>composable, portable, efficient, powerful</strong>.</p>
+<p>조합성이란 여러 스킬이 함께 작동하면서 Claude가 자동으로 어떤 스킬을 쓸지 조율한다는 의미다.</p>
+<p><strong>나쁜 예 (화자의 초기 실수):</strong>
+<code>/content-creation</code> 하나에 아이디어 생성, 스크립트 작성, SNS 초안 전부 포함 → 수정 시마다 전체 스킬 재작성 필요, 버그 위치 파악 불가.</p>
+<p><strong>좋은 예 (개선 후):</strong>
+- <code>/youtube-idea-research</code>
+- <code>/youtube-script-writer</code>
+- <code>/linkedin-post</code></p>
+<p>각 스킬이 서로를 호출해 체이닝됨.</p>
+<p><strong>조합 스킬의 3가지 이점:</strong>
+1. <strong>문제 위치 즉시 파악</strong>: 집중된 스킬이 깨지면 어디가 문제인지 바로 알 수 있음
+2. <strong>개선이 복리로 적용</strong>: <code>/youtube-idea-research</code>를 업데이트하면 이 스킬을 쓰는 모든 워크플로우가 자동 업그레이드됨
+3. <strong>재사용 가능</strong>: 도메인 체크 스킬처럼 범용 도구는 어떤 워크플로우에도 플러그인 가능</p>
+<p><strong>고급 패턴 1 — 스크립트를 스킬 안에 저장:</strong>
+Barry(Anthropic)의 사례: Claude가 슬라이드 스타일링용 Python 스크립트를 매 세션마다 새로 작성하고 있었다. 이를 스킬 폴더에 저장하게 했더니 다음 세션부터 재실행만 하면 됨.</p>
+<p>핵심 원칙: <strong>코드로 할 수 있는 것은 AI에게 시키지 마라.</strong> 코드는 결정론적(같은 입력 → 같은 출력)이고, 토큰 소모 없이 빠르며 반복 가능하다. "AI 토큰을 코드 연산으로 교체"하는 전략.</p>
+<p><strong>고급 패턴 2 — 호출 권한 제어:</strong>
+Claude Skills에 내장된 두 플래그:
+- <code>user_invocable: false</code> → 슬래시 메뉴에서 숨김. 에이전트 전용 내부 스킬.
+- <code>disable_model_invocation</code> → 모델이 자동 호출 불가. 배포, 메시지 전송 같은 고위험 작업에 적합.</p>
+<hr>
+<h2>5. Rule 4 — 스킬은 매 세션마다 스마트해진다</h2>
+<p>프롬프트는 창을 닫으면 사라지지만, 스킬은 남는다. 그리고 매번 사용할 때마다 개선 기회가 생긴다.</p>
+<p>Anthropic 엔지니어 인용: "Claude가 당신과 30일 함께 일했을 때, Day 1보다 훨씬 나은 성능을 낼 수 있도록 설계되어야 한다."</p>
+<p><strong>실제 루프:</strong>
+1. 스킬 실행
+2. 출력이 기대와 다를 때 → "이게 일회성 수정인가, 스킬에 영구 반영해야 하는가?" 질문
+3. 영구 반영이라면 → 스킬에 규칙/예시/엣지 케이스 추가
+4. 채팅 히스토리를 참조 포인트로 활용: "이 대화를 보고 스킬을 개선해줘. 이 문제가 자동으로 처리되도록, 또는 같은 실수가 반복되지 않도록"</p>
+<p>대부분의 사람은 스킬을 실행하고 출력을 받으면 그냥 넘어간다. Anthropic 엔지니어들은 반드시 스킬을 업데이트해 복리 루프를 만든다.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 지금 매번 새로 입력하는 반복 프롬프트 목록 작성 → 스킬 후보 식별</li>
+<li>[ ] 각 스킬의 3계층(설명/지시사항/도구) 명확하게 설계</li>
+<li>[ ] 스킬 설명(Description)을 구체적으로 작성 — Claude가 자동 선택할 수 있도록</li>
+<li>[ ] 스킬에 도구 추가: 반복되는 코드 스크립트를 스킬 폴더에 저장</li>
+<li>[ ] 거대한 단일 스킬이 있으면 작은 조합 스킬로 분리</li>
+<li>[ ] 고위험 스킬(배포, 전송)에 <code>disable_model_invocation</code> 적용 여부 검토</li>
+<li>[ ] 스킬 사용 후 개선 루프 습관화: 출력 검토 → 스킬 업데이트</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Anthropic 엔지니어들이 실제로 Claude Code에 프롬프트하는 방법 · https://www.youtube.com/watch?v=0QsCi1vFcuM · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>저는 AI Code Summit에서 Anthropic 엔지니어들의 발표를 들었고, 예상치 못한 것을 알게 됐습니다. 거의 모든 사람이 Claude Code를 잘못 프롬프트하고 있었습니다. 그래서 더 깊이 파고들었고, Anthropic 엔지니어들이 공개한 모든 자료를 분석한 끝에 그들이 실제로 Claude Code를 프롬프트하는 4가지 규칙을 발견했습니다. 기술적 경험이 없어도 이 규칙들을 적용할 수 있습니다.</p>
+<p><strong>Rule 1: Claude가 아니라 스킬(Skills)에 프롬프트하라</strong></p>
+<p>규칙들로 넘어가기 전에, 그들이 Claude를 어떻게 사용하는지 기반을 이해해야 합니다. 일반적으로 사람들이 AI를 처음 쓸 때는 모든 작업마다 새 프롬프트를 작성합니다. 하지만 현실에서 대부분의 작업은 반복적입니다. 그래서 Anthropic 엔지니어들은 이 반복 작업을 해결하기 위해 Claude Skills를 만들었습니다.</p>
+<p>스킬에 대한 그들의 설명입니다(기술 용어가 있어도 걱정 마세요): "스킬은 에이전트를 위한 조합 가능한 절차 지식을 패키지화한 정돈된 파일 묶음이다." 다시 말해 폴더입니다. Barry는 이를 "에이전트를 위한 절차 지식"이라고 표현했는데, 쉽게 말해 작업을 완수하는 방법이 담긴 것입니다. 스킬을 실제로 만드는 데는 예술적인 면이 있으며 이는 규칙 2, 3, 4에서 다룹니다. 하지만 먼저 사고방식을 바꿔야 합니다. 전통적인 프롬프트 사고를 멈추고, Claude 스킬에 프롬프트하는 방식으로 전환해야 합니다.</p>
+<p>복잡하게 들릴 수 있지만 실제로는 간단합니다. 이메일 답장 초안을 원한다면, 복잡한 프롬프트 대신 <code>/draft-email</code>을 입력하고 이메일을 붙여넣으면 됩니다.</p>
+<p>개념적으로는 Anthropic 엔지니어 발표에서 가져온 레이어 모델로 설명할 수 있습니다. Layer 1은 AI 모델 자체, Layer 2는 AI 에이전트와 프롬프트(대부분의 사람이 여기서 상호작용), Layer 3이 스킬입니다. 이것이 AI 세계의 애플리케이션 레이어입니다. 스마트폰에 비유하면 Anthropic이 폰을 만들고, 앱은 여러분이 만드는 것입니다. 앱 레이어를 컨트롤해야 합니다.</p>
+<p><strong>Rule 2: 스킬은 프롬프트 이상이다</strong></p>
+<p>스킬 방식으로 전환해야 한다는 것은 납득했습니다. 그렇다면 실제로 작동하는 스킬을 어떻게 만들까요? ChatGPT가 처음 나왔을 때 프롬프트 엔지니어링이 유행했던 것처럼, 여기에도 예술이 있습니다.</p>
+<p>스킬 자체를 만드는 행위는 쉽습니다. Claude에게 "X를 위한 스킬을 만들어줘"라고 하면 만들어줍니다. 하지만 스킬을 효과적으로 쓰려면 내부가 무엇인지 이해해야 합니다. 스킬은 단순한 프롬프트가 아니기 때문입니다.</p>
+<p>스킬 안에는 3개의 계층이 있습니다. Layer 1은 설명(Description)입니다. Claude가 특정 질문을 받을 때마다 이 스킬을 써야 하는지 판단하는 데 사용하는 것입니다. 폴더의 레이블과 같습니다. 레이블이 모호하면 Claude가 언제 써야 하는지 판단하기 어렵고, 구체적이면 정확히 알 수 있습니다. 그리고 Claude에 프롬프트할 때 스킬을 명시적으로 호출하지 않아도 됩니다. 적절하게 설명되어 있으면 Claude가 언제 써야 하는지 자동으로 알게 됩니다.</p>
+<p>Layer 2는 지시사항(Instructions)입니다. Claude가 스킬을 선택한 후 따르는 플레이북입니다. 작업을 실제로 완수하는 단계별 절차입니다. Layer 3은 도구(Tools)입니다. 코드 스크립트, API 호출, 참조 파일입니다. 여기서 스킬이 단순한 프롬프트를 훨씬 넘어서게 됩니다. 모든 레버리지가 이 Layer 3에 있지만, 대부분의 사람들은 Layer 2에서 멈춥니다.</p>
+<p>Eric(Anthropic)의 발언을 인용하겠습니다: "사람들이 매우 아름답고 상세한 프롬프트를 만드는 데 엄청난 노력을 기울이는 걸 봅니다. 그런데 모델에게 주는 도구들은 믿을 수 없을 정도로 기본적인 수준이에요. 문서도 없고, 파라미터 이름이 A와 B인 식이죠. 엔지니어라면 이런 함수를 사용할 수 없을 거예요."</p>
+<p>사람들은 프롬프트에 집착하면서 스킬의 세 번째 계층인 도구는 건너뜁니다. Anthropic 엔지니어들은 반대로 합니다. 도구에 집중합니다. 저는 예를 들어 AI가 알려주는 도메인이 실제로 구매 가능한지 프로그래밍으로 확인하는 커스텀 스킬을 만들었습니다. 그 스킬에 적절한 도구를 주었더니 전체 프로세스가 레벨업됐습니다. Rule 1에서 말한 것처럼, 10개의 서브에이전트가 이 스킬을 사용해 10,000개 이상의 도메인을 탐색해 적절한 것을 찾을 수 있게 됐습니다.</p>
+<p><strong>Rule 3: 조합 가능한(Composable) 스킬을 만들어라, 맞춤형 스킬이 아니라</strong></p>
+<p>Anthropic 엔지니어링 블로그에서 스킬의 특성을 직접 인용하면: 조합 가능하고, 이식 가능하며, 효율적이고, 강력합니다. 조합성이란 여러 스킬이 함께 작동하면서 Claude가 자동으로 어떤 것을 사용할지 조율한다는 의미입니다. 이는 작고 집중되고 재사용 가능한 스킬을 가져야 한다는 것을 의미합니다. 모든 것을 하는 단일 거대 스킬 대신.</p>
+<p>제가 처음 콘텐츠 엔진을 위한 스킬을 만들 때 경험한 구체적인 사례입니다. <code>/content-creation</code> 하나를 만들어 아이디어 생성, 스크립트 작성, SNS 초안 모두를 담았습니다. 관리하기 불가능해졌습니다. 스크립트 작성 방식을 바꾸고 싶을 때마다 전체 스킬을 다시 써야 했고 어디에 영향을 미치는지 알 수 없었습니다. 그래서 더 구체적인 스킬들로 분리했습니다: YouTube 아이디어 리서치, YouTube 스크립트 작성, LinkedIn 포스트. 각 스킬에 구체적인 목표가 있었고, 각자 서로를 호출할 수 있어서 체이닝됩니다.</p>
+<p>이게 과도해 보일 수 있지만, 세 가지 이유로 그렇지 않습니다. 첫째, 문제 위치 파악이 쉽습니다. 집중된 스킬이 깨지면 어디를 봐야 하는지 정확히 압니다. 둘째, 개선이 복리로 적용됩니다. YouTube 아이디어 리서치를 업데이트하면 같은 스킬을 쓰는 모든 워크플로우가 자동으로 업그레이드됩니다. 셋째, 재건 없이 재사용 가능합니다. 도메인 체크 스킬 같은 것을 만들면 원하는 어떤 워크플로우에도 플러그인할 수 있습니다.</p>
+<p>Anthropic 엔지니어들이 실제로 사용하는 두 가지 기술적 패턴:</p>
+<p>패턴 1 — 스크립트를 스킬 안에 저장: Barry(Anthropic): "Claude가 슬라이드에 스타일링을 적용하기 위해 매번 같은 Python 스크립트를 작성하는 걸 계속 봤습니다. 그래서 미래의 자신을 위한 도구로 스킬에 저장하게 했습니다. 이제 스크립트를 실행하기만 하면 됩니다. 훨씬 일관되고 효율적입니다." Claude가 매 세션마다 같은 코드를 다시 쓰는 대신, 스킬 폴더에 스크립트를 저장합니다. 다음 세션엔 재실행만 합니다. 코드는 결정론적(같은 입력 → 같은 출력)이며 AI 추론처럼 해석하거나 추측하거나 토큰을 소모하지 않습니다. 스킬 안에 스크립트를 넣으면 AI 토큰을 코드 연산으로 교체하는 것 — 더 저렴하고, 빠르고, 반복 가능합니다. 일반 원칙: 코드로 할 수 있으면 코드를 써야 합니다. AI가 코드를 한 번 만들게 하고 원하는 만큼 재사용하세요.</p>
+<p>패턴 2 — 호출 권한 제어: 대부분의 사람이 모르지만 Anthropic은 Claude 스킬에 두 가지 플래그를 내장했습니다. <code>user_invocable</code>을 <code>false</code>로 설정하면 슬래시 메뉴에서 숨겨집니다. 사용자(나 혹은 다른 누구든)가 직접 이 스킬을 호출할 수 없습니다. 에이전트 전용 스킬입니다. 내가 신경 쓰고 싶지 않은 AI 에이전트 전용 도구에 적합합니다. 반대로 <code>disable_model_invocation</code>은 사용자만 실행할 수 있고 모델은 못합니다. 메시지를 전송하거나 프로덕션에 새 버전을 배포하는 스킬처럼 위험도가 높은 작업에 적합합니다.</p>
+<p><strong>Rule 4: 스킬은 매 세션마다 스마트해진다</strong></p>
+<p>여기서 진짜 차이가 납니다. 그들의 스킬, 나아가 프롬프트가 단지 작동하는 데 그치지 않고 매 세션마다 더 나아집니다. 문장으로 Claude에게 프롬프트하면 창을 닫는 순간 그 프롬프트의 이점은 사라집니다. 스킬로 프롬프트하면 스킬은 남습니다. 그리고 매번 사용할 때마다 더 날카롭게 만들 기회가 있습니다.</p>
+<p>Anthropic 엔지니어링 팀의 발언: "Claude를 처음 쓸 때, 이 표준화된 형식은 매우 중요한 보장을 제공합니다. Claude가 기록한 모든 것은 미래의 자신이 효율적으로 사용할 수 있습니다. 우리의 목표는 당신과 함께 30일째 일하는 Claude가 첫날 Claude보다 훨씬 더 잘할 수 있는 것입니다."</p>
+<p>Claude가 당신의 작업 방식, 목소리, 프로세스, 엣지 케이스에 대해 무언가를 배울 때마다 스킬에 기록하세요. 다음 세션은 이전 세션보다 스마트하게 시작합니다.</p>
+<p>실제로 어떻게 하는가: 스킬을 실행하고 출력이 정확히 원하는 것이 아닐 때, 스스로 한 가지 질문을 하세요. "이건 일회성 수정인가, 아니면 이 스킬에 영원히 있어야 하는 것인가?" 영원히라면 스킬을 업데이트하세요. 규칙, 예시, 엣지 케이스를 추가하세요. 많은 사람들이 이걸 완전히 건너뜁니다. Anthropic 엔지니어들은 스킬을 사용하고, 출력을 받고, 스킬을 업데이트해서 시간이 지날수록 개선되는 복리 루프를 만듭니다. 채팅 히스토리를 참조 포인트로 활용하면 됩니다: "방금 이 스킬을 사용한 후 나눈 대화를 검토해줘. 이게 자동으로 처리되도록, 또는 같은 실수를 반복하지 않도록 스킬을 개선할 수 있을까?"</p>
+<p><strong>마무리</strong></p>
+<p>네 가지 규칙을 정리하면: 프롬프트가 아닌 스킬에 프롬프트하라. 프롬프트와 스킬만이 아닌 도구를 만들어라. 맞춤형이 아닌 조합 가능한 스킬을 만들어라. 그리고 사용할 때마다 스킬을 업데이트하라. 엔지니어처럼 Claude를 사용하는 것이 복잡할 필요는 없습니다.</p>
+</details>
+</body></html>

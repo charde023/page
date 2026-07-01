@@ -1,0 +1,357 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>하네스 엔지니어링 - 사람이 방향을 잡고 에이전트가 실행하는 소프트웨어 개발법</title>
+<meta name="description" content="OpenAI Ryan Lopopolo가 &#x27;코드는 무료&#x27;인 시대에 에이전트를 팀 워크플로에 통합하는 하네스 엔지니어링 전략을 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>하네스 엔지니어링 - 사람이 방향을 잡고 에이전트가 실행하는 소프트웨어 개발법</h1>
+<div class="meta">원작자 Ryan Lopopolo · OpenAI · 업로드 2026-04-30 · 46.3분 · <a href="https://www.youtube.com/watch?v=zIbSNV2htgw" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>하네스 엔지니어링 - 사람이 방향을 잡고 에이전트가 실행하는 소프트웨어 개발법</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>'코드는 무료'인 시대에 엔지니어의 역할은 구현이 아니라 에이전트가 좋은 일을 할 수 있도록 컨텍스트·가드레일·구조를 만드는 것이다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Ryan Lopopolo · OpenAI · 추정 출처 https://openai.com/index/harness-engineering/ · 업로드 2026-04-30 · 46분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>하네스 엔지니어링 (Harness Engineering)</td>
+<td>에이전트가 좋은 코드를 낼 수 있도록 환경·지시·도구를 설계하는 일</td>
+<td>코드를 쓰는 게 아니라 에이전트가 코드를 잘 쓸 조건을 만드는 것</td>
+</tr>
+<tr>
+<td>코드는 무료 (Code is Free)</td>
+<td>구현 비용이 0에 수렴하므로 P3 태스크도 병렬로 즉시 킥오프 가능</td>
+<td>희소 자원은 코드가 아니라 인간 시간·컨텍스트 윈도</td>
+</tr>
+<tr>
+<td>비기능 요구사항 문서화</td>
+<td>에이전트는 트릴리온 줄 코드를 봤지만 어떤 선택을 해야 하는지 모른다</td>
+<td>좋은 패치 하나에 500개의 비기능 결정이 있다</td>
+</tr>
+<tr>
+<td>쓰레기 수거일 (Garbage Collection Day)</td>
+<td>매주 금요일 슬롭 제거·린트·가드레일 구축에 집중하는 루틴</td>
+<td>피드백 → 문서화 → 자동 프롬프트 주입 루프를 닫는다</td>
+</tr>
+<tr>
+<td>리뷰 에이전트 (Review Agent)</td>
+<td>CI 매 푸시마다 보안·신뢰성·QA 관점으로 코드 자동 검토</td>
+<td>퍼소나 기반 리뷰어를 에이전트로 만들어 동기 인간 리뷰를 제거</td>
+</tr>
+<tr>
+<td>점진적 컨텍스트 공개 (Progressive Disclosure)</td>
+<td>모든 지시를 앞에 다 주면 에이전트가 압도됨</td>
+<td>린트·테스트 타임에 적시 지시를 주입해 단계적으로 가이드</td>
+</tr>
+<tr>
+<td>코드 = 에이전트에게 보내는 프롬프트</td>
+<td>파일 시스템의 코드는 텍스트이므로 에이전트의 컨텍스트로 직접 작용</td>
+<td>코드베이스를 균일하게 만들면 에이전트의 예측 비용이 낮아짐</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>하네스 엔지니어링 (Harness Engineering)</strong> — Ryan이 쓴 개념. 에이전트가 좋은 결과를 낼 수 있도록 코드베이스·도구·문서·린트·리뷰 에이전트 등 모든 환경을 설계하는 일. 코딩 에이전트 자체를 만드는 게 아님</li>
+<li><strong>Codex (OpenAI)</strong> — OpenAI의 코딩 에이전트 플랫폼. Claude Code와 유사하게 하네스 안에서 포스트-트레이닝됨</li>
+<li><strong>슬롭 (Slop)</strong> — 에이전트가 내놓는 품질 낮은 코드. "Do not produce slop"만 써도 슬롭이 줄어든다고 함</li>
+<li><strong>ADR (Architecture Decision Records)</strong> — 아키텍처 결정 이력 문서. 에이전트가 왜 이런 구조인지 파악하는 데 필수</li>
+<li><strong>Zod</strong> — TypeScript 스키마 파싱 라이브러리. "parse, don't validate at the edge"와 함께 언급</li>
+<li><strong>PNPM workspace</strong> — 모노레포에서 패키지 격리에 사용. 750개 패키지로 구성한 사례</li>
+<li><strong>apply patch tool</strong> — Codex 하네스 내 포스트-트레이닝된 도구. 하네스 의존 레버리지를 얻는 핵심</li>
+<li><strong>Symphony</strong> — OpenAI가 공개한 에이전트 오케스트레이터. 코드를 라이브러리 스펙의 컴파일 산출물로 보는 개념</li>
+<li><strong>exec plans</strong> — Codex용 초기 플랜 스킬. 마일스톤·수락 기준 구조 포함</li>
+<li><strong>Kafka queue</strong> — 이벤트 큐. 컨슈머 구현 패턴 예시로 언급</li>
+<li><strong>Electron app</strong> — 데스크톱 앱 프레임워크. Ryan 팀의 실제 제품 기반</li>
+<li><strong>ESLint custom rules</strong> — 팀 전용 린트 규칙. PNPM 모든 패키지에 연결</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>Ryan은 <strong>9개월간 에디터를 한 번도 열지 않았고</strong>, 팀에서도 에디터 사용을 금지시킴 — 에이전트를 통해서만 코드 작성</li>
+<li>하루 10억 출력 토큰 소비 → <strong>하루 $1,000 이상</strong> 지출 ("토큰 억만장자")</li>
+<li>코드베이스에 <strong>파일당 350줄 제한 테스트</strong>를 추가 — 컨텍스트 효율을 위해 코드 구조 자체를 모델에 맞게 바꿈</li>
+<li><strong>매주 금요일 = Garbage Collection Day</strong> — 엔지니어 전원이 슬롭 제거·가드레일 구축에 1일 투자</li>
+<li><strong>3인 팀이 하루 3~5개 PR</strong>씩 → 하루 최대 15 PR. 머지 컨플릭트가 큰 문제가 되어 패키지 분리 + PR 오픈 시간 단축으로 해결</li>
+<li>코드 리뷰 블로킹을 없애기 위해 <strong>퍼소나 기반 리뷰 에이전트</strong> 도입 (프론트엔드 아키텍트, 신뢰성 엔지니어, 확장성 등) — 각 에이전트가 매 푸시마다 자동 실행</li>
+<li>Codex 하네스는 <strong>포스트-트레이닝 루프에 하네스 자체가 포함</strong>됨 → 퍼스트파티 하네스에 올라타는 게 직접 만드는 것보다 유리</li>
+<li><strong>Chrome DevTools 프로토콜 → 데몬 방식 전환</strong>이 있었는데 Ryan은 3주간 몰랐음 — Codex가 문서 보고 스스로 해결</li>
+<li><strong>계획(Plan Mode) 주의사항</strong>: 플랜을 읽지 않고 승인하면 원하지 않는 지시가 주입됨 → 플랜 PR은 반드시 라인 단위로 인간 검토 후 머지</li>
+<li>토큰 배분은 대략 <strong>계획·티켓 큐레이션·문서화 1/3 + 구현 1/3 + CI 실행 1/3</strong></li>
+<li>"에이전트에게 Continue를 타이핑해야 할 때마다 하네스 실패" — 에이전트가 멈추지 않고 완료까지 가려면 충분한 컨텍스트가 하네스에 내장돼야 함</li>
+<li><strong>코드를 컴파일 산출물로 보는 관점</strong>: 하네스 = LLVM 최적화 패스, 모델 교체 = 코드 생성 백엔드 교체 (Cranelift 비유)</li>
+<li><strong>750개 PNPM 패키지</strong> — 비즈니스 로직 도메인 또는 스택 레이어 단위로 격리. 마이크로서비스가 아니어도 이 구조는 유효하다고 강조</li>
+<li>Codex에게 OpenAI 개발자 가이드의 <strong>프롬프트 쿡북 전체를 읽혀서 "프롬프트 쓰는 스킬"을 합성</strong>시킴 → 프롬프트 작성도 에이전트에게 위임</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>코드는 무료</td>
+<td>구현이 희소 자원이 아닌 시대. 인간 시간·컨텍스트 윈도가 진짜 희소 자원</td>
+</tr>
+<tr>
+<td>2</td>
+<td>에이전트 시대의 엔지니어 역할</td>
+<td>스태프 엔지니어처럼 위임·시스템 설계·우선순위 결정</td>
+</tr>
+<tr>
+<td>3</td>
+<td>비기능 요구사항 문서화</td>
+<td>팀 퍼소나별 비기능 결정을 문서화 → 모든 에이전트 경로가 혜택</td>
+</tr>
+<tr>
+<td>4</td>
+<td>프롬프트 주입 기법</td>
+<td>CLAUDE.md·rules 파일·린트 에러·리뷰 에이전트 — 모두 프롬프트</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Garbage Collection Day</td>
+<td>매주 금요일 슬롭 제거 루틴 → 피드백 루프 자동화</td>
+</tr>
+<tr>
+<td>6</td>
+<td>코드베이스 균일화</td>
+<td>ORM 1개·언어 1개·CI 방식 1개 → 에이전트 컨텍스트 전이 비용 감소</td>
+</tr>
+<tr>
+<td>7</td>
+<td>퍼스트파티 하네스 활용</td>
+<td>Codex·Claude Code는 포스트-트레이닝에 하네스가 포함 → 올라타는 게 이득</td>
+</tr>
+<tr>
+<td>8</td>
+<td>협업 허브 = PR</td>
+<td>GitHub PR을 에이전트·인간 모두의 허브앤스포크 협업 공간으로 사용</td>
+</tr>
+<tr>
+<td>9</td>
+<td>미래 비전</td>
+<td>분기 단위 토큰 예산·사람 우선순위 입력 → 에이전트가 자율 실행</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 코드는 무료 — 희소 자원의 이동</h2>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>코드는 더 이상 희소 자원이 아니다.</strong></span> 구현 비용이 0에 가까워지면서 예전엔 절대 못 했던 P3 태스크들을 4개 병렬로 즉시 킥오프하고 가장 좋은 결과만 선택할 수 있다. 팀 내 모든 내부 도구에 처음부터 다국어 지원을 넣을 수도 있다.</p>
+<p>지금 진짜 희소한 것은 세 가지다:
+- <strong>인간의 시간과 주의력 (Human time &amp; attention)</strong>
+- <strong>모델 컨텍스트 윈도 (Context window)</strong>
+- GPU 용량 / 토큰 예산</p>
+<p>따라서 엔지니어의 역할은 구현 손을 보내는 것에서 <strong>생산된 코드가 가치를 가질 수 있도록 시스템·구조·환경을 만드는 것</strong>으로 이동한다.</p>
+<hr>
+<h2>2. 에이전트 시대의 엔지니어 역할</h2>
+<p>모든 엔지니어는 이제 스태프 엔지니어다 — 자신이 동시에 구동할 수 있는 만큼의 팀원을 갖는다. 중요한 것은:</p>
+<ul>
+<li>1일·1주·6개월 앞을 보고 코드를 생산할 <strong>구조를 설계</strong>하는 것</li>
+<li>인간 시간을 <strong>더 높은 레버리지 활동</strong>으로 이동시키는 것</li>
+<li>에이전트가 도중에 막히지 않도록 <strong>블로커를 제거</strong>하는 것</li>
+</ul>
+<p><span style="font-size:1.1em"><strong>"에이전트에게 Continue를 타이핑해야 할 때마다 하네스 실패다."</strong></span></p>
+<hr>
+<h2>3. 비기능 요구사항 문서화</h2>
+<p>하나의 좋은 패치를 만들려면 비기능 요구사항에 대한 <strong>500개의 작은 결정</strong>이 필요하다. 에이전트는 트릴리온 줄 코드를 학습해서 모든 선택지를 알지만, <strong>어떤 선택이 이 팀에서 옳은지는 모른다.</strong></p>
+<p>팀의 각 퍼소나(프론트엔드 아키텍트, 신뢰성 엔지니어, 프로덕트 마인드 엔지니어)가 자신의 비기능 기준을 문서화하면, 그 팀원이 없더라도 모든 에이전트 경로가 그 기준을 따른다. <strong>한 번의 고레버리지 작업이 모든 미래 PR에 적용된다.</strong></p>
+<p>문서화해야 할 것들:
+- 좋은 QA 플랜이란 무엇인가
+- 네트워크 코드에 retry + timeout이 있어야 하는가
+- Zod 스키마 중복을 어떻게 처리할 것인가
+- 의존성 경계(레이어 간 API 공개/비공개)는 어떻게 정하는가</p>
+<hr>
+<h2>4. 프롬프트 주입 기법 — "모든 것은 프롬프트다"</h2>
+<p>에이전트에게 올바른 행동을 유도하는 모든 방법은 결국 <strong>프롬프트 주입</strong>이다:</p>
+<table>
+<thead>
+<tr>
+<th>기법</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CLAUDE.md</code> / <code>rules</code> 파일</td>
+<td>프롬프트</td>
+</tr>
+<tr>
+<td>Skills</td>
+<td>프롬프트</td>
+</tr>
+<tr>
+<td>린트 에러 메시지</td>
+<td>프롬프트 (remediation steps 포함해야 효과적)</td>
+</tr>
+<tr>
+<td>리뷰 에이전트의 PR 코멘트</td>
+<td>프롬프트</td>
+</tr>
+<tr>
+<td>소스 코드 구조 자체</td>
+<td>에이전트에게 전달되는 텍스트 = 프롬프트</td>
+</tr>
+<tr>
+<td>CI 테스트 실패 메시지</td>
+<td>프롬프트</td>
+</tr>
+</tbody>
+</table>
+<p><strong>점진적 컨텍스트 공개</strong>: 모든 지시를 앞에서 다 주면 에이전트가 압도된다. 대신 린트·테스트 타임에 적시에 주입한다.</p>
+<p>예시: React 컴포넌트 분해 요구사항은 구현 초기가 아니라 <strong>린트 타임에 "컴포넌트를 작고 stateless하게 쪼개라"</strong> 메시지로 준다. 에이전트는 자연스럽게 기존 패치를 수정해 요구사항을 충족시킨다.</p>
+<hr>
+<h2>5. Garbage Collection Day — 피드백 루프 닫기</h2>
+<p><strong>매주 금요일</strong>, 팀 전원이 한 가지만 한다:</p>
+<ol>
+<li>한 주 동안 PR 머지를 어렵게 만든 슬롭 패턴을 수집</li>
+<li>그 패턴이 <strong>왜 발생하는지</strong> 분석 (컨텍스트 실패 = 에이전트가 해당 기준을 몰랐음)</li>
+<li>린트·테스트·리뷰 에이전트 프롬프트로 <strong>카테고리 단위 제거</strong></li>
+</ol>
+<p>이 루프가 닫히면:
+- 인간 코드 리뷰 코멘트 → 문서화 → 자동 프롬프트 주입 → 에이전트 자가 치유</p>
+<p>결과적으로 동기 인간 리뷰가 줄어들고, PR 오픈 시간이 단축되며, 머지 컨플릭트도 감소한다.</p>
+<hr>
+<h2>6. 코드베이스 균일화 — 에이전트 컨텍스트 전이</h2>
+<p>코드베이스 어디를 보더라도 <strong>동일한 패턴</strong>이면 에이전트가 개발한 컨텍스트가 모든 위치에 전이된다.</p>
+<ul>
+<li>ORM 1개, 프로그래밍 언어 1개, CI 스크립트 작성 방식 1개</li>
+<li>린트 규칙 추가 방법 1개, bounded concurrency 헬퍼 1개</li>
+<li>750개 PNPM 패키지 → 비즈니스 도메인/스택 레이어 단위로 격리</li>
+</ul>
+<p>이렇게 하면 <strong>에이전트가 생성할 토큰이 예측 가능</strong>해지고, 저장소 어느 부분을 보더라도 같은 품질의 코드를 낸다.</p>
+<p>균일화는 대규모 마이그레이션을 에이전트 15개를 병렬로 써서 끝낼 수 있다. <strong>6개월 동안 열려있던 마이그레이션은 이제 없다.</strong></p>
+<hr>
+<h2>7. 퍼스트파티 하네스 활용</h2>
+<p>Codex·Claude Code 같은 퍼스트파티 코딩 에이전트는 <strong>포스트-트레이닝 루프에 하네스 자체(apply patch tool, bash tool 호출 방식 등)가 포함</strong>된다.</p>
+<p>따라서:
+- 직접 하네스를 밑바닥부터 만드는 것보다 <strong>퍼스트파티 하네스 위에서 스티어링</strong>하는 게 효율적
+- Ryan의 역할 = 모델 릴리스 간 동작 차이를 관찰하고 원하는 동작으로 유도하는 것
+- 내부 메커니즘 이해보다 <strong>관찰된 동작 기반으로 가드레일 조정</strong></p>
+<hr>
+<h2>8. 협업 구조 = PR 허브</h2>
+<p>Google Docs와 유사하게 PR을 <strong>에이전트·인간이 함께 작업하는 허브앤스포크</strong>로 사용한다.</p>
+<ul>
+<li>구현 에이전트: 피드백을 acknowledge / defer / reject할 수 있음</li>
+<li>리뷰어(인간·에이전트) 모두 비동기 참여</li>
+<li>모든 피드백이 반드시 반영될 필요는 없음 → 에이전트가 과도한 리뷰에 "bullied"되는 상황 방지</li>
+<li><span style="font-size:1.1em"><strong>"코드가 완벽하지 않아도 수락되는 방향으로 바이어스"</strong></span></li>
+</ul>
+<hr>
+<h2>9. 미래 비전</h2>
+<p>Ryan이 목표로 하는 미래:</p>
+<blockquote>
+<p>분기 단위 토큰 예산 + 인간이 우선순위를 지정한 입력 → 에이전트 50개가 24/7 자율 실행 → 인간은 결과만 확인</p>
+</blockquote>
+<p>소프트웨어 엔지니어링 외부 영역(사용자 피드백 트리아지, 프로덕션 PII 유출 감지, 런북 작성, Twitter 분위기 모니터링)도 에이전트로 이동한다. 인간의 역할은 점점 <strong>"무엇을 해야 하는지 정의하고 수락 기준을 작성하는 메타 프로그래밍"</strong>으로 이동한다.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 팀의 비기능 요구사항을 퍼소나별로 문서화해보기 (신뢰성, 프론트엔드, 확장성)</li>
+<li>[ ] 에이전트 슬롭 패턴을 모아 카테고리별 린트/테스트로 자동 제거하는 루틴 만들기</li>
+<li>[ ] 코드베이스 균일화 감사 — ORM, CI 방식, async 헬퍼가 1개씩인지 확인</li>
+<li>[ ] 리뷰 에이전트 한 개라도 CI에 추가해보기 (네트워크 코드 retry + timeout 검사부터)</li>
+<li>[ ] 린트 에러 메시지에 구체적인 remediation 단계 추가</li>
+<li>[ ] 파일당 350줄 제한 테스트 실험해보기</li>
+<li>[ ] 하네스 스킬을 5~10개로 집중하고 넓히지 않기</li>
+<li>[ ] Plan Mode 사용 시 라인 단위로 인간 검토 후 머지하는 정책 수립</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 하네스 엔지니어링: 사람이 방향을 잡고 에이전트가 실행하는 소프트웨어 개발법 - Ryan Lopopolo, OpenAI · https://www.youtube.com/watch?v=zIbSNV2htgw · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>발표자 소개: 사람이 방향을 잡고 에이전트가 실행하는 소프트웨어 개발, 즉 하네스 엔지니어링에 대해 발표할 분을 소개합니다. OpenAI 기술 스태프 멤버 Ryan Lopopolo입니다.</p>
+<p><strong>Ryan 기조연설:</strong>
+런던, 좋은 아침입니다. 저는 Ryan Lopopolo입니다. 지난 9개월 동안 에이전트만으로 소프트웨어를 개발하는 특권을 누려왔습니다. 저는 토큰 억만장자입니다. 우리가 AGI 미래로 나아가기 위해서는 모든 사람이 토큰 억만장자가 되어 모델이 소프트웨어 엔지니어로서 전체 업무를 수행하도록 해야 한다고 믿습니다.</p>
+<p>팀이 에디터를 아예 열지 못하게 금지시키고, 모델을 통해서만 작업하게 했습니다. 오늘은 그 실천이 어떤 의미인지, 그리고 팀의 작업 방식·코드 공간·프로세스를 에이전트가 전체 업무를 수행할 수 있도록 어떻게 운영화하는지 말씀드리겠습니다.</p>
+<p>소프트웨어를 만드는 방법이 바뀌었다는 건 아시죠. 지난 6개월간 코딩 에이전트가 세상을 점령했고, 능력은 계속 빠르게 향상되어 더 복잡한 작업을 더 긴 시간 지평에서 더 높은 신뢰성으로 수행하게 됐습니다. 이제 구현은 소프트웨어 엔지니어링의 희소 자원이 아닙니다. <strong>코드는 무료입니다.</strong> 우리가 매일 마주하는 문제를 해결할 코드는 넘쳐납니다.</p>
+<p>오늘 이 자리의 모든 엔지니어는 24/7 365일 5명, 50명, 5,000명 분의 엔지니어링 용량에 접근할 수 있습니다. 우리의 역할은 이 새로운 용량을 코드와 팀에 생산적으로 배치하는 방법을 알아내는 것입니다. 스킬셋은 시스템 사고, 시스템 설계, 위임 쪽으로 이동하고 있습니다.</p>
+<p>제게 마법 같은 순간은 GPT 5.2 [?] 였습니다. 그 시점에 처음으로 소프트웨어 엔지니어의 전체 업무를 수행할 수 있는 코드를 봤습니다. 모델들은 이제 실제 코드베이스에서 실제 사용자 문제를 고품질 코드로 해결하는 능력에서 우리와 동형(isomorphic)입니다.</p>
+<p>코드는 유지보수 부담을 수반하지만, 생산은 무료이고 리팩터도 무료입니다. 모델은 무한히 인내심이 있고 무한히 병렬입니다. 코드를 생산·유지·리팩터·삭제하는 것이 더 이상 팀 자원 배분의 강제 함수가 아닙니다.</p>
+<p>오늘날 희소한 자원은 인간의 시간·주의력, 그리고 모델 컨텍스트 윈도입니다. 코드가 무료인 세상에서는 P3 태스크들이 즉시 4개 병렬로 킥오프되고, 그 중 문제를 해결하는 것 하나를 선택합니다. 국제화도 처음부터 무료로 제공할 수 있습니다.</p>
+<p>중요한 것은 코드가 아니라 <strong>그것을 만든 프롬프트와 가드레일</strong>입니다. 브레드크럼을 남기세요 — 문서, ADR, 페르소나 지향 문서, 좋은 작업이 무엇인지 설명하는 문서, 티켓·코드 리뷰의 모든 역사적 로그. 이것이 에이전트가 여러분의 코드와 제품에 도달하는 방법이기도 합니다.</p>
+<p>에이전트가 일을 잘하기 위한 도구와 기법:
+- <code>good-agents.md</code> 파일 (auto-compaction이 계속 발전하고 있어 효과가 높아짐)
+- 리뷰어 에이전트 — 코드를 보면서 "이 네트워크 코드에 timeout과 retry가 있는가?" 확인
+- 보안·신뢰성 리뷰 에이전트를 CI 매 푸시에 실행
+- 슬롭을 거부하라. "슬롭을 내지 마라"고 말하면 슬롭이 나오지 않는다</p>
+<p>제품 마인드를 가진 엔지니어 한 명이 좋은 QA 플랜이 무엇인지 문서화하면, 모든 에이전트 경로가 좋은 QA 플랜을 갖게 됩니다. 한 번의 고레버리지 작업이 영속적으로 쌓입니다.</p>
+<p>테스트에 에이전트 SDK를 임베드해서 코드베이스 수용 가능성을 프롬프트로 검토하게 할 수도 있습니다. 저는 Codex [?]에게 OpenAI 개발자 가이드의 모든 프롬프팅 쿡북을 가리키고 프롬프트 작성 스킬을 합성하게 했습니다. 그래서 이제 프롬프트를 써야 할 때 에이전트가 만든 스킬로 프롬프트를 씁니다.</p>
+<p>모든 것이 쌓입니다. 내보내세요. 에이전트가 전체 업무를 수행할 수 있으니까요.</p>
+<hr>
+<p><strong>Q&amp;A (팟캐스트 형식):</strong></p>
+<p><strong>Q: 실제 워크플로가 어떻게 되나요?</strong></p>
+<p>티켓에서 시작합니다. 기능·신뢰성 작업 청크를 에이전트에게 주고 앱을 조작할 스킬 몇 가지를 함께 제공합니다. 개발 프로세스의 진입점은 Codex이고, 그 주위에 환경을 만드는 게 아니라 바깥에서 안으로 접근합니다. Codex에게 앱을 어떻게 구동하는지, 로컬 observability 스택을 어떻게 올리는지, Chrome DevTools에 어떻게 연결하는지 가르치는 스킬을 줍니다. 저장소 전체, 로컬 개발 도구 전체가 <strong>Codex가 먼저 실행</strong>하도록 설정돼 있습니다.</p>
+<p>커스텀 ESLint 규칙 패키지가 PNPM 워크스페이스의 모든 패키지에 연결됩니다. 소스 코드 자체를 검증하는 높은 수준의 테스트도 있습니다 — 패키지 프라이버시, 레이어 간 의존성 엣지, Zod 스키마 중복 제거, async 헬퍼 단일 표준 구현 등입니다. 에이전트가 공유 유틸리티 대신 로컬 패키지 내에서만 최적화하는 경향을 관찰하고 이를 차단하는 검증기를 만들었습니다.</p>
+<p>스킬은 5~10개로 집중합니다. 스킬을 넓히기보다 기존 스킬을 더 좋게 만들길 선호합니다. Chrome DevTools 프로토콜에서 데몬 방식으로 바꾼 일이 있었는데 저는 3주간 몰랐습니다. 완전히 괜찮았어요. Codex가 문서를 보고 알아서 처리했습니다.</p>
+<p><strong>Q: 하네스를 과잉 엔지니어링하지 않으려면?</strong></p>
+<p>비터 레슨(bitter lesson) 방향으로 생각합니다. 모델 능력 향상으로 내 작업이 완전히 obsolete되지 않으려면? 최소한의 컨텍스트 관리 — 에이전트가 허용 가능한 작업을 하기 위한 요구사항을 적시에 제공하는 것. 컨텍스트는 obsolete되지 않을 것입니다. 모델은 태스크 요구사항과 어떤 가드레일을 따라야 하는지 반드시 알아야 합니다. 좋은 하네스는 적시에 올바른 텍스트를 모델에게 제공하는 것입니다.</p>
+<p>모든 지시를 앞에서 다 주면 안 됩니다. React 컴포넌트를 작고 stateless하게 분해하는 요구사항은 처음에 줄 필요 없습니다. 에이전트가 프로토타입을 만들게 두고, 린트/테스트 타임에 "컴포넌트를 분해하라"고 말하면 됩니다.</p>
+<p><strong>Q: Codex 하네스 vs Claude Code?</strong></p>
+<p>퍼스트파티 하네스의 강점은 포스트-트레이닝 루프에 하네스 자체가 포함된다는 것입니다. apply patch 도구, bash 도구 호출 방식이 포스트-트레이닝에 들어갑니다. SDK를 통하거나 Codex 앱 서버를 조작하면 그 레버리지를 그대로 활용할 수 있습니다. 제 역할은 모델 릴리스 간 동작 차이를 관찰하고 가드레일을 조정하는 것으로 올라갑니다.</p>
+<p><strong>Q: 협업 플랫폼은?</strong></p>
+<p>저장소의 마크다운 파일과 GitHub PR이 주요 허브입니다. PR을 Google Docs처럼 협업 공간으로 씁니다. 에이전트·인간 모두 비동기로 참여하고, 구현 에이전트는 피드백을 acknowledge/defer/reject할 수 있습니다. 모든 피드백이 반드시 반영될 필요는 없습니다. 에이전트가 리뷰어들에게 "bullied"되어 완벽주의에 빠지지 않게 합니다.</p>
+<p><strong>Q: 코딩 에이전트를 어떻게 시작해야 하나?</strong></p>
+<p>두 가지 방법이 있습니다. 첫째, 에이전트를 써서 기존 코드에 테스트를 추가해 코드 품질에 대한 신뢰를 높이고, 그러면 에이전트 출력도 더 잘 탐색합니다. 둘째, 지금 시간을 어디에 쓰고 있는지 보세요 — 에디터 앞에서 코드 쓰기? 테스트 기다리기? 인간 리뷰 대기? CI 대기? 플레이키 테스트 처리? 에이전트로 순차적으로 자동화하세요. 최종적으로 높은 레버리지는 해야 할 일을 정의하고, 우선순위를 정하고, 팀을 효과적으로 권한을 부여하는 것입니다.</p>
+<p><strong>Q: 차 안에서 에이전트와 어떻게 일하나요?</strong></p>
+<p>퇴근 직전에 태스크를 킥오프하고 노트북을 뒷좌석에 시트벨트 채우고 폰 테더링으로 30분 귀가하는 동안 요리하게 둡니다. 스킬이 "테스트가 초록불이 될 때까지 계속해"라고 말하기 때문에 중간에 "Continue"를 눌러줄 필요가 없습니다. 꿈은 에이전트 50개가 24/7 돌아가고 저는 전혀 상호작용하지 않아도 되는 것입니다.</p>
+<p><strong>Q: 대규모 코드베이스에서 점진적 컨텍스트 공개는?</strong></p>
+<p>처음에 Electron 앱 단일 패키지로 시작했다가 엉망이 됐습니다. 패키지 프라이버시도 없고, 에이전트가 도메인을 구분할 파일 시스템 훅도 없었습니다. 결국 750개 PNPM 패키지로 완전히 전환했습니다 — 비즈니스 로직 도메인 또는 스택 레이어 단위로 격리. 마이크로서비스가 아니어도 이 구조는 의미 있습니다. ORM 1개, 언어 1개, CI 방식 1개, 린트 규칙 추가 방법 1개. 누군가를 "독재자"로 세워서 "이것이 방법이다"라고 하거나 함께 결정하고, 써내려가고, 코드를 그 현실에 맞게 발전시키세요.</p>
+<p><strong>Q: 코드 리뷰를 어떻게 하나요?</strong></p>
+<p>초기에 팀 3명이 하루 3~5개 PR씩 냈는데 머지 컨플릭트가 심했습니다. 두 방향으로 움직였습니다: 코드를 더 tree-out해서 충돌 최소화, PR 오픈 시간 단축. PR이 오래 열려있는 이유는 코드 리뷰 때문이었습니다. 인간이 블로커였습니다. 그래서 퍼소나 기반 리뷰 에이전트를 도입했습니다. Garbage Collection Day에 팀이 관찰한 슬롭을 카테고리별로 제거합니다. 이 피드백 루프 — 인간 코드 리뷰 코멘트 → 컨텍스트 실패 파악 → 저장소에 문서화 → 자동 프롬프트 주입 → 에이전트 자가 치유 — 가 닫히면 슬롭이 계속 줄어듭니다.</p>
+<p><strong>Q: 토큰은 어디에 쓰나요? 예산 제한이 있다면?</strong></p>
+<p>대략 계획·티켓 큐레이션·문서화 1/3, 구현 1/3, CI 실행 1/3입니다. $200 프로 플랜이라면 코드 작성보다 CI에서 토큰을 쓰는 게 필요합니다. 코드를 쓰는 게 어려운 게 아니라 코드가 수락되고 제품이 전진하는 게 가치를 만드는 것입니다.</p>
+<p><strong>Q: 코드는 disposable build artifact인가요?</strong></p>
+<p>맞습니다. Symphony 에이전트 오케스트레이터 개념처럼, 라이브러리를 잘 정의된 스펙으로 퍼블리시하고 코드는 그 컴파일 산출물로 봅니다. LLM을 퍼지 컴파일러로 보는 멘탈 모델 — 하네스 엔지니어링의 모든 컨텍스트는 허용 가능한 코드를 제약하는 최적화 패스입니다. LLVM이 Rust 코드를 컴파일하는 것과 같습니다. 모델을 교체하는 건 크레인리프트 [?Cranelift]로 코드 생성 백엔드를 바꾸는 것과 같습니다.</p>
+<p><strong>Q: 하네스 엔지니어링의 미래는?</strong></p>
+<p>분기·반기·연간 토큰 예산과 인간이 우선순위를 정한 입력을 주면 에이전트가 제 손을 빌리지 않고 계속 제품을 전진시키는 것입니다. 초기 프로토타입 → 내부 알파 → 내부 베타 → 외부 알파로 가면서 소프트웨어 엔지니어링의 새로운 영역들이 0에서 다시 시작해야 했습니다 — QA 스모크 테스팅, 빌드 아티팩트 검증, 사용자 피드백 트리아지, 프로덕션 PII 유출 감지, 런북 작성, 소셜미디어 분위기 모니터링. 이런 것들을 에이전트가 하게 만드는 것이 목표입니다. 코드를 더 이상 직접 쓰지 않으면서, 이 더 높은 수준의 활동들로 마음이 이동합니다. 이것들의 프로세스와 수락 기준을 쓰는 게 메타 프로그래밍이 됩니다.</p>
+</details>
+</body></html>

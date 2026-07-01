@@ -1,0 +1,339 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>전 메타 L8 엔지니어가 AI 에이전트로 하루에 PR 40개를 올리는 방법 - Kun Chen</title>
+<meta name="description" content="전 메타 L8 Kun Chen이 Plan-Code-Validate 3단계 루프, Lavish(HTML 계획 에디터)·Treehouse(워크트리 관리)·No Mistakes(에이전트 PR 리뷰) 세 가지 자체 제작 도구로 하루 20-40 PR을 처리하는 실전 에이전틱 워크플로를 시연한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>전 메타 L8 엔지니어가 AI 에이전트로 하루에 PR 40개를 올리는 방법 - Kun Chen</h1>
+<div class="meta">원작자 Kun Chen · Linear (前 Meta L8, Microsoft) · 업로드 2026-06-18 · 56.3분 · <a href="https://www.youtube.com/watch?v=EzwHnHwgbUo" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>전 메타 L8 엔지니어가 AI 에이전트로 하루에 PR 40개를 올리는 방법 - Kun Chen</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Plan-Code-Validate 3단계에서 계획에 집중하고 나머지를 에이전트에 위임하면, 하루 20-40 PR을 혼자서 처리할 수 있다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Kun Chen · Linear (前 Meta L8) · https://x.com/kunchenguid · 업로드 2026-06-18 · 56분 · 전사 Whisper large-v3 (auto) · 진행 Peter Yang</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plan-Code-Validate 루프</td>
+<td>계획에 시간을 더 쓸수록 에이전트가 더 오래 자율 실행된다</td>
+<td>짧은 프롬프트 → 에이전트 금방 막힘, 상세 스펙 → 장시간 자율 실행</td>
+</tr>
+<tr>
+<td>HTML 계획 아티팩트 (Lavish)</td>
+<td>긴 텍스트 벽 대신 시각적으로 클릭하며 피드백 가능</td>
+<td>마크다운보다 토큰 비효율적이지만 협업 UX에서 압도적으로 유리</td>
+</tr>
+<tr>
+<td>워크트리 풀 관리 (Treehouse)</td>
+<td>새 세션마다 의존성 재설치 없이 즉시 병렬 세션 시작</td>
+<td><code>treehouse</code> 한 번 타이핑으로 준비된 워크트리에 진입</td>
+</tr>
+<tr>
+<td>신규 컨텍스트 창 리뷰 (No Mistakes)</td>
+<td>동일 세션에서 리뷰하면 에이전트가 자신의 이전 작업에 편향됨</td>
+<td>새 컨텍스트 창이 엣지 케이스를 훨씬 많이 잡아낸다</td>
+</tr>
+<tr>
+<td>서브에이전트 분리</td>
+<td>탐색/실험 작업을 메인 세션에서 분리해 컨텍스트 폭발 방지</td>
+<td>10개 실험 → 10개 서브에이전트 병렬 실행 후 결론만 반환</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Lavish</strong> (<code>npx lavish-axi</code>) — Kun이 직접 만든 오픈소스 HTML 계획 에디터. 에이전트가 생성한 HTML 아티팩트에 주석 달고 클릭으로 피드백을 돌려보내는 양방향 협업 도구. 용어노트#Lavish</li>
+<li><strong>Treehouse</strong> — 워크트리(git worktree) 풀을 자동 관리하는 CLI. 타이핑 한 번으로 의존성 설치된 워크트리에 진입. 용어노트#Treehouse</li>
+<li><strong>No Mistakes (<code>nm</code>)</strong> — PR 생성부터 리뷰·테스트·문서·린트·푸시까지 파이프라인 자동화. 신규 컨텍스트 창을 열어 intent를 분석한 뒤 명백한 버그는 자동 수정, 판단이 필요한 건 사람에게 에스컬레이션.</li>
+<li><strong>ProgramBench</strong> — SWE-Bench 제작진의 새 벤치마크. 에이전트에게 FFmpeg 같은 도구를 처음부터 구현하게 해 요건 충족률과 테스트 통과율을 측정.</li>
+<li><strong>OpenCode</strong> — 오픈소스 터미널 기반 AI 코딩 CLI. 여러 모델을 빠르게 전환할 수 있어 Kun이 Claude Code (Claude Code) 외에도 활용.</li>
+<li><strong>git worktree</strong> — 같은 저장소를 다른 디렉토리에 병렬 체크아웃. 에이전트 세션 간 파일 충돌을 방지하는 핵심 메커니즘.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li><strong>계획 깊이가 자율 실행 시간 결정</strong> — 한 줄 프롬프트는 금방 막히고, 상세 스펙을 넘기면 에이전트가 훨씬 오래 자율 실행된다. "얼마나 계획에 투자하느냐가 에이전트 자율 시간에 직접 영향을 준다."</li>
+<li><strong>평균 20-30개 에이전트 동시 실행</strong> — 최소 5개 세션, 각 세션에 서브에이전트 다수. 동시에 20-30개 에이전트가 돌고 있음.</li>
+<li><strong>PR 수 공개</strong> — 26, 14, 27, 30…이 하루 PR 수. 실업 직후 수치가 급증하는 패턴이 차트에서 명확히 보인다고 진행자가 언급.</li>
+<li><strong>fresh context window가 핵심</strong> — "같은 세션에서 리뷰를 요청하면 에이전트가 이전 과정을 모두 봤기 때문에 맞다고 편향되어 엣지 케이스를 놓친다." 새 창을 여는 것이 리뷰 품질의 핵심.</li>
+<li><strong>No Mistakes 운영 방식</strong> — 모든 변경에 쓰지 않는다. 간단한 문서 업데이트엔 쓰지 않는 것이 토큰 효율적. 의미 있는 변경에만 적용.</li>
+<li><strong>Claude Design</strong> — 주간 쿼터 대부분을 사용할 정도로 신규 프로젝트 디자인 시스템 구축에 적극 활용.</li>
+<li><strong>Claude Code <code>insights</code> 명령</strong> — 세션을 분석해 "어떤 습관을 개선할 수 있는지, 어떤 skill을 추가하면 좋은지"를 리포트로 생성하는 내장 기능. 토큰 소모가 크다.</li>
+<li><strong>에이전트 병렬화는 탐색/실험 비용 때문에도 필요</strong> — 실험 200개 × 8가지 언어 조합 같은 대규모 실험을 단일 세션에서 돌리면 compaction이 반복돼 비효율적.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Plan-Code-Validate 개요</td>
+<td>세 단계 중 계획에 가장 많은 시간 투자, 코딩·검증은 에이전트에 위임</td>
+</tr>
+<tr>
+<td>2</td>
+<td>병렬 세션 전략</td>
+<td>에이전트가 작업하는 동안 다른 세션으로 즉시 전환 → 항상 생산적</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Lavish: HTML 계획 에디터</td>
+<td>텍스트 벽 대신 시각 아티팩트로 계획 반복, 클릭으로 피드백</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Treehouse: 워크트리 풀</td>
+<td>매번 의존성 재설치 없이 즉시 병렬 세션 시작</td>
+</tr>
+<tr>
+<td>5</td>
+<td>서브에이전트 활용 기준</td>
+<td>탐색·실험처럼 컨텍스트 크고 메인 세션에 불필요한 작업에만 분리</td>
+</tr>
+<tr>
+<td>6</td>
+<td>AGENTS.md 테스트 지침</td>
+<td>엔드투엔드 테스트 방법을 프로젝트별 AGENTS.md에 명시해 에이전트가 자동 검증</td>
+</tr>
+<tr>
+<td>7</td>
+<td>No Mistakes: 자동 PR 파이프라인</td>
+<td>intent 분석 → 리뷰 → 테스트(증거 캡처) → 문서 → 린트 → PR 생성</td>
+</tr>
+<tr>
+<td>8</td>
+<td>PR 리뷰 철학</td>
+<td>줄별 코드 리뷰 대신 리스크 수준으로 집중도 결정, 저위험은 스킴 후 즉시 머지</td>
+</tr>
+<tr>
+<td>9</td>
+<td>AI 시대 팀 워크플로 변화</td>
+<td>월 10-15 PR → 일 20-40 PR로 바뀌면 기존 PR 리뷰 프로세스 붕괴</td>
+</tr>
+<tr>
+<td>10</td>
+<td>조언: 스케일업 3원칙</td>
+<td>많이 만들기, 병렬 에이전트 적극 활용, 코딩 외 모든 수동 작업에 AI 투입</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. Plan-Code-Validate 루프</h2>
+<p>Kun의 핵심 워크플로는 <strong>Plan → Code → Validate</strong> 세 단계다. 계획 단계에서 본인이 가장 많은 시간을 쓰고, 코딩은 거의 전적으로 에이전트에 맡기며, 검증도 에이전트가 대부분 처리한다.</p>
+<p>중요한 인사이트: <strong>계획에 투자하는 시간이 에이전트 자율 실행 시간을 결정한다.</strong> 한 줄짜리 프롬프트를 주면 에이전트가 금방 막혀서 다시 불러야 하지만, 상세한 스펙을 주면 에이전트가 훨씬 오래 자율 실행된다. "얼마나 자세하게 계획하느냐가 에이전트가 얼마나 오래 코딩하느냐에 직접 영향을 준다."</p>
+<p>또한 코드 단계와 검증 단계는 에이전트가 루프로 돌릴 수 있어서 실행 시간을 늘리기 위해 에이전트 자율 루프를 최대화하는 방향으로 시스템을 설계했다.</p>
+<h2>2. 병렬 세션 전략</h2>
+<p>Kun은 최소 5개의 세션을 상시 유지하고, 각 세션에 서브에이전트 여러 개가 돌면서 평균 20-30개의 에이전트가 동시에 실행된다.</p>
+<p>핵심 원리: <strong>에이전트가 작업하는 시간(계획 전 준비, 구현 직후) 동안 사람의 개입이 필요하지 않다.</strong> 에이전트를 실행하자마자 다른 세션으로 전환해 다른 일을 한다. 진행자 Peter가 "과거 대기업에서는 회의 사이에 컨텍스트 스위칭을 했다면 이제는 에이전트 스레드 사이를 전환하는 것"이라 표현했고, Kun은 이를 "대규모 범위를 관리하는 사람처럼, 여러 곳에서 일이 진행되고 있고 가장 필요한 곳으로 뛰어든다"고 비유했다.</p>
+<h2>3. Lavish: HTML 계획 에디터</h2>
+<p>마크다운 플랜의 문제점은 긴 텍스트 벽이 돼서 읽는 데 시간이 많이 든다는 점이다. Kun은 타리크 시히파르(Tariq Kieshar [?])의 "HTML over Markdown" 아티클에서 영감받아 <strong>Lavish</strong> 에디터를 직접 만들었다.</p>
+<p>동작 방식:
+1. 에이전트에게 <code>npx lavish-axi</code>를 사용해 계획을 작성하라고 지시
+2. 에이전트가 HTML 아티팩트를 생성
+3. Lavish 에디터에서 시각적으로 확인하며 클릭으로 직접 주석·피드백 제공
+4. 에이전트가 피드백을 받아 아티팩트를 수정</p>
+<p>실제 데모에서 아이들용 AI 튜터 앱 화면 리디자인 과정을 보여줬다. 에이전트가 옵션 A/B/C/D 레이아웃을 HTML로 제안하고, Kun이 옵션 C를 클릭하자 자동으로 에이전트에게 "옵션 C를 선택했다"는 피드백이 전달됐다.</p>
+<p><strong>마크다운보다 HTML이 나은 이유:</strong> 토큰 효율은 낮지만, 시각적 미리보기와 양방향 인터랙션(클릭 피드백)이 가능해 계획 반복(iteration) 속도가 훨씬 빠르다.</p>
+<h2>4. Treehouse: 워크트리 풀 관리</h2>
+<p>여러 세션을 병렬로 돌리려면 같은 디렉토리에서 여러 에이전트가 동시에 작업하면 충돌이 난다. 해결책은 <code>git worktree</code>로 병렬 디렉토리를 만드는 것이지만 두 가지 문제가 있다:</p>
+<ol>
+<li>워크트리마다 이름을 짓고 현황을 추적해야 하는 인지 부하</li>
+<li>새 워크트리에는 node_modules 같은 의존성이 없어서 매번 재설치 필요</li>
+</ol>
+<p><strong>Treehouse</strong>는 이 두 문제를 해결한다. <code>treehouse</code>를 타이핑하면 풀에서 관리되는(이미 의존성이 설치된) 워크트리를 자동으로 할당하고 진입시켜 준다. 이름을 생각하거나 상태를 추적할 필요가 없다.</p>
+<h2>5. 서브에이전트 활용 기준</h2>
+<p>"언제 서브에이전트가 필요한가"에 대해 Kun의 답변: <strong>메인 세션의 컨텍스트 창을 크게 소모하지만, 결론만 메인 세션에 필요한 작업</strong>에 서브에이전트를 쓴다.</p>
+<p>구체적 예시:
+- 코드베이스 탐색·조사: 탐색 과정은 메인 세션에 불필요하므로 서브에이전트가 탐색 후 결론만 반환
+- 독립된 실험 10개: 각각 서브에이전트를 병렬로 실행
+- ProgramBench 실험 200개 × 8개 언어: 서브에이전트 없이 단일 세션에서 돌리면 compaction이 반복돼 비효율</p>
+<p>대부분의 현재 모델과 하네스는 서브에이전트를 자발적으로 쓰는 데 훈련이 부족하다고 지적. Claude Code (Claude Code)의 <code>explore</code> 서브에이전트처럼 내장된 경우를 제외하면 명시적으로 지시해야 한다.</p>
+<h2>6. AGENTS.md 테스트 지침</h2>
+<p>에이전트는 기본적으로 유닛 테스트(순수 코드 기반)를 선호하는데, 이는 엔드투엔드 검증이 부족하다. Kun은 프로젝트별 AGENTS.md에 <strong>이 앱을 어떻게 엔드투엔드 테스트하는지</strong> 구체적인 지침을 작성해 놓는다.</p>
+<p>예: HiBit (Electron 앱)의 경우 "이 앱은 Electron 앱이므로 브라우저를 직접 구동해서 이렇게 테스트한다"고 명시. 그러면 에이전트가 구현 완료 후 자동으로 앱을 실행하고 스크린샷을 찍으며 엔드투엔드 검증을 수행한다.</p>
+<p>원칙: <strong>내가 수동으로 하는 것을 에이전트 지침으로 전환한다.</strong> "앱을 열고 화면을 보며 직접 확인"하던 것을 에이전트가 대신하도록 만든다.</p>
+<h2>7. No Mistakes: 자동 PR 파이프라인</h2>
+<p>코딩이 끝나면 <code>nm</code>을 실행한다. No Mistakes는 다음 파이프라인을 자동으로 처리한다:</p>
+<ol>
+<li><strong>Intent 분석</strong> — 이전 에이전트 세션을 읽어 "무엇을 하려 했는지" 파악 (새 컨텍스트 창에서 진행)</li>
+<li><strong>브랜치 생성</strong> — 브랜치 이름·커밋 메시지 자동 결정, 리베이스(rebase)로 충돌 방지</li>
+<li><strong>리뷰</strong> — 엣지 케이스·논리 오류·버그를 높은 recall로 검출. 명백한 버그는 자동 수정, 판단이 필요한 건 사람에게 에스컬레이션</li>
+<li><strong>테스트</strong> — CI처럼 전체 회귀 검증, 스크린샷/동영상으로 변경 증거 캡처</li>
+<li><strong>문서</strong> — 변경으로 영향받는 문서 일관성 검사</li>
+<li><strong>린트</strong></li>
+<li><strong>PR 생성</strong> — intent 기반 설명, 리스크 수준(낮음/중간/높음) 자동 판정</li>
+</ol>
+<p><strong>핵심 설계 결정 — 신규 컨텍스트 창:</strong>
+같은 세션에서 리뷰를 요청하면 에이전트가 모든 이전 과정에 편향돼 버그를 놓친다. 새 컨텍스트 창은 "시니어 엔지니어가 완료한 PR에 주임급이 새 눈으로 들어오는 것"과 같다.</p>
+<p>Kun이 직접 리뷰하던 것과 에이전트 리뷰를 병렬 테스트해서 "내가 잡고 에이전트가 못 잡는 것"이 0에 수렴할 때까지 프롬프트를 개선했다. 현재는 에이전트가 못 잡는 것을 자신이 잡는 경우가 없다고 한다.</p>
+<h2>8. PR 리뷰 철학과 팀 워크플로 변화</h2>
+<p><strong>리스크 기반 집중:</strong> 저위험 PR은 스킴 후 즉시 머지, 중간/고위험 PR만 diff를 열어 직접 확인한다. 줄별 코드 리뷰는 사람을 병목으로 만든다.</p>
+<p><strong>팀 워크플로 변화 예측:</strong> 평균 소프트웨어팀은 월 10-15 PR을 처리한다. AI로 10배 빨라지면 기존 PR 리뷰 프로세스(사람이 검토 대기)가 붕괴한다. 이미 일부 스타트업은 PR을 기록 목적으로만 올리고 리뷰 대기 없이 바로 머지하는 방식으로 전환 중이다. Kun은 이를 "No Mistakes 없이 그렇게 하는 것"이라며 안정성 저하를 우려했다.</p>
+<p>혼자 일하는 것에 대해: 동료와의 브레인스토밍(다양한 관점)은 그리워하지만, "20개의 PR을 올려도 아무도 리뷰 안 해주는" 대기업의 병목은 그립지 않다. "리뷰를 요청하면 항상 즉시 시작해주는 AI"가 그것을 대체한다.</p>
+<h2>9. 스케일업 3원칙</h2>
+<ol>
+<li><strong>많이 만들기</strong> — 아이디어가 생기면 바로 프롬프트를 날린다. "무엇을 할지 결정하는 데 시간을 너무 쓰다가 하나를 해보고 안 되면 포기"하지 않는다. 모든 아이디어를 빠르게 실행해봐야 한다.</li>
+<li><strong>병렬 에이전트로 더 많은 반복</strong> — 하나의 에이전트를 기다리는 것 자체가 병목이다. 더 많은 토큰을 쓰고 더 많은 에이전트를 병렬로 돌리는 것이 스스로를 루프에서 꺼내는 방법이다. 구독 플랜이라면 쿼터를 모두 소진하는 것이 목표다.</li>
+<li><strong>코딩 외 모든 수동 작업에 AI 투입</strong> — 코딩뿐 아니라 PR 생성, 문서 업데이트, 테스트 실행 등 모든 반복적·수동 작업에 에이전트를 투입한다. "내가 수동으로 하는 것을 발견하면 에이전트에게 시킬 수 있는지 생각한다."</li>
+</ol>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] AGENTS.md에 엔드투엔드 테스트 방법을 명시하고, 에이전트가 자동으로 실행하는지 확인</li>
+<li>[ ] 계획 단계에서 한 줄 프롬프트 대신 상세 스펙 또는 측정 가능한 목표(goal)를 작성하는 습관 만들기</li>
+<li>[ ] Lavish (<code>npx lavish-axi</code>) 설치 및 기존 계획 대화에 적용 테스트</li>
+<li>[ ] Treehouse 설치 후 병렬 세션 워크플로에 도입</li>
+<li>[ ] No Mistakes 설치, 중요한 변경 후 <code>nm</code> 파이프라인 실행 습관 만들기</li>
+<li>[ ] 에이전트가 작업하는 동안 즉시 다른 세션으로 전환하는 습관 (기다리지 않기)</li>
+<li>[ ] 탐색·실험 위주 작업은 서브에이전트로 분리해 메인 컨텍스트 절약</li>
+<li>[ ] Claude Code <code>insights</code> 명령으로 세션 패턴 분석 및 개선점 도출 (토큰 여유 시)</li>
+<li>[ ] PR 리뷰를 "리스크 수준"으로 분류해 집중도 조절</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 전 메타 L8 엔지니어가 AI 에이전트로 하루에 PR 40개를 올리는 방법 | Kun Chen · https://www.youtube.com/watch?v=EzwHnHwgbUo · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p><strong>[오프닝 인용]</strong>
+코드를 한 줄 한 줄 전부 리뷰하면 당신이 병목이 된다. 그래서 나는 에이전트가 처음 짠 코드를 리뷰하지 않는다. 결국 에이전트가 잡지 못하는 것을 내가 잡는 경우가 없어졌다. 나는 보통 최소 다섯 개의 다른 세션을 동시에 돌린다. 평균적으로는 20-30개 에이전트가 돌고 있다. 대부분의 경우 하루에 PR을 20-40개 정도 올린다.</p>
+<p>우리의 워크플로와 팀 운영 방식은 대부분의 시간을 코딩에 쓰던 시절에 만들어진 것이다. 그런데 PR을 10배 더 쓰기 시작하면 우리는 그 규모를 따라잡을 준비가 안 돼 있다. 에이전트에게서 더 많은 것을 얻으려면 우리 스스로를 루프에서 최대한 빼내야 한다.</p>
+<p><strong>[소개]</strong>
+(진행자 Peter Yang) 안녕하세요, 오늘은 Meta와 Microsoft 출신 L8 엔지니어이자 현재 솔로 AI 빌더인 친구 Kun을 모셨습니다. Kun은 에이전트로 어떻게 제품을 만드는지 실제로 보여줄 예정입니다.</p>
+<p>(Kun Chen) 고마워요, Peter.</p>
+<p><strong>[워크플로 개요: Plan, Code, Validate]</strong>
+(Peter) 에이전트로 제품을 만드는 방법을 전반적으로 설명해 주실 수 있나요?</p>
+<p>(Kun) 제 워크플로는 Plan, Code, Validate입니다. 이게 남들과 크게 다르지는 않으니, 제가 다르게 하는 부분을 중심으로 설명할게요. 의미 있는 것을 만들 때 보통 이 세 단계를 거치는데, 요건을 계획하고, 에이전트가 코딩하고, 에이전트가 원하는 대로 했는지 검증합니다.</p>
+<p>제가 다르게 하는 건 각 단계에 얼마나 시간을 쓰느냐입니다. 저는 지금 계획 단계에 가장 많은 시간을 씁니다. 계획은 대부분 제가 에이전트의 도움을 받아서 합니다. 코딩은 거의 전적으로 에이전트가 합니다. 요건이 명확하게 계획되면 에이전트를 믿고 대부분의 작업을 맡깁니다. 검증 단계에서도 에이전트를 많이 씁니다.</p>
+<p>(Peter) 코드와 검증이 에이전트가 자체적으로 돌릴 수 있는 루프가 되는 거죠?</p>
+<p>(Kun) 맞아요. 계획 단계에 얼마나 투자하느냐에 따라 달라지기도 합니다. 상세한 계획을 짜면 에이전트가 더 오래 돌 수 있고, 짧은 프롬프트만 쓰면 에이전트가 금방 작업을 마치고 다시 프롬프트를 받아야 합니다.</p>
+<p>(Peter) 저도 에이전트에 게으르게 한 줄짜리 프롬프트만 써왔는데, 역시 안 되더라고요.</p>
+<p><strong>[병렬 세션]</strong>
+(Kun) 또 다른 최적화 방법은 타임라인에서 사람이 필요한 건 시작과 끝뿐이라는 거예요. 그래서 저는 많은 세션을 병렬로 돌립니다. 에이전트가 작업하는 동안 항상 생산적으로 다른 일을 하는 거죠. 동시 병렬 세션 수를 늘리는 게 더 많은 일을 하는 데 중요한 부분입니다.</p>
+<p>(Peter) 같은 프로젝트 안에서도 병렬로 돌리나요, 아니면 여러 프로젝트를 병렬로?</p>
+<p>(Kun) 둘 다요. 서로 다른 프로젝트를 섞기도 하고, 같은 프로젝트 안에서도 다른 세션이 다른 일을 하기도 합니다.</p>
+<p>(Peter) 대기업에서는 회의들 사이를 컨텍스트 스위칭하며 다녔는데, 이제는 에이전트 스레드 사이를 전환하는 것 같네요.</p>
+<p>(Kun) 맞아요. 대규모 범위를 관리하는 사람처럼, 항상 다양한 곳에서 일이 진행되고 있고 필요한 곳에 뛰어드는 것과 비슷해요.</p>
+<p><strong>[스폰서: Linear]</strong>
+(진행자 내레이션) 이 에피소드는 Linear의 후원으로 제작됩니다. Cursor, Claude Code (Claude Code), Codex 같은 도구를 쓰면 많은 작업이 코드 에디터 밖에서 보이지 않게 이루어집니다. Linear는 이런 에이전트 코딩 도구들과 직접 통합돼 누가 무엇을 작업 중인지 팀 전체가 볼 수 있습니다. OpenAI, Ramp, Block이 Linear를 씁니다. linear.app/agents에서 확인하세요.</p>
+<p><strong>[데모: 터미널 기반 워크플로]</strong>
+(Kun) 이게 제 터미널입니다. 거의 모든 작업을 여기서 합니다. HiBit라는 아들을 위한 AI 튜터 프로젝트를 예시로 쓸게요. 오늘 아침에 메인 화면을 개편했는데 아직 지저분하고 마음에 들지 않습니다. 전형적인 워크플로로 스크린샷을 찍고 에이전트에게 보여주는 거죠.</p>
+<p>OpenCode를 많이 씁니다. 여러 모델을 빠르게 전환할 수 있어서요. 에이전트에게 스크린샷을 붙여넣고 문제점을 말해요. 아이들에게 친화적이지 않은 기술적 세부사항이 너무 많고, 화면 공간이 낭비되고 있다는 것들이요. "어떻게 개선할지 옵션을 제안해 줘"라고 요청합니다.</p>
+<p>에이전트가 텍스트 플랜을 냈는데 긴 텍스트 벽이라 읽기 어렵네요. 그래서 저는 다른 방법을 씁니다. Lavish를 사용하라는 지시를 추가해요.</p>
+<p><strong>[Lavish: HTML 계획 에디터]</strong>
+Lavish는 제가 직접 만든 시각적 에디터예요. "HTML over Markdown" 아티클을 읽고 만들었는데, 처음엔 HTML이 토큰 비효율적일 것 같았는데 써보니 정말 유용했어요.</p>
+<p>(Peter) Lavish가 HTML을 원하는 형식으로 만들어주는 앱인가요?</p>
+<p>(Kun) 맞아요. HTML 아티팩트를 생성하고 사람과 에이전트 간의 인터랙티브한 피드백을 지원하는 도구입니다. 에이전트가 HTML을 생성하고, 저는 브라우저에서 열어서 보고, 마음에 들지 않는 부분을 주석으로 달 수 있어요. 이 주석이 에이전트에게 다시 전달됩니다. 이 양방향 피드백이 Lavish가 해결하려는 문제예요.</p>
+<p>에이전트가 HTML을 작성하는 동안, 저는 그 시간을 낭비하지 않고 Tmux에서 새 탭을 열어 다른 일을 합니다.</p>
+<p><strong>[Treehouse: 워크트리 관리]</strong>
+문제는 같은 디렉토리에서 다른 에이전트를 돌리면 충돌이 난다는 것입니다. 그래서 <code>git worktree add</code>로 다른 디렉토리를 만드는 게 일반적인 방법인데, 두 가지 문제가 있어요. 어떤 워크트리가 무엇을 하는지 추적하는 인지 부하가 있고, 새 워크트리에는 node_modules 같은 의존성이 없어서 매번 재설치해야 합니다.</p>
+<p>(Peter) 워크트리가 뭔지 모르는 분들을 위해 설명해 주실 수 있나요?</p>
+<p>(Kun) 워크트리는 현재 Git 저장소를 다른 디렉토리에 복제한 것과 같아요. 병렬 디렉토리라 서로 직접 영향을 주지 않습니다.</p>
+<p>그래서 저는 <strong>Treehouse</strong>를 만들었어요. 매번 새 세션을 시작할 때 <code>treehouse</code>를 타이핑하면, 풀에서 관리되는 워크트리(이미 의존성 설치됨)를 자동으로 할당하고 진입시켜 줍니다. 어떤 워크트리가 있는지 생각할 필요가 없고, 의존성을 재설치할 필요도 없습니다.</p>
+<p><strong>[Lavish 데모 결과]</strong>
+(Kun) 이제 HTML이 준비됐네요. 현재 레이아웃의 문제점과 옵션 A/B/C/D를 시각적으로 보여주고 있어요. 텍스트 벽보다 훨씬 보기 쉽고, 버튼을 클릭하면 해당 옵션을 선택했다는 피드백이 에이전트에게 즉시 전달됩니다. 저는 옵션 C가 마음에 들어서 클릭합니다. 에이전트가 이제 옵션 C를 구현하면 됩니다.</p>
+<p><strong>[스펙 작성 방법]</strong>
+(Peter) 완전히 새로운 프로젝트를 시작할 때는 어떻게 계획하나요?</p>
+<p>(Kun) 새 프로젝트면 같은 Lavish 에디터를 써요. 에이전트에게 초기 아이디어를 말하고, 위험 요소나 제가 생각 못한 약점을 비판해달라고 합니다. 에이전트가 HTML 아티팩트로 돌아오면, 그것을 보면서 아이디어를 스펙으로 다듬어 나갑니다. 자신의 의견이 있어도 에이전트에게 반박할 권한을 줍니다. 더 많은 옵션을 보고 싶기도 하니까요.</p>
+<p>실제로 저는 많은 지침을 Lavish 에디터 안에 내장했어요. 에이전트가 Lavish를 쓸 때 이미 그런 best practice들을 알고 있습니다.</p>
+<p>(Peter) 비주얼 디자인은 어떻게 처리하나요?</p>
+<p>(Kun) Claude Design (Claude Design)을 많이 씁니다. 새 프로젝트의 디자인 시스템을 만드는 데 특히 유용해요. 주간 쿼터를 거의 다 썼을 정도로 자주 씁니다.</p>
+<p><strong>[병렬 에이전트 수와 서브에이전트]</strong>
+(Peter) 지금 몇 개의 에이전트 빌딩 세션을 동시에 돌리나요?</p>
+<p>(Kun) 보통 최소 다섯 개의 세션을 동시에 돌리고, 각 세션에는 서브에이전트가 여러 개 있어서 총합은 아마 평균 20-30개일 거예요.</p>
+<p>(Peter) 서브에이전트를 직접 지시하나요, 아니면 에이전트가 알아서 쓰나요?</p>
+<p>(Kun) 좋은 질문이에요. 현재 대부분의 모델과 하네스는 서브에이전트를 자발적으로 쓰는 데 능숙하지 않아요. Claude Code (Claude Code)의 <code>explore</code> 같은 내장된 경우를 제외하면, 명시적으로 지시해야 하는 경우가 많습니다.</p>
+<p>제가 서브에이전트를 쓰는 가장 큰 이유는 메인 에이전트의 컨텍스트 창이 폭발하는 것을 막기 위해서예요. 탐색·조사처럼 컨텍스트를 많이 소모하지만 결론만 메인 세션에 필요한 경우에 서브에이전트를 씁니다. 또는 10개의 독립적인 실험을 돌릴 때 10개의 서브에이전트를 병렬로 실행합니다.</p>
+<p>지금 돌아가고 있는 게 있는데, ProgramBench(프로그램벤치)를 여러 프로그래밍 언어(TypeScript, JavaScript, Python 등)로 Codex (Codex)에게 돌려보면서 언어별 성능 차이를 측정하는 실험이에요. 200 × 8가지 조합이라 서브에이전트 없이는 비효율적입니다.</p>
+<p><strong>[AGENTS.md 테스트 지침]</strong>
+(Kun) 각 프로젝트의 AGENTS.md에 테스트 방법을 명시해 두면 에이전트가 작업 완료 후 자동으로 엔드투엔드 검증을 합니다. HiBit는 Electron 앱이라 "이 앱은 이렇게 브라우저를 구동해서 테스트한다"고 적어뒀어요. 그러면 에이전트가 스크린샷을 찍고 시각적으로 확인합니다.</p>
+<p>(Peter) 기술적으로 잘 모르는 사람은 어떻게 하나요?</p>
+<p>(Kun) 고수준 원칙은: 내가 수동으로 하는 것을 에이전트에게 시킬 수 있는지 물어보세요. 에이전트가 방법을 알아서 찾을 겁니다.</p>
+<p><strong>[검증 단계: No Mistakes 데모]</strong>
+(Kun) 에이전트가 작업을 마쳤네요. 이제 검증을 해야 합니다. AI는 엄청나게 많은 코드를 쓸 수 있어서, 한 줄 한 줄 리뷰하면 당신이 병목이 됩니다. 저는 코드를 리뷰하지 않습니다. 대신 <strong>No Mistakes</strong>를 씁니다.</p>
+<p><code>nm</code>을 실행하면:
+1. 에이전트가 브랜치를 만들고 커밋 메시지도 자동으로 씁니다. 저는 아무것도 생각하지 않아도 됩니다.
+2. 제 이전 OpenCode (OpenCode) 세션을 분석해서 제 intent를 파악합니다.
+3. 리베이스해서 merge conflict를 방지합니다.
+4. 변경을 리뷰합니다 — 엣지 케이스, 논리 오류, 버그를 높은 recall로 찾습니다. 명백한 버그는 자동 수정, 판단이 필요한 건 저에게 에스컬레이션합니다.
+5. CI처럼 테스트를 실행하고 스크린샷/동영상으로 증거를 캡처합니다.
+6. 문서 일관성을 확인합니다.
+7. 린트를 실행합니다.
+8. PR을 생성하고 리스크 수준을 판정합니다.</p>
+<p><strong>[신규 컨텍스트 창의 중요성]</strong>
+No Mistakes는 새로운 컨텍스트 창에서 실행됩니다. 의도적인 설계예요. 같은 세션에서 리뷰를 요청하면 에이전트가 모든 이전 단계를 봤기 때문에 맞다고 편향됩니다. 새 컨텍스트 창을 쓰면 훨씬 더 많은 엣지 케이스가 잡힙니다. 이걸 많이 테스트했고, 결국 에이전트가 못 잡는 것을 제가 잡는 경우가 없어졌습니다.</p>
+<p>(Peter) No Mistakes 에이전트가 코드베이스 전체를 다시 봐야 하나요?</p>
+<p>(Kun) Intent 단계가 그걸 처리합니다. 세션 전체를 새 컨텍스트로 복사하는 게 아니라, 이 변경이 무엇을 하려 했는지 기본 컨텍스트를 설명하는 거예요. 시니어 엔지니어가 주임 엔지니어에게 기본 맥락을 설명하는 것과 같습니다.</p>
+<p><strong>[PR 리뷰 철학과 프로세스 변화]</strong>
+(Kun) No Mistakes가 완료됐네요. 문서 단계에서 한 가지를 수정했어요. 디자인 시스템 예제 카피가 업데이트되지 않았던 것을 잡았습니다. 이건 저도, 에이전트도 자동으로 안 하는 부분인데 No Mistakes가 잡아줬어요.</p>
+<p>저위험 변경이라 diff를 열어보지 않고 바로 머지합니다. 중간/고위험이면 직접 확인합니다. 그래도 리스크 수준과 실제 무엇을 했는지 PR을 훑어보는 건 여전히 합니다.</p>
+<p>(Peter) 저는 때때로 PR을 스킴도 안 하고 바로 머지해서 나중에 다른 게 깨지는 걸 발견하더라고요.</p>
+<p>(Kun) 어느 정도의 리뷰는 여전히 유용해요. 줄별 코드 리뷰가 아니라도, 무엇이 바뀌었고 어떤 리스크가 있는지 확인하는 것은 가치 있습니다.</p>
+<p>대기업의 평균 팀은 월 10-15 PR을 처리합니다. AI로 10배 빨라지면 기존 프로세스가 붕괴합니다. 일부 스타트업은 이미 PR 리뷰를 폼 용도로만 올리고 기다리지 않고 바로 머지합니다. No Mistakes 같은 도구 없이 그렇게 하면 불안정성이 높아집니다.</p>
+<p><strong>[혼자 일하는 것에 대해]</strong>
+(Peter) 대기업 경력 후 혼자 일하는 게 어색하지 않나요?</p>
+<p>(Kun) 절반은 해방감, 절반은 아쉬움이에요. 브레인스토밍할 때 팀의 다양한 시각이 그립습니다. AI가 어느 정도 돕지만 스마트한 팀을 완전히 대체하지는 못합니다. 아쉽지 않은 건 하루 20개의 PR을 올려도 아무도 리뷰 안 해주는 상황이요. 리뷰를 요청하면 항상 즉시 시작해주는 AI가 그것을 대체합니다.</p>
+<p><strong>[PR 수 공개]</strong>
+(Kun) 26, 14, 27, 30... 이게 하루 PR 수고, 대부분의 경우 20-40 PR입니다. 때로는 더 많기도 해요.</p>
+<p>(Peter) 이 차트에서 백수가 된 시점이 딱 보이는군요.</p>
+<p><strong>[마무리 조언]</strong>
+(Peter) 기술을 키우고 싶은 사람에게 조언을 해주실 수 있나요?</p>
+<p>(Kun) 세 가지입니다.
+1. <strong>많이 만들어라</strong> — 버릴 것이라도 만들고, 그 과정에서 배운다. 뭘 할지 결정하는 데 너무 많은 시간을 쓰지 마라. 아이디어가 생기면 바로 에이전트에게 보내라.
+2. <strong>더 많은 토큰을 쓰고 더 많은 병렬 에이전트를 돌려라</strong> — 이게 스스로를 루프에서 꺼내는 강제 조건이 된다. 한 번에 하나의 에이전트로만 작업하면 여전히 병목이다. 구독이면 쿼터를 다 소진하는 게 목표다.
+3. <strong>코딩 외 모든 워크플로에 AI를 적용하라</strong> — PR, 문서, 테스트... 내가 수동으로 하는 것을 발견하면 에이전트에게 시킬 수 있는지 생각하라.</p>
+<p>(Peter) 두 번째가 쉽지 않은 이유가, 아시아에서 자란 분들처럼 절약 마인드가 있어서 토큰 태우는 게 편하지 않은 거죠.</p>
+<p>(Kun) 물론 토큰 자체를 위해 쓰는 게 아닙니다. 스스로를 루프에서 꺼내서 더 많은 일을 하기 위해 스케일업하는 것이 목적입니다.</p>
+<p><strong>[Claude Code insights 명령]</strong>
+(Peter) AI가 "이걸 자동화해야 한다"고 먼저 알려주면 좋겠는데요.</p>
+<p>(Kun) 실제로 있어요. Claude Code (Claude Code)에 <code>insights</code>라는 슬래시 명령이 있는데, 당신의 Claude Code (Claude Code) 세션을 분석해서 무엇을 더 잘할 수 있는지, 어떤 skill을 추가하면 좋은지 리포트를 생성합니다. 토큰을 많이 쓰지만 굉장히 유용한 기능입니다.</p>
+<p><strong>[마무리]</strong>
+(Peter) Kun, 이 모든 걸 무료로 공유해줘서 감사해요. No Mistakes, Lavish 다 써볼게요.</p>
+<p>(Kun) 고마워요 Peter. 쓰다가 뭔가 있으면 알려줘요. 계속 개선하고 있습니다.</p>
+</details>
+</body></html>

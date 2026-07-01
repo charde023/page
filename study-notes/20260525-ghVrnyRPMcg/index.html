@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>AI 하네스 심층 분석 — Tejas Kumar, IBM</title>
+<meta name="description" content="에이전트 하네스란 모델을 감싸는 결정론적 실행 환경 — 가드레일·검증·로그인 처리를 코드로 구현해 GPT-3.5 수준 모델도 신뢰할 수 있게 만드는 법을 라이브 데모로 보여준다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>AI 하네스 심층 분석 — Tejas Kumar, IBM</h1>
+<div class="meta">원작자 Tejas Kumar · IBM (AI Developer Advocate) · 업로드 2026-05-25 · 20.4분 · <a href="https://www.youtube.com/watch?v=ghVrnyRPMcg" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>AI 하네스 심층 분석 — Tejas Kumar, IBM</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>프롬프트를 바꾸지 않아도, <strong>모델을 감싸는 하네스(harness) 설계만으로</strong> 에이전트 신뢰도를 근본적으로 높일 수 있다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Tejas Kumar · IBM AI Developer Advocate · 추정 출처 https://x.com/TejasKumar_ · 업로드 2026-05-25 · 약 20분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>에이전트 하네스 (agent harness)</td>
+<td>모델 불확실성을 코드로 통제하는 유일한 수단</td>
+<td>모델 바깥에서 에이전트를 안전하게 고정하는 실행 래퍼</td>
+</tr>
+<tr>
+<td>가드레일 (guardrail)</td>
+<td>비용·루프·맥락 폭발을 방지</td>
+<td>최대 반복 횟수·최대 메시지 수로 실행을 강제 종료</td>
+</tr>
+<tr>
+<td>검증 단계 (verify step)</td>
+<td>에이전트가 성공했다고 거짓말하는 문제 해결</td>
+<td>도구 호출 이력을 반영하여 실제 결과를 결정론적으로 확인</td>
+</tr>
+<tr>
+<td>컨텍스트 압축 (context compressor)</td>
+<td>토큰 비용·컨텍스트 한계 관리</td>
+<td>시스템·유저 프롬프트 + 최근 2개 메시지만 남기고 중간 제거</td>
+</tr>
+<tr>
+<td>로그인 핸들러 (login handler)</td>
+<td>에이전트가 자주 막히는 인증 지점을 코드로 우회</td>
+<td>하네스가 URL 감시 후 자격증명 주입, 에이전트는 인지 못 함</td>
+</tr>
+<tr>
+<td>하네스 루프 (outer loop)</td>
+<td>에이전트 루프 자체를 재시도하는 상위 루프</td>
+<td><code>run_harness_attempt</code>를 최대 3회 감싸는 외부 재시도 레이어</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>에이전트 하네스 vs ML 하네스</strong>: ML 하네스는 모델 품질을 테스트하는 테스트 스위트. 에이전트 하네스는 실행 환경 전체를 감싸는 런타임 래퍼 — 전혀 다른 개념.</li>
+<li><strong>Playwright (playwright)</strong>: 브라우저 자동화 라이브러리. MCP 버전이 아닌 직접 라이브러리 호출 — <code>Chromium</code> 인스턴스를 코드로 열고 클릭/입력.</li>
+<li><strong>OpenAI SDK tool 형식</strong>: <code>{ name, description, parameters, execute }</code> 구조로 도구를 정의하며, <code>execute</code>가 실제 런타임 호출부.</li>
+<li><strong><code>run_harness_attempt</code></strong>: 하네스의 내부 단일 시도 함수. <code>run_harness</code>는 이를 최대 N회 감싸는 외부 루프.</li>
+<li><strong>Open RAG</strong>: IBM의 엔터프라이즈 오픈소스 RAG 프레임워크. Teams 통화·PDF·인보이스를 사내 격리 데이터에서 질의 가능. 하네스 기반 보안 설계.</li>
+<li><strong>Qwen (큰 모델 대신 쓸 수 있는 OSS 모델)</strong>: 화자가 비용 절감 예시로 언급한 오픈소스 LLM.</li>
+<li><strong>동적 하네스 (dynamic on-the-fly harness)</strong>: 화자가 예측한 2027년 방향 — 에이전트가 작업 전 스스로 하네스를 생성하는 자기인식 실행 계획.</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li><strong>프롬프트는 한 번도 바꾸지 않았다.</strong> 데모 전체에서 시스템 프롬프트·유저 태스크를 전혀 수정하지 않고, 하네스 코드만 추가해서 결과가 달라졌다.</li>
+<li><strong>사용 모델은 GPT-3.5 Turbo (2023년 모델).</strong> 의도적으로 구형 모델을 선택해 "하네스만으로 성능 보완 가능"을 증명.</li>
+<li><strong>Max iterations = 6, Max messages = N (컨텍스트 압축 트리거).</strong> 실제 코드에서 두 개 가드레일이 독립적으로 작동.</li>
+<li><strong>컨텍스트 압축 전략 = system + user + 최근 2 메시지만 보존.</strong> "슈퍼 나이브"하다고 직접 인정. 더 나은 전략이 존재하지만 데모 목적상 최소 구현.</li>
+<li><strong>로그인 핸들러는 에이전트 루프 내 매 이터레이션마다 URL을 체크.</strong> 로그인 페이지가 아니면 연산 비용 제로. 로그인 페이지이면 자격증명을 환경변수에서 주입 후 폼 제출.</li>
+<li><strong>하네스가 에이전트에게 메시지를 직접 삽입한다.</strong> 로그인 성공 시 <code>"I'm the harness, I logged in. You're good now."</code> 메시지를 큐에 push — 에이전트가 상황을 인지하게 유도.</li>
+<li><strong>에이전트가 거짓 성공 보고를 했다.</strong> 초기 버전에서 로그인 실패 후 "업보트 완료"라고 출력. 하네스의 첫 번째 역할은 이 거짓말을 제거하는 것.</li>
+<li><strong>성공 판정은 도구 이력(trace) 반영.</strong> <code>verify_successful_upvote</code>는 에이전트 루프에서 축적한 이력 이벤트를 읽어 클릭 성공 여부를 확인. LLM 출력 텍스트를 믿지 않음.</li>
+<li><strong>2025 = 에이전트의 해, 2026 = 하네스의 해, 2027 = 동적 하네스의 해</strong> — 화자의 로드맵 예측.</li>
+<li><strong>슬라이드와 코드는 GitHub에 공개.</strong> <code>github.com/TejasQ</code>에서 확인 가능.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>왜 하네스인가</td>
+<td>모델은 블랙박스·비결정론적. 비용도 냄. 안정성이 목표.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>하네스란 무엇인가</td>
+<td>모델 주변 모든 것 — 도구 레지스트리·모델·컨텍스트 관리·가드레일·에이전트 루프·검증</td>
+</tr>
+<tr>
+<td>3</td>
+<td>데모 1: 베이스라인</td>
+<td>GPT-3.5 + Playwright, 로그인 없이 업보트 시도 → 실패 + 거짓 성공 보고</td>
+</tr>
+<tr>
+<td>4</td>
+<td>데모 2: 가드레일 추가</td>
+<td>Max iterations / Max messages 가드레일 + 컨텍스트 압축기 구현</td>
+</tr>
+<tr>
+<td>5</td>
+<td>데모 3: 검증 단계</td>
+<td><code>verify_successful_upvote</code> — 이력 기반 결정론적 판정, 거짓말 제거</td>
+</tr>
+<tr>
+<td>6</td>
+<td>데모 4: 로그인 핸들러</td>
+<td>하네스가 URL 감시 → 자격증명 주입 → 성공적 업보트 완료</td>
+</tr>
+<tr>
+<td>7</td>
+<td>정리 및 전망</td>
+<td>프롬프트 변경 없이 하네스로 결과 전환. 2027년 동적 하네스 예측.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 왜 하네스인가</h2>
+<p>화자는 현실적 문제를 세 가지로 요약한다.</p>
+<ul>
+<li><strong>비용</strong>: 대부분은 토큰 빌리언어가 아니다. Claude Pro $20/월, 제한된 컨텍스트 창.</li>
+<li><strong>블랙박스</strong>: Opus라고 써 있어도 내부에서 Sonnet을 제공할 수 있다. 알 방법이 없다.</li>
+<li><strong>비결정성</strong>: 같은 프롬프트에도 결과가 다르다.</li>
+</ul>
+<p>핵심 주장: <strong>하네스의 목적은 신뢰성(reliability)</strong>. 모델이 어떤 블랙박스이든 에이전트가 해야 할 일을 하도록 보장하는 것.</p>
+<h2>2. 하네스의 구성 요소</h2>
+<p>에이전트 하네스 = 모델에 현실적 기반을 제공하는 모든 것.</p>
+<table>
+<thead>
+<tr>
+<th>구성 요소</th>
+<th>설명</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>도구 레지스트리 (tool registry)</td>
+<td>에이전트가 호출할 수 있는 함수 목록</td>
+<td>파일 읽기·쓰기·bash 실행</td>
+</tr>
+<tr>
+<td>모델</td>
+<td>LLM 자체. 교체 가능 여부 다양</td>
+<td>GPT-3.5, Qwen, Claude</td>
+</tr>
+<tr>
+<td>컨텍스트 관리</td>
+<td>컨텍스트 압축·정리</td>
+<td>하네스가 자동으로 compact</td>
+</tr>
+<tr>
+<td>가드레일</td>
+<td>실행 제한</td>
+<td>max_steps=5, max_messages=N</td>
+</tr>
+<tr>
+<td>에이전트 루프</td>
+<td>실행의 핵심 루프. 하네스의 일부</td>
+<td>while true → response → trace</td>
+</tr>
+<tr>
+<td>검증 단계</td>
+<td>작업 완료 후 결과 확인</td>
+<td>lint 실행, 테스트, 업보트 확인</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Claude Code, Cursor, Codex — 이것들은 모두 코딩 에이전트이면서 동시에 에이전트 하네스다.</p>
+</blockquote>
+<h2>3. 데모: 베이스라인</h2>
+<ul>
+<li>GPT-3.5 Turbo + Playwright로 Hacker News 업보트 에이전트 구성</li>
+<li>시스템 프롬프트: "첫 번째 게시물을 업보트하라" (이후 절대 수정 안 함)</li>
+<li>도구: OpenAI SDK 형식 (<code>name / description / parameters / execute</code>)</li>
+<li>실행 루프: <code>while True</code> — LLM 응답 수신 → stop이면 반환, 아니면 이력에 추가</li>
+</ul>
+<p>결과: 로그인 화면에서 패닉 → 크래시 → "업보트 완료"라고 거짓 출력.</p>
+<h2>4. 데모: 가드레일 + 컨텍스트 압축</h2>
+<p>가드레일 두 개:
+- <code>max_iterations</code>: 6스텝 초과 시 강제 종료
+- <code>max_messages</code>: N개 초과 시 컨텍스트 압축 트리거</p>
+<p>컨텍스트 압축 전략:</p>
+<pre><code>보존: 시스템 프롬프트 + 유저 프롬프트 + 최근 2개 메시지
+제거: 중간 이력 전부
+</code></pre>
+<p>이후 모든 로직을 <code>run_harness()</code> 함수로 추상화 → 진입점(<code>index</code>)은 19줄로 축소.</p>
+<h2>5. 데모: 검증 단계 — 거짓말 제거</h2>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>하네스의 핵심 교훈: 에이전트의 출력 텍스트를 믿지 말고, 이력(trace)을 확인하라.</strong></span></p>
+<p><code>verify_successful_upvote()</code> 함수:
+- 에이전트 루프에서 축적한 이벤트 이력을 스캔
+- 업보트 버튼 클릭 + 성공 여부 확인
+- 로그인 실패 케이스: <code>harness_auto_login</code> 도구가 <code>"failed"</code>로 시작하면 즉시 실패 반환
+- 로그인 리다이렉트 케이스: 로그인 URL로 이동했는데 자동 로그인이 안 됐으면 실패 반환</p>
+<p>외부 루프: <code>run_harness_attempt</code>를 최대 3회 재시도. 3회 초과 시 포기.</p>
+<p>결과: 이제 에이전트가 실패하면 "실패"라고 말한다. 거짓 성공 없음.</p>
+<h2>6. 데모: 로그인 핸들러 — 결정론적 우회</h2>
+<p><code>create_login_handler()</code>:
+- 에이전트 루프 이터레이션마다 실행 (매 루프 호출)
+- 현재 URL이 로그인 페이지가 아니면 → 즉시 반환 (비용 제로)
+- 로그인 페이지이면:
+  1. 환경변수에서 자격증명 읽기
+  2. Playwright로 입력 폼 채우기 + 제출
+  3. 에이전트 큐에 "하네스가 로그인 완료" 메시지 삽입</p>
+<p><span style="font-size:1.1em"><strong>핵심</strong>: 민감한 자격증명이 LLM 컨텍스트에 절대 노출되지 않는다. 하네스 코드만 접근.</span></p>
+<p>결과: 에이전트가 로그인 페이지를 만나도 하네스가 처리 → 업보트 성공 → 6회 반복 후 성공 확인.</p>
+<h2>7. 정리 및 전망</h2>
+<ul>
+<li><strong>2025년</strong>: 에이전트의 해</li>
+<li><strong>2026년</strong>: 하네스의 해 (화자 확신)</li>
+<li><strong>2027년 예측</strong>: 동적 하네스 — 에이전트가 작업 전 스스로 하네스를 생성. Plan mode의 스테로이드 버전.</li>
+</ul>
+<p>실제 사례: IBM Open RAG — 엔터프라이즈 사내 격리 데이터(Teams 통화·PDF·인보이스) 대상 RAG. 하네스 기반 엔터프라이즈 보안 설계.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 에이전트 프로젝트에 <code>max_iterations</code> / <code>max_messages</code> 가드레일 추가</li>
+<li>[ ] 에이전트 성공 판정을 LLM 텍스트 출력이 아닌 이력(trace) 기반으로 전환</li>
+<li>[ ] 인증이 필요한 에이전트에 URL 감시 기반 로그인 핸들러 구현</li>
+<li>[ ] 컨텍스트 압축 전략 설계 (최소: system + user + 최근 N개 메시지)</li>
+<li>[ ] Tejas Kumar GitHub에서 데모 코드 확인 (github.com/TejasQ)</li>
+<li>[ ] Open RAG 프로젝트 조사 (IBM 엔터프라이즈 RAG 하네스 사례)</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] AI 하네스 심층 분석 — Tejas Kumar, IBM · https://www.youtube.com/watch?v=ghVrnyRPMcg · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요 여러분. 점심은 어떠셨나요? 영국 음식 같았다고요? 어쨌든, 안녕하세요. 저는 Tejas입니다. 오후 첫 번째 발표자입니다. Tejas는 'contagious(전염성)'처럼 발음합니다. 걱정 마세요, 저는 전염성이 없습니다. 제 AI에 대한 열정이 전염되길 바랄 뿐이죠.</p>
+<p>저는 IBM에서 AI 개발자 애드보케이트로 일하고 있습니다. 프런티어 모델 학습, 하네스 구축 등 다양한 AI 작업을 합니다. 오늘은 AI 하네스에 대해 이야기하겠습니다.</p>
+<p>시작 전에, 손 들어보실까요. AI 하네스에 대해 자신 있게 이해하고 계신 분? 오늘 이 자리에서 발표할 수 있을 정도로요. 둘러보세요. 네, 그래서 이 발표를 하는 겁니다. 이 발표가 끝나면 "아, 이제 알겠다"가 되길 바랍니다.</p>
+<p>이 용어는 오늘만 52,000번은 들으셨을 겁니다. 의미도 사람마다 다릅니다. 머신러닝 세계에서는 모델 품질 테스트 스위트를 의미하지만, AI 엔지니어링 세계에서는 다른 의미입니다. 오늘은 AI 엔지니어링 관점의 에이전트 하네스를 깊이 파헤칩니다. 18분짜리 딥다이브입니다.</p>
+<p><strong>왜 하네스인가?</strong></p>
+<p>우리는 컴퓨트, 추론, 토큰을 제공하는 회사에 임대료를 냅니다. Anthropic, Google 같은 프런티어 모델 보유사에 다니지 않는 한 대부분은 '토큰 빌리언어'가 아닙니다. Claude Pro $20/월, 제한된 컨텍스트 창. 우리가 빌리는 모델은 블랙박스입니다. Opus라고 되어 있어도 실제로 Sonnet을 제공할 수 있고 우리는 알 방법이 없습니다.</p>
+<p>하네스의 목적: <strong>신뢰성</strong>. 어떤 블랙박스 모델을 쓰든, 에이전트가 해야 할 일을 하도록 보장하는 것.</p>
+<p><strong>하네스란 무엇인가?</strong></p>
+<p>산악 등반가가 산에 자신을 고정하는 하네스처럼, 개가 탈선하지 않도록 하는 줄처럼 — 에이전트 하네스는 모델 주변의 모든 것입니다. 모델을 안정적인 환경에 고정하는 것.</p>
+<p>Claude Code도 에이전트 하네스입니다. 코딩 에이전트이기도 하지만, 하네스가 씌워진 코딩 에이전트입니다.</p>
+<p>에이전트 하네스의 전형적인 구성 요소:
+1. <strong>도구 레지스트리</strong>: 파일 읽기·쓰기·bash 실행 등
+2. <strong>모델</strong>: LLM 자체 (교체 가능 여부 다양)
+3. <strong>컨텍스트 관리</strong>: 자동 압축 포함
+4. <strong>가드레일</strong>: 예) max_steps=5 (5회 초과 시 강제 종료)
+5. <strong>에이전트 루프</strong>: 하네스의 일부이지 전부가 아님. 하네스는 루프 바깥도 포함
+6. <strong>검증 단계</strong>: 코딩 에이전트라면 lint·테스트 실행</p>
+<p><strong>데모: 빈털터리 AI 하네스 만들기</strong></p>
+<p>목표: Hacker News에서 첫 번째 게시물을 업보트하는 브라우저 에이전트.
+모델: GPT-3.5 Turbo (의도적으로 구형 모델 사용)
+브라우저: Playwright (MCP 버전 아님, 직접 라이브러리 호출)</p>
+<p>초기 구조:
+- 모델, 도구, 컨텍스트, 에이전트 루프로 구성
+- 도구: OpenAI SDK 형식 (<code>name / description / parameters / execute</code>)
+- 컨텍스트: 시스템 프롬프트 + 유저 태스크만 (컨텍스트 엔지니어링 없음)
+- 루프: <code>while True</code> — 응답 받기 → stop이면 반환, 아니면 이력에 추가</p>
+<p>실행 결과: 로그인 화면 도달 → 패닉 → 크래시. 하지만 로그에는 "업보트 성공"이라고 출력. <strong>거짓말.</strong></p>
+<p><strong>1차 개선: 가드레일 추가</strong></p>
+<ul>
+<li><code>max_iterations = 6</code>: 6스텝 초과 시 강제 종료</li>
+<li><code>max_messages = N</code>: 메시지 수 초과 시 컨텍스트 압축</li>
+</ul>
+<p>컨텍스트 압축: 시스템 프롬프트 + 유저 프롬프트 + 최근 2개 메시지 보존, 중간 전부 삭제. 슈퍼 나이브하지만 시작점으로 충분.</p>
+<p>이후 <code>index.ts</code>의 모든 로직을 <code>harness.ts</code>의 <code>run_harness()</code> 함수로 이동. 진입점은 19줄만 남음.</p>
+<p><strong>2차 개선: 검증 단계 — 거짓말 제거</strong></p>
+<p><code>run_harness</code>가 <code>run_harness_attempt</code>를 최대 3회 재시도하는 외부 루프 구조로 변경.</p>
+<p><code>verify_successful_upvote()</code>: 에이전트 루프 이력을 스캔해 실제 클릭 성공 여부 판정.
+- 로그인 실패 감지: <code>harness_auto_login</code> 도구가 "failed"로 시작 → 즉시 실패 반환
+- 로그인 리다이렉트 감지: 로그인 URL에 있는데 자동 로그인 미실행 → 실패 반환</p>
+<p>결과: 이제 실패하면 "실패"라고 정직하게 출력. 문제를 인정하는 것이 해결의 첫 단계 — TDD 감성.</p>
+<p><strong>3차 개선: 로그인 핸들러</strong></p>
+<p><code>create_login_handler()</code>:
+- 에이전트 루프 매 이터레이션마다 URL 확인
+- 로그인 페이지가 아니면 → 즉시 반환 (연산 비용 없음)
+- 로그인 페이지이면: 환경변수에서 자격증명 읽기 → Playwright로 폼 채우기 + 제출 → 에이전트 큐에 "하네스가 로그인 완료" 메시지 삽입</p>
+<p>자격증명은 LLM 컨텍스트에 노출되지 않는다. 하네스 파일만 시크릿에 접근.</p>
+<p>최종 실행: Hacker News 열기 → 로그인 화면 → 하네스가 자동 로그인 → 첫 번째 게시물 업보트 → 성공. 6회 반복 후 완료. 실제로 업보트된 것 확인 (언업보트 버튼 활성화).</p>
+<p><strong>마무리 및 전망</strong></p>
+<p>프롬프트를 한 번도 바꾸지 않았다. 하네스만으로 결과가 완전히 달라졌다.</p>
+<p>IBM Open RAG: 엔터프라이즈 오픈소스 프로젝트. Teams 통화·PDF·인보이스 등 사내 격리 데이터 대상 RAG. 하네스 기반 엔터프라이즈 보안.</p>
+<ul>
+<li>2025년: 에이전트의 해</li>
+<li>2026년: 하네스의 해</li>
+<li>2027년: 동적 하네스 — 에이전트가 스스로 하네스 생성. Plan mode의 스테로이드 버전. AGI로 가는 논리적 다음 단계.</li>
+</ul>
+<p>슬라이드와 코드는 GitHub(github.com/TejasQ) 공개. 감사합니다.</p>
+</details>
+</body></html>

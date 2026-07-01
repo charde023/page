@@ -1,0 +1,321 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>여러분의 집중력이 병목입니다, 에이전트가 아닙니다 — Zack Proser, WorkOS</title>
+<meta name="description" content="에이전트가 무한 확장 가능해진 지금, 실제 병목은 도구가 아니라 개발자 본인의 집중력과 에너지이며, Signal Layer·음성 우선 코딩·Remote Control·시스템 자기개선으로 번아웃 없이 균형을 찾는 전략을 제시한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>여러분의 집중력이 병목입니다, 에이전트가 아닙니다 — Zack Proser, WorkOS</h1>
+<div class="meta">원작자 Zack Proser · WorkOS · 업로드 2026-06-18 · 25.3분 · <a href="https://www.youtube.com/watch?v=ky38WkUHppA" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>여러분의 집중력이 병목입니다, 에이전트가 아닙니다 — Zack Proser, WorkOS</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>에이전트는 무한히 확장되지만 인간의 주의력은 고정 자원이다. Signal Layer, 음성 우선 코딩, Remote Control, 대화 기록 자기개선으로 번아웃 없이 개발 루프를 유지한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Zack Proser · WorkOS · 출처 추정 https://linkedin.com/in/zackproser · 업로드 2026-06-18 · 25분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Signal Layer (신호 계층)</td>
+<td>직접 Slack·Linear를 뒤지면 컨텍스트 전환 비용이 크다</td>
+<td>Claude Code에 Slack·Linear MCP를 연결해 대신 필터링시킨다</td>
+</tr>
+<tr>
+<td>음성 우선 코딩 (Voice-First Coding)</td>
+<td>타이핑보다 빠르고 여러 에이전트 창을 병렬 구동할 수 있다</td>
+<td>분당 90 단어 → 184 단어로 늘어남</td>
+</tr>
+<tr>
+<td>Remote Control (원격 제어)</td>
+<td>Diffuse Mode(확산 사고)를 작업 중단 없이 활용할 수 있다</td>
+<td>Claude Code remote control 플래그로 외출 중에도 세션 유지</td>
+</tr>
+<tr>
+<td>검증 게이트 3단계</td>
+<td>"속도는 안전을 전제로 한다" — 에이전트 오류를 조기에 차단</td>
+<td>lint/build → 브라우저 확인 → critic 에이전트</td>
+</tr>
+<tr>
+<td>대화 기록 자기개선</td>
+<td>JSONL 대화 파일에서 패턴을 찾아 skill을 자동으로 정제할 수 있다</td>
+<td>Claude Hooks로 세션 종료 시 고난이도 구간 추출 → 다음 주 루프 개선</td>
+</tr>
+<tr>
+<td>Oura Ring MCP 연동</td>
+<td>신체 컨디션을 코딩 세션 판단에 반영할 수 있다</td>
+<td>수면 부족이면 Claude가 작업 범위를 줄여줌</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Signal Layer</strong> — Slack·Linear 같은 외부 채널을 Claude Code MCP로 연결해 에이전트가 대신 우선순위를 판별하게 하는 추상 계층. Proser의 용어.</li>
+<li><strong>Remote Control (Claude Code)</strong> — <code>--remote-control</code> 플래그(또는 config <code>enable remote control</code>)를 켜면 스마트폰에서 동일 세션에 접속·메시지 전송 가능. LTE 환경에서도 동작.</li>
+<li><strong>Shower Principle (샤워 원리)</strong> — 집중 모드(Focus Mode)와 확산 모드(Diffuse Mode)의 구분. 책상을 떠났을 때 창의적 해결책이 떠오르는 신경과학적 현상. 저자는 에이전트 Remote Control이 이를 생산성과 결합시킨다고 주장.</li>
+<li><strong>JSONL 대화 파일</strong> — Claude Code가 로컬에 저장하는 세션 로그. 경로 지정 후 Claude에게 직접 넘겨 패턴 분석 가능.</li>
+<li><strong>Codex</strong> — 발표 문맥상 GitHub 백로그 태스크를 일괄 큐잉하는 자동화 도구로 언급됨(OpenAI Codex가 아닌 내부 워크플로 용어일 가능성 있음).</li>
+<li><strong>Oura Ring MCP</strong> — Oura 스마트 링의 수면·심박 데이터를 MCP로 Claude에 노출. GitHub에 서드파티 프로젝트 존재.</li>
+<li><strong>Work Trees (git worktree)</strong> — 에이전트 여러 개가 동일 저장소를 동시에 건드려 충돌이 나지 않도록 독립 작업 디렉터리를 분리하는 git 기능. English-한국어</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>발표자 Zack Proser. WorkOS Applied AI 팀. Claude Code를 주 개발 인터페이스로 사용.</p>
+</blockquote>
+<ol>
+<li><strong>Simon Wilson 인용</strong> — "에이전트 4개를 병렬로 띄우면 오전 11시에 녹초가 된다"며 개인별 한계 파악이 필수라고 말함.</li>
+<li><strong>음성 코딩 속도 수치</strong> — 타이핑 최고 90 WPM → 음성 우선 후 184 WPM. 약 2배.</li>
+<li><strong>Opus 4.6</strong> — 발표에서 "Claude Opus 4.6"을 모델명으로 직접 언급. GitHub 모바일에서 자연어 리뷰 코멘트로 에이전트에 지시할 수 있는 수준이라고 평가.</li>
+<li><strong>32분짜리 직접 촬영 필름</strong> — 숲속에서 폰으로 PR 리뷰를 하는 장면을 1년 전 직접 녹화해 증거로 제시.</li>
+<li><strong>야간 에이전트 루프</strong> — Linear 티켓에 "agent-ready" 태그를 붙이고 15분마다 도는 루프를 설계 중.</li>
+<li><strong>OpenAI 고급 음성 모드</strong> — "ChatGPT를 쓰는 유일한 이유"로 꼽음. 2시간 산책 중 브레인덤프 → 세션 종료 시 아키텍처 문서 요청.</li>
+<li><strong>오픈소스 Whisper 로컬 음성 입력</strong> — "ghost pepper" 표현을 씀. Whisperflow 계열 로컬 전용 도구를 발견했다고 언급.</li>
+<li><strong>OpenClaw on Twilio</strong> — 밤에 전화로 Claude에 내일 할 일을 지시하는 실험 중.</li>
+<li><strong>Q&amp;A: 주니어 개발자 조언</strong> — "아직 모르는 것에 AI를 쓰지 말라. 먼저 손으로 만들어봐야 Claude가 틀렸을 때 알아챌 수 있다."</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>번아웃 문제 제기</td>
+<td>도구는 강력해졌는데 개발자는 오전 11시에 지친다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Slack 버그 수정 사례</td>
+<td>Claude Code + Slack MCP로 닫힌 루프(closed loop) 완성</td>
+</tr>
+<tr>
+<td>3</td>
+<td>에이전트 ≠ 병목</td>
+<td>에이전트는 무한 확장, 사람의 주의력이 진짜 한계</td>
+</tr>
+<tr>
+<td>4</td>
+<td>지속 가능한 AI 스택 4가지</td>
+<td>Signal Layer / 음성 우선 / Remote Control / 자기개선</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Signal Layer</td>
+<td>MCP로 알림 필터링 → 핵심 집중 시간 확보</td>
+</tr>
+<tr>
+<td>6</td>
+<td>음성 우선 코딩</td>
+<td>속도 + 병렬 워크플로 + 책상 이탈 준비</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Shower Principle + Remote Control</td>
+<td>산책·이동 중에도 에이전트에 지시 → Diffuse Mode 활용</td>
+</tr>
+<tr>
+<td>8</td>
+<td>검증 게이트 3단계</td>
+<td>lint/build → 브라우저 use → critic 에이전트</td>
+</tr>
+<tr>
+<td>9</td>
+<td>하루 워크플로 제안</td>
+<td>오전 집중 → 에이전트 분배 → 책상 이탈 → 폰으로 PR 리뷰</td>
+</tr>
+<tr>
+<td>10</td>
+<td>JSONL 자기개선</td>
+<td>주간 대화 분석 → skill 정제 → 루프 단축</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Oura Ring 연동</td>
+<td>신체 컨디션까지 코딩 판단에 반영</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Q&amp;A</td>
+<td>주니어 스킬 개발 / JSONL 관리 / 야간 에이전트 / 음성 피드백 / 복잡한 기능 처리</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 번아웃 문제 — 도구는 핵폭탄, 신경계는 구석기</h2>
+<p>Claude Code 같은 AI 코딩 도구로 어느 때보다 많은 것을 만들어내면서도 오전 11시에 기진맥진한 개발자가 늘고 있다. 원인은 컨텍스트 전환 비용이 기존보다 훨씬 빨리 쌓이기 때문이다. 에이전트가 빠르게 작업을 처리할수록 인간 쪽에서 판단·검토·다음 지시를 내려야 하는 빈도도 함께 올라간다.</p>
+<p>Proser는 이를 "도구는 핵폭탄 수준이 됐는데 우리 신경계는 여전히 고대인"이라고 표현한다.</p>
+<h2>2. 구체적 사례 — Slack 버그 수정과 닫힌 루프</h2>
+<p>WorkOS의 Slack 블로그봇에서 acronym(SCIM, SSO 등)을 잘못 처리하는 버그가 보고됐다. 기존 방식이었다면 여러 Slack 창을 오가며 컨텍스트를 잃었겠지만, 이번에는 Claude Code에 Slack 읽기·쓰기 MCP와 Linear 티켓 MCP를 함께 부여했다.</p>
+<p>지시는 단 하나: "이 버그를 고치고, 직접 검증하고, 완료될 때까지 멈추지 마라."</p>
+<p>결과: Claude가 수정 후 Slack 채널에 테스트 포스트를 게시하고, 블로그봇이 그걸 받아 실행하고, Claude가 출력을 확인해 "이 버그는 완전히 수정됐다"고 스스로 선언했다. 돌아왔을 때 완결된 루프만 기다리고 있었다.</p>
+<p>이를 가능하게 한 핵심 조건:
+- 에이전트에게 <strong>검증 도구</strong>를 줄 것 (Slack 쓰기 권한)
+- <strong>완료 기준</strong>을 명시할 것 ("직접 검증하고, 완료까지 멈추지 마라")
+- 인간은 검토만 하면 되는 구조</p>
+<h2>3. 병목 이동 — 에이전트가 아니라 인간</h2>
+<p>이제 에이전트는 충분히 맥락을 주고 검증 기준을 제시하면 무한히 루프를 돌 수 있다. Claude API를 통해 에이전트는 무한 확장(infinite scaling)이 가능하다. 반면 인간의 주의력(attention)은 여전히 "고기 공간(meat space)"에 존재하며 부하에 따라 저하된다.</p>
+<p>Simon Wilson도 에이전트 4개를 병렬로 돌리면 오전 11시에 녹초가 된다고 말한 바 있다. 에이전트가 병목이 아니라 우리가 병목이다.</p>
+<h2>4. 지속 가능한 AI 개발 스택 4가지</h2>
+<p>Proser가 제시하는 네 가지 전략:</p>
+<p><strong>① Signal Layer (신호 계층)</strong>
+Slack·Linear 같은 외부 알림 채널을 직접 확인하는 대신, Claude Code에 MCP로 연결해 "고우선도 멘션·DM만 추출"하게 한다. 개발자는 에이전트가 필터링한 결과만 보면 되므로 집중 흐름을 유지할 수 있다.</p>
+<p><strong>② 음성 우선 코딩 (Voice-First Coding)</strong>
+1년 6개월간 사용하면서 분당 속도가 90 WPM에서 184 WPM으로 올랐다. 더 중요한 건 여러 Cursor 창, Claude 탭을 병렬로 구동하면서 동시에 지시를 내릴 수 있다는 것. 타이핑 속도로는 따라갈 수 없는 병렬 워크플로가 가능해진다.</p>
+<p><strong>③ Remote Control (원격 제어)</strong>
+Shower Principle: 책상에서 집중 모드일 때는 시야가 좁아지고 창의적 해결책을 놓친다. 산책·샤워·놀이 중 확산 모드에서 오히려 전체 해법이 떠오른다. 그런데 지금까지는 책상 이탈 = 작업 중단이었다.</p>
+<p>Claude Code의 remote control 옵션을 켜면 스마트폰에서 동일 세션에 접속해 메시지를 보낼 수 있다. LTE 환경에서도 동작. 아이디어가 떠오르면 그 자리에서 바로 에이전트에 전달 → 책상으로 돌아왔을 때 이미 적용되어 있다.</p>
+<p><strong>④ 시스템 자기개선 (Self-Improving System)</strong>
+Claude Code의 모든 대화는 로컬 JSONL 파일로 저장된다. Claude Hooks를 이용해 세션 종료 시(또는 PR 머지 시) "우리가 오래 씨름한 구간, 모호성 제거에 시간이 많이 든 구간을 추출해 별도 저장소에 보관"하는 패스를 자동 실행할 수 있다. 주간 단위로 이 저장소를 Claude로 분석해 skill을 정제하면 루프가 점점 짧아진다.</p>
+<p>Claude Code에는 skill 빌드·평가·개선·자연어 → bespoke skill 생성 기능이 내장되어 있다.</p>
+<h2>5. 검증 게이트 3단계 — "속도는 안전을 전제로 한다"</h2>
+<p>에이전트에게 원격 제어를 넘기려면 신뢰할 수 있는 자기검증이 먼저다.</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gate 1</td>
+<td>lint + build + unit test. 에이전트가 hooks로 매번 자동 실행</td>
+</tr>
+<tr>
+<td>Gate 2</td>
+<td>브라우저 직접 확인. <code>--chrome</code> 플래그 부여 후 로그인 같은 핵심 플로 클릭 검증</td>
+</tr>
+<tr>
+<td>Gate 3</td>
+<td>Critic 에이전트. Constitutional AI 방식 — "준수해야 할 원칙 목록"을 별도 에이전트가 검토하고 피드백</td>
+</tr>
+</tbody>
+</table>
+<h2>6. 균형 잡힌 하루 워크플로 제안</h2>
+<ol>
+<li><strong>오전 집중 세션</strong>: GitHub 백로그 정리, Codex에 태스크 큐잉, 핵심 기능은 Claude Code나 IDE에서 직접 시작</li>
+<li><strong>에이전트 분배</strong>: 진행 방향 확인 후 책상 이탈</li>
+<li><strong>이동 중</strong>: LTE로 세션 접속, 아이디어 전달, PR 리뷰 (GitHub Mobile에 자연어 코멘트)</li>
+<li><strong>돌아와서</strong>: 에이전트가 이미 처리한 결과 검토 후 다음 배치</li>
+</ol>
+<p>이 사이클이 반복되면 RSI(반복성 긴장 손상)도 줄고, 신선한 관점도 유지된다.</p>
+<h2>7. Q&amp;A 핵심 요약</h2>
+<p><strong>주니어 개발자 skill 개발 우려</strong></p>
+<p>"아직 모르는 것에 AI를 쓰지 마라." TypeScript, AWS 배포 등 기초를 손으로 먼저 쌓아야 Claude가 틀렸을 때 즉시 알아챌 수 있다. LLM으로 오히려 더 빠르고 깊게 공부할 수 있다 — "내가 모른다"는 것을 솔직하게 인정하면 더 빨리 채울 수 있다.</p>
+<p><strong>JSONL 파일 처리</strong></p>
+<p>직접 가리켜도 동작하지만, hooks로 세션 종료 시 "고난이도 구간만 추출 → Obsidian이나 Markdown 파일에 저장"하는 방식이 더 효율적. 분석 프롬프트: "미래에 더 효율적으로 할 수 있었던 것, 오래 씨름한 패턴을 찾아라."</p>
+<p><strong>야간 에이전트 (Night Shift)</strong></p>
+<p>Cron 잡으로 야간에 콘텐츠 생성 실험 중. 아침에 일어나서 결과 검토 → 작은 비율만 머지. 향후 목표: Linear에 "agent-ready" 태그 붙이고 15분마다 도는 루프.</p>
+<p><strong>복잡한 멀티스택 기능</strong></p>
+<p>git worktree로 에이전트가 병렬로 서로 방해 없이 작업. 명확한 프롬프트를 가진 에이전트 팀 구성. unit test + CI 강화. 모델이 발전할수록 이런 큰 기능도 하네스(harness)가 더 안정적으로 처리할 것으로 예상.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Claude Code에 Slack MCP 연결 — 직접 확인 대신 자동 필터링 구성</li>
+<li>[ ] Linear MCP 연결 + 중복 제거(deduplication) 설정</li>
+<li>[ ] 음성 입력 도구 설정 — Whisperflow 계열 로컬 도구 또는 OS 기본 음성</li>
+<li>[ ] Claude Code <code>--remote-control</code> 플래그 또는 config 설정 확인</li>
+<li>[ ] hooks 설정: 세션 종료 / PR 머지 시 고난이도 구간 자동 추출 → Obsidian 저장</li>
+<li>[ ] 주간 skill 정제 루프: JSONL 또는 추출 파일 → Claude 분석 → skill 업데이트</li>
+<li>[ ] 검증 게이트 구성: lint/build/test → 브라우저 확인 → critic 에이전트</li>
+<li>[ ] Linear 티켓에 "agent-ready" 태그 컨벤션 도입</li>
+<li>[ ] git worktree 활용: 큰 기능은 에이전트별 독립 작업 디렉터리 분리</li>
+<li>[ ] Oura Ring 또는 수면 데이터 MCP 연동 실험</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 여러분의 집중력이 병목입니다, 에이전트가 아닙니다 — Zack Proser, WorkOS · https://www.youtube.com/watch?v=ky38WkUHppA · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요, 저는 Zack입니다. WorkOS에서 일합니다. 와주셔서 감사합니다. WorkOS는 소프트웨어를 엔터프라이즈 시장에 판매할 수 있도록 드롭인(drop-in) API를 제공하는 회사입니다.</p>
+<p>오늘 제가 이야기하고 싶은 건, 매일 쏟아지는 미친 듯한 새 도구들 사이에서 균형을 찾는 방법에 대한 겁니다. 요즘 AI 에이전트로 코딩하면서 이런 기분 드시는 분 손 들어보세요.</p>
+<p>맞죠, 전보다 훨씬 많은 걸 해내면서도 하루가 끝나면 완전히 녹아있고, 아드레날린이 계속 쏟아지는 느낌. 저도 그렇습니다. 그 중에서도 제일 힘든 게 컨텍스트 전환(context switching) 비용인데, 원래도 비쌌는데 지금은 더 심해졌습니다.</p>
+<p>도구는 말도 안 되게 강력해졌고, 우리 기술은 전보다 더 많이 요구받고 있는데 오전 11시면 탈진 상태가 됩니다.</p>
+<p>구체적인 사례를 들어드릴게요. 저는 WorkOS의 Applied AI 팀에서 일합니다. Slack 봇을 만들고 있었는데, 블로그 글을 한 번도 써본 적 없는 사람도 Slack 채널에서 간단한 요청만 하면 제대로 된 블로그 포스트가 나오게 하는 봇이었습니다.</p>
+<p>동료 한 명이 "sentence case(문장 첫 글자 대문자) 처리가 SCIM, SSO 같은 약어를 망가뜨리고 있다"는 버그를 보고했습니다. 보통이라면 여러 창을 오가며 정신없이 작업했겠지만, 이번에는 작은 변화를 줬습니다.</p>
+<p>Claude Code(제가 현재 주로 쓰는 인터페이스)에 Slack 읽기·쓰기 권한을 줬습니다. Linear 티켓 접근 권한은 이미 있었고요. 그리고 이렇게 지시했습니다: "이걸 고쳐라. 그리고 직접 검증하고, 완료될 때까지 멈추지 마라."</p>
+<p>결과: Claude가 코드를 수정하고, MCP로 Slack 채널에 테스트 포스트를 날렸고, 제 작업 디렉터리에 있던 블로그봇이 그걸 받아서 전체 플로를 실행한 후 관련 단계까지 왔고, Claude가 출력을 검증한 뒤 "이 버그는 완전히 수정됐다"고 선언했습니다. 돌아왔을 때 완결된 루프가 기다리고 있었습니다. "이 부분 아직 고장났어"라고 말할 필요가 없었습니다. 그 느낌이 엄청났어요.</p>
+<p>그런데 동시에 겁도 났습니다. 이 과정에 상한선이 없다는 게 보였거든요. 도구는 핵폭탄 수준이 됐는데 우리 신경계는 여전히 고대인입니다.</p>
+<p>그래서 요즘 고민하는 게 "어떻게 개발자로서 균형을 찾을 것인가"입니다. 왜 그냥 같은 방식으로 하루에 버그 150개를 고치지 않느냐고요? 에이전트는 충분한 컨텍스트와 검증 기준, 도구가 있으면 그게 가능합니다. 하지만 저는 그 위에서 품질을 보장하면서 다음 날 8시간 세션에 또 멀쩡하게 나타날 수가 없습니다.</p>
+<p>요즘 저와 주변 사람들이 공통적으로 느끼는 건 <strong>에이전트가 병목이 아니라 우리가 병목</strong>이라는 겁니다. 에이전트는 Claude API를 통해 무한히 확장할 수 있습니다. 검증 기준과 도구를 주면 됩니다. 하지만 우리의 주의력(attention)은 여전히 고기 공간(meat space)에 있고, 부하에 따라 저하됩니다.</p>
+<p>Simon Wilson도 최근 에이전트 4개를 병렬로 돌리면 오전 11시에 녹초가 된다고 말했습니다. 개인별 균형과 한계를 각자가 찾아야 할 때가 됐습니다.</p>
+<p>제가 최근에 효과를 본 방법들을 공유하겠습니다.</p>
+<p>핵심 프레임: 인간 개발자를 이 새로운 작업 방식과 균형 맞추기. 에이전트는 무한 루프·무한 확장에 더 잘 맞습니다. 하지만 판단·taste, 뭔가가 실제로 해결됐는지, 기준이 진짜 인간적·비즈니스적 필요를 충족하는지는 여전히 우리 영역입니다.</p>
+<p><strong>첫째, Signal Layer (신호 계층)</strong>
+제가 직접 Slack을 뒤지면 80% 확률로 다른 쓰레드에 빠집니다. 대신 Claude Code에 Slack 읽기 MCP를 줘서 루프로 돌게 했습니다. 멘션이 있나, DM이 있나, 진짜 급한 요청이 있나를 확인하고, 동시에 Linear에서 진짜 티켓을 찾아 중복을 제거합니다. 이 작은 필터 하나가 핵심 집중 시간을 지켜줍니다. 앞으로 이런 도구들이 더 많이 나올 겁니다.</p>
+<p><strong>둘째, 음성 우선 코딩 (Voice-First Coding)</strong>
+저는 세 살 때부터 타이핑을 했고, 최고 기록이 90 WPM입니다. 지금은 음성 우선 도구로 184 WPM이 나옵니다. 단순히 하나를 빨리 하는 게 아니라 Cursor 창 3개, Claude 탭 여러 개에 동시에 지시할 수 있습니다. 전통적인 개발자가 첫 프롬프트를 타이핑하는 동안 여러 에이전트가 이미 달리고 있습니다. 이게 1~2년 복리로 쌓이면 어떻게 될까요?</p>
+<p>음성 흐름에 익숙해질수록 다음 단계, 즉 실제로 책상에 덜 앉아 있으면서 일이 되는 게 가능해집니다.</p>
+<p><strong>셋째, Remote Control (원격 제어)</strong>
+먼저 Shower Principle(샤워 원리): 집중 모드에서 IDE에 파묻혀 있으면 명확한 청사진은 있지만 창의적 해결책을 놓치고 blind spot이 생깁니다. 역설적으로 일어나서 개를 산책시키거나 아이를 공원에 데려가거나 샤워를 하면 갑자기 완전한 해법이 떠오릅니다. 무의식이 계속 어려운 문제를 돌리고 있다가 긴장이 풀리면 확산 모드(diffuse mode)로 더 창의적인 해결책이 나옵니다. 이건 수십 년간 이야기되어온 현상입니다.</p>
+<p>문제는 지금까지 확산 모드 = 일 중단이었다는 겁니다. 이제 Remote Control로 그게 바뀝니다. Claude Code 세션을 remote control 플래그를 켜고 시작하면, 집에서 멀리 떨어진 LTE 환경에서도 스마트폰으로 그 세션을 보고 메시지를 보낼 수 있습니다. 산책 중에 좋은 아이디어가 떠오르면 바로 에이전트에 전달 → 책상으로 돌아왔을 때 이미 적용되어 있습니다. 직접 32분짜리 영상도 찍었습니다. 숲속에서 폰으로 PR을 리뷰하는 장면을요. 실제로 됩니다.</p>
+<p>물론 이걸 위해서는 "속도는 안전을 전제로 한다"는 원칙이 필요합니다. 검증 게이트:
+- Gate 1: 최소 lint, build, unit test — 에이전트가 hooks로 매번 자동 실행
+- Gate 2: 브라우저로 직접 확인 — <code>--chrome</code> 플래그, 로그인 같은 핵심 플로 클릭
+- Gate 3: Constitutional AI 방식 — "준수해야 할 원칙" 목록을 별도 에이전트가 검토하고 피드백</p>
+<p><strong>새로운 하루 워크플로:</strong>
+오전: GitHub 백로그 전체 확인 → Codex에 태스크 큐잉 → 핵심 기능 IDE/Claude Code에서 시작 → 에이전트가 방향대로 가는지 확인 → 책상 이탈. 폰으로 메시지 전달, PR 리뷰. GitHub Mobile에서 Claude나 Cursor Agent, Vercelbot에 자연어 코멘트로 "이 부분 바꿔" 하면 대부분 맞게 처리. 책상에 덜 앉고, RSI도 줄고, 산책하면서 더 좋은 아이디어를 얻고, 루프는 계속 돌아갑니다.</p>
+<p><strong>넷째, 시스템 자기개선</strong>
+도구만 쓰면 월요일은 놀랍고 금요일은 진이 빠지고 뭘 했는지도 기억 안 납니다. 동료 Nick이 알려줬는데, Claude Code의 모든 대화는 로컬 JSONL 파일로 저장됩니다. 이걸 에이전트가 주간 단위로 분석하게 할 수 있습니다. "우리가 많은 생각 토큰(thinking token)을 쓴 구간, 모호성을 제거하느라 오래 주고받은 구간을 찾아라. 거기서 어떤 도구나 MCP 서버, skill이 있었으면 루프가 짧아졌을지 파악해라." 이게 바로 skill 간격(skill delta) 분석입니다.</p>
+<p>hooks로 세션 종료 시 또는 PR 머지 시 자동으로 고난이도 구간을 Obsidian이나 Markdown 파일에 저장할 수 있습니다. 주간 분석 루프를 한 번 돌리면 Claude Code에 내장된 skill 빌드·평가·개선 기능으로 다음 주엔 더 빠르고 정확하게 됩니다.</p>
+<p><strong>Oura Ring MCP 연동</strong>
+오라 링을 MCP로 Claude에 연결했습니다(GitHub에 서드파티 프로젝트 몇 개 있음). Claude가 간혹 "어젯밤에 잠을 못 잤네요. 첫 번째 부분만 하고 나머지는 내일 합시다"라고 합니다. "닥쳐, 넌 기계잖아"라고 하고 그냥 진행하긴 하지만, 적어도 한 번 생각하게 됩니다. 이게 실제로 의미가 있는 방향이라고 생각합니다. 티켓·대화·skill만이 아니라 신체 컨디션까지 전체적으로 보는 것. 의도 없이 그냥 달리면 번아웃, 이번엔 터보 번아웃입니다. LLM이 그걸 그 어느 때보다 빠르게 가능하게 합니다. 의도적인 길은 나를 보존하면서 품질 책임은 유지하고 에이전트에게 세부 사항을 맡기는 것입니다.</p>
+<p><strong>마무리 제안:</strong>
+Signal Layer 하나만 만들어보세요. Slack이든 Linear든 컨텍스트 전환 비용이 제일 큰 것 하나를 선택한 인터페이스에 연결하는 것으로 시작. 검증 게이트 추가. Chrome 브라우저 접근은 <code>--chrome</code> 플래그 하나면 됩니다. 그렇게 확보한 여유로 공원 피크닉을 가거나 산책을 하거나 개와 놀아주세요.</p>
+<p>도구는 핵폭탄입니다. 신경계는 여전히 고대인입니다. 개발자 균형을 찾는 게 요즘 저의 화두입니다. 감사합니다.</p>
+<hr>
+<p><strong>Q&amp;A</strong></p>
+<p>Q: 커리어 초반인데 이런 방식으로 hard skill이 줄어들까 걱정됩니다.</p>
+<p>A: 제가 본 최고의 조언은 "아직 모르는 것에 AI를 쓰지 마라"입니다. 저는 TypeScript, RAG 시스템, AWS 배포를 오랫동안 힘들게 했기 때문에 Claude가 이상한 말을 하면 바로 알아챕니다. 그 scar tissue(상처 흔적)가 중요합니다. 먼저 깊게 파고, LLM으로 더 빠르고 깊게 배우세요 — "이 부분 내 멘탈 모델이 불명확해"라고 솔직하게 말하면 더 빨리 채울 수 있습니다. Ruby 앱을 충분히 직접 만들어봤으면 그때 LLM으로 더 빠르게 만들어도 됩니다.</p>
+<p>Q: JSONL 파일이 AI 소비용이 아닌데 어떻게 처리하나요?</p>
+<p>A: 직접 가리키기도 했습니다. 더 좋은 방법은 hooks를 써서 세션 종료 시 "핵심 교훈, 특히 오래 씨름한 구간을 별도 데이터 저장소(Obsidian, 주간 Markdown 파일 등)에 저장"하는 것. 그 파일에 주간 분석을 돌리는 방식.</p>
+<p>Q: 야간 백그라운드 에이전트 활용하나요?</p>
+<p>A: 네, Cron 잡으로 콘텐츠 생성 실험 중입니다. 아침에 검토하고 일부만 머지합니다. 목표는 Linear에 "agent-ready" 태그를 붙이고 15분마다 도는 루프를 만드는 것.</p>
+<p>Q: 에이전트가 음성으로 피드백을 주나요?</p>
+<p>A: Claude Code에는 주로 타이핑으로 지시하고 결과를 읽습니다. 하지만 OpenAI 고급 음성 모드(Advanced Voice Mode)로 2시간 산책 중 브레인덤프를 많이 합니다. ChatGPT를 쓰는 유일한 이유입니다. 오픈소스 Whisperflow 계열 로컬 도구도 최근 발견했습니다. OpenClaw를 Twilio에 연결해서 밤에 전화로 "내일 이걸 해달라"고 지시하는 실험도 합니다.</p>
+<p>Q: 복잡한 멀티스택 기능 작업은 어떻게 하나요?</p>
+<p>A: git worktree로 에이전트별 독립 작업 디렉터리를 분리 → 병렬 충돌 방지. 명확한 프롬프트의 에이전트 팀 구성. 검증 게이트와 unit test 강화. CI를 항상 spec 기반으로 빌드하게. 모델이 발전할수록 이런 큰 기능도 하네스가 더 안정적으로 처리할 것입니다.</p>
+</details>
+</body></html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Claude Code가 더 좋아졌습니다 | Agent View</title>
+<meta name="description" content="Claude Code Agent View로 여러 에이전트 인스턴스를 한 화면에서 관리·병렬 실행하는 워크플로 소개"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Claude Code가 더 좋아졌습니다 | Agent View</h1>
+<div class="meta">원작자 Jonny K (jonnykvids) · Getpushtoprod · 업로드 2026-05-21 · 13.2분 · <a href="https://www.youtube.com/watch?v=7ydv-L3A0Xc" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Claude Code가 더 좋아졌습니다 | Agent View</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Claude Code의 Agent View는 여러 에이전트 인스턴스를 하나의 터미널 뷰에서 조회·제어·병렬 실행할 수 있는 내장 오케스트레이션 레이어다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Jonny K (jonnykvids) · Getpushtoprod · 추정 출처 https://getpushtoprod.substack.com · 업로드 2026-05-21 · 13.2분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agent View</td>
+<td>여러 Claude 인스턴스를 한 화면에서 파악</td>
+<td><code>claude agents</code> 명령으로 진입하는 내장 오케스트레이션 UI</td>
+</tr>
+<tr>
+<td>세션 영속성</td>
+<td>터미널 닫아도 인스턴스가 살아있음</td>
+<td>tmux 없이도 에이전트 유지 가능</td>
+</tr>
+<tr>
+<td>Worktree 병렬 개발</td>
+<td>같은 레포에서 기능별 충돌 없이 동시 작업</td>
+<td>인스턴스별 독립 워크트리로 merge conflict 최소화</td>
+</tr>
+<tr>
+<td>Peek 모드</td>
+<td>전체 진입 없이 빠른 맥락 확인·응답</td>
+<td><code>Space</code> 키로 인스턴스 훑기</td>
+</tr>
+<tr>
+<td>인스턴스 이름 변경 (<code>Ctrl+R</code>)</td>
+<td>무슨 작업 중인지 기억에 보조</td>
+<td>프로젝트명 + 태스크 형태로 라벨링 권장</td>
+</tr>
+<tr>
+<td>Plan Mode 선행</td>
+<td>에이전트가 스스로 루프 돌게 하려면 PRD·스펙 품질이 전제</td>
+<td>몇 시간 plan → 에이전트 실행 → 최소 개입</td>
+</tr>
+<tr>
+<td>색상 상태 코드</td>
+<td>한눈에 실행 상황 파악</td>
+<td>회색=작업 중, 노랑=대기, 초록=완료, 보라=머지 중</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Agent View</strong> (<code>claude agents</code>): Claude Code 0.x 이후 추가된 터미널 내 멀티에이전트 대시보드</li>
+<li><strong>Peek 모드</strong> (<code>Space</code>): 인스턴스에 완전 attach하지 않고 빠른 메시지 입력 후 detach</li>
+<li><strong>Attach / Detach</strong>: <code>→</code> 로 인스턴스 진입, <code>←</code> (프롬프트 비었을 때) 로 빠져나옴</li>
+<li><strong>Ctrl+S</strong>: 디렉토리별 그룹핑 노출 토글 — 여러 프로젝트 구분 시 유용</li>
+<li><strong>Ctrl+X</strong>: 특정 인스턴스 삭제</li>
+<li><strong>워크트리(Worktree)</strong>: <code>git worktree</code>를 이용해 같은 레포에서 브랜치별 독립 파일시스템 생성 — 병렬 기능 개발 시 충돌 방지</li>
+<li><strong>Agent Team</strong>: 단일 오케스트레이터 세션이 내부적으로 서브 에이전트를 관리해 merge conflict 자동 조율</li>
+<li><strong>Haiku 내부 사용</strong>: 빠른 자동완성·제안 응답에 Claude Haiku를 under the hood로 사용</li>
+<li><strong>Self-automated loop</strong>: PRD + 테스트 harness 품질이 충분하면 에이전트가 자율 루프 실행 → 사람은 방향만</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li><code>claude agents</code>를 다시 실행하면 이전에 닫았던 터미널의 모든 인스턴스가 <strong>복원된다</strong> — 세션이 백그라운드에서 계속 실행 중이었기 때문.</li>
+<li>인스턴스 이름 포맷: <strong>"프로젝트명 + 고수준 태스크"</strong> (예: <code>hermes-trip-home-screen</code>) — 라벨이 없으면 무슨 작업인지 금방 잊음.</li>
+<li><strong>핀 기능(pin)</strong>: 중요한 인스턴스를 상단 고정 가능.</li>
+<li>Haiku가 자동완성·빠른 reply에 쓰인다고 <strong>명시적으로 언급</strong> — 비용·속도 고려된 내부 설계.</li>
+<li><strong>색상 코드 정확값</strong>: 노랑=waiting(실패 체크 중), 초록=done(머지 완료), 회색=working(실행 중), 보라=merging(워크트리 머지 진행 중).</li>
+<li>병렬 워크트리 사용 시 <strong>"어떤 기능을 작업하는지 신중하게 구분"</strong> 하면 merge conflict가 크지 않다고 강조 — 무작정 병렬화는 지양.</li>
+<li><strong>Ctrl+X 두 번</strong>: 인스턴스 삭제 확인(두 번 눌러야 적용).</li>
+<li>화자는 tmux 대체로 Agent View를 평가 — "더 이상 tmux가 필요 없다".</li>
+<li>모델 abstraction 방향: <em>"AI 랩들이 supervise에서 멀어지고, 루프 밖에서 guidance/direction을 주는 방향으로 이동 중"</em> — 매 업그레이드마다 스택에서 한 단계 위로 추상화.</li>
+<li>트립 추적 앱 시연 시 한 인스턴스에서 <strong>로컬 서브에이전트를 스폰</strong>해 동시에 여러 작업을 처리하는 모습을 보여줌.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>문제 정의</td>
+<td>단일 터미널·다수 pane 방식의 한계 (컨텍스트 스위칭 혼란)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Agent View 개요</td>
+<td><code>claude agents</code>로 진입하는 2E 오케스트레이션 내장 UI</td>
+</tr>
+<tr>
+<td>3</td>
+<td>단축키 실습</td>
+<td>Ctrl+R(이름변경), Space(peek), →/←(attach/detach), Ctrl+S(그룹), pin, Ctrl+X(삭제)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>색상 상태 코드</td>
+<td>회색/노랑/초록/보라 각 의미</td>
+</tr>
+<tr>
+<td>5</td>
+<td>병렬 개발 패턴</td>
+<td>Worktree + Agent Team 조합, merge conflict 최소화 전략</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Plan-first 워크플로</td>
+<td>좋은 PRD + harness → 에이전트 자율 실행 → 사람은 방향만</td>
+</tr>
+<tr>
+<td>7</td>
+<td>데모</td>
+<td>트립 추적 앱: 여러 인스턴스에 화면별 태스크 분배</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 문제 정의 — 기존 방식의 한계</h2>
+<p>Claude Code를 혼자 사용할 때 가장 흔한 패턴은 <strong>창 하나 + 인스턴스 하나</strong>였다. 영상이 끝날 때까지 기다리는 방식. 그 다음으로 많이 시도하는 건 tmux나 터미널 앱의 여러 pane을 만들어 각 프로젝트별로 분리하는 것이다. 화자 본인도 <code>newsletter</code>, <code>booker</code> 같은 이름으로 pane을 라벨링해 여러 인스턴스를 관리했다고 설명한다.</p>
+<p>문제는 <strong>클럭킹(컨텍스트 전환) 능력</strong>이 부족하면 금방 혼란스러워진다는 것. Codex나 Claude 앱이 사이드바로 프로젝트를 구분한 것과 같은 맥락에서, Agent View는 이 오케스트레이션 레이어를 터미널 안에 내장한 것이다.</p>
+<h2>2. Agent View 개요</h2>
+<p><code>claude agents</code>를 입력하면 현재 실행 중인 모든 Claude Code 인스턴스를 <strong>한 화면</strong>에서 볼 수 있다.</p>
+<p>핵심 특성:
+- <strong>세션 영속</strong>: 터미널을 완전히 닫아도 인스턴스가 백그라운드에서 유지된다. 다시 <code>claude agents</code>를 치면 그대로 복원됨.
+- <strong>디렉토리 기반 그룹핑</strong>: 각 인스턴스는 자신의 Claude Code 프로젝트 컨텍스트를 유지 → 컨텍스트 오염 방지.
+- <strong>시각적 상태</strong>: 색상 코드로 즉시 상황 파악 가능.
+- 내부적으로 빠른 응답에 <strong>Haiku</strong> 사용.</p>
+<h2>3. 단축키 실전 정리</h2>
+<table>
+<thead>
+<tr>
+<th>단축키</th>
+<th>동작</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>→</code></td>
+<td>인스턴스 attach (진입)</td>
+</tr>
+<tr>
+<td><code>←</code> (빈 프롬프트)</td>
+<td>인스턴스 detach (빠져나옴)</td>
+</tr>
+<tr>
+<td><code>Space</code></td>
+<td>Peek 모드 — 진입 없이 빠른 확인·응답</td>
+</tr>
+<tr>
+<td><code>Ctrl+R</code></td>
+<td>인스턴스 이름 변경</td>
+</tr>
+<tr>
+<td><code>Ctrl+S</code></td>
+<td>디렉토리별 그룹핑 노출 토글</td>
+</tr>
+<tr>
+<td><code>Enter</code> (그룹 이름)</td>
+<td>그룹 접기/펼치기</td>
+</tr>
+<tr>
+<td><code>Pin</code></td>
+<td>인스턴스 상단 고정</td>
+</tr>
+<tr>
+<td><code>Ctrl+X</code> × 2</td>
+<td>인스턴스 삭제</td>
+</tr>
+</tbody>
+</table>
+<p><strong>권장 이름 포맷</strong>: <code>&lt;프로젝트명&gt;-&lt;고수준태스크&gt;</code> (예: <code>hermes-trip-home-screen</code>)</p>
+<h2>4. 색상 상태 코드</h2>
+<table>
+<thead>
+<tr>
+<th>색상</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>회색</td>
+<td>작업 중 (실행 중)</td>
+</tr>
+<tr>
+<td>노랑</td>
+<td>대기 중 (실패 여부 체크 중)</td>
+</tr>
+<tr>
+<td>초록</td>
+<td>완료 (모두 통과, 머지됨)</td>
+</tr>
+<tr>
+<td>보라</td>
+<td>머지 진행 중 (워크트리 머지)</td>
+</tr>
+</tbody>
+</table>
+<h2>5. 병렬 개발 패턴</h2>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>워크트리(Worktree) + Agent View 조합이 핵심이다.</strong></span></p>
+<p>새 인스턴스를 생성할 때 <code>git worktree</code>를 활용하면 같은 레포의 서로 다른 브랜치를 독립된 파일 시스템에서 작업할 수 있다. 기능 경계를 잘 나누면 merge conflict가 크지 않다. 더 자동화된 방식은 <strong>Agent Team</strong> — 단일 오케스트레이터 세션이 내부 서브에이전트의 충돌을 알아서 조율한다.</p>
+<p>핵심 선택지:</p>
+<ul>
+<li><strong>수동 Worktree</strong>: 기능별로 직접 인스턴스를 만들어 병렬 실행. 결과 merge는 직접 처리.</li>
+<li><strong>Agent Team</strong>: 오케스트레이터가 서브에이전트를 스폰·조율. 더 자율적이나 스펙 품질이 전제.</li>
+</ul>
+<h2>6. Plan-first 워크플로 (가장 중요한 멘탈 모델)</h2>
+<p>화자가 실제로 쓰는 방식:</p>
+<ol>
+<li><strong>Plan Mode에서 몇 시간</strong> — PRD, 투두, 아키텍처를 엔지니어링 수준으로 정제.</li>
+<li>각 인스턴스에 <strong>세분화된 기능 스펙</strong> 할당.</li>
+<li>자동화 루프를 돌릴 <strong>harness(테스트·검증 자동화)</strong> 준비.</li>
+<li>인스턴스 실행 → <strong>가끔 들여다보고 방향 수정</strong>만.</li>
+</ol>
+<p><span style="font-size:1.1em"><strong>요점: 에이전트가 자율 루프를 돌게 하려면 PRD와 harness의 품질이 핵심이다. 손잡고 다니는 방식으로는 병렬화의 이점을 못 얻는다.</strong></span></p>
+<h2>7. 데모 — 트립 추적 앱</h2>
+<p>화자는 <code>trip-home-screen</code> 인스턴스와 <code>active-dash-screen</code> 인스턴스를 동시에 열고 각각 다른 화면의 UI를 빌드했다. 각 인스턴스에 PRD와 디자인 참조를 넘기고 자율 실행. Agent View에서 두 인스턴스가 동시에 회색(작업 중) 상태로 표시되는 것을 확인할 수 있었다.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] <code>claude agents</code>로 Agent View 직접 진입해 보기</li>
+<li>[ ] Ctrl+R로 현재 인스턴스 이름 붙이는 습관 들이기</li>
+<li>[ ] Space(Peek)로 다른 인스턴스 빠르게 확인하는 흐름 연습</li>
+<li>[ ] 다음 기능 개발 시 git worktree + 별도 인스턴스 병렬 실험</li>
+<li>[ ] Plan Mode에서 PRD 충분히 다듬은 뒤 에이전트 자율 실행 시도</li>
+<li>[ ] 색상 상태 코드 숙지 (회색/노랑/초록/보라)</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Claude Code가 더 좋아졌습니다 | Agent View · https://www.youtube.com/watch?v=7ydv-L3A0Xc · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요, Claude Code가 Agent View를 출시했는데 제가 생각하기에 이게 굉장히 멋진 신기능입니다. 혁명적이라고는 할 수 없지만 분명히 제 일상 작업에서 쓸 기능입니다.</p>
+<p>이 영상에서는 문서를 좀 더 소화하기 쉽게 설명하는 고수준 슬라이드를 준비했습니다. 직접 Claude Code 문서를 읽어보셔도 좋고요. 시연을 위해 트립 추적 앱을 준비해서 그냥 재미로 만들어볼 겁니다.</p>
+<p><strong>Agent View가 뭔가요?</strong>
+기본적으로 <code>claude agents</code>를 입력하면 보이는 화면이 Agent View입니다. Claude Code 위에 바로 얹힌 엔드투엔드 오케스트레이션입니다. 마우스 클릭도 지원하고 키보드 단축키도 됩니다.</p>
+<p><strong>왜 이게 필요한가 — 기존의 문제점</strong></p>
+<p>Agent View 이전에는 창 하나에 인스턴스 하나가 일반적인 방식이었습니다. 그냥 지켜보면서 기다리는 거죠. 그 다음 단계로 많은 분들이, 저도 포함해서, 터미널 pane을 여러 개 만들어서 관리하는 방법을 시도했습니다. <code>newsletter</code>나 <code>booker</code> 같은 이름으로 pane을 만들어 여러 프로젝트를 저글링하는 방식이죠.</p>
+<p>문제는 컨텍스트 스위칭을 잘 못하면 압도당한다는 겁니다. 그래서 Codex 같은 경우엔 사이드바를 도입했고, Claude 앱도 비슷한 패턴이 있죠. Agent View가 바로 그 해결책입니다 — 모든 에이전트가 무엇을 하는지 한 화면에 보여주는 것.</p>
+<p>터미널에서 진짜 살고 싶은 저에게는 이게 이상적인 형태입니다. 애니메이션이나 다양한 상태 표시에도 많은 공을 들인 것 같아서 마음에 듭니다.</p>
+<p><strong>세션 영속성</strong></p>
+<p>어떤 세션이 열려있었든, 어떤 디렉토리에서 실행하든 상관없이 유지됩니다. 터미널을 완전히 닫아도 다시 <code>claude agents</code>를 치면 모든 인스턴스가 다 거기 있습니다. 그래서 더 이상 tmux가 필요 없어요.</p>
+<p>색상도 다양하게 상태를 표시하고 여러 상태가 있습니다.</p>
+<p><strong>키보드 단축키</strong></p>
+<p>키보드 단축키는 CLI 도구를 배울 때 정말 중요합니다. 마우스도 되지만 더 빠르고 좋습니다.</p>
+<p>첫 번째로, 현재 있는 디렉토리에서 태스크를 시작할 수 있습니다. 여기서 뭔가 입력하면 됩니다. 예를 들어 "프로젝트 페이즈 2를 로드해줘" 같은 거요. 내부적으로 Haiku를 써서 이 응답 부분을 처리합니다.</p>
+<p>제가 제일 먼저 하는 건 <code>Ctrl+R</code>로 인스턴스 이름을 바꾸는 겁니다. 프로젝트명 + 고수준 태스크 형태로요. 예를 들어 <code>phase-two</code>라고 이름 붙이면 내가 무슨 작업을 하고 있었는지 기억하기 편합니다.</p>
+<p>회색은 작업 중이라는 뜻입니다. <code>→</code> 키를 누르면 해당 인스턴스로 attach(진입)됩니다. 프롬프트에 아무것도 없을 때 <code>←</code>를 누르면 detach(빠져나옴)됩니다.</p>
+<p><strong>Peek 모드</strong>: <code>Space</code>를 누르면 peek 모드가 활성화됩니다. 인스턴스에 완전히 들어가지 않고 빠르게 내용을 확인하고 응답을 보낼 수 있습니다.</p>
+<p><strong>Pin</strong>: 중요한 인스턴스를 상단에 고정할 수 있습니다.</p>
+<p><strong>Ctrl+S</strong>: 디렉토리별 그룹핑을 노출합니다. 같은 프로젝트 디렉토리에서 여러 인스턴스를 묶어서 볼 수 있습니다. Claude Code에서 컨텍스트 엔지니어링이 중요한 만큼 프로젝트 스코프를 유지하는 게 중요합니다. 각 인스턴스는 자체 Claude Code 프로젝트입니다.</p>
+<p>그룹 이름에서 <code>Enter</code>를 치면 그룹을 접을 수 있습니다.</p>
+<p>핵심은 인스턴스를 빠르게 오가고 Peek으로 빠르게 확인하는 것 — whisper [?음성입력 도구]를 사용해서 빠르게 입력하는 것도 상상해볼 수 있습니다.</p>
+<p><strong>병렬 개발</strong></p>
+<p>이걸 쓰고 싶은 또 하나의 이유는 많은 작업을 병렬로 처리할 수 있다는 겁니다. 새 인스턴스를 만들 때 워크트리를 사용하면 여러 태스크를 충돌 없이 동시에 진행할 수 있습니다. 어떤 기능을 작업할지 신중하게 구분하면 merge conflict가 크지 않습니다. Agent Team을 사용해서 하나의 세션이 충돌을 관리하게 하는 방법도 좋은 옵션입니다.</p>
+<p><strong>중요한 멘탈 모델 전환</strong></p>
+<p>AI 랩들이 supervise 방향에서 멀어지고, 루프 밖에서 지침·방향만 주는 방향으로 이동하고 있다는 걸 이해하기 시작했습니다. 매 주요 모델·도구 업그레이드마다 스택의 한 단계 위로 추상화가 이동합니다.</p>
+<p><strong>색상 코드 정리</strong>:
+- 노랑: 대기 중 (실패 체크 중)
+- 초록: 완료 (통과, 머지됨)
+- 회색: 작업 중
+- 보라: 머지 진행 중 (워크트리 머지)</p>
+<p><code>Ctrl+X</code>를 두 번 누르면 해당 인스턴스를 삭제합니다.</p>
+<p><strong>실제 빌드 흐름</strong></p>
+<p>트립 추적 앱을 예시로, Agent Team을 만들어 wave 3를 진행하는 방식을 보여줬습니다. 가장 극단적인 예시이고, 보통은 스펙이 잘 갖춰져 있으면 하나의 에이전트 팀이 전체를 처리하게 합니다.</p>
+<p>실제로 동작하게 하려면 좋은 스펙, 좋은 PRD, 좋은 harness가 있어야 자동화 루프가 돌아가고 에이전트를 손잡고 다니지 않아도 됩니다.</p>
+<p>예를 들어: "트립 홈 화면 작업해줘, PRD와 투두를 보고 디자인에 맞게 스펙을 계속 채워줘" — 이 인스턴스 이름을 <code>hermes-trip-home-screen</code>으로 변경. 또 다른 인스턴스: "액티브 대시 화면 작업해줘, PRD와 투두를 보고 디자인에 맞는지 확인해줘".</p>
+<p>평소라면 PRD와 투두에 많은 시간을 쓰고, Plan Mode에서 아키텍처를 엔지니어링 수준으로 계획하고, 에이전트 팀이 실행하게 놔두는 방식입니다. 각 인스턴스에 특정 기능에 대한 매우 세분화된 스펙이 있고, 자동화 루프를 위한 harness가 있으면, Plan Mode에서 몇 시간을 쏟아 품질 높인 계획으로 그냥 실행시킵니다. 가끔 돌아봐서 방향 수정만 하는 거죠.</p>
+<p>아이디어는 여러 에이전트가 동시에 실행되는 걸 하나의 뷰에서 보면서 이름 바꾸고 맥락을 조금씩 추가하는 라이브 뷰 — 그게 Agent View입니다.</p>
+<p>Anthropic 개발자 데이 발표를 많이 봤는데, 많은 생각이 있어서 관련 영상을 더 만들 것 같습니다. 이 기능은 정말 멋지고, 자체 오케스트레이션 레이어를 찾고 있거나 여러 컨텍스트·인스턴스를 저글링하기 힘들었던 분들에게 도움이 될 것 같습니다. 저는 Claude Code에 더 중독될 것 같네요.</p>
+</details>
+</body></html>

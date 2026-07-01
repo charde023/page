@@ -1,0 +1,353 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Matt Pocock의 에이전틱 엔지니어링 워크플로우를 그대로 따라 해보세요</title>
+<meta name="description" content="모델보다 하네스(harness)가 중요하다 — 전술적 프로그래밍은 AI에게 넘기고, 인간은 전략적 프로그래밍과 코드베이스 설계에 집중해야 한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Matt Pocock의 에이전틱 엔지니어링 워크플로우를 그대로 따라 해보세요</h1>
+<div class="meta">원작자 Matt Pocock · Scale Software (aihero.dev) · 업로드 2026-06-19 · 62.4분 · <a href="https://www.youtube.com/watch?v=IK6H-lcGYm8" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Matt Pocock의 에이전틱 엔지니어링 워크플로우를 그대로 따라 해보세요</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>모델 성능 경쟁보다 하네스(harness) 설계와 코드베이스 품질이 AI 생산성의 진짜 레버리지다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Matt Pocock · Scale Software (aihero.dev) · 추정 출처 https://twitter.com/mattpocockuk · 업로드 2026-06-19 · 62분 · 전사 Whisper large-v3 (auto) · 인터뷰어: David Ondrej</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>전술적 vs 전략적 프로그래밍 (tactical vs strategic programming)</td>
+<td>AI가 전술 부분을 대체하므로, 인간은 전략에 더 집중해야 한다</td>
+<td>AI 시대에 생존하는 개발자는 전략 담당자</td>
+</tr>
+<tr>
+<td>하네스(harness) 우선주의</td>
+<td>모델 교체보다 harness 개선이 더 오래 유효하고 더 많은 통제권을 준다</td>
+<td>모델은 50%, 하네스도 50%</td>
+</tr>
+<tr>
+<td>Procedure skill vs Ability skill</td>
+<td>procedure는 인간이 직접 호출, ability는 모델이 자동 호출 — 맥락 누수 방지와 제어권 유지에 중요</td>
+<td>제어권을 인간이 가져야 한다</td>
+</tr>
+<tr>
+<td>AFK(Away From Keyboard) 에이전트</td>
+<td>병렬화로 생산성 폭발적 증가 — 에이전트 여러 개를 동시에 돌릴 수 있음</td>
+<td>나를 복수화(parallelize)하는 도구</td>
+</tr>
+<tr>
+<td>큐(queue) vs 루프(loop)</td>
+<td>loop는 무한 실행, queue는 목적 있는 작업 목록 — 실제 개발은 queue 모델이 맞다</td>
+<td>에이전트에게 backlog를 처리하게 한다</td>
+</tr>
+<tr>
+<td>DX vs AX</td>
+<td>Developer Experience와 Agent Experience는 겹치지만 다르다 — 코드베이스 품질이 AX에도 직결됨</td>
+<td>좋은 코드베이스 = 더 싼 모델로도 좋은 결과</td>
+</tr>
+<tr>
+<td>지식(knowledge) · 스킬(skill) · 지혜(wisdom) 삼분법</td>
+<td>지혜는 실전 경험 없이 얻기 어렵다 — skill 저장소로 knowledge·skill은 공유 가능</td>
+<td>팀 전체의 수준을 올리는 절차 공유</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Sandcastle</strong> — Matt이 직접 만든 도구. Docker/Podman 샌드박스 안에서 Claude Code 에이전트를 실행. GitHub Actions와 연동해 AFK 워크플로 구현. 랜덤 홈 디렉토리 삭제나 환경 변수 유출 방지.</li>
+<li><strong>Superpowers (skills repo)</strong> — Matt이 언급한 "가장 인기 있는 skills 저장소". ability 방식의 스킬을 선호하는 반대 철학.</li>
+<li><strong>skills 설치 CLI</strong> — <code>npx skills latest add mattpocock/skills</code> 로 로컬 설치. Claude Code·Codex 모두 호환.</li>
+<li><strong>teach skill</strong> — 존근 근접 발달영역(zone of proximal development), 지식·스킬·지혜 구분 등 교육 이론을 인코딩한 절차형 스킬. stateful: workspace에 mission.md·learning record를 저장해 교사처럼 기억함.</li>
+<li><strong>grill me skill</strong> — 역할이 adversarial interviewer인 절차형 스킬. 4~5문장 분량. plan mode 대체용.</li>
+<li><strong>Ralph loop / G. Huntley</strong> — 2025년 7월 14일 원조 글. Claude Code를 while loop로 반복 호출하는 아이디어. Matt은 loop보다 queue 모델을 선호.</li>
+<li><strong>AX (Agent Experience)</strong> — DX(Developer Experience)의 에이전트판. 코드베이스가 에이전트 친화적인지 측정하는 개념.</li>
+<li><strong>Bitter Lesson</strong> — ML 연구에서 raw compute가 결국 모든 최적화를 이긴다는 교훈. Matt이 하네스 집착이 이 함정에 빠질 수 있음을 스스로 인정하면서도, 그래도 하네스 개선은 가치 있다고 주장.</li>
+<li><strong>WhisperFlow</strong> — 받아쓰기(dictation) 도구. Matt이 코딩 중 구술 입력에 활용.</li>
+<li><strong>SERP API</strong> — 구조화된 검색 결과를 JSON으로 제공하는 API. 이 영상의 스폰서. 에이전트가 실시간 정보를 가져올 때 사용.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li><strong>모델 선택: Claude Code Opus 4.8 medium effort</strong> — Fable(Claude 4 계열)이 출시됐지만 Matt은 아직 Opus 4.8 medium 유지. "새 모델이 나오면 한 달 기다려서 먼지가 가라앉은 후 전환"이 본인 전략.</li>
+<li><strong>스킬 description 누수</strong> — ability 스킬은 설명이 context window에 자동 주입된다. 100개 스킬이면 100개 설명이 누수됨. <code>disable_model_invocation: true</code> 플래그로 비활성화 가능.</li>
+<li><strong>코드베이스 품질 = 토큰 절약</strong> — "코드베이스가 변경하기 쉬우면 더 싼 모델로도 같은 결과" — 토큰 최적화 질문에 Matt의 실제 대답.</li>
+<li><strong>AFK GitHub Actions 설정</strong> — Sandcastle을 GitHub Actions에서 실행. PR에 <code>agent-review</code> 레이블 → 에이전트가 타입 체크·lint·코드 리뷰 수행 → 결과를 PR 댓글로 달아줌.</li>
+<li><strong>teach skill = stateful skill</strong> — mission.md·learning record·reference cheat sheet·HTML 레슨 파일을 워크스페이스에 저장. 브라우저에서 시각적으로 볼 수 있는 HTML 산출물 생성.</li>
+<li><strong>grill me skill = 4~5문장</strong> — "unreasonably effective"라는 표현 반복. plan mode 이전에 먼저 grill me → PRD 작성 → 이슈 분해 순이 Matt의 일반적 workflow.</li>
+<li><strong>큐 관리</strong> — Sandcastle GitHub 이슈를 큐로 사용. <code>explore</code> 레이블 → 에이전트가 탐색 후 <code>agent-implement</code> 레이블로 전환 → AFK 구현.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>하네스 우선주의</td>
+<td>모델보다 harness 개선이 더 효과적이고 통제 가능하다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>전술 vs 전략 프로그래밍</td>
+<td>AI가 전술을 대체 — 인간은 전략 역할이 더 중요해졌다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>스킬(skills) 철학</td>
+<td>procedure/ability 구분, 인간이 드라이버로 남아야 한다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>teach skill 라이브 데모</td>
+<td>stateful skill로 개인화 교육 경로 생성, HTML 산출물</td>
+</tr>
+<tr>
+<td>5</td>
+<td>AFK + Sandcastle</td>
+<td>GitHub Actions 기반 병렬 에이전트, 큐(queue) 모델</td>
+</tr>
+<tr>
+<td>6</td>
+<td>루프 vs 큐 논쟁</td>
+<td>루프는 과장됨, 실제 개발은 backlog queue가 맞다</td>
+</tr>
+<tr>
+<td>7</td>
+<td>DX vs AX</td>
+<td>코드베이스 품질이 AX에도 직결 — 기본기가 핵심</td>
+</tr>
+<tr>
+<td>8</td>
+<td>비즈니스 조언</td>
+<td>AI는 구현을 빠르게 하지만, 제품 비전은 여전히 인간의 것</td>
+</tr>
+<tr>
+<td>9</td>
+<td>마무리 조언</td>
+<td>모든 스킬 삭제 후 빈 상태에서 시작, 필요한 것만 procedure로 추가</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 하네스(harness) 우선주의</h2>
+<p>Matt의 핵심 주장: 개발자들이 모델(엔진)에만 집착하는 반면, harness — 즉 에이전트가 실행되는 환경, 프롬프트 설계, 코드베이스 품질, 스킬 구성 — 가 동등하게 중요하다.</p>
+<p>Formula One 비유: 엔진만 보지 말고 섀시, 공기역학, 전체 시스템을 봐야 한다. 모델과 harness를 50:50으로 보는 것이 Matt의 입장.</p>
+<p>Bitter Lesson 반론도 스스로 제기: "harness 최적화보다 그냥 모델이 좋아지길 기다리는 게 낫지 않나?" — 그래도 harness 개선은 가치 있다는 결론.</p>
+<p>실용적 귀결: <strong>코드베이스가 좋을수록 더 싼 모델로도 같은 결과</strong>. 토큰 최적화 = 더 좋은 코드베이스.</p>
+<h2>2. 전술 vs 전략 프로그래밍</h2>
+<p>출처: John Ousterhout의 <em>Philosophy of Software Design</em>.</p>
+<ul>
+<li><strong>전술적 프로그래밍 (tactical programming)</strong>: 코드 작성, 문법 해결, 버그 수정, 커밋 생성 — 일상적 구현 작업.</li>
+<li><strong>전략적 프로그래밍 (strategic programming)</strong>: 코드베이스 설계, 속도 향상 전략, 모듈 인터페이스 설계, 문서화, 장기 로드맵.</li>
+</ul>
+<p>AI가 전술을 대체했다. 따라서 전략적 역량이 있는 사람이 "무한한 전술 프로그래머 군단"을 효과적으로 지휘할 수 있다.</p>
+<p>"AI는 시니어 개발자를 10배 더 낫게 만들고, 주니어에게는 작은 부스트만 준다" — 본인 스킬이 AI 활용의 천장(ceiling).</p>
+<p>좋은 위임을 위한 조건(AI도 동일):
+- 어려운 부분을 미리 설계
+- 작업을 잘 범위 지정(scoped)
+- 모듈 간 인터페이스 정의
+- 테스트 설계
+- AI가 올바른 위치를 찾아갈 수 있는 최소한의 문서</p>
+<h2>3. 스킬(skills) 철학과 설계</h2>
+<h3>Procedure skill vs Ability skill</h3>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>Procedure skill</th>
+<th>Ability skill</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>호출 주체</td>
+<td>인간이 직접</td>
+<td>모델이 자율 호출</td>
+</tr>
+<tr>
+<td>context 누수</td>
+<td>없음 (invocation 비활성화 가능)</td>
+<td>description이 context window에 주입됨</td>
+</tr>
+<tr>
+<td>예시</td>
+<td>grill me, teach, PRD 작성</td>
+<td>코딩 스타일 가이드, React 기준</td>
+</tr>
+<tr>
+<td>Matt 선호</td>
+<td><strong>procedure 우선</strong></td>
+<td>최소화</td>
+</tr>
+</tbody>
+</table>
+<p>Matt의 철학: "나는 드라이버 자리를 내주지 않는다. 모든 스킬은 내가 호출하는 procedure로 만든다."</p>
+<h3>grill me skill</h3>
+<p>4~5문장짜리 짧은 스킬. 에이전트를 adversarial interviewer로 변환. 구현 시작 전 plan mode 대신 사용.</p>
+<p>워크플로: grill me → 공유 이해 도달 → PRD 작성 (2PRD 스킬) → 이슈 분해 → 각 이슈 AFK 구현.</p>
+<h3>skills 저장소</h3>
+<p><code>npx skills latest add mattpocock/skills</code> — Claude Code·Codex 등 어느 도구에서나 동작. 설치 후 빈 workspace에서 <code>/teach</code> 등으로 호출.</p>
+<p>팀 레벨 활용: 절차(procedure)를 스킬로 인코딩 → 팀 전체 배포 → 팀 전체가 같은 방식으로 계획·구현 → 팀 최저선(floor) 상향.</p>
+<h2>4. teach skill 라이브 데모</h2>
+<p>핵심 교육 이론 두 가지를 인코딩:
+1. <strong>Zone of Proximal Development</strong> (근접 발달 영역) — 현재 수준 바로 위의 다음 학습 단계 추천
+2. <strong>Knowledge / Skills / Wisdom 삼분법</strong> — 각 단계별 학습 전략 차별화</p>
+<p><strong>Stateful skill</strong>: workspace에 다음을 저장.
+- <code>mission.md</code> — 학습 목표, 현재 수준, 원하는 결과
+- <code>learning-record.md</code> — 이미 학습한 내용 기록
+- <code>reference-cheatsheet.html</code> — 참고용 치트시트
+- <code>lesson-N.html</code> — 각 레슨 (브라우저에서 열기 가능, 퀴즈·연습문제 포함)</p>
+<p>데모에서 Matt가 "vibe coder" 페르소나로 요청 → 에이전트가 미션 3문항 확인 → Git 부터 시작 → 브라우저 열 수 있는 HTML 레슨 생성 → 퀴즈로 기억 강화.</p>
+<p>Matt 본인은 이 스킬로 루빅스 큐브 독학 완료.</p>
+<h2>5. AFK + Sandcastle + GitHub Actions</h2>
+<p><strong>AFK(Away From Keyboard)</strong>: 에이전트에게 범위 지정 작업을 맡기고 자리를 비움. "나를 복수화하는 순간" — 동시에 여러 에이전트가 병렬로 작업.</p>
+<p><strong>Sandcastle</strong>: Matt이 만든 오픈소스 도구. Docker/Podman 플러그인 지원.
+- 에이전트가 홈 디렉토리 삭제·환경 변수 유출 등 위험 행동 차단
+- Vercel sandbox 등 원격 환경에서도 실행 가능</p>
+<p><strong>GitHub Actions 연동</strong>:
+1. GitHub 이슈에 <code>explore</code> 레이블 추가 → 에이전트가 탐색·분석
+2. 에이전트가 <code>agent-implement</code> 레이블로 변경
+3. AFK 에이전트가 구현 → PR 생성
+4. PR에 <code>agent-review</code> 레이블 → 리뷰 에이전트가 타입 체크·lint 수행 후 댓글</p>
+<p>인간의 역할: 이슈 트리아지, 레이블 추가, PR 최종 승인.</p>
+<h2>6. 루프(loop) vs 큐(queue) 논쟁</h2>
+<p><strong>Ralph loop</strong>: 2025년 7월 G. Huntley의 원조 아이디어. Claude Code를 while loop로 반복 호출.</p>
+<p>Matt의 반론: "루프는 필요 없다. 내가 필요한 건 AFK 에이전트가 특정 작업을 완수하는 것뿐."</p>
+<p><strong>큐(queue) 모델</strong>이 실제 개발 팀과 더 일치:
+- Backlog = 처리할 작업 목록
+- 여러 노드(개발자·에이전트)가 큐에서 작업을 가져옴
+- 완료 조건이 명확 (PR 머지)
+- 무한 실행·무한 비용 없음</p>
+<p>왕과 신하 비유(David의 비유): 왕(인간)이 큐에서 우선순위를 정하고, 신하(에이전트)에게 범위 지정 임무를 부여. 신하를 내보내고 소식이 없으면 위험.</p>
+<p>인간 체크포인트 위치: "human-in-the-loop 체크포인트를 최대한 오른쪽으로(마지막 단계 가까이) 밀어야 한다. 하지만 시스템 자체를 관찰·개선하기 위해 일부 체크포인트는 반드시 유지."</p>
+<h2>7. DX vs AX와 코드베이스 기본기</h2>
+<p><strong>DX (Developer Experience)</strong>: 인간 개발자가 코드베이스에서 작업하는 경험.</p>
+<p><strong>AX (Agent Experience)</strong>: 에이전트가 코드베이스에서 작업하는 경험.</p>
+<p>두 개의 큰 겹침: 좋은 DX는 대부분 좋은 AX이기도 하다. 단, 접근 방향이 다름 — 시니어는 DX 설계 경험, 주니어 AI 활용자는 AX 최적화 경험에서 출발.</p>
+<p>"코드베이스를 변경하기 쉽게 만드는 것이 토큰 비용을 줄이는 최선의 방법" — 아키텍처가 좋으면 더 저렴한 모델도 같은 결과.</p>
+<p>가드레일이 좋을수록 모델이 벽에 머리를 박는 시간을 줄이고, 더 효율적으로 탐색 가능.</p>
+<h2>8. 비즈니스와 제품 방향</h2>
+<p>Matt의 입장: "AI가 등장해도 비즈니스 근본은 바뀌지 않았다."
+- 고객과 대화하고 필요를 파악하는 것 → AI 대체 불가
+- 프로토타입 구현 속도 → AI로 대폭 향상</p>
+<p>"AI에게 어떤 기능을 추가할지 묻지 말고, 어떤 기능을 제거할지 물어라 — 어떻게 더 단순하게 만들지."</p>
+<p>SaaS 생사 논쟁에 대해: "나는 시장 예측에 관심 없다. 좋은 제품을 빠르게 만드는 것에 집중."</p>
+<h2>9. 마무리 — 초보자를 위한 두 가지 조언</h2>
+<p>Matt의 실용 조언:</p>
+<p><strong>1단계: 초기화(reset)</strong>
+- 모든 스킬, 플러그인, MCP 서버 삭제
+- CLAUDE.md, agents.md 삭제
+- 빈 상태에서 에이전트 관찰 — 기본 동작 파악</p>
+<p><strong>2단계: 절차(procedure)만 추가</strong>
+- 정말 그리운 것만 하나씩 다시 설치
+- ability 스킬이 아닌 procedure 스킬 위주로
+- mattpocock/skills 저장소가 시작점으로 좋음
+- 문제가 보이면 그 문제를 해결하는 스킬을 추가</p>
+<p><strong>AFK 워크플로 설정</strong>: "설정에 약간의 시간이 들지만, 되고 나면 생산성이 폭발적으로 증가한다."</p>
+<p>Matt 연락처: aihero.dev / aihero.dev/skills / Twitter @mattpocockuk</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] mattpocock/skills 저장소 clone, 핵심 스킬(teach, grill me) 로컬 설치</li>
+<li>[ ] 현재 사용 중인 스킬 목록 점검 — ability vs procedure 분류</li>
+<li>[ ] 불필요한 ability 스킬의 <code>disable_model_invocation: true</code> 설정 검토</li>
+<li>[ ] AFK 에이전트 환경 구성 (Sandcastle 또는 대안 sandbox 도구)</li>
+<li>[ ] GitHub Actions 기반 에이전트 리뷰 파이프라인 구축 시도</li>
+<li>[ ] 현재 프로젝트의 코드베이스 AX 관점에서 점검 — 에이전트가 탐색하기 쉬운가</li>
+<li>[ ] 새 기능 구현 전 grill me → PRD → 이슈 분해 흐름 한 번 실행</li>
+<li>[ ] 큐(queue) 방식으로 작업 목록 관리 전환 (loop 사고방식 탈피)</li>
+<li>[ ] "모델 전환 전 한 달 기다리기" 원칙 검토 — 현재 모델 최대 활용</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Matt Pocock의 에이전틱 엔지니어링 워크플로우를 그대로 따라 해보세요 · https://www.youtube.com/watch?v=IK6H-lcGYm8 · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>모두가 모델에 집착하는데, 나는 사람들이 하네스(harness)에 더 관심을 가져야 한다고 생각한다. 하네스에서 최대한 활용하기 위해 할 수 있는 것들, 즉 올바른 프롬프트 제공, 작업할 수 있는 올바른 스킬 제공, 모델이 실행되는 환경 개선. Fable과 관련해 말했듯이 모델은 유용하지만, 하네스도 그에 못지않은 작업량을 갖고 있으며 모델보다 하네스를 훨씬 더 많이 통제할 수 있다. 사람들은 잘못된 것에 집중하고 있다. 30, 40년 동안 잘 작동해온 것에 집중하라. 그리고 그건 정말 효과가 있다. 사람들이 항상 묻는다: 토큰을 어떻게 최적화하느냐고. 변경하기 쉬운 코드베이스를 만들어라.</p>
+<p>Matt, AI를 사용해 엄청나게 앞서 나가는 사람들과 작은 부스트만 얻는 다수의 사람들 사이의 주요 차이점은 무엇일까요?</p>
+<p>John Ousterhout의 <em>Philosophy of Software Design</em>이라는 책에서 전술적 프로그래밍(tactical programming)과 전략적 프로그래밍(strategic programming)의 차이를 이야기한다. 이 구분이 AI를 생각할 때 정말 유용하다. 전술적 프로그래밍은 지상에서의 일상적인 작업이다 — 실제 코드 작성, 문법과의 씨름, 버그 수정, 실제 코드와 커밋 생성. 전략적 프로그래밍은 전쟁에서 이기는 것이지 전투가 아니다. 장기적인 사고다. 코드베이스가 어떻게 생겨야 하는가? 속도를 높이기 위해 어떤 전략을 쓸 것인가?</p>
+<p>나에게 전략적 프로그래밍은 항상 가장 흥미롭고 흥미진진한 것이었다. 주니어 때도 그렇게 생각했다. 어떻게 하면 더 적은 것으로 더 많이 할 수 있을까? AI가 전술적 프로그래밍을 다 먹어버렸다. 사라졌다. AI는 전술적 프로그래밍을 더 저렴하게 할 수 있으니 당연히 더 잘한다. 그래서 이 무한한 전술 프로그래머 군단에서 최대한 활용하려면 전략적 프로그래밍을 잘 해야 한다.</p>
+<p>즉 에이전트 오케스트레이션과 소프트웨어 설계 기초 지식이 필요하다는 건데, 어떻게 나누어 생각할 수 있을까요?</p>
+<p>전략적 프로그래밍은 AI 시대에도 크게 바뀌지 않았다. 우리는 그저 주니어나 미드레벨 프로그래머에게 위임하는 대신 AI에게 위임하는 것이다. 좋은 위임을 위해 필요한 것들은 여전히 같다 — 어려운 부분을 미리 설계하고, 작업을 잘 범위 지정하고, 모듈 간 인터페이스를 생각하고, 테스트를 생각하고, 기본적으로 작업하기 좋고 AI가 변경사항을 효과적으로 만들 수 있는 코드베이스를 설계해야 한다.</p>
+<p>많은 사람들이 AI 진보가 빠르다는 것에 동의하면서도, 자신을 업스킬링하는 부분을 놓친다. 구독료를 내고 최신 도구를 살 수 있지만, 그건 누구나 할 수 있다. 결국 이 도구들로 크게 성장하는 사람이 있을 것이다. 어떻게 더 잘하도록 스스로를 가르칠까요?</p>
+<p>사람들이 항상 묻는다 — 나는 개발자 강좌를 팔기도 하니 이 말을 약간의 소금과 함께 들어달라 — 하지만 나는 내 스킬이 AI의 배수(multiplier)라고 생각한다. 코드베이스를 감독하고 어떻게 만들어야 할지 AI에게 알려줄 수 있다면, AI는 훨씬 더 풍부한 컨텍스트로 작업할 수 있다. AI는 시니어 개발자를 10배 더 낫게 만들고, 주니어에게는 그냥 작은 부스트만 준다. 당신의 스킬이 AI가 할 수 있는 것의 천장(ceiling)이다. 스킬이 낮으면 AI가 그 이상을 넘지 못한다. 그래서 AI를 잘 활용하는 것은 사실 자신의 도메인을 잘 아는 것이다.</p>
+<p>(광고: SERP API — 웹 스크래핑의 어려움 없이 구조화된 검색 결과를 JSON으로 제공하는 API. 캡챠·프록시·HTML 파싱 없음. AI 에이전트의 실시간 정보 수집 도구로 활용 가능. 250 무료 크레딧.)</p>
+<p>teach 스킬을 최근 배포했다고요. 나는 10년간 교사를 했다 — 대학 직후 노래와 음성을 가르쳤고, 그 후 개발자가 되어 지난 4년간 개발자를 가르치고 있다. 가르치기에 대해 많이 안다. 근접 발달 영역(zone of proximal development), 지식·스킬·지혜의 차이 등의 교육 원칙들을 스킬에 인코딩해서 기본적으로 모든 주제에 대해 즉석에서 강좌를 만들어내도록 했다. 나는 이것으로 실제로 루빅스 큐브를 독학했다 — 지금 기억으로 풀 수 있다.</p>
+<p>시연: "나는 vibe coder이고, 더 나은 소프트웨어를 출시하기 위해 지식 격차를 채우고 싶다. 기본 CLI 명령어 조금과 코드를 읽고 터미널을 사용하는 정도를 안다. 다음에 무엇을 배워야 할까요?" 에이전트가 workspace를 확인하고(teach skill은 workspace에서 실행 필요), 먼저 미션을 명확히 하기 위해 3개의 빠른 질문을 한다.</p>
+<p>나는 교육과 학습을 머릿속에 정보를 넣는 것이 아니라 세상에서 당신을 새로운 위치에 두는 것으로 생각한다. 이것은 다소 추상적이고 거의 영적이지만, 사실 이 스킬들을 배우는 것은 세상에서 무언가를 하기 위해서다. 그게 당신의 미션이다.</p>
+<p>mission.md를 만든다. 가르치는 노래 선생님 페르소나로 — 스케줄링 앱, 학생 노트, 연습 도구를 만들고 싶다. 인증이 있는 풀스택 앱이지만 현재 능력 밖이다.</p>
+<p>WhisperFlow(받아쓰기 도구) 언급 — "구술 입력 안 하는 사람은 너무 느린 거야. 빠른 개발자일수록 언어 유창성이 큰 이점이 된다."</p>
+<p>레슨 1 "Get Your Project's Undo Button" (Git): HTML로 생성됨, 브라우저에서 열기 가능. 퀴즈 포함: git commit, git status, git add의 역할, commit은 저장 지점. 퀴즈는 불편하지만 기억 저장 강도를 높이는 데 매우 효과적.</p>
+<p>지식은 그래프 같은 것 — 큰 숲을 탐험하는 것. teach skill이 그 그래프를 통한 선형 경로를 만들어 준다. learning record, zone of proximal development, 현재 수준 추정치를 저장한다.</p>
+<p>skills GitHub: Matt Pocock skills. <code>npx skills latest add mattpocock/skills</code>로 설치. Claude Code든 Codex든 작동.</p>
+<p>좋은 에이전트 스킬과 나쁜 것의 차이는? "깊은 질문이다." 두 종류: procedure skill(직접 호출), ability skill(모델이 자율 호출).</p>
+<p>ability 예시: React 코딩 기준 스킬 — 에이전트가 React 코드를 쓸 때 자동으로 가져와서 useEffect 대신 무엇을 써야 하는지 확인.</p>
+<p>procedure 예시: grill me 스킬 — 4~5문장, adversarial interviewer로 변환, unreasonably effective. plan mode 대신 사용. grill me → PRD → 이슈 분해.</p>
+<p>나는 절차형(procedure)을 선호한다. 내가 운전석에 있고 싶다. "grill me 하자, 그 다음 PRD 쓰자"식으로 내가 결정한다. Superpowers(오페라의 가장 인기 있는 skills repo)는 반대 접근 — 모델이 더 많이 제어. 각자의 철학.</p>
+<p>능력 목록이 있다면 description이 context window에 누수된다 — 100개 스킬이면 100개 description 누수. <code>disable_model_invocation: true</code>로 비활성화 가능.</p>
+<p>나는 대부분의 description을 AI에서 숨기고 그 지식을 인간 안에 두는 것을 선호한다. 스킬을 재사용 가능한 덩어리로 절차화하는 것은 흥미로운 시대다. 코드베이스에서 함수를 중복 제거하는 것처럼, 우리 자신의 절차도 스킬로 만들어 팀에 배포할 수 있다. 팀 전체의 최저선을 높이는 것.</p>
+<p>현재 에이전틱 엔지니어링 셋업: Claude Code로 계획과 일부 구현(로컬). Opus 4.8 medium effort. 대부분의 작업을 AFK로 한다. Sandcastle 도구로 Docker/Podman 샌드박스 안에서 에이전트 실행. 병렬화 또는 Vercel 샌드박스에서 원격 실행 후 커밋을 로컬 workspace로 가져오기.</p>
+<p>GitHub Actions 연동: PR에 agent-review 액션 → 에이전트가 타입 체크, lint, 코드 리뷰 → 댓글로 결과 달아줌.</p>
+<p>모델은 어떻게 선택하나? 그냥 Claude Code Opus 4.8 medium. 모델을 크게 바꾸지 않는다. "모두가 모델에 집착한다. 모두가 F1 엔진에 집착한다. 하지만 섀시와 공기역학도 있다. 모두가 모델에 집착하고 harness에는 더 관심을 가져야 한다고 생각한다."</p>
+<p>왜 두 개 다 할 수 없냐는 David의 반론: "물론 더 좋은 엔진을 꽂으면 전부 즉시 좋아지지. 하지만 50:50으로 봐야 한다. 모델이 90%고 harness 최적화가 10%가 아니라."</p>
+<p>Bitter Lesson: "내가 harness를 최적화하는 대신 그냥 모델이 더 좋아지길 기다려야 할 것 같다는 아이디어에 빠지고 있는 건지 모르겠다. 그래도 harness 개선에는 얻을 것이 많다고 생각한다."</p>
+<p>모델 선택 vs harness 최적화 — 나는 중간 어딘가다. 매일 설정을 개선하려 한다. VPS 써야 하나? TailScale 써야 하나? 모델 제외 모든 걸 개선하면서도 최고 모델 사용.</p>
+<p>다음 세대 모델(Opus 6, Fable 6 등)이 더 적은 조종을 필요로 할까? "나는 전문가가 아니다. 내가 가진 것으로 최선을 다하는 중. 예측하고 싶지 않다. workspace와 harness를 최대한 에이전트 불가지론적으로 유지하고, 오래된 소프트웨어 기초에 집중하면 미래에도 통할 것이다."</p>
+<p>"사람들이 잘못된 것에 집중한다. 30, 40년 동안 통해온 것에 집중해라. 코드베이스를 변경하기 쉽게 만들어라. 그러면 더 저렴한 모델을 쓸 수 있다. 아키텍처가 좋으면 더 멍청한 모델로도 같은 작업을 할 수 있다. 가드레일이 좋으면 모델이 벽에 머리를 박는 시간이 줄어든다."</p>
+<p>Fable 보안 이슈 예시 — Cursor + Fable가 Twitter API 콘솔에서 버튼이 안 눌리는 문제를 built-in 브라우저로 직접 해결(보안 비권장 방식). Matt의 반응: "AI의 결과물이 올바른지 판단하는 건 여전히 당신(David)이 필요하다. 더 많이 위임할 수 있지만 완전히 빠지는 게 아니다."</p>
+<p>더 나은 모델이 더 많은 버그를 발견한다는 주장에 대해: "그 버그들은 더 싼 모델도 harness만 제대로 있으면 찾을 수 있다. 매일 다른 부분을 검사하는 cron job을 돌려라. harness가 잘 되어 있으면 더 싼 모델도 같은 결과를 낸다. 우리가 harness에서 뒤처진 채 모델에게 떠밀고 있는 것이다."</p>
+<p>Fable가 발견한 보안 이슈에서 얻어야 할 교훈: "좋아, Fable가 좋다는 걸 배웠다. 하지만 더 중요한 건 보안 이슈가 있다는 걸 발견한 것이다. 앞으로 더 많은 이슈를 확인하는 무언가가 있어야 한다. 자전거를 자꾸 도난당한다면 잠금장치를 사라. 왜 이 지경이 됐는지 이유를 파악해라."</p>
+<p>소프트웨어 엔지니어로서 자기 개선 시스템 구축: 테스트 스위트, 코드 리뷰, 리팩터링 — 오래된 방식이지만 여전히 중요. 모델이 그냥 버그를 고쳐주길 기다리는 대신, 왜 버그가 생겼는지 근본 원인을 찾아라.</p>
+<p>루프 논쟁: 루프는 기본적으로 그냥 AFK 에이전트 이야기다. G. Huntley(2025년 7월 14일 원조)의 Ralph loop. 나는 루프보다 큐로 생각한다. Sandcastle 이슈들이 backlog. explore → agent-implement → GitHub Actions에서 AFK 구현. 큐는 작업이 완료되면 소진된다. 팀에서도 마찬가지 — 여러 노드가 큐에서 가져간다.</p>
+<p>왕과 신하 비유(David): 신하를 보내고 소식이 없으면 문제. 큐(Q) 접근법이 맞다. 우선순위 정하기, 리소스 배분, 여전히 왕이 통솔.</p>
+<p>자동화 추가 예시: Sentry에서 버그 리포트 → 이슈 자동 생성 → explore 레이블 → 에이전트가 탐색 → 즉시 고칠 수 있나 구조화된 데이터로 반환 → 구현 → "자동 머지 가능?" 태그 또는 사용자에게 알림.</p>
+<p>인간 체크포인트: "가능한 한 오른쪽으로(최종 출력 가까이) 밀어야 한다. 하지만 코드를 리뷰하는 게 보안·안전만을 위한 게 아니다 — 시스템 플러밍을 관찰하고 harness를 개선하기 위해 일부 PR은 직접 봐야 한다."</p>
+<p>AI가 자동으로 처리하는 PR: "그 PR들을 일일 요약 HTML 파일로 받는 것이 낫다. GitHub 인터페이스보다 훨씬 최적화된 방식으로."</p>
+<p>AI가 프론트엔드 변경 시 동영상 녹화 + TTS로 음성 설명을 오버레이 → PR에 영상 첨부. 이런 식으로 리뷰를 빠르게 만들어야 한다. 아직 표면만 긁은 것이다.</p>
+<p>비즈니스 구축에 대해: 크게 바뀐 건 없다. 고객과 대화하고, 필요를 파악하고, 프로토타입을 만들어라. AI가 구현을 빠르게 해주지만 좋은 아이디어를 뽑아내진 않는다. "AI에게 어떤 기능을 추가할지 묻지 말고 어떤 것을 제거할지 물어라."</p>
+<p>AI에게 강한 시니어 vs AI 열성 주니어 채용 비교: "좋은 주니어를 찾는 게 항상 목표였다. 열정이 경험을 이긴다." AI + 소프트웨어 기초 조금 = 강력. DX 설계 능력(시니어)과 AX 최적화 경험(주니어 AI 활용자)은 다른 방향에서 출발하지만 큰 겹침이 있다.</p>
+<p>결론: "실험적 마인드셋을 갖고 harness에 집중하면 주니어든 시니어든 잘 된다. 더 이상 코드 원숭이는 없다. 전략적으로 생각해야 한다. 시니어도 물론 최대한 활용 가능하고, 주니어도 배울 수 있다."</p>
+<p>마지막 실용 조언: 모든 스킬·플러그인·MCP·CLAUDE.md·agents.md 삭제. 빈 상태에서 에이전트 관찰. 그 후 정말 그리운 것만 procedure 스킬로 다시 추가. 문제가 생기면 그 문제를 해결하는 스킬 추가. AFK 도전 — 약간의 설정이 필요하지만 효과는 엄청나다.</p>
+</details>
+</body></html>

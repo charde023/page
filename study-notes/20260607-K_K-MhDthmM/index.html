@@ -1,0 +1,409 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>이 오픈소스 저장소가 Claude Code의 가장 큰 문제를 해결했습니다</title>
+<meta name="description" content="Graphify가 코드베이스를 지식 그래프로 변환해 Claude Code의 토큰 비용을 대폭 줄이는 방법 — 3-패스 분석·커밋 훅·Obsidian 연동까지"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>이 오픈소스 저장소가 Claude Code의 가장 큰 문제를 해결했습니다</h1>
+<div class="meta">원작자 Chase (ChaseAI) · ChaseAI / Skool · 업로드 2026-06-07 · 13.4분 · <a href="https://www.youtube.com/watch?v=K_K-MhDthmM" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>이 오픈소스 저장소가 Claude Code의 가장 큰 문제를 해결했습니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Graphify는 코드베이스를 지식 그래프로 변환해 Claude Code가 파일을 매번 grep하지 않고도 더 정확하게, 더 적은 토큰으로 답변할 수 있게 한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Chase · ChaseAI / Skool · 추정 출처 https://chaseai.io · 업로드 2026-06-07 · 13분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Graphify 지식 그래프</td>
+<td>Claude Code에 코드베이스 "지도"를 제공</td>
+<td>grep 대신 노드-엣지 구조로 연결 추론</td>
+</tr>
+<tr>
+<td>3-패스 분석 구조</td>
+<td>각 패스가 다른 소스를 담당 — 비용·정확도 분리</td>
+<td>1패스 무비용(AST) → 2패스 전사(faster-whisper) → 3패스 LLM</td>
+</tr>
+<tr>
+<td>토큰 절감 효과</td>
+<td>대규모 코드베이스 질문 비용 ~60% 절감</td>
+<td>Graphify 80k토큰 vs 비(非)Graphify 200k토큰 실측</td>
+</tr>
+<tr>
+<td><code>/graphify</code> 슬래시 커맨드</td>
+<td>설치 후 Claude Code가 알아서 언제 쓸지 판단</td>
+<td>skill 파일이 사용 시점을 자동 지시</td>
+</tr>
+<tr>
+<td><code>graphify hook install</code></td>
+<td>커밋마다 그래프 자동 갱신 (AST만, API비용 0)</td>
+<td>팀 개발·브랜치 병렬 작업에서도 그래프 최신 유지</td>
+</tr>
+<tr>
+<td>Graphify vs GraphRAG</td>
+<td>코드베이스 = Graphify, 비정형 문서 = GraphRAG</td>
+<td>임베딩 없음 + 코드 특화 = Graphify의 차별점</td>
+</tr>
+<tr>
+<td>Obsidian 연동 (<code>--obsidian</code> 플래그)</td>
+<td>코드가 없는 md 저장소도 볼트로 변환</td>
+<td>한 커맨드로 Obsidian Vault 자동 생성</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Graphify</strong> — 오픈소스 코드베이스 지식 그래프 생성 도구. 약 60,000 GitHub 스타. <code>safishamsi/graphify</code></li>
+<li><strong>Tree-sitter</strong> — AST(Abstract Syntax Tree) 파서. 언어별 코드 파일에서 클래스·함수·임포트·콜 그래프·인라인 주석을 추출. LLM 없이 로컬 실행.</li>
+<li><strong>faster-whisper</strong> — OpenAI Whisper 경량화 버전. Graphify 2패스에서 영상/오디오 파일 전사에 사용.</li>
+<li><strong>Graph RAG vs Graphify</strong> — GraphRAG(Microsoft), LightRAG, RagAnything 등은 임베딩 기반 비정형 문서용. Graphify는 임베딩 없이 코드 구조 특화.</li>
+<li><strong>"God nodes"</strong> — 그래프 내에서 가장 많은 엣지를 가진 핵심 노드. Graphify 결과 요약에 자동 리스트업.</li>
+<li><strong>Community (그래프 용어)</strong> — 성격이 유사한 노드들의 대규모 클러스터링. Graphify는 커뮤니티 수로 코드베이스 구조 파악.</li>
+<li><strong>Open Design</strong> — 데모에 사용된 오픈소스 프로젝트. "Claude Design"의 오픈소스 버전이라고 화자가 설명.</li>
+<li><strong>Chase AI+</strong> — Chase가 운영하는 Claude Code Masterclass 유료 멤버십 (Skool 기반).</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>"70배 토큰 절감"은 과장이라고 직접 언급 — 실측 결과는 <strong>Graphify 80k 토큰 vs 비Graphify 200k 토큰 (약 2.5배, 60% 절감)</strong>.</li>
+<li>Graphify가 처음 코드베이스 크롤을 마치면, <strong>이후 동일 세션 내 추가 질문은 비Graphify도 비용이 비슷</strong>해짐 — 최초 1회 크롤 비용이 핵심.</li>
+<li>Graphify의 진짜 가치는 <strong>시각화 그래프가 아니라</strong> 지식 그래프를 Claude Code에 핸드오프한다는 점 — "cool looking이지만 핵심은 map을 줬다는 것".</li>
+<li><code>/graphify .</code> 한 번 실행 후 <strong>Open Design 203파일, 1,907 노드, 3,447 엣지, 109 커뮤니티, ~120k 출력 토큰, 소요 6분</strong>.</li>
+<li><code>graphify hook install</code> 실행 시 커밋마다 <strong>AST 패스만</strong> 자동 재실행 — API 비용 0원 ("deterministic").</li>
+<li><code>graphify claude install</code>로 <strong>항상 Graphify 사용 훅</strong> 설정 가능 — 이후 <code>/graphify query</code> 등 명시 없이도 자동 참조.</li>
+<li>Obsidian 연동(<code>--obsidian</code> 플래그)은 이 영상에서 <strong>다음 영상 예고</strong>로만 언급, 세부 설명은 별도 영상 예정.</li>
+<li>Graphify 설치 가장 쉬운 방법: GitHub 링크를 복사해 Claude Code에 "Graphify 설치해줘"라고 붙여넣기.</li>
+<li>팀 환경(두 개발자 동시 작업)에서도 지식 그래프 충돌 없이 동작한다고 언급.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Graphify란</td>
+<td>코드베이스를 지식 그래프로 변환 — AI 코딩 어시스턴트에 "지도" 제공</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3-패스 동작 원리</td>
+<td>AST(무비용) → 오디오/영상 전사 → 문서 LLM 의미 분석</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Graphify vs GraphRAG</td>
+<td>코드 특화 + 임베딩 없음 vs 비정형 문서 + 임베딩 기반</td>
+</tr>
+<tr>
+<td>4</td>
+<td>설치·슬래시 커맨드</td>
+<td>GitHub 링크 → Claude Code에 맡기거나 수동 설치, skill이 자동 관리</td>
+</tr>
+<tr>
+<td>5</td>
+<td>실측 데모 (Open Design)</td>
+<td>6분 실행, 80k vs 200k 토큰 비교</td>
+</tr>
+<tr>
+<td>6</td>
+<td>지속 갱신·팀 환경</td>
+<td>hook install로 커밋마다 AST 재빌드 (비용 0)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Obsidian 연동·마무리</td>
+<td>--obsidian 플래그로 md 저장소도 볼트화 (다음 영상 예정)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. Graphify란 무엇이고 왜 써야 하나</h2>
+<p>Claude Code(또는 다른 AI 코딩 어시스턴트)는 기본적으로 코드베이스를 "grep" 방식으로 탐색한다 — 마치 Ctrl+F로 파일을 뒤지는 것과 같다. Graphify는 이 방식 대신 <strong>전체 저장소를 지식 그래프(knowledge graph)로 매핑</strong>해 Claude Code에게 사전에 완성된 "지도"를 넘겨준다.</p>
+<p>지식 그래프는 노드(개별 코드 요소), 엣지(연결), 커뮤니티(유사 노드 클러스터)로 구성된다. Claude Code는 이 그래프를 활용해 A→B→C 연결 경로와 그 이유를 이미 알고 있으므로, 질문에 더 빠르고 정확하게 답변한다.</p>
+<p>GitHub 스타 약 60,000개. 오픈소스이고 완전 무료.</p>
+<hr>
+<h2>2. 3-패스 동작 원리</h2>
+<p><strong>1패스 — 코드 구조 분석 (비용 없음)</strong>
+- Tree-sitter가 코드 파일을 파싱해 클래스·함수·임포트·콜 그래프·인라인 주석 추출
+- LLM 관여 없음 — 완전 결정론적(deterministic), 로컬 실행
+- 시각화 그래프의 대부분이 이 패스의 결과</p>
+<p><strong>2패스 — 오디오/영상 전사</strong>
+- 저장소 내 오디오·영상 파일이 있을 경우만 실행
+- faster-whisper로 전사 후 텍스트를 지식 그래프에 주입</p>
+<p><strong>3패스 — 문서·이미지 의미 분석 (LLM 개입)</strong>
+- PDF·마크다운·이미지 등 코드 외 파일 처리
+- LLM이 "이 문서의 의미가 뭔지, 그래프의 어디에 위치해야 하는지"를 판단
+- RAG의 임베딩 없이 의미 연결 — "RAG Lite"에 가까운 동작</p>
+<hr>
+<h2>3. Graphify vs GraphRAG — 언제 무엇을 쓰나</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Graphify</th>
+<th>GraphRAG (LightRAG·RagAnything·MS GraphRAG)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>최적 대상</td>
+<td>코드베이스 탐색·이해</td>
+<td>수만 건 비정형 문서 (정책·PDF 등)</td>
+</tr>
+<tr>
+<td>임베딩 사용</td>
+<td>없음</td>
+<td>있음</td>
+</tr>
+<tr>
+<td>코드 구조 인식</td>
+<td>특화 (AST)</td>
+<td>없음</td>
+</tr>
+<tr>
+<td>운영 비용</td>
+<td>무료 (1패스) + LLM (3패스)</td>
+<td>임베딩 + LLM 비용</td>
+</tr>
+<tr>
+<td>경계</td>
+<td>마크다운/문서 저장소도 가능 (3패스)</td>
+<td>코드 구조 이해 불가</td>
+</tr>
+</tbody>
+</table>
+<p>Graphify는 "코드베이스 이해"와 "진짜 RAG" 사이 중간 지점에 위치한다.</p>
+<hr>
+<h2>4. 설치 및 슬래시 커맨드</h2>
+<p><strong>설치 (가장 쉬운 방법)</strong></p>
+<pre><code>GitHub 링크를 복사 → Claude Code 채팅에 붙여넣고 &quot;Graphify 설치해줘&quot; 입력
+</code></pre>
+<p>또는 GitHub README의 수동 설치 단계 따라 진행. 플랫폼 무관, 모든 AI 코딩 어시스턴트와 호환.</p>
+<p><strong>설치 후 — skill 파일이 모든 커맨드 관리</strong>
+Claude Code는 어느 커맨드를 언제 쓸지 자동 판단. 암기 불필요.</p>
+<p><strong>주요 커맨드</strong></p>
+<table>
+<thead>
+<tr>
+<th>커맨드</th>
+<th>동작</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/graphify .</code></td>
+<td>현재 디렉터리 전체를 그래프화</td>
+</tr>
+<tr>
+<td><code>/graphify query &lt;질문&gt;</code></td>
+<td>지식 그래프를 명시적으로 참조해 답변</td>
+</tr>
+<tr>
+<td><code>/graphify explain &lt;주제&gt;</code></td>
+<td>지식 그래프 기반 설명</td>
+</tr>
+<tr>
+<td><code>graphify claude install</code></td>
+<td>이후 모든 질문에 자동으로 Graphify 사용 (훅 등록)</td>
+</tr>
+<tr>
+<td><code>graphify hook install</code></td>
+<td>커밋마다 AST 패스 자동 재빌드 (비용 0)</td>
+</tr>
+<tr>
+<td><code>/graphify --obsidian</code></td>
+<td>md 저장소를 Obsidian Vault로 변환</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>5. 실측 데모 — Open Design 코드베이스</h2>
+<p><strong>환경</strong>: Open Design 저장소 (Claude Design의 오픈소스 버전), Claude Code 내에서 실행</p>
+<p><strong>Graphify 실행 결과</strong>:
+- 소요 시간: 6분
+- 처리 파일: 203개
+- 노드: 1,907개, 엣지: 3,447개, 커뮤니티: 109개
+- 출력 토큰: ~120k</p>
+<p><strong>질문 비교 실험</strong> — "web app에서 coding agent까지 design request가 흐르는 경로를 추적해줘"</p>
+<table>
+<thead>
+<tr>
+<th>방식</th>
+<th>토큰 사용량</th>
+<th>방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Graphify 사용</td>
+<td><strong>~80k 토큰</strong></td>
+<td>skill 로드 → graphify query 실행</td>
+</tr>
+<tr>
+<td>Graphify 미사용</td>
+<td><strong>~200k 토큰</strong></td>
+<td>explorer 에이전트 2개 생성, 100k 즉시 소비 + 메인 세션 50k</td>
+</tr>
+</tbody>
+</table>
+<p>결과: <strong>약 60% 토큰 절감</strong> (약 2.5배 차이). 70배는 과장, 실측은 이 수준.</p>
+<hr>
+<h2>6. 지속 갱신 및 팀 환경 지원</h2>
+<ul>
+<li><code>graphify hook install</code> → 커밋마다 1패스(AST) 자동 재실행</li>
+<li>1패스는 LLM 미사용, API 비용 0 — 완전 결정론적</li>
+<li>변경된 파일만 재분석, 새 연결만 업데이트</li>
+<li>두 개발자가 동일 저장소를 병렬 작업해도 충돌 없이 처리</li>
+</ul>
+<p>결과: "한 번 만들면 항상 최신 상태인 영구 지식 그래프" 유지.</p>
+<hr>
+<h2>7. Obsidian 연동 (예고)</h2>
+<ul>
+<li><code>--obsidian</code> 플래그 한 번으로 Obsidian Vault 자동 생성 가능</li>
+<li>코드가 없는 마크다운 저장소(문서·노트 모음)에도 적용 가능</li>
+<li>세부 데모는 별도 영상 예정 — 이 영상에서는 가능성만 언급</li>
+</ul>
+<p>Graphify의 포지션: Obsidian(마크다운 노트) ↔ 진짜 RAG 인프라 사이의 중간 지점.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Graphify GitHub(<code>safishamsi/graphify</code>) 클론 후 Claude Code에 설치 테스트</li>
+<li>[ ] 현재 주요 작업 저장소에 <code>/graphify .</code> 실행 — 노드·엣지·커뮤니티 수 확인</li>
+<li>[ ] <code>graphify hook install</code>로 커밋 훅 등록 (비용 0 자동 갱신)</li>
+<li>[ ] 동일 질문을 Graphify 있을 때/없을 때 비교해 실제 토큰 차이 측정</li>
+<li>[ ] md 문서 저장소 하나에 <code>--obsidian</code> 플래그 실험 (다음 영상 나오면)</li>
+<li>[ ] GraphRAG vs Graphify 선택 기준 내재화 — 코드베이스면 Graphify, 비정형 문서면 GraphRAG</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 이 오픈소스 저장소가 Claude Code의 가장 큰 문제를 해결했습니다 · https://www.youtube.com/watch?v=K_K-MhDthmM · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>Graphify가 방금 Claude Code(클로드 코드)의 메모리 문제를 해결했습니다.
+어떤 저장소든 가져와서 여기 보이는 것 같은 지식 그래프로 변환할 수 있습니다.
+이 과정에서 Claude Code가 훨씬 더 정확한 답변을 훨씬 적은 토큰 비용으로 제공할 수 있게 됩니다.
+전체 코드베이스를 순회하며 모든 연결을 매핑하고, 그 연결의 "이유"까지 파악하는 방식으로 동작합니다.
+그리고 가장 좋은 점은 오픈소스이며 완전 무료라는 것입니다.</p>
+<p>오늘은 이것을 직접 작동시키는 방법과 내부에서 실제로 어떤 일이 일어나는지를 보여드리겠습니다.</p>
+<p>Graphify는 몇 달 전에 출시됐는데 GitHub 스타가 거의 60,000개에 달합니다.
+이 도구는 AI 코딩 어시스턴트(반드시 Claude Code일 필요는 없지만 오늘은 Claude Code를 씁니다)가 전체 프로젝트 — 코드, 문서, PDF, 이미지, 영상까지 — 를 지식 그래프로 매핑해 파일을 grep하는 대신 그래프를 쿼리할 수 있게 해줍니다.</p>
+<p>Graphify를 원하는 저장소에 가리키면 이런 지식 그래프가 만들어집니다.
+이게 중요한 이유는 지식 그래프가 생성되면 A가 B에, B가 C에 어떻게 연결되는지, 그리고 그 연결이 왜 중요한지가 이미 정리되어 있기 때문에 Claude Code가 저장소 관련 질문에 훨씬 쉽게 답할 수 있기 때문입니다.
+기존의 파일 grep 방식 — Claude Code 같은 AI 코딩 어시스턴트가 보통 동작하는 방식 — 과 대비됩니다.
+단순한 비유지만, 마치 Ctrl+F로 검색하는 것 vs 모든 경로가 명확하게 지도로 그려진 것의 차이입니다.
+Graphify는 Claude Code에 지도를 주는 것이고, grep은 지도가 없는 것입니다.</p>
+<p>따라서 Graphify를 쓰면 더 정확한 답변을 더 적은 토큰으로 얻을 수 있습니다.
+그 절감 효과가 얼마나 클까요? 일부에서는 70배까지 주장하는데, 저는 그게 좀 높다고 생각하고 오늘 데모에서 보시겠지만 70배보다는 낮습니다. 그래도 여전히 상당한 절감입니다.</p>
+<p><strong>동작 방식 — 3패스</strong></p>
+<p>코드베이스에서 지식 그래프로 어떻게 만들어지는지, 그리고 이게 Graph RAG 지식 베이스와 어떻게 다른지 알아보겠습니다.</p>
+<p><strong>1패스 — 코드 구조 분석</strong>
+코드 구조를 분석합니다. 비용 없음. 화면에 보이는 모든 것은 이 1패스만으로 만들어집니다.
+결정론적이고 AI가 추측하는 방식이 아닙니다. 코드 자체를 보면서 "이 코드가 저 코드와 연결된다"는 것을 파악합니다. 이미 코드베이스에 명시된 연결들입니다.
+Tree-sitter가 코드 파일을 파싱해 클래스, 함수, 임포트, 콜 그래프, 인라인 주석을 추출합니다. LLM 없이 로컬에서 실행됩니다.</p>
+<p><strong>2패스 — 영상·오디오 전사</strong>
+저장소에 영상·오디오 파일이 있을 때만 실행됩니다. 있다면 faster-whisper로 전사한 후 텍스트를 지식 그래프에 주입합니다.</p>
+<p><strong>3패스 — 문서·논문·이미지</strong>
+코드가 아닌 파일 — PDF, 문서, 이미지 등 — 을 처리합니다.
+여기서 대형 언어 모델이 실제로 개입합니다. 의미 분석을 통해 "이 문서가 실제로 무슨 의미인지, 이 큰 지식 그래프의 어디에 위치해야 하는지"를 판단합니다.
+이 3패스는 진짜 임베딩 없이 RAG 시스템과 비슷한 역할을 합니다.</p>
+<p>이 모든 처리가 끝나면 실제 지식 그래프를 만들기 시작합니다.
+노드(동그라미들), 엣지(두 노드를 연결하는 선), 커뮤니티(성격이 유사한 노드들의 대규모 그룹)로 구성됩니다.
+화면에 보이는 것은 486개 커뮤니티입니다.</p>
+<p><strong>자주 묻는 질문</strong></p>
+<p>Q: 코드 구조가 없으면? 마크다운 파일만 가득한 저장소라면?
+A: 가능합니다. 사실 Graphify로 Obsidian Vault를 만들 수도 있습니다. 마지막에 잠깐 얘기할게요.</p>
+<p>Q: GraphRAG랑 매우 비슷해 보이는데, 차이가 뭐고 언제 어느 쪽을 써야 하나?
+A: 가장 큰 차이는 임베딩입니다. Graphify는 임베딩을 전혀 쓰지 않습니다.
+두 번째 차이는 사용 목적입니다. Graphify는 코드베이스에 가장 적합합니다.
+LightRAG, RagAnything, Microsoft GraphRAG 같은 GraphRAG 시스템은 비정형 데이터 — 수만 건의 PDF나 마크다운 파일처럼 서로 명확하게 연결되어 있지 않은 문서 모음 — 에 더 적합합니다.
+예를 들어 정책 문서들이 수십 개 있고 "X에 대한 정책이 뭔가요?"라고 물을 때, 답이 어느 문서에나 있을 수 있고 구조도 없는 경우 — 그게 GraphRAG나 RAG 시스템이 빛나는 상황입니다.
+다만 경계는 좀 흐릿합니다. 3패스에서 언급했듯이 Graphify로도 어느 정도 할 수 있어서 "RAG Lite" 시스템에 가깝기도 합니다.</p>
+<p><strong>설치 및 커맨드</strong></p>
+<p>설치는 상대적으로 간단합니다. 사전 요구사항과 설치 방법이 있습니다.
+Claude Code를 쓰고 있다면 이렇게 하세요: Graphify GitHub 링크를 복사해서 Claude Code에 붙여넣고 "Graphify 설치해줘"라고 말하면 됩니다.
+수동으로 하고 싶으면 단계별로 따라 하면 됩니다. Graphify는 플랫폼 무관이고 모든 코딩 에이전트와 호환됩니다.</p>
+<p>커맨드가 꽤 많아서 전부 외우실 필요 없습니다.
+설치하면 Graphify skill 파일이 함께 딸려 옵니다. 이 skill이 Claude Code에게 언제 어떤 커맨드를 써야 하는지 자연어 기반으로 가르쳐 줍니다.
+GitHub 저장소를 어느 정도 살펴보면서 뭐가 가능한지 파악해두면 좋지만 암기는 불필요합니다.</p>
+<p>중요한 커맨드 몇 가지:
+- <code>/graphify</code> (점 포함): 현재 디렉터리 전체 그래프화
+- <code>graphify query</code>, <code>graphify explain</code>: 지식 그래프를 명시적으로 참조해 답변
+- <code>graphify claude install</code>: 항상 Graphify를 쓰도록 훅 등록 — 명시하지 않아도 자동 사용
+- <code>--obsidian</code> 플래그: 한 커맨드로 Obsidian Vault 생성</p>
+<p><strong>데모 — Open Design 코드베이스</strong></p>
+<p>Open Design(Claude Design의 오픈소스 버전)을 대상으로 데모를 진행합니다.
+디렉터리 안에서 <code>/graphify .</code>을 실행합니다.</p>
+<p>6분 실행 후 결과:
+- 파일 203개 처리
+- 노드 1,907개, 엣지 3,447개, 커뮤니티 109개
+- 출력 토큰 약 120k</p>
+<p>결과 요약에는 "God nodes"(가장 많이 연결된 핵심 노드), 예상치 못한 연결(surprising connections), 제안 질문(suggested questions)이 나옵니다.</p>
+<p>그래프 시각화를 열면 커뮤니티(클러스터), 노드(점), 엣지(연결선)가 보입니다.
+노드를 클릭하면 타입(코드 노드 등), 커뮤니티, 출처, 이웃 노드 정보가 표시됩니다.
+하지만 이 시각화가 멋있어 보인다고 해서 핵심은 아닙니다. 진짜 가치는 Claude Code에 지도를 넘겨줬다는 것입니다.</p>
+<p><strong>토큰 비교 실험</strong></p>
+<p>동일 질문: "web app에서 coding agent까지 design request가 어떻게 흐르는지 추적해줘"</p>
+<ul>
+<li>Graphify 탭: skill 즉시 로드 → <code>graphify query</code> 실행 → 약 80k 토큰</li>
+<li>비Graphify 탭: 탐색 에이전트 2개 생성, 100k 토큰 즉시 소비 + 메인 세션 50k = 약 200k 토큰</li>
+</ul>
+<p>답변 품질은 동일했지만 토큰은 약 60% 절감(비Graphify의 40% 수준).</p>
+<p>참고: 비Graphify 방식은 이후 동일 세션에서 추가 질문 시 이미 크롤한 내용이 있어 비용이 줄어듭니다. 반면 Graphify는 한 번 만든 지식 그래프를 계속 재사용 — 추가 크롤 비용 없음.</p>
+<p><strong>지속 갱신 및 팀 환경</strong></p>
+<p>살아있는 저장소라면 업데이트 시 지식 그래프도 갱신됩니다.
+<code>graphify hook install</code> 실행 → 커밋마다 자동 재빌드. AST 패스만 재실행, API 비용 0원, 완전 결정론적.
+팀 환경(두 개발자 병렬 작업)에서도 정상 동작합니다.
+결과: 원하는 저장소의 영구적이면서도 항상 최신인 지식 지도 유지.</p>
+<p><strong>Obsidian 연동 및 마무리</strong></p>
+<p><code>--obsidian</code> 플래그를 쓰면 코드가 아닌 저장소에도 적용할 수 있습니다. 한 커맨드로 Obsidian Vault를 자동 생성합니다. 세부 내용은 다음 영상에서 다룰 예정입니다.</p>
+<p>Graphify는 메모리 인접 도구 스펙트럼에서 Obsidian과 진짜 RAG 시스템 사이 어딘가에 위치합니다. 마크다운만 쓰는 게 아니거나 대형 RAG 인프라가 과하다면 이 중간 지점이 딱 맞는 선택입니다.
+올바른 도구를 골라 쓸 수 있다는 게 핵심입니다.</p>
+</details>
+</body></html>

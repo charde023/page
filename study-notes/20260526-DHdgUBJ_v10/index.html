@@ -1,0 +1,337 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Anthropic 엔지니어 - 저희는 Claude Code를 이렇게 사용합니다</title>
+<meta name="description" content="Anthropic Applied AI 팀 아키텍트 Arno가 요구사항 인터뷰 프롬프팅 → HTML 명세 → 에이전트 친화적 검증 프레임워크까지 Claude Code 실전 워크플로우 3단계를 시연한 워크숍."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Anthropic 엔지니어 - 저희는 Claude Code를 이렇게 사용합니다</h1>
+<div class="meta">원작자 Arno · Anthropic (Applied AI Team, Architect) · 업로드 2026-05-26 · 31.7분 · <a href="https://www.youtube.com/watch?v=DHdgUBJ_v10" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Anthropic 엔지니어 - 저희는 Claude Code를 이렇게 사용합니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Claude Code를 잘 쓰려면 ① Claude가 요구사항을 직접 인터뷰하게 하고 ② Markdown 대신 HTML 명세로 합의하고 ③ DOM 데이터 계약 + Playwright MCP로 에이전트가 스스로 검증하게 만들어야 한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Arno · Anthropic Applied AI Team (Architect) · 추정 출처 CWC Workshops (Claude with Code Workshops) · 업로드 2026-05-26 · 31.7분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude가 사용자를 인터뷰하게 만드는 프롬프팅</td>
+<td>요구사항은 사람이 미리 다 언어화하기 어렵다</td>
+<td><code>ask_user_question</code> 도구를 프롬프트에 명시해 Claude가 턴 바이 턴으로 끌어내게 함</td>
+</tr>
+<tr>
+<td>HTML 명세 (Spec as HTML)</td>
+<td>200줄 넘는 Markdown은 아무도 안 읽는다</td>
+<td>HTML은 정보 밀도가 높고, 스크린샷 피드백·Playwright 연동이 쉬움</td>
+</tr>
+<tr>
+<td>DOM 데이터 계약 (data-* 속성)</td>
+<td>에이전트가 DOM을 스크레이핑하지 않아도 됨</td>
+<td>컴포넌트가 자기 상태를 <code>data-verify-unit</code> 등 속성으로 퍼블리시</td>
+</tr>
+<tr>
+<td>에이전트 친화적 검증 3계층</td>
+<td>사람 / 브라우저 에이전트 / Headless CI를 같은 계약으로 커버</td>
+<td>동일한 DOM 계약을 사람 대시보드·Claude Code·<code>bun verify</code> CI가 다 읽음</td>
+</tr>
+<tr>
+<td>Storybook fixture + 불변식(invariants)</td>
+<td>모든 컴포넌트의 알려진 상태를 사전 선언</td>
+<td>schema, fixture, invariant 3종을 컴포넌트마다 정의</td>
+</tr>
+<tr>
+<td>검증 영상 클립 기록</td>
+<td>프런트엔드 변경 증거를 S3/공유로 보관</td>
+<td>Playwright가 검증 스텝을 녹화 → 번들로 공유</td>
+</tr>
+<tr>
+<td><code>/effort</code>, <code>/fast</code>, auto mode</td>
+<td>Claude Code 기본 설정이 결과 품질을 바꿈</td>
+<td>권장: auto mode + effort <code>xhigh</code>, Fast Mode는 스펙 반복에 유용</td>
+</tr>
+<tr>
+<td>Bitter Lesson (Richard Sutton)</td>
+<td>인간이 제약을 걸수록 AI 잠재력이 줄어든다는 원칙</td>
+<td>모델이 더 잘 뽑아낼 수 있도록 제약을 줄이는 방향으로 워크플로우 설계</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Bitter Lesson (쓴 교훈)</strong> — Richard Sutton (강화학습의 아버지)이 주장: 사람이 규칙·제약을 하드코딩하는 것보다 데이터+컴퓨팅을 쏟아붓는 게 결국 이긴다. Claude Code 워크플로우에도 동일 원칙 적용.</li>
+<li><strong><code>ask_user_question</code> 도구</strong> — Claude Code에서 에이전트가 사용자에게 structured 질문을 던지는 내장 도구. 프롬프트에 명시해야 활성화됨.</li>
+<li><strong>DOM 데이터 계약</strong> — React 컴포넌트가 <code>data-verify-unit</code>, <code>data-total-done</code>, <code>data-active</code> 같은 HTML 속성으로 현재 상태를 DOM에 노출. 에이전트가 React 내부를 모르고도 상태 읽기 가능.</li>
+<li><strong>Playwright MCP</strong> — Playwright를 MCP 서버로 연결하면 Claude Code가 브라우저를 직접 제어하며 검증 실행 가능.</li>
+<li><strong>Storybook fixtures</strong> — 컴포넌트의 "알려진 상태" 목록. 검증할 때 고정된 입력으로 예측 가능한 출력을 테스트.</li>
+<li><strong>headless 검증</strong> — <code>bun verify</code> (또는 <code>npm run verify</code>) 로 브라우저 UI 없이 CLI에서 검증 매트릭스 실행 → CI 파이프라인에 삽입 가능.</li>
+<li><strong>CWC Workshops</strong> — "Claude with Code Workshops" 의 약자. Anthropic이 운영하는 실습 워크숍 시리즈.</li>
+<li><strong>Fast Mode</strong> — Claude Code의 응답 속도 최우선 모드(<code>/fast</code>). 비용이 더 들지만 스펙 반복 작업에 효과적.</li>
+<li><strong>auto mode</strong> — Claude가 상황에 맞는 모델을 자동 선택. 화자가 강하게 권장.</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>Arno는 Anthropic <strong>Applied AI Team의 아키텍트</strong>. 오늘 워크숍은 Tarek이 약 1.5주 전 샌프란시스코에서 발표한 내용을 기반으로 구성됨.</li>
+<li>Tarek이 퍼블리시한 블로그 포스트 제목: <strong>"The Unreasonable Effectiveness of HTML Files"</strong> — Markdown에서 HTML로 명세 형식을 전환하는 주장.</li>
+<li>HTML 명세 생성 시 <strong>Opus 4.7</strong> 사용 권장. 비전 모델이 이전 버전 대비 향상되어 스크린샷 피드백 해석 정확도가 높음.</li>
+<li>Markdown 파일이 <strong>200줄 초과</strong>되면 본인도 읽지 않고 동료도 읽지 않는다고 명시.</li>
+<li>effort 권장값: <strong><code>xhigh</code></strong> (max도 가능). <code>/effort xhigh</code> 로 설정.</li>
+<li>Fast Mode는 <strong>비용이 더 들지만</strong> 스펙을 빠르게 반복할 때 효과적. HTML 명세 작업에 특히 추천.</li>
+<li>"HTML 명세가 토큰 비효율적이지 않냐?"는 질문에 대한 답: <strong>장기적으로 반복을 줄여서 오히려 절감</strong>. 단발성 토큰은 더 쓰더라도 좋은 명세 하나면 재작업이 준다.</li>
+<li>검증 클립 녹화는 Claude Code 팀 내부 실무에서 <strong>이미 실제로 사용</strong> 중. 프런트엔드 변경마다 기록하며, 자동화 수준이 데모보다 더 높음.</li>
+<li>HTML 디자인 방향 4개를 Opus 4.7에게 생성시킨 예시 키워드: <strong>Brutalist, Tokyo, Fintech</strong> 스타일.</li>
+<li>컴포넌트에 불변식 검증을 심을 때, 일부러 <code>3 + 3 + 4 != 10</code> 이 되도록 <strong>실패 케이스를 하드코딩</strong>해두고 에이전트가 발견하는 흐름을 시연.</li>
+<li><code>bun verify</code>로 실행하면 테스트 매트릭스 자체는 통과하지만 (일부러 검증과 분리해둠), DOM 계약 기반 검증은 별도로 실패를 잡는다 — <strong>테스트 통과 ≠ 검증 통과</strong> 의 차이를 명시적으로 보여줌.</li>
+<li>Sonnet으로 이 워크플로우를 돌리는 건 <strong>비추천</strong>. Opus 4.7을 써야 한다고 두 번 강조.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>오프닝 &amp; 배경</td>
+<td>에이전트가 장시간 실행될수록 초기 명세가 중요해짐</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bitter Lesson 적용</td>
+<td>제약보다 Claude가 요구사항을 끌어내도록 맡겨라</td>
+</tr>
+<tr>
+<td>3</td>
+<td>요구사항 인터뷰 프롬프팅</td>
+<td><code>ask_user_question</code> 도구를 명시해 Claude가 인터뷰하게 함</td>
+</tr>
+<tr>
+<td>4</td>
+<td>HTML 명세 생성</td>
+<td>Markdown 대신 HTML로 디자인 방향 4개 생성 후 시각 비교</td>
+</tr>
+<tr>
+<td>5</td>
+<td>검증 프레임워크 개요</td>
+<td>사람 / 에이전트 / headless 3계층 검증 구조</td>
+</tr>
+<tr>
+<td>6</td>
+<td>DOM 데이터 계약</td>
+<td>컴포넌트 상태를 <code>data-*</code> 속성으로 퍼블리시, 에이전트가 직접 읽음</td>
+</tr>
+<tr>
+<td>7</td>
+<td>라이브 시연 — 실패 감지</td>
+<td>심어둔 불변식 위반을 에이전트가 자동으로 찾아 진단</td>
+</tr>
+<tr>
+<td>8</td>
+<td>클립 녹화 &amp; 공유</td>
+<td>검증 스텝을 영상으로 기록해 S3/동료 공유 → 증거 번들</td>
+</tr>
+<tr>
+<td>9</td>
+<td>마무리 권장 사항</td>
+<td>Opus 4.7 + Fast Mode + auto mode + effort xhigh</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 에이전트 시대의 워크플로우 변화 필요성</h2>
+<p>모델이 강해질수록 에이전트가 더 오래, 더 복잡한 작업을 수행할 수 있다. 그런데 에이전트가 장시간 실행될수록 초반에 잘못된 방향으로 가면 토큰 소모가 커진다. 따라서 <strong>프런트로딩(frontloading)</strong> — 명세와 검증을 초반에 풍부하게 만드는 것 — 이 핵심이 된다.</p>
+<p>Richard Sutton의 Bitter Lesson과 연결: 인간이 제약을 하드코딩하는 것보다 모델에게 맡기는 게 결국 낫다. 요구사항을 직접 전달하는 것보다 <strong>Claude가 인터뷰해서 끌어내도록 세팅</strong>하는 게 더 좋은 결과를 낸다.</p>
+<hr>
+<h2>2. Phase 1: 요구사항 인터뷰 프롬프팅</h2>
+<p><strong>나쁜 프롬프팅 예시:</strong> "더 좋게 만들어줘 (make it better)" — 아무 도메인도, 방향도 없음.</p>
+<p><strong>좋은 프롬프팅 조건:</strong>
+- 관심 영역(도메인)을 명시하되 결과를 과도하게 규정하지 않음
+- 청중(audience)을 구체화
+- 오픈엔드 질문 방식으로 유도</p>
+<p><strong>핵심 메커니즘:</strong> 프롬프트에 <code>ask_user_question</code> 도구를 명시 → Claude가 탭으로 넘기며 구조화된 질문을 던짐 → 사용자가 답변 → Claude가 명세 생성. "bill splitting app" 예시에서 시연.</p>
+<p>Claude Code 설정:
+- <code>/fast</code> — Fast Mode 활성화
+- auto mode — 모델 자동 선택 (강력 권장)
+- <code>/effort xhigh</code> — 노력 수준 설정</p>
+<hr>
+<h2>3. Phase 2: HTML 명세로 디자인 방향 합의</h2>
+<p>Markdown 파일의 한계: 200줄 넘으면 본인도, 동료도 읽지 않는다.</p>
+<p>HTML 명세의 장점:
+- <strong>정보 밀도가 높다</strong> — 같은 내용을 더 적은 공간에 시각적으로 담음
+- <strong>스크린샷 피드백</strong> — 결과물을 보고 스크린샷을 Claude에 넘겨 수정 지시 가능
+- <strong>Playwright MCP 연동</strong> — 이후 에이전트가 직접 브라우저에서 검증 실행 가능
+- <strong>시각적 비교</strong> — Brutalist, Tokyo, Fintech 등 4개 방향을 나란히 클릭하며 비교</p>
+<p>프롬프트 구조: "4가지 다른 디자인 방향을 탐색하고 각각 HTML로 생성, 비교 설명해줘."</p>
+<p>Opus 4.7 권장 이유: 비전 모델이 강화되어 스크린샷에서 미세 UI 오류(정렬 틀어짐 등)를 더 잘 감지함.</p>
+<hr>
+<h2>4. Phase 3: 에이전트 친화적 검증 프레임워크</h2>
+<p><strong>대상:</strong> React로 만든 To-do 앱 (항목 추가, 완료 체크, 삭제, 완료 항목 전체 삭제).</p>
+<p><strong>검증 3계층:</strong></p>
+<table>
+<thead>
+<tr>
+<th>계층</th>
+<th>방법</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>사람(Human)</td>
+<td>브라우저 대시보드</td>
+<td>시각적 패스/페일 표시, 상세 실행 결과 확인</td>
+</tr>
+<tr>
+<td>에이전트(Agent-first)</td>
+<td>Claude Code + Playwright MCP</td>
+<td>Claude가 DOM 계약 읽고 검증 스텝 직접 실행</td>
+</tr>
+<tr>
+<td>Headless (CI)</td>
+<td><code>bun verify</code></td>
+<td>브라우저 없이 CLI에서 테스트 매트릭스 실행</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>5. DOM 데이터 계약 구현</h2>
+<p>React 컴포넌트가 자기 상태를 HTML 속성으로 퍼블리시:</p>
+<pre><code class="language-html">&lt;div data-verify-unit=&quot;todo-stats&quot;
+     data-total-done=&quot;2&quot;
+     data-active=&quot;3&quot;&gt;
+</code></pre>
+<ul>
+<li>상태 변경 시 속성값 실시간 업데이트</li>
+<li>에이전트는 React 내부 상태 대신 이 속성을 읽음 → <strong>DOM이 데이터 계약</strong></li>
+</ul>
+<p>각 컴포넌트마다 3종 세트 정의:
+1. <strong>schemas</strong> — 어떤 속성이 있어야 하는가
+2. <strong>fixtures</strong> — 알려진 상태 목록
+3. <strong>invariants</strong> — 항상 성립해야 하는 조건 (불변식)</p>
+<p>시연에서 일부러 심어둔 실패: <code>3 + 3 + 4 = 10</code> 이 아닌 케이스를 불변식 위반으로 설정. Claude + Playwright MCP가 자동으로 발견하고 진단.</p>
+<hr>
+<h2>6. 검증 클립 기록 및 공유</h2>
+<p>Playwright가 검증 스텝을 영상으로 녹화 → 클립 단위로 다운로드 가능 → S3 또는 동료 공유.</p>
+<p>Claude Code 팀 내부 실무:
+- 모든 프런트엔드 변경마다 이 방식으로 기록
+- 데모보다 더 자동화된 버전 내부 운영 중
+- <strong>변경 증거 번들</strong>로 활용 (누가, 언제, 어떤 검증을 통과했는지)</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Claude Code에서 auto mode 켜기 (<code>/auto</code>)</li>
+<li>[ ] effort 레벨을 <code>xhigh</code>로 설정하기 (<code>/effort xhigh</code>)</li>
+<li>[ ] 다음 스펙 작업 시 <code>ask_user_question</code> 도구를 프롬프트에 명시해 인터뷰 방식으로 요구사항 수집해보기</li>
+<li>[ ] Markdown 명세 대신 HTML 명세로 디자인 방향 탐색해보기</li>
+<li>[ ] React 컴포넌트에 <code>data-verify-*</code> 속성 달아서 DOM 데이터 계약 만들어보기</li>
+<li>[ ] Playwright MCP 설정하고 Claude Code가 브라우저 검증을 직접 실행하게 해보기</li>
+<li>[ ] Storybook fixture + invariant 3종 세트 패턴 익히기</li>
+<li>[ ] CWC Workshops GitHub 리포 클론해서 Phase 3 직접 실행해보기</li>
+<li>[ ] 스크린샷을 Claude에 넘겨 UI 피드백 주는 습관 들이기</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Anthropic 엔지니어 | 저희는 Claude Code를 이렇게 사용합니다 · https://www.youtube.com/watch?v=DHdgUBJ_v10 · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요, 안녕하세요. 워크숍에 오신 모든 분들 환영합니다. 오늘 정말 사람이 많이 모였네요. 기쁩니다. 손 들어볼게요 — Claude Code 좋아하시는 분? 네, 잘 오셨습니다. 반갑습니다. 저는 Arno입니다. Anthropic의 Applied AI 팀 소속 아키텍트입니다. 오늘은 Anthropic에서 Claude Code를 어떻게 쓰는지 워크숍으로 보여드리겠습니다. 같이 코딩해볼 수 있고, 크레딧도 받으실 수 있습니다. 잠시 후 QR 코드가 뜰 테니 꼭 찍으세요. 기술적으로 막히는 분은 스태프가 도와드릴 겁니다. Claude Code를 한 번도 안 써보신 분 계세요? 네, 잘 오셨습니다. 더 알아갈 게 많으니까요. 시작하겠습니다.</p>
+<p>클리커 가져오고요. 자, QR 코드 꼭 찍으세요. 리포도 있으니 클론해두세요. 오늘 다룰 건 세 단계입니다. 흥미로운 검증 셋업이 있어서 같이 따라할 수 있고, 꽤 상세하니 나중에 혼자 더 파보시기 바랍니다.</p>
+<p>오늘 내용은 Tarek이 약 일주일 반 전 샌프란시스코에서 발표한 내용을 기반으로 합니다. Tarek 트위터 팔로우하시는 분 계세요? 좋네요. 그가 올린 블로그 포스트 제목이 <strong>"The Unreasonable Effectiveness of HTML Files"</strong>인데, 기본적으로 Markdown 파일에서 벗어나 HTML을 쓰자는 제안입니다. 오늘 그걸 보여드립니다. 리포도 같이 활용하면서 진행해보세요.</p>
+<p>자, 현재 상황과 방향을 짚어볼게요. 에이전트가 점점 더 강해지고 있죠. 왜냐면 모델이 강해지고 있으니까요. 모델이 강해지면 에이전트가 더 오래 실행되고 더 복잡한 작업을 맡길 수 있습니다. 그런데 그만큼 우리가 일하는 방식도 바꿔야 합니다. 오늘이 그 이야기입니다 — Claude Code를 어떻게 쓰면 더 많은 걸 뽑아낼 수 있는가.</p>
+<p>에이전트를 오래 실행시키면 방향이 잘못됐을 때 토큰을 엄청 태웁니다. 이걸 초반에 막고 싶죠. 그래서 나온 아이디어가 — 인간이 명세에서 하던 검증을 앞당겨서 HTML 파일에 넣자는 것입니다. HTML이 더 풍부하고 인간 친화적으로 에이전트가 만들어갈 결과물을 미리 보여줄 수 있으니까요.</p>
+<p>Anthropic 엔지니어링 블로그에 에이전트, 장시간 실행, 하네스 관련 글들이 많이 있습니다. 꼭 읽어보세요. 오늘은 세 가지 레벨로 다루겠습니다 — 기초, 다음 단계, 그리고 좀 더 심화된 것.</p>
+<p>모델이 강해질수록 여러분은 오히려 제약을 줄여야 합니다. Richard Sutton의 <strong>Bitter Lesson(쓴 교훈)</strong>을 들어보신 분 계세요? Sutton은 강화학습의 아버지입니다. 강화학습 교재를 쓰면 그 사람입니다. 그의 주장은 — 인간이 아무리 규칙을 하드코딩해도, 결국 데이터와 컴퓨팅을 쏟아붓는 게 더 나은 결과를 낸다는 것입니다. Claude Code에도 같은 원리가 적용됩니다. 모델이 강해졌으므로, 요구사항을 여러분이 정의하는 것보다 <strong>Claude가 여러분에게 질문해서 끌어내게</strong> 하는 게 더 낫습니다. 요구사항은 여러분 안에 잠재해 있습니다. 사용자가 "보면 알 것 같은데 말로는 못 하겠어"와 같은 상태처럼요. Claude가 여러분보다 더 잘 뽑아냅니다.</p>
+<p>오늘 다룰 내용:
+- 모호성 제거
+- Claude가 여러분을 인터뷰해서 프롬프팅하게 만들기
+- 이해와 계획
+- HTML 명세로 검증을 네이티브하게 내장하기</p>
+<p>이전에는 Markdown으로 다 했습니다. 동료 하나가 "Markdown 파일은 AI 네이티브 소프트웨어 개발 생명주기의 링구아 프랑카"라고 했는데 꽤 시적인 표현이죠. 그런데 그 형식이 이제 좀 제한적이 됐습니다. 줄이 너무 많아지고 있어요. HTML 파일에 더 많은 정보를 압축할 수 있습니다.</p>
+<p>검증도 네이티브하게 만들어야 합니다. 에이전트가 인간과 함께, 또는 나중에는 완전히 headless로 검증을 돌릴 수 있도록. 에이전트가 점점 이 모든 걸 알아서 하게 되는 방향이니까요. 그래서 여러분이 만드는 산출물 자체에 검증 가능성을 내장해야 합니다.</p>
+<p><strong>Phase 1: 요구사항 인터뷰 (Bill Splitting App 예시)</strong></p>
+<p>Bill splitting app (지출 분할 앱)을 만든다고 해봅시다. 친구들이랑 나가서 누가 얼마 내야 하는지 계산하는 앱이요. Claude한테 인터뷰를 맡겨봅시다.</p>
+<p>나쁜 프롬프팅 예: "더 좋게 만들어줘." 이건 안 됩니다. 좋은 프롬프팅은 Claude가 구체적인 내용을 끌어낼 수 있도록 영역을 제시하되 결과를 과도하게 규정하지 않는 겁니다. 청중(audience)을 명시하거나 오픈엔드 방식으로 질문하도록 유도하는 것이죠.</p>
+<p>Claude Code 두 개 켜놨습니다. Fast Mode 쓰시는 분 얼마나 계세요? 많지 않네요. 그래서 보여드리려고 켰습니다. auto mode는요? 잘 쓰고 계시는군요. auto mode 꼭 쓰세요. 안 쓰시면 지금 당장 켜세요. 훨씬 편해집니다.</p>
+<p>effort 파라미터 설정하시는 분 계세요? 저희 권장은 <code>xhigh</code>입니다. max effort도 괜찮아요. 저는 이번에 <code>xhigh</code>로 했습니다.</p>
+<p><code>/effort</code> — effort 파라미터, <code>/fast</code> — fast mode, auto mode는 자동으로 최적 모델 선택.</p>
+<p>프롬프트를 복붙하면 Claude가 질문을 탭으로 넘기면서 묻습니다. "친구 전용인가요? 두 번째 청중이 있나요?" 등. 핵심은 프롬프트에 <code>ask_user_question</code> 도구를 명시적으로 언급하는 것입니다. 그게 이 워크플로우를 트리거합니다. 잘 명시할수록 더 좋은 결과가 나옵니다.</p>
+<p>답변을 제출하면 Claude가 명세를 생성합니다. 이걸 여러 방식으로 앱 구현에 활용할 수 있죠. 좀 시간이 걸리니 슬라이드로 넘어가겠습니다.</p>
+<p>계획이 생겼습니다. 질문에 답하면서 내가 원하는 걸 클로드가 점점 더 잘 뽑아내고 있습니다. 이게 내가 원하는 것과 맞는지 확인하고 싶죠. HTML 파일이 정보 밀도가 훨씬 높습니다. 스크린샷을 찍어서 넣을 수도 있고, 나중에 Playwright MCP도 활용할 수 있습니다. 200줄 넘는 Markdown 파일보다 훨씬 풍부하게 상호작용할 수 있죠. 동료들도 안 읽을 게 뻔한 긴 Markdown 대신에요.</p>
+<p>Opus 4.7로 몇 가지 방향을 미리 생성해뒀습니다. 프롬프트: "4가지 다른 디자인 방향을 탐색해줘. HTML로 생성하고 각각 설명해줘." 결과로 나온 방향들: Brutalist, Tokyo, Fintech 스타일 등.</p>
+<p>클릭해서 보면 완전히 다른 느낌. Markdown으로 추론하는 것보다 훨씬 직관적입니다. 스크린샷을 찍어서 Claude에 피드백으로 넘기면 됩니다. 프런트엔드 작업에서 특히 유용합니다 — "이게 약간 틀어졌는데"를 말로 설명하기 어려울 때 스크린샷이 훨씬 정확합니다. Opus 4.7의 비전 모델이 강화됐기 때문에 미세 UI 문제도 잘 잡아냅니다.</p>
+<p><strong>Phase 3: 검증 프레임워크 (React To-do App)</strong></p>
+<p>리포에 있는 Phase 3는 to-do 앱 기준입니다 (bill splitting 앱과는 별개). 아이템 추가, 체크, 삭제, 완료 항목 전체 삭제 기능. 상태 변화가 많아서 검증이 중요합니다.</p>
+<p>세 가지 방법으로 검증합니다:
+1. 사람이 보는 대시보드 — 브라우저에서 시각적으로 확인
+2. 에이전트 구동 방식 — Claude Code + Playwright MCP가 DOM 계약 읽고 검증 실행
+3. Headless — <code>bun verify</code>로 CI에서 실행</p>
+<p>리포에서 직접 실행하면 결과가 약간 다르지만 원리는 같습니다.</p>
+<p>앱 요소를 검사(Elements)하면 <code>data-verify-unit</code>, <code>data-total-done</code>, <code>data-active</code> 같은 속성들이 보입니다. 컴포넌트가 자기 상태를 DOM에 퍼블리시하는 것입니다. 상태가 바뀌면 속성값도 바뀝니다. 에이전트는 React 내부를 모르고도 이 속성을 읽어서 상태를 파악할 수 있습니다. 앱 상태와 독립적으로 검증을 실행할 수 있죠.</p>
+<p>각 컴포넌트마다: schemas, fixtures(알려진 상태), invariants(불변식) — 항상 성립해야 하는 조건들. probe로 테스트합니다.</p>
+<p>일부러 실패 케이스를 심었습니다. 대시보드에서 전체 실행하면 하나가 걸립니다. 스크롤 내리면 어딘지 보입니다. 에이전트로도 똑같이 잡을 수 있습니다.</p>
+<p>에이전트용: DOM에 선언된 검증 스텝 매니페스트를 가져와서 실행. 수동 재생 후 요약에서 의도적으로 심은 실패가 하나 보입니다. 각 케이스의 실행 상세도 확인 가능.</p>
+<p>핵심은 <strong>해피 패스를 벗어나는 probe를 포함하는 것</strong>. 그리고 많은 부분을 Claude가 Claude를 위해 생성할 수 있습니다. 스케일업이 가능한 구조입니다.</p>
+<p><code>3 + 3 + 4 = 10</code>이 아닌 케이스를 하드코딩해서 심었습니다. <code>bun verify</code>로 실행하면 테스트 매트릭스는 통과하지만 (의도적으로 분리) DOM 계약 기반 검증은 실패를 잡습니다. <strong>테스트 통과 != 검증 통과</strong>. 이 둘을 분리한 이유를 명시적으로 시연한 것입니다.</p>
+<p><code>data-total-done</code> 속성을 지우면 앱은 정상 동작하지만 계약이 깨져서 모든 관련 검증이 실패합니다. 앱을 안 깨고 계약만 깬 것입니다.</p>
+<p>Claude한테 실패한 것 분석 맡기기: Playwright MCP 연결된 상태에서 Opus 4.7이 직접 브라우저 구동하며 <code>4 + 3 != 10</code> 임을 발견하고 진단합니다.</p>
+<p>클립 녹화: 검증 스텝을 실행하면서 영상으로 기록. 클립 단위로 다운로드해 동료와 공유하거나 S3에 저장. Claude Code 팀은 이 방식으로 모든 프런트엔드 변경을 기록하고 있습니다. 내부적으로는 데모보다 더 자동화돼 있음. 정기적인 주기로 운영 중.</p>
+<p>정리하면 세 가지 서피스:
+1. 사람 서피스 — 브라우저 대시보드
+2. 에이전트 퍼스트 — 브라우저 기반 에이전트가 같은 방식으로
+3. CI — <code>bun verify</code>로 headless</p>
+<p>목표: <strong>검증을 산출물 자체에 내장</strong>하는 것.</p>
+<p>리포를 직접 클론해서 몇 가지 예시 돌려보세요. 코드 바꾸고, 뭐가 깨지는지 확인하고, 다시 실행해보세요. 꽤 상세합니다. Tarek 팀이 이미 실무에서 쓰고 있습니다. 불과 일주일 반 만에 이 데모가 나왔습니다.</p>
+<p>새로운 것은 기존 프리미티브(도구들)를 에이전트 퍼스트로 쓸 수 있게 재조합한 것입니다.</p>
+<p>마지막 권장 사항:
+- <strong>Opus 4.7</strong> 사용 (Sonnet은 비추)
+- <strong>Fast Mode</strong> — 비용이 더 들지만 스펙 반복에 탁월
+- HTML 명세가 토큰 비효율적이지 않냐? → 장기적으로 반복 줄어서 오히려 절감. 좋은 HTML 명세 하나면 재작업이 줄어듦.
+- Fast Mode로 HTML 명세 작업해보세요.</p>
+<p>이상입니다. 감사합니다.</p>
+</details>
+</body></html>

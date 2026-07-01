@@ -1,0 +1,290 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>보리스 체르니 - Claude Code와 엔지니어링의 미래</title>
+<meta name="description" content="Claude Code 창시자 Boris Cherny가 탄생 배경·모델-제품 피드백 루프·Co-work 출시·빌더 역할 통합까지 직접 설명한 Acquired Unplugged 인터뷰"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>보리스 체르니 - Claude Code와 엔지니어링의 미래</h1>
+<div class="meta">원작자 Boris Cherny · Anthropic (Claude Code 리드) · 업로드 2026-06-07 · 29.6분 · <a href="https://www.youtube.com/watch?v=a3KQkqQMoQU" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>보리스 체르니 - Claude Code와 엔지니어링의 미래</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Claude Code는 "AI 안전 연구를 위한 코딩 에이전트"라는 필연적 방향에서 시작됐고, 모델 성능 향상이 제품 경험을 결정했으며, 곧 모든 직군은 하나의 '빌더'로 수렴한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Boris Cherny · Anthropic, Claude Code 리드 · 원본: Acquired Unplugged (WorkOS 제공) · 업로드 2026-06-07 · 29.6분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>코딩 에이전트의 전략적 위치</td>
+<td>안전 연구 → 코딩이 모델의 '자연어'</td>
+<td>Anthropic은 AI 안전 연구를 위해 코딩에 집중했다</td>
+</tr>
+<tr>
+<td>모델이 제품을 결정한다</td>
+<td>하네스 개선보다 모델 점프가 사용률을 바꿨다</td>
+<td>Sonnet 4·Opus 4 릴리스 시 10% → 100% 전환</td>
+</tr>
+<tr>
+<td>추상화 레벨 상승 법칙</td>
+<td>펀치카드→어셈블리→Python→프롬프트→루프</td>
+<td>프롬프트도 이미 구시대, 지금은 루프를 쓴다</td>
+</tr>
+<tr>
+<td>인력 언더펀딩 + 토큰 오버펀딩</td>
+<td>리소스 제약이 자동화를 강제한다</td>
+<td>4명짜리 프로젝트에 2명+토큰을 줘라</td>
+</tr>
+<tr>
+<td>직군 경계 붕괴</td>
+<td>PM·디자이너·엔지니어가 '빌더' 하나로</td>
+<td>연말 전에 모든 롤 구분이 사라진다</td>
+</tr>
+<tr>
+<td>제품 취향(taste)의 수명</td>
+<td>현재의 알파는 취향이지만 모델이 따라잡는다</td>
+<td>6개월 후엔 모델 아이디어의 80%가 좋아진다</td>
+</tr>
+<tr>
+<td>온보딩 시간 단축</td>
+<td>신입이 이틀 만에 코드 짜기 시작</td>
+<td>Claude에게 물어보면 된다가 정답이 됐다</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Labs Team (Anthropic)</strong>: 차기 주력 제품 프로토타이핑 전담 팀. 현재 부활해 운영 중.</li>
+<li><strong>product overhang</strong>: 모델 능력은 충분한데 그 능력을 포착하는 제품이 없는 상태. 2024년 중반 Claude가 처했던 상황.</li>
+<li><strong>plan mode</strong>: Claude Code 내 계획 수립 전용 모드. 구현 전에 계획만 먼저 작성.</li>
+<li><strong>Co-work (Claude Co-work)</strong>: 터미널 없이 Claude Code 기능을 쓸 수 있는 데스크탑 앱. 약 8~9일 만에 Claude Code로 100% 빌드.</li>
+<li><strong>Hofstadter, Douglas</strong>: <em>Gödel, Escher, Bach</em> 저자. 패턴 인식이 인지의 근본이라고 주장. Boris가 "코딩이 AI 연구에 적합한 이유"를 설명할 때 인용.</li>
+<li><strong>AppleScript</strong>: macOS 자동화 스크립팅 언어. Claude가 배시 도구로 자발적으로 작성해 음악 재생 정보를 가져온 사례.</li>
+<li><strong>log-linear chart</strong>: Y축을 로그 스케일로 설정해 지수 성장을 직선으로 표현. Anthropic 내부 대부분의 지표가 이 형태.</li>
+<li><strong>Member of Technical Staff</strong>: Anthropic의 직함 체계. 직군·시니어리티를 감추고 동등한 출발선을 만드는 문화 장치.</li>
+<li><strong>functional programming (Haskell, Scala)</strong>: Boris가 선호했으나 모델이 클래스로 코드를 쓰기 시작하면서 포기한 코딩 철학.</li>
+<li><strong>YC (Y Combinator)</strong>: Boris가 2010~2011년 초창기 배치 회사에 첫 번째 입사. "사용자가 원하는 걸 만들어라" 철학을 내면화.</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>Claude Code가 코드를 쓰기 시작한 전환점은 <strong>2024년 5월 Sonnet 4 + Opus 4</strong> 릴리스였다. 이전엔 10~20%만 작성.</li>
+<li>Anthropic 엔지니어 1인당 코드 생산량이 Claude Code 출시 이후 <strong>3X 증가</strong> (이 수치도 이미 구식이라 "훨씬 높다"고 언급).</li>
+<li>신입 온보딩이 <strong>과거 수주 → 현재 2일</strong>로 단축. "데이터베이스 쿼리하는 법?" → "Claude Code 켜고 Claude한테 시켜"가 표준 답변.</li>
+<li>Boris는 2024년 11월 IDE를 <strong>완전히 삭제(uninstall)</strong>했다. "한 달간 안 열었으니 지웠다."</li>
+<li>현재 작업 방식: <strong>수백 개의 Claude 인스턴스</strong>가 병렬 실행 중. Twitter 피드백·GitHub 이슈·Slack을 분석해 다음에 무엇을 빌드할지 판단.</li>
+<li>Co-work 출시 결정 트리거: 팀원 David가 <strong>처음으로 터미널을 연</strong> 다음 날 Co-work가 출시됨. "David가 터미널을 열었다 = 이제 메인스트림이다"로 해석.</li>
+<li>슬랙 기반 프로토타입, 다양한 웹 기반 프로토타입이 모두 실패했다. 웹은 <strong>파일시스템 접근 불가</strong> 문제가 결정적.</li>
+<li>Boris는 원래 "코드베이스에 클래스 금지, 함수만" 규칙을 강제했으나 모델이 클래스를 쓰기 시작하자 포기. "결국 비즈니스 결과가 나오면 됐다."</li>
+<li>조직 처방: <strong>토큰 예산을 최대화하고, 인원은 의도적으로 부족하게</strong>. 자동화 강제가 복리 효과를 낸다.</li>
+<li>현재 알파는 '제품 취향'이지만, <strong>3~6개월 내 모델 아이디어의 대부분이 좋아질 것</strong>이라 예측. 최후의 인간 역할은 모델에게 <strong>가치관을 가르치는 것</strong>.</li>
+<li>Sonnet 3.5 시절, 도구 설명 없이 배시 도구를 넘겼더니 <strong>스스로 AppleScript를 작성해</strong> 음악 플레이어를 열었다.</li>
+<li>Anthropic 전사(재무·스태프·디자이너 포함)가 코드를 배포하고 있다고 언급. "Our finance guy ships code."</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>탄생 배경</td>
+<td>Labs Team 프로토타입에서 출발, 안전 연구가 코딩을 낳았다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>초기 한계와 전환</td>
+<td>10% 코드 작성 → 모델 점프로 100% 전환</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Anthropic 코딩 문화</td>
+<td>3X 생산성, 2일 온보딩, IDE 삭제</td>
+</tr>
+<tr>
+<td>4</td>
+<td>추상화 레벨 진화</td>
+<td>프롬프트 → 루프 작성으로 이미 전환</td>
+</tr>
+<tr>
+<td>5</td>
+<td>채용 기준 변화</td>
+<td>제너럴리스트, 직군 경계 붕괴, MTS 구조</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Co-work 탄생</td>
+<td>터미널 없는 UX, 8~9일 빌드, 파일시스템 접근이 핵심</td>
+</tr>
+<tr>
+<td>7</td>
+<td>조직 처방</td>
+<td>인원 언더펀딩 + 토큰 오버펀딩</td>
+</tr>
+<tr>
+<td>8</td>
+<td>취향과 AI의 미래</td>
+<td>취향도 결국 모델이 따라잡는다, 마지막 역할은 가치 교육</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 탄생 배경 — "사고"가 낳은 제품</h2>
+<p>Boris가 2024년 말 Anthropic의 <strong>Labs Team</strong>에 합류했을 때, 팀의 미션은 "다음 대형 제품을 찾는 것"이었다. 동시에 프론티어 모델 발전을 밀어붙이되, 실제 제품이 있어야 모델이 무엇을 잘해야 하는지 알 수 있다는 닭-달걀 문제가 있었다.</p>
+<p>Anthropic이 코딩에 집중한 이유는 전략적이다:
+- <strong>AI 안전 연구의 핵심 방법</strong>: 모델을 '페트리 접시'가 아니라 실제 세계에서 관찰해야 한다.
+- <strong>코딩 = 모델의 자연어</strong>: 모델이 소프트웨어로 존재하는 한, 세계와 상호작용하는 방식은 코드다.
+- <strong>명확한 정답/오답 구분</strong>: 컴파일·테스트 통과 여부로 품질을 측정할 수 있다. 영어 시는 무한히 올바른 버전이 있지만, 코드는 그렇지 않다.
+- <strong>상업적 가치</strong>: 기업·스타트업 고객이 원하는 것 + 광고 없는 비즈니스 모델 유지 가능.</p>
+<p>당시 시장 상황은 <strong>product overhang</strong> 상태였다. 모델은 할 수 있었는데 자동완성이나 Q&amp;A 수준의 제품만 존재했다. "코딩 에이전트를 만들자"는 결정이 여기서 나왔다.</p>
+<hr>
+<h2>2. 초기 한계와 모델 점프</h2>
+<p>처음엔 Claude Code가 코드의 <strong>10~20%</strong>만 작성했다. 전환점은 모델이었다:</p>
+<ul>
+<li><strong>2024년 5월</strong>: Sonnet 4 + Opus 4 출시 → 급격한 품질 향상</li>
+<li><strong>2024년 11월</strong>: Opus 4.5 → Boris가 IDE를 삭제</li>
+</ul>
+<p>하네스(CLI, 데스크탑 앱, 모바일 앱, iOS/Android, Slack 앱, GitHub 앱)도 지속 개선했지만, "코드 작성 비율의 계단식 상승"은 순전히 모델이 결정했다.</p>
+<p>Anthropic 전 직원이 Claude Code를 매일 사용 → 모델 팀이 Claude Code로 모델을 만든다 → 그 모델이 Claude Code를 더 잘하게 된다는 <strong>내부 피드백 루프</strong>가 완성됐다.</p>
+<hr>
+<h2>3. Anthropic 코딩 문화 변화</h2>
+<p>Claude Code 출시 이후 Anthropic 내부 수치:</p>
+<ul>
+<li>엔지니어 1인당 코드량: <strong>3X 이상</strong> 증가 (이미 낡은 수치, 실제는 더 높음)</li>
+<li>신입 온보딩: <strong>수주 → 2일</strong></li>
+<li>Boris의 현재 워크플로우: IDE 없음, CLI 없음, <strong>수백 개의 Claude 루프</strong>가 병렬 실행</li>
+</ul>
+<p><code>"사람들이 '데이터베이스 어떻게 쿼리해요?' 물으면 정답은 Claude Code 켜고 시키는 것"</code></p>
+<hr>
+<h2>4. 추상화 레벨 진화</h2>
+<p>Boris는 코딩을 기술의 추상화 수준 상승으로 본다:</p>
+<p>스위치 → 펀치카드 → 어셈블리 → COBOL/FORTRAN → Java → Python/JavaScript → <strong>프롬프트</strong> → <strong>루프</strong></p>
+<p>현재 Boris의 단계: "나는 더 이상 Claude에게 직접 프롬프트하지 않는다. <strong>루프를 작성한다.</strong> 루프가 Claude에게 프롬프트하고 판단한다."</p>
+<hr>
+<h2>5. 채용 기준과 조직 구조 변화</h2>
+<p><strong>현재 Anthropic Claude Code 팀에서 찾는 인재</strong>: 제너럴리스트.</p>
+<p>6개월 전부터 팀 전원이:
+- 사용자 인터뷰 진행
+- 디자인 작업
+- 데이터 풀·대시보드 구축
+- 스코핑·PM 업무</p>
+<p>엔지니어·PM·디자이너·UX리서처 경계가 이미 사실상 붕괴됐다. "재무 담당자도, 비서실장도 코드를 배포한다."</p>
+<p><strong>Member of Technical Staff(MTS)</strong> 직함 체계: 직군·시니어리티를 숨겨 출발선을 동일하게. 신입이 VP에게 아이디어를 들고 가는 문화를 가능하게 한다.</p>
+<p>시니어 10~30년 경력자 역설: 오래된 습관을 <strong>언러닝(unlearning)</strong>하는 데 수개월이 걸린다. 반면 신입은 Claude Code를 네이티브하게 사고해 오히려 더 잘 쓴다.</p>
+<hr>
+<h2>6. Co-work 탄생</h2>
+<p><strong>배경</strong>: 비개발자들이 터미널 없이도 Claude Code의 힘을 쓰고 싶어 하는 수요 포착.
+- 데이터 과학자 Brandon이 혼자 터미널·Node.js·API 키 설정해서 사용 → 일주일 후 팀 전체가 Claude Code 창 여러 개
+- 방울토마토 재배자가 Claude Code로 식물 영양 관리하는 트윗 → "이제 메인스트림"</p>
+<p><strong>실패한 프로토타입들</strong>:
+- 슬랙 봇 기반: 느낌이 좋지 않음
+- 웹 기반 여러 프로토타입: <strong>파일시스템 접근 불가</strong>가 치명적. 파일 드래그&amp;드롭 마찰만으로도 경험이 깨졌다.</p>
+<p><strong>Co-work 결정 순간</strong>: Acquired 팟캐스트 진행자 David가 처음으로 터미널을 열었다는 이야기 → "이걸 8~9일 안에 만들어서 내일 출시해야 한다."</p>
+<p>Co-work는 <strong>100% Claude Code로 빌드</strong>됐다.</p>
+<hr>
+<h2>7. 조직 처방 — 토큰으로 인원을 대체하라</h2>
+<p>창업자·기업 대상 조언:</p>
+<ol>
+<li><strong>토큰 예산을 최대화하라</strong>: "더 살수록 더 절약된다(Jensen 인용)." 실험을 막지 마라.</li>
+<li><strong>인원을 의도적으로 부족하게</strong>: 4명짜리 프로젝트에 2명 넣기. 자동화를 강제하면 다음번엔 더 싸고 빠르다. <strong>복리 효과</strong>.</li>
+<li><strong>스킬(skills) 문서화</strong>: 비즈니스 원칙처럼 모델도 이걸 사용할 수 있다.</li>
+<li><strong>많이 쓰이는 태스크만 최적화</strong>: 80% 케이스를 자유롭게 돌리다가 비용이 보이면 그때 최적화.</li>
+</ol>
+<p>수식으로 요약: 선행 비용 증가 → 반복 비용 감소. "일종의 사전 컴파일."</p>
+<hr>
+<h2>8. 취향과 AI의 장기 미래</h2>
+<p>현재 소위 "알파"로 꼽히는 것은 <strong>제품 취향(product taste)</strong>이다. 하지만 Boris의 전망:</p>
+<ul>
+<li>몇 달 내 모델이 생성하는 아이디어의 80%가 좋아질 것 (현재는 20% 수준)</li>
+<li>취향도 결국 모델이 따라잡는다</li>
+<li><strong>인간이 끝까지 담당할 영역</strong>: 가치관(values) 교육. 자녀에게 좋은 사람이 되는 법을 가르치듯, 모델에게 좋은 모델이 되는 법을 가르치는 것.</li>
+</ul>
+<p>개인 사례: Boris는 코드베이스에 "클래스 금지, 함수만" 규칙을 강제했다. 모델이 클래스를 쓰기 시작하자 포기했다. 결과는 나빴지 않았다. "나만의 특별함이라고 생각했던 것이 틀렸음을 계속 증명당한다."</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Claude Code에 직접 프롬프트하는 대신 루프를 작성해 병렬 실행 실험</li>
+<li>[ ] 현재 팀 프로젝트에 "인원 반감 + 토큰 두 배" 원칙 적용해 보기</li>
+<li>[ ] 자신의 코딩 스타일 규칙 중 모델이 자연스럽게 깨뜨리는 것 목록화 → 언러닝 후보</li>
+<li>[ ] Co-work 사용해보고 터미널 없이 가능한 작업 범위 파악</li>
+<li>[ ] 팀 온보딩 프로세스에서 "Claude Code에게 물어봐" 단계를 공식화</li>
+<li>[ ] 가치관/원칙 문서를 Claude skills로 변환 가능한지 검토</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 보리스 체르니: Claude Code와 엔지니어링의 미래 | WorkOS가 선보이는 Acquired Unplugged · https://www.youtube.com/watch?v=a3KQkqQMoQU · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p><strong>[진행자]</strong>: 그래서 기원 이야기가 필요한데요. Claude Code는 어디서 시작됐나요?</p>
+<p>참고로 여기 앉아서 여러분 목소리를 듣는 게 신기한 게, 보통 저는 2배속으로 듣거든요.</p>
+<p><strong>[Boris]</strong>: 2배속이요, 아마.</p>
+<p><strong>[진행자]</strong>: 그리고 편집된 버전으로.</p>
+<p><strong>[Boris]</strong>: 어떻게 보면 사고에 가까웠어요. 저는 2024년 말 Anthropic에 Labs Team이라는 팀에 합류했는데, 프로토타이핑 팀이었어요. 다시 부활했죠. 아이디어는 "다음 대형 제품이 뭔지 찾아내자"였고, 동시에 모델 프론티어를 밀어붙이며 그 미래 제품을 가장 잘 지원할 방향으로 모델을 어떻게 발전시킬지 파악하는 것이었어요. 제품이 실제로 프론티어를 밀어붙이기 전까진 모델을 어느 방향으로 발전시켜야 할지 알기 어렵거든요. 당시에 'product overhang'이라는 이상한 느낌이 있었어요 — 모델은 할 수 있는데, 그걸 포착하는 제품이 없는 상태요. 코딩 도구만 해도 당시엔 자동완성 도구나 질문은 받지만 코드는 못 쓰는 에이전트 수준이었어요.</p>
+<p><strong>[진행자]</strong>: 이 시점 전에 Anthropic 내부 코딩 상황은 어땠나요?</p>
+<p><strong>[Boris]</strong>: 내부적으론 여전히 IDE를 쓰고 있었어요. 하지만 Anthropic은 회사 차원에서 항상 코딩을 중요하게 여겼어요. 도구 사용(tool use), 컴퓨터 사용(computer use) — 이게 항상 핵심 연구 방향이었어요. AI 안전을 연구하기 위해 존재하는 회사니까요. Anthropic 직원을 복도에서 잡고 "왜 여기 있어요?" 물으면 전부 "AI 안전"이라고 답해요. 기계적 해석 가능성(mechanistic interpretability), 정렬 연구(alignment work) 등 여러 방법이 있지만, 결국 모델을 실제 세계에서 연구해야 해요. 그 방법이 코딩이에요. 모델이 세계와 상호작용하는 방식이 코딩이니까요. 코드는 컴파일되거나 안 되거나, 테스트를 통과하거나 못 하거나 — 아주 명확한 합격/불합격 기준이 있어요. 영어엔 올바른 시가 무한히 많지만, 특정 문제를 푸는 올바른 코드는 무한하지 않아요.</p>
+<p><strong>[진행자]</strong>: Meta에서 오셨는데, 거기서의 경험이 Claude Code 초기에 어떻게 연결됐나요?</p>
+<p><strong>[Boris]</strong>: 저한테 DevTools는 항상 부업이었어요. 메인이 아니었죠. 제품을 만들다 보면 개발자 경험(DevX)이 안 좋을 때 도구를 만드는 식이에요. YC 정신이기도 하고요 — 저는 2010~2011년 초창기 YC 배치 회사의 첫 번째 입사자였어요. 그래서 여기서도 "내가 쓸 걸 먼저 만들자" 마음으로 접근했어요. 다른 사람들도 유용하게 쓰길 바라면서. 놀랍게도 그렇게 됐고요.</p>
+<p><strong>[진행자]</strong>: 처음엔 별로였다고 하셨는데, 10% 코드만 썼다가 지금은 6개월간 한 줄도 안 쓰셨다고요. 무엇이 바뀌었나요?</p>
+<p><strong>[Boris]</strong>: 기억해요. 5월에 Sonnet 4와 Opus 4, 그리고 11월에 Opus 4.5 [?Opus 4.5]. 결국 모델이었어요. 하네스 개선도 많이 했고, Claude Code도 계속 좋아졌어요. CLI에서 시작해서 데스크탑 앱, 모바일 앱, iOS와 Android, Slack 앱, GitHub 앱까지 만들었어요. Plan mode 같은 기능들도 그 과정에서 나왔고요. 하지만 "내 코드에서 모델이 쓰는 비율"이 계단식으로 오른 건 순전히 모델이었어요.</p>
+<p><strong>[진행자]</strong>: Claude Code 경험이 모델 개선으로 얼마나 피드백됐나요?</p>
+<p><strong>[Boris]</strong>: Anthropic 전 직원이 매일 Claude Code를 써요. 모델 만드는 연구자도, 제품 만드는 사람도. 그게 사이클이에요.</p>
+<p><strong>[진행자]</strong>: 회사 생산성 변화를 수치로 표현할 수 있나요?</p>
+<p><strong>[Boris]</strong>: AI 랩에 있다 보니 지수 함수적 사고에 익숙해졌어요. 내부 차트는 거의 다 로그 선형 그래프예요. 매출도, 사용량도, 코드도 다 지수 성장이에요. Anthropic 직원 1인당 코드량, PR 수가 Claude Code 출시 이후 수백 % 성장했어요. 가장 최근에 공유한 수치가 3X인데, 이미 구식 수치예요. 엔지니어링 팀 규모가 늘면 보통 생산성이 떨어지는데 — 신입이 기존 직원에게 계속 물어보니까요 — 여기선 신입 온보딩이 2일이에요. 예전엔 몇 주였는데. "데이터베이스 어떻게 쿼리해요?" → "Claude Code 켜서 시키면 돼요."</p>
+<p><strong>[진행자]</strong>: 2026년에 합류한 신입들 중 실제로 코드를 쓴 사람이 있나요?</p>
+<p><strong>[Boris]</strong>: '코드 쓴다'를 어떻게 정의하냐에 달렸어요. 제 할아버지는 소련에서 펀치카드로 코딩했어요. 아버지는 어셈블리 쓰면서 Python 쓰는 저를 "코딩하는 게 아니다"라고 놀렸고요. 항상 추상화 레벨이 올라가요 — 스위치→펀치카드→어셈블리→COBOL/FORTRAN→Java→Python/JavaScript. 지금 우리가 하는 것도 그 연속선 어딘가에 있어요. 1년 전 저는 IDE에서 자동완성으로 코딩했어요. 11월에 IDE를 삭제했어요 — 한 달간 안 열었으니까. 그때 5~10개의 Claude 인스턴스를 병렬 실행하면서 프롬프팅이 코딩이었어요. 지금은 한 단계 더 올라갔어요. 더 이상 Claude에게 직접 프롬프트하지 않아요. <strong>루프를 작성해요.</strong> 루프가 Claude에게 프롬프팅하고 무엇을 할지 판단해요.</p>
+<p><strong>[진행자]</strong>: Anthropic 팀에 지원하는 엔지니어를 어떻게 평가하나요?</p>
+<p><strong>[Boris]</strong>: 제너럴리스트를 좋아해요. 6개월 전부터 팀 전원이 사용자 인터뷰, 디자인, 데이터 분석, 스코핑을 다 해요. 예전처럼 UX리서처→디자이너→PM→엔지니어 순서의 폭포수 구조가 아니에요. 모든 직군이 하나의 '빌더'로 합쳐지고 있어요. 그래서 Member of Technical Staff(MTS)라는 직함이 의미있어요 — 직군·시니어리티를 숨겨요. Meta에서도 소프트웨어 엔지니어는 전부 동일한 직함이었어요. 시니어·프린시펄 같은 직급이 없었죠. 그러면 사람들이 아이디어 자체로 평가받아요. 저도 L4 엔지니어였을 때 VP한테 아이디어 들고 갔는데, VP는 제 레벨을 몰랐어요. 결국 세 번째 도전 때 성공했고요. 30년 경력 시니어들은 오래된 습관을 언러닝하는 데 몇 달이 걸려요. 신입은 Claude Code를 네이티브하게 생각해서 오히려 더 잘 가르쳐줘요.</p>
+<p><strong>[진행자]</strong>: Co-work 이야기를 해주세요.</p>
+<p><strong>[Boris]</strong>: 4월에 출근했는데 Claude Code 팀 옆에 앉은 데이터 과학자 Brandon이 Claude Code를 쓰고 있었어요. 당시엔 터미널에서만 됐는데, 그는 데이터 분석용으로 혼자 터미널·Node.js·API 키 설정을 다 해냈더라고요. 다음 주엔 데이터 과학자 전원이 Claude Code 창 여러 개 켜놨어요. 그리고 5~6월쯤 Twitter에서 방울토마토 키우는 사람이 Claude Code로 식물 영양 관리하는 걸 봤어요. 웹캠으로 모니터링하고, 몇 주 후에 토마토가 열리자 Claude가 "우리 일이 빛을 발하고 있다"고 했어요. 그 트윗 보고 "이제 메인스트림이다"고 느꼈어요.</p>
+<p>실패한 프로토타입이 많았어요 — Slack 봇, 다양한 웹 기반 프로토타입. 웹은 파일시스템 접근이 안 된다는 게 치명적이었어요. 파일 드래그&amp;드롭 마찰만으로도 경험이 깨졌어요. 결국 Co-work는 약 8~9일 만에 100% Claude Code로 빌드했어요. Acquired 팟캐스트 David가 처음으로 터미널을 열었다는 얘길 듣고 하루 만에 출시했어요.</p>
+<p><strong>[진행자]</strong>: 창업자들이 조직에서 무엇을 바꿔야 할까요?</p>
+<p><strong>[Boris]</strong>: 토큰을 최대한 많이 주세요. Jensen 말대로 많이 살수록 절약이에요. 그리고 인원을 의도적으로 부족하게 배치하세요. 4명짜리 프로젝트에 2명 넣고 토큰 많이 주세요. 자동화를 강제하면 다음번엔 더 싸고 빠르게 해요. 복리 효과예요. 스킬(skills) 형태로 원칙을 문서화하면 모델도 그 원칙을 쓸 수 있어요. 많이 쓰이는 태스크에 비용이 쌓이면 그때 최적화하면 돼요.</p>
+<p><strong>[진행자]</strong>: 취향(taste)에 대해 어떻게 생각하세요?</p>
+<p><strong>[Boris]</strong>: "내가 특별하다"는 느낌이 틀렸다는 게 계속 증명돼요. 코드베이스에 클래스 금지 규칙을 강제했는데 — 함수형 프로그래밍을 좋아해서요, Haskell [?Haskell]·Scala [?Scala] 팬이에요 — 모델이 클래스를 쓰기 시작했어요. 결국 포기했어요. 비즈니스 결과가 나왔으니까요. 지금 '알파'는 제품 취향이라고들 하지만, 저는 이것도 사라질 거라 생각해요. 지금 저는 수백 개의 Claude 인스턴스가 Twitter 피드백·GitHub 이슈·Slack을 분석해서 다음에 뭘 만들지 판단하게 하고 있어요. 현재는 아이디어의 20%만 좋아요. 3~6개월 후 모델이 업그레이드되면 대부분이 좋을 거예요. 인간이 끝까지 맡을 역할은 모델에게 <strong>가치관(values)을 가르치는 것</strong>이에요. 자녀에게 좋은 사람이 되는 법을 가르치듯이요.</p>
+</details>
+</body></html>

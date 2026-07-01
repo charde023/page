@@ -1,0 +1,346 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>OpenAI @ Replay 2026 | OpenAI는 Codex로 개발 방식을 어떻게 바꾸고 있을까요?</title>
+<meta name="description" content="OpenAI Codex 팀의 Dom이 Replay 2026에서 컨텍스트·검증·품질 관리 3축으로 코딩 에이전트 품질을 높이는 OpenAI 내부 워크플로우를 공개한 강연"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>OpenAI @ Replay 2026 | OpenAI는 Codex로 개발 방식을 어떻게 바꾸고 있을까요?</h1>
+<div class="meta">원작자 Dominic (Dom) · OpenAI (Codex 팀, Developer Experience) · 업로드 2026-06-03 · 47.0분 · <a href="https://www.youtube.com/watch?v=H95cVsPJLcw" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>OpenAI @ Replay 2026 | OpenAI는 Codex로 개발 방식을 어떻게 바꾸고 있을까요?</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>코드 생성 자체는 더 이상 병목이 아니다 — 컨텍스트 공급, 자동 검증, 지속적 품질 피드백 루프가 코딩 에이전트의 핵심이다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Dominic (Dom) · OpenAI Codex 팀, Developer Experience · 행사: Temporal Replay 2026 · 업로드 2026-06-03 · 47분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>컨텍스트 = 사람처럼 공급</td>
+<td>에이전트도 신규 입사자처럼 셋업해야 한다</td>
+<td>Codex를 Linear·Figma·Slack·Gmail·Sentry에 연결</td>
+</tr>
+<tr>
+<td>검증 도구 속도가 비용</td>
+<td>에이전트는 루프에서 린터를 수십 번 실행한다</td>
+<td>Prettier → <code>oxc-format</code>(Rust), TS 5.x → TS 7(Go) 로 전환</td>
+</tr>
+<tr>
+<td>코드 리뷰 자동화</td>
+<td>PR 100% Codex 리뷰 통과 후에야 사람에게 넘긴다</td>
+<td><code>slop</code>이 통과되지 않도록 게이트 역할</td>
+</tr>
+<tr>
+<td>Deploy Preview</td>
+<td>노트북·체크아웃 없이 스마트폰으로 PR 검토 가능</td>
+<td>핸드폰에서 태그 → 수정 → 리뷰 → 병합까지 완결</td>
+</tr>
+<tr>
+<td>코드를 소모품으로</td>
+<td>코드보다 제약 조건(테스트·스펙·lint)이 진실의 원천</td>
+<td>빠른 리팩터, 주저 없는 폐기, 플라이휠</td>
+</tr>
+<tr>
+<td>메모리 + Chronicle</td>
+<td>Codex가 과거 해결 맥락을 기억·스크린 관찰로 학습</td>
+<td>반복 설명 줄이고 점점 덜 시키게 된다</td>
+</tr>
+<tr>
+<td>Goals 기능 (실험적)</td>
+<td>명확한 목표를 주면 Codex가 완료까지 자율 실행</td>
+<td><code>Vercel 빌드 50% 빠르게</code> → 2시간 만에 달성</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Codex (OpenAI)</strong> — ChatGPT 계열이 아닌 코딩 에이전트 전용 제품. 클라우드·CLI·앱 형태로 제공</li>
+<li><strong>Chronicle</strong> — Codex의 스크린 모니터링 기능. 화면에서 무슨 작업을 하는지 관찰해 컨텍스트 자동 수집</li>
+<li><strong>Goals 슬래시 명령</strong> (<code>/goal</code>) — Codex CLI 실험적 기능. 목표 도달 때까지 루프 실행</li>
+<li><strong><code>oxc-format</code></strong> — Rust 기반 JS/TS 포매터. Prettier 대비 속도 우위 (<code>oxc</code> = Oxc 툴체인)</li>
+<li><strong>TypeScript 7</strong> — Go로 재작성된 TypeScript 컴파일러 (속도 중심). 이미 얼리 버전 존재</li>
+<li><strong>Vail</strong> — OpenAI 개발자 문서의 스타일 가이드 강제 린터 (내부 도구명)</li>
+<li><strong>Symfony (공개 레포)</strong> — OpenAI가 공개한 내부 에이전트 팀 운영 도구. Elixir 구현이지만 스펙이 진실의 원천</li>
+<li><strong>Work trees (git)</strong> — 같은 리포를 병렬로 여러 브랜치에서 체크아웃. Codex가 병렬 작업 시 충돌 방지용</li>
+<li><strong>Plan mode</strong> — Codex CLI 내 계획 작성 모드. 구현 전 accept test를 먼저 정의하는 데 활용</li>
+<li><strong>Babysitting skills</strong> — Codex가 PR을 올린 후 CI·리뷰 상태를 직접 모니터링하다 문제 생기면 수정</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>OpenAI 전 직원 80%가 Codex를 매주 사용 — 엔지니어뿐 아니라 영업·마케팅·재무·홍보팀도 포함</li>
+<li>사이드바에 상시 8~9개 에이전트 작업을 핀해두고 준비되면 그때그때 돌아온다 — 매니저처럼 위임</li>
+<li><code>agents.md</code> 파일은 길지 않게 유지 — <strong>충돌하는 컨텍스트</strong>가 분량보다 훨씬 더 나쁘다</li>
+<li>Vercel 빌드 50% 속도 개선 Goal: Codex가 <strong>2시간</strong> 만에 완료, Dom은 손 안 댐</li>
+<li>누군가 집에서 SF까지 비행 후 귀가했을 때 Codex가 <strong>3일째 계속 작동 중</strong>이었던 사례 언급</li>
+<li>GPT-4.1 → GPT-4.5 사이 토큰 사용량이 대폭 효율화 — 코드베이스 탐색 방식이 개선된 덕분</li>
+<li>5.5는 디테일 주의력이 뛰어나서, GPT Image를 베이스라인으로 주면 UI를 더 충실히 구현</li>
+<li>Codex 리뷰는 의도적으로 노이즈 없게 설계 — P0/P1 이슈만 올린다. 문서 오탈자는 별도 설정으로 P0 지정</li>
+<li>발표 당일 강연 중 <strong>Chrome 확장 프로그램 동시 런칭</strong> — Codex가 실제 Chrome 탭을 제어 가능</li>
+<li>Windows 3.1 브라우저 클론을 GPT Image 2 + GPT 5.5로 제작 후 Minesweeper 플레이 시연</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>AI 코딩의 현재</td>
+<td>코드 생성은 더 이상 병목이 아님. 품질·컨텍스트가 병목으로 이동</td>
+</tr>
+<tr>
+<td>2</td>
+<td>컨텍스트</td>
+<td>Linear·Sentry·Figma·Slack·Gmail·Calendar 등 모든 곳 연결</td>
+</tr>
+<tr>
+<td>3</td>
+<td>메모리 + Chronicle</td>
+<td>과거 해결책과 현재 스크린 활동을 학습. 점점 적게 설명</td>
+</tr>
+<tr>
+<td>4</td>
+<td>검증 도구</td>
+<td>린터·컴파일러·테스트·Vail. 속도가 비용 — Rust/Go 도구로 전환</td>
+</tr>
+<tr>
+<td>5</td>
+<td>병렬 환경</td>
+<td>여러 에이전트가 동시에 독립 작업트리에서 검증 가능해야 함</td>
+</tr>
+<tr>
+<td>6</td>
+<td>PR 리뷰</td>
+<td>100% Codex 리뷰 → 통과 후 사람 리뷰. Deploy Preview로 폰에서 병합</td>
+</tr>
+<tr>
+<td>7</td>
+<td>품질 유지</td>
+<td>코드를 소모품으로. 제약(테스트·스펙)이 진실의 원천. 리팩터 주저 말 것</td>
+</tr>
+<tr>
+<td>8</td>
+<td>로드맵</td>
+<td>능동성(proactivity) · 독립성(independence) · 병렬화(parallelization)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Q&amp;A</td>
+<td>소스 오브 트루스, 모델 선택, 대규모 마이그레이션, 토큰 관리, 컨텍스트 충돌</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. AI 코딩의 현재 — 병목이 바뀌었다</h2>
+<p>코드를 손으로 50% 이상 짜는 사람이 이제 소수다. 모델이 더 똑똑해졌을 뿐 아니라 더 유능해졌다. Codex는 자기 자신의 개발에도 기여하는 플라이휠 구조다.</p>
+<p>핵심 전환: <strong>병목이 코드 생성에서 컨텍스트 공급·검증·품질 보증으로 이동했다.</strong> 에이전트가 실제 업무를 하려면 사람이 할 때와 동일한 인프라가 필요하다.</p>
+<hr>
+<h2>2. 컨텍스트 — 에이전트를 제대로 셋업하기</h2>
+<p>"신입이 코드베이스만 보고 기준에 맞는 코드를 짤 수 있을까?" 라는 질문에서 출발.</p>
+<p>Codex는 태스크를 받으면 먼저 컨텍스트를 수집한다 — 파일 탐색, 라이브러리 파악, 코드 구조 이해. 이 단계가 첫 코드 라인 전까지 상당 시간을 차지한다.</p>
+<p><strong>Dom의 연결 목록</strong>: Linear, Sentry, CI, Figma, Gmail, Calendar, Slack, Notion</p>
+<p><strong>Vague prompting 예시</strong>:
+- "내일 이벤트에 대해 알아야 할 것 요약해줘" — 이벤트 이름도 안 썼지만 Gmail·Calendar·Slack 뒤져서 티켓까지 찾아냄
+- "Katja가 Slack에서 언급한 블로그 포스트 초안 써줘" — 스프레드시트, X 게시물 문체, 최근 작업 레포지토리까지 조합</p>
+<p><strong>Slack/Linear/GitHub 태그</strong>: 동료가 문서 이슈를 올리면 <code>@Codex</code>로 태그 → Codex가 컨텍스트를 직접 읽고 처리</p>
+<hr>
+<h2>3. 메모리 + Chronicle</h2>
+<p><strong>메모리 (실험적 기능)</strong>: 과거에 어떻게 문제를 해결했는지, 어디서 정보를 찾았는지 기억. 다음번엔 그걸 활용.</p>
+<p><strong>Chronicle</strong>: 화면을 모니터링해서 다른 툴 사용 패턴도 학습. 예: Google Docs에서 작업 중임을 파악하고 해당 드라이브 파일 위치를 기억.</p>
+<hr>
+<h2>4. 검증 (Validation) — 개발자 경험이 드디어 ROI를 낸다</h2>
+<p>에이전트가 기존 도구(컴파일러·린터·테스트)를 그대로 쓰기 때문에, 그 도구가 좋으면 에이전트도 잘 작동한다.</p>
+<p><strong>도구 유형</strong>:
+- 컴파일러, 포매터, 테스트 스위트, 린터 — 기본
+- <code>Vail</code> — OpenAI 문서 스타일 강제 린터 (커스텀)
+- UI 검증: 스크린샷, 접근성 도구, computer use</p>
+<p><strong>속도 업그레이드</strong> (루프에서 수십 번 호출되므로 누적됨):
+- Prettier → <code>oxc-format</code> (Rust)
+- TypeScript 5.x → TypeScript 7 얼리 버전 (Go)</p>
+<p><strong>병렬 환경</strong>: 여러 에이전트가 각각 독립적인 dev server + 작업트리를 가져야 충돌 없이 검증 가능.</p>
+<p><strong>에러 메시지도 교육 기회</strong>: 린터 출력이 에이전트에게 도움이 되는 피드백을 주고 있는지 점검.</p>
+<hr>
+<h2>5. PR 리뷰 — 슬롭(slop) 막기</h2>
+<p>OpenAI 전체 PR의 100%를 Codex 리뷰에 돌린다. <strong>Codex 리뷰 통과 전까지는 사람에게 리뷰 요청 안 함.</strong></p>
+<p><strong>설계 철학</strong>:
+- 노이즈 없음 — 사소한 것은 지적 안 함
+- 자체 환경에서 가설 검증 가능
+- 중요한 이슈만 하이라이트</p>
+<p><strong>커스텀 리뷰 기준 예시</strong>: 문서 콘텐츠의 오탈자·문법 오류를 P0/P1으로 지정 → 코드에선 기본 무시되던 것을 문서에서는 강제</p>
+<p><strong>피드백 루프</strong>: 같은 실수가 반복되면 그것을 컨텍스트나 검증 도구에 다시 녹인다.</p>
+<p><strong>Babysitting PR</strong>:
+- Codex가 PR 올린 뒤 CI 모니터링 → 실패 시 수정 → 통과까지 반복
+- 코드 리뷰 댓글까지 처리
+- Deploy Preview 생성 후 담당자에게 Slack 알림</p>
+<hr>
+<h2>6. Deploy Preview와 폰 리뷰</h2>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>프론트엔드 작업의 비협상 원칙</strong></span>: 로컬 체크아웃 없이 검증.</p>
+<p>워크플로우: Slack 이슈 태그 → Codex 수정 → PR 올림 → Deploy Preview → 동료에게 공유 → 폰에서 병합</p>
+<p>UI 변경 시 비디오/스크린샷 업로드 표준화 — Codex가 앱 실행·조작·녹화까지 처리.</p>
+<hr>
+<h2>7. 품질 유지 — 코드는 소모품이다</h2>
+<p><strong>빠른 배포 → 빠른 폐기</strong>: Codex 앱은 출시 3개월, 매주 배포, 수차례 대규모 리팩터 완료.</p>
+<p><strong>제약이 진실의 원천</strong>:
+- 테스트·CI·스펙이 진짜 소스 오브 트루스
+- 코드 한 줄이 어떻게 생겼는지보다 제약이 제대로 동작하는지가 중요</p>
+<p><strong>Skills</strong>: 
+- 문서 에디터 skill — 스타일 가이드 강제
+- <code>finish</code> skill — PR 병합 전 리팩터 자동 수행</p>
+<p><strong>Symfony 레포 사례</strong>: 내부 Python 구현을 Codex로 스펙으로 증류 → 그 스펙으로 Elixir 재구현. 스펙이 진실.</p>
+<hr>
+<h2>8. 로드맵 — 세 가지 트렌드</h2>
+<table>
+<thead>
+<tr>
+<th>트렌드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>능동성 (Proactivity)</strong></td>
+<td>사용자가 직접 프롬프트 안 해도 에이전트가 먼저 행동. Sentry 에러 감지 → PR 자동 오픈</td>
+</tr>
+<tr>
+<td><strong>독립성 (Independence)</strong></td>
+<td>Chronicle + computer use 조합으로 장시간 자율 실행</td>
+</tr>
+<tr>
+<td><strong>병렬화 (Parallelization)</strong></td>
+<td>로컬 머신 한계 → 클라우드·dev box에서 컴퓨팅 병렬화</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>9. Q&amp;A 주요 내용</h2>
+<p><strong>Q: 코드가 소모품이면 진실의 원천은?</strong>
+테스트·CI·스펙이 진실. 코드 디테일은 그 아래. Symfony 사례처럼 스펙이 구현을 드라이브한다.</p>
+<p><strong>Q: 모델별 차이?</strong>
+5.5는 디테일 주의력 탁월, GPT Image 베이스라인 결합 시 UI 충실도 높음. 일반 UI 생성은 4.1이 더 나을 수 있음. 모델마다 소통 방식이 약간 다르다.</p>
+<p><strong>Q: 30-40K줄 대규모 언어 마이그레이션?</strong>
+1. 언어 독립적 acceptance test 먼저 작성 (양쪽 엔드포인트에 공통 테스트)
+2. Plan mode로 접근법 계획
+3. Goals 기능으로 장시간 자율 실행 (<code>/goal</code>: 아직 실험적, Codex CLI 한정)</p>
+<p><strong>Q: 토큰 예산?</strong>
+Dom은 무제한 토큰. 제한 환경이라면 — 메모리 활용, Codex의 자기 성찰(agents.md 기반), 결과 중심으로 개선 방향 잡기.</p>
+<p><strong>Q: 여러 개발자의 컨텍스트 충돌?</strong>
+<strong>분량보다 충돌이 더 큰 문제.</strong> agents.md를 짧게 유지, 모노레포 전체가 아닌 해당 프로젝트 폴더에서 Codex 실행. GPT 4.1→4.5 사이 토큰 효율 자체가 크게 개선됨.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Codex (또는 다른 코딩 에이전트)에 Linear·Slack·Sentry·Figma 등 연결해보기</li>
+<li>[ ] 린터·포매터 실행 속도 측정. Rust/Go 기반 도구 전환 검토 (<code>oxc-format</code> 등)</li>
+<li>[ ] PR 100% 자동 리뷰 게이트 도입 — 사람 리뷰 전 에이전트 리뷰 통과 의무화</li>
+<li>[ ] Deploy Preview 파이프라인 구축 — 로컬 체크아웃 없이 폰에서 검증 가능하게</li>
+<li>[ ] agents.md (또는 CLAUDE.md 등) 파일 짧게·충돌 없이 유지</li>
+<li>[ ] 코드 대신 스펙·테스트·lint 규칙에 집중하는 습관 만들기</li>
+<li>[ ] Codex Goals 기능(<code>/goal</code>) 실험해보기 — 측정 가능한 목표 형태로 작성</li>
+<li>[ ] UI 변경 시 스크린샷/영상 업로드를 PR 표준으로 만들기</li>
+<li>[ ] 반복되는 실수 → 검증 도구나 컨텍스트 파일에 다시 녹이는 루프 확립</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] OpenAI @ Replay 2026 | OpenAI는 Codex로 개발 방식을 어떻게 바꾸고 있을까요? · https://www.youtube.com/watch?v=H95cVsPJLcw · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p><strong>[사회자]</strong> Dom을 모시게 되어 정말 기쁩니다. OpenAI에서 Codex를 담당하며 개발자 경험에 집중하고 있습니다. Codex가 OpenAI 내부 개발 방식을 어떻게 바꾸고 있는지 공유해 주실 겁니다.</p>
+<p><strong>[Dom]</strong> 감사합니다. 어젯밤에야 더 나은 제목을 떠올렸는데, 그래도 와주셔서 감사합니다. 손 한번 들어볼게요 — 아직 코드의 50% 이상을 직접 손으로 짜는 분 계세요? (몇 명 손) 40%? 30%? 20%? 10%? 이제 코드를 전혀 손으로 안 짜는 분은요? 좋습니다.</p>
+<p>AI 기반 코딩은 지난 2년 동안 엄청나게 변했습니다. 이제 코드 자체가 병목이 아닙니다. 많은 코드를 만들 수는 있어요. 하지만 실제로 품질 좋은 소프트웨어를 어떻게 보장하느냐가 문제입니다. 모델이 더 지능적이 됐을 뿐 아니라 더 유능해졌어요. 그리고 Codex는 자기 자신의 훈련·개발에 직접 기여하는 플라이휠 구조가 됐습니다.</p>
+<p>AI는 이제 단순 자동완성이나 페어 프로그래밍을 넘어, 복잡한 작업을 몇 시간 또는 며칠씩 처음부터 끝까지 프로덕션까지 가져가는 수준에 왔습니다. 그에 따라 병목이 코드 생성에서 <strong>컨텍스트 공급·검증·확인</strong> 으로 이동했습니다.</p>
+<p>OpenAI에서는 전 직원 80%가 Codex를 매주 씁니다 — 엔지니어만이 아니라 영업·마케팅·재무·홍보팀까지. 많은 사람이, 특히 비개발자들이 이제 Codex 없이는 못 살겠다고 합니다.</p>
+<p><strong>[컨텍스트]</strong></p>
+<p>코딩 에이전트를 제대로 활용하는 첫 번째 열쇠는 컨텍스트입니다. 신입이 팀에 합류했을 때 그냥 코드베이스에 던져놓으면 될까요? 아니죠. 우리는 그 사람이 성공하도록 적절한 도구와 정보를 갖춰줍니다. 에이전트에게도 똑같이 해야 합니다.</p>
+<p>Codex는 태스크를 받으면 바로 코드를 짜지 않습니다. 먼저 컨텍스트를 수집합니다 — 파일 탐색, 어떤 기능·라이브러리가 있는지, 코드베이스 전체 구조. 이게 첫 코드 라인이 나오기 전까지 상당한 시간을 차지합니다. 새 코드베이스에 파고드는 엔지니어가 하는 것과 같습니다.</p>
+<p>그런데 컨텍스트가 코드베이스에만 있지 않습니다. 요즘 엔지니어는 코드 에디터 밖에서 더 많은 시간을 씁니다. OpenAI에서는 에이전트가 피처를 만드는 데 필요한 모든 컨텍스트에 접근할 수 있도록 합니다. 제 경우 Codex를 Linear, Sentry, CI 시스템, Figma, Gmail, 캘린더, Slack, Notion에 연결해뒀습니다.</p>
+<p>실제 예시를 보여드리겠습니다. 어젯밤 저는 Codex에게 "내일 행사에 대해 알아야 할 것 전부 요약해줘"라고만 했습니다. 어떤 행사인지도 명시 안 했죠. 그랬더니 Gmail, 캘린더, Slack을 뒤져서 티켓 위치, Stu와의 대화, 가져와야 할 것들까지 다 찾아냈습니다.</p>
+<p>또 다른 예: 동료 Katja가 블로그 포스트를 써달라고 언젠가 태그를 달았는데, 저는 그게 뭔지 뭉뚱그려서만 기억했습니다. "Slack에서 Katja가 태그한 것 찾아서, X 게시물 문체로, 최근 작업 기반으로 초안 써줘"라고 했습니다. Codex가 스프레드시트를 찾고, 주제를 파악하고, 파일시스템에서 레포지토리를 뒤지고, X 게시물에서 제 문체를 파악해 초안을 만들었습니다.</p>
+<p>Slack·Linear·GitHub에서도 <code>@Codex</code>로 태그하면 됩니다. 예: 동료가 문서 이슈를 올리면 Codex 태그 → Codex가 알아서 수정 → PR 생성. 저는 가끔 동료들한테 그냥 Codex 태그한 Slack 메시지를 보내기도 합니다. 거기 컨텍스트가 다 있으니까요.</p>
+<p><strong>[메모리 + Chronicle]</strong></p>
+<p>세 번째 요소는 메모리입니다. Codex가 매번 처음부터 정보를 찾을 필요 없이, 어떻게 일하는지를 학습해야 합니다. 몇 주 전 메모리를 실험적 기능으로 출시했습니다. 활성화하면 Codex가 과거 해결 방법, 정보 위치를 기억하면서도 CI·Slack·이메일에서 최신 컨텍스트는 실시간으로 가져옵니다.</p>
+<p>Chronicle은 추가 옵션으로, Codex 대화뿐 아니라 화면 전체를 모니터링해 다른 도구 사용 패턴도 학습합니다. 예: Google Docs에서 작성 중임을 파악하고 해당 소스를 Google Drive에서 찾아옴. "Roman에게 나중에 메시지 보내줘"라고 하면 어떤 Roman인지, Slack을 써야 하는지까지 알아서 판단.</p>
+<p><strong>[검증 도구]</strong></p>
+<p>컨텍스트를 다 줬으면, 에이전트가 올바르게 작업하는지 어떻게 확인할까요? 개발자 경험에 투자했다면 이제 그 투자가 빛을 발합니다. Codex는 여러분이 이미 쓰는 도구로 자기 작업을 검증합니다 — 자기 검증 훈련이 된 상태입니다.</p>
+<p>기본 도구: 컴파일러, 포매터, 테스트 스위트, 린터. 하지만 린터는 꼭 전통적인 린터일 필요 없습니다. 에이전트에게 작업 완료 여부를 결정론적으로 알려주는 모든 것이 린터입니다. 예: <code>Vail</code> — OpenAI 개발자 문서의 스타일 가이드 강제 도구. Codex가 문서 초안을 쓸 때 스타일 기준을 지켰는지 자동 검증.</p>
+<p>속도가 중요합니다. 에이전트가 루프에서 이 도구들을 수십 번 실행하니까요. 그래서 더 빠른 도구로 전환했습니다:
+- Prettier → <code>oxc-format</code> (Rust 기반)
+- TypeScript 5.x → TypeScript 7 얼리 버전 (Go 기반)</p>
+<p>병렬 실행 시에는 에이전트마다 독립적인 환경이 필요합니다 — 각자 dev server, 각자 작업트리. 예: Temporal 환경이라면 각 에이전트가 자기 worker와 dev server를 갖고 서로 부딪히지 않아야 합니다.</p>
+<p>UI 검증: 스크린샷, 접근성 도구, computer use로 실제 UI를 클릭하며 검증. Codex 앱에 이 기능들을 직접 추가했습니다. 인앱 브라우저, computer use(Mac 전체 앱 제어), 그리고 이 강연 당일 Chrome 확장 프로그램 출시 — Codex가 실제 Chrome 탭을 제어해서 테스트·리서치·멀티탭 검증 가능.</p>
+<p><strong>[PR 리뷰]</strong></p>
+<p>에이전트가 코드를 더 많이 만들수록 PR도 많아집니다. 품질 바를 낮추지 않으려면 어떻게 해야 할까요?</p>
+<p>모든 PR의 100%를 GitHub에서 Codex 리뷰 기능으로 돌립니다. 기본 철학: Codex 리뷰 통과 전까지 사람에게 리뷰 요청 안 함. 의도적으로 노이즈 없게 설계 — 중요한 이슈만 올림. 자체 환경에서 가설 검증 후 critical 이슈를 하이라이트.</p>
+<p>커스텀 기준 예시: 개발 문서의 오탈자·문법 오류를 P0/P1으로 지정(코드에서는 기본 무시). 반복되는 실수는 컨텍스트나 검증 도구에 다시 녹입니다.</p>
+<p>CI는 더 중요해졌습니다. 속도보다 견고함이 우선입니다. 프로덕션에 올라가지 말았어야 할 것이 올라가면, 그 케이스를 CI에 추가합니다. 속도는 Codex가 자기 PR을 직접 모니터링하니 걱정 덜 해도 됩니다.</p>
+<p>Babysitting 예시: Codex Cloud에서 시작한 PR을 로컬로 가져오고 싶었습니다. "이 PR 수정해줘"라고 링크 줬더니 — GitHub에 가서 브랜치 체크아웃, 이슈 파악, 수정, CI 모니터링, Vercel 부분은 아직 진행 중이지만 괜찮다고 판단, 담당자 Ankur에게 Slack 알림까지.</p>
+<p>Katja 예시: Slack DM에서 Google Doc 찾고, 코드베이스 변경 사항 파악, MDX 수정, PR 올리고, CI 23분 기다리면서 모니터링(그 중 6-7분은 CI 대기), Deploy Preview 확인 후 Slack 스레드에 직접 답변. 이러면 저는 5-7개 에이전트를 동시에 돌리면서 컨텍스트 전환 에너지 없이 핵심 피처에만 집중합니다.</p>
+<p>Deploy Preview: 프론트엔드에서 비협상 원칙. 로컬 체크아웃 없이 폰에서 태그 → 수정 → 리뷰 → 병합까지. UI 변경 시 비디오·스크린샷 업로드 표준화 — Codex가 앱 실행·조작·녹화까지.</p>
+<p><strong>[품질 유지]</strong></p>
+<p>이 모든 것이 품질을 높이지만, 피처 블로트(feature bloat)도 문제입니다. 가장 어려운 것은 <strong>절제</strong>입니다. 내부 테스트, 여러 접근법 비교 후 확신이 생기면 배포. 제거도 망설이지 않습니다.</p>
+<p>Codex 앱은 출시 3개월, 매주 배포, 수차례 대규모 리팩터 완료. 상태 관리·작업트리 등 핵심 부분도 통째로 버리고 새로 짰습니다. 1-2명이 대규모 리팩터를 하면서 동시에 다른 피처 개발도 가능합니다. 2-3주 코드 프리즈 없이.</p>
+<p><strong>코드는 소모품처럼 다루세요.</strong> 코드 한 줄보다 제약(테스트·CI·스펙)이 진실의 원천입니다. Codex가 실수를 반복하지 않도록 컨텍스트와 검증 도구를 지속적으로 업데이트하는 루프가 핵심입니다.</p>
+<p><strong>Skills</strong> 예시: 문서 에디터 skill(스타일 가이드 강제), <code>finish</code> skill(PR 병합 전 리팩터·베스트 프랙티스 체크).</p>
+<p>Symfony 레포: 내부 구현을 Codex로 스펙으로 증류 → 그 스펙으로 Elixir 재구현. 기술 구현이 아니라 스펙이 진실의 원천.</p>
+<p><strong>[로드맵]</strong></p>
+<p>세 가지 트렌드:
+1. <strong>능동성(Proactivity)</strong>: 직접 프롬프트 안 해도 먼저 행동. Sentry 에러 감지 → PR 자동 오픈
+2. <strong>독립성(Independence)</strong>: Chronicle + computer use로 장시간 자율 실행
+3. <strong>병렬화(Parallelization)</strong>: 로컬 한계 → 클라우드·dev box에서 컴퓨팅 병렬화</p>
+<p><strong>[데모]</strong> GPT Image 2 + GPT 5.5로 Windows 3.1 브라우저 클론 제작. Minesweeper 포함. 인앱 브라우저에서 Codex 커서가 직접 조작.</p>
+<p><strong>[마무리]</strong> 핵심 세 가지: (1) Codex에 올바른 컨텍스트를 주고 있는가? (2) Codex가 올바르게 검증하고 있는가? 잘못됐을 때 올바른 신호를 받고 있는가? (3) 잘못된 리뷰·이슈를 컨텍스트·검증 도구에 다시 녹여 Codex가 같은 실수를 못 하도록 하고 있는가?</p>
+<p>Codex에게 팀원과 동일한 여건을 줘야 합니다. 감사합니다.</p>
+<p><strong>[Q&amp;A 요약]</strong></p>
+<p>Q(소스 오브 트루스): 코드가 소모품이면 진실의 원천은? → 테스트·CI·스펙. Symfony 사례: 내부 구현 → 스펙 증류 → 여러 언어로 구현. 스펙이 진실.</p>
+<p>Q(모델 선택): 5.5를 쓰나? 모델별 차이는? → 5.5는 디테일 주의력 탁월. GPT Image 베이스라인 결합 시 UI 충실도 높음. 모델마다 소통 방식 약간 다름. 하드앤패스트 규칙 없음.</p>
+<p>Q(코드 폐기 사례): 실제로 버린 것은? → Codex 앱 Automations 페이지, 작업트리 구현 — 출시 후에도 2-3회 완전히 새로 짰음.</p>
+<p>Q(시간 관리): 에이전트 실행 중 25분을 어떻게 쓰나? → 매니저처럼 위임. 8-9개 작업을 사이드바에 핀해두고 준비되면 돌아옴. 하루이틀 후에야 생각이 바뀌어 폐기할 수도 있는데, 그게 오히려 좋음 — 감정적 투자가 없어서 더 솔직하게 평가.</p>
+<p>Q(대규모 마이그레이션): 40K줄을 다른 언어로 이전하려면? → 언어 독립적 acceptance test 먼저, Plan mode 활용, Goals 기능(<code>/goal</code>, CLI 실험적) 사용. 측정 가능한 목표 형태 필수. 예: Vercel 빌드 50% 단축 → 2시간. 누군가는 3일 내내 실행시킨 사례도 있음.</p>
+<p>Q(토큰 예산): 토큰 카운트를 고려하나? → Dom은 무제한 토큰. 제한 환경이라면 메모리 활용, Codex 자기 성찰(<code>agents.md</code> 드리븐), 결과 중심. 추론 레벨 선택 가능 — Dom은 "extra high"로 설정하고 비동기로 처리.</p>
+<p>Q(컨텍스트 충돌): 여러 개발자 작업 시 컨텍스트 관리? → 분량보다 <strong>충돌하는 컨텍스트</strong>가 더 위험. <code>agents.md</code>를 짧게 유지. 모노레포 전체보다 해당 프로젝트 폴더에서 실행. GPT 4.1→4.5 사이 토큰 효율 자체가 크게 개선됨.</p>
+</details>
+</body></html>

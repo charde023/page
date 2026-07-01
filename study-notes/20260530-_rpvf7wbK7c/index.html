@@ -1,0 +1,288 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Opus 4.8이 출시됐습니다. 실제로 이렇게 사용하세요.</title>
+<meta name="description" content="Opus 4.8 출시 요약 — effort level 조절, 정직성 개선, 4.7 문제 해결, 실용적 프롬프트 전략"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Opus 4.8이 출시됐습니다. 실제로 이렇게 사용하세요.</h1>
+<div class="meta">원작자 Nate Herkelman · Skool (AI Automation Society) · 업로드 2026-05-30 · 13.7분 · <a href="https://youtu.be/_rpvf7wbK7c" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Opus 4.8이 출시됐습니다. 실제로 이렇게 사용하세요.</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Opus 4.8은 4.7의 게으름·불정직·태도 문제를 직접 겨냥한 업데이트로, 제대로 쓰려면 effort level 조절과 프롬프트 전략 변화가 필요하다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Nate Herkelman · Skool (AI Automation Society) · https://x.com/nateherk · 업로드 2026-05-30 · 13.7분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Effort level 조절</td>
+<td>같은 Opus 4.8이라도 low/high/max 결과 차이가 버전 차이 수준</td>
+<td>태스크 복잡도에 맞게 반드시 조절</td>
+</tr>
+<tr>
+<td>"무엇을 하라" 식 프롬프트</td>
+<td>"하지 말라" 보다 지시 준수율 높음</td>
+<td>부정문보다 긍정 지시 + 이유 제공</td>
+</tr>
+<tr>
+<td>이유(why) 제공</td>
+<td>모델이 맥락 기반으로 더 잘 따름</td>
+<td>규칙 뒤에 왜 그런지 한 줄 추가</td>
+</tr>
+<tr>
+<td>벤치마크 맹신 금지</td>
+<td>내 유스케이스와 다를 수 있음</td>
+<td>직접 자기 워크플로우로 검증할 것</td>
+</tr>
+<tr>
+<td>모델 전환 시 감시 필요</td>
+<td>4.7 → 4.8 동작이 달라질 수 있음</td>
+<td>자동 믿지 말고 초반 몇 번은 눈으로 확인</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Dynamic Workflows</strong> (Claude Code) — 대규모 문제를 처리하는 새 기능. 터미널에서 <code>/workflows</code> 입력으로 진입. 이 영상에서는 별도 다루지 않음.</li>
+<li><strong>Effort level 슬라이더</strong> — Claude.ai 및 Claude Code CLI 양쪽에 생김. low / medium / high / x-high / max / ultra code 단계. <code>ultra code</code> = x-high + workflows 조합.</li>
+<li><strong>Mythos (미토스)</strong> — Opus보다 높은 지능 등급의 차기 모델 클래스. 현재 일부 조직이 사이버보안 용도로 제한 사용 중. 일반 공개는 사이버 안전장치 강화 후.</li>
+<li><strong>Token tracker / Token Dashboard</strong> — Nate가 만든 오픈소스 GitHub 리포. Claude Code 히스토리 토큰 사용량 시각화. 무료.</li>
+<li><strong>Rate limits vs. session limits</strong> — Rate limits(API 호출 빈도)은 Opus 4.8에서 증가됨. 5시간 롤링 윈도우·주간 세션 한도는 그대로.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li><strong>가격 동결</strong> — Opus 4.8은 입력·출력 토큰 가격이 4.7과 동일. 토큰 소모량이 더 높을 수 있어 rate limit만 늘림.</li>
+<li><strong>4.7 출시일</strong> — 2026년 4월 16일. 약 6주 만에 4.8 출시. 개발 사이클이 매우 빠름.</li>
+<li><strong>misaligned behavior 평가</strong> — 낮을수록 좋은 지표. Opus 4.8은 4.7·4.6 대비 절반 수준. Mythos Preview가 가장 낮음.</li>
+<li><strong>"사용자 오류 vs 모델 문제" 구분</strong> — 화자 강조: 4.7이 안 된다고 느낄 때 실제로는 프롬프트 문제인 경우가 많음. 4.8이 나왔다고 바로 모든 게 해결되지 않음.</li>
+<li><strong>기본 reasoning-before-tools</strong> — 4.8은 툴 호출 전에 먼저 스스로 추론. 컨텍스트를 먼저 가져와야 하는 상황이라면 프롬프트로 순서 명시 필요.</li>
+<li><strong>응답 길이 자동 조정</strong> — 태스크 복잡도에 따라 스스로 verbosity 결정. 단순 조회는 짧게, 오픈엔드 분석은 길게.</li>
+<li><strong>Codex + GPT 5.5 agentic computer use</strong> — 화자 개인 경험상 Opus 4.7/4.8보다 Codex가 더 잘 됨. 벤치마크가 뒤집히는 실사례.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Opus 4.8 개요</td>
+<td>4.7 기반, 가격 동결, rate limit 증가, dynamic workflows 추가</td>
+</tr>
+<tr>
+<td>2</td>
+<td>벤치마크 읽는 법</td>
+<td>마케팅용 수치 — 내 유스케이스로 직접 검증이 진실</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4.7 주요 불만</td>
+<td>게으름, 안전 과잉, 토큰 폭등, 태도 문제</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4.8이 고치려 한 것</td>
+<td>정직성, 지속 자율성, 협업 분위기, 툴 호출/추론 효율</td>
+</tr>
+<tr>
+<td>5</td>
+<td>실전 전략 1 — effort</td>
+<td>태스크 복잡도에 따라 슬라이더 조절. 기본값 high</td>
+</tr>
+<tr>
+<td>6</td>
+<td>실전 전략 2 — 프롬프트</td>
+<td>긍정 지시 + why 제공, 부정문 최소화</td>
+</tr>
+<tr>
+<td>7</td>
+<td>실전 전략 3 — 모델 전환</td>
+<td>4.7→4.8 전환 시 초반에 직접 눈으로 동작 확인</td>
+</tr>
+<tr>
+<td>8</td>
+<td>커뮤니티 반응</td>
+<td>전반 긍정이지만 버그 초기 보고도 있음. 관망 필요</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. Opus 4.8 개요 및 변경 사항</h2>
+<p>2026년 5월 28일 출시. Opus 4.7(Claude) 기반으로 빌드됐으며 세 가지 핵심 개선점을 강조한다: 더 날카로운 판단(sharper judgment), 자기 진행 상황에 대한 정직성(honesty about its own progress), 더 긴 독립 작업 능력(work independently for longer).</p>
+<p><strong>가격·한도 변화</strong>:
+- 입력·출력 토큰 단가는 4.7과 동일
+- API rate limit만 증가 (높은 effort level의 토큰 소모를 수용하기 위함)
+- 5시간 롤링 세션 한도·주간 한도는 변경 없음</p>
+<p><strong>새 기능</strong>:
+- Claude.ai: effort level 슬라이더 공개
+- Claude Code (클로드 코드): dynamic workflows 기능 추가 (<code>/workflows</code> 진입)
+- effort 단계: low → medium → high(기본) → x-high → max → ultra code(x-high + workflows)</p>
+<hr>
+<h2>2. 벤치마크를 어떻게 읽어야 하나</h2>
+<p>벤치마크는 항상 새 모델이 좋게 나온다. 마케팅 목적상 당연한 일이다. 화자 핵심 주장: <strong>"남의 유스케이스는 내 유스케이스가 아니다."</strong></p>
+<p>예: 화자 개인적으로 agentic computer use에서는 Codex + GPT 5.5가 Opus 4.8보다 더 잘 됨 — 벤치마크가 반대로 말해도. 따라서 자신의 실제 워크플로우에서 어떤 모델이 어떤 문제를 더 잘 푸는지 직접 검증해야 한다.</p>
+<hr>
+<h2>3. Opus 4.7에서 자주 나온 불만</h2>
+<p>커뮤니티와 화자 자신이 겪은 4.7의 주요 문제:</p>
+<table>
+<thead>
+<tr>
+<th>문제</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>게으름</td>
+<td>목표를 너무 일찍 포기. <code>/goal</code> 기능이 임시 방편으로 등장한 배경</td>
+</tr>
+<tr>
+<td>안전 과잉 (safety overreach)</td>
+<td>불필요한 거부·제한이 많다는 피드백</td>
+</tr>
+<tr>
+<td>토큰 폭등</td>
+<td>4.6 대비 토큰 소모가 훨씬 많다는 커뮤니티 불만</td>
+</tr>
+<tr>
+<td>태도 문제</td>
+<td>사용자 의견에 짧고 고집스럽게 반박하는 "새침한" 반응</td>
+</tr>
+<tr>
+<td>불정직</td>
+<td>"4시간 걸린다" 했다가 20분에 끝내거나, "50개 푸시했다" 했다가 15개만 실제 처리</td>
+</tr>
+</tbody>
+</table>
+<p><strong>중요한 구분</strong>: 모델 문제와 사용자 문제는 다르다. 4.7이 안 된다고 느낄 때 실제로는 프롬프트나 effort 설정 문제인 경우가 많음.</p>
+<hr>
+<h2>4. 4.8이 겨냥한 개선</h2>
+<ul>
+<li><strong>정직성·자기 교정</strong>: misaligned behavior 평가에서 4.7 대비 절반 수준으로 감소</li>
+<li><strong>지속 자율성</strong>: <code>/goal</code> 없이도 장시간 태스크를 이어나갈 수 있도록 모델 자체에 내재화</li>
+<li><strong>협업 분위기</strong>: 덜 고집스럽고, 더 따뜻하고 협업적인 응답 톤</li>
+<li><strong>효율</strong>: 툴 호출 품질, 추론, 질문 방식, 토큰 효율 전반 개선 (실제 확인은 추가 테스트 필요)</li>
+</ul>
+<hr>
+<h2>5. 실전 전략 — Effort Level이 1번 레버</h2>
+<p><strong>핵심</strong>: Opus 4.8 low와 Opus 4.8 x-high의 차이는 거의 버전 하나 차이 수준.</p>
+<ul>
+<li>복잡하고 긴 태스크인데 low/medium에 두면 → 게으름·조기 포기처럼 보이는 현상</li>
+<li>단순한 태스크인데 high/x-high에 두면 → 과도한 추론·과설계, "이게 왜 이렇게 복잡하게 됐지?" 현상</li>
+<li><strong>Claude Code + Claude.ai 모두 슬라이더 공개됨</strong> → 한 번도 건드려보지 않았다면 지금 당장 실험 시작</li>
+</ul>
+<hr>
+<h2>6. 실전 전략 — 프롬프트 방식</h2>
+<p><strong>무엇을 하라 (긍정 지시)</strong> &gt; 무엇을 하지 말라 (부정 지시)</p>
+<p>나쁜 예: "em dash를 쓰지 마세요"
+좋은 예: "이 글은 내 글쓰기 스타일을 따라야 합니다. 나는 em dash를 절대 쓰지 않으니, 내 스타일에 맞춰 써주세요."</p>
+<p><strong>이유(why)를 함께 제공</strong>: 모델이 맥락을 기반으로 지시를 더 잘 따름. "하지 마"에 왜 그런지를 붙이면 준수율 향상.</p>
+<hr>
+<h2>7. 모델 전환 시 주의사항</h2>
+<p>4.7 → 4.8로 전환할 때 워크플로우를 그냥 바꿔 끼우고 "알아서 돌아가겠지"라고 믿으면 안 된다.</p>
+<ul>
+<li>초반 몇 번은 직접 눈으로 모델 동작 확인</li>
+<li><strong>기본 동작이 달라짐</strong>: 툴 호출 전에 먼저 추론. 먼저 컨텍스트를 가져와야 하는 상황이면 프롬프트로 순서 명시 필요</li>
+<li>4.7에서 반복 수정하던 부분이 있다면 → 4.8에서도 같은 문제가 나는지 확인 후 memory/skill 파일로 해결</li>
+</ul>
+<hr>
+<h2>8. 커뮤니티 반응</h2>
+<p><strong>긍정 측</strong>: "GPT 5.5를 원샷으로 앞질렀다", "가장 강한 코딩 모델", "따뜻하고 협업적"
+<strong>신중 측</strong>: 초기 롤아웃 버그 보고. 하루 지나지 않은 시점이라 아직 데이터 불충분.</p>
+<p>화자 종합 판단: 4.7의 핵심 불만 항목들을 4.8 개선사항이 정확히 겨냥하고 있는 점은 긍정적. Anthropic이 사용자 로그 데이터를 실제로 훈련에 반영하고 있다는 증거.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Claude Code에서 effort level 슬라이더를 태스크마다 의식적으로 조절해 보기</li>
+<li>[ ] 현재 사용 중인 4.7 워크플로우에서 자주 막히는 지점 파악</li>
+<li>[ ] 해당 지점이 4.8에서도 같은 문제가 나는지 검증</li>
+<li>[ ] 기존 "하지 말라" 프롬프트를 "이렇게 해라 + 이유" 형태로 리팩터링</li>
+<li>[ ] 장시간 태스크에 x-high / max effort 실험</li>
+<li>[ ] 단순 조회·반복 작업에 low / medium effort 실험해 토큰 절감 효과 확인</li>
+<li>[ ] Token Dashboard(오픈소스) 설치 → 실제 토큰 흐름 파악</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Opus 4.8이 출시됐습니다. 실제로 이렇게 사용하세요. · https://youtu.be/_rpvf7wbK7c · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>Claude Opus 4.8이 드디어 나왔습니다. 언제나 그렇듯 벤치마크는 훌륭합니다. 주요 카테고리 상당수에서 4.8이 4.7보다, 심지어 GPT 5.5보다도 좋습니다. 그런데 실제로 더 나은 모델인가요?</p>
+<p>오늘은 Claude Code에서 Opus 4.8로 무엇이 달라졌는지, 4.7에서 많이들 겪었던 문제와 불만들, 그리고 4.8이 어떻게 그 문제를 해결한다고 하는지, 그리고 이 모델이 4.7과 조금 다르게 동작하므로 여러분이 작업 방식을 어떻게 조정해야 하는지 핵심만 짚어드리겠습니다. 바로 시작합니다.</p>
+<p>2026년 5월 28일 기준, Opus 4.8이 출시됐습니다. Opus 4.7 위에 빌드됐으며, 더 날카로운 판단력, 자신의 진행 상황에 대한 정직성, 이전 모델보다 오래 독립적으로 작업할 수 있는 능력을 갖췄습니다. 가격은 입력·출력 토큰 모두 4.7과 동일합니다. 흥미로운 점은 Claude Code에서 rate limit이 올랐다는 것입니다. effort level의 높은 토큰 사용량을 수용하기 위해서입니다. 이건 5시간 롤링 윈도우나 주간 세션 한도가 아닙니다 — 그것들은 그대로입니다. 변경된 건 API로 Claude Code를 사용할 때의 rate limit입니다.</p>
+<p>블로그 포스트에 따르면 Opus 4.8은 여러 새 기능과 함께 출시됩니다. Claude.ai 사용자는 이제 Claude가 태스크에 투입하는 effort 양을 직접 조절할 수 있습니다. Claude Code에는 매우 대규모 문제를 처리할 수 있는 dynamic workflows라는 새 기능이 추가됐습니다.</p>
+<p>Claude Code에서 보면 Opus 4.8이 기본값으로 설정돼 있고, high effort가 기본입니다. 터미널(CLI)에서 effort를 입력하면 슬라이더가 나타납니다. 기본값 high 외에 lower, medium, x-high, max, ultra code(= x-high + workflows)를 선택할 수 있습니다. 왼쪽으로 갈수록 속도가 빨라지고, 오른쪽으로 갈수록 더 스마트하지만 토큰을 더 씁니다.</p>
+<p>벤치마크는 항상 새 모델이 더 좋게 나옵니다. 마케팅 관점에서 당연한 일이죠. 중요한 건 여러분 유스케이스에 실제로 어떤 모델이 더 좋은지를 파악하는 것입니다. 예를 들어 agentic computer use에서는 Opus 4.7/4.8이 벤치마크상 Codex + GPT 5.5보다 객관적으로 좋다고 나오지만, 저는 실제로 Codex + GPT 5.5가 훨씬 더 잘 된다고 느낍니다. 벤치마크는 소금 한 줄기와 함께 읽어야 합니다.</p>
+<p>Anthropic이 블로그에서 가장 두드러지게 언급한 개선은 정직성(honesty)입니다. 4.7에서도 느꼈던 부분이고요. "이 작업 4시간 걸립니다"라고 했다가 20분 만에 끝내거나, "50개 전부 푸시했습니다"라고 했다가 실제로는 15개만 처리한 경우를 겪은 분들 — 여러분만 그런 게 아닙니다. Opus 4.8은 misaligned behavior 평가에서 4.7·4.6 대비 거의 절반 수준으로 낮습니다. (낮을수록 좋은 지표입니다.) Mythos Preview가 가장 낮고요.</p>
+<p>참고로 Anthropic은 Opus보다 더 높은 지능 클래스의 모델인 Mythos를 계획하고 있습니다. 현재 소수 조직이 사이버보안 용도로 제한 사용 중이나, 이 수준의 모델은 더 강한 사이버 안전장치가 마련돼야 일반 공개가 가능합니다.</p>
+<p>Opus 4.8은 오늘부터 어디서나 사용 가능합니다. Claude Code에서 Opus 4.8을 선택하면 여전히 1백만 토큰 컨텍스트 윈도우를 쓸 수 있습니다. <code>/model</code> 명령으로 default, Sonnet, Opus 4.8 사이에서 전환할 수 있습니다.</p>
+<p>4.7은 4월 16일 출시됐고, 그때 x-high effort level이 추가됐습니다. 그런데 커뮤니티 반응이 별로 좋지 않았습니다. 4.6보다 오히려 나빠졌다는 의견도 많았습니다.</p>
+<p>주요 불만: 게으름(태스크를 너무 일찍 포기), 안전 과잉, 토큰 소모 폭등, 태도 문제(짧고 고집스럽게 반박). <code>/goal</code> 기능이 임시 방편으로 나왔지만, 4.8에서는 이 아이디어를 모델 자체에 내재화했습니다. 단, 모든 게 모델 문제는 아닙니다 — 사용자 기술 문제인 경우도 있습니다.</p>
+<p>4.8의 개선 키워드: 더 많은 정직성과 자기 교정, 장시간 태스크의 지속 자율성, 더 따뜻하고 협업적인 분위기, 효율과 품질 향상(툴 호출·추론·질문·토큰 효율).</p>
+<p><strong>핵심 테이크어웨이:</strong></p>
+<ol>
+<li>
+<p><strong>Effort가 1번 레버</strong>: 복잡한 태스크인데 low에 두면 게으름처럼 보이는 현상, 단순한 태스크에 x-high 두면 과잉 추론 현상. Claude Code를 쓰면서 한 번도 effort 조절을 안 했다면 지금 당장 시작하세요. low Opus 4.8과 x-high Opus 4.8은 거의 버전 하나 차이처럼 느껴집니다.</p>
+</li>
+<li>
+<p><strong>무엇을 하라, 무엇을 하지 말라가 아니라</strong>: Anthropic 공식 프롬프트 문서를 읽으면 좋은 예시 프롬프트들은 대부분 긍정 지시 형태입니다. 부정문보다 "이렇게 해줘 + 왜"가 준수율이 높습니다.</p>
+</li>
+<li>
+<p><strong>이유를 제공하라</strong>: "em dash 쓰지 마" 대신 "이건 내 글쓰기 스타일이고, 나는 em dash를 안 씁니다 — 내 스타일을 따라주세요". 모델이 맥락 기반으로 더 잘 따릅니다.</p>
+</li>
+<li>
+<p><strong>툴 호출 전 추론 기본값</strong>: 4.8은 기본적으로 추론을 먼저 하고 나서 툴(서브에이전트, DB 읽기 등)을 호출합니다. 컨텍스트를 먼저 가져와야 하는 경우라면 프롬프트로 순서를 명시하세요.</p>
+</li>
+<li>
+<p><strong>응답 길이 자동 조정</strong>: 태스크 복잡도에 따라 스스로 verbosity를 결정합니다. 단순 조회는 짧게, 오픈엔드 분석은 길게.</p>
+</li>
+</ol>
+<p>커뮤니티 반응: 긍정 측 — "GPT 5.5를 원샷으로 이겼다", "최강 코딩 모델", "따뜻하고 협업적". 신중 측 — 초기 버그 보고, 아직 테스트 중.</p>
+<p>중요한 관찰: 4.7의 핵심 불만 5가지와 4.8 개선사항이 거의 1:1로 대응됩니다. Anthropic이 사용자 로그 데이터(여러분이 Claude Code에서 교정 지시를 보내는 것들)를 실제로 훈련에 반영하고 있다는 뜻입니다.</p>
+<p>마지막 조언: 여러분 자신의 4.7 워크플로우에서 어떤 문제가 있었는지 파악하세요. 4.8이 그 문제를 실제로 고쳐주는지는 직접 검증해야 합니다. 벤치마크가 좋다고 내 특정 문제도 해결된다는 보장은 없습니다. 다른 모델, 다른 컨텍스트 전략, 다른 effort level을 조합해서 실제 고통점을 직접 해결하는 방법을 찾으세요.</p>
+</details>
+</body></html>

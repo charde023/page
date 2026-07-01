@@ -1,0 +1,484 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>최고의 로컬 에이전틱 코딩 워크플로우 완전 가이드</title>
+<meta name="description" content="LM Studio를 허브로 삼아 로컬 AI 모델을 설치·로드하고, VS Code(Continue 확장·GitHub Copilot 내부 모델)와 Pi CLI에 연동해 완전 오프라인 에이전틱 코딩 환경을 구축하는 단계별 가이드"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>최고의 로컬 에이전틱 코딩 워크플로우 완전 가이드</h1>
+<div class="meta">원작자 Kyle (WebDevSimplified) · WebDevSimplified · 업로드 2026-06-09 · 45.0분 · <a href="https://www.youtube.com/watch?v=XMqNRvKKWM8" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>최고의 로컬 에이전틱 코딩 워크플로우 완전 가이드</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>LM Studio로 로컬 모델을 서버로 올린 뒤, VS Code Continue 확장·GitHub Copilot 로컬 모델·Pi CLI 세 곳에 OpenAI 호환 엔드포인트로 연결하면 완전 오프라인·무료 에이전틱 코딩 환경이 완성된다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Kyle (WebDevSimplified) · 개인 채널 · 추정 출처 https://blog.webdevsimplified.com/ · 업로드 2026-06-09 · 45분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VRAM vs 시스템 RAM 역할 구분</td>
+<td>모델이 VRAM을 초과하면 속도가 5-6배 떨어짐</td>
+<td>VRAM에 다 올려야 빠름</td>
+</tr>
+<tr>
+<td>Quantization (Q4/Q6/Q8)</td>
+<td>모델 크기·속도·품질의 3각 트레이드오프</td>
+<td>Q4가 크기·품질 균형점</td>
+</tr>
+<tr>
+<td>MoE (Mixture of Experts)</td>
+<td>큰 모델을 GPU+CPU에 나눠 올려 성능 확보 가능</td>
+<td>active 파라미터만 GPU에</td>
+</tr>
+<tr>
+<td>LM Studio 개발자 모드 + 서버</td>
+<td>OpenAI 호환 API로 어느 클라이언트에든 연결</td>
+<td><code>/v1</code> 엔드포인트 공유</td>
+</tr>
+<tr>
+<td>Continue 확장 roles 설정</td>
+<td>autocomplete 모델과 agent 모델을 분리 운영</td>
+<td>YAML에 <code>roles: [autocomplete]</code></td>
+</tr>
+<tr>
+<td>GitHub Copilot 로컬 모델 연결</td>
+<td>Copilot 구독 없이 로컬 모델을 Copilot UI로 사용</td>
+<td>VS Code Insider 필요</td>
+</tr>
+<tr>
+<td>Pi CLI 에이전트 연결</td>
+<td>터미널 기반 에이전틱 루프, 완전 오프라인 가능</td>
+<td><code>/model</code> 슬래시로 전환</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>MoE (Mixture of Experts)</strong>: 파라미터 일부만 활성화되는 아키텍처. 모델명에 <code>35B+3B</code> 또는 <code>35x3</code> 식으로 표기 — 첫 숫자가 총 파라미터, 둘째가 active 파라미터. LM Studio에서 <code>number of layers for which to force MoE weights onto the CPU</code> 슬라이더로 CPU 오프로드 비율 조절.</li>
+<li><strong>Quantization bit-depth</strong>: 16bit(원본) → 8bit(1단계 축소) → 4bit(4단계 축소) → 3bit·2bit. <code>Q4</code> = 16 ÷ 4 개념으로 이해하면 쉬움.</li>
+<li><strong>GPU Offload 슬라이더</strong>: LM Studio 모델 로드 시 나타나는 설정. max로 올리면 전 레이어를 GPU에 올림. VRAM 초과 시 스스로 시스템 RAM 스필오버.</li>
+<li><strong>Continue 확장</strong> (<code>continue.dev</code>): VS Code에서 autocomplete + agent 모드를 모두 제공. 설정 파일(YAML)에 provider·model·apiBase·roles 지정.</li>
+<li><strong>Pi CLI</strong> (<code>pi.dev</code>): 터미널 에이전트 프레임워크. <code>pi.dev</code>에서 install 명령 복사 후 설치. <code>/model</code> 슬래시 커맨드로 모델 선택.</li>
+<li><strong>Unsloth</strong>: HuggingFace에서 고성능 quantization 패키지로 유명. 4bit·3bit·2bit 버전 경량 모델 빠르게 찾을 수 있음 → 용어노트 추가 예정.</li>
+<li><strong>Mac 유니파이드 메모리</strong>: GPU VRAM과 시스템 RAM이 동일 풀 → 스필오버 없음. Windows 전용 VRAM+RAM 분리 구조와 다름.</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<ol>
+<li>자신의 GPU는 <strong>VRAM 16GB</strong>, 시스템 RAM은 고사양(영상 편집 목적) — 일반 개발자 기준이 아님. 더 낮은 스펙에서도 작동 가능하다고 강조.</li>
+<li>모델 로드 시 context 길이를 늘리면 <strong>VRAM 사용량이 최대 2배</strong>까지 올라갈 수 있음 — context 크기가 모델 크기만큼 중요.</li>
+<li>GPU 완전 적재(VRAM 거의 꽉 참)에서 <strong>124 tokens/sec</strong>, 시스템 RAM 스필오버 발생 시 <strong>24 tokens/sec</strong> → 약 6배 차이.</li>
+<li>MoE 모델에서 CPU 오프로드 레이어를 <code>30/40</code>으로 설정했을 때 <strong>43 tokens/sec</strong> 수렴 — "느리지 않다"고 표현.</li>
+<li>autocomplete용 모델은 <strong>Qwen 2.5 1.5B (1GB)</strong> 사용 — 이유는 속도. timeout 1000ms보다 빨리 응답해야 해서.</li>
+<li>agent용 모델은 <strong>Qwen 3.6 (27B, Q4 quantization)</strong> — VRAM 17.48GB 추정이지만 MoE 오프로드로 16GB GPU에 올림.</li>
+<li><strong>Continue 확장 도구 설정</strong>: <code>run terminal command</code> → <code>ask first</code>, <code>create rules</code> → <code>excluded</code>, <code>fetch URLs</code> → <code>ask first</code>, 나머지 파일 읽기·쓰기 → <code>automatic</code>.</li>
+<li>GitHub Copilot 로컬 모델 연결은 현재 <strong>VS Code Insider(베타)</strong>에서만 가능 — 일반 버전은 추후 지원 예정.</li>
+<li>GitHub Copilot 로컬 모델 사용 시 <strong>인터넷 연결 필요</strong> (GitHub 서버와 통신) — 완전 오프라인은 Pi CLI 또는 Continue.</li>
+<li>동일 프롬프트(스도쿠 앱 생성) → Qwen 3.6 로컬: <strong>9분</strong>, Claude Sonnet 4.6: <strong>9분</strong> — 생성 시간이 같았으나 Sonnet은 더 많은 thinking 시간 포함.</li>
+<li>버그 수정 작업에서: Sonnet 4.6 <strong>45초</strong>, Qwen 로컬 <strong>2.5분</strong> — 코드베이스 읽기 속도 차이가 원인.</li>
+<li>클라우드 플랜 $100–$200/월 구독을 2~3달 취소하면 더 고사양 AI 전용 하드웨어 구매 가능 — 화자 본인 하드웨어는 영상 편집 목적이라 AI 최적화 아님.</li>
+<li><code>Ctrl+Alt+Space</code> 단축키: Continue 자동완성 강제 트리거.</li>
+<li>Pi CLI 설정 파일에서 <code>api: openai completions</code>로 명시해야 agent 모드가 작동.</li>
+</ol>
+</blockquote>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>모델 동작 원리</td>
+<td>파라미터 수·컨텍스트 크기 → 모델 용량 결정. GPU VRAM &gt; 시스템 RAM 순위</td>
+</tr>
+<tr>
+<td>2</td>
+<td>모델 선택 (LM Studio)</td>
+<td>모델 브라우저에서 파라미터·VRAM 추정치 확인, Q4 quantization 추천</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Hugging Face에서 직접 내려받기</td>
+<td>trending 필터 + inference available 필터, unsloth quantization 추천</td>
+</tr>
+<tr>
+<td>4</td>
+<td>LM Studio 개발자 모드</td>
+<td>서버 실행, <code>/v1</code> URL 확인, 여러 모델 동시 로드 가능</td>
+</tr>
+<tr>
+<td>5</td>
+<td>MoE 모델 활용</td>
+<td>CPU 레이어 오프로드 슬라이더로 대형 모델을 중급 GPU에서 실행</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Continue 확장 설정</td>
+<td>autocomplete 모델 + agent 모델 분리, YAML roles 설정, 도구 권한 설정</td>
+</tr>
+<tr>
+<td>7</td>
+<td>GitHub Copilot 로컬 모델</td>
+<td>VS Code Insider에서 OpenAI compatible 추가, 인터넷 연결 필요</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Pi CLI 연동</td>
+<td><code>/model</code> 커맨드, models 파일에 LM Studio URL+모델ID 등록</td>
+</tr>
+<tr>
+<td>9</td>
+<td>성능 비교</td>
+<td>스도쿠: 로컬=클라우드 동일 9분. 버그수정: 클라우드 45초 vs 로컬 2.5분</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 모델 동작 원리 — VRAM·파라미터·컨텍스트</h2>
+<p>모델은 <strong>파라미터 수</strong>와 <strong>컨텍스트 크기</strong> 두 가지로 용량이 결정된다. 862B 파라미터짜리 모델은 어떤 소비자 GPU에도 올릴 수 없고, 9B 파라미터·Q4 quantization이면 6.55GB — 16GB GPU에 완전 적재 가능.</p>
+<p>모델을 로드하면 먼저 VRAM에 꽉 채우고, 넘치면 시스템 RAM으로 스필오버된다. VRAM 완전 적재 시 <strong>124 tok/s</strong>, 스필오버 발생 시 <strong>24 tok/s</strong> — 약 6배 속도 차이. 컨텍스트 길이를 늘릴수록 추가 메모리를 차지하므로 VRAM 한계에서 컨텍스트를 무리하게 키우면 안 된다.</p>
+<p>Mac 유니파이드 메모리는 GPU·CPU RAM이 동일 풀이라 스필오버 없이 최대 RAM까지 사용 가능하지만, 한계를 넘으면 그냥 실패한다.</p>
+<hr>
+<h2>2. 모델 선택 — LM Studio 브라우저 + Hugging Face</h2>
+<p>LM Studio 모델 탭에서 키워드 검색 → 파라미터 수·VRAM 추정치 직접 확인. 파라미터 옆에 VRAM 추정치(예: <code>17.48 GB</code>)가 표시됨.</p>
+<p><strong>Quantization 가이드</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>bit</th>
+<th>설명</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16bit</td>
+<td>원본 풀 모델</td>
+<td>가장 크고 가장 정확</td>
+</tr>
+<tr>
+<td>8bit</td>
+<td>절반 크기</td>
+<td>품질 거의 유지</td>
+</tr>
+<tr>
+<td><strong>4bit</strong></td>
+<td><strong>추천 균형점</strong></td>
+<td><strong>크기 절반·품질 소폭 저하</strong></td>
+</tr>
+<tr>
+<td>3bit</td>
+<td>더 압축</td>
+<td>대형 MoE 모델에서 활용</td>
+</tr>
+<tr>
+<td>2bit</td>
+<td>최소 크기</td>
+<td>품질 저하 큼</td>
+</tr>
+</tbody>
+</table>
+<p><strong>모델 능력 태그 확인</strong>: vision(이미지 처리), tool use(도구 호출), reasoning(thinking 모드). 에이전틱 코딩에는 <strong>tool use + reasoning</strong> 둘 다 있는 모델 권장.</p>
+<p>Hugging Face에서 직접 내려받을 때: trending 정렬 + <code>inference available</code> 필터 + unsloth 배포판 선택 → "Use this model" → "Browse quantizations" → LM Studio에서 열기.</p>
+<hr>
+<h2>3. LM Studio 설정 — 로드 파라미터</h2>
+<p>로드 시 "manually choose model load parameters" 토글 활성화 필수. 주요 설정:</p>
+<ul>
+<li><strong>GPU Offload</strong>: VRAM에 다 들어가면 max로 설정. 그러면 전 레이어가 GPU에 올라감.</li>
+<li><strong>Context Length</strong>: 늘릴수록 메모리 증가. 채팅용은 5,000~10,000이면 충분. 에이전틱 코딩이면 더 크게.</li>
+<li><strong>MoE CPU Layers</strong>: MoE 모델에서만 나타남. 낮을수록 GPU 많이 사용 → 빠름. GPU 부족하면 값 올려서 CPU로 오프로드.</li>
+</ul>
+<p>개발자 탭에서 <strong>서버 status: running</strong> 확인. URL(기본 <code>http://localhost:1234/v1</code>)을 모든 클라이언트에서 공통으로 사용.</p>
+<hr>
+<h2>4. MoE 모델로 대형 모델 활용하기</h2>
+<p>MoE 모델 명명법: <code>35B+3B</code> 또는 <code>35Bx3</code> — 35B가 총 파라미터, 3B가 active 파라미터. active 파라미터 부분만 GPU에 올리고 나머지를 CPU로 내리는 게 핵심 전략.</p>
+<p>Kyle의 설정 예시: 40레이어 모델에서 30레이어를 CPU로 오프로드(<code>30/40</code>) → GPU에 중요 레이어만 남김 → <strong>43 tok/s</strong> 달성. 같은 모델을 MoE 오프로드 없이 전부 GPU에 때려 넣으면 스필오버로 <strong>1 tok/s</strong> 수준으로 추락.</p>
+<hr>
+<h2>5. Continue 확장 설정 (VS Code)</h2>
+<p><strong>autocomplete용 소형 모델 분리 운영</strong>이 핵심. 에이전트 모델이 VRAM을 다 차지해도 autocomplete는 별도 소형 모델이 빠르게 처리.</p>
+<p>YAML 설정 구조:</p>
+<pre><code class="language-yaml"># autocomplete 모델
+- name: autocomplete
+  provider: lmStudio
+  model: &lt;LM Studio에서 복사한 정확한 모델 ID&gt;
+  apiBase: http://localhost:1234/v1
+  roles:
+    - autocomplete
+
+# agent/chat 모델
+- name: qwen-agent
+  provider: lmStudio
+  model: &lt;LM Studio에서 복사한 정확한 모델 ID&gt;
+  apiBase: http://localhost:1234/v1
+  capabilities:
+    - tool_use
+    - image_input
+</code></pre>
+<p><strong>도구 권한 설정</strong> (settings &gt; tools):</p>
+<table>
+<thead>
+<tr>
+<th>도구</th>
+<th>권장 설정</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>파일 읽기·생성·편집</td>
+<td>automatic</td>
+</tr>
+<tr>
+<td>터미널 명령 실행</td>
+<td>ask first</td>
+</tr>
+<tr>
+<td>URL 불러오기</td>
+<td>ask first</td>
+</tr>
+<tr>
+<td>rules 생성</td>
+<td>excluded</td>
+</tr>
+</tbody>
+</table>
+<p>자동완성 강제 트리거: <code>Ctrl+Alt+Space</code>. LM Studio 개발자 로그에서 호출 시간 확인 가능 (예: 259ms) — timeout(1000ms)보다 느리면 더 작은 모델로 교체.</p>
+<hr>
+<h2>6. GitHub Copilot 로컬 모델 연결</h2>
+<p>VS Code <strong>Insider 버전</strong> 필요 (일반 버전에는 아직 미지원). Copilot 구독 불필요.</p>
+<p>설정 경로: Copilot 채팅 패널 → 모델 드롭다운 → 기어 아이콘 → "Add models" → "OpenAI compatible"</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;LM Studio&quot;,
+  &quot;models&quot;: [
+    {
+      &quot;id&quot;: &quot;&lt;LM Studio 모델 ID&gt;&quot;,
+      &quot;name&quot;: &quot;Qwen 3.6&quot;,
+      &quot;url&quot;: &quot;http://localhost:1234/v1&quot;,
+      &quot;toolCalling&quot;: true,
+      &quot;vision&quot;: true,
+      &quot;maxInputTokens&quot;: &lt;LM Studio context 길이 복사&gt;,
+      &quot;maxOutputTokens&quot;: &lt;원하는 값&gt;
+    }
+  ]
+}
+</code></pre>
+<p>변경 후 <code>Developer: Reload Window</code> 필수. <strong>주의</strong>: Copilot UI 사용 시 GitHub 서버와 통신하므로 인터넷 연결 필요 — 완전 오프라인이 목표면 Continue나 Pi CLI 사용.</p>
+<hr>
+<h2>7. Pi CLI 에이전트 연결</h2>
+<p><code>pi.dev</code>에서 install 명령 복사 → 터미널에서 실행 → <code>pi</code> 입력으로 실행.</p>
+<p>모델 설정 파일(OS마다 경로 다름, Pi 문서 참고):</p>
+<pre><code class="language-yaml">lmstudio:
+  provider: lmStudio
+  base_url: http://localhost:1234/v1
+  api: openai completions    # agent 모드에 필요
+  api_key: any               # 아무 값이나 OK
+  models:
+    - id: &lt;LM Studio 모델 ID&gt;
+      context_window: &lt;LM Studio context 길이&gt;
+      reasoning: true        # reasoning 모델이면
+      input:
+        - text
+        - image              # vision 지원이면
+</code></pre>
+<p><code>/model</code> 슬래시 커맨드로 모델 전환. 완전 오프라인 동작 가능.</p>
+<hr>
+<h2>8. 클라우드 vs 로컬 성능 비교</h2>
+<table>
+<thead>
+<tr>
+<th>작업</th>
+<th>Claude Sonnet 4.6</th>
+<th>Qwen 3.6 (로컬)</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>스도쿠 앱 vibe coding (one-shot)</td>
+<td>9분</td>
+<td>9분</td>
+<td>동일. Sonnet은 thinking 시간 포함</td>
+</tr>
+<tr>
+<td>코드베이스 버그 수정</td>
+<td><strong>45초</strong></td>
+<td><strong>2.5분</strong></td>
+<td>코드 읽기 속도 차이</td>
+</tr>
+<tr>
+<td>결과물 품질</td>
+<td>center pencil marking 추가 등 미세 우위</td>
+<td>거의 동등</td>
+<td>복잡도에 따라 격차 벌어짐</td>
+</tr>
+</tbody>
+</table>
+<p><strong>비용 관점</strong>: 클라우드 플랜 $100~200/월 → 2~3달 절감 = AI 최적화 고사양 하드웨어 구매 가능. 영상 편집용 하드웨어는 AI 최적화 아니라 가성비 낮음.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 내 GPU VRAM 확인 (Windows: 작업관리자 &gt; 성능 &gt; 전용 GPU 메모리)</li>
+<li>[ ] LM Studio 설치 + 개발자 모드 활성화</li>
+<li>[ ] autocomplete용 소형 모델 (1~2GB) + agent용 MoE 모델 분리 다운로드</li>
+<li>[ ] LM Studio 서버 실행 확인 + <code>/v1</code> URL 복사</li>
+<li>[ ] Continue 확장 YAML 설정: roles 분리, 도구 권한 조정</li>
+<li>[ ] (선택) VS Code Insider + GitHub Copilot 로컬 모델 연결</li>
+<li>[ ] (선택) Pi CLI 설치 + models 파일에 LM Studio 연결</li>
+<li>[ ] MoE 모델: CPU 오프로드 레이어 수 실험 (낮을수록 빠름, GPU 한계 내에서)</li>
+<li>[ ] autocomplete timeout 1000ms 설정, 느리면 더 작은 모델로 교체</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 최고의 로컬 에이전틱 코딩 워크플로우 완전 가이드입니다 · https://www.youtube.com/watch?v=XMqNRvKKWM8 · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>AI 요금이 너무 비싸다. 월정액 플랜은 거의 다 껍데기가 됐고, 결국 비싼 API 요금을 내야 한다. 그래서 나는 로컬에서 완전히 실행되는 AI를 셋업하는 게 어떤 것인지 파고들기로 했다 — 완전 프라이빗, 빠르고, 채팅뿐 아니라 자동완성(autocomplete)과 에이전트 모드까지 전부 된다. VS Code에서 직접 에이전트를 설정할 수 있고, Pi 커맨드라인 도구 같은 오픈 코드 스타일 에이전트도 쓸 수 있다.</p>
+<p>단순히 "이렇게 해라"가 아니라 모든 개념이 어떻게 작동하는지 설명한다. 그래야 영상을 지금 보든 1년 뒤에 보든, 어떤 모델이든 어떤 하드웨어든 본인 상황에 맞게 완벽히 셋업할 수 있다.</p>
+<p>WebDevSimplified에 돌아온 것을 환영한다. 나는 Kyle이고, 웹을 단순하게 만드는 게 내 일이다.</p>
+<p><strong>모델이 어떻게 실행되는가</strong></p>
+<p>모델은 크게 두 가지로 구성된다: <strong>파라미터 수</strong>와 <strong>컨텍스트 크기</strong>. 862B 파라미터는 로컬 하드웨어에서 절대 실행 불가, 9B 정도가 현실적이다. 컨텍스트는 모델이 한 번에 얼마나 많은 정보를 담을 수 있냐 — 클수록 더 긴 작업을 더 잘 기억한다.</p>
+<p>모델은 <strong>GPU</strong>(그래픽카드)에서 실행된다. GPU에서 가장 중요한 수치는 <strong>VRAM</strong> — 그래픽카드 전용 메모리. Mac 신형 모델은 통합 메모리(unified memory)를 써서 GPU와 시스템 RAM이 같은 풀 → 더 많은 공간을 GPU로 쓸 수 있지만 스필오버 없음. Windows 전용 GPU는 VRAM이 적지만 약간 더 빠름.</p>
+<p>모델을 로드하면 VRAM에 통째로 올리려 하고, VRAM이 부족하면 시스템 RAM으로 넘친다. 16GB VRAM GPU를 예로 들면, 모델이 16GB를 초과하면 나머지가 시스템 RAM에 들어간다.</p>
+<p>Windows에서 VRAM 확인: 작업관리자 &gt; 성능 &gt; 전용 GPU 메모리.</p>
+<p><strong>LM Studio로 시작하기</strong></p>
+<p>처음 시작하기 가장 좋은 도구는 LM Studio — UI가 직관적이고 메모리 관련 개념들을 잘 설명해준다. LM Studio를 내려받고, 모델은 LM Studio 내장 브라우저나 Hugging Face에서 찾는다.</p>
+<p>모델 탭에서 검색하면 모델 이름, 파라미터 수(예: 27B, 35B, 9B), VRAM 추정치가 나온다. Qwen 3.6 27B는 17.48GB 추정 — 16GB GPU를 약간 초과. Qwen 3.5 9B는 6.55GB — 16GB GPU에 완전히 적재 가능.</p>
+<p><strong>Quantization</strong>: Q4, Q6, Q8 등이 있다. 16bit이 기준 원본. 8bit는 절반 크기. <strong>Q4는 4단계 quantization — 크기와 품질의 좋은 균형점</strong>. Q4에서 Q8로 가면 크기가 거의 2배. Q4에서 Q3·Q2로 가면 대형 MoE 모델을 더 압축할 때 유용하다.</p>
+<p>모델 능력 태그: vision(이미지 처리), tool use(도구 호출), reasoning(thinking 모델). 에이전틱 코딩이면 tool use와 reasoning 둘 다 있는 것을 골라야 한다. reasoning 모델은 대체로 크기가 큰 편.</p>
+<p>원하는 모델을 클릭 → 다운로드. 완료 후 세 번째 패널(다운로드된 모델 목록)에서 확인.</p>
+<p>Hugging Face에서 찾을 때: trending 정렬 + "inference available" 필터 → unsloth 배포판 클릭 → "Use this model" → "Browse quantizations" → LM Studio 버튼 → LM Studio에서 직접 다운로드.</p>
+<p><strong>모델 로드 — 파라미터 설정</strong></p>
+<p>채팅 창에서 "select a model to load". <strong>"manually choose model load parameters" 반드시 활성화</strong> — 세부 설정 접근 가능.</p>
+<p>핵심 설정:
+- <strong>GPU Offload</strong>: VRAM에 모두 들어가면 최대값(max)으로 설정. 전 레이어가 GPU에 올라감.
+- <strong>Context Length</strong>: 올릴수록 메모리 증가. 경우에 따라 모델 크기의 2배까지 뛸 수 있음. 기본 채팅이면 5,000~10,000 정도로 충분.</p>
+<p>실험: 16GB VRAM에 동일 모델을 완전 적재 → 124 tok/s. 컨텍스트를 최대로 늘려 스필오버 유발 → 24 tok/s. 6배 차이.</p>
+<p><strong>MoE(Mixture of Experts) 모델</strong></p>
+<p>MoE = "전문가 혼합". 큰 모델인데 특정 시간에 일부 파라미터만 활성화. 그 활성 파라미터를 GPU에 올리고, 나머지를 시스템 RAM으로 내린다. 모델명: <code>35B+3B</code> → 총 35B 파라미터, 활성 3B. 또는 <code>35x3</code> 형식.</p>
+<p>LM Studio에서 MoE 모델 로드 시 "number of layers for which to force MoE weights onto the CPU" 슬라이더 등장. 낮을수록 GPU 사용 많음 = 빠름. GPU 부족하면 값을 올려 CPU 오프로드 증가.</p>
+<p>Kyle 설정 예시: 40레이어 모델, 30레이어를 CPU로 오프로드 (30/40). GPU에 중요 레이어만 남기고 → 43 tok/s. 같은 모델 MoE 없이 CPU 오프로드 0 → 1 tok/s 수준으로 추락.</p>
+<p>MoE 모델이 일반 중급 하드웨어에서 대형 모델을 실용적으로 쓸 수 있는 최선의 방법.</p>
+<p><strong>LM Studio 개발자 모드 + 서버</strong></p>
+<p>developer 탭 활성화 (설치 시 "show developer settings" 선택 안 했으면 설정 &gt; developer &gt; 개발자 모드 ON).</p>
+<p>여기서 여러 모델을 동시에 로드 가능. Kyle 예시: Qwen 3.6(대형, 에이전트용) + 940MB 소형 모델(autocomplete용) 동시 로드.</p>
+<p>서버 status: running 확인. URL (기본 <code>http://localhost:1234/v1</code>) 모든 클라이언트에서 공통 사용. OpenAI 호환 엔드포인트 — OpenAI와 호환되는 것은 전부 LM Studio와도 호환됨.</p>
+<p><strong>Continue 확장 (VS Code)</strong></p>
+<p>Continue 확장 설치 → 사이드바 Continue 클릭 → 설정 아이콘 → config 파일 열기(YAML).</p>
+<p>autocomplete 설정 추천:
+- timeout: 1000ms (기본보다 길게)
+- debounce: 100ms (타이핑 멈춘 후 대기 시간)</p>
+<p>도구 권한: 파일 읽기·쓰기·생성은 <code>automatic</code>. 터미널 실행은 <code>ask first</code>. rules 생성은 <code>excluded</code>. URL 불러오기는 <code>ask first</code>.</p>
+<p>YAML 설정 예시:</p>
+<pre><code class="language-yaml"># autocomplete 전용 소형 모델
+- name: autocomplete
+  provider: lmStudio
+  model: &lt;LM Studio 모델 ID 복사&gt;
+  apiBase: http://localhost:1234/v1
+  roles:
+    - autocomplete
+
+# 에이전트/채팅용 대형 모델
+- name: qwen-agent
+  provider: lmStudio
+  model: &lt;LM Studio 모델 ID 복사&gt;
+  apiBase: http://localhost:1234/v1
+  capabilities:
+    - tool_use
+    - image_input
+</code></pre>
+<p>roles에 autocomplete를 지정한 모델은 채팅 목록에 나타나지 않음 — 자동완성 전용으로만 동작.</p>
+<p>autocomplete 강제 트리거: <code>Ctrl+Alt+Space</code>. LM Studio 개발자 로그에서 호출 시간 확인 (예: 259ms). timeout보다 오래 걸리면 더 작은 모델 필요.</p>
+<p>에이전트 모드에서 "create a file called test.ts that just has console.log test" → 파일 생성 성공 확인.</p>
+<p>Continue 에이전트가 가끔 버그가 있어서, GitHub Copilot 로컬 모델 연결도 보여주겠다.</p>
+<p><strong>GitHub Copilot 로컬 모델 연결</strong></p>
+<p>VS Code Insider(베타) 필요. Copilot 구독 불필요.</p>
+<p>Copilot 채팅 패널 → 모델 드롭다운 → 기어 아이콘 → "Add models" → "OpenAI compatible" → 이름 입력(예: "LM Studio") → API key 아무 값이나 입력(예: "key") → 설정 파일 열림.</p>
+<p>설정 파일에 모델 추가:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;&lt;LM Studio 모델 ID&gt;&quot;,
+  &quot;name&quot;: &quot;Qwen 3.6&quot;,
+  &quot;url&quot;: &quot;http://localhost:1234/v1&quot;,
+  &quot;toolCalling&quot;: true,
+  &quot;vision&quot;: true,
+  &quot;maxInputTokens&quot;: &lt;LM Studio context 길이&gt;
+}
+</code></pre>
+<p>변경 후 <code>Developer: Reload Window</code> 또는 VS Code 재시작. 이후 Copilot 모델 드롭다운 → "Other models"에서 추가한 모델 선택 가능.</p>
+<p><strong>주의</strong>: GitHub Copilot 관련 기능은 GitHub 서버와 통신 → 인터넷 연결 필요. 완전 오프라인이면 Continue 또는 Pi CLI.</p>
+<p><strong>Pi CLI 연동</strong></p>
+<p><code>pi.dev</code>에서 install 명령 복사 → 터미널 실행 → <code>pi</code> 입력.</p>
+<p><code>/model</code> 슬래시 커맨드로 모델 선택. 처음엔 목록이 비어있음 → models 파일 수정 필요.</p>
+<p>models 파일 위치는 Pi 문서 참고 (OS마다 다름). VS Code에서 해당 파일 열고:</p>
+<pre><code class="language-yaml">lmstudio:
+  provider: lmStudio
+  base_url: http://localhost:1234/v1
+  api: openai completions
+  api_key: any
+  models:
+    - id: &lt;LM Studio 모델 ID&gt;
+      context_window: &lt;LM Studio context 길이&gt;
+      reasoning: true
+      input:
+        - text
+        - image
+</code></pre>
+<p>이후 Pi에서 "describe this codebase" 같은 명령 → 에이전트가 자율 실행. context 사용량 하단에 실시간 표시.</p>
+<p><strong>클라우드 vs 로컬 성능 비교</strong></p>
+<p>스도쿠 앱 생성 (원샷 프롬프트: 펜슬 마킹, 난이도 3가지, 솔루션 체커 포함):
+- Qwen 3.6 로컬: 9분, 대부분 기능 구현, center pencil marking 누락
+- Claude Sonnet 4.6: 9분, center pencil marking 포함, 미세 우위
+→ 시간은 동일, 품질은 거의 비슷.</p>
+<p>버그 수정 (대형 코드베이스 비디오 에디터, 특정 씬에서 항상 전체 오디오 재생되는 버그):
+- Claude Sonnet 4.6: <strong>45초</strong>
+- Qwen 3.6 로컬: <strong>2분 30초</strong>
+→ 코드베이스 읽기 속도 차이. 두 모델 모두 동일한 방식으로 동일한 코드 변경으로 수정.</p>
+<p><strong>마무리</strong></p>
+<p>클라우드 모델과 비교해 로컬 모델은 느리고 약간 품질이 낮지만, 완전 무료·오프라인·프라이빗. 클라우드 플랜 $100~200/월을 2~3달 취소하면 그 돈으로 AI 최적화 고사양 PC를 살 수 있다 — 영상 편집용 하드웨어보다 훨씬 가성비 좋은 AI 전용 하드웨어가 있다.</p>
+<p>어떤 하드웨어든 맞는 모델을 찾을 수 있다. 스펙이 낮으면 더 작은 모델·더 높은 quantization 압축 레벨로 조정하면 된다. 이 영상의 개념을 이해했다면 앞으로 새 모델이 나와도 직접 판단할 수 있다.</p>
+</details>
+</body></html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Anthropic이 기존 에이전트 하네스를 사실상 끝장냈습니다</title>
+<meta name="description" content="Opus 4.6 시대에는 플래너·생성자·평가자 3가지만 남기고 나머지 에이전트 하네스 구성 요소는 오히려 오버헤드라는 Anthropic 실험 결론"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Anthropic이 기존 에이전트 하네스를 사실상 끝장냈습니다</h1>
+<div class="meta">업로드 2026-04-02 · 14.6분 · <a href="https://www.youtube.com/watch?v=PZxzX9CbP3U" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Anthropic이 기존 에이전트 하네스를 사실상 끝장냈습니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Anthropic이 하네스 구성 요소를 하나씩 제거하는 실험을 통해, Opus 4.6 기준으로는 플래너·생성자·평가자 세 역할만 남기고 나머지는 모두 불필요한 짐이라는 결론을 내렸다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 (Tech Bridge 채널 자체 제작) · 소속 없음 · 원본 참고 https://www.anthropic.com/engineering/harness-design-long-running-apps · 업로드 2026-04-02 · 14.6분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>하네스 구성 요소는 모델 가정을 내포</td>
+<td>모델이 발전하면 가정이 깨진다</td>
+<td>프레임워크는 모델 능력에 맞게 계속 재검증해야 한다</td>
+</tr>
+<tr>
+<td>플래너는 제품 레벨 계획만</td>
+<td>지나치게 세밀한 계획은 에이전트를 묶어버린다</td>
+<td>구현 디테일이 아닌 방향 제시만</td>
+</tr>
+<tr>
+<td>생성자·평가자 분리</td>
+<td>자기 코드를 자기가 평가하면 과신한다</td>
+<td>구현자 ≠ 평가자 는 필수 구조적 원칙</td>
+</tr>
+<tr>
+<td>컨텍스트 불안 (context anxiety)</td>
+<td>작은 모델이 컨텍스트 창이 차오를수록 일관성을 잃는 현상</td>
+<td>Opus 4.5+ 부터 거의 해소됨</td>
+</tr>
+<tr>
+<td>점수형 평가 메커니즘</td>
+<td>합격/불합격보다 수치 점수가 에이전트 품질 개선에 효과적</td>
+<td>디자인·독창성·완성도·기능성 4개 기준</td>
+</tr>
+<tr>
+<td>GSD + Anthropic 방식 혼합</td>
+<td>GSD는 플래너·생성자·평가자 구조지만 점수화 없음</td>
+<td>평가자 교체 + 세부 기준 주입으로 보완 가능</td>
+</tr>
+<tr>
+<td>에이전트 팀즈 구성</td>
+<td>팀원 에이전트끼리는 직접 소통, 서브 에이전트는 문서 경유 오버헤드</td>
+<td>생성자·평가자를 동시 병렬 실행하는 구조</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Domad(도마드) / Speckit(스펙키트)</strong>: 작업을 마이크로태스크 단위로 쪼개는 계획 프레임워크. 예전에는 유용했지만 강한 모델에서는 오버헤드.</li>
+<li><strong>GSD(GST)</strong>: 기존 계획 vs 구현을 대조해 문서 보고서를 만드는 검증 방식의 프레임워크.</li>
+<li><strong>Superpowers(슈퍼파워즈)</strong>: 엄격한 TDD 강제 — 테스트 케이스 없이는 코드 작성 불가. 질문 세션으로 엣지 케이스 발굴.</li>
+<li><strong>Sprint contract(스프린트 계약)</strong>: 생성·평가 에이전트가 구현 전에 완료 기준을 합의하는 메커니즘.</li>
+<li><strong>Context anxiety(컨텍스트 불안)</strong>: 작은 모델이 긴 작업 중 컨텍스트 창이 차오르면 작업 완료를 조기 선언하는 현상.</li>
+<li><strong>Claude compaction</strong>: Claude의 자체 컨텍스트 압축 처리. Opus 4.5+ 에서는 이것만으로 긴 세션을 충분히 관리 가능.</li>
+<li><strong>Playwright MCP</strong>: 브라우저 자동화 MCP. 평가 에이전트가 사용자 동작 시뮬레이션에 활용.</li>
+<li><strong>Minimax(맥스클로 / MaxClaude)</strong>: 영상 스폰서. 클라우드 기반 AI 에이전트 서비스. 본 내용과는 무관.</li>
+<li><strong>ailabspro.io</strong>: 영상 자료(에이전트 프롬프트 등)를 제공하는 채널 운영 서비스.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>Anthropic은 하네스 구성 요소를 <strong>하나씩 제거하는 ablation 실험</strong>을 직접 수행 — 단순 이론이 아닌 실측 결과.</li>
+<li>플래너가 기술 디테일을 너무 촘촘하게 박아 넣으면 <strong>작은 오류 하나가 구현 전체에 연쇄적으로 퍼진다</strong> — 계획의 세밀함이 오히려 리스크.</li>
+<li>Opus <strong>4.5</strong>에서 컨텍스트 불안이 거의 사라졌고, Opus <strong>4.6</strong>에서는 스프린트 계약도 불필요해졌다 — 모델 버전이 구조 설계 결정의 기준점.</li>
+<li>더 작은 모델(Haiku, Sonnet 급)을 쓸 때는 여전히 <strong>작업 분해·스프린트 계약·컨텍스트 관리</strong>가 필요.</li>
+<li>에이전트 팀즈(Teams)를 쓰는 이유: 팀원 에이전트끼리는 직접 소통 가능하지만, 서브 에이전트는 문서에 적어 전달해야 하므로 <strong>오버헤드 차이</strong>가 발생.</li>
+<li>AI가 UI를 만들 때 <strong>보라색·흰색 그라데이션 패턴으로 수렴하는 경향</strong> — 독창성 기준을 명시적으로 요구해야 함.</li>
+<li>Claude는 완성도·기능성 점수는 잘 나오지만 <strong>디자인 품질·독창성이 주요 약점</strong> — 프롬프트에서 강하게 밀어줘야 함.</li>
+<li>Anthropic의 플래너 에이전트 예시 계획이 공개돼 있음 — 직접 세팅 시 참고 가능 (링크: anthropic.com/engineering/harness-design-long-running-apps).</li>
+<li>생성자·평가자가 구현 시작 전 <strong>완료 기준 계약을 맞추는 과정</strong>이 Opus 4.5에서는 성능 차이를 만들었다.</li>
+<li>평가자는 "버그가 분명히 있다"고 가정하고 비판적으로 보는 방식으로 설계 — 단순 버그 찾기가 아님.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>배경 — 왜 기존 프레임워크가 낡아졌나</td>
+<td>Opus 4.6 출시로 프레임워크가 내포한 모델 능력 가정이 대부분 무효화</td>
+</tr>
+<tr>
+<td>2</td>
+<td>계획(플래너) 역할 변화</td>
+<td>세밀한 스펙 대신 제품 레벨 방향 제시만. 도마드·스펙키트 방식은 이제 과잉</td>
+</tr>
+<tr>
+<td>3</td>
+<td>생성자·평가자 분리 원칙</td>
+<td>자기 평가 금지. 구현 전 완료 기준 계약. 강한 모델일수록 계약 없이도 동작</td>
+</tr>
+<tr>
+<td>4</td>
+<td>컨텍스트 불안 해소</td>
+<td>Opus 4.5+에서 해소. Claude compaction만으로 충분. 컨텍스트 리셋 불필요</td>
+</tr>
+<tr>
+<td>5</td>
+<td>점수형 평가 기준</td>
+<td>디자인 품질·독창성·완성도·기능성 4개 항목별 점수. Claude 약점은 앞 두 항목</td>
+</tr>
+<tr>
+<td>6</td>
+<td>실용 권고 — GSD vs 직접 구현</td>
+<td>GSD 기반으로 평가자만 교체하거나, 에이전트 팀즈로 생성자·평가자 병렬 실행</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 왜 지금 기존 프레임워크가 문제인가</h2>
+<p>모든 에이전트 하네스 구성 요소에는 <strong>"모델이 혼자 할 수 없는 일"에 대한 가정</strong>이 들어있다. 이 가정이 모델 발전과 함께 틀려지면, 해당 구성 요소는 도움이 아니라 오버헤드가 된다.</p>
+<p>Anthropic은 하네스 구성 요소를 하나씩 제거하는 ablation 실험을 직접 수행했다. 결론: <strong>Opus 4.6 기준으로 필요한 것은 플래너·생성자·평가자 세 가지뿐</strong>이다. 나머지는 모두 쓸데없는 무게다.</p>
+<p>베메이드, 스펙키트, 슈퍼파워즈 같은 프레임워크는 당시 모델 성능이 낮았을 때 나온 설계다. 특히 컨텍스트 분리와 세밀한 작업 분해에 집중했는데, Opus 4.6에서는 이것들이 더 이상 병목이 아니다.</p>
+<h2>2. 계획(플래너)의 역할 변화</h2>
+<h3>이전 방식</h3>
+<p>도마드·스펙키트는 작업을 <strong>마이크로태스크 단위로 쪼개서</strong> 에이전트가 생각 없이 따라가기만 하면 됐다. 당시에는 모델이 충분하지 않아 이렇게 이끌어줘야 결과가 나왔다.</p>
+<h3>지금 방식</h3>
+<p>Anthropic 실험 결과: 플래너가 처음부터 기술적 디테일을 촘촘하게 박아 넣으면, <strong>작은 오류 하나가 구현 전체에 연쇄 전파</strong>된다. 에이전트가 스스로 방향을 틀기 어려워진다.</p>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>핵심 전환: 계획은 구현 명세가 아니라 제품 레벨 방향 제시여야 한다.</strong></span></p>
+<p>어떤 결과물이 필요한지만 알려주면 Opus 4.6은 스스로 경로를 찾는다. 도마드·스펙키트 방식의 세밀한 단계 분해는 이제 생략 가능하다.</p>
+<p>대안으로:
+- <strong>Superpower의 질문 세션</strong>: 엣지 케이스를 찾는 방식. 여러 단계 문서 쌓기보다 효과적일 수 있음.
+- Claude의 플랜 모드도 비슷해 보이지만, 여전히 구현 디테일에 무게가 실려 있어 진짜 제품 레벨은 아님.</p>
+<h2>3. 생성자·평가자 분리</h2>
+<h3>왜 분리해야 하는가</h3>
+<p>같은 에이전트가 자기 코드를 평가하면 <strong>과도한 자신감으로 자기 작업을 칭찬</strong>하는 경향이 있다. 수치로 판단 가능한 작업(API 동작 여부)은 관리하기 쉽지만, UI처럼 주관적인 품질 검증에서 이 문제가 심각해진다.</p>
+<h3>구조 설계</h3>
+<ul>
+<li>생성·평가 에이전트가 구현 시작 전 <strong>완료 기준 계약</strong>을 맞춘다.</li>
+<li>두 에이전트 모두 "무엇을 만들어야 하는가"와 "무엇을 검증해야 하는가"를 명확히 안다.</li>
+</ul>
+<h3>스프린트 계약의 모델 의존성</h3>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>스프린트 계약 필요 여부</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Haiku / Sonnet급</td>
+<td>필요. 작업 분해·완료 기준 합의 없으면 효율 저하</td>
+</tr>
+<tr>
+<td>Opus 4.5</td>
+<td>없으면 평가자가 계속 개입해야 해 효율 저하</td>
+</tr>
+<tr>
+<td>Opus 4.6</td>
+<td>불필요. 생성 에이전트가 대부분 혼자 처리 가능</td>
+</tr>
+</tbody>
+</table>
+<h2>4. 컨텍스트 불안 해소</h2>
+<p><strong>컨텍스트 불안(context anxiety)</strong>: 작은 모델이 긴 작업 중 컨텍스트 창이 차오르면 아직 완성 안 됐는데 조기 마무리 선언을 해버리는 현상.</p>
+<p>이전에는 컨텍스트 리셋(구현 전 컨텍스트 창을 비우기)이 필요했다. 외부 문서에 작업 분해를 남겨두고, 빈 컨텍스트로 다시 시작하는 방식.</p>
+<p><span style="font-size:1.1em"><strong>Opus 4.5부터 컨텍스트 불안이 거의 사라졌다.</strong> Claude의 compaction 처리만으로 긴 세션 전체를 달릴 수 있다.</span></p>
+<p>결과적으로:
+- 컨텍스트 리셋 불필요
+- 상세 작업 분해(범야드·스펙키트 방식) 불필요
+- 상위 수준 가이드만으로 충분</p>
+<h2>5. 점수형 평가 메커니즘</h2>
+<p>기존 프레임워크들은 합격/불합격 방식. Anthropic은 <strong>수치 점수형 평가</strong>가 필요하다는 결론을 냈다.</p>
+<p>특히 UI 같이 수치로 검증하기 어려운 구현에서, 에이전트는 "좋은 결과가 어떤 모습인지" 알 방법이 없다. 점수형 기준을 줘야 모델이 어떤 요소가 중요한지 학습한다.</p>
+<h3>Anthropic의 프론트엔드 평가 4개 기준</h3>
+<table>
+<thead>
+<tr>
+<th>기준</th>
+<th>설명</th>
+<th>Claude의 현황</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>디자인 품질</td>
+<td>일관된 결과물인가, 부품 이어붙임인가</td>
+<td>약점</td>
+</tr>
+<tr>
+<td>독창성</td>
+<td>보라색·흰색 그라데이션 수렴 경향 극복 여부</td>
+<td>약점</td>
+</tr>
+<tr>
+<td>완성도</td>
+<td>타이포그래피·간격·색조 일관성</td>
+<td>강점</td>
+</tr>
+<tr>
+<td>기능성</td>
+<td>각 컴포넌트가 UX를 끌어올리는 시각적 역할 수행</td>
+<td>강점</td>
+</tr>
+</tbody>
+</table>
+<p>이 기준은 코드 아키텍처, UX, 사용자 플로우 등 다른 영역에도 동일하게 적용 가능하다.</p>
+<h2>6. 실용 권고 — 지금 어떻게 세팅할 것인가</h2>
+<h3>옵션 A: GSD 기반 + Anthropic 방식 혼합</h3>
+<p>GSD는 이미 플래너·생성자·평가자 구조를 갖추고 있고, 계획 vs 구현 대조 방식도 있다. 다만 점수화된 평가가 없다.</p>
+<p><strong>개선 방법</strong>: 평가자 에이전트를 교체하고, Anthropic 기준의 세부 루브릭을 주입해서 점수형 평가로 전환.</p>
+<h3>옵션 B: Anthropic 방식 직접 구현</h3>
+<ul>
+<li>역할별 에이전트(생성자, 평가자) 생성</li>
+<li><strong>에이전트 팀즈</strong>로 구성 — 팀원끼리 직접 소통 가능 (서브 에이전트는 문서 경유 오버헤드 발생)</li>
+<li>실행 흐름:</li>
+<li>Claude가 상위 계획에서 작업을 생성하고 두 에이전트를 동시 실행</li>
+<li>생성자가 구현 → 평가자가 Playwright MCP + 브라우저로 즉시 테스트</li>
+<li>평가자가 문제를 생성자에게 전달 → 협업 반복</li>
+</ul>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 현재 하네스에서 "모델이 못해서 추가한 구성 요소"가 뭔지 목록화하고 Opus 4.6에서 여전히 유효한지 검증</li>
+<li>[ ] 플래너 프롬프트에서 구현 디테일 제거, 제품 레벨 방향 제시만 남기기</li>
+<li>[ ] 생성자 에이전트와 평가자 에이전트를 완전히 분리한 구조로 전환</li>
+<li>[ ] 점수형 평가 루브릭 작성 (디자인·독창성·완성도·기능성 4개 기준 이상)</li>
+<li>[ ] Anthropic의 플래너 에이전트 예시 계획 읽기 (anthropic.com/engineering/harness-design-long-running-apps)</li>
+<li>[ ] 작은 모델(Haiku, Sonnet)을 쓰는 파이프라인은 스프린트 계약·작업 분해 유지 여부 재검토</li>
+<li>[ ] 에이전트 팀즈 구성 시 서브 에이전트와 팀원 에이전트의 소통 오버헤드 차이 실측</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR "Anthropic이 기존 에이전트 하네스를 사실상 끝장냈습니다" · https://www.youtube.com/watch?v=PZxzX9CbP3U · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>지난 몇 달 동안 베메이드, GSD, 스펙키트, 슈퍼파워즈 같은 여러 AI 코딩 프레임워크를 다뤘습니다. 실제로 많은 분들이 그걸 쓰기 시작하셨죠. 그런데 Anthropic이 자기들 하네스로 실험을 해보면서 구성 요소를 하나씩 빼고 뭐가 진짜 중요한지 측정했습니다.</p>
+<p>결론은 대부분이 이제 쓸데없는 짐이 됐다는 겁니다. 프레임워크의 모든 구성 요소에는 모델이 스스로 못하는 일이 있다는 가정이 들어있습니다. 그런데 Opus 4.6이 나오면서 그런 가정이 이제는 낡아버렸습니다. 그래서 지금도 중요한 게 뭔지, 뭘 빼도 되는지, 실제 세팅은 어떻게 가야 하는지 정리해봤습니다.</p>
+<p>에이전트 하네스는 긴 작업을 할 때 에이전트 성능을 크게 끌어올리는 데 중요한 역할을 합니다. Anthropic도 이미 에이전트 하네스를 공개했는데요. 저희도 이전 영상에서 그 세팅 방법과 활용법을 자세히 다뤘습니다. 비슷한 맥락에서 다른 프레임워크도 다뤘는데, 구현 방식은 달라도 결국 하려는 일은 같습니다.</p>
+<p>다만 그 프레임워크들이 나왔을 때는 지금의 Opus 4.6만큼 모델이 강하지 않았습니다. 많은 프레임워크가 컨텍스트 분리에 집중했지만, Opus 4.6에서는 그게 큰 문제가 아닙니다. 100만 토큰 컨텍스트 창 때문만이 아니라, 조금 뒤에 말씀드릴 다른 이유도 있기 때문입니다. 그래서 예전에 만든 많은 프레임워크가 지금은 새 모델 능력에 비해 오히려 오버헤드가 되고 있습니다.</p>
+<p>Anthropic은 실제로 하네스의 여러 요소를 하나씩 빼보면서 각각이 어떤 영향을 주는지 실험했습니다. 그 결과 에이전트 하네스에 진짜 필요한 건 플래너·생성자·평가자뿐이라는 결론을 내렸습니다. 나머지는 모델이 충분히 똑똑해진 지금 기준으로 보면 쓸데없는 무게만 더하는 요소라는 뜻입니다.</p>
+<p>핵심 이론은 이겁니다. 어떤 에이전트 하네스를 쓰든 모든 구성 요소는 같은 원리에 기대고 있고, 각 요소에는 모델이 혼자 할 수 있는 일과 못하는 일에 대한 가정이 들어있다는 겁니다. 이 가정들은 틀릴 수도 있고, 모델이 좋아질수록 금방 낡아지기 때문에 꼭 검증해봐야 합니다. 이번 내용 전체가 바로 그 검증 과정입니다. 그래서 모델이 발전하면 여러분의 하네스도 같이 바뀌어야 합니다.</p>
+<p><strong>계획(플래너)</strong></p>
+<p>계획 세우기는 모든 프레임워크에서 여전히 첫 단계지만, 더 강한 모델에 맞게 계획 방식은 바뀌어야 합니다. Anthropic의 이전 장기 실행 하네스는 사용자가 처음부터 아주 자세한 명세를 넣어야 했습니다. 도마드나 스펙키트 같은 프레임워크는 작업을 더 작은 조각과 마이크로태스크로 쪼개서, AI 에이전트가 쉽게 구현하도록 도와줬습니다. 말 그대로 에이전트가 생각하지 않고 따라가기만 하면 되는 상세 단계였죠. 그때는 모델 성능이 충분하지 않아서 그렇게 세세하게 이끌어줘야 원하는 결과가 나왔습니다.</p>
+<p>하지만 Opus 4.5와 4.6부터는 상황이 달라졌습니다. Anthropic이 실험해보니, 플래너가 처음부터 기술적인 디테일까지 너무 촘촘하게 박아 넣으면, 작은 오류 하나가 구현 전체에 연쇄적으로 퍼졌습니다. 그래서 에이전트가 스스로 방향을 틀고 문제를 고치기 어려워졌습니다.</p>
+<p>그래서 이제 계획은 세부 구현서가 아니라 상위 수준의 방향 제시에 가까워졌습니다. 에이전트가 훨씬 똑똑해졌기 때문에, 이제는 어떤 결과물이 필요한지만 알려주면 됩니다. 그 다음 경로는 스스로 찾아갈 수 있습니다. 이 변화 때문에 도마드나 스펙키트식 계획 방식은 예전만큼 중요하지 않게 됐습니다.</p>
+<p>PRD 생성은 여전히 유용합니다. 제품 요구사항을 이해하는 데 특화된 에이전트가 있어서, Claude 단독보다 더 잘 정리해주기 때문입니다. 그 이유는 작성자가 특정 작업용 외부 컨텍스트를 그 에이전트들에 따로 넣어뒀기 때문입니다. 대안으로는 슈퍼파워즈의 질문 세션을 써도 됩니다. 원래 엣지 케이스를 찾도록 만든 방식이라, 여러 단계 문서를 쌓는 것보다 더 효과적일 수 있습니다.</p>
+<p>하지만 계획이 지나치게 자세하면 가장 큰 문제가 생깁니다. 에이전트를 너무 꽁꽁 묶어버려서, AI가 스스로 발견하고 풀어갈 여지를 남기지 않는다는 점입니다.</p>
+<p>Anthropic은 플래너 에이전트가 만든 예시 계획도 공개했는데, 여러분이 직접 플래너를 세팅할 때 참고할 수 있습니다. 핵심은 프로젝트를 구현 레벨이 아니라, 제품 레벨에서 다루는 겁니다. 프로젝트 계획 안에서 구현까지 다 짜려고 들면, 기술 디테일에만 몰두하다가 정작 완성된 제품에 필요한 걸 놓칠 수 있기 때문입니다.</p>
+<p>Claude의 플랜 모드도 질문을 던지고 상세 계획을 내주지만 차이가 있습니다. Claude에도 플래닝 에이전트는 있지만, 여전히 구현 디테일에 무게가 실려 있고, 진짜 제품 레벨에서 움직이지는 않습니다. 이건 Anthropic의 결론과는 반대입니다.</p>
+<p><strong>생성자(Generator)</strong></p>
+<p>생성 에이전트는 기능별로 실제 구현하는 핵심 작업자입니다. 계획에서 나온 명세를 받아서 Git과 연동하며 계속 구현해 나가고, 평가 에이전트와도 긴밀하게 협업합니다. 기능 하나를 만들고 나면 테스트로 넘기고, 피드백을 받아 구현을 더 다듬습니다.</p>
+<p><strong>평가자(Evaluator)</strong></p>
+<p>코드를 짠 에이전트가 그 코드를 직접 평가하면 안 됩니다. 이건 두 번째로 흔한 문제인데, 의외로 많이 이야기되지는 않습니다. 같은 에이전트가 자기 코드를 평가하면, 품질이 분명히 별로여도 지나치게 자신감 있게 자기 작업을 칭찬하는 경향이 있다는 점입니다.</p>
+<p>이 문제는 명확하게 검증하기 어려운 작업에서 훨씬 심해집니다. 대표적인 예가 UI입니다. 좋은 UI가 뭔지는 주관적이고, AI가 여러분 의도를 완전히 이해하지 못할 수도 있습니다.</p>
+<p>평가 에이전트는 생성 에이전트의 맞상대 역할을 합니다. 역할은 앱이 제대로 구현됐는지 확인하는 겁니다. 그냥 대충 버그 찾기 한 번 돌리는 게 아니라, 분명 버그가 있다고 가정하고 비판적으로 보는 방식입니다. Playwright로 사용자 동작을 시뮬레이션하면서 앱을 테스트하고, 미리 정한 기준에 따라 버그를 찾아 생성자에게 다시 피드백합니다.</p>
+<p><strong>컨텍스트 불안 해소</strong></p>
+<p>작은 모델이 컨텍스트 불안이라는 현상을 겪습니다. 긴 작업을 하면서 컨텍스트 창이 차오르면 점점 일관성을 잃기 시작하는 현상이죠. 이 상태가 오면 아직 안 끝났는데도 일찍 마무리하고 제대로 구현했다고 주장해버립니다.</p>
+<p>이걸 해결하는 데 도움이 된 게 컨텍스트 리셋이었습니다. 구현 전에 컨텍스트 창을 비워주는 방식이죠. 컨텍스트를 비워도 외부 문서의 작업 분해가 남아있었기 때문에 그걸 기준으로 계속 이어갈 수 있었습니다.</p>
+<p>다만 Opus 4.5부터는 이런 행동이 거의 사라졌습니다. 이제 에이전트는 세션 전체를 계속 달릴 수 있고, Claude의 compaction 처리만으로도 충분히 돌아갑니다. 그래서 이제는 컨텍스트 리셋도 필요 없고, 상세 작업 분해도 꼭 필요하지 않습니다.</p>
+<p><strong>점수형 평가</strong></p>
+<p>Anthropic이 프론트엔드 평가 기준 예시를 들면서 말한 게 있습니다. AI는 대부분 비슷비슷한 결과물로 수렴하는 경향이 있다는 점입니다. 그래서 생성자와 평가자 둘 다 기준을 공유해야 합니다. 첫 번째는 디자인 품질 — 화면이 하나의 일관된 결과물인지 보라는 뜻입니다. 다음은 독창성 — AI가 대부분의 UI를 비슷한 보라색, 흰색 그라데이션 패턴으로 몰아가려는 경향 때문에 특히 중요합니다. 세 번째 기준은 완성도 — 타이포그래피, 간격, 일관성, 색조 같은 디테일. 마지막은 기능성이고요.</p>
+<p>Claude는 완성도와 기능성은 이미 점수가 잘 나오는 편입니다. 하지만 나머지 항목이 흔한 약점이라, 프롬프트에서 좋은 디자인은 결국 높은 품질에서 나온다는 점을 강하게 밀어줘야 합니다.</p>
+<p><strong>실용 권고</strong></p>
+<p>세팅을 더 쉽게 하고 싶어서 프레임워크를 쓰려는 거라면 GSD를 추천합니다. 기본적으로 플래너, 생성자, 평가자를 이미 쓰고 있기 때문입니다. 기존 계획과 코드를 대조하고, 최종적으로는 사용자 승인 테스트에 기대는 방식입니다. 다만 점수화된 평가가 아니라 합격/불합격 방식입니다. 그래서 Anthropic 프레임워크의 좋은 부분을 골라 GSD와 섞으면 됩니다.</p>
+<p>반대로 Anthropic 방식 자체를 직접 세팅하고 싶다면, 역할별 에이전트를 만들고, 에이전트 팀즈로 함께 일하게 구성하면 됩니다. 에이전트 팀즈를 쓰는 이유는, 팀원끼리는 직접 소통할 수 있지만 서브 에이전트는 문서에 적어가며 전달해야 해서 오버헤드가 생기기 때문입니다. 그래서 Claude가 상위 계획에서 작업을 만들고, 두 에이전트를 동시에 띄웁니다. 하나는 구현하고, 다른 하나는 Playwright MCP와 브라우저로 테스트를 돌리면서, 생성자의 업데이트를 기다렸다가 바로 검증을 시작하는 구조입니다.</p>
+</details>
+</body></html>

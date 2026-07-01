@@ -1,0 +1,329 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>AI 네이티브 엔지니어링 조직 운영하기 | Code w/ Claude 발표 세션</title>
+<meta name="description" content="Claude Code 팀 리드 Fiona Feng이 AI 네이티브 조직에서 실제로 바꾼 팀 규범 5가지와 조직 운영 철학을 공유한 Code w/ Claude 컨퍼런스 세션."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>AI 네이티브 엔지니어링 조직 운영하기 | Code w/ Claude 발표 세션</h1>
+<div class="meta">원작자 Fiona Feng · Anthropic (Claude Code & Co-work 엔지니어링/프로덕트 리드) · 업로드 2026-05-13 · 28.6분 · <a href="https://www.youtube.com/watch?v=cx6yo_z6GiI" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>AI 네이티브 엔지니어링 조직 운영하기</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>코딩이 더 이상 병목이 아닌 시대에, Claude Code 팀 리드 Fiona Feng이 실제로 재작성한 팀 규범과 조직 철학을 솔직하게 공유한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Fiona Feng · Anthropic Claude Code &amp; Co-work 엔지니어링/프로덕트 리드 (前 Meta, Microsoft) · Code w/ Claude 컨퍼런스 발표 · 업로드 2026-05-13 · 28.6분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>병목의 이동</td>
+<td>AI 이전과 이후에 팀 에너지를 어디에 써야 하는지 바뀜</td>
+<td>코딩 → 검증·리뷰·보안이 새 병목</td>
+</tr>
+<tr>
+<td>JIT 계획</td>
+<td>6개월 로드맵은 이미 낡은 관행</td>
+<td>프로토타입과 PR이 기획 도구</td>
+</tr>
+<tr>
+<td>"조용히 멈추는 프로세스"</td>
+<td>프로세스는 스스로 죽지 않고 쌓인다</td>
+<td>명시적 권한 부여로만 제거됨</td>
+</tr>
+<tr>
+<td>Shift Left 검증</td>
+<td>코드 생성량이 폭발적으로 늘었으므로 버그를 더 앞단에서 잡아야 함</td>
+<td>자동화로 소스 가까이서 포착</td>
+</tr>
+<tr>
+<td>역할 경계 희미화</td>
+<td>PM·디자이너도 코드 작성, 엔지니어도 콘텐츠 작업</td>
+<td>채용 기준과 조직 구조를 재설계해야 함</td>
+</tr>
+<tr>
+<td>관리자도 IC 선행</td>
+<td>제품을 직접 사용해야 팀을 제대로 이끌 수 있음</td>
+<td>Dog-fooding이 리더십의 기본</td>
+</tr>
+<tr>
+<td>코드가 진실의 원천</td>
+<td>AI 시대엔 코드베이스 자체가 문서 역할을 함</td>
+<td>스펙도 레포에 체크인</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>JIT 계획 (Just-In-Time Planning)</strong>: 컴파일러 용어 차용. 필요한 시점에 필요한 만큼만 계획하는 방식. 6개월 로드맵 대신 PR·프로토타입 중심.</li>
+<li><strong>Routines (Claude Code 기능)</strong>: 매일 아침 수동으로 하던 작업(고객 피드백 채널 요약 등)을 자동화 스케줄로 등록하는 기능. 발표 당시 신규 출시.</li>
+<li><strong>Co-work</strong>: Anthropic이 개발 중인 협업 도구. Claude Code와 함께 Fiona가 리드하는 제품군.</li>
+<li><strong>Shift Left</strong>: 버그·결함 탐지를 개발 주기의 더 앞단(소스 코드 작성 시점)으로 당기는 전략. 용어노트/ShiftLeft</li>
+<li><strong>Dog-fooding (독식)</strong>: 팀이 자사 제품을 일상적으로 직접 사용하는 것. 제품 품질 감각 유지의 핵심.</li>
+<li><strong>코드 소유권(Code Ownership)의 모호화</strong>: AI가 대부분의 커밋을 보조하면서 "누가 이 코드를 작성했나"라는 질문 자체가 의미를 잃어가는 현상.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>슬라이드 덱을 약 <strong>한 달 전에 완성했는데 발표 전에 이미 내용 일부를 수정</strong>해야 했음 — Routines가 그 사이에 출시됐기 때문.</li>
+<li>Fiona가 Claude Code 합류 당시 <strong>6개월 로드맵</strong>을 작성했는데, 새해 복귀 후 이미 절반이 유효하지 않았음 — 3개월도 긴 계획 주기임을 실감.</li>
+<li>기술 토론(Technical Debate) 방식 변화: 이전엔 화이트보드 회의 → 지금은 <strong>세 가지 구현 방안을 세 개의 PR로 직접 생성</strong>해서 비교. 구현 방식뿐 아니라 <strong>API 호출자(caller)들에게 미치는 영향</strong>까지 같이 비교 가능해짐.</li>
+<li>"마지막 커밋이 이기는 문화(last person who checks in wins)" — 코드 생성이 빨라졌다고 자정 3시에 PR 올려 마지막 발언권 챙기는 행위는 명시적 금지 사항.</li>
+<li>Claude Code 팀 내 전체 Claude-assisted 커밋 비율: <strong>지난 4개월간 non-AI-assisted 커밋을 본 적 없음</strong>.</li>
+<li>디자이너가 버그를 수정했다가 다른 버그를 만들까 봐 <strong>자신감이 없었던 사례</strong> — 역할 경계가 희미해질수록 모두에게 높은 수준의 테스트 신뢰성이 필요함.</li>
+<li>Claude에게 <strong>크리스마스 시즌 ASCII 눈사람</strong> 그리기를 시켰더니 "Mr. Peanut"처럼 나왔던 에피소드 — 제품 감각(Product Sense)은 여전히 사람이 담당해야 하는 이유의 예시.</li>
+<li>채용 시 리크루터가 "<strong>관리자를 IC(개인 기여자)로 먼저 시작하면 아무도 지원 안 할 것</strong>"이라 했지만, Fiona는 그 조건에 맞지 않으면 오히려 일찍 분리되는 게 낫다고 판단.</li>
+<li>Claude Code 팀에서 주간 스탠드업 스프레드시트를 → <strong>스탠드업 스크립트(Claude 자동 요약)</strong>으로 교체한 실제 사례.</li>
+<li>온보딩 램프업 시간이 <strong>극적으로 단축</strong>됐다고 언급 (구체 수치는 비공개). PR 사이클 타임 단축, Claude-assisted 커밋 비율 상승을 핵심 지표로 사용.</li>
+<li>iOS/Android 팀 분리 구조가 여전히 적절한지 <strong>본인도 아직 답을 못 찾은 질문</strong>으로 솔직하게 공개.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>병목의 이동</td>
+<td>코딩 비용 → 검증·리뷰·보안 비용으로 이동</td>
+</tr>
+<tr>
+<td>2</td>
+<td>조용히 멈추는 프로세스들</td>
+<td>계획 규범·코드 소유권·코드 리뷰·팀 구성·지식 공유</td>
+</tr>
+<tr>
+<td>3</td>
+<td>재작성한 팀 규범</td>
+<td>JIT 계획, PR이 설계 문서, Shift Left 검증</td>
+</tr>
+<tr>
+<td>4</td>
+<td>조직 구조와 채용</td>
+<td>최대한 플랫하게, 관리자도 IC 선행, 창의적 빌더 + 시스템 전문가</td>
+</tr>
+<tr>
+<td>5</td>
+<td>성공 지표</td>
+<td>온보딩 시간, PR 사이클 타임, Claude-assisted 커밋 비율</td>
+</tr>
+<tr>
+<td>6</td>
+<td>아직 풀리지 않은 질문들</td>
+<td>iOS/Android 분리, 완전 자동 리뷰의 균형점, 역할 희미화 속 생산성</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 병목의 이동 — "과거에 통했던 것이 지금은 통하지 않는다"</h2>
+<p>Fiona는 2000년대 Visual Studio 2005 팀에서 커리어를 시작했다. 당시엔 CD-ROM 출시 데드라인에 맞춰 제조사에 소프트웨어를 넘겨야 했기 때문에 <strong>엔지니어링 대역폭이 가장 비싼 자원</strong>이었다. 이 전제 위에 워터폴, 애자일, 상세 사전 계획 등 모든 프로세스가 설계됐다.</p>
+<p>지금은 상황이 달라졌다. Claude Code 팀에서 코딩 자체가 더 이상 느린 부분이 아니다. 코드 생성 처리량이 폭발적으로 늘었고, 이에 따라 새로운 병목이 생겨났다.</p>
+<p><strong>새로운 병목:</strong>
+- 검증 (Verification) — 이 코드가 맞는가?
+- 리뷰 — 사람이 AI가 생성한 엄청난 양의 코드를 따라갈 수 있는가?
+- 크로스-펑션 파트너 (법무, 보안 등)
+- 유지보수 비용 — 대량 생성된 코드의 장기 관리</p>
+<p><strong>조용히 멈추는 프로세스들:</strong>
+- 상세한 사전 계획 (Planning)
+- 코드 소유권 (Code Ownership)
+- 기존 방식의 코드 리뷰
+- 팀 구성 방식
+- 지식 공유와 온보딩</p>
+<p>프로세스는 스스로 죽지 않는다. 계속 쌓이기만 한다. 명시적으로 점검하고 제거 권한을 부여해야 한다.</p>
+<h2>2. 재작성한 팀 규범</h2>
+<h3>계획 (Planning) — JIT 계획</h3>
+<p>6개월 로드맵은 시도했지만 3개월 만에 절반이 무의미해졌다. 이제는 <strong>JIT 계획</strong>: 프로토타이핑과 코드 생성이 더 이상 병목이 아니므로, 긴 계획 대신 빠른 프로토타이핑과 PR로 아이디어를 검증한다. 제품 리뷰보다 <strong>프로토타입 → 내부 사용자 테스트 → 사용자 피드백</strong> 루프를 선호.</p>
+<h3>기술 토론 — 코드가 이긴다</h3>
+<p>화이트보드 토론 대신 여러 구현 방안을 직접 PR로 생성해서 비교. 추상적 논쟁보다 실제 코드와 그 영향(API 호출자 변화 등)을 보며 결정. 단, "마지막 커밋이 이기는" 문화는 명시적으로 금지 — 팀 정렬(alignment)과 오픈 토론 문화가 더 중요해진다.</p>
+<h3>줄인 것: 설계 문서 (Design Doc)</h3>
+<p>모든 코드 작업 전 설계 문서 작성 의식을 크게 줄였다. 대신 <strong>"아이디어 생기면 PR"</strong> — 대부분의 논의는 PR 또는 프로토타입 안에서 이뤄진다. (단, 비동기 협업이 많거나 복잡한 시나리오엔 여전히 설계 문서가 유효.)</p>
+<h3>늘린 것: 검증 (Shift Left)</h3>
+<p>코드 생성량이 폭증했으므로 버그를 더 앞단에서 잡아야 한다. 자동화로 소스에 가깝게 포착. 역할 경계가 희미해지면서 디자이너, PM 등 비엔지니어도 코드를 수정하게 되므로, <strong>누구든 자신이 만든 변경에 대해 높은 신뢰도를 가질 수 있는 환경</strong> 조성이 필요.</p>
+<h3>코드 리뷰 — 사람이 필요한 곳과 Claude에 맡길 곳</h3>
+<p><strong>Claude에게 위임:</strong>
+- 스타일, 린트 피드백
+- PR 코멘트 처리
+- 버그 사전 포착 및 수정
+- 테스트 추가</p>
+<p><strong>사람이 반드시 필요한 곳:</strong>
+- 법무 검토
+- 보안 민감 코드 (신뢰 경계)
+- 제품 감각과 취향 판단 (Product Sense/Taste)</p>
+<h3>코드 소유권</h3>
+<p>"누가 이 코드를 만들었나"라는 질문 자체가 달라졌다. 더 유용한 접근: <strong>이 질문의 실제 의도가 뭔가?</strong> 회귀(regression) 원인 파악인가, 전문가 문의인가, 맥락 파악인가? 그 하위 질문에 맞게 자동화할 수 있는지 검토.</p>
+<h2>3. 조직 구조와 채용</h2>
+<p><strong>채용 시 중시하는 두 프로필:</strong>
+1. 제품 감각을 가진 창의적 빌더 — 문제를 발견하고 제품으로 풀고 싶어하는 사람
+2. 깊은 시스템 전문 지식 — 분산 시스템 등 AI가 대체하기 어려운 핵심 기술</p>
+<p><strong>줄인 기준:</strong> 순수 코딩 처리량(raw throughput). 모델이 대부분 담당하므로.</p>
+<p><strong>조직 철학:</strong>
+- <strong>최대한 플랫하게</strong> — 관리자는 팟(pod)을 지원하는 역할, 결정 속도 유지
+- 팀 전체에 <strong>하나의 미션</strong> — 팟별 미션 분리 시 방향 전환 비용 증가
+- <strong>관리자도 IC로 먼저 시작</strong> — 제품을 직접 만들고 사용하며 팀 신뢰 획득. 리크루터의 반대에도 이 원칙 유지.</p>
+<p><strong>크로스-펑셔널 역할 변화:</strong>
+- 비엔지니어(PM, 디자이너)도 코드를 직접 작성
+- 엔지니어도 콘텐츠 작성, 디자인 작업 등 전통적 비기술 역할 수행
+- Claude가 콘텐츠 디자이너 역할을 보완 (설문 문구 작성 등)</p>
+<h2>4. 지식 공유와 소스 진실</h2>
+<p>Claude Code 팀의 진실의 원천(Source of Truth) = <strong>코드베이스 자체</strong>. Fiona는 고객 질문에 답할 때 로컬 레포지토리를 열고 Claude Code Desktop을 통해 직접 코드를 참조한다.</p>
+<p>스펙이 있다면 레포지토리에 체크인하고, Claude에게 "스펙과 코드 실행이 일치하는지 검증해달라"고 요청하는 방식.</p>
+<h2>5. 롤아웃 방식과 성공 지표</h2>
+<p><strong>팀 규범 적용 방식:</strong>
+- 반드시 지켜야 할 것: 팀 전체 합의 후 명시적 규범으로 지정
+- 팟별 자율성: 트리아지 방식, 스탠드업 형식, 온콜 운영, 자동화 우선순위 등은 각 팟이 결정</p>
+<p><strong>핵심 팀 원칙 (Claude Code 팀):</strong>
+- 엔지니어뿐 아니라 크로스-펑셔널 파트너 포함 <strong>모든 팀원이 Claude Code 사용</strong>
+- <strong>모든 것을 정량화</strong> — Claude가 할 수 있는 건 Claude에게
+- <strong>프로세스를 죽일 명시적 권한 부여</strong> — 주기적으로 프로세스가 여전히 목적을 달성하는지 점검</p>
+<p><strong>성공 지표 (3가지):</strong>
+1. <strong>온보딩 램프업 시간</strong> — 엔지니어/디자이너/PM이 팀에서 효과적으로 기여하기까지 걸리는 시간 단축
+2. <strong>PR 사이클 타임 단축</strong> — 병목 위치 진단 지표 (CI 인프라, 리뷰어 가용성 등)
+3. <strong>Claude-assisted 커밋 비율 상승</strong> — Claude Code 팀은 현재 사실상 100%</p>
+<p>단, 처리량 지표만 보지 말고 <strong>실제 제품 품질과 신뢰성</strong>도 함께 추적해야 한다고 강조.</p>
+<h2>6. 아직 풀리지 않은 질문들</h2>
+<ul>
+<li>iOS/Android 팀 분리 구조가 엔지니어들이 모바일 플랫폼을 유연하게 오갈 수 있는 지금도 여전히 적절한가?</li>
+<li>완전 자동화 리뷰와 사람 리뷰의 균형점은 어디인가? (모델 능력 향상으로 이 기준도 계속 바뀜)</li>
+<li>역할이 희미해지는 환경에서 모두가 동등하게 생산적이라고 느끼게 하려면?</li>
+</ul>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 팀에서 "조용히 죽어가는" 프로세스 하나를 골라 실제로 없애보기</li>
+<li>[ ] 기술 토론 시 화이트보드 대신 여러 구현 PR을 생성해 비교하는 방식 시도</li>
+<li>[ ] 6개월 로드맵 대신 JIT 계획으로 전환하는 실험 제안</li>
+<li>[ ] 코드 리뷰에서 Claude에게 위임할 것 vs 사람이 반드시 할 것 명시적으로 정의</li>
+<li>[ ] 온보딩 시간과 PR 사이클 타임을 팀 지표로 추적 시작</li>
+<li>[ ] 관리자/리더로서 실제 제품을 매일 사용하는 dog-fooding 루틴 만들기</li>
+<li>[ ] 스펙이 있다면 레포지토리에 체크인하고 Claude를 통해 코드와 정합성 검증</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] AI 네이티브 엔지니어링 조직 운영하기 | Code w/ Claude 발표 세션 · https://www.youtube.com/watch?v=cx6yo_z6GiI · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요, 들리시나요? 네, 사실 이건 Claude Code 문제가 아닌데요, 사진 한 장 찍어도 될까요? Boris와 Jared 세션이 2시에 있었고, 저는 이 방이 완전히 비어 있을 줄 알았거든요. 와주셔서 정말 감사합니다.</p>
+<p>제 이름은 <strong>Fiona Feng</strong>이고, Claude Code와 Co-work의 엔지니어링 및 프로덕트를 리드하고 있습니다. Boris, Kat와 긴밀하게 협업하고 있으며, Anthropic 전에는 Meta와 Microsoft에서 팀을 이끌었습니다.</p>
+<p>오늘 발표의 핵심은 Claude Code와 Co-work 팀을 성장시키면서 제가 배운 교훈들입니다. 흥미로운 건, Meta나 Microsoft 시절의 교훈도 있지만 Anthropic에서 배운 것도 있다는 점입니다. 이 슬라이드를 약 한 달 전에 만들었는데 이미 내용 일부를 바꿔야 했어요. 예를 들어 처음 만들 때는 Routines 기능이 없었고, 그 작업 방식 자체가 저에게 달랐거든요.</p>
+<p><strong>다섯 가지 주제를 다루겠습니다:</strong>
+1. 병목의 이동 (The Shift)
+2. 우리가 재작성해야 했던 팀 규범
+3. 그 규범들을 어떻게 롤아웃했는가
+4. 성공 신호들
+5. 제 자신에게 남은 질문들과 여러분이 팀에 가져갈 액션 아이템</p>
+<hr>
+<p><strong>병목의 이동</strong></p>
+<p>"과거에 통했던 것이 더 이상 통하지 않는다" — 이 문장을 반복해서 말하게 될 거예요. 성장 마인드셋은 제게 언제나 강점이었는데, 지금처럼 변화 속도가 빠른 시기엔 특히 중요합니다. 작년에 처음 바이브 코딩(vibe coding)을 시도했을 때만 해도 버그가 꽤 있었고 "왜 상수를 이렇게 많이 쓰지?"라고 생각했는데, 이제는 훨씬 더 유능해졌습니다.</p>
+<p>수년간 엔지니어링 대역폭이 가장 비싼 자원이었습니다. 2000년대 저는 Visual Studio 2005 팀에서 일했는데, CD-ROM에 소프트웨어를 구워서 상점에 보내야 했던 시절이었어요. 그래서 모든 계획이 "엔지니어링 대역폭이 비싸다"는 전제 위에 만들어졌습니다.</p>
+<p>지금은 다릅니다. Claude Code 팀에서 코딩은 더 이상 느린 부분이 아닙니다. 처리량 자체가 엄청나게 증가했습니다. 그러자 병목이 다른 곳으로 이동했습니다 — 검증, 리뷰, 크로스-펑셔널 파트너, 보안. "이 코드가 맞는가?"와 "누가 이 코드를 리뷰하는가?"가 동료 리더들이 가장 자주 묻는 질문이 됐습니다.</p>
+<p><strong>조용히 멈추는 프로세스들:</strong>
+- 사전 계획 규범 (코딩 시간이 비쌌기 때문에 상세하게 계획했던 것들)
+- 코드 소유권 ("누가 이 코드를 작성했나?" — 지금은 이상한 질문)
+- 코드 리뷰 방식
+- 팀 구성
+- 지식 공유와 온보딩</p>
+<hr>
+<p><strong>재작성한 팀 규범들</strong></p>
+<p><strong>1) 코드 리뷰 — 사람 판단이 실제로 필요한 곳</strong></p>
+<p><strong>2) 계획 방식</strong></p>
+<p>계획을 훨씬 덜 합니다. JIT 계획이라고 부릅니다. 처음 합류했을 때 "6개월 로드맵이 필요하지 않나요?"라고 생각했고, 작성했습니다. 꽤 좋았어요, 3개월까지는. 새해에 돌아오니 이미 많은 것이 바뀌어 있었습니다. 프로토타이핑과 코드 생성이 더 이상 병목이 아니니, 그냥 해보는 게 낫습니다.</p>
+<p><strong>기술 토론에서는 코드가 이긴다.</strong> Claude Code 팀에 처음 합류했을 때 리팩토링을 하고 싶었고, Boris와 기술 토론을 하게 됐습니다. 저는 거의 예전 습관대로 "화이트보드 앞에서 얘기해보자"고 할 뻔했는데, 그러지 않았습니다. 대신 우리가 논의한 세 가지 방안을 세 개의 PR로 생성했습니다. API 구현뿐 아니라 그 API를 호출하는 모든 곳에 미치는 영향까지 비교할 수 있었습니다.</p>
+<p>빌딩이 싸지면 논쟁이 비싸집니다 — 그래서 팀 문화와 정렬이 더 중요해집니다. "마지막 커밋이 이기는" 문화는 절대 안 됩니다. 새벽 3시에 PR 올려서 마지막 발언권 챙기는 식은 금지입니다.</p>
+<p>Claude Code에서 대부분의 논의는 <strong>설계 문서 대신 PR</strong>입니다. 아이디어가 생기면 프로토타입을 만들고, 내부 앤츠(Anthropic 직원들)이 먼저 써보게 하고, 그 다음 사용자 피드백을 받습니다.</p>
+<p><strong>늘린 것: 검증 (Shift Left)</strong></p>
+<p>처리량이 달라졌고 새로운 방식으로 버그가 생깁니다. 옛날엔 코드를 내보내고 제가 버그를 찾으면 좋은 거였는데, 이제는 소스에 더 가깝게, 자동화를 통해 더 앞단에서 잡는 게 목표입니다. 역할이 희미해지면서 디자이너도 코드를 수정하게 됐는데, 변경 사항에 대한 신뢰도를 높이는 게 중요합니다. (실제로 디자이너가 버그를 수정했다가 다른 버그를 만들어서 Boris 스레드에서 태그된 것을 봤을 때 그 "가라앉는 기분"을 설명했습니다.)</p>
+<p><strong>코드 소유권의 재정의</strong></p>
+<p>"누가 이 변경을 했나?" 대신, 이 질문의 실제 의도를 파고들어야 합니다:
+- 회귀 원인을 찾는 건가?
+- 고객 질문에 답할 전문가를 찾는 건가?
+- 맥락을 파악하려는 건가?</p>
+<p>그 하위 질문에 따라 자동화 방법을 찾으세요. 저는 매일 아침 Claude Code Desktop을 열고 고객 피드백 채널을 요약해달라고 했는데, 이제 Routines로 자동화됩니다.</p>
+<p><strong>코드 리뷰의 분리</strong></p>
+<p>Claude에게 위임: 스타일, 린트, PR 피드백, 버그 사전 포착, 테스트 추가.</p>
+<p>사람이 반드시 필요한 곳: 법무 검토, 보안 민감 코드 (신뢰 경계), 제품 감각과 취향.</p>
+<p>(Claude에게 터미널에 크리스마스 눈사람 ASCII 아트를 만들어달라고 했더니 Mr. Peanut 같은 게 나왔고, 디자이너 파트너가 보자마자 지적해줬습니다. 그래서 결국 눈 파란색에 눈송이로 단순하게 바꿨습니다.)</p>
+<hr>
+<p><strong>팀 구성과 채용</strong></p>
+<p>제가 중점적으로 채용하는 두 유형의 엔지니어:</p>
+<ol>
+<li><strong>제품 감각을 가진 창의적 빌더</strong> — 호기심이 크고, 문제를 발견하면 제품으로 풀고, 반복하면서 완성하는 사람.</li>
+<li><strong>깊은 시스템 전문 지식</strong> — 분산 시스템 등. Claude Code Remote처럼 어디서나 Claude를 실행해야 하는 환경에선 이 전문성이 여전히 필수.</li>
+</ol>
+<p>줄인 기준: 순수 코딩 처리량. 모델이 담당하므로.</p>
+<p><strong>크로스-펑셔널 역할 변화:</strong> 전용 콘텐츠 디자이너 없이 설문 문구를 고쳐야 했을 때 Claude가 콘텐츠 디자인 파트너 역할을 했습니다. PM들도 코드를 직접 많이 작성합니다. 반대로 엔지니어도 전통적으로 비기술 영역이었던 작업을 하게 됩니다.</p>
+<p><strong>조직 구조 — 스파이시한 주제:</strong></p>
+<p>리크루터들이 "관리자를 IC로 먼저 시작시키면 아무도 지원하지 않을 것"이라고 했지만, 저는 Claude Code 팀에서 모든 관리자가 IC로 먼저 시작하도록 했습니다. 제품을 직접 사용하고, 팀에서 신뢰를 얻고, 효과적인 엔지니어가 되는 법을 익히는 것이 목적. 이 조건에 맞지 않는다면 조기에 분리되는 게 낫습니다.</p>
+<p>Claude 없이는 이것이 가능하지 않았을 것입니다 — 컨텍스트 전환이 많은 관리자에게 코드 작업은 예전엔 너무 어려웠습니다. Meta에서는 1년에 PR 하나 작성하는 것도 힘들었는데, 내부 도구 명령어가 계속 바뀌었기 때문입니다. 이제는 Git 명령어도 Claude에게 물어봅니다.</p>
+<p><strong>조직을 최대한 플랫하게:</strong> 팀 전체에 하나의 미션만. 팟별 미션을 만들면 방향 전환 시 비용이 커집니다.</p>
+<hr>
+<p><strong>지식 공유</strong></p>
+<p>Claude Code 팀의 진실의 원천 = 코드베이스. 문서를 코드와 동기화하는 부담이 줄어듭니다. 좋은 스펙이 있다면 레포에 체크인하고 Claude에게 코드가 스펙과 일치하는지 검증시키세요.</p>
+<hr>
+<p><strong>롤아웃 방식</strong></p>
+<p>팀 규범은 mandate(강제)와 자율의 균형:</p>
+<p><strong>반드시 지킬 것 (전사 합의):</strong>
+- 엔지니어뿐 아니라 크로스-펑셔널 파트너 포함 모든 팀원이 Claude Code 사용
+- 모든 것을 정량화하라 — Claude가 할 수 있는 건 Claude에게
+- 프로세스를 죽일 명시적 권한 부여</p>
+<p><strong>팟별 자율:</strong>
+- 트리아지 방식, 스탠드업 형식, 온콜 운영, 어떤 워크플로를 먼저 자동화할지</p>
+<p>주간 스탠드업 스프레드시트가 너무 커지자 스탠드업 스크립트로 교체해서 Claude가 팀 진행 상황을 자동 요약하게 했습니다.</p>
+<hr>
+<p><strong>성공 신호</strong></p>
+<p>수치는 공개할 수 없지만, 세 가지 지표:</p>
+<ol>
+<li><strong>온보딩 램프업 시간 단축</strong> — 엔지니어/디자이너/PM이 팀에서 효과적으로 기여하기까지 걸리는 시간. 극적으로 줄었습니다.</li>
+<li><strong>PR 사이클 타임 단축</strong> — 이게 줄지 않는다면 파이프라인 어딘가(CI 인프라, 리뷰어)가 병목임을 알 수 있습니다.</li>
+<li><strong>Claude-assisted 커밋 비율 상승</strong> — 저희 팀은 지난 4개월간 non-AI-assisted 커밋을 본 적이 없습니다.</li>
+</ol>
+<p>단, 처리량만 보지 마세요. "이 회사는 AI가 코드의 X%를 생성한다"는 헤드라인보다, 실제로 해결하려는 문제와 제품 품질·신뢰성이 중요합니다.</p>
+<hr>
+<p><strong>마지막 — 자신의 노력을 감사(audit)하라</strong></p>
+<p>제가 아직 답을 못 찾은 질문들:
+- iOS/Android 팀을 분리하는 게 여전히 맞나?
+- 완전 자동화 리뷰를 어디까지 밀어붙일 수 있나? (모델 능력이 계속 향상되므로 기준도 바뀜)
+- 역할이 희미해지는 환경에서 모두가 동등하게 생산적이라고 느끼게 하려면?</p>
+<p><strong>액션 아이템:</strong> 팀에서 가장 "시끄러운" 워크플로 하나를 골라보세요. 가장 비용이 크거나 팀이 가장 기피하는 것. 그것이 여전히 목적에 부합하는지 물어보세요. 50명이 참석하던 주간 리뷰 — 모두가 자기 발표 순서가 아니면 노트북만 보고 있었습니다. "왜 이 미팅을 하나요?"라고 물었더니 모두 "그러게요"라고 했고, 취소했습니다.</p>
+<p>자동화하거나 없앨 수 있는 것을 찾아보세요. 감사합니다.</p>
+</details>
+</body></html>

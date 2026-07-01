@@ -1,0 +1,312 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Anthropic이 공개한 대규모 코딩 프로젝트용 최고의 Claude Code 설정법</title>
+<meta name="description" content="대규모 코드베이스에서 Claude Code가 안정적으로 동작하려면 CLAUDE.md·훅·스킬·플러그인·LSP·MCP·서브에이전트 7가지를 체계적으로 조합한 프로젝트 맞춤 하네스가 필수라는 Anthropic의 권장 설정법 정리."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Anthropic이 공개한 대규모 코딩 프로젝트용 최고의 Claude Code 설정법</h1>
+<div class="meta">업로드 2026-05-22 · 14.1분 · <a href="https://www.youtube.com/watch?v=diF0Qbj56ys" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Anthropic이 공개한 대규모 코딩 프로젝트용 최고의 Claude Code 설정법</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>에이전트 품질은 모델 성능만이 아니라 프로젝트에 맞게 구성된 하네스(CLAUDE.md + 훅 + 스킬 + 플러그인 + LSP + MCP + 서브에이전트)가 결정한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Tech Bridge 채널 (AI Labs) · Anthropic 공식 블로그 기반 · 참고 출처 https://claude.com/blog/how-claude-code-works-in-large-codebases-best-practices-and-where-to-start · 업로드 2026-05-22 · 14분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>파일시스템 기반 탐색 vs RAG</td>
+<td>RAG는 대형 코드베이스에서 환각을 유발한다</td>
+<td><code>ls</code> + <code>grep</code> 조합이 현재 표준</td>
+</tr>
+<tr>
+<td>CLAUDE.md 계층화</td>
+<td>루트 하나에 다 넣으면 주의폭 낭비</td>
+<td>300줄 이하, 서브디렉토리마다 별도 파일</td>
+</tr>
+<tr>
+<td>훅(Hooks)</td>
+<td>지시문 블러 현상을 강제 실행으로 보완</td>
+<td>stop hook으로 세션 후 자동 학습·갱신</td>
+</tr>
+<tr>
+<td>스킬(Skills)</td>
+<td>필요할 때만 로드하는 온디맨드 지식 확장</td>
+<td>불필요한 토큰 소모 없이 전문 컨텍스트 추가</td>
+</tr>
+<tr>
+<td>플러그인(Plugins)</td>
+<td>스킬+훅+MCP를 하나의 배포 단위로 묶음</td>
+<td>팀 전체에 동일 컨텍스트를 한 번에 배포</td>
+</tr>
+<tr>
+<td>LSP (Language Server Protocol)</td>
+<td>텍스트 패턴 매칭이 아닌 IDE 수준 코드 탐색</td>
+<td>비주류 언어에서 특히 필수, 프로젝트 시작 전에 설정</td>
+</tr>
+<tr>
+<td>MCP — 내부 도구 연결</td>
+<td>에이전트가 내부 API·데이터소스에 직접 접근 가능</td>
+<td>앱 기본 동작 확인 후에 MCP 구성할 것</td>
+</tr>
+<tr>
+<td>서브에이전트(Sub-agents)</td>
+<td>컨텍스트 윈도우 오염 없이 병렬 작업</td>
+<td>메인 오케스트레이터는 지휘, 실제 작업은 서브에이전트</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>RAG 기반 에이전트 탐색</strong>: 코드베이스를 임베딩해 시맨틱 검색으로 관련 청크 로드. 파일 수가 많아지면 시맨틱 매칭 정확도 저하 → 존재하지 않는 모듈 환각 유발</li>
+<li><strong>파일시스템 기반 탐색 (File-system navigation)</strong>: Claude Code가 채택한 방식. <code>ls</code>, <code>grep</code>, <code>find</code>로 실제 개발자처럼 코드 탐색. 불필요한 컨텍스트 오염 없음</li>
+<li><strong>하네스(Harness)</strong>: 에이전트에게 씌우는 프로젝트 맞춤 설정 체계. 모델 자체의 능력과는 별개로, 하네스가 약하면 강한 모델도 무용</li>
+<li><strong>Superpowers</strong>: 오픈소스 에이전트 하네스 (대규모 프로젝트에서는 한계 있음)</li>
+<li><strong>stop hook</strong>: 세션 종료 후 에이전트가 지금까지 한 일을 되돌아보고 CLAUDE.md를 업데이트하도록 강제하는 훅</li>
+<li><strong>exit code 2 hook</strong>: 에러 메시지를 에이전트에게 피드백해 반복 수정(iterate)하도록 유도</li>
+<li><strong>pre-tool use hook</strong>: 특정 도구 사용 직전에 실행되는 훅. 특정 파일 편집 차단 등에 활용</li>
+<li><strong>스킬 creator</strong>: Claude Code에 기본 내장된 스킬 생성 도구 (이전에는 GitHub에서 별도 설치 필요)</li>
+<li><strong>플러그인 마켓플레이스</strong>: 프론트엔드 디자인, 코드 리뷰, 코드 단순화, Playwright 등 Claude 공식 플러그인 제공</li>
+<li><strong>LSP (Language Server Protocol)</strong>: IDE가 코드 탐색에 사용하는 프로토콜. 함수 정의 추적·심볼 탐색을 텍스트 매칭이 아닌 언어 지식으로 수행</li>
+<li><strong>.agentignore</strong>: <code>.gitignore</code>처럼 에이전트가 건드리지 말아야 할 파일을 지정하는 파일</li>
+<li><strong>코드베이스 맵 파일</strong>: 프로젝트 구조를 목차처럼 요약한 파일. C++ 같은 비주류 언어에서 bash 탐색 횟수를 줄여줌</li>
+<li><strong>탐색 에이전트(explore agent) 오버라이드</strong>: Claude 기본 탐색 에이전트를 프로젝트 맞춤 에이전트로 교체 가능</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>CLAUDE.md는 <strong>300줄 이하</strong>를 권장 — 그 이상이면 에이전트 주의폭 분산</li>
+<li>모델마다 CLAUDE.md를 달리 써야 함 — Sonnet 4.5에 맞는 지시문이 Opus에는 적합하지 않을 수 있음; 구버전 패턴을 신모델에게 그대로 주면 토큰 낭비</li>
+<li>CLAUDE.md는 <strong>한 번 쓰고 끝이 아님</strong> — 프로젝트가 진화하고 모델 지능이 올라갈 때마다 능동적으로 갱신 필요</li>
+<li>서브디렉토리별 CLAUDE.md — 루트 파일에서 모든 것 끌어오지 않고, 해당 디렉토리 작업 시 해당 서브 파일만 점진적 로드</li>
+<li>스킬은 <strong>경로 스코핑</strong> 가능 — 배포 디렉토리 안에서만 배포 관련 스킬이 활성화되도록 설정 가능</li>
+<li>플러그인 설치 명령어: <code>/plugin</code> 명령 + 마켓플레이스 추가는 <code>add plugin marketplace</code> 명령</li>
+<li>LSP는 <strong>코드 작성 전에 미리 설정</strong> — 에러가 없다고 LSP를 생략하면 안 됨; 비주류 언어에서는 특히 필수</li>
+<li>MCP 구성 순서: <strong>앱 기본 동작 확인 먼저</strong> → 그 후 MCP 구성. 순서 반대면 구현 실패 가능성 높음</li>
+<li>서브에이전트 <strong>커스텀 explore 에이전트</strong>: Claude 기본 <code>explore</code> 에이전트를 프로젝트 맞춤 설명으로 오버라이드 가능 → 파일 구조 탐색 효율 향상</li>
+<li>하네스 설정을 <strong>몇 달마다 재검토</strong> 필요 — 신모델이 불필요해진 훅·지시문은 삭제해 컨텍스트 낭비 방지</li>
+<li>테스트는 <strong>서브디렉토리별로 분산</strong> — 한 곳에 몰아놓으면 타임아웃 문제 발생</li>
+<li>React·Next.js 같은 주류 프레임워크는 에이전트가 충분히 훈련되어 코드베이스 맵 없어도 됨; C++ 같은 비주류는 맵 필수</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>에이전트 코드 탐색 방식</td>
+<td>RAG vs 파일시스템 기반 — 현재 표준은 파일시스템</td>
+</tr>
+<tr>
+<td>2</td>
+<td>하네스의 중요성</td>
+<td>모델 단독이 아니라 하네스가 출력 품질 결정</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CLAUDE.md</td>
+<td>짧고 계층적으로 (300줄, 서브디렉토리별 분리)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>훅(Hooks)</td>
+<td>강제 실행으로 지시문 블러 보완 — stop/pre-tool/lint</td>
+</tr>
+<tr>
+<td>5</td>
+<td>스킬(Skills)</td>
+<td>온디맨드 로드, 경로 스코핑, 스킬 creator로 생성</td>
+</tr>
+<tr>
+<td>6</td>
+<td>플러그인(Plugins)</td>
+<td>스킬+훅+MCP 묶음 — 팀 배포 단위</td>
+</tr>
+<tr>
+<td>7</td>
+<td>LSP</td>
+<td>IDE 수준 탐색 — 프로젝트 시작 전 미리 설정</td>
+</tr>
+<tr>
+<td>8</td>
+<td>MCP</td>
+<td>내부 도구·API 연결 — 앱 동작 확인 후 구성</td>
+</tr>
+<tr>
+<td>9</td>
+<td>서브에이전트</td>
+<td>병렬 작업 + 컨텍스트 격리 — explore 에이전트 오버라이드 가능</td>
+</tr>
+<tr>
+<td>10</td>
+<td>추가 실천 사항</td>
+<td>테스트 분산, 코드베이스 맵, 주기적 하네스 재검토, .agentignore</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 에이전트의 코드 탐색 방식 — RAG vs 파일시스템</h2>
+<p>코딩 에이전트가 코드베이스를 탐색하는 방법은 크게 두 가지다.</p>
+<p><strong>RAG 기반</strong>: 전체 코드베이스를 임베딩해 데이터베이스에 보관하고, 쿼리 시 시맨틱 검색으로 관련 청크를 로드한다. 소규모 앱에서는 통하지만, 파일이 많아지면 시맨틱 매칭의 정확도가 떨어지고 에이전트가 존재하지 않는 모듈을 환각하는 문제가 생긴다. 이 한계 때문에 RAG 기반 접근은 사실상 대체되었다.</p>
+<p><strong>파일시스템 기반</strong>: Claude Code를 포함한 대부분의 현대 에이전트가 채택한 방식. <code>ls</code>, <code>grep</code>, <code>find</code> 같은 bash 도구로 실제 개발자처럼 탐색하고, 필요한 코드 스니펫만 컨텍스트에 로드한다. 불필요한 내용이 컨텍스트 윈도우를 오염시키지 않는다.</p>
+<hr>
+<h2>2. 하네스(Harness)의 중요성</h2>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>에이전트의 출력 품질은 모델 단독이 아니라 하네스와의 조합으로 결정된다.</strong></span></p>
+<p>Claude Code, Codex, Gemini CLI 같은 도구도 기본 하네스를 갖추고 있지만, 그것만으로는 충분하지 않다. 프로젝트에 맞춤화된 하네스가 없으면 강력한 모델도 제 성능을 내지 못한다. 에이전트 하네스는 다음 다섯 가지 구성 요소로 이루어진다.</p>
+<hr>
+<h2>3. CLAUDE.md — 세션 전체에 걸친 지식 베이스</h2>
+<p>CLAUDE.md는 세션 시작 시 로드되어 세션 전체에 메모리로 유지된다. 코드베이스 관례, 해야 할 것/하지 말아야 할 것을 담는 파일이다.</p>
+<ul>
+<li><strong>300줄 이하</strong>를 권장. 모든 것을 한 파일에 넣으면 에이전트의 주의폭이 분산된다</li>
+<li><strong>모노리포·멀티 아키텍처</strong>에서는 서브디렉토리마다 별도 CLAUDE.md를 작성하고, 에이전트가 해당 디렉토리 작업 시 해당 파일만 점진적 로드한다</li>
+<li><strong>지속적 갱신</strong> 필요 — 프로젝트 진화뿐 아니라 모델 지능이 올라가면 이전 모델용 지시문은 불필요해지므로 삭제한다</li>
+</ul>
+<hr>
+<h2>4. 훅(Hooks) — 강제 실행으로 지시문 블러 보완</h2>
+<p>훅은 특정 조건에서 에이전트가 특정 동작을 수행하도록 강제하는 셸 스크립트다. CLAUDE.md의 지시문은 에이전트 주의폭에 따라 흐려질 수 있지만, 훅은 강제 실행되기 때문에 더 신뢰할 수 있다.</p>
+<ul>
+<li><strong>세션 시작 훅</strong>: 세션 초기에 로드할 파일·컨텍스트 지정</li>
+<li><strong>pre-tool use 훅</strong>: 특정 도구 사용 전 실행 — 수정 금지 파일 보호 등에 활용</li>
+<li><strong>exit code 2 훅</strong>: 에러 메시지를 에이전트에게 피드백해 반복 수정 유도</li>
+<li><strong>stop 훅</strong> (가장 중요): 세션 종료 후 에이전트가 작업 내용을 되돌아보고 학습 내용을 CLAUDE.md에 반영 — 동일 문제 재발 방지</li>
+<li>린팅, 테스트 실행 등 다양한 목적으로도 구성 가능</li>
+</ul>
+<hr>
+<h2>5. 스킬(Skills) — 온디맨드 전문 지식</h2>
+<p>스킬은 <code>.skills.md</code> 파일과 관련 파일들의 묶음으로, 필요할 때만 로드된다. CLAUDE.md에 넣으면 매 세션마다 불필요하게 토큰을 소모하지만, 스킬은 실제로 필요한 순간에만 로드한다.</p>
+<ul>
+<li>특정 경로에 스코핑 가능 — 예: 배포 디렉토리 내에서만 배포 관련 스킬 활성화</li>
+<li>스킬 creator가 Claude Code에 기본 내장됨 (이전에는 GitHub에서 별도 설치)</li>
+<li>질의응답 세션을 통해 프로젝트 맞춤 스킬 생성 후 세션 재시작 시 사용 가능</li>
+</ul>
+<hr>
+<h2>6. 플러그인(Plugins) — 팀 배포 단위</h2>
+<p>플러그인은 스킬 + 훅 + MCP를 하나의 패키지로 묶어 배포할 수 있는 단위다. 팀원이 플러그인 하나만 설치하면 동일한 컨텍스트와 설정을 즉시 사용할 수 있다.</p>
+<ul>
+<li>GitHub 리포와 동기화하거나 수동 업로드로 관리</li>
+<li><code>/plugin</code> 명령으로 설치, <code>add plugin marketplace</code>로 마켓플레이스 추가</li>
+<li>Claude 공식 마켓플레이스에서 프론트엔드 디자인, 코드 리뷰, 코드 단순화, Playwright 등 플러그인 기본 제공</li>
+</ul>
+<hr>
+<h2>7. LSP (Language Server Protocol) — IDE 수준 코드 탐색</h2>
+<p>LSP는 에이전트에게 IDE 개발자와 동일한 코드 탐색 능력을 부여한다.</p>
+<p>LSP 없이는 파일명과 텍스트 패턴 매칭에만 의존 → 잘못된 심볼에 도달할 가능성 높음. LSP가 있으면 함수 정의 추적, 임포트 경로 탐색 등을 언어 지식 기반으로 수행한다.</p>
+<ul>
+<li><span style="color:#ef6c00; font-size:1.1em"><strong>코드 작성 전, 프로젝트 시작 전에 미리 설정할 것</strong></span></li>
+<li>에러가 없어도 생략하지 말 것</li>
+<li>React·Next.js 등 주류 언어는 에이전트가 이미 충분히 훈련되어 필요성이 낮지만, C++ 같은 비주류 언어에서는 필수</li>
+</ul>
+<hr>
+<h2>8. MCP — 내부 도구·데이터소스 연결</h2>
+<p>MCP (Model Context Protocol)는 에이전트를 외부 도구뿐 아니라 프로젝트 내부 API, 데이터소스, 시스템에도 연결할 수 있다.</p>
+<ul>
+<li>문서 가이드, 분석 데이터 조회, 내부 변경 작업 등 다양한 용도로 MCP 빌드 가능</li>
+<li><strong>순서 주의</strong>: 앱 기본 동작이 정상 확인된 후 MCP를 구성할 것. 순서가 반대면 MCP 구현 실패 가능</li>
+</ul>
+<hr>
+<h2>9. 서브에이전트(Sub-agents) — 병렬 작업과 컨텍스트 격리</h2>
+<p>서브에이전트는 독립된 컨텍스트 윈도우를 가지고 메인 오케스트레이터로부터 위임받은 작업을 처리한 후 최종 결과만 반환한다.</p>
+<ul>
+<li>메인 에이전트의 컨텍스트 윈도우에 불필요한 정보를 쌓지 않음</li>
+<li>병렬 작업 분배로 워크플로우 효율 향상</li>
+<li>사용할 도구·모델·지시문을 커스텀 설정 가능</li>
+<li>Claude 기본 <code>explore</code> 에이전트를 프로젝트 맞춤 탐색 에이전트로 <strong>오버라이드</strong> 가능 — 파일 구조 정보를 CLAUDE.md에 넣지 않아도 됨</li>
+</ul>
+<hr>
+<h2>10. 추가 실천 사항</h2>
+<ul>
+<li><strong>테스트 분산</strong>: 서브디렉토리별로 테스트를 나눠 타임아웃 문제 방지</li>
+<li><strong>코드베이스 맵 파일</strong>: 비주류 언어 프로젝트에서 파일 위치를 목차 형태로 정리 → bash 탐색 횟수 감소</li>
+<li><strong>.agentignore</strong>: 에이전트가 건드리지 말아야 할 파일 지정 (<code>.gitignore</code>와 유사)</li>
+<li><strong>주기적 하네스 재검토</strong>: 몇 달마다 신모델 기준으로 불필요해진 훅·지시문 삭제</li>
+</ul>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] CLAUDE.md를 300줄 이하로 유지하고 서브디렉토리별로 분리했는지 확인</li>
+<li>[ ] stop hook을 설정해 세션 후 자동 학습·갱신 루프 구성</li>
+<li>[ ] 프로젝트 시작 전 LSP를 모든 사용 언어에 설정</li>
+<li>[ ] 팀 프로젝트라면 스킬+훅+MCP를 플러그인으로 묶어 배포</li>
+<li>[ ] 앱 기본 동작 확인 후 MCP 구성</li>
+<li>[ ] 서브에이전트로 작업 병렬화 구성</li>
+<li>[ ] 테스트를 서브디렉토리별로 분산</li>
+<li>[ ] .agentignore 파일로 민감 파일 보호</li>
+<li>[ ] 현재 사용 중인 모델에 맞게 CLAUDE.md 지시문 최적화 여부 검토</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Anthropic이 공개한 대규모 코딩 프로젝트용 최고의 Claude Code 설정법 · https://www.youtube.com/watch?v=diF0Qbj56ys · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>요즘 작은 프로젝트를 완성하는 건 매우 쉬워졌지만, 코드베이스가 커지고 의존성이 많아지는 순간부터 에이전트는 실패하기 시작한다. 비주류 언어를 쓰고 있다면 오류 추적이 더욱 어려워진다. 많은 사람들이 놓치는 점은, 에이전트를 대규모 코드베이스에 투입하기 전에 적절한 준비 단계가 필요하다는 것이다. 이것이 바로 Anthropic이 다루는 내용이다 — 프로젝트가 규모 있게 성장할 때 실제로 어떻게 다뤄야 하는지를.</p>
+<p>세부 설정에 들어가기 전에, 에이전트가 일반적으로 코드를 어떻게 탐색하는지부터 살펴보자. 방법은 두 가지다.</p>
+<p><strong>첫 번째는 RAG 기반</strong>이다. 전체 코드베이스를 임베딩하고 쿼리 시 관련 청크를 검색한다. 쿼리를 입력하면 시맨틱 검색으로 데이터베이스의 코드와 매칭하고, 유사도 높은 항목을 모델이 분석할 컨텍스트로 로드한다. 소규모 앱에서는 통하지만 대규모에서는 지속되지 않는다. 파일이 많아지면 중앙 데이터베이스의 시맨틱 매칭이 문제를 일으키고, 에이전트가 더 이상 존재하지 않는 모듈을 환각하는 원인이 된다. 이 문제 때문에 RAG 기반 접근은 완전히 대체되었다.</p>
+<p><strong>두 번째는 파일시스템 기반 탐색</strong>이다. Claude Code를 포함한 대부분의 에이전트가 지금 사용하는 방식이다. 실제 소프트웨어 개발자가 탐색하는 방식과 유사하다. 에이전트가 <code>ls</code> 명령으로 파일을 찾고, <code>grep</code>으로 좁혀 정확히 필요한 코드 스니펫을 찾아 컨텍스트에 로드한다. bash 도구는 불필요한 스니펫으로 컨텍스트 윈도우를 오염시키지 않기 때문에 효과적이다. 거의 모든 코딩 에이전트가 이 방식으로 탐색한다.</p>
+<p>여기서 중요한 점은, 모델이 아무리 발전해도 모델 단독으로 출력 품질이 결정되지 않는다는 것이다. 실제로 동작하는 시스템에서 더 중요한 것은 코딩에 어떤 하네스를 사용하느냐다. Claude Code, Codex, Gemini CLI 중 무엇을 쓰든, 결과물은 강력한 모델 단독이 아니라 모델과 조합하는 하네스에 따라서도 달라진다. 하네스가 약하면 모델이 강해도 의미가 없다. Claude Code나 Codex 같은 에이전트가 강력한 기본 하네스를 갖고 있더라도, 그것만 완전히 의존하면 안 된다. 프로젝트에 딱 맞는 하네스를 직접 설정해야 한다.</p>
+<p>Superpowers 같은 오픈소스 하네스도 있지만, 대규모 프로젝트에서는 한계가 생기고 결국 직접 구성해야 한다. 에이전트 하네스를 직접 만들거나 공유된 것에서 가져오면, Claude의 작업과 에이전틱 루프가 환경적으로 어떻게 설정되는지를 중심으로 한 다섯 가지 구성 요소가 있다.</p>
+<p><strong>첫 번째 구성 요소: CLAUDE.md</strong></p>
+<p>세션 시작 시 로드되어 세션 전체에 메모리로 유지된다. 코드베이스 지식 베이스 역할을 하기 때문에 매우 중요하다. 코드베이스 관례, 전체 코드베이스에 걸친 해야 할 것/하지 말아야 할 것을 담는다. 코드베이스가 작다면 괜찮지만, 여러 아키텍처로 확장되는 순간 문제가 된다. 모든 것을 하나의 파일에 우겨 넣으면 에이전트가 지금 당장 필요 없는 정보에 주의를 빼앗겨 비효율적이다. 그래서 CLAUDE.md는 짧게, 이상적으로는 300줄 이하로 유지해야 한다. 여러 영역이 있는 모노리포라면 각 서브디렉토리에 동일한 규칙을 따르는 별도의 CLAUDE.md를 두어야 한다. 에이전트가 해당 디렉토리에서 작업할 때 루트 파일 전체가 아닌 해당 서브 파일의 집중된 지시를 받게 된다.</p>
+<p>이 파일은 한 번 쓰고 영원히 의존하는 게 아니다. 프로젝트가 진화할 때뿐 아니라 모델 지능이 올라갈 때도 능동적으로 유지 관리해야 한다. Sonnet 4.5에 적용했던 원칙이 Opus에는 맞지 않을 수 있다. 신모델은 이전 지시에서 실패하던 패턴을 극복하도록 훈련된다. 그러므로 모든 모델에 같은 지시를 주면 토큰만 낭비한다.</p>
+<p>(스폰서 광고 구간 생략 — CleanMyMac)</p>
+<p><strong>두 번째 구성 요소: 훅(Hooks)</strong></p>
+<p>훅은 에이전트가 특정 조건에서 특정 동작을 수행하도록 하는 스크립트다. 에이전트 동작을 제어하는 셸 스크립트 형태로 작성된다. 세션 시작 훅은 각 세션 초기에 로드할 정보(Claude가 컨텍스트로 읽어야 할 파일 등)를 지정한다. exit code 2 훅을 써서 에러 메시지를 Claude에게 피드백하면 반복 수정이 가능하다. pre-tool use 훅은 에이전트가 설정된 도구를 사용하기 직전에 명령을 실행한다 — 수정하면 안 되는 파일 편집을 차단하는 데 활용할 수 있다. stop 훅은 가장 중요한 훅으로, 세션 종료 후 Claude가 지금까지 한 일을 되돌아보게 한다. 이로부터 세션의 학습을 CLAUDE.md에 반영해 같은 문제가 반복되지 않도록 한다. 린팅, 테스트 실행 등 다양한 목적으로도 훅을 설정할 수 있다. 이 모든 것이 합쳐져 대규모 코드베이스에서 큰 도움이 된다. 훅은 에이전트가 신중해야 할 일을 강제하는데, CLAUDE.md의 지시만으로는 부족할 수 있다. CLAUDE.md 지시는 집중해야 할 것이 너무 많아 에이전트 주의폭에서 흐려질 수 있지만, 훅은 Claude를 실제로 행동하게 강제한다.</p>
+<p><strong>세 번째 구성 요소: 스킬(Skills)</strong></p>
+<p>스킬은 <code>.skills.md</code>와 그룹화된 파일들의 집합으로, 매 세션에 상주하며 불필요하게 비대해지는 대신 온디맨드로 로드된다. 스킬은 점진적 공개(progressive disclosure)를 사용하고 워크플로우에 필요한 특정 전문 작업에 맞게 조정된다. 에이전트가 이미 할 수 있는 일에 대한 지식을 확장한다. 이런 지시를 CLAUDE.md에 넣으면 불필요하게 토큰만 소모한다. 프로젝트별 지시는 스킬에 넣어야 한다 — 실제로 필요할 때만 로드된다. 특정 경로에 스킬을 스코핑해서 코드의 관련 부분에서만 활성화되도록 할 수도 있다. 예를 들어 배포 영역에서 작업할 때, 해당 디렉토리 경로를 스킬 설명에 지정하면 다른 곳에서 작업할 때 해당 스킬이 로드되지 않는다. 스킬을 설정하려면 Claude Code에 기본 내장된 스킬 creator를 호출하면 된다. 이전에는 GitHub에서 별도로 가져와야 했다. 스킬 creator가 묻는 질문에 답하면 정확히 필요한 스킬이 만들어지고, 세션 재시작 후 사용할 수 있다.</p>
+<p>스킬 외에도 플러그인을 사용할 수 있다. 플러그인은 스킬 + 훅 + MCP를 하나의 다운로드 가능하고 배포 가능한 패키지로 묶은 것이다. 플러그인을 설치하면 동일한 컨텍스트와 설정이 즉시 사용 가능해진다. 팀으로 작업한다면, 팀원에게 배포할 자체 플러그인을 만드는 것이 매우 중요하다. 모든 설정을 한 곳에 모아 조직 전체에 배포하면 팀원들이 여러분과 동일한 컨텍스트를 가질 수 있다. 플러그인을 만들고 수동 업로드 또는 GitHub 리포 동기화로 관리할 수 있다. <code>/plugin</code> 명령으로 설치하고, <code>add plugin marketplace</code> 명령으로 마켓플레이스를 추가할 수 있다. Claude Code는 프론트엔드 디자인, 코드 리뷰, 코드 단순화, Playwright 등 Claude 공식 마켓플레이스의 여러 플러그인과 함께 제공된다.</p>
+<p><strong>네 번째 구성 요소: LSP (Language Server Protocol)</strong></p>
+<p>많이 언급되지 않지만 에이전트 하네스에서 중요한 요소가 LSP다. 에이전트에게 IDE 개발자와 동일한 수준의 코드 탐색 능력을 부여한다. LSP는 거의 모든 프로그래밍 언어에 존재하며, 주류 언어에서는 불필요할 수 있지만 비주류 언어에서는 필수다. 에이전트에게 프로그래밍 언어에 대한 지식을 제공해 인간처럼 코드베이스를 탐색할 수 있게 한다. 예를 들어 인간 개발자가 함수를 찾을 때 임포트된 위치를 확인하고 그 파일로 가서 함수 정의를 찾는다 — 이것이 실제로 정확한 소스를 찾는 방법이다. LSP 없이는 에이전트가 텍스트 패턴 매칭으로 탐색하고 잘못된 심볼에 도달할 가능성이 높다.</p>
+<p>Claude Code는 파일시스템 기반 + bash 접근 방식을 사용하기 때문에, LSP 없이는 파일명과 텍스트의 패턴 매칭에만 의존하며 더 깊은 지능으로 탐색하지 못한다. 에이전트가 아직 에러가 없다고 해서 LSP가 필요 없다고 가정하지 말라. 프로젝트 시작 전, 코드를 작성하기 전에 미리 사용할 모든 언어에 대해 LSP를 설정하라. 에이전트가 패턴을 추측하게 두는 대신, LSP를 설치하면 에이전트가 텍스트가 아니라 개발자가 생각하는 방식으로 코드를 읽고 편집할 수 있다.</p>
+<p><strong>다섯 번째 구성 요소: MCP와 서브에이전트</strong></p>
+<p>MCP는 에이전트를 외부 도구에 연결하는 것 외에도, 프로젝트 내부 도구, 데이터소스, API, 기타 시스템에도 연결할 수 있다. 이를 위해 자체 MCP를 만들어 팀원들이 쉽게 사용할 수 있도록 해야 한다. MCP는 기존 설정의 확장으로, 필요할 때 로드되고 제공하는 도구를 에이전트가 사용할 수 있게 된다. 대규모 코드베이스에서 MCP는 문서 가이드, 분석 조회, 변경 작업 등 다양한 목적으로 활용할 수 있다. 방대한 문서를 헤매지 않고 에이전트가 내부 정보에 자연스럽게 접근하고 도구를 호출하고 변경할 수 있게 된다. 단, MCP를 구성하기 전에 앱의 기본 설정이 먼저 동작해야 한다. 순서가 반대면 MCP 구현이 실패할 수 있다.</p>
+<p>서브에이전트는 독립된 컨텍스트 윈도우를 가지고 메인 오케스트레이터로부터 위임받은 작업을 처리한 후 최종 결과만 반환한다. 메인 에이전트의 컨텍스트 윈도우를 불필요한 정보로 채우지 않아 컨텍스트 활용 효율이 높아진다. 서브에이전트는 호출될 때만 실행되고 결과를 반환한다. Claude는 자체적으로 서브에이전트를 생성하지만, 직접 구성할 수도 있다. 어떤 도구와 모델을 쓸지, 어떻게 동작해야 하는지를 지정해 워크플로우 전용 에이전트를 만들 수 있다. Claude의 기존 에이전트(예: <code>explore</code>)를 오버라이드해 디렉토리 구조를 더 잘 파악하는 맞춤 탐색 에이전트를 만들 수도 있다. Claude 기본 explore 에이전트는 모든 종류의 코드베이스에 범용화되어 있지만, 맞춤 설정하면 파일 구조를 더 잘 알고 CLAUDE.md 탐색에 토큰을 낭비하지 않는다. 메인 에이전트가 전체 프로젝트 실행을 제어하고 실제 작업은 서브에이전트에 위임하면 된다. 서브에이전트를 통해 작업을 병렬화할 수 있어 워크플로우가 훨씬 쉬워진다.</p>
+<p><strong>추가 실천 사항</strong></p>
+<p>에이전트가 올바른 컨텍스트를 찾는 능력이 대규모 코드베이스 탐색 능력을 결정한다. CLAUDE.md 분리 외에도, 테스트를 서브디렉토리별로 나눠 타임아웃 문제를 방지하라. 프로젝트 구조를 매핑하는 별도 코드베이스 맵 파일을 만들 수 있다. React나 Next.js 같은 주류 프레임워크에서는 생략해도 되지만, C++ 같은 비주류 언어에서는 필수다. 에이전트에게 목차 역할을 해 수많은 bash 명령 없이 파일 위치를 파악할 수 있게 한다. 마지막으로, 몇 달마다 설정을 검토하라. 신모델 기준으로 불필요해진 지시문, 훅 등을 제거하라. .gitignore처럼 .agentignore 파일을 사용해 에이전트가 건드리지 말아야 할 파일을 지정하라. 이렇게 하면 설정이 대규모 앱에서도 지속 가능하게 유지된다.</p>
+</details>
+</body></html>

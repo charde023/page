@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Headroom: AI 에이전트를 10배 더 싸게 만드는 Netflix 도구입니다</title>
+<meta name="description" content="Netflix 개발자가 만든 오픈소스 도구 Headroom이 AI 에이전트의 도구 호출 출력을 LLM에 전달하기 전에 압축해 토큰 비용을 최대 98%까지 줄이는 방법을 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Headroom: AI 에이전트를 10배 더 싸게 만드는 Netflix 도구입니다</h1>
+<div class="meta">원작자 Tejas Chopra (Netflix 시니어 개발자, Headroom 제작자) · Netflix · 업로드 2026-06-14 · 7.0분 · <a href="https://www.youtube.com/watch?v=EbNdr0LNgd8" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Headroom: AI 에이전트를 10배 더 싸게 만드는 Netflix 도구입니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Headroom은 AI 에이전트의 도구 호출 결과를 LLM에 보내기 전에 프록시에서 압축해 토큰 비용을 최대 98%까지 줄이는 오픈소스 도구다. 압축 내용에 해시 단서를 남겨 모델이 원본을 다시 요청할 수 있다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Tejas Chopra · Netflix · 출처 https://github.com/chopratejas/headroom · 업로드 2026-06-14 · 7분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Headroom 프록시 구조</td>
+<td>AI 에이전트 비용 절감의 핵심 레이어</td>
+<td>앱 ↔ Headroom 프록시 ↔ LLM API 사이에서 도구 출력을 압축</td>
+</tr>
+<tr>
+<td>콘텐츠 타입별 압축 전략</td>
+<td>단순 truncation이 아닌 의미 보존 압축</td>
+<td>JSON은 이상값·엣지케이스 보존, 코드는 AST 분석, 빌드 로그는 실패만 유지</td>
+</tr>
+<tr>
+<td>CompressBase 모델</td>
+<td>일반 텍스트 압축에 별도 로컬 모델 사용</td>
+<td>Tejas가 직접 학습시킨 압축 전용 로컬 모델, 외부 API 호출 없음</td>
+</tr>
+<tr>
+<td>해시 브레드크럼 (hash breadcrumb)</td>
+<td>압축 후에도 복원 가능성 보장</td>
+<td>압축 결과에 해시를 남겨 모델이 원본 데이터를 재요청할 수 있음</td>
+</tr>
+<tr>
+<td>Caveman과의 조합</td>
+<td>입력+출력 양방향 토큰 절감</td>
+<td>Headroom(입력 압축) + Caveman(출력 단축)을 함께 쓰면 최대 절감</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Headroom</strong> — Netflix 시니어 개발자 Tejas Chopra가 만든 오픈소스 토큰 압축 프록시. Python 서버 형태.</li>
+<li><strong>CompressBase</strong> — Headroom이 일반 텍스트 압축에 사용하는 자체 로컬 모델. 외부 LLM 없이 로컬에서 실행.</li>
+<li><strong>해시 브레드크럼 (hash breadcrumb)</strong> — 압축 결과에 원본 데이터를 식별할 수 있는 해시를 삽입해, 모델이 필요하면 <code>retrieve</code> 요청으로 원본을 돌려받는 메커니즘.</li>
+<li><strong>AST(Abstract Syntax Tree) 기반 코드 압축</strong> — 코드 파일을 텍스트 수준이 아닌 문법 트리 수준에서 파싱해 중요한 구조만 보존.</li>
+<li><strong>Caveman</strong> — 모델의 응답 출력 토큰을 줄이는 도구. Headroom과 반대 방향(입력이 아닌 출력 측).</li>
+<li><strong>uv</strong> — Python 패키지 관리자. Headroom 설치 예시에서 pip 대신 uv를 사용.</li>
+<li><strong>cross-agent memory</strong> — Claude Code, Codex 등 여러 에이전트 하네스가 동일한 압축 컨텍스트를 공유하는 Headroom 기능.</li>
+<li><strong>Headroom Learn</strong> — 과거 실패 세션을 분석해 과도하게 압축했던 패턴을 학습, 향후 같은 실수를 줄이는 기능.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>Python 3.12 필수 — 더 높은 버전에서는 동작하지 않음. <code>uv</code>로 설치 시 버전 명시 필요.</li>
+<li>Headroom은 도구 호출 출력(tool call output)만 압축한다 — 텍스트 파일을 직접 주면 압축 안 됨.</li>
+<li>로그 파일 데모: 98% 토큰 절감, 17,000토큰 이상 절약. 419개의 유사한 info 로그를 요약 1개로 압축.</li>
+<li>Claude Code + Headroom 데모: 89.1K 토큰 사용. Headroom 없이는 더 많은 토큰 사용 (정확 수치는 컨텍스트 창 차이로 직접 비교 어려움).</li>
+<li>Opus 저노력(low effort) 모드에서는 Headroom이 토큰 절감 효과 없음 — medium 이상에서 효과 확인됨.</li>
+<li>Headroom이 $700,000 이상의 토큰 비용을 사용자들에게 절약시켰다고 주장.</li>
+<li>2차 왕복(second round trip) 트레이드오프 — 모델이 압축 결과로 충분하지 않다고 판단하면 원본을 재요청해 오히려 토큰이 더 늘어날 수 있음.</li>
+<li>압축은 Rust로 구현된 엔진이 수행 — 성능 최적화.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Headroom이란</td>
+<td>도구 호출 출력을 LLM 전달 전에 압축하는 Python 프록시 서버</td>
+</tr>
+<tr>
+<td>2</td>
+<td>압축 방식</td>
+<td>콘텐츠 타입별(JSON/코드/빌드로그/일반텍스트) 전략 + CompressBase 로컬 모델</td>
+</tr>
+<tr>
+<td>3</td>
+<td>해시 브레드크럼</td>
+<td>압축 후 복원 가능성 보장 메커니즘</td>
+</tr>
+<tr>
+<td>4</td>
+<td>기본 데모</td>
+<td>서버 로그 압축 — 98% 절감, 17K 토큰 절약 확인</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Claude Code 연동 데모</td>
+<td>TS 프로젝트 전체 분석 — 프록시 경유로 실제 절감 확인</td>
+</tr>
+<tr>
+<td>6</td>
+<td>트레이드오프</td>
+<td>재요청 시 2차 왕복 발생 가능, Headroom Learn이 완화</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Caveman과의 조합</td>
+<td>입력(Headroom) + 출력(Caveman) 동시 압축으로 최대 절감</td>
+</tr>
+</tbody>
+</table>
+<h2>1. Headroom이란 무엇인가</h2>
+<p>Headroom은 Netflix 시니어 개발자 Tejas Chopra가 만든 오픈소스 도구다. Claude Code 같은 AI 에이전트 하네스(harness)는 매 도구 호출마다 방대한 JSON 로그, 코드 파일, RAG 결과를 컨텍스트 창에 쌓는데, 이게 전부 비용으로 이어진다. Opus Ultra 모드처럼 병렬 서브에이전트를 무제한으로 돌리는 경우 특히 심각하다.</p>
+<p>Headroom은 앱과 LLM API 사이에 Python 프록시 서버로 앉아서, 도구 호출 결과(tool call output)가 LLM에 도달하기 전에 Rust 엔진으로 압축한다.</p>
+<h2>2. 콘텐츠 타입별 압축 전략</h2>
+<p>Headroom은 단순히 텍스트를 자르지 않는다. 콘텐츠 타입을 감지해 의미 있는 정보를 선별 보존한다:</p>
+<ul>
+<li><strong>JSON 배열</strong> — 이상값(anomaly)과 엣지케이스만 보존.</li>
+<li><strong>코드</strong> — AST(문법 트리)를 읽어 중요한 구조 보존, 반복 보일러플레이트 제거.</li>
+<li><strong>빌드 로그</strong> — 실패(failure)만 남기고 통과한 테스트는 버림.</li>
+<li><strong>일반 텍스트</strong> — CompressBase라는 Tejas 직접 학습 로컬 모델로 압축.</li>
+</ul>
+<h2>3. 해시 브레드크럼 메커니즘</h2>
+<p>압축된 결과에는 원본 데이터의 해시가 포함된다. 모델이 압축 결과만으로는 태스크를 완료할 수 없다고 판단하면, 이 해시를 이용해 Headroom 프록시에 원본 데이터를 재요청할 수 있다. 즉, 압축은 비가역적이지 않고 <strong>가역적(reversible)</strong> 이다.</p>
+<p>단, 이 재요청이 발생하면 2차 왕복(second round trip)이 생겨 오히려 토큰이 더 늘어날 수 있다. Headroom Learn 기능이 이런 실수를 점진적으로 줄이도록 설계됐다.</p>
+<h2>4. 기본 데모 — 서버 로그 분석</h2>
+<p>설치:</p>
+<pre><code class="language-bash">uv pip install headroom --python 3.12
+uv pip install headroom[sdk] anthropic
+</code></pre>
+<p>프록시 실행:</p>
+<pre><code class="language-bash">headroom proxy
+</code></pre>
+<p>Python SDK로 <code>compress</code> 함수를 호출해 도구 호출 결과 메시지를 압축한 뒤, 압축된 메시지를 Claude API에 전달한다. 실제 모델 호출에는 Haiku가 아닌 지정 모델을 사용하지만, 토큰 카운팅 정확도를 위해 compress 함수에 모델명을 전달한다.</p>
+<p>결과: 서버 로그 419개의 유사 info 로그가 요약 1개로 압축 → <strong>98% 토큰 절감, 17,000토큰 이상 절약</strong>.</p>
+<p>초기 실행 시 Claude가 "정보가 부족하다"고 응답하는 경우가 있었는데, 재실행하자 98% 절감 유지 상태에서 올바른 답변이 나왔다.</p>
+<h2>5. Claude Code 연동 데모</h2>
+<p>더 많은 파라미터로 프록시를 실행:</p>
+<pre><code class="language-bash">headroom proxy --ml --code-aware
+</code></pre>
+<ul>
+<li><code>--ml</code>: CompressBase 로컬 모델로 일반 텍스트 압축 활성화.</li>
+<li><code>--code-aware</code>: 코드 인식 압축기 활성화.</li>
+</ul>
+<p>Claude Code의 base URL을 프록시로 설정한 뒤, TypeScript 프로젝트 전체를 읽고 깊은 개요를 요청. 5개 패키지의 모든 TS 파일을 읽고 응답 완료. <code>/context</code> 명령어로 확인한 토큰 사용량: <strong>89.1K 토큰</strong>. Headroom 없이 동일 프롬프트 실행 시 더 많은 토큰 사용(컨텍스트 창 크기가 달라 직접 비교 제한됨).</p>
+<p><code>curl</code> + <code>jq</code>로 프록시 엔드포인트를 조회하면 압축으로 절약된 토큰 수와 절약된 비용을 확인할 수 있다.</p>
+<h2>6. 트레이드오프와 고급 기능</h2>
+<p><strong>트레이드오프</strong>:
+- 모델이 압축 결과만으로 충분하지 않다고 판단 → 원본 재요청 → 2차 왕복 → 토큰 증가 가능.
+- Headroom Learn이 완화책: 과거 실패 세션을 분석해 과압축 패턴 학습.
+- Opus 저노력(low effort) 모드에서는 절감 효과 없었음 — medium 이상에서 효과 발생.</p>
+<p><strong>아직 다루지 않은 고급 기능</strong>:
+- <strong>Cross-agent memory</strong> — Claude Code, Codex 등이 동일한 압축 컨텍스트 공유.
+- <strong>Headroom Learn</strong> — 실패 세션 학습으로 과압축 방지.
+- 인기 SDK 통합.</p>
+<h2>7. Caveman과의 조합</h2>
+<p>Caveman은 모델에게 짧은 단편으로 응답하도록 지시해 출력 토큰을 줄인다. Headroom은 모델이 읽는 입력을 줄인다. 방향이 반대이므로 두 도구를 함께 사용하면 <strong>입력(Headroom) + 출력(Caveman) 양방향 최대 절감</strong>이 가능하다.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Headroom GitHub을 클론해 로컬 프록시 실행 테스트.</li>
+<li>[ ] Claude Code 작업 시 base URL을 Headroom 프록시로 설정해 실제 절감 측정.</li>
+<li>[ ] <code>--ml --code-aware</code> 옵션으로 TS/Python 프로젝트 분석 비교.</li>
+<li>[ ] Caveman과 함께 사용해 입출력 동시 절감 효과 확인.</li>
+<li>[ ] Headroom Learn 기능 활성화해 점진적 과압축 방지 효과 관찰.</li>
+<li>[ ] 병렬 Claude Code 세션에서 cross-agent memory 기능 테스트.</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Headroom: AI 에이전트를 10배 더 싸게 만드는 Netflix 도구입니다 · https://www.youtube.com/watch?v=EbNdr0LNgd8 · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>이것이 Headroom입니다. AI 에이전트가 읽는 모든 것 — 도구 호출, 코드 파일, RAG 결과 — 을 LLM에 도달하기 전에 압축하는 오픈소스 도구입니다. 토큰을 60%에서 최대 95%까지 줄이면서도 동일한 답변을 얻을 수 있습니다. 영리한 점은 가역적(reversible)이라는 것입니다. 모델이 전체 정보가 실제로 필요할 때는 언제든 다시 요청할 수 있습니다.</p>
+<p>그런데 압축은 보통 무언가를 잃는다는 뜻인데, 대부분의 컨텍스트를 제거하고도 올바른 답을 얻을 수 있을까요? 이건 진짜 흥미로운 질문입니다. 구독하고 함께 알아봅시다.</p>
+<p>Claude Code 같은 하네스(harness)를 써봤다면 토큰을 엄청나게 소모한다는 걸 알 겁니다. 매 도구 호출마다 대용량 JSON 로그를 쏟아내는데, 대부분이 중요한 정보를 방해하는 노이즈입니다. 이게 전부 컨텍스트 창에 쌓이고, 그게 곧 비용입니다. 특히 Opus Ultra 모드처럼 동적 워크플로를 돌리면서 토큰 한도 없이 병렬 서브에이전트를 띄우면 더욱 심각합니다. 이게 바로 Netflix 시니어 개발자 Tejas Chopra가 Headroom을 만든 이유입니다.</p>
+<p>Headroom은 콘텐츠 타입을 감지해 중요한 정보만 보존합니다. JSON 배열에서는 이상값(anomaly)과 엣지케이스를 보존합니다. 실제 문법 트리를 읽는 코드 압축기도 있습니다. 빌드 로그를 읽을 때는 실패만 남기고 통과한 테스트는 버립니다.</p>
+<p>흥미로운 부분은 일반 텍스트의 경우입니다. Headroom은 CompressBase라는 자체 모델을 사용하는데, Tejas가 압축 전용으로 직접 학습시킨 모델이며 여러분의 로컬 머신에서 실행됩니다. Headroom은 이미 사용자들에게 약 $700,000의 토큰 비용을 절약시켰다고 주장합니다.</p>
+<p>정말 영리한 점은, 압축된 텍스트에 해시를 포함한 브레드크럼(breadcrumb)을 남긴다는 것입니다. 모델은 이 해시로 필요할 때 압축 해제된 데이터를 다시 가져올 수 있습니다.</p>
+<p>Caveman에 대한 James의 영상을 봤다면, 그것도 컨텍스트를 줄이지만 반대 방향에서 접근합니다. 이에 대해서는 나중에 더 설명하겠습니다. 지금은 Headroom의 기본 예제를 보면서 어떻게 작동하는지 이해해봅시다.</p>
+<p>Headroom은 여러분의 앱(Claude Code 등)과 Anthropic 서버 사이에 앉는 Python 서버로 동작합니다. 도구 호출 결과가 돌아오면 프록시가 Rust 엔진으로 압축해 압축된 버전만 API로 전송합니다.</p>
+<p>pip로 서버를 설치할 수 있지만, 저는 uv를 사용하겠습니다. Python 3.12 버전을 맞춰야 합니다 — 상위 버전에서는 동작하지 않습니다. 그 다음 headroom proxy 명령으로 프록시를 해당 포트에서 실행합니다. Headroom에는 TypeScript 또는 Python SDK도 있습니다. 데모에서는 Python SDK로 Claude SDK를 사용하는 앱을 만들겠습니다.</p>
+<p>앱의 계획은 이렇습니다. 사용자 프롬프트는 모든 로그 파일을 읽고 오류와 근본 원인을 찾아달라는 것입니다. 도구 호출을 가짜로 만들 겁니다 — Claude가 bash 도구로 서버 로그 파일을 cat하도록 하고, 파일에는 가짜 로그가 담겨 있습니다. 그 도구 호출 결과를 반환합니다.</p>
+<p>Headroom에 텍스트 파일을 직접 주지 않는 이유는, Headroom이 도구 호출 출력만 압축하기 때문입니다. 여기서 모델을 지정하고, 그 아래에 headroom compress 함수를 사용합니다 — 정확한 토큰 카운팅을 위해 메시지와 모델을 넘깁니다(Headroom이 실제로 Haiku를 사용하지는 않습니다). 그리고 프록시의 base URL을 지정합니다. 압축 전후 메시지와 절약 비율을 보여주는 로그도 추가했습니다. 그 다음 Headroom에서 압축된 메시지를 사용자 프롬프트와 함께 Claude Code에 전달합니다.</p>
+<p>실행하면 Headroom이 98%의 토큰을 절약한 것을 볼 수 있습니다. 전: 17,000토큰 이상. 후: 훨씬 적음. 압축 전후를 스크롤해서 보면 명확합니다. 전에는 사용자 프롬프트, 도구 호출, 전체 로그 파일이 담긴 도구 응답이 있습니다. 후에는 같은 사용자 메시지와 도구 호출이 있지만, 도구 응답이 훨씬 짧습니다. 통계적 압축으로 419개의 유사한 info 로그를 요약 하나로 압축했습니다.</p>
+<p>Headroom이 Claude에게 이게 압축된 출력이며 이 해시로 원본을 다시 가져올 수 있다고 알려주는 것도 볼 수 있습니다.</p>
+<p>Headroom의 즉각적인 단점 중 하나는, Claude가 태스크를 완료하기에 정보가 부족하다고 생각한다는 점입니다 — 실제로는 충분히 있는데도. 다시 실행하면 이번에는 98% 절감을 유지하면서 Claude가 훨씬 더 많은 정보를 제공합니다.</p>
+<p>다음 데모입니다. 마찬가지로 Headroom 프록시를 실행해야 하는데, 이번에는 더 많은 파라미터를 줍니다. <code>--ml</code> 값을 추가하면 일반 텍스트 압축에 로컬 압축 모델을 사용합니다. <code>--code-aware</code> 플래그도 추가해 코드 인식 압축기를 활성화합니다. 이제 활성화된 것을 확인할 수 있습니다.</p>
+<p>그 다음 Claude Code를 실행하되, 먼저 base URL을 프록시로 설정합니다. 이 상태에서 "이 프로젝트의 모든 TS 파일을 읽고 관련 코드 인용과 함께 프로젝트가 무엇을 하는지 깊이 있는 개요를 달라"는 프롬프트를 줍니다. 잠시 후 5개 패키지의 모든 TypeScript 파일을 읽고 전체 개요를 제공했습니다.</p>
+<p><code>/context</code> 명령어로 확인하면 89.1K 토큰을 사용했습니다. Headroom 없이 유사한 프롬프트로 실행했을 때는 토큰이 더 많이 사용됐습니다. 왜 여기서는 Opus 1M 컨텍스트 창을, 저기서는 200K 창을 선택했는지 정확히는 모르겠습니다만, 이 엔드포인트를 curl과 jq로 포맷하면 프록시의 압축 세부 사항을 볼 수 있습니다. 정보가 많아서 찾는 데 시간이 걸렸지만, 스크롤해서 올라가면 Headroom 압축으로 절약된 토큰 수와 비용을 확인할 수 있습니다.</p>
+<p>물론 이건 프롬프트 하나에서 나온 결과입니다. 여러 Claude Code 세션을 동시에 돌리면서 Headroom이 모든 도구 호출을 압축한다면 얼마나 더 많은 토큰을 절약할 수 있을지 상상해보세요.</p>
+<p>한 가지 더: 저노력(low effort) Opus로 동일한 프롬프트를 실행했을 때 Headroom은 토큰 절감 효과가 없었습니다. medium으로 올리자 절감 효과가 나타났습니다. high, x-high, max라면 더 많이 절약될 것입니다.</p>
+<p>Headroom의 빠른 개요를 살펴봤습니다. 물론 다루지 못한 기능이 훨씬 많습니다 — 여러 하네스가 동일한 압축 컨텍스트를 공유하는 cross-agent memory, 실패 세션을 분석해 과압축 패턴을 학습하는 Headroom Learn, 인기 SDK 통합 등.</p>
+<p>단, 중요한 고려사항이 있습니다. 모델이 필요한 정보를 얻지 못해 Headroom에 전체 데이터를 요청할 때마다 2차 왕복이 발생합니다. 경우에 따라서는 Headroom을 안 쓸 때보다 토큰을 더 많이 쓰게 될 수도 있습니다. 이게 Headroom Learn의 장점입니다 — 점점 그런 일이 덜 발생하도록 학습합니다.</p>
+<p>앞서 Caveman 이야기를 했죠. Caveman은 모델에게 짧은 단편으로 응답하고 불필요한 단어를 빼도록 지시해 토큰을 줄입니다. 반면 Headroom은 모델이 읽기 전에 입력을 줄입니다. 하나는 출력을 줄이고 다른 하나는 입력을 줄입니다. 토큰 절약에 정말 관심 있다면 두 가지를 함께 사용해 최대 절감을 달성할 수 있습니다.</p>
+</details>
+</body></html>

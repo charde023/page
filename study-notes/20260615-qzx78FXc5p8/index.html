@@ -1,0 +1,194 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>9분 만에 이해하는 루프 엔지니어링</title>
+<meta name="description" content="프롬프트 입력 대신 goal·loop·자동화 탭으로 AI 에이전트를 장기·반복 실행하는 루프 엔지니어링 개요"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>9분 만에 이해하는 루프 엔지니어링</h1>
+<div class="meta">업로드 2026-06-15 · 8.8분 · <a href="https://www.youtube.com/watch?v=qzx78FXc5p8" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>9분 만에 이해하는 루프 엔지니어링</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>프롬프트를 반복 입력하는 방식을 버리고, goal·/loop·IDE 자동화 탭으로 에이전트를 스스로 장기·반복 실행시키는 루프 엔지니어링을 소개한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 미확인 · 소속 미확인 · TechBridge-KR 재업로드 · 업로드 2026-06-15 · 8.8분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>goal (장기 실행 작업)</td>
+<td>며칠씩 돌릴 수 있는 bounded 태스크에 적합</td>
+<td>검증 수단(단위 테스트 등)이 있으면 자율 진행 가능</td>
+</tr>
+<tr>
+<td>/loop (반복 탐색)</td>
+<td>탐색적·그린필드 작업에서 크론잡 기반으로 반복 실행</td>
+<td>"5분마다 이 방향 탐색해줘" 식으로 오픈엔디드 질문 처리</td>
+</tr>
+<tr>
+<td>IDE 자동화 탭</td>
+<td>Claude Code·Codex·Cursor 공통 기능, 실전 자동화 기반</td>
+<td>받은 편지함 정리·보안 스캔·메모리 구축에 활용</td>
+</tr>
+<tr>
+<td>continual learning</td>
+<td>에이전트가 경험을 쌓아 점점 스마트해지는 구조</td>
+<td>사전학습 고정 모델의 한계를 넘어서는 핵심 연구 방향</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>goal</strong> — Claude Code (클로드 코드)·Codex에서 공통 지원하는 장기 실행 태스크 기능. Ralph Wiggums [?원문] 과 유사하게 반복 프롬프트 없이 자동 진행.</li>
+<li><strong>/loop</strong> — Claude Code 슬래시 커맨드. 자연어로 인터벌 지정 후 크론잡 등록. 예: <code>/loop every 5 minutes</code>.</li>
+<li><strong>parameter golf</strong> — 모델 학습 실험에서 최적 파라미터를 반복 탐색하는 기법. Andrej Karpathy [?원문: Andre Carpathi]의 auto-research 프로젝트에서 예시.</li>
+<li><strong>Linear</strong> — 이슈 트래킹 도구. 화자가 받은 편지함 자동 분류 자동화 대상으로 활용.</li>
+<li><strong>continual learning (지속 학습)</strong> — 에이전트가 일상 태스크를 수행하며 합성 메모리를 누적, 컨텍스트 윈도우에 프로그래밍적으로 로드하는 구조.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li><strong>goal은 여러 날 실행 가능</strong> — 복잡한 웹사이트 파서 구축 실험에서 목표를 며칠간 실행시켜 봤다고 언급. 단, bounded 태스크여야 하고 검증 수단(단위 테스트 등)이 필요.</li>
+<li><strong>loop보다 goal을 더 자주 쓴다</strong> — 화자는 goal이 더 신뢰할 만하다고 평가. loop는 탐색적 작업에 적합.</li>
+<li><strong>끝에서 끝까지 자동화할 필요 없다</strong> — 이메일 초안은 에이전트가 쓰지만 전송은 직접 한다. human-in-the-loop 유지 권장.</li>
+<li><strong>Claude Code creator가 "이제 루프를 만든다"고 언급</strong> — 영상 도입부에서 바이럴 포스트로 소개. Lance Martin의 Fable [?원문: Fable five] 출시 관련 X 포스트도 링크 예정이라 언급.</li>
+<li><strong>자동화 탭 위치</strong> — IDE마다 이름은 다르지만 보통 좌측 상단에 "current automations / paused automations" 구조.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>루프가 프롬프트보다 강한 이유</td>
+<td>코드 비용 하락 → 야심찬 자동화 시도가 경제적으로 합리화됨</td>
+</tr>
+<tr>
+<td>2</td>
+<td>goal — 장기 실행 에이전트</td>
+<td>Claude Code·Codex에서 공통 지원. 검증 가능하면 며칠씩 실행</td>
+</tr>
+<tr>
+<td>3</td>
+<td>/loop — 탐색적 반복 실행</td>
+<td>크론잡 기반, 오픈엔디드 질문에 적합. 주니어 엔지니어에게 맡기는 감각</td>
+</tr>
+<tr>
+<td>4</td>
+<td>IDE 자동화 탭</td>
+<td>받은 편지함 정리·보안 스캔·agent.md 자동 갱신·메모리 구축</td>
+</tr>
+<tr>
+<td>5</td>
+<td>continual learning</td>
+<td>에이전트가 경험 누적 → 컨텍스트에 프로그래밍적으로 로드 → 점진적 성장</td>
+</tr>
+<tr>
+<td>6</td>
+<td>human-in-the-loop 팁</td>
+<td>전송·최종 판단은 사람이. 초안·분류는 에이전트가</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 루프가 프롬프트보다 강한 이유</h2>
+<p>Claude Code (클로드 코드)를 만든 사람이 바이럴 포스트에서 "이제 나는 Claude에게 프롬프트를 입력하지 않는다. 주로 루프를 만든다"고 밝혔다. 코드 실행 비용이 지속적으로 하락하면서, 결과를 미리 알 수 없는 방향이라도 실행해보는 비용이 낮아졌다. 이로 인해 탐색적이고 야심찬 자동화 시도가 현실적으로 가능해졌다.</p>
+<p>루프의 스펙트럼은 넓다. /loop 슬래시 커맨드 같은 단순 반복부터, 며칠씩 실행되는 goal, IDE 자동화 탭에서 관리되는 상시 자동화까지 다양한 형태가 있다.</p>
+<h2>2. goal — 장기 실행 에이전트 태스크</h2>
+<p>goal은 Claude Code와 Codex 양쪽에서 공통으로 지원하는 기능이다. Ralph Wiggums [?원문]처럼 반복 프롬프트 없이 에이전트가 목표를 향해 자율 진행한다. <code>goal &lt;원하는 내용&gt;</code> 형태로 실행한다.</p>
+<p>핵심 조건은 두 가지다.</p>
+<ul>
+<li><strong>bounded 태스크</strong>: 완료 시점이 정의될 수 있어야 한다.</li>
+<li><strong>검증 수단</strong>: 단위 테스트나 매핑 가능한 검증 기준이 있으면 자율 진행이 훨씬 안정적이다.</li>
+</ul>
+<p>화자는 복잡한 웹사이트 파서 구축 실험에서 며칠간 실행해봤다고 언급했다. loop보다 goal을 더 자주 쓰며 신뢰도도 더 높다고 평가한다.</p>
+<h2>3. /loop — 탐색적 반복 실행</h2>
+<p>Claude Code의 <code>/loop</code> 커맨드는 자연어로 인터벌을 지정해 크론잡을 세션 내에 등록한다. 예: <code>/loop every 5 minutes, 이 프로젝트의 이 방향을 탐색해줘</code>.</p>
+<p>탐색적 작업이나 그린필드 프로젝트에 특히 유용하다. "야심 찬 주니어 엔지니어에게 맡기는" 감각으로, 예상치 못한 방향으로 갈 수 있지만 실제 결과를 보기 전엔 나쁜 시도인지 알 수 없는 작업에 적합하다.</p>
+<h2>4. IDE 자동화 탭 — 상시 자동화</h2>
+<p>Claude Code·Codex·Cursor 등 대부분의 AI IDE에는 자동화 탭이 있다(위치: 주로 좌측 상단). current automations / paused automations 구조로 관리된다.</p>
+<p><strong>실전 활용 사례:</strong></p>
+<ul>
+<li><strong>받은 편지함 → Linear 보드</strong>: 매일 inbox를 스캔해 Linear 보드에 추가, 우선순위 정리.</li>
+<li><strong>agent.md 자동 갱신</strong>: 특정 주기마다 프로젝트의 AGENT.md나 관련 스킬을 자동 생성.</li>
+<li><strong>보안 취약점 스캔</strong>: 설정한 주기마다 코드베이스 보안 스캔 실행.</li>
+<li><strong>에이전트 메모리 구축</strong>: 하루 동안 발생한 일을 에이전트가 "꿈꾸듯(dream)" 정리해 합성 메모리로 저장. 모델이 컨텍스트 윈도우에 프로그래밍적으로 로드할 수 있는 형태로.</li>
+</ul>
+<h2>5. continual learning — 에이전트의 점진적 성장</h2>
+<p>에이전트가 일상 태스크를 수행하면서 경험을 합성 표현(synthetic representation)으로 누적하고, 필요 시 컨텍스트 윈도우에 로드하는 구조다. 사전학습 고정 모델의 한계를 넘어서는 방향이며, 연구자들이 주목하는 분야다.</p>
+<p>이 구조가 성숙하면 에이전트는 시간이 지날수록 점점 스마트해지고 다양한 도메인에서 유용해진다.</p>
+<h2>6. human-in-the-loop 팁</h2>
+<p>자동화를 끝에서 끝까지 완전히 맡길 필요는 없다. 화자는 이메일 초안은 에이전트가 작성하지만 전송은 직접 한다. 컨텍스트가 완전하지 않을 수 있기 때문이다. 시간이 지나면서 프롬프트를 개선하고, 자동화 범위를 점진적으로 넓혀가는 방식을 권장한다.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Claude Code에서 <code>goal &lt;태스크&gt;</code> 실행해보기 — 검증 가능한 bounded 작업으로 시작</li>
+<li>[ ] <code>/loop every 5 minutes, &lt;탐색 질문&gt;</code> 그린필드 프로젝트에 적용해보기</li>
+<li>[ ] IDE 자동화 탭에서 받은 편지함 정리 자동화 설정 시도</li>
+<li>[ ] agent.md 자동 갱신 자동화 주기 설정</li>
+<li>[ ] Andrej Karpathy의 auto-research 프로젝트 참고 — parameter golf 실험</li>
+<li>[ ] Lance Martin의 Fable [?원문: Fable five] 관련 루프 포스트 찾아보기</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 9분 만에 이해하는 루프 엔지니어링 · https://www.youtube.com/watch?v=qzx78FXc5p8 · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>Claude Code (클로드 코드)를 만든 사람의 바이럴 포스트를 몇 개 봤다. 그는 "나는 이제 Claude에게 프롬프트를 입력하지 않는다. 주로 루프(loop)를 만든다. 루프가 내 일의 나머지를 해준다"고 했다.</p>
+<p>이건 정말 흥미로운 개념이다. 이런 방식에 처음 접하는 사람, 특히 좀 더 hands-on 역할을 맡고 있는 사람에게는 낯설게 느껴질 수 있다. 하지만 루프는 다양한 방식으로 활용할 수 있고, 스펙트럼이 꽤 넓다. 이 영상에서는 내가 직접 쓰는 방식들을 소개한다.</p>
+<p>최근 Fable [?원문: Fable five] 출시와 함께 Lance Martin이 X에 아주 좋은 포스트를 올렸다(영상 설명란에 링크 예정). 루프 접근 방식에는 복잡도에 따라 여러 레벨이 있다. Andrej Karpathy [?원문: Andre Carpathi]의 auto-research 같은 프로젝트가 있는데, 일정 인터벌마다 실험을 실행해 무엇이 효과적인지 확인하고 좋은 방향으로 진행을 이어간다. 이 아이디어는 다양한 방식으로 응용 가능하다. 포스트에서 언급된 parameter golf도 흥미로운 접근 방식이다.</p>
+<p>프로그래밍이 아닌 더 폭넓은 작업에도 적용할 수 있다. Codex와 Claude Code 양쪽에서 활용할 수 있는 개념이 바로 <strong>goal</strong>이다. goal은 본질적으로 장기 실행 태스크다. Ralph Wiggums [?원문]과 유사한 개념으로, 반복해서 모델에게 프롬프트를 입력하지 않아도 하네스(harness) 안에 메커니즘이 내장되어 있어 목표에 도달할 때까지 자율 진행한다.</p>
+<p>사용법은 간단하다. Claude Code나 Codex에서 <code>goal</code>을 입력하고 원하는 내용을 설명하면 된다.</p>
+<p>Claude Code에는 별도의 loop 기능도 있다. <code>/loop</code>를 입력하면 자연어로 인터벌을 지정할 수 있다. 예: <code>/loop every 5 minutes, &lt;원하는 결과 설명&gt;</code>. 내가 loop를 특히 좋아하는 이유는, 탐색적 작업이나 다양한 실험을 할 때 — 그린필드 프로젝트에서 모델의 모든 역량을 활용하고 싶을 때 — 오픈엔디드 질문으로 루프를 돌리면 좋다. 야심 찬 주니어 엔지니어에게 맡기는 느낌이다. 예상과 다른 방향으로 갈 수 있지만, 실제로 결과를 보기 전에는 나쁜 접근인지 알 수 없는 경우가 있다. 코드 실행 비용이 점점 낮아지면서 이런 야심찬 시도가 현실적이 되고 있다.</p>
+<p>loop로 할 수 있는 것: "5분마다 이 프로젝트의 이 부분을 탐색해줘. 앞으로 3시간 동안." → 세션 내에서 지정한 기간 동안 크론잡을 등록해 실행한다. LLM 스레드 컨텍스트 내에서 이벤트가 트리거되는 결정론적 측면이 있어서 goal과 유사하다. 개인적으로는 goal을 더 자주 쓴다. goal이 실제로 더 신뢰할 만하다고 느끼기 때문이다.</p>
+<p>며칠씩 실행된 goal 경험도 있다. 여러 웹사이트의 복잡한 문서 파서를 구축하는 실험을 할 때 goal을 써봤다. bounded 태스크이고 검증 수단(단위 테스트 등)이 있으면 며칠씩도 실행 가능하다.</p>
+<p>나의 일상 작업을 도와주는 장기 자동화를 더 선호하게 되었다. Claude Code·Codex·Cursor 같은 환경에 모두 비슷한 기능이 있고, 대부분 좌측 상단에 자동화 탭이 있다. current automations / paused automations 구조다. 처음 나왔을 때는 크게 주목하지 않았는데, 하나가 실제로 유용하게 돌아가기 시작하자 다른 자동화도 생각하게 됐다.</p>
+<p>예를 들어 내 유튜브 채널은 이메일이 많이 오는데 관리할 시간이 없다. 그래서 받은 편지함을 스캔해 Linear 보드에 추가하는 자동화를 만들었다. 매일 inbox를 확인하고, Linear 보드와 비교해 우선순위 높은 것을 정리한다.</p>
+<p>다른 활용 예: Codex나 Claude Code의 내부 파일을 참조해, 이 주기마다 프로젝트의 agent.md를 만들거나 한 주 동안 한 작업에서 관련 스킬을 생성하도록 설정할 수 있다. 또는 특정 주기마다 코드베이스 보안 취약점 스캔도 가능하다.</p>
+<p>다른 활용 방향은 메모리다. LLM이나 에이전트가 하루 동안 있었던 일을 꿈꾸듯 정리하고, 더 작고 일관되며 접근하기 쉬운 합성 표현을 만들어 모델이 컨텍스트 윈도우에 프로그래밍적으로 로드할 수 있게 하는 아이디어다. 이것이 <strong>continual learning(지속 학습)</strong>의 핵심 아이디어다. 앞으로 더 많이 들게 될 개념이다. 사전학습에 고정된 모델과 하네스를 넘어서, 세상의 다양한 태스크를 탐색하고 경험을 쌓아가며 시간이 지날수록 더 스마트해지고 다양한 도메인에서 유용해지는 시스템이 가능하다.</p>
+<p>루프를 활용하는 방법은 매우 다양하다. /loop로 탐색을 돕는 단순한 반복부터, 며칠씩 다양한 하네스에서 실행되는 goal, 매일·6시간마다·주 1회 반복하는 일상 자동화까지. 컴퓨터에서 반복적으로 하는 작업이 있다면, 상당 부분을 이런 자동화에 넘길 수 있다.</p>
+<p>한 가지 강조하고 싶은 것: 끝에서 끝까지 자동화할 필요는 없다. 루프 안에 여전히 내가 있어도 된다. 나는 이메일 초안은 에이전트가 쓰지만 전송은 직접 한다. 모든 컨텍스트를 항상 정확하게 반영하지는 않기 때문이다. 유용한 보조도구로 활용하면서, 시간이 지나면서 실제 활용 방식에 맞게 프롬프트도 개선해나갈 수 있다.</p>
+<p>흥미로운 주제다. 여러분은 어떻게 활용하고 있는가? 프롬프트 입력에서 벗어나고 있는가? 프롬프트 대신 루프를 구축하는 방향으로 생각이 바뀌고 있는가? 더 높은 레벨에서 시스템과 에이전트가 관리하는 루프들을 설계하는 쪽으로 가고 있는가? 댓글로 알려달라. 영상이 유익했다면 좋아요·댓글·공유·구독 부탁드린다.</p>
+</details>
+</body></html>

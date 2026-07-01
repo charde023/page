@@ -1,0 +1,349 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>이 AI 스킬이 주니어 개발자 업무의 90%를 대체합니다 (Claude Code 에이전트 팀)</title>
+<meta name="description" content="Claude Code의 Fix Ticket 스킬 하나로 Jira 티켓 읽기→버그 재현→코드 수정→멀티 에이전트 리뷰→QA 검증→Vercel 배포→Jira 핸드오프까지 버그 수정 파이프라인 전체를 자동화하는 방법 데모"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>이 AI 스킬이 주니어 개발자 업무의 90%를 대체합니다 (Claude Code 에이전트 팀)</h1>
+<div class="meta">원작자 Eric (EricWTech) · 前 Amazon·AWS·Microsoft 시니어 소프트웨어 엔지니어 · 업로드 2026-03-11 · 17.0분 · <a href="https://www.youtube.com/watch?v=QRtg2VrDO9g" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>이 AI 스킬이 주니어 개발자 업무의 90%를 대체합니다 (Claude Code 에이전트 팀)</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Claude Code의 <code>Fix Ticket</code> 스킬 하나로 Jira 버그 티켓을 읽는 순간부터 Vercel 배포·Jira 핸드오프까지 버그 수정 파이프라인 전체를 무인 자동화할 수 있다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Eric (EricWTech) · 前 Amazon·AWS·Microsoft 시니어 소프트웨어 엔지니어 · 추정 출처 https://www.youtube.com/@EricWTech · 업로드 2026-03-11 · 17분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fix Ticket 스킬</td>
+<td>버그 수정 파이프라인 전체 자동화의 진입점</td>
+<td>티켓 번호 하나로 8단계 워크플로우 기동</td>
+</tr>
+<tr>
+<td>Playwright CLI 스킬</td>
+<td>브라우저에서 버그를 재현·검증하는 자동화 레이어</td>
+<td>헤드리스 브라우저로 로그인·내비·스크린샷·리포트 생성</td>
+</tr>
+<tr>
+<td>멀티 에이전트 코드 리뷰</td>
+<td>단일 에이전트보다 높은 리뷰 신뢰도</td>
+<td>3개 에이전트가 각기 다른 관점으로 엣지 케이스 검출</td>
+</tr>
+<tr>
+<td>워크트리 전략</td>
+<td>메인 브랜치 오염 없이 격리된 환경에서 작업</td>
+<td>픽처 브랜치·격리 워크트리 선택 가능</td>
+</tr>
+<tr>
+<td>Vercel 배포 모니터링</td>
+<td>커밋 후 빌드 성공 여부 자동 추적</td>
+<td>45초 주기로 상태 폴링, 실패 시 자동 재시도</td>
+</tr>
+<tr>
+<td>Jira MCP 연동</td>
+<td>티켓 읽기·댓글 추가·담당자 변경까지 API로 처리</td>
+<td>QA 핸드오프까지 무인 완결</td>
+</tr>
+<tr>
+<td>Auto Commit 파라미터</td>
+<td>자동화 수위를 조절하는 안전 스위치</td>
+<td>false 설정 시 사람이 최종 확인 후 커밋</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Fix Ticket 스킬</strong> — Claude Code 커스텀 스킬. 티켓 번호만 넘기면 8단계 파이프라인을 순차 실행하는 "메가 스킬" (<code>/fix-ticket KAN-191</code>)</li>
+<li><strong>Playwright CLI 스킬</strong> — Claude Code에서 Playwright를 헤드리스로 실행해 스크린샷·버그 재현·QA 리포트를 생성하는 서브 스킬 (이전 영상에서 별도 제작)</li>
+<li><strong>SilentFailureHunter</strong> — 멀티 에이전트 리뷰 팀 중 한 에이전트 이름. 조용히 실패하는 엣지 케이스 전담 탐색</li>
+<li><strong>Devils Advocate 방식</strong> — 리뷰 팀이 의도적으로 반대 관점을 취해 버그·놓친 케이스를 찾는 접근법 (5-에이전트 PR 리뷰 팀)</li>
+<li><strong>Jira MCP</strong> — Jira를 Claude Code와 연결하는 MCP 서버. 티켓 읽기·댓글·상태 변경 API 제공</li>
+<li><strong>Vercel MCP</strong> — Vercel 빌드 상태를 Claude Code에서 직접 조회·모니터링할 수 있게 하는 MCP 서버</li>
+<li><strong>Supabase MCP</strong> — 스킬 내부에서 DB 접근에 사용</li>
+<li><strong>startup-claude-skills</strong> — Eric이 GitHub에 공개한 스킬 컬렉션 (<code>github.com/EricTechPro/startup-claude-skills</code>)</li>
+<li><strong>워크트리(worktree)</strong> — <code>git worktree</code>로 동일 리포의 다른 브랜치를 별도 디렉토리에 체크아웃. 메인 브랜치와 분리된 실험 가능</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li><strong>Vercel 폴링 주기는 정확히 45초</strong>. 빌드 실패 시 자동으로 수정 재시도.</li>
+<li>스킬 실행 중 사람이 <strong>개입해야 하는 유일한 지점</strong>은 "리서치 방향이 맞는지" 확인하는 한 번뿐. 나머지는 완전 무인.</li>
+<li><code>Auto Commit = false</code>(펄스)로 설정하면 스킬이 커밋 직전에 대기 → 사람이 코드 확인 후 "계속해" 명령으로 재개. <strong>프로덕션 배포 전 마지막 안전장치</strong>.</li>
+<li>리뷰 단계에서 한 에이전트가 <strong>"뷰 영수증 다이얼로그를 닫을 때 이전 데이터를 정리하지 않는 문제"</strong> 를 추가로 발견 — 원래 티켓에 없던 결함을 멀티 에이전트가 잡아냄.</li>
+<li>데모 버그의 근본 원인: 영수증 페이지로 <strong>navigate</strong> 하는 대신 <strong>ID로 영수증을 fetch해 다이얼로그로 열었어야</strong> 했음 — 페이지 이동 없이 같은 페이지에서 모달 처리.</li>
+<li>스킬은 Jira 티켓의 <strong>댓글까지 읽음</strong> (이 데모에서 댓글 2개 파싱).</li>
+<li>멀티 에이전트 리뷰 팀 구성: <strong>3개 에이전트</strong> (각각 다른 관점) + PR 리뷰 전용 <strong>5개 에이전트</strong> (Devils Advocate) — 용도가 다름.</li>
+<li><code>startup-claude-skills</code> 리포 내부에 개발팀(계획·리뷰·구현·PR 생성)·리뷰팀·리뷰픽스(병렬 에이전트)·Playwright 스킬 등이 <strong>모두 포함</strong>된 패키지.</li>
+<li>Jira 프리픽스(<code>KAN</code>)를 본인 프로젝트에 맞게 교체하면 즉시 커스터마이징 가능.</li>
+<li>이 스킬이 자동화하는 업무 목록: <strong>티켓 읽기 → 버그 재현 → 리서치 → 분석·계획 → 구현 → 빌드·린팅 → 코드 리뷰 → QA 검증 → 커밋·푸시 → 배포 모니터 → Jira 핸드오프</strong> — 주니어 엔지니어 업무의 90% 해당.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>스킬 개요</td>
+<td>Fix Ticket 스킬이 자동화하는 8단계 파이프라인 소개</td>
+</tr>
+<tr>
+<td>2</td>
+<td>화자 소개</td>
+<td>Eric — 前 Amazon·AWS·MS 시니어 SWE, EricWTech 채널 운영</td>
+</tr>
+<tr>
+<td>3</td>
+<td>파라미터 설명</td>
+<td>브랜치 전략·Auto Commit·QA 스킵·담당자 지정 등 설정값</td>
+</tr>
+<tr>
+<td>4</td>
+<td>데모 Step 1-2</td>
+<td>Jira 티켓 KAN-191 읽기, 댓글 파싱, 티켓 요약</td>
+</tr>
+<tr>
+<td>5</td>
+<td>데모 Step 3</td>
+<td>Playwright로 버그 재현 → 스크린샷 저장 → 버그 확인</td>
+</tr>
+<tr>
+<td>6</td>
+<td>데모 Step 4</td>
+<td>리서치·근본 원인 분석 → 버그 흐름 다이어그램 생성</td>
+</tr>
+<tr>
+<td>7</td>
+<td>데모 Step 5</td>
+<td>계획·구현 → 빌드·린트 자동 실행 및 통과 확인</td>
+</tr>
+<tr>
+<td>8</td>
+<td>데모 Step 5.5</td>
+<td>3-에이전트 코드 리뷰 → 추가 결함 발견·수정</td>
+</tr>
+<tr>
+<td>9</td>
+<td>데모 Step 5.5</td>
+<td>Playwright로 수정 검증 → 버그 해결 확인</td>
+</tr>
+<tr>
+<td>10</td>
+<td>데모 Step 6-8</td>
+<td>커밋·푸시 → Vercel 배포 모니터(45초) → Jira 핸드오프</td>
+</tr>
+<tr>
+<td>11</td>
+<td>스킬 다운로드</td>
+<td>GitHub startup-claude-skills 리포 구조 및 요구사항 안내</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. Fix Ticket 스킬 개요</h2>
+<p>화자가 만든 <strong>Fix Ticket 스킬</strong>은 Claude Code의 에이전트팀 기능을 활용해 버그 수정 파이프라인 전체를 자동화한다.</p>
+<p><strong>파이프라인 흐름:</strong>
+1. 브랜치 전략 결정 (메인 / 피처 브랜치 / 격리 워크트리)
+2. Jira 티켓 + 댓글 읽기 → 요약
+3. Playwright 스킬로 실제 앱에서 버그 재현
+4. 리서치 에이전트팀 → 근본 원인 분석·계획
+5. 구현 → 빌드·린트 자동 실행
+6. 멀티 에이전트 코드 리뷰 (3개 에이전트)
+7. Playwright 스킬로 수정 검증
+8. 자동 커밋·푸시 → Vercel 배포 모니터 → Jira 핸드오프</p>
+<p>화자 주장: "이것을 사용하면 주니어 엔지니어 업무의 90%를 대체할 수 있다. 주니어가 하는 일이 바로 이거다 — 티켓 가져오고 읽고 리서치하고 분석하고 리뷰하고 구현하는 것."</p>
+<hr>
+<h2>2. 파라미터 설계</h2>
+<p>스킬 호출 시 다음 파라미터로 워크플로우를 제어한다:</p>
+<table>
+<thead>
+<tr>
+<th>파라미터</th>
+<th>설명</th>
+<th>기본값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>티켓 번호</td>
+<td>처리할 Jira 티켓 ID</td>
+<td>필수</td>
+</tr>
+<tr>
+<td>브랜치 전략</td>
+<td>main / 피처 브랜치 / 격리 워크트리</td>
+<td>실행 시 선택</td>
+</tr>
+<tr>
+<td><code>auto_commit</code></td>
+<td>자동 커밋 여부</td>
+<td>false 권장 (수동 확인)</td>
+</tr>
+<tr>
+<td><code>skip_review</code></td>
+<td>코드 리뷰 단계 스킵</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>skip_vercel</code></td>
+<td>Vercel 배포 모니터 스킵</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>skip_qa</code></td>
+<td>QA 검증 단계 스킵</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>assignee</code></td>
+<td>완료 후 Jira 티켓 담당자</td>
+<td>선택</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>3. 데모 — KAN-191 버그 수정</h2>
+<p><strong>버그 내용:</strong> 매칭 트랜잭션 페이지의 "뷰" 버튼 클릭 시 영수증 상세 다이얼로그가 열려야 하는데 일반 영수증 페이지로 이동(리다이렉트)되는 문제.</p>
+<p><strong>근본 원인:</strong> <code>navigate</code> 방식으로 영수증 페이지로 이동하도록 구현 → <strong>ID로 영수증 fetch 후 다이얼로그를 현재 페이지에서 열어야</strong> 했음.</p>
+<p><strong>멀티 에이전트 리뷰에서 추가 발견된 결함:</strong> 영수증 다이얼로그를 닫을 때 이전 데이터(stale data)를 정리하지 않는 문제 → 리뷰 단계에서 수정.</p>
+<p><strong>수정 검증:</strong> Playwright 스킬이 로그인 → 트랜잭션 페이지 이동 → 영수증 클릭을 자동 실행 → 다이얼로그가 리다이렉트 없이 현재 페이지에서 열리는 것 확인.</p>
+<p><strong>Vercel 배포:</strong> 45초 주기 폴링으로 빌드 성공 확인 → 복지로 AI(Welfarely AI)에 완전 배포.</p>
+<hr>
+<h2>4. startup-claude-skills 리포 구조</h2>
+<p>GitHub: <code>github.com/EricTechPro/startup-claude-skills</code></p>
+<table>
+<thead>
+<tr>
+<th>스킬</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fix Ticket</td>
+<td>메가 스킬 — 아래 모든 스킬을 포함</td>
+</tr>
+<tr>
+<td>개발팀 에이전트</td>
+<td>계획·리뷰·구현·PR 생성</td>
+</tr>
+<tr>
+<td>리뷰팀 (5에이전트)</td>
+<td>Devils Advocate 방식 PR 리뷰, 최고 신뢰도</td>
+</tr>
+<tr>
+<td>리뷰픽스</td>
+<td>병렬 에이전트로 리뷰하면서 동시 수정</td>
+</tr>
+<tr>
+<td>Playwright CLI 스킬</td>
+<td>헤드리스 브라우저 QA 자동화</td>
+</tr>
+</tbody>
+</table>
+<p><strong>요구사항 (MCP 서버):</strong>
+- <code>Jira MCP</code> — 티켓 읽기·댓글·상태 변경
+- <code>Vercel MCP</code> — 배포 상태 모니터링
+- <code>Supabase MCP</code> — DB 연동
+- <code>Playwright</code> — 브라우저 자동화</p>
+<p><strong>커스터마이징:</strong> 프로젝트별 Jira 프리픽스(예: <code>KAN</code> → 본인 프리픽스) 변경 후 바로 사용 가능.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] <code>startup-claude-skills</code> 리포 클론 후 Fix Ticket 스킬 본인 프로젝트에 적용</li>
+<li>[ ] Jira MCP, Vercel MCP, Supabase MCP 설치·연결 확인</li>
+<li>[ ] Playwright CLI 스킬 설정 (이전 영상 참고)</li>
+<li>[ ] <code>auto_commit = false</code>로 시작해 파이프라인 각 단계 수동 검증</li>
+<li>[ ] 멀티 에이전트 리뷰 팀이 원래 티켓에 없던 결함을 추가로 잡는지 확인</li>
+<li>[ ] Vercel 배포 모니터링 45초 주기 동작 테스트</li>
+<li>[ ] 담당자 파라미터로 QA 엔지니어 자동 핸드오프 설정</li>
+<li>[ ] Devils Advocate 5-에이전트 PR 리뷰팀 별도 활용 검토</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR 이 AI 스킬이 주니어 개발자 업무의 90%를 대체합니다 (Claude Code 에이전트 팀) · https://www.youtube.com/watch?v=QRtg2VrDO9g · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>이 영상에서는 제가 만든 에이전트팀 스킬인 Fix Ticket 스킬을 보여드리겠습니다. 목표는 애플리케이션의 버그 수정 파이프라인을 자동화하는 것입니다.</p>
+<p>제 애플리케이션을 예로 들면, 현재 Jira의 '백로그 버그' 컬럼이 있는데, QA 엔지니어가 발견한 모든 버그를 이 Jira 보드에 등록합니다. 제가 만든 Fix Ticket 스킬을 사용해 버그 수정 파이프라인을 자동화합니다. 버그가 있을 때마다 티켓을 읽기 시작하고, 지난 영상에서 만든 Playwright 스킬을 사용해 버그가 실제로 존재하는지 확인합니다. 버그가 존재하면 리서치를 하고 구현을 시도한 다음 멀티 에이전트팀을 실행해 리뷰를 진행하고 최고의 정확도를 보장합니다. 그리고 최종적으로 Playwright 스킬을 다시 실행해 수정 사항이 실제로 제대로 고쳐졌는지 확인합니다. 스킬이 모두 완료되면 커밋하고 GitHub에 푸시하고 Vercel에서 배포를 모니터링하고, 최종적으로 그 티켓을 Jira 보드에서 완료 또는 QA 상태로 이동시킬 수 있습니다.</p>
+<p>이 스킬 덕분에 아무것도 건드리지 않고도 버그에서 완료까지 갈 수 있습니다.</p>
+<p>들어가기 전에 간단히 소개하겠습니다. 저는 Eric이고, Amazon·AWS·Microsoft 같은 회사에서 시니어 소프트웨어 엔지니어로 수년간 일했습니다. AI와 코딩부터 자동화, 커리어 개발 등 제가 배운 모든 것을 실용적인 튜토리얼로 공유하기 위해 이 채널을 시작했습니다. Skool 커뮤니티도 있어서 모든 리소스·템플릿과 커뮤니티 지원을 받으실 수 있습니다.</p>
+<p><strong>[데모 시작]</strong></p>
+<p>여기 제 Jira 보드가 있고 이 프로젝트에서 작업하는 모든 태스크를 추적합니다. '백로그 버그' 컬럼에 있는 티켓 KAN-191을 사용합니다. 이 티켓 번호와 실제 설명이 있습니다.</p>
+<p>스킬에서 사용할 수 있는 파라미터를 보면: 어떤 브랜치에서 작업할 것인지(메인·피처 브랜치·격리 워크트리), 리뷰 과정이나 Jira 프로세스 단계를 건너뛸 수도 있고, Vercel 배포 과정도, QA 검증 단계도 건너뛸 수 있습니다. Auto Commit 기능도 있어서 수정 완료 후 자동으로 커밋할지 선택할 수 있습니다. 마지막으로 티켓 완료 후 다른 사람에게 할당할 수도 있습니다(예: QA 엔지니어).</p>
+<p><strong>[파이프라인 흐름]</strong>
+1. 어떤 브랜치에서 작업할지 결정
+2. Jira 티켓 읽기 → 티켓 요약
+3. 지난 영상에서 만든 QA 스킬로 브라우저에서 버그 재현
+4. 다른 에이전트팀으로 리서치 → 사용자 방향 확인
+5. 분석·계획 → 구현 → 서브 에이전트로 코드 리뷰 (다양한 관점, 엣지 케이스 확인)
+6. QA로 브라우저에서 수정 검증
+7. 자동 커밋·푸시
+8. Vercel 배포 모니터 (빌드 실패 시 수정 재시도)
+9. 워크트리 머지 → Jira 티켓 담당자에게 핸드오프 → 전체 요약 제공</p>
+<p>"이것을 사용하면 주니어 엔지니어 업무의 90%를 대체할 수 있습니다. 주니어 엔지니어가 하는 일이 바로 이거거든요 — 티켓 가져오고 읽고 리서치하고 분석하고 리뷰하고 구현하는 것입니다."</p>
+<p><strong>[스폰서: OnlyOffice]</strong> — 문서·스프레드시트·프레젠테이션·PDF 풀 오피스 스위트. 에디터 내부에서 AI 어시스턴트 플러그인 사용 가능 (요약·재작성·텍스트 개선·이미지 생성, 스프레드시트에서 수식 자동 제안). 작업별로 다른 LLM 모델 라우팅 가능 (예: 번역만 Gemini 사용). AI는 완전 선택 사항이며 기본값은 비활성.</p>
+<p><strong>[데모 실행]</strong></p>
+<p><code>/fix-ticket KAN-191 auto_commit=false</code> 입력 → 실행.</p>
+<ul>
+<li>1단계: 브랜치 전략 — 메인(1번) 선택</li>
+<li>2단계: Jira 티켓 KAN-191 읽기 + 댓글 2개 파싱 → 요약</li>
+<li>3단계: Playwright 스킬 실행 → localhost:3000에서 로그인 → 트랜잭션 페이지 → 3월 날짜 필터 → 매칭 트랜잭션 페이지 이동 → "뷰" 버튼 클릭 → <strong>버그 확인</strong>: 영수증 상세 다이얼로그 대신 일반 영수증 페이지로 이동 → 스크린샷 <code>kan191-betterpy</code> 저장</li>
+<li>4단계: 리서치 — 이전 커밋 분석 → 근본 원인 파악 → 버그 흐름 다이어그램 생성 → 해결 방향 제안 (navigate 대신 ID로 fetch 후 다이얼로그 열기) → 사용자 확인 → "좋다" 승인</li>
+<li>5단계: 구현 → 빌드 + 린트 자동 실행 → 통과 확인 (에러·경고 없음)</li>
+<li>리뷰 단계: 3개 에이전트 실행 → 에이전트1: 수정 필요 2가지 발견 (영수증 stale data 정리 문제 등) → SilentFailureHunter 에이전트: 추가 엣지 케이스 발견 → 3번째 에이전트 결과 확인</li>
+<li>5.5단계: Playwright 스킬로 수정 검증 → 뷰 클릭 시 리다이렉트 없이 동일 페이지에서 영수증 상세 다이얼로그 표시 → <strong>버그 수정 완료 확인</strong></li>
+</ul>
+<p><code>auto_commit=false</code>로 설정했기 때문에 이 시점에서 스킬이 대기 → 전체 수정 요약 제공 (변경 파일 목록, 리뷰 과정, Jira 상태) → 사용자가 직접 앱에서 테스트 유저로 로그인 → 뷰 클릭 → 다이얼로그 정상 표시 확인.</p>
+<p>"계속해서 스텝 6부터 진행해줘" → 커밋·메인 브랜치 푸시 → Vercel 배포 모니터링 (45초마다 폴링) → 복지로 AI에 완전 배포 → Jira 핸드오프 (QA 엔지니어에게 할당, 수행 내용 댓글 전체 게시, 수동 테스트 방법 안내).</p>
+<p>"모든 것이 제가 관여하지 않아도 스킬을 사용해서 단계별로 자동으로 완료됩니다. 솔직히 관여해야 하는 것은 실제 리서치를 확인하고 원하는 방향과 일치하는지 확인하는 것뿐입니다."</p>
+<p><strong>[스킬 다운로드]</strong></p>
+<p><code>github.com/EricTechPro/startup-claude-skills</code> — Fix Ticket 스킬은 모든 서브 스킬을 포함하는 메가 스킬. 내부 구성: 개발팀(계획·리뷰·구현·PR 생성), 리뷰팀(5-에이전트 Devils Advocate), 리뷰픽스(병렬 에이전트), Playwright CLI 스킬. 요구 MCP: Jira MCP·Vercel MCP·Supabase MCP + Playwright. 프리픽스 <code>KAN</code>을 본인 프로젝트 프리픽스로 변경 후 사용.</p>
+</details>
+</body></html>

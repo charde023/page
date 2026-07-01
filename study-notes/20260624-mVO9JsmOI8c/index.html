@@ -1,0 +1,319 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>앤트로픽 CEO 다리오 아모데이의 생각을 들여다봅니다 - The Circuit - 확장 인터뷰</title>
+<meta name="description" content="Anthropic CEO 다리오 아모데이가 OpenAI 이탈 배경, Claude Code 성공, AI 노동시장 충격, Mythos 모델 공개 보류, 군사 활용 적정선, 재귀적 자기개선, 문명 붕괴 위험 등을 솔직하게 답변한 Bloomberg The Circuit 확장 인터뷰 정리본."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>앤트로픽 CEO 다리오 아모데이의 생각을 들여다봅니다 - The Circuit - 확장 인터뷰</h1>
+<div class="meta">원작자 Dario Amodei (Anthropic CEO), Emily Chang (The Circuit / Bloomberg) · Bloomberg · 업로드 2026-06-24 · 70.1분 · <a href="https://www.youtube.com/watch?v=mVO9JsmOI8c" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>앤트로픽 CEO 다리오 아모데이의 생각을 들여다봅니다 - The Circuit - 확장 인터뷰</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Anthropic CEO 다리오 아모데이가 OpenAI 이탈부터 Mythos 공개 보류, 군사 AI 적정선, 문명 붕괴 확률까지 — 70분 확장 인터뷰에서 핵심 관점을 모두 꺼냈다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Dario Amodei (Anthropic CEO) · Bloomberg / The Circuit with Emily Chang · 출처 https://youtu.be/mVO9JsmOI8c · 업로드 2026-06-24 · 70.1분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>부드러운 지수 곡선 (Smooth Exponential)</td>
+<td>AI 발전을 '순간'이 아닌 지속 가속으로 봐야 과잉반응을 피한다</td>
+<td>"nothing's happening... then zoom — it goes crazy"</td>
+</tr>
+<tr>
+<td>엔터프라이즈 우선 전략</td>
+<td>소비자 앱의 중독성·슬롭과 달리 기업 고객은 신뢰·장기 관계 → 안전 지향과 수익 모두 가능</td>
+<td>가치와 비즈니스 모델의 정렬</td>
+</tr>
+<tr>
+<td>Mythos 공개 보류</td>
+<td>사이버 킬체인 전 과정 자율 수행 능력 → 방어자 먼저 패치 기회 부여 후 일반 공개</td>
+<td>상업적 손해를 감수한 안전 결정</td>
+</tr>
+<tr>
+<td>인간 최종 결정 원칙</td>
+<td>자율 무기와의 경계선 — AI는 보조, 최종 결정은 반드시 사람</td>
+<td>다리오의 국방 참여 조건부 협력 논리</td>
+</tr>
+<tr>
+<td>문명 붕괴 10-25% 확률</td>
+<td>AI 기업 자체가 위험 원천임을 인정하면서도 행동으로 확률 낮추는 것이 목표</td>
+<td>항공사 안전 비유</td>
+</tr>
+<tr>
+<td>재귀적 자기개선은 '순간'이 아님</td>
+<td>이미 진행 중 — 총요소생산성 AI 기여 1년 전 10-15% → 현재 20-30%</td>
+<td>요-요 반응 금지, 점진적 제어 상향 필요</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>SaaSpocalypse</strong> — Claude Code 출시 직후 SaaS 주식 $2,850억 증발한 사건을 트레이더들이 부른 이름. AI가 기존 소프트웨어 모트(moat)를 빠르게 침식한다는 신호로 읽힘.</li>
+<li><strong>Maven Smart System (Palantir)</strong> — 미 국방부의 AI 기반 표적 분석 플랫폼. Anthropic은 Palantir와 협력하지만 ICE·CBP에는 제공하지 않는다고 명시.</li>
+<li><strong>Long-Term Benefit Trust</strong> — Anthropic 이사회 다수 선임·해임권을 가진 별도 거버넌스 기구. 주주 이익이 아닌 장기 공익을 위해 설계. 다리오 해임 권한도 있음.</li>
+<li><strong>Cyber Kill Chain</strong> — 공격자가 취약점 발견 → 익스플로잇 개발 → 침투까지의 전 단계. Mythos는 이 전체를 자율적으로 수행 가능.</li>
+<li><strong>Total Factor Productivity (TFP)</strong> — 자본·노동 투입 외 기술 등 '나머지' 요인이 생산성에 기여하는 비율. AI가 Anthropic 내부 TFP를 20-30%까지 끌어올림.</li>
+<li><strong>Token Tax</strong> — AI로 인한 노동 대체 충격 완화 방안 중 하나로 다리오가 언급. AI 토큰 사용량에 세금을 부과해 재분배에 사용하는 아이디어.</li>
+<li><strong>Forward Deployed Engineer / Applied AI Solutions Architect</strong> — 기술 역량 + 고객 대화를 동시에 수행하는 역할. 순수 소프트웨어 엔지니어링이 AI로 대체될 때 수요가 증가하는 직군으로 다리오가 제시.</li>
+<li><strong>Leo Szilard</strong> — 핵연쇄반응 아이디어를 처음 제안한 물리학자. 다리오는 Oppenheimer(영웅 서사)보다 Szilard(균형·견제 추구)와 자신을 동일시.</li>
+<li><strong>Adolescence of Technology</strong> — 다리오가 AI 노동시장·정책에 관해 쓴 에세이. 임무·직업 구분, 대응책 6가지, 역사적 비교 등 5페이지 분량.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li><strong>수면 문제 고백</strong> — "지수 가속이 지구 상대성 이론 같다 — 하루 자고 일어나면 지구에서 이틀이 지나있는 느낌." 수면을 잘 못 자왔다고 직접 언급.</li>
+<li><strong>아들이 Claude Code 계정 요청</strong> — "내 토큰이 필요해서 절대 안 된다고 했다." 소비자 수요를 직접 체감하는 순간을 유머로 표현.</li>
+<li><strong>2026 Q1 매출 3X 성장 (분기 기준, 연율 아님)</strong> — 계획은 연 10X이었는데 실제는 분기 3X → 연율 환산 시 80X. "80X를 계획하는 건 합리적이지 않았다"고 인정.</li>
+<li><strong>Mythos → Firefox에서 271개 신규 취약점 발견</strong> — 이전 모델로는 발견 못 했던 취약점을 Mythos가 찾아냄. 오픈소스 모델과의 차별점 근거.</li>
+<li><strong>Claude 2 출시 지연</strong> — 출시 전 몇 달 지연 결정. 안전 검토 때문에 수백만 달러 손실을 당시 매출 대비 의미 있는 비율로 감수.</li>
+<li><strong>China 모델 접근 차단</strong> — 누가 시키지 않았는데도 자발적으로 중국 접근 차단 → 수억 달러 손실. "돈으로 가치를 샀다"는 증거로 제시.</li>
+<li><strong>펜타곤 갈등 구체 내용</strong> — 대통령이 Anthropic을 연방 정부에서 배제, 국방부가 '공급망 위험'으로 분류, OpenAI가 Anthropic이 거절한 계약을 대신 서명.</li>
+<li><strong>이란 전쟁 여학생 학교 오폭 사건</strong> — 150명 이상 사망(대부분 아동). Bloomberg 보도 기준. 다리오는 "Claude가 역할을 했는지 모르지만, 인간이 최종 결정했다"며 완전 자율 무기가 아니었음을 강조.</li>
+<li><strong>Mythos 사이버 가드레일은 지금 jailbreak 가능</strong> — Opus 4.7에 적용된 수준의 현재 가드레일은 우회 가능하다고 직접 인정. 그래서 더 강력한 방어 기술 완성 전까지 일반 공개 보류 중.</li>
+<li><strong>재귀적 자기개선 현재 수치</strong> — AI가 다음 AI 아키텍처를 제안하는 것은 이미 진행 중. 1년 전 TFP 기여 10-15% → 현재 20-30%, "아마 두 배가 되고 있을 것."</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Anthropic 내부 현황</td>
+<td>부드러운 지수 곡선 체험 중. 매출·밸류에이션 1위 달성</td>
+</tr>
+<tr>
+<td>2</td>
+<td>다리오의 성장 배경</td>
+<td>SF 비순응주의 문화, 수학·과학·SF 덕후, 생물과학자 → AI</td>
+</tr>
+<tr>
+<td>3</td>
+<td>OpenAI 이탈 이유</td>
+<td>가치관 차이가 아닌 신뢰 부재. "왜 싸우나, 그냥 각자 하면 된다"</td>
+</tr>
+<tr>
+<td>4</td>
+<td>인도 AI 정상회의 손잡기 거부 논란</td>
+<td>행사 자체가 혼란스러웠다는 해명. Sam Altman과의 관계는 '불신'이 아님</td>
+</tr>
+<tr>
+<td>5</td>
+<td>AI 기업 협력 구조</td>
+<td>신뢰할 수 있는 플레이어(Demis Hassabis 등)가 표준 끌어올리는 방식</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Claude Code (엔터프라이즈 베팅)</td>
+<td>소비자 = 중독·슬롭, 엔터프라이즈 = 신뢰·장기관계. 가치와 비즈니스 모델 정렬</td>
+</tr>
+<tr>
+<td>7</td>
+<td>SaaSpocalypse</td>
+<td>전통 SaaS 모트 중 '소프트웨어 복잡성' 모트는 사라짐. 살아남을 모트: 고객관계·도메인 지식</td>
+</tr>
+<tr>
+<td>8</td>
+<td>빅테크 파트너십</td>
+<td>Amazon·Google·Microsoft와 협력하되 의견은 내 마음대로 (칩 수출 통제 지지 등)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>컴퓨트 부족</td>
+<td>Q1 2026 분기 3X 성장(→ 연율 80X) 은 계획 불가. 단기 극값이며, 추가 조달 중</td>
+</tr>
+<tr>
+<td>10</td>
+<td>제품 개발 속도</td>
+<td>문화 통일성 + Claude가 Claude 개발을 도움 (두 가지가 핵심)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>AI 노동시장 충격</td>
+<td>진입 레벨 화이트칼라 대규모 충격 예상. 물리적 세계·인간 관계 직종·AI 디렉터가 대안</td>
+</tr>
+<tr>
+<td>12</td>
+<td>국방·군사 AI</td>
+<td>민주주의 수호를 위해 DoD 협력. 레드라인: 대량 감시·완전 자율 무기. "인간 최종 결정" 원칙</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Mythos</td>
+<td>사이버 킬체인 전 단계 자율 수행. Firefox 271개 취약점. 방어자 먼저 → 이후 일반 공개</td>
+</tr>
+<tr>
+<td>14</td>
+<td>AI 국유화 / 거버넌스</td>
+<td>정부-기업 상호 견제 필요. Long-Term Benefit Trust, 사전 심사 의무화 지지</td>
+</tr>
+<tr>
+<td>15</td>
+<td>재귀적 자기개선</td>
+<td>이미 진행 중, '폭발 순간' 없음. 점진적 제어 상향으로 대응</td>
+</tr>
+<tr>
+<td>16</td>
+<td>문명 붕괴 10-25%</td>
+<td>Anthropic이 확률을 낮추고 있다는 믿음. 항공사 안전 비유</td>
+</tr>
+<tr>
+<td>17</td>
+<td>신뢰</td>
+<td>행동으로 증명 — Mythos 보류, China 차단, 출시 지연</td>
+</tr>
+</tbody>
+</table>
+<h2>1. Anthropic 내부 현황 — 부드러운 지수 곡선</h2>
+<p>다리오는 AI 발전을 "지수 곡선 위를 걷는 경험"으로 묘사한다. 겉으로는 아무 일도 없다가 갑자기 폭발적으로 커지는 패턴. Anthropic은 수익·밸류에이션 기준으로 이미 최상위권에 진입했다고 인정하지만, "평소 생각하던 그래프의 선 위에 있었을 뿐"이라고 담담히 말한다. <strong>Q1 2026 단일 분기 매출 3X 성장</strong> — 연율 환산 시 80X — 은 계획 범위 밖이었음을 솔직히 인정.</p>
+<h2>2. OpenAI 이탈 — 신뢰 부재</h2>
+<p>"안전에 대한 이견만으로는 이직할 이유가 없다. 여기서도 이견은 많다." 이탈의 핵심은 <strong>상대방의 가치관이 말과 다르다는 불신</strong>. 불신이 생기면 논쟁할 이유가 없다 — 각자의 방식으로 하면 된다.</p>
+<h2>3. 엔터프라이즈 전략 — 가치와 수익의 정렬</h2>
+<p>소비자 앱의 문제: 광고 수익 → 중독·참여 극대화 → 슬롭. 기업 고객의 특성: 신뢰 기반 장기 관계 → Anthropic의 안전 지향과 자연스럽게 정렬. "비즈니스 모델이 가치관과 충돌하면 딜레마에 빠진다 — 반대로 정렬시키면 훨씬 편하다." <strong>Claude Code (Claude 코드) 와 Claude Code Work (Claude 코워크) 성공이 이 전략의 증거.</strong></p>
+<h2>4. SaaSpocalypse — 소프트웨어 모트의 재편</h2>
+<p>Claude Code Work 출시 직후 전통 SaaS 주가 $2,850억 증발. 다리오의 분석: "소프트웨어 복잡성이 경쟁력이었던 모트는 사라진다. 살아남을 모트: 고객 관계, 도메인 지식, 독점 데이터." 소프트웨어 산업의 파이 자체는 커지지만 적응 못 한 기업은 퇴출된다.</p>
+<h2>5. AI 노동시장 — "doom 마케팅"이라는 비판에 반박</h2>
+<p>다리오는 "진입 레벨 화이트칼라의 절반이 사라질 수 있다"는 발언이 3초 클립으로만 유통된다고 분노한다. 원래 발언에는 항상 대응책(Token Tax, 거시경제 정책, 기업 권고)이 포함되어 있었다. <strong>"doom이 온다"는 메시지가 아니라 "우리가 지금 대비해야 한다"는 메시지다.</strong> Anthropic 내부에서도 소프트웨어 엔지니어의 역할 변화를 이미 관찰 중이며, <strong>Forward Deployed Engineer</strong> 같은 새 직군이 증가하고 있다.</p>
+<h2>6. 국방 협력 — 원칙 기반 참여</h2>
+<p>다리오가 설정한 레드라인 두 가지:
+- <strong>대량 감시 (Mass Surveillance)</strong> — 허용 안 함
+- <strong>완전 자율 무기 (Fully Autonomous Weapons)</strong> — 허용 안 함</p>
+<p>"민주주의가 이기더라도, 민주주의가 그 과정에서 이 두 가지를 행한다면 승리의 의미가 없다." Palantir와 협력하지만 ICE·CBP에는 미제공. 이란 전쟁 오폭 건에서도 "Claude가 역할을 했는지 모르지만, 인간이 최종 결정을 내렸다"는 원칙이 지켜졌음을 강조. OpenAI가 Anthropic이 거절한 계약을 대신 서명하고 대통령이 Anthropic을 연방에서 배제했지만 "원칙은 바꾸지 않는다."</p>
+<h2>7. Mythos — 공개 보류의 논리</h2>
+<p>Mythos는 사이버 킬체인 전 단계(취약점 발견 → 익스플로잇 개발 → 침투)를 자율 수행한다. 파트너사가 "이건 일종의 수퍼 웨폰이다 — 공개하지 말아달라"고 요청. <strong>Firefox에서 271개 신규 취약점 발견</strong> (이전 모델로는 불가). 공개 보류로 인해 엄청난 상업적 손해를 보고 있지만, 현재의 사이버 가드레일이 jailbreak 가능하다는 점에서 일반 공개는 아직 이르다. 전략: 방어자에게 먼저 접근 제공 → 취약점 패치 → 이후 단계적 확대.</p>
+<h2>8. AI 거버넌스 — 정부·기업 상호 견제</h2>
+<p>다리오는 국유화를 지지하지 않지만, <strong>AI는 역사상 최초로 민간에서 먼저 개발된 강력 기술</strong>이라는 점에서 불안정하다고 본다. 솔루션: Long-Term Benefit Trust (다리오 해임 권한 포함), 의회의 레드라인 입법, 사전 출시 심사 의무화. <strong>"정부가 기업을 견제하고, 기업이 정부를 견제해야 한다."</strong> 극단적 반규제 → 갑자기 국유화 요구로 전환하는 요-요 반응 자체가 위험 신호.</p>
+<h2>9. 재귀적 자기개선 — 폭발 순간은 없다</h2>
+<p>"이미 진행 중이다. AI가 다음 AI 아키텍처를 제안하는 것은 지금 일어나고 있다." <strong>1년 전 TFP 기여 10-15% → 현재 20-30%.</strong> 중요한 것은 '폭발 순간'에 대비하는 것이 아니라, <strong>각 지수 지점에서 적절한 수준의 제어를 상향 조정하는 것</strong>이다.</p>
+<h2>10. 문명 붕괴 10-25% — 신뢰와 투명성</h2>
+<p>다리오는 이 확률을 '아무것도 안 해도 내재된 기술의 불확실성'에서 나온다고 설명하며, Anthropic의 행동이 이 확률을 낮춘다고 주장한다. 신뢰 근거로 제시하는 것: Mythos 보류 (상업적 손해), 중국 접근 차단 (수억 달러 손실), Claude 2 출시 지연. <strong>"우리가 완벽하지 않지만, 행동 기록의 총합이 진정성을 보여준다."</strong></p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] "부드러운 지수 곡선" 사고방식을 내 업무·학습 계획에 적용해보기 — 극단적 요-요 없이 점진적 대비</li>
+<li>[ ] 엔터프라이즈 AI 전략을 볼 때 "가치관과 비즈니스 모델의 정렬" 기준으로 평가하기</li>
+<li>[ ] Mythos 공개 보류 사례를 AI 안전 의사결정 프레임워크로 참고</li>
+<li>[ ] Forward Deployed Engineer 직군 변화를 직업 계획에 반영 — 기술+고객 대화 역량 조합</li>
+<li>[ ] Long-Term Benefit Trust 구조를 AI 거버넌스 설계 참고사례로 메모</li>
+<li>[ ] Token Tax 개념을 AI 노동 정책 관련 자료에서 추가 탐구</li>
+<li>[ ] 다리오의 에세이 "Adolescence of Technology" 읽기 (작업·직무 구분, 대응책 6가지)</li>
+<li>[ ] Cyber Kill Chain 전 단계 자율화의 의미를 사이버 보안 맥락에서 더 조사</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 앤트로픽 CEO 다리오 아모데이의 생각을 들여다봅니다 | The Circuit | 확장 인터뷰 · https://www.youtube.com/watch?v=mVO9JsmOI8c · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p><strong>[인터뷰어]</strong> 얼마나 자고 있나요?</p>
+<p><strong>[다리오]</strong> 사실 잠을 잘 자는 편이 아니에요. 이 특별한 압박의 시기에 긴장을 풀고 잠드는 방법을 배우는 중이라고 하죠.</p>
+<p><strong>[인터뷰어]</strong> 모든 것이 너무 빠르게 움직이고 있어요. 내부에서는 어떤 느낌인가요?</p>
+<p><strong>[다리오]</strong> 지수(exponential)를 실감하는 느낌이에요. 상대론적 속도로 지구를 벗어나는 우주선에 타고 있다고 상상해보세요. 특수상대성이론에 따라, 잠들었다 깨어나면 지구에서는 이틀이 지나 있어요. 다음 날 자면 또 사흘이 지나 있고, 그다음 날은 나흘이 지나 있죠. 그게 지금 느낌이에요. 밤마다 내일 깨어나면 무슨 일이 생겼을지 두려워하냐고요? 당장 처리해야 할 명확한 현안들이 있어서 그것들을 처리하면서 어떻게 준비할지도 생각하는데, 두려움이나 걱정은 생산적이지 않다고 봐요. 역사적으로 고압적 상황을 다룬 사람들을 보면, 합리적으로 반응하고 위험을 과장하지 않는 법을 배워야 한다는 걸 알 수 있어요. "걱정 없다"와 "오늘 패닉해야 한다" 사이를 왔다갔다 하는 건 미숙한 의사결정의 특징이에요. 성숙한 의사결정은 — 무시할 수 없고, 방심해서도 안 되고, 실제로 위험이 점점 커지고 있지만, 외과의사나 군사 지휘관처럼 합리적으로 대응해야 한다는 거예요.</p>
+<p><strong>[다리오]</strong> 어제 아들이 Claude Code Work (Claude 코워크) 계정 쓸 수 있냐고 하더라고요. "절대 안 된다"고 했어요. 내 토큰이 필요해서요. 우리는 소비자 영역에서도, 많은 노력을 기울이지 않았음에도 빠르게 성장하는 걸 보고 있어요.</p>
+<p><strong>[인터뷰어]</strong> 지금 AI 우주의 중심에 있잖아요. 어떤 느낌인가요?</p>
+<p><strong>[다리오]</strong> 흥미로운 건 제 경력 내내, Anthropic에 있는 내내 이 부드러운 지수 곡선이 있었다는 거예요. 부드러운 지수 곡선의 경험은 아무 일도 없고, 아무 일도 없고, 아무 일도 없다가 — 그러다 훅! 하고 폭발하는 거예요. 한동안 그래프를 보면서 "우리가 매출과 밸류에이션 기준으로 1위 AI 기업이 될 시기가 아마 이쯤이겠구나" 했는데, 실제로 그렇게 됐어요. 어떤 면에서는 그래프의 부드러운 선 위에 있었으니 놀랍지 않아요. 하지만 실제 일어나는 걸 보면 세부사항과 색깔이 훨씬 많이 보이고, 분명 놀랍기도 해요.</p>
+<p><strong>[인터뷰어]</strong> 어렸을 때 샌프란시스코에서 어떻게 자랐나요?</p>
+<p><strong>[다리오]</strong> 첫 인터넷 혁명이 주변에서 일어나고 있었는데, 저는 전혀 관심이 없었어요. 수학 하고 뭔가 끄적이는 게 좋았고, 우주를 이해하고 싶었고, SF를 좋아했어요. 호기심이 많았죠. 실리콘밸리에 대해 비판적인 것도 많지만, 한 가지 좋은 점은 "모든 전문가가 반대하더라도, 일관된 비전과 세계관이 있으면 가야 한다"는 비순응 정신이에요. 실패할 수도 있지만, 특정 금맥을 파면 큰 금광을 발견할 수도 있는 장꼬리(long tail) 구조가 있어요.</p>
+<p><strong>[인터뷰어]</strong> OpenAI를 떠난 이유가 실리콘밸리 전설이 됐죠. 진짜 무슨 일이었나요?</p>
+<p><strong>[다리오]</strong> 간단히 말할게요. 강력한 기술을 만들 때 매일 옳고 그른지 모르는 어려운 결정들이 있어요. 안전에 대한 유효한 이견도 있었어요. 하지만 이견만으로는 떠날 이유가 충분하지 않아요. 여기서도 저와 이견이 있는 사람들이 있어요. 하지만 <strong>누군가를 신뢰할 수 없을 때, 그들의 가치관이 말과 다르다고 느낄 때, 불성실한 행동 패턴이 보일 때</strong> — 계속 함께 일하기 매우 어려워요. 같은 비전이 없고 신뢰도 없다면 왜 싸우나요? 각자의 방식으로 가면 됩니다. 저는 우리가 우리 방식으로 하고 그들이 그들 방식으로 하는 것에 완전히 평화롭게 받아들여요. 시장과 여론이 판단할 거예요.</p>
+<p><strong>[인터뷰어]</strong> 인도 AI 정상회의에서 손잡기를 거부한 것 같던데요?</p>
+<p><strong>[다리오]</strong> 행사 자체가 엄청나게 혼란스러웠어요. 마지막 순간에 모두 올라갔고, 서는 순서도 바꿨어요. 사진 찍고 나서 손 잡으라고 했는데... 이런 국제 행사가 다 그렇죠. Sam과 Elon이 서로 소송 중이잖아요. 저도 Sam을 안 좋아하는 것 같다고요? 이 기술을 만드는 사람들의 신뢰도는 넓은 스펙트럼이 있어요. Demis Hassabis를 15년 알아왔고 같이 일해왔어요. Google 컴퓨트도 쓰고, 안전 아이디어도 공유해요. 신뢰할 수 있는 행위자들이 모여 신뢰하기 어려운 행위자들도 같은 기준을 따르도록 만들어야 해요.</p>
+<p><strong>[인터뷰어]</strong> Claude Code (클로드 코드)와 Claude Code Work (클로드 코워크)에 베팅한 이유는?</p>
+<p><strong>[다리오]</strong> 가치관과 충돌하는 비즈니스 모델을 고르면 딜레마에 빠져요. 소비자 세계는 참여·중독 극대화를 장려해요. AI 비디오 모델의 슬롭을 보세요. 엔터프라이즈는 다릅니다 — 신뢰 기반 장기 관계예요. AI로 하고 싶은 좋은 일들 — 질병 치료, 에너지 효율화, 교육, 경제 성장 — 대부분 엔터프라이즈예요. 가치와 비즈니스 모델이 정렬되면 훨씬 편해요.</p>
+<p><strong>[인터뷰어]</strong> Claude Code Work 출시 후 $2,850억이 하루 만에 증발했어요. 전통 소프트웨어는 얼마나 대체될까요?</p>
+<p><strong>[다리오]</strong> 소프트웨어 모트(moat) 중 일부는 사라지고 일부는 남아요. "복잡한 소프트웨어를 우리만 만들 수 있다"는 모트는 사라집니다. 하지만 고객 관계, 도메인 지식, 독점 데이터는 남아요. 소프트웨어 산업 파이 자체는 커질 거예요. 적응 못 한 기업은 퇴출되지만, 잘 적응한 기업은 성장할 거예요.</p>
+<p><strong>[인터뷰어]</strong> Amazon, Google, Microsoft, Nvidia가 주요 후원자예요. 누가 실제로 결정권을 가지고 있나요?</p>
+<p><strong>[다리오]</strong> 저는 항상 솔직하게 말해왔어요. 중국으로의 칩 수출 통제를 강력히 지지해요. 일부 칩 제조사는 반대하지만 막지는 않아요. 새 파트너십을 맺은 후에도 계속 말하고 있어요. 그들은 우리가 좋은 파트너라는 걸 알아요. 서로 어른이잖아요.</p>
+<p><strong>[인터뷰어]</strong> 밸류에이션이 OpenAI보다 높다는 보도가 있어요. 거의 1조 달러에 가까운 5년 된 스타트업이요.</p>
+<p><strong>[다리오]</strong> 컴퓨트 수요가 매우 빠르게 늘고 있어요. Q1 2026에 분기 기준 3X 매출 성장을 봤어요 — 연율로는 80X예요. 80X를 계획하는 건 합리적이지 않았어요. 단기 극값이고, 이런 상황에서 자금 조달은 불확실성에 대한 완충재예요. 지분 희석도 매우 작고, 기업 펀더멘털과 모순되지 않아요.</p>
+<p><strong>[인터뷰어]</strong> 서버 부하, 신뢰성 문제, 토큰 부족 불만이 있었어요. 실제로 필요한 것을 갖추고 있나요?</p>
+<p><strong>[다리오]</strong> 연 10X 성장을 계획했는데, 분기 3X(연율 80X)는 계획 밖이었어요. 단기 극값이고, Google과 Amazon과의 컴퓨트 계약을 알고 계시죠. 시장은 유동적이에요 — 컴퓨트를 잘 활용하고 수요가 있으면 1~2달 내에 확보할 수 있어요.</p>
+<p><strong>[인터뷰어]</strong> 경쟁자를 앞서는 게 기분 좋나요?</p>
+<p><strong>[다리오]</strong> "Race to the Top" — 우리가 생태계를 끌어올리려 노력하고 있고, 실제로 그렇게 하고 있어요. 1위가 되는 가치는 경쟁 자체가 아니라, 생태계를 끌어올리는 능력에 있어요. 물론 성공하려고 노력하죠. 실패하려는 게 아니니까요.</p>
+<p><strong>[인터뷰어]</strong> Anthropic은 오랫동안 언더독이었어요. 스케일이 커진 지금 가치관을 유지하기 얼마나 어렵나요?</p>
+<p><strong>[다리오]</strong> 모든 규모에서 편집증적이었어요. 빠르게 성장하면서 빅테크에서 온 사람들을 많이 채용하는데, 그들에게 Anthropic이 어떻게 운영되는지 알려주지 않으면 자기들이 아는 방식으로 일하게 돼요. 그래서 저와 다니엘라는 아마 시간의 절반을 문화 이야기에 쓰고 있어요.</p>
+<p><strong>[인터뷰어]</strong> 제품 개발 속도가 엄청 빠른데, 어떻게 하고 있나요?</p>
+<p><strong>[다리오]</strong> 두 가지예요. 첫째, 통합된 회사 문화 — 모두가 같은 방향을 보고 있어요. 둘째, Claude 자체가 모델 개발과 제품 개발을 가속화해요. 아직 새로운 방식에 익숙해지는 중이지만, 점점 신뢰할 수 있는 가속이 만들어지고 있어요.</p>
+<p><strong>[인터뷰어]</strong> AI가 한 가장 놀라운 일은 뭔가요?</p>
+<p><strong>[다리오]</strong> 생물학·의학 쪽이요. Claude가 여러 명의 의사가 놓친 의료 문제를 진단한 경우를 봤어요 — 다니엘라 포함해서요. 약물 설계나 전산화학 같은 것도 놀랍게 잘하고 있어요. 1900년으로 돌아가서 그때 사람들이 겪던 모든 문제를 생각해보세요. 그 다음 100년의 진보를 생각해보면 — 저는 이번 세기에 과학적·의학적으로 엄청난 진보가 있을 거라고 진심으로 믿어요.</p>
+<p><strong>[인터뷰어]</strong> 에세이 쓰기를 좋아하시죠. Claude를 써서 글을 쓰나요?</p>
+<p><strong>[다리오]</strong> 써요. 아직 Claude가 직접 쓴 텍스트를 그대로 쓰는 단계에는 아직 안 왔어요. 제 스타일이 너무 독특해서요. 브레인스토밍, 테마 구성, 참고문헌 찾기 등 보조 역할로 써요. Claude가 나보다 더 잘 쓸 날이 얼마나 남았는지 모르겠지만, 분명 오겠죠. 글쓰기는 아이디어와 씨름하는 과정이고 비판적 사고가 많이 필요해요. Claude에게 다 맡기면 그 혜택을 잃게 될까 걱정돼요.</p>
+<p><strong>[인터뷰어]</strong> AI가 일자리 절반을 없앨 수 있다고 했는데, 그 수치가 높아졌나요?</p>
+<p><strong>[다리오]</strong> 제가 항상 한 말은 "정확히 모르지만, 이것이 얼마나 심각할 수 있는지의 규모"였어요. 3초짜리 클립이 계속 컨텍스트 없이 유통돼요. 제 메시지는 doom이 아니에요 — 예상할 수 있는 일이고, 걱정하고 있고, 실제로 대응해야 한다는 거예요. 아직 비슷한 수준으로 걱정하고 있어요. 산업혁명처럼 — 90%를 자동화하면 나머지 10%에서 10배 생산적이 됩니다. 하지만 결국 100%에 가까워져요. 그다음은 다른 일을 찾아야 해요.</p>
+<p><strong>[인터뷰어]</strong> 5년 후 이 나라는 어떤 모습일까요? 실업이 그렇게 많다면 혁명이 시작되는 것 아닌가요?</p>
+<p><strong>[다리오]</strong> 그게 바로 우리가 막아야 할 결과예요. 물리적 세계가 하나의 답이에요 — 로봇공학 혁명도 있지만 AI보다는 느려요. 데이터센터, 제조, 물건 만들기 — 이런 것들이 필요해요. 인간 관계 중심 직업도 중요해요. AI가 더 잘한다고 해도, 사람들은 중요한 일에서 인간과 이야기하고 싶어 해요. 그리고 AI를 지휘하는 인간 역할도 있을 거예요.</p>
+<p><strong>[인터뷰어]</strong> 국방부와 계약한 것을 설명해주세요.</p>
+<p><strong>[다리오]</strong> 러시아의 우크라이나 침공, 중국의 대만 침공 위험을 보면 권위주의 블록이 강해지고 있어요. 중국·러시아가 AI로 정보 분석하고 대만·우크라이나를 공격하는데 우리가 방어 못 하는 세상을 원하지 않아요. 그래서 협력했어요. 돈 때문이 아니에요 — 정부 네트워크에 올리는 건 엄청 힘든 일이에요. 하지만 가치관 때문에 했으니, 같은 이유로 제한도 있어요. 대량 감시와 완전 자율 무기는 레드라인이에요. 민주주의가 이기더라도 그 과정에서 그것들을 행하면 의미가 없어요.</p>
+<p><strong>[인터뷰어]</strong> Palantir와 협력하고 있어요. 그들의 기술은 ICE, 경찰, 가자 지구에서 쓰이는데요.</p>
+<p><strong>[다리오]</strong> ICE나 CBP와는 Palantir를 통해서도, 다른 어떤 경로로도 협력하지 않아요. 가자에서도 협력하지 않는다고 믿어요. 우리가 믿는 것들로 범위를 제한하고 있어요.</p>
+<p><strong>[인터뷰어]</strong> 대통령이 당신을 연방 정부에서 배제했고, 국방부는 공급망 위험으로 분류했고, OpenAI가 당신이 서명하지 않은 계약을 체결했어요. 이 싸움에서 이기는 것이 어떤 모습인가요?</p>
+<p><strong>[다리오]</strong> Anthropic이 이기려는 싸움이 아니에요. 이건 정부의 적절한 AI 활용에 대한 논쟁이에요. 우리가 한 것은 좋다고 생각하는 사용 사례에 선례를 세우고, 우려되는 사례에 대한 인식을 높인 거예요. 의회의 초당적 입법 노력도 있고요.</p>
+<p><strong>[인터뷰어]</strong> 미 군이 LLM 덕분에 하루 1,000개에서 5,000개 표적을 공격할 수 있게 됐다는 보도가 있어요. 편한가요?</p>
+<p><strong>[다리오]</strong> 두 가지예요. 미국의 군사적 역량 강화 — 지지해요. 강한 역량이 전쟁을 억제해요. 별개 질문은 특정 군사 작전을 지지하냐인데, 그건 우리가 결정할 영역이 아니에요. 기술을 제공하면, 어떤 작전에 쓸지는 군사 의사결정자들의 영역이에요. 우리가 할 수 있는 건 가치와 일치하지 않는 사용 사례를 막는 고수준 경계를 설정하는 것.</p>
+<p><strong>[인터뷰어]</strong> Bloomberg 보도에 따르면 이란 전쟁에서 Claude가 Palantir Maven Smart System을 통해 AI 보조 표적 선정에 사용됐다고 해요. 2월에 미국 미사일이 이란의 여학교에 떨어져 150명 이상이 숨졌는데, 대부분 어린이였어요. Claude가 역할을 했나요?</p>
+<p><strong>[다리오]</strong> 우리는 모델이 정확히 어떻게 사용됐는지 알 수 없어요. 전쟁에서 이런 실수가 일어나는 건 정말 끔찍해요. 이것이 우리가 지지하지 않는 사용 사례를 막기 위해 회사의 미래를 걸 각오가 된 이유예요. 그리고 여기서 말하는 건 우리 레드라인을 위반하지 않는 사용 사례예요. 완전 자율 무기였다면 달랐을 거예요. 여기서는 Claude가 보조했지만, 인간이 최종 결정을 내렸어요.</p>
+<p><strong>[인터뷰어]</strong> AI 전쟁이 3차 세계대전을 막을 가능성이 더 높나요, 아니면 일으킬 가능성이 더 높나요?</p>
+<p><strong>[다리오]</strong> 제한 없이 사용하면 더 일으킬 가능성이 높아요. 적절히 사용하면 억제 효과가 더 커요. 갈등은 양측이 서로를 오해할 때 일어나요. 적절한 감독 없이는 그런 사고가 더 일어나기 쉬워요. AI로 대만 침공을 미리 예측할 수 있다면, 적대국들은 두 번 생각하게 될 거예요.</p>
+<p><strong>[인터뷰어]</strong> Mythos에 대해 이야기해주세요.</p>
+<p><strong>[다리오]</strong> 가장 놀라운 건 모델들이 취약점 발견 능력 — 특히 익스플로잇으로 전환하는 능력 — 이 크게 도약했다는 거예요. Mythos를 준 초기 기업들은 "이건 수퍼 웨폰이에요 — 총기 면허가 필요한 수준이에요. 공개하지 마세요"라고 했어요. Firefox에서 271개 새 취약점을 찾았어요. 이전 모델로는 못 찾은 것들이에요. 목표는 영원히 잠가두는 게 아니에요 — 점차 더 넓은 사람들에게 열어가고 있어요. 하지만 현재 사이버 가드레일은 jailbreak 가능해요. 방어 기술이 충분히 강해질 때까지 일반 공개를 보류하는 거예요. 지금은 방어자에게 먼저 접근 제공해서 취약점을 패치하는 전략이에요. 6~12개월 후에는 훨씬 안전한 인터넷 생태계가 될 거라 기대해요.</p>
+<p><strong>[인터뷰어]</strong> Mythos를 공개하지 않는 결정에 대한 반발이 있었어요. 오픈소스 모델로 복제할 수 있다는 주장도 있고요.</p>
+<p><strong>[다리오]</strong> 완전히 틀렸어요. Mythos는 전체 코드베이스를 보고 뭔가를 찾아요. 어떤 사람이 트위터에 "Mythos가 찾은 정확한 코드 줄을 오픈소스 모델에 지정하면 같은 걸 찾는다"고 했는데, 그건 같은 질문이 아니에요. 그건 이미 바늘을 찾은 다음에 다른 모델이 그 바늘을 집어 드는 것과 같아요. "좋은 마케팅 아니냐"는 말도 있는데, Mythos를 공개하지 않아서 상업적으로 엄청난 손해를 보고 있어요.</p>
+<p><strong>[인터뷰어]</strong> 트레이드오프 중 완전히 편하지 않은 것도 있었나요?</p>
+<p><strong>[다리오]</strong> Anthropic 전체 역사가 트레이드오프예요. 모든 것이 트레이드오프예요. 스펙트럼의 극단은 완전히 미쳐요. 이제 상업적으로 선두 위치에 있으니, 저와 다니엘라는 더 신중한 방향으로 다이얼을 최대한 돌리고 있어요.</p>
+<p><strong>[인터뷰어]</strong> 왜 정부가 당신을 접수하지 않는 건가요?</p>
+<p><strong>[다리오]</strong> 매우 진지한 질문이고, 저도 그 걱정을 공유해요. 국유화에는 찬성하지 않지만, AI는 역사상 민간에서 먼저 만들어진 최초의 강력한 기술이에요. 위험하고 불안정한 상황이에요. 견제와 균형이 필요해요. AI 기업에 대한 견제, 정부에 대한 견제 모두요. Long-Term Benefit Trust — 이사회 다수를 선임·해임할 수 있는 기구, 즉 저를 해임할 수도 있는 구조예요. 사전 출시 심사 의무화도 지지해요. 완전 반규제에서 갑자기 국유화로 전환하는 요-요 반응은 정말 위험 신호예요. 우리는 처음부터 온건한 접근을 해왔어요. 부드러운 지수를 보면서 그에 맞게 대응해온 거예요.</p>
+<p><strong>[인터뷰어]</strong> 백악관 방문은 어땠나요?</p>
+<p><strong>[다리오]</strong> 항상 정부와 협력하려 노력해요. 원칙이 있고, 그것을 따르고, 상대방이 합리적이길 바라는 접근이에요. Mythos에 대해 정부는 매우 진지하게 받아들였어요. Besson 장관, Susie Wiles 비서실장과도 좋은 대화를 했어요. 어느 행정부나 잘 통하는 부분과 어려운 부분이 있어요.</p>
+<p><strong>[인터뷰어]</strong> 중국에 대한 견해는?</p>
+<p><strong>[다리오]</strong> 중국 오픈소스 모델이 강해지고 미국 기업들이 공짜로 쓰고 있어요. 하지만 프론티어 모델에는 항상 엄청난 프리미엄이 있어요. 연 10X 성장하는 세계에서, 2023~2024년에 경제적 가치가 있었던 것이 내년에는 프론티어 대비 훨씬 뒤처져요. Mythos급 사이버 역량이 12개월 후에는 누구나 다운로드할 수 있게 될 수도 있어요. 그 전에 패치할 수 있기를 바라지만 심각한 우려예요. Baidu에서 일했을 때? 크게 영향 받지는 않았어요. 위구르 탄압, 홍콩, 미국 내 비판 억압을 보면 — 고도화된 권위주의 국가가 AI와 결합하면 1984년보다 나쁜 디스토피아가 와요. 이를 막는 것이 제 목표예요.</p>
+<p><strong>[인터뷰어]</strong> 재귀적 자기개선은 얼마나 가까이 왔나요?</p>
+<p><strong>[다리오]</strong> '순간'이 아니에요 — 이미 진행 중이에요. AI가 다음 AI 아키텍처를 제안하는 건 지금 일어나고 있어요. 1년 전 AI의 총요소생산성 기여가 10-15%였고, 지금은 20-30%예요. 두 배가 되고 있는 것 같아요. 급격히 개선하거나 통제 불능이 되거나 안전하지 않게 되는 순간은 없어요. 가속하는 지수가 있을 뿐이에요. 각 지점에서 이 기술에 더 많은 통제가 필요한지 평가해야 해요. 극단에서 극단으로 요-요 하는 반응은 진지하지 않다는 표시예요.</p>
+<p><strong>[인터뷰어]</strong> 문명 붕괴 10-25% 확률을 말씀하셨는데, 그게 Anthropic이 만든 것 때문일 수도 있다고 생각하나요?</p>
+<p><strong>[다리오]</strong> 그러길 바라지 않아요. 이 확률은 기술이 존재한다는 것, 많은 국가와 기업들이 있다는 것, 이 공허함을 채우려는 새 기업들이 나온다는 단순한 조합에서 나와요. 우리의 행동이 그 확률을 높이는 것보다 낮추고 있다고 믿어요. 기술이 예측 불가능한 건 내재적 속성이에요. 완벽히 테스트하고 출시해도, 오늘 출시된 모델은 사이버 영역 외에는 위험하지 않거나 크게 위험하지 않아요. 그러고 나서 반복하고 배우는 거예요. 하지만 제로는 될 수 없어요. 25%는 비행기 탑승 거부할 정도로 높죠. 그래서 우리가 그 확률을 훨씬 낮추려는 거예요. 그게 목표예요.</p>
+<p><strong>[인터뷰어]</strong> 왜 당신을 신뢰해야 하나요?</p>
+<p><strong>[다리오]</strong> 불신에서 시작하는 건 합리적이에요. 실리콘밸리는 많은 신뢰를 잃었어요. 우리가 다르다는 건 행동으로 증명해야 해요. 동의하든 안 하든, 우리는 가치관을 위해 서 있었어요. Mythos 보류는 상업적으로 엄청난 타격이었어요. 중국 접근 차단 — 아무도 시키지 않았는데, 수억 달러를 잃었어요. Claude 2 지연. 완벽하지 않아요. 실수도 많이 했어요. 하지만 전체 역사의 합계를 보면, 가장 일관성 있는 가설은 — 우리가 진정으로 옳은 일을 하려 한다는 거예요. 우리는 정직하고 진지하게 올바른 방법에 대한 그림을 갖고 있고, 그것을 실행하려 노력하고 있어요.</p>
+<p><strong>[인터뷰어]</strong> 지수의 반대편에서 봬요.</p>
+<p><strong>[다리오]</strong> 그러기를 바랍니다. CEO 직업의 놀라운 점 중 하나는 분장을 해야 한다는 거예요. 빙고 카드에 없던 일이에요.</p>
+</details>
+</body></html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Cursor 공동창업자 Michael Truell의 Compile 26 오프닝 키노트</title>
+<meta name="description" content="Cursor CEO Michael Truell이 Compile 26에서 agent-first 전환, Cursor Mobile, Origin(agent-native Git), 새 자체 훈련 모델을 발표한 오프닝 키노트."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Cursor 공동창업자 Michael Truell의 Compile 26 오프닝 키노트</h1>
+<div class="meta">원작자 Michael Truell · Cursor (Anysphere) · 업로드 2026-06-23 · 27분 · <a href="https://www.youtube.com/watch?v=K-QOiihIXQk" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Cursor 공동창업자 Michael Truell의 Compile 26 오프닝 키노트</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Cursor는 단순 코딩 보조 도구를 넘어 cloud agent 인프라·모바일·자체 Git 플랫폼으로 확장하며 "개발자 팀원" 패러다임을 선언했다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Michael Truell · Cursor (Anysphere) CEO · https://cursor.com · 업로드 2026-06-23 · 27분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agent-first 전환</td>
+<td>95% 이상 사용량이 이미 agent</td>
+<td>Tab 자동완성 시대가 끝났고 agent 중심 개발이 표준</td>
+</tr>
+<tr>
+<td>Cloud agents + automations</td>
+<td>로컬 실행 한계를 벗어나 24/7 상시 실행</td>
+<td>에이전트를 팀원처럼 상시 가동하는 인프라 개념</td>
+</tr>
+<tr>
+<td>Origin</td>
+<td>GitHub를 대체할 agent-native Git 플랫폼</td>
+<td>PR·merge conflict·CI 실패를 에이전트가 자동 처리</td>
+</tr>
+<tr>
+<td>Cursor Mobile</td>
+<td>이동 중 cloud agent 관리·언블락</td>
+<td>아이디어를 즉시 에이전트에게 위임하는 모바일 워크플로</td>
+</tr>
+<tr>
+<td>자체 기초 모델 훈련</td>
+<td>오픈소스 기반 없이 처음부터 훈련</td>
+<td>컴퓨팅 10~20x 확장 + frontier 수준 목표</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Composer 모델 시리즈</strong> (Composer 1 → 1.5 → 2 → 2.5) — Cursor가 자체 개발한 agentic coding 기초 모델 시리즈. Composer 1은 2025년 11월 출시. RL 온라인 학습으로 5시간마다 업데이트.</li>
+<li><strong>Cursor 3</strong> — agent-first UI로 전면 재설계된 메이저 버전. 좌측·중앙 모두 agent 패널, recursive subagent 지원.</li>
+<li><strong>Origin</strong> — Graphite(인수된 스타트업) 팀이 만든 agent-native Git 플랫폼. novel gate architecture로 수천 agent 동시 push/pull 처리.</li>
+<li><strong>Cursor SDK</strong> — Cursor를 프로그래밍 언어·타 에이전트에서 호출하는 공개 SDK.</li>
+<li><strong>Cursor CLI</strong> — headless 모드 또는 터미널 UI로 사용 가능. 최근 2개월간 50개 이상 개선.</li>
+<li><strong>Design mode</strong> — 빌드 중인 화면에 제스처(gesture)로 요소를 가리켜 에이전트에게 수정 지시.</li>
+<li><strong>SpaceX 파트너십</strong> — 새 대형 모델 훈련 컴퓨팅 인프라 제공.</li>
+<li><strong>Amplitude 사례</strong> — Cursor automations으로 React 컴포넌트 20,000개를 Tailwind로 일괄 마이그레이션 중.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정값·명령어·뉘앙스.</p>
+</blockquote>
+<ol>
+<li><strong>95% + 5x</strong> — 사용자의 95% 이상이 주로 agent로 사용. agent 요청 수가 Tab 등 보조 기능보다 약 5배 많음. 코드 라인 기준으로는 수십 배 차이.</li>
+<li><strong>Cloud agents 3배 빨라짐 + 3-nines 가용성</strong> — 최근 몇 달간 달성. "항상 켜진 팀원" 전제 조건으로 언급.</li>
+<li><strong>6백만 자동화 실행</strong> — automations 제품 출시 몇 달 만에 달성.</li>
+<li><strong>Composer 1 출시: 2025년 11월</strong> — RL at scale을 오픈소스 기반에서 처음 구현한 버전.</li>
+<li><strong>새 모델: Opus·GPT 급 크기</strong> — 처음부터 훈련, 컴퓨팅 10~20x 확장, 출시 "몇 주 내".</li>
+<li><strong>Graphite 인수 → Origin 팀</strong> — Tomas가 Graphite 공동창업자. 2026년 1월 인수 후 Cursor에 합류. Shopify·Snowflake·Notion·Figma 등을 고객으로 서비스했음.</li>
+<li><strong>Origin 현황</strong> — cursor.com에서 내부 + select design partners 사용 중, 2026년 가을 전체 공개 예정.</li>
+<li><strong>Cursor는 2022년 1월 창업</strong> — AI 시대 기준 "선사시대". 창업자 4명 모두 개발자, 처음엔 AI 코딩 경쟁이 너무 치열해 다른 프로젝트 진행 후 연말에 Cursor 착수.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Cursor 창업 스토리</td>
+<td>4명의 개발자, 2주 동안 속옷 바람으로 프로토타입 코딩. 초기 베타 20명 중 18명 이탈</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Agent-first 전환</td>
+<td>95%+ 사용이 agent. Cursor 3로 UI 전면 재설계</td>
+</tr>
+<tr>
+<td>3</td>
+<td>플랫폼화</td>
+<td>SDK, CLI, 플러그인 생태계, 외부 도구 연동으로 hackable platform 지향</td>
+</tr>
+<tr>
+<td>4</td>
+<td>자체 모델 여정</td>
+<td>Tab → 에이전트 surrogate → Composer 시리즈. 이제 frontier 급 자체 기초 모델 훈련 중</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Cloud agents (Kevin)</td>
+<td>dev environment 지급, 3배 빠름, 3-nines 가용성, automations 6M 실행</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Cursor Mobile (Kevin)</td>
+<td>iOS 베타 공개. 이동 중 agent 관리·언블락, 로컬 agent 원격 제어 포함</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Origin (Tomas)</td>
+<td>agent-native Git. PR·CI·merge conflict 자동 처리. 리뷰 시간 절반 이상 단축</td>
+</tr>
+<tr>
+<td>8</td>
+<td>새 모델 발표 (Michael)</td>
+<td>Opus·GPT 급, 처음부터 훈련, 10~20x 컴퓨팅, 코딩 외 범용 지능 목표</td>
+</tr>
+</tbody>
+</table>
+<h2>1. Cursor 창업 스토리 — "속옷 바람 프로토타입"</h2>
+<p>2022년 1월, 4명의 젊은 개발자가 회사를 시작했다. AI 코딩 도구를 만들고 싶었지만, 당시 이미 수십 개의 스타트업과 빅테크, 거대 AI 연구소가 진입해 있어 경쟁이 두려워 다른 프로젝트를 먼저 진행했다. 2022년 말, 시장에 마음에 드는 도구가 없다는 결론에 도달해 "자신들이 쓸 수 있는 개발 환경"을 목표로 Cursor를 착수했다.</p>
+<p>2주 동안 처음부터 코드 에디터를 구현했다. 언어 서버 통합, remote SSH, Copilot 연동까지 직접 만들었다. 첫 베타 초대 20명 중 2~3명만 실제로 계속 사용했고, 나머지 대부분은 이탈하거나 연락을 끊었다. 그 소수의 "매일 쓰는 개발자"로부터 피드백 루프를 시작해 오늘까지 이어지고 있다. 초기 Discord 멤버 다수를 실제 채용했다.</p>
+<h2>2. Agent-first 전환과 Cursor 3</h2>
+<p>Cursor의 가장 큰 변화 방향은 "더 단순하고 더 강력하며 에이전트를 위해 근본적으로 설계된" 형태로의 전환이다. 이 전환은 지난 1년 반에 걸쳐 진행되었으며, 최근 3개월에 확실히 자리를 잡았다.</p>
+<ul>
+<li>사용자의 95% 이상이 주로 에이전트 모드 사용</li>
+<li>요청 건수 기준 에이전트가 Tab 등 보조 기능의 5배</li>
+<li>코드 라인 기준으로는 수십 배 차이</li>
+</ul>
+<p>Cursor 3는 agent-first UI로 전면 재설계됐다. 좌측과 중앙 모두 에이전트 패널. 전문 개발 환경으로서 파일 편집, remote SSH, 언어 서버 lint 등 기존 기능은 그대로 유지하면서 에이전트 특화 기능을 추가했다. design mode(화면 제스처로 요소 지정), recursive subagents(서브에이전트를 호출하는 서브에이전트), 전체 컨텍스트 가시성 등이 포함된다.</p>
+<h2>3. 에이전트를 팀원처럼 — "로컬 에이전트는 미래가 아니다"</h2>
+<p>Michael Truell은 현재 대부분의 개발자가 에이전트에게 30분~1시간 분량의 작업을 쪼개어 로컬 컴퓨터에서 3~5개씩 병렬 실행하는 방식을 쓰고 있으나, 이는 미래 방식이 아니라고 단호하게 말한다.</p>
+<blockquote>
+<p>"코딩 AGI가 나왔는데 로컬 컴퓨터에서 돌리면서 서로 같은 코드베이스에서 충돌하는 상황은 없어야 한다."</p>
+</blockquote>
+<p>진짜 방향은 에이전트에게 프로젝트 전체를 맡기고 며칠 후 완성된 결과물을 받는 것이다. 그러려면 에이전트에게 자체 컴퓨터(dev environment)가 필요하다.</p>
+<h2>4. 자체 모델 여정 — Composer 시리즈</h2>
+<p>Cursor는 창업 초기부터 모델을 직접 훈련해왔다.</p>
+<ul>
+<li><strong>2023</strong>: Tab 자동완성 모델. 당시 가장 많이 쓰인 코딩 모델 중 하나였다고 주장.</li>
+<li><strong>2024~2025</strong>: 에이전트 기반 모델. API 모델의 약점(tool calling, 코드베이스 검색)을 보완하는 소형 surrogate 모델 방식.</li>
+<li><strong>Composer 1 (2025년 11월)</strong>: RL at scale을 오픈소스 베이스에서 처음 구현. 에이전틱 코딩 기초 모델.</li>
+<li><strong>Composer 1.5</strong>: 동일 방식 스케일업.</li>
+<li><strong>Composer 2</strong>: continued pre-training(수십 조 토큰), 실시간 RL(5시간마다 모델 업데이트).</li>
+<li><strong>Composer 2.5</strong>: 스케일업.</li>
+</ul>
+<p>Composer 시리즈의 초기 초점은 속도와 비용이었다. 개인 개발자·솔로 해커도 frontier 모델을 쓸 수 있어야 한다는 철학 때문.</p>
+<h2>5. Cloud Agents 업데이트 (Kevin 발표)</h2>
+<p>에이전트를 "항상 켜진 팀원"으로 만들기 위한 세 가지 원칙: <strong>자율성(autonomous)</strong>, <strong>항상 켜짐(always-on)</strong>, <strong>어디서나(from anywhere)</strong>.</p>
+<p><strong>자율성 — dev environment 지급</strong>
+- 클론된 저장소, 설치된 의존성, 빌드 시스템/내부 툴체인 접근 크리덴셜
+- 에이전트가 직접 테스트 실행, 데모 스크린샷 생성, 결과물 시각화 가능</p>
+<p><strong>항상 켜짐</strong>
+- 최근 몇 달간 cloud agents 3배 빠르게, 가용성 3-nines 달성
+- automations와 SDK로 에이전트 루프를 쉽게 빌드·배포
+- Amplitude 사례: React 컴포넌트 20,000개를 Tailwind로 마이그레이션하는 automation 자체 제작해 백그라운드 실행 중
+- 전체 automation 실행 횟수: 6백만 건 이상 (출시 몇 달 만)</p>
+<p><strong>어디서나</strong>
+- Slack, Microsoft Teams, Jira, Linear 등에서 에이전트 kick-off
+- cloud API + webhook 지원
+- 그리고 오늘 <strong>Cursor Mobile iOS 베타</strong> 공개</p>
+<h2>6. Cursor Mobile — 이동 중 에이전트 관리</h2>
+<p>Cursor Mobile에서 가능한 것:
+- 실행 중인 에이전트 전체 목록 확인
+- 막힌(blocked) 에이전트 파악
+- 전체 저장소 연결
+- 에이전트가 생성한 아티팩트(스크린샷) 확인 후 어노테이션 추가 → 재지시
+- <strong>로컬 에이전트 원격 제어</strong> (맥 미니 여러 대 쓰거나 랩톱 세미-오픈 상태인 사람들을 위해)</p>
+<p>Compile 26 행사장에서 iOS 테스트플라이트 QR 코드 공개. 이후 며칠 내 일반 공개 예정.</p>
+<h2>7. Origin — Agent-Native Git 플랫폼 (Tomas 발표)</h2>
+<p>Graphite 공동창업자 Tomas가 2026년 1월 Cursor에 인수 합류 후 개발한 agent-native Git 플랫폼. Graphite는 Shopify, Snowflake, Notion, Figma 등 최고 수준 엔지니어링 팀에 Git 워크플로 툴링을 제공해왔다.</p>
+<p>문제 인식: AI 도구 도입 이후 코드 볼륨(커밋, PR)이 급격히 증가하면서 기존 Git 인프라가 따라가지 못함.</p>
+<p><strong>Origin의 세 가지 키워드</strong>
+1. <strong>Scale</strong>: novel gate architecture로 수천 에이전트의 동시 push/pull 처리. 현재 및 미래 수요에 대응.
+2. <strong>Extensible</strong>: API, MCP, third-party app 플랫폼으로 원하는 모든 것을 위에 빌드 가능.
+3. <strong>Keep code moving</strong>: Cursor와 동일한 AI로 merge conflict 해결, CI 실패 수정, PR 코멘트 대응 자동화. 리뷰 시간 절반 이상 단축.</p>
+<p>현재 cursor.com 내부 + select design partners 사용 중. 2026년 가을 전체 공개. 대기자 등록: cursor.com/origin.</p>
+<h2>8. 새 모델 발표 — "처음부터 훈련, frontier 돌파 목표"</h2>
+<p>Composer 시리즈와 전혀 다른 유형의 모델을 현재 훈련 중이며 몇 주 내 출시 예정이라고 발표했다.</p>
+<p><strong>세 가지 차이점</strong>
+1. <strong>크기</strong>: Opus(Claude) 및 GPT-4급 대형 모델
+2. <strong>처음부터 훈련</strong>: 오픈소스 베이스 없이 완전 자체 훈련 → 모든 동작을 완전히 제어하고 원하는 workload에 최적화 가능
+3. <strong>컴퓨팅 10~20x 확장</strong>: Composer 시리즈는 frontier 대비 매우 적은 GPU로 훈련했는데, 이번 스케일업으로 frontier 도달 및 추월을 목표</p>
+<p>코딩을 넘어 범용 지능(long-range planning, 도구 사용, 실제 UI 클릭 테스트, 에이전트 변경 사항 UX 등)도 목표. 컴퓨팅 인프라는 SpaceX 파트너십을 통해 제공.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Cursor 3 업데이트 후 agent-first 워크플로로 전환해보기 (Tab 의존도 줄이기)</li>
+<li>[ ] Cloud agents automations로 반복 마이그레이션 작업 자동화 시도</li>
+<li>[ ] Cursor Mobile iOS 테스트플라이트 신청해서 이동 중 agent 관리 흐름 경험</li>
+<li>[ ] Origin 대기자 등록 (cursor.com/origin) — GitHub 대체 가능성 추적</li>
+<li>[ ] Cursor SDK로 에이전트 기반 자동화 빌드 가능성 탐색</li>
+<li>[ ] Composer 시리즈와 새 대형 모델 출시 시 벤치마크 비교 확인</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Cursor 공동창업자 Michael Truell의 Compile 26 오프닝 키노트 · https://www.youtube.com/watch?v=K-QOiihIXQk · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>오늘 이 자리에 모인 분들과 커뮤니티를 보니, 처음 회사를 시작하던 때가 떠오릅니다. Cursor가 어떻게 시작됐는지, 첫 버전이 어떤 모습이었는지 아시는 분이 많지 않을 것 같아요. AI 회사로서 저희는 2022년 1월이라는 선사시대에서 출발했습니다. 그때 이 모든 것을 시작했고, Cursor 첫 버전은 그리 오래되지 않았지만 AI 시간으로는 역시 선사시대인 2023년 초에 출시됐습니다.</p>
+<p>회사 초기에는 약간 우회로를 걸었습니다. 개발자 도구와 AI 코딩에 정말 열정이 있었지만, 처음엔 하지 않았어요. 이유는, 이 회사를 시작한 네 명의 프로그래머, 정말 젊은 프로그래머들이 유용한 것을 만들고 싶었지만, 이미 AI 코딩에 뛰어든 사람들을 보면서 경쟁이 두려웠거든요. 당시 AI 코딩에 뛰어든 회사들은 이미 매우 많았습니다. 수십 개의 스타트업, 빅테크, 당시에는 작았지만 지금은 훨씬 커진 무섭고 위협적인 AI 연구소들이 있었습니다. 2022년에 AI 코딩에 도전하는 모든 사람들을 보면서 "이미 자리가 없겠다, 할 일이 없겠다"고 생각했고, 우리만의 길을 갔습니다. 2022년 내내 여러 프로젝트를 진행했지만 결국 AI 코딩에 중독되어 떠날 수 없었고, 연말에 Cursor를 만들기 시작했습니다. 근본적으로 우리가 정말 좋아하는 도구, 우리가 쓰고 싶은 도구를 만들고 싶었는데 시장에 그런 게 없었거든요.</p>
+<p>그래서 내성적이고 회사 경영엔 서툴지만 진취적인 개발자들답게, 굴 속에 들어가서 2주 동안 속옷 바람으로 코딩해서 프로토타입을 만들었습니다. 그것이 시작이었습니다. 초기 목표는 겸손했습니다. 우리가 이전에 쓰던 것보다 2배 덜 생산적이지 않을 수준의 개발 환경을 만드는 것. 몇 주 만에 그 목표에 도달했습니다. 처음부터 완전히 새로 만든 제품이었고, 나중에 Cursor가 기반으로 삼은 것과는 달랐습니다. 오픈소스 코드 에디터 구성 요소를 처음부터 만들었고, 언어 서버 통합, remote SSH, 당시 자동완성도 없었기 때문에 Copilot 연동까지 직접 구현했습니다.</p>
+<p>그래서 우리가 쓸 수 있는 것을 만들었고, 베타 초대 이메일을 보냈습니다. 공동창업자 중 한 명이 만든 영화 같은 데모가 붙어 있었고, 많은 사람이 등록했습니다. 첫 20명을 직접 온보딩했습니다. 제품 사용법을 설명하고, 세팅을 도와주고, 옆에 앉아서 같이 해봤습니다. 첫 번째 사용자는 별로 좋아하지 않았습니다. 두 번째도 별로였고, 심지어 연락을 끊어버렸습니다. 세 번째, 네 번째도 미지근한 반응이었습니다. 하지만 곧 매일 쓰는 개발자 몇 명을 확보했고, 그것이 오늘까지 이어진 핵심 루프의 시작이었습니다. 매일 하나의 질문: 어떻게 하면 제품을 더 좋게 만들 수 있을까? 어떻게 하면 함께 만드는 커뮤니티를 위해 더 좋게 만들 수 있을까? 그 초기 베타 테스터 20명과는 아직도 이메일로 연락합니다. 그 다음 커뮤니티는 Discord 서버였고, 거기서 실제로 많은 멤버를 채용했습니다. 그리고 이런 이벤트가 그 커뮤니티의 다음 확장입니다.</p>
+<p>지금 우리가 만드는 것을 보면, 무엇보다 가장 흥분되는 것은, 이 모든 혼란 속에서도 핵심이 변하지 않았다는 겁니다. 개발자를 위해 만드는 개발자 집단. 제품에 깊이 집중하는 회사. 세 가지 큰 발표가 있습니다. 그 전에 지난 3개월간 Cursor가 얼마나 많이 바뀌었는지 얘기하겠습니다. 많이 바뀌었어요. 첫 프로토타입에서 한 줄의 코드도 남아 있지 않습니다. 화면의 픽셀도 하나도 남아 있지 않습니다. 꽤 빨리 그렇게 됐는데, 코드가 좋지 않았고 화면은 괜찮았기 때문입니다. Cursor에는 수차례의 전면 교체가 있었습니다. 우리 목표는 우리가, 그리고 커뮤니티의 개발자들이 유용하게 쓸 수 있는 것을 만드는 것입니다. 기술 변화 속도를 감안하면 그 정의가 수차례 바뀌었습니다.</p>
+<p>지난 몇 달간 생각해온 첫 번째 큰 주제는 Cursor를 더 단순하고 더 강력하게, 특히 에이전트와 함께 작업하는 것을 위해 근본적으로 설계된 형태로 바꾸는 것이었습니다. agent-first. 이 전환은 지난 1년 반에 걸쳐 일어났지만, 최근 3개월에 마침내 자리를 잡은 것 같습니다. 현재 Cursor 사용자의 95% 이상이 에이전트로 주로 사용합니다. 우리 비즈니스의 절대적 다수가 코딩 에이전트입니다. 요청 건수 기준으로도 에이전트가 Tab 같은 보조 기능보다 약 5배 많이 사용됩니다. 코드 라인으로 환산하면 에이전트 쪽이 수십 배 더 많습니다. 거기 도달하기 위해 제품, 하네스, 모델 측에서 많은 변화가 있었습니다. 특히 지난 한두 달간 Cursor 3 출시로 화면이 크게 바뀌었습니다. 지금의 Cursor입니다. 근본적으로 agent-first입니다. 왼쪽에도 에이전트, 가운데에도 에이전트. 에이전트와 함께 작업하도록 근본적으로 설계된 개발 환경의 힘과, 전문 개발 환경에서 기대하는 모든 기능을 결합했습니다. 파일 편집, 원격 SSH, 언어 서버 상시 실행과 lint 등은 그대로입니다. 그리고 에이전트와 작업하는 pro 기능들이 추가됐습니다. 예를 들어 design mode: 빌드 중인 화면의 특정 요소를 가리키며 에이전트에게 수정 요청 가능. 이것은 더 넓은 주제의 일부입니다. 에이전트와 일하는 것이 동료와 일하는 것 같아야 한다는 것. 텍스트 채팅만이 아니라 화면을 같이 가리킬 수 있어야 합니다. Cursor 3는 recursive subagent도 지원합니다. 서브에이전트가 서브에이전트를 호출하고 에이전트 팀 전체를 활용 가능합니다. 컨텍스트 전체를 볼 수 있고 다른 여러 기능도 있습니다.</p>
+<p>이 다음 단계의 두 번째 큰 파트는 에이전트가 기능 전체, 버그 픽스 전체, 프로젝트 전체를 처리할 수 있게 하는 것입니다. 대부분의 개발자가 아직 이 단계에 도달하지 못했다고 생각합니다. 우리 제품이든 경쟁 제품이든, 에이전트에게 30분~1시간 분량의 작업을 쪼개서 로컬 컴퓨터에서 3~5개를 돌리고 있죠. 이건 미래가 아닙니다. 코딩 AGI가 나왔는데 로컬 컴퓨터에서 돌리면서 같은 코드베이스에서 충돌하는 상황은 없어야 합니다. 에이전트와 함께 일하는 것이 진짜 동료와 일하는 것 같아야 합니다. 자기 팀의 엔지니어들처럼 대할 수 있어야 합니다. 프로젝트 전체를 넘기고 며칠 후 에이전트가 완성하고 테스트까지 마친 결과물을 가져오는 것. 그러려면 에이전트에게 자체 컴퓨터를 주는 것에 많은 투자를 했습니다. 그 경험을 특히 단순하고, 특히 빠르고, 특히 강력하게 만들었습니다. cloud [cloud agents]에 큰 업그레이드와 성능 개선이 있었고, Cursor 3의 큰 부분입니다.</p>
+<p>또 다른 큰 변화는 Cursor가 단순히 인간이 상호작용하는 폐쇄형 제품에서 진정한 플랫폼으로 변화한 것입니다. 에이전트는 팀과 비즈니스의 근본 인프라이고, 오늘날 모든 사람이 코딩하는 방식입니다. 작업의 중심에 있는 도구는 변경하고 편집하고 제어할 수 있어야 합니다. 그래서 SDK 발표를 기쁘게 생각합니다. Cursor가 인간이 직접 상호작용하는 것뿐만 아니라 정식 프로그래밍 언어로, 다른 에이전트로도 접근할 수 있어야 합니다. 플랫폼의 hackability는 SDK뿐만 아니라 Cursor가 여러분이 쓰는 모든 도구를 사용할 수 있게 하는 것에서도 옵니다. 에이전트가 동료처럼 일하려면 엔지니어가 쓰는 도구를 똑같이 사용할 수 있어야 합니다. Datadog을 뒤지거나 데이터베이스에서 데이터를 가져오거나 같은 디자인 도구를 써야 합니다. 사람들이 자신의 내부 도구나 널리 쓰이는 도구를 위한 Cursor 플러그인을 만드는 생태계가 자라고 있습니다. Cursor를 점점 더 hackable하고 extensible하게 만드는 또 다른 부분은 CLI에 더 투자하는 것입니다. 지난 몇 달간 CLI에 50개 이상의 품질 및 편의 개선이 있었습니다. headless 모드나 그 자체로 하나의 화면으로 사용 가능합니다. Cursor가 웹, 데스크톱 앱 등 원하는 모든 곳에서 사용 가능해야 한다고 생각합니다. 그리고 항상 터미널 UI가 필요한 순간이 있습니다.</p>
+<p>마지막으로, 지난 몇 달간의 큰 집중 영역은 모델 개발입니다. 창업 초기부터 해온 일입니다. 2023년, 18명이 줄행랑을 치던 그 첫 프로토타입 직후, 그 자신감의 부스트를 받아(?) 모델 작업을 시작했습니다. 2023년에는 Tab 모델로 시작했습니다. 2023~2024년에 출시한 Tab 모델 시리즈는, 몰래, 사실 그 기간 동안 가장 많이 쓰인 코딩 모델 중 하나였고 세계의 많은 코드를 작성했습니다. 다음은 2024~2025년 최초 에이전트 프로토타입이었습니다. API 모델의 약점을 보완하는 소형 surrogate 모델 방식으로 구현했습니다. tool calling이 안 될 때, 코드베이스 검색이 안 될 때 그 기능을 보완하는 모델을 만들었습니다. 하지만 지난 1년간 야망이 커져서 agentic coding 모델을 만들기 시작했습니다. Cursor가 하길 원하는 모든 행동을 할 수 있는 기초 모델. 그것이 Composer 시리즈입니다. Composer 1은 2025년 11월에 출시됐습니다. RL을 우리가 중요하게 생각하는 workload에서 대규모로 작동시켰습니다. 오픈소스 베이스로 시작해서 많은 작업과 컴퓨팅을 쏟아부어 개발자에게 더 유용하게 만들었습니다. 그것을 Composer 1.5로 스케일업했습니다. Composer 2에는 두 가지 큰 패러다임 전환이 있었습니다. 첫째, continued pre-training을 작동시킨 것 — RL 측만이 아니라 오픈소스 모델 위에서 수십 조 토큰을 추가 학습. 둘째, real-time RL — 5시간마다 업데이트되는 새 모델을 만들어 사람들이 좋아하는 것, 싫어하는 것, 에이전트가 생산적인 곳과 아닌 곳을 온라인으로 학습. 그리고 Composer 2.5로 스케일업했습니다. Composer에 빠른 관심이 모인 것을 보고 정말 힘이 났습니다. 지금까지는 속도와 비용에 초점을 맞췄습니다. 가장 유능한 모델이 자본이 많은 대기업에게만 접근 가능한 세상은 슬프다고 생각합니다. 개인 개발자, 솔로 해커도 시장 최고 성능 모델을 쓸 수 있어야 합니다. 그래서 최신 Composer 모델 출시에서 비용과 속도에 집중했습니다. 사람들이 일상 드라이버는 가성비 좋은 모델로, 필요할 때는 더 비싼 모델로 가는 패턴이 생기고 있습니다. 우리의 최종 야망은 전반적으로 가장 유능하고 가장 유용한 코딩 모델을 만드는 것입니다. 비용과 속도에 대한 초점이 자리를 잡기 시작한 것이 좋습니다.</p>
+<p>그래서 새로운 것들에 대한 세 가지 큰 발표가 있습니다. Kevin이 이어서 발표합니다.</p>
+<p><strong>[Kevin의 발표]</strong></p>
+<p>감사합니다, Michael. 오늘은 노트북을 넘어서는 코딩에 대해 어떻게 생각하는지 공유하겠습니다. Fable [?원문: Fable — 발표 맥락상 "Fable" 이나 cloud agent 관련 사례를 지칭하는 것으로 추정]과 초기 에이전트 시스템에서 봤듯이, 에이전트는 곧 시간 단위가 아니라 일, 주 단위로 실행될 것입니다. 이것을 핵심 인프라로 생각하면, 에이전트는 항상 켜져 있고 항상 실행 중이어야 합니다. 프로덕션 서버를 노트북에서 돌리지 않는 것처럼. Michael이 말했듯, 고객 방문 중이든, 달리기 중이든, 자기 직전 아이디어가 떠올랐든 언제든 돌아볼 수 있는 팀원이 필요합니다. 실제로 그 기능 요청을 구현하고, 현실로 만들고, 완전히 프로덕션 준비된 버전을 아이디어가 떠오를 때 바로 배포해줄 팀원. cloud agents를 그렇게 만들기 위해 일했습니다. 설계 원칙 세 가지: <strong>자율성</strong>, <strong>항상 켜짐</strong>, <strong>어디서나</strong>. 이 세 가지 차원에서 정말 흥미로운 업데이트를 공유합니다.</p>
+<p>에이전트를 자율적으로 만들기 위해 에이전트에게 자체 dev environment를 줬습니다. 여러분처럼 일할 수 있게. 자체 컴퓨터와 자체 리소스가 있어서 실제로 코드를 테스트하고, 데모를 만들고, 여러분이 소프트웨어를 만드는 것처럼 행동할 수 있습니다. dev environment에는 뭐가 있을까요? 에이전트에게 코드가 필요합니다. 클론된 저장소, 설치된 의존성, 빌드 시스템과 내부 툴체인 접근을 위한 크리덴셜이 필요합니다. 그 결과로 에이전트가 할 수 있는 새로운 것들이 열립니다. 테스트 실행, 작업 검증, 스크린샷 생성 — 여러분이 시각적으로 확인하고 동그라미 치고 설명을 추가하고 계속 프롬프트할 수 있는 것들. 에이전트가 자체 개발 환경을 갖게 되면 훨씬 더 인터랙티브해집니다. 화면 뒤에서 자율 에이전트가 cloud에서 작업한 것을 볼 수 있습니다. 데모를 만들었습니다. 검토하고, 동그라미 치고, 상호작용할 수 있습니다. 에이전트가 자체 개발 환경을 갖게 되면 훨씬 더 현실적으로 느껴집니다.</p>
+<p>두 번째, 에이전트는 항상 켜져 있어야 합니다. 에이전트에게 작업을 프롬프트하는 것에서 루프와 에이전트 시스템의 시대로 이동하고 있습니다. 에이전트가 항상 우리를 위해 계속 일하는 시대. 프로그래밍 방식으로 시작되고, 에이전트가 우리에게 더 많이 프롬프트하는 세상. 이것은 정말 빠르고 신뢰할 수 있는 에이전트가 있을 때만 가능합니다. 항상 켜진 에이전트를 만드는 것은 어려운 인프라 문제이고, 저희는 그것을 어렵게 배우고 있습니다. 지난 몇 달간 cloud agents를 3배 빠르게 만들었고, 3-nines 가용성을 달성했습니다. 목표는 최종적으로 24/7 일하는 에이전트라는 팀원을 제공하는 것입니다. 이 신뢰성과 성능 향상은 에이전트가 24/7 작동할 때 정말 빛을 발합니다. automations와 SDK를 만들어 루프를 쉽게 빌드, 배포, 백그라운드 실행이 가능하게 했습니다. 제가 가장 좋아하는 자동화 사례는 Amplitude입니다. 현재 React 컴포넌트 20,000개를 Tailwind 동등품으로 교체하는 마이그레이션 중입니다. 이 모든 것이 커스텀 마이그레이션 에이전트를 만들어 Cursor 위에 배포한 automation으로 백그라운드에서 돌고 있습니다. Amplitude만이 아닙니다. automations 제품 출시 몇 달 만에 6백만 건 이상의 자동화 실행이 있었습니다.</p>
+<p>마지막으로, 에이전트와 어디서나 작업할 수 있어야 합니다. 이제 Slack, Microsoft Teams에서 동료와 협업하면서, Jira나 Linear에 새 티켓이 들어오면 에이전트를 시작할 수 있습니다. cloud API와 webhook으로 이 cloud agents를 호출할 수 있습니다. 물론 agents 창, 에디터, CLI 터미널 등 여러 화면에서 에이전트와 작업할 수 있습니다. 그리고 오늘, <strong>Cursor Mobile</strong> iOS 베타를 공개합니다. 이것이 Cursor로 Cursor를 만드는 방식을 바꿨습니다. Cursor Mobile로 이동 중에 에이전트와 작업하고, 막힌 에이전트를 풀어주고, 어디서든 자유롭게 빌드할 수 있습니다. 실행 중인 에이전트 모두 볼 수 있고, 막힌 것도 볼 수 있고, 모든 저장소에 연결할 수 있습니다. 에이전트가 만들고 있는 아티팩트도 볼 수 있습니다. 이동 중에도 짧고 검증 가능한 스크린샷을 볼 수 있습니다. 뭔가 이상하면 스크린샷에 어노테이션을 추가하고, 에이전트에게 프롬프트하고, 다시 작업으로 돌아가게 할 수 있습니다. 로컬에서 계속 작업하고 싶은 분들 — 맥 미니 여러 대 놓고 쓰거나 반만 열린 노트북을 좋아하는 분들 — 을 위해 Cursor Mobile에는 이동 중에 로컬 에이전트를 원격 제어하는 기능도 포함됩니다. 오늘 이 자리에 있는 모든 분에게 Cursor iOS를 제공합니다. QR 코드를 스캔해서 테스트플라이트에 접근하세요. 며칠 내로 전 세계에 공개합니다. 여러분이 Cursor Mobile로 무엇을 만들지, 어디서 만들지 기대됩니다.</p>
+<p>다음은 Tomas에게 넘기겠습니다.</p>
+<p><strong>[Tomas의 발표]</strong></p>
+<p>감사합니다, Kevin. 여러분 안녕하세요. 정말 기쁩니다. 저는 Tomas입니다. Graphite 공동창업자이고, 올해 1월 인수를 통해 Cursor에 합류했습니다. 팀으로 소프트웨어를 만들어본 분들은 아시겠지만, 소프트웨어 개발은 코드 작성 그 이상입니다. 테스트, 검토, 병합, 배포가 포함됩니다. Graphite에서는 그 부분을 가속하는 최고 수준의 도구를 만들었습니다. Shopify, Snowflake, Notion, Figma 등 최고의 엔지니어링 팀들을 매일 지원하며 개발자들의 중요한 워크플로를 돌렸습니다. 하지만 지난 몇 년간 추세를 발견했습니다. 회사들이 AI 도구를 도입하면서 의존하던 도구들이 불안정해지기 시작했습니다. AI 도구가 산업을 완전히 바꿔놓았기 때문입니다. 모든 개발자를 10~100배 개발자로 만들었지만, 그 변화는 근본적으로 다른 도구를 요구했습니다. Cursor에 인수됐을 때, 우리는 가장 야심 찬 프로젝트 — 그 도구를 처음부터 다시 만드는 것 — 를 가속했습니다. 오늘 <strong>Origin</strong>, agent-native Git 플랫폼을 발표합니다. Origin으로 여러분과 에이전트가 저장소를 만들고, 코드를 공유하고, 이미 사용하고 사랑하는 같은 생태계 내에서 변경사항을 관리할 수 있습니다. 확장 가능하고, extensible하고, 코드가 계속 움직이도록 만들어졌습니다. agent-native가 실제로 무엇을 의미하는지 얘기해봅시다.</p>
+<p>첫 번째 단어는 <strong>scale</strong>입니다. AI 도구를 도입하는 개발자들을 보면서 코드 라인, 커밋, PR 수가 훨씬 더 많아졌습니다. 그래서 기본으로 돌아가 novel gate architecture를 설계했습니다. cloud provider가 제공하는 primitives를 활용해 더 나은 확장성, 신뢰성, 성능을 제공합니다. 초기 부하 테스트에서 수천 개의 에이전트를 시뮬레이션했고, 단일 저장소에 동시에 push/pull을 하면서 현재 수요와 미래 수요에 충분히 대응할 수 있음을 확인했습니다. 결과는 놀라웠고, Origin이 human scale과 agent scale 모두를 위해 만들어진 탄탄한 Git 인프라임을 확신합니다.</p>
+<p>두 번째는 <strong>extensible</strong>입니다. Michael이 방금 말했듯, Cursor는 플랫폼입니다. agent-native Git 플랫폼을 만들 때 가장 먼저 생각한 것은, 그 위에 원하는 모든 것을 빌드할 수 있어야 한다는 것이었습니다. API, MCP, third-party app 플랫폼을 통해 여러분과 에이전트가 Origin을 원하는 방식으로 사용할 수 있습니다. 관대한 rate limit과 포괄적인 API로 자신의 데이터를 완전히 제어할 수 있습니다.</p>
+<p>세 번째는 <strong>코드를 계속 움직이게 하는 것</strong>입니다. Cursor를 구동하는 것과 같은 인텔리전스로 Origin은 merge conflict를 해결하고, CI 실패를 수정하고, 코멘트에 대응할 수 있습니다. 각 PR의 다음 단계를 자동으로 파악하고, 도움이 필요할 때만 알립니다. 에이전트로 PR을 수정하고 검토함으로써 리뷰 시간을 절반 이상 단축할 수 있습니다. Origin은 이미 cursor.com에서 내부적으로 그리고 select design partners를 위해 사용 중이며, 올 가을에 모두에게 공개됩니다. 미래 협업 소프트웨어 개발을 함께 만드는 데 관심이 있다면 cursor.com/origin에서 대기자 등록을 하세요. 감사합니다. Michael에게 다시 넘깁니다.</p>
+<p><strong>[Michael의 마지막 발표]</strong></p>
+<p>감사합니다, Tomas. 마지막 발표입니다. 오늘 제품뿐만 아니라 다음 모델에 대해서도 얘기하게 되어 기쁩니다. 지금까지 훈련한 것과 매우 다른 유형의 모델을 훈련 중이며 발표하게 됩니다. 세 가지 측면에서 다릅니다. 첫째, 크고 Opus(Claude) 및 GPT만큼 큽니다. 둘째, 처음부터 훈련합니다. 오픈소스 베이스로 시작하지 않습니다. 오픈소스를 사랑하고 기여 방법을 찾고 싶지만, 처음부터 시작하면 모델의 모든 동작을 제어하고 우리가 중요하게 생각하는 workload에 더욱 최적화할 수 있습니다. 그리고 결정적으로 10~20배 더 많은 컴퓨팅으로 실행합니다. 마지막 모델도 예전보다 조금 더 많은 컴퓨팅을 썼지만, 이번이 진짜 처음으로 컴퓨팅을 대폭 스케일업하는 첫 번째 모델입니다. Composer 1부터 2.5까지 frontier 연구소에 비해 매우 적은 GPU로 훈련했습니다. 그것이 모델을 더 좋게 만드는 것을 근본적으로 제한했습니다. GPU를 더 많이, 더 오래 쓸 수 있는지가 병목이었습니다. 10~20x 스케일업으로 frontier에 도달하고, 나아가 그것을 뛰어넘어 모두에게 흥미롭고 강력한 기능을 제공할 수 있을 것으로 생각합니다. 마지막으로, 이 모델은 단순한 코딩을 넘어 지능적일 것입니다. 이것이 Cursor가 나아가고자 하는 방향에 중요합니다. 누구나 컴퓨터에서 원하는 모든 것을 만들 수 있게 하고 싶습니다. 그 병목은 이제 코드 작성뿐만 아니라 엔지니어 동료에게 원하는 모든 것으로 확장되고 있습니다. 엔지니어가 사용하는 도구 사용, 장기 계획, 실제 소프트웨어 테스트 및 버튼 클릭, 에이전트가 변경한 내용을 사용자에게 정확히 보여주는 훌륭한 UX 등. 코딩을 넘어 훨씬 더 범용적으로 지능적인 모델을 만들 것입니다. 훈련이 한창이고 킥오프됐으며 다음 몇 주 내에 출시됩니다. 이 모든 것은 SpaceX와의 파트너십으로 지원됩니다. 다들 아시다시피 단순한 파트너십 이상입니다. 뉴스가 뜸한 날이네요 [?웃음]. 이번 특정 프로젝트와 앞으로의 모델 출시 시리즈 모두에 흥미롭다고 생각합니다. AI에서 제품과 모델 양쪽을 모두 공동 설계할 수 있는 플레이어와 기관이 매우 적습니다. 다른 플레이어들의 DNA는 대형 테크 회사이거나, 연구소로 시작해서 개발자·빌더 쪽으로 들어온 것입니다. 좋든 나쁘든, 저는 좋다고 생각하지만, 이 회사는 근본적으로 개발자에 관한 것입니다. 그것이 우리가 시작한 것이고 우리가 중요하게 생각하는 것입니다. 이 회사는 근본적으로 자신들에게 유용한 도구를 만들고 싶은 사람들로 이루어져 있습니다. 이 다음 단계는, 처음으로 그 제품 에토스, 개발자 에토스를 핵심에 가진 그룹을 격상시키고, 화면의 픽셀을 수정하는 것뿐만 아니라 모델의 근본적인 역량을 수정하는 능력도 부여합니다. 이것이 제품의 중요한 부분입니다. 다음 출시와 앞으로 몇 달간의 출시 시리즈에 정말 기대됩니다. 세 가지 큰 발표: 오늘 공개되는 모바일 앱, GitHub 도전의 시작, 그리고 이 새 모델과 앞으로의 모델 계획에 대한 처음 공개. 감사합니다.</p>
+</details>
+</body></html>

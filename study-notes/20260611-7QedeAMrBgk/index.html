@@ -1,0 +1,228 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Google 실시간 번역 모델 Gemini 3.5 Live Translate를 소개합니다</title>
+<meta name="description" content="Google이 Gemini 3.5 Live Translate를 API로 공개 — 70개 이상 언어 실시간 음성-음성 번역, 자동 언어 전환, 발표 세션 다국어 동시 청취 지원"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Google 실시간 번역 모델 Gemini 3.5 Live Translate를 소개합니다</h1>
+<div class="meta">업로드 2026-06-11 · 3.5분 · <a href="https://www.youtube.com/watch?v=7QedeAMrBgk" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Google 실시간 번역 모델 Gemini 3.5 Live Translate를 소개합니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Google이 Gemini 3.5 Live Translate를 개발자 API로 공개했다 — 70개 이상 언어 간 실시간 음성-음성 번역, 자동 언어 감지, 발표 세션 다국어 동시 청취를 지원한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>Google 공식 발표 · Google · 추정 출처 https://goo.gle/4ogWS2D · 업로드 2026-06-11 · 3.5분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gemini Live API (음성-음성)</td>
+<td>텍스트 없이 오디오 스트림 직접 번역 — 레이턴시 최소화</td>
+<td>입력 오디오 → 출력 오디오, 텍스트 중간 단계 없음</td>
+</tr>
+<tr>
+<td>70개 이상 언어 지원</td>
+<td>다국어 서비스 개발 시 번역 인프라를 자체 구축할 필요 없음</td>
+<td>입력·출력 모두 70+ 언어 실시간 처리</td>
+</tr>
+<tr>
+<td>브라우저 탭 오디오 캡처 번역</td>
+<td>기존 컨텐츠(유튜브·웨비나)를 실시간 더빙 가능</td>
+<td>탭 오디오 스트리밍 → 번역 오디오 출력</td>
+</tr>
+<tr>
+<td>QR/URL 발표 세션</td>
+<td>발표자 1명이 다국어 청중 동시 서비스</td>
+<td>청중이 QR 스캔 후 원하는 언어 선택해 청취</td>
+</tr>
+<tr>
+<td>자동 언어 전환 감지</td>
+<td>스피커가 언어를 바꿔도 별도 설정 없이 즉시 대응</td>
+<td>영어→신할라어→일본어 전환 자동 인식</td>
+</tr>
+<tr>
+<td>AI Studio + Gemini API 접근</td>
+<td>즉시 프로토타이핑 가능</td>
+<td>API 키만 있으면 오늘부터 사용 가능</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Gemini Live API</strong>: 기존 텍스트→텍스트 번역과 달리 오디오 스트림을 직접 처리하는 WebSocket 기반 실시간 API. Gemini API 용어노트 참고</li>
+<li><strong>신할라어 (Sinhala)</strong>: 스리랑카 공식어. 데모에서 실시간 전환 테스트에 사용됨 — 비주류 언어까지 포함됐다는 증거</li>
+<li><strong>AI Studio (Google)</strong>: Google의 브라우저 기반 Gemini API 테스트 환경 (Anthropic의 Workbench에 해당)</li>
+<li><strong>Live Dubbing</strong>: 오디오 스트림을 실시간으로 다른 언어 음성으로 대체하는 기술 — 자막이 아닌 음성 교체</li>
+<li><strong>Google Meet Private Preview</strong>: 화상회의에 실시간 번역 통합 예정, 아직 비공개 미리보기 단계</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<ol>
+<li>모델이 <strong>이미 Google 번역(Google Translate) 내부에서 사용</strong> 중이었고, 이번에 <strong>개발자 API로 외부 공개</strong>되는 것 — 완전 신모델이 아닌 내부 모델의 API 개방.</li>
+<li>iOS·Android Google Translate 앱에서 <strong>헤드폰 연결 시</strong> Live Translate 체험 가능 — 지금 당장 써볼 수 있음.</li>
+<li><strong>Google Meet 비공개 미리보기</strong> 진행 중 — 화상회의 실시간 번역 통합이 임박.</li>
+<li>발표 세션 데모에서 <strong>청중이 언어를 자유롭게 선택</strong> — 발표자가 세션 생성 후 URL/QR 공유, 각 언어마다 새 Live API 세션이 개별 생성됨.</li>
+<li>언어 전환 데모: 영어 → 일본어 → 스페인어 → 독일어 → 신할라어 순서로 전환. <strong>별도 설정 없이 자동 감지</strong>.</li>
+<li>화자가 강조한 품질 포인트: "no choppiness, no artificial pauses — flows like a completely natural language switch" (끊김 없음, 인위적 멈춤 없음, 완전히 자연스러운 전환).</li>
+</ol>
+</blockquote>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>제품 발표</td>
+<td>Gemini 3.5 Live Translate, 개발자 API 공개. 70개+ 언어, Google Translate 내부 모델</td>
+</tr>
+<tr>
+<td>2</td>
+<td>데모 1 — 라이브 더빙</td>
+<td>브라우저 탭(Google I/O 키노트) 오디오를 힌디어로 실시간 더빙</td>
+</tr>
+<tr>
+<td>3</td>
+<td>데모 2 — 발표 세션</td>
+<td>QR/URL로 청중 초대, 각자 원하는 언어로 청취. 영어→일본어→스페인어→독일어→신할라어 자동 전환</td>
+</tr>
+<tr>
+<td>4</td>
+<td>사용 경로</td>
+<td>Gemini API, AI Studio, Google Translate(iOS/Android), Google Meet(비공개 프리뷰)</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 제품 발표 — Gemini 3.5 Live Translate API 공개</h2>
+<p>Google이 <span style="color:#ef6c00; font-size:1.1em"><strong>Gemini 3.5 Live Translate</strong></span>를 개발자 API로 공개했다. 이 모델은 음성-음성(speech-to-speech) 실시간 번역에 특화돼 있으며, 이미 Google 번역 앱 내부에서 동작하고 있던 모델을 외부 API로 개방한 것이다.</p>
+<p>지원 언어는 입력·출력 모두 <strong>70개 이상</strong>, 오늘부터 바로 통합 가능하다.</p>
+<h2>2. 데모 1 — 라이브 더빙 (탭 오디오 번역)</h2>
+<p>브라우저 탭의 오디오 스트림을 API로 흘려보내 실시간으로 다른 언어 음성으로 출력하는 시나리오. 데모에서는 Google I/O 키노트 영상을 <strong>힌디어</strong>로 실시간 더빙했다.</p>
+<p>이 방식으로 활용 가능한 시나리오:
+- 외국어 웨비나·유튜브를 모국어 음성으로 실시간 청취
+- OTT 컨텐츠 실시간 더빙 프로토타이핑
+- 기업 내 다국어 방송 시스템</p>
+<h2>3. 데모 2 — 발표 세션 다국어 동시 청취</h2>
+<p>발표자가 한 명이더라도 다국어 청중을 동시에 서비스할 수 있는 세션 구조다:</p>
+<ol>
+<li>발표자가 세션 생성 → URL 또는 QR 코드 획득</li>
+<li>청중이 QR 스캔 후 <strong>원하는 언어 선택</strong></li>
+<li>각 언어마다 독립적인 Live API 세션이 백엔드에서 생성됨</li>
+<li>발표자가 언어를 전환해도 자동 감지 — 별도 설정 불필요</li>
+</ol>
+<p>데모에서 실시한 언어 전환 순서: 영어 → 일본어 → 스페인어 → 독일어 → 신할라어 → 일본어로 복귀. 모든 전환이 자동으로 인식됐다.</p>
+<p>번역 품질: <span style="font-size:1.1em"><strong>끊김 없는 자연스러운 흐름</strong></span> — 인위적인 멈춤이나 어색함 없이 원어처럼 들린다고 화자가 강조.</p>
+<h2>4. 사용 경로 및 접근 방법</h2>
+<table>
+<thead>
+<tr>
+<th>채널</th>
+<th>상태</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gemini API</td>
+<td>공개</td>
+<td>오늘부터 개발자 통합 가능</td>
+</tr>
+<tr>
+<td>AI Studio</td>
+<td>공개</td>
+<td>브라우저에서 바로 테스트</td>
+</tr>
+<tr>
+<td>Google Translate (iOS/Android)</td>
+<td>공개</td>
+<td>헤드폰 연결 후 사용</td>
+</tr>
+<tr>
+<td>Google Meet</td>
+<td>비공개 프리뷰</td>
+<td>아직 일반 공개 아님</td>
+</tr>
+</tbody>
+</table>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Gemini Live API 문서 확인 — 음성-음성 번역 세션 구조 파악</li>
+<li>[ ] AI Studio에서 Live Translate 직접 테스트</li>
+<li>[ ] 70개 언어 목록 확인 — 업무에서 필요한 언어 포함 여부</li>
+<li>[ ] 발표 세션 데모 구조 (QR 초대 + 다국어 세션) 재현 가능 여부 검토</li>
+<li>[ ] Google Meet 비공개 프리뷰 신청 여부 확인</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR · Google 실시간 번역 모델 Gemini 3.5 Live Translate를 소개합니다 · https://www.youtube.com/watch?v=7QedeAMrBgk · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요, 여러분.</p>
+<p>오늘 저희는 <span style="color:#ef6c00; font-size:1.1em"><strong>Gemini 3.5 Live Translate</strong></span>를 출시하게 됐습니다. 원활한 음성-음성 번역(speech-to-speech translation)을 위해 개발된 최신 모델입니다.</p>
+<p>이미 Google 번역(Google Translate) 내에서 이 기능을 지원하고 있었는데, 이제 이 기능을 API를 통해 개발자들에게 직접 제공하게 됐습니다. 오늘부터 입력과 출력 모두 70개 이상의 지원 언어에 걸쳐 실시간 번역을 통합할 수 있습니다.</p>
+<p>두 가지 데모를 통해 어떤 일이 가능한지 보여드리겠습니다.</p>
+<p><strong>[데모 1 — 라이브 더빙]</strong></p>
+<p>첫 번째 데모는 라이브 더빙(live dubbing) 경험입니다. 여기서는 API를 사용해 브라우저 탭에서 번역된 오디오를 직접 스트리밍하고 있습니다. Google I/O 키노트를 힌디어로 들어보겠습니다.</p>
+<p><em>(힌디어 번역 재생 — 원문: "What's really incredible is how people are using our AI...")</em></p>
+<p>[번역된 힌디어 음성]</p>
+<p><em>(학생들의 Gemini 앱 활용, 음악가·아티스트의 Lyria·Veo 사용, 개발자들의 코딩 내용이 힌디어로 번역됨)</em></p>
+<p>저는 Gemini 3.5 Live Translate입니다.</p>
+<p>제 부모님은 의사입니다. 최근 저는 Gemini를 활용해 부모님의 진료 시간[?일정/자료]을 이해하고 있습니다.</p>
+<p><strong>[데모 2 — 발표 세션 실시간 번역]</strong></p>
+<p>두 번째 데모는 강연과 발표를 위한 실시간 번역입니다. 다양한 언어를 사용하는 국제 청중에게 발표를 한다고 가정해봅시다.</p>
+<p>발표자로서 새 세션을 만들고, 마이크 오디오를 캡처할 수 있습니다. 그러면 참석자들이 스마트폰으로 스캔할 수 있는 URL 또는 QR 코드를 받게 됩니다. 참석자들은 세션에 참여해 자신이 원하는 언어로 청취를 시작할 수 있습니다.</p>
+<p>먼저 일본어로 시작해봅시다.</p>
+<p>사용자가 새로운 언어로 청취를 시작하면, 저희는 Live API로 새 세션을 설정합니다. 모델은 70개 이상의 언어 간 번역을 지원합니다.</p>
+<p>타(Tar), 데모를 좀 더 진행해서 언어를 몇 개 더 추가해볼까요?</p>
+<p>좋아요, 스페인어도 추가해봅시다.</p>
+<p>얼마나 유용할 수 있는지 상상이 되시죠.</p>
+<p>이제 독일어로 전환합니다.</p>
+<p>모델이 언어 전환을 자동으로 인식합니다. 별도로 설정할 필요가 없습니다.</p>
+<p>제가 신할라어(Sinhala)로 말할 때 신할라어로 말하는 내용이 별도 설정 없이 영어로 번역됩니다. 그리고 번역이 얼마나 자연스럽게 들리는지 들어보세요. 끊김도 없고, 인위적인 멈춤도 없습니다. 완전히 자연스러운 언어 전환처럼 흐릅니다.</p>
+<p>이제 일본어 세션으로 돌아갑니다.</p>
+<p>이 모델은 현재 Gemini API와 AI Studio에서 사용 가능합니다. 헤드폰을 연결하면 iOS·Android의 Google 번역에서도 사용해볼 수 있으며, Google Meet에서도 비공개 미리보기(private preview)로 출시하고 있습니다. 여러분이 무엇을 만드실지 기대됩니다.</p>
+</details>
+</body></html>

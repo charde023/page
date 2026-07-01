@@ -1,0 +1,394 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Claude Fable 5를 Opus와 GPT 5.5와 비교 - 놀라운 활용법 6가지</title>
+<meta name="description" content="Fable 5(Anthropic 최상위 mythos급 모델)를 Opus 4.8·GPT-5.5 Codex와 6가지 실전 태스크로 비교 — 게임·3D·랜딩페이지·대시보드·앱·뮤직비주얼라이저에서 Fable 5가 한 단계 위임을 실증"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Claude Fable 5를 Opus와 GPT 5.5와 비교 - 놀라운 활용법 6가지</h1>
+<div class="meta">원작자 RoboNuggets · Robo Labs / Robo Nuggets 커뮤니티 · 업로드 2026-06-13 · 16.4분 · <a href="https://www.youtube.com/watch?v=PB6Nc2GT5gg" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Claude Fable 5를 Opus와 GPT 5.5와 비교 - 놀라운 활용법 6가지</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Anthropic의 mythos급 신모델 Fable 5는 Opus 4.8 대비 원샷 퀄리티가 크게 향상됐지만, 비용이 2배이므로 중요 태스크에 선택적으로 써야 한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 RoboNuggets · Robo Labs · 출처 https://www.youtube.com/@RoboNuggets · 업로드 2026-06-13 · 16.4분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fable 5 = mythos급 4번째 티어</td>
+<td>Haiku·Sonnet·Opus 위의 새 레이어 — 모델 선택 전략이 바뀜</td>
+<td>Opus가 최상위가 아님을 인지해야</td>
+</tr>
+<tr>
+<td>mythos vs Fable 차이</td>
+<td>사이버보안 오용 방지 필터 여부</td>
+<td>mythos는 보안 파트너 전용, Fable은 일반 공개</td>
+</tr>
+<tr>
+<td>비용 구조</td>
+<td>$10/M input, $50/M output — Opus의 2배</td>
+<td>무분별한 사용 시 비용 폭발</td>
+</tr>
+<tr>
+<td>원샷 게임/3D 생성</td>
+<td>Fable 5는 사운드·물리·검증까지 자체 처리</td>
+<td>복잡한 인터랙티브 결과물을 단일 프롬프트로</td>
+</tr>
+<tr>
+<td><code>command loop</code> 패턴</td>
+<td>모델에게 자체 검증 루프 실행을 강제 — 30~40분 자율 QA</td>
+<td>장기 세션에서 품질 보증 수단</td>
+</tr>
+<tr>
+<td>AI vibe-coded 탈출 전략</td>
+<td>퍼플 그라디언트 등 AI 티가 나는 결과물은 사람 취향+검수로 보완</td>
+<td>모델만 믿으면 여전히 AI티 남음</td>
+</tr>
+<tr>
+<td>Fable 5의 "제품 완성도 추론"</td>
+<td>프롬프트 없이 PDF 내보내기 기능 등을 자체 추가</td>
+<td>브리프를 해석해 기대 기능을 알아서 구현</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>mythos-class 모델</strong>: Anthropic 내부 분류 — Opus 위에 있는 최상위 능력 티어. Claude 3 시절의 Opus 포지션과 다름.</li>
+<li><strong>Fable 5 가용 기간</strong>: 2026-06-22까지 Pro/Max/Team/Enterprise 플랜에 포함. 이후 usage credits(종량제) 필요.</li>
+<li><strong>command loop</strong>: 화자가 Fable에게 "네 작업을 처음부터 끝까지 걸어가며 검증해" 식의 루프 지시를 프롬프트로 전달 → 모델이 브라우저를 직접 열고 자율 테스트. 정확한 구현 방식은 불명확 [?command loop].</li>
+<li><strong>one-shot / 원샷 게임</strong>: 단 하나의 프롬프트로 HTML 파일 하나를 만들어 브라우저에서 바로 실행 가능한 완성형 게임을 만드는 방식.</li>
+<li><strong>vibe-coded AI tells</strong>: AI가 만든 결과물에서 반복적으로 나타나는 패턴 (퍼플 그라디언트, 중앙 정렬 오류 등) — 클라이언트가 'AI가 만든 것'임을 알아채는 단서.</li>
+<li><strong>Codex</strong>: OpenAI GPT-5.5 기반 코드 생성 도구. 이미지 생성 가능하나 디자인 완성도는 낮음.</li>
+<li><strong>Robo Nuggets 커뮤니티</strong>: 화자가 운영하는 AI 에이전트 서비스화 교육 커뮤니티 (skool.com).</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<ol>
+<li>Fable 5 비용: <strong>input $10/백만 토큰, output $50/백만 토큰</strong> — Opus 4.8의 정확히 2배.</li>
+<li><strong>2026-06-22 이후</strong> 유료 플랜에서 제외, usage credits 별도 구매 필요 (영상 촬영 기준 12~13일 남음).</li>
+<li>3D 마법학교 테스트: Fable 5가 30~40분 동안 브라우저를 자율 제어하며 <code>Lumos</code>·<code>Leviosa</code> 등 주문 검증 → Opus 4.8은 <code>Wingardium Leviosa</code> 명령이 실제로 동작 안 함, 접근 불가 구역 존재 → "Opus 4.8 불합격" 판정.</li>
+<li>대시보드 테스트에서 Fable 5는 <strong>프롬프트 지시 없이도 PDF 내보내기 버튼을 자체 추가</strong>, 실제 PDF 포맷까지 잡아줌.</li>
+<li>랜딩페이지 결과: Fable 5가 Opus 대비 <strong>10~15% 디자인 개선</strong>에 불과 — 둘 다 AI 티(퍼플 그라디언트) 여전. 사람 디자인 시스템 개입 필수.</li>
+<li>Opus 4.8 대시보드 단점: 데이터 제목 텍스트 <strong>정렬 오류(off center)</strong> — 프로 납품 시 용납 불가 수준.</li>
+<li>Codex(GPT-5.5)는 랜딩페이지에서 <strong>이미지 자동 생성</strong> 가능 — Fable/Opus 대비 차별점이나 디자인 전체 퀄리티는 낮음.</li>
+<li>원샷 게임: Fable 5는 <strong>대시 기동·사운드 이펙트·이펙트 폴리싱</strong>까지 자동 포함. Opus 4.8도 작동하지만 이펙트 없음.</li>
+<li>화자 결론: <strong>"중요한 작업에는 Fable 5, 일상 작업은 Opus 4.8"</strong> 이분법적 전략 권장.</li>
+<li>영상 촬영 당일 아침(same morning) 6가지 테스트 수행 — 즉각적 리뷰.</li>
+</ol>
+</blockquote>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Fable 5 모델 개요</td>
+<td>mythos 4번째 티어, 비용 2배, 6월 22일까지 구독 포함</td>
+</tr>
+<tr>
+<td>2</td>
+<td>테스트 1 — 원샷 게임</td>
+<td>Fable 5 &gt; Opus 4.8 &gt;&gt; GPT-5.5 Codex (사운드·폴리시 차이)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>테스트 2 — 3D 탐험 월드</td>
+<td>Fable 5 통과, Opus 4.8 불합격 (주문·이동 검증 실패)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>테스트 3 — 랜딩페이지</td>
+<td>둘 다 AI 티 잔존, 사람 검수 필수, Codex는 이미지 생성 가능</td>
+</tr>
+<tr>
+<td>5</td>
+<td>테스트 4 — 대시보드</td>
+<td>Fable 5: 정렬 완벽 + PDF 내보내기 자체 추가, Opus: 정렬 오류</td>
+</tr>
+<tr>
+<td>6</td>
+<td>테스트 5 — 무드 저널 앱</td>
+<td>Fable 5: 아이콘·12주 그리드뷰, Opus: 달력뷰 (스타일 차이)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>테스트 6 — 뮤직 비주얼라이저</td>
+<td>Fable 5: 미니멀·드래그앤드롭 오디오, Opus: 퍼플 그라디언트 기본값</td>
+</tr>
+<tr>
+<td>8</td>
+<td>최종 정리</td>
+<td>Fable 5는 취향 적용 가능, 그러나 랜딩페이지 등 디자인 판단 작업은 사람 보완 필수</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. Fable 5 모델 개요 — 알아야 할 4가지</h2>
+<p>Anthropic이 "mythos급" 최상위 모델을 일반 공개했다. 이름은 <strong>Fable 5</strong>. 기존 Haiku → Sonnet → Opus 3단계 위에 4번째 레이어를 추가한 것으로, 원래 4월에 사이버보안 파트너에게만 공개된 mythos 모델을 <span style="color:#ef6c00; font-size:1.1em"><strong>사이버보안 오용 방지 필터를 추가해 일반 공개한 버전</strong></span>이다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>수치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Input 비용</td>
+<td>$10 / 백만 토큰</td>
+</tr>
+<tr>
+<td>Output 비용</td>
+<td>$50 / 백만 토큰</td>
+</tr>
+<tr>
+<td>Opus 4.8 대비</td>
+<td>2배 비쌈</td>
+</tr>
+<tr>
+<td>구독 포함 기간</td>
+<td>~2026-06-22 (Pro/Max/Team/Enterprise)</td>
+</tr>
+<tr>
+<td>이후</td>
+<td>usage credits 별도 구매 필요</td>
+</tr>
+</tbody>
+</table>
+<p>화자의 판단: <strong>벤치마크는 참고만 하되, 실제 사용 패턴으로 직접 검증해야 한다.</strong></p>
+<hr>
+<h2>2. 테스트 1 — 원샷 탑다운 슈터 게임</h2>
+<p><strong>프롬프트 요지</strong>: 탑다운 슈터 게임, HTML 파일 1개, 이동·사격·적·다양한 무기, 시각적으로 살아있게.</p>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opus 4.8</td>
+<td>작동함, 복셀 캐릭터·다양한 적·무기 포함, 기능적으로 합격</td>
+</tr>
+<tr>
+<td><span style="color:#ef6c00; font-size:1.1em"><strong>Fable 5</strong></span></td>
+<td>대시 기동, 사운드 이펙트, 그리드 글로우 폴리싱, "wrecked" 게임오버 이펙트 — 체감 품질 크게 위</td>
+</tr>
+<tr>
+<td>GPT-5.5 Codex</td>
+<td>"Vox Rush" 작동, 기능 OK, 사운드 없음, 폴리시 현저히 낮음</td>
+</tr>
+</tbody>
+</table>
+<p><strong>결론</strong>: Fable 5가 명확한 우위. 원샷 게임 제작에는 Fable 5가 표준.</p>
+<hr>
+<h2>3. 테스트 2 — 브라우저 3D 탐험 월드</h2>
+<p><strong>프롬프트 요지</strong>: 마법학교 성을 탐험하는 3D 브라우저 게임, 홀·계단·마법 주문 동작.</p>
+<p>화자는 <strong><code>command loop</code></strong> 를 추가 — 모델이 성 전체를 스스로 걸어다니며 검증하도록 강제. Fable 5는 약 30~40분간 브라우저를 자율 제어하며 테스트했다.</p>
+<ul>
+<li><strong>Fable 5 (Castle of Whispers)</strong>: <code>Lumos</code>(조명), <code>Leviosa</code>(부양) 주문 실제 동작, 숨겨진 문 열기, 초상화 SVG 포함. <strong>합격</strong>.</li>
+<li><strong>Opus 4.8</strong>: 주문이 실행은 되지만 <code>Lumos</code> 후 어둠 유지, <code>Wingardium Leviosa</code> 부양 안 됨, 일부 구역 접근 불가 지형 오류. <strong>불합격</strong>.</li>
+</ul>
+<p><strong>결론</strong>: 다수 기능 검증이 필요한 앱·게임이라면 Fable 5가 확실한 선택.</p>
+<hr>
+<h2>4. 테스트 3 — AI SaaS 랜딩페이지</h2>
+<p><strong>프롬프트 요지</strong>: AI 클라이언트 커뮤니케이션 툴 "Rover"의 랜딩페이지, HTML 1개, 최고 수준의 디자인.</p>
+<ul>
+<li><strong>Opus 4.8 vs Fable 5</strong>: Fable 5가 약 10~15% 낫지만, <strong>둘 다 퍼플 그라디언트·AI 티 여전</strong>. 수동 검수 필수.</li>
+<li>Fable 5의 차별점: 인박스 뷰 컴포넌트 자체 추가, 기능 섹션·증언·가격 페이지 구성 더 자연스러움.</li>
+<li><strong>Codex</strong>: 이미지 자동 생성 가능, 덜 템플릿화된 느낌, 디자인 개선 여지 많음.</li>
+</ul>
+<p><span style="font-size:1.1em"><strong>핵심 교훈: 아무리 좋은 모델도 디자인 판단 작업에서는 사람 취향+검수가 필수다.</strong></span></p>
+<p>화자는 자체 디자인 시스템을 별도 적용해 합리적인 전문가 수준 랜딩페이지를 만들 수 있었다. codex.com·Robo Nuggets 커뮤니티 홍보 포함.</p>
+<hr>
+<h2>5. 테스트 4 — 세일즈 대시보드</h2>
+<p><strong>프롬프트 요지</strong>: 세일즈 CSV 데이터로 대시보드, 카드·차트·사이드바, 클라이언트에게 팔 수 있는 수준.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Opus 4.8</th>
+<th>Fable 5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>데이터 정확성</td>
+<td>OK (오프라인 검증)</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>텍스트 정렬</td>
+<td><strong>오프센터 오류</strong> — 비전문적</td>
+<td><strong>완벽하게 정렬됨</strong></td>
+</tr>
+<tr>
+<td>전체 폴리시</td>
+<td>보라색 vibe코드 티</td>
+<td>더 전문적</td>
+</tr>
+<tr>
+<td>PDF 내보내기</td>
+<td>없음</td>
+<td><strong>프롬프트 없이 자체 추가</strong>, PDF 레이아웃까지 잡아줌</td>
+</tr>
+</tbody>
+</table>
+<p><strong>결론</strong>: 대시보드는 Fable 5가 클라이언트 납품 수준에 훨씬 가깝다.</p>
+<hr>
+<h2>6. 테스트 5 — 무드 저널 앱</h2>
+<p><strong>프롬프트 요지</strong>: 감정 선택 + 하루 한 줄 기록 + 과거 기록 보존, HTML 1개.</p>
+<ul>
+<li><strong>Fable 5</strong>: 감정별 아이콘, 달·감정 아이콘 시각화, <strong>최근 12주 그리드뷰</strong>, 인터랙션 완성도 높음.</li>
+<li><strong>Opus 4.8</strong>: 달력 뷰, 기능적으로 작동, 스타일 차이 있음.</li>
+<li><strong>Codex</strong>: 라이트모드 기본 폰트, 작동하지만 Fable 5 대비 낮음.</li>
+</ul>
+<p><strong>결론</strong>: Fable 5 우위. Opus가 달력뷰를 선택한 것처럼 UX 방향은 다를 수 있음.</p>
+<hr>
+<h2>7. 테스트 6 — 뮤직 비주얼라이저</h2>
+<p><strong>프롬프트 요지</strong>: 소리에 맞춰 도형과 색이 반응하는 비주얼라이저, 시각적으로 강렬하게.</p>
+<ul>
+<li><strong>Opus 4.8</strong>: 퍼플 그라디언트 기본값, 여러 시각화 옵션 제공.</li>
+<li><strong>Fable 5</strong>: 미니멀 디자인("Pick a sound source, then sit back"), <strong>드래그앤드롭 오디오 파일 지원</strong>, 팔레트 색상 변경, 풀스크린 가능. 다만 시각화 옵션 선택 없음.</li>
+<li><strong>Codex</strong>: 시각화 옵션 버튼은 있지만 실제로 변환이 안 됨 (버그).</li>
+</ul>
+<p><strong>결론</strong>: 디자인·기능 완성도는 Fable 5, 옵션 다양성은 Opus.</p>
+<hr>
+<h2>8. 최종 정리 — 언제 Fable 5를 쓸 것인가</h2>
+<table>
+<thead>
+<tr>
+<th>사용 기준</th>
+<th>권장 모델</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>원샷 게임·3D 인터랙티브 결과물</td>
+<td><strong>Fable 5</strong></td>
+</tr>
+<tr>
+<td>다수 기능 자체 검증이 필요한 복잡 앱</td>
+<td><strong>Fable 5</strong></td>
+</tr>
+<tr>
+<td>대시보드·앱 납품 수준 퀄리티</td>
+<td><strong>Fable 5</strong></td>
+</tr>
+<tr>
+<td>디자인 판단이 중요한 랜딩페이지</td>
+<td>Fable 5 초안 + <strong>사람 검수</strong></td>
+</tr>
+<tr>
+<td>일반 코딩·반복 작업</td>
+<td>Opus 4.8 (비용 효율)</td>
+</tr>
+<tr>
+<td>이미지 자동 생성 필요</td>
+<td>Codex (GPT-5.5)</td>
+</tr>
+</tbody>
+</table>
+<p>화자의 핵심 메시지: <strong>"Fable 5는 취향(taste)을 브리프에 적용하기 시작했다. 하지만 사람의 판단과 결합할 때 비로소 진짜 전문적인 결과물이 나온다."</strong></p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 현재 사용 중인 모델이 Opus인지 확인 — Fable 5로 전환 효과가 클 작업 목록 만들기</li>
+<li>[ ] <code>command loop</code> 패턴 프롬프트 구체화해서 실험 (자율 검증 루프)</li>
+<li>[ ] 대시보드/앱 납품 시 Fable 5 원샷 → 사람 디자인 검수 워크플로 정립</li>
+<li>[ ] 2026-06-22 이전에 Fable 5 중요 작업 우선 소화</li>
+<li>[ ] 랜딩페이지 등 디자인 판단 필요 작업에 자체 디자인 시스템 문서화</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Claude Fable 5를 Opus와 GPT 5.5와 비교해봤습니다: 놀라운 활용법 6가지 · https://www.youtube.com/watch?v=PB6Nc2GT5gg · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>Anthropic의 첫 번째 mythos급 모델이 나왔습니다. 이름은 Fable 5입니다. 오늘 아침 6가지 테스트를 진행해, 토큰 사용량 2배가 정말 가치 있는지 확인해봤습니다. Opus 4.8과 GPT-5.5와 비교했고, 이 모델이 열어주는 새로운 가능성을 실제로 발견했습니다.</p>
+<p>먼저 알아야 할 4가지를 짚어드리겠습니다.</p>
+<p>첫째, Anthropic이 이 모델을 "일반 사용에 안전한 mythos급 모델"로 설명하고 있습니다. 주석을 보면 mythos급 모델은 Opus 위에 위치한 Claude 모델 티어라고 나와 있습니다. 기존에 Haiku, Sonnet, Opus의 3단계가 있었다면, 이제 4번째 레이어가 생긴 셈입니다.</p>
+<p>둘째, 몇 주 전에 4월에 사이버보안 파트너 한정으로 공개됐던 mythos 모델을 리브랜딩해서 Fable 5로 일반 공개했습니다. 두 모델의 차이는 Fable은 사이버보안 오용 시도를 감지해 거부한다는 점입니다. 벤치마크는 4월 미리보기보다 소폭 개선됐습니다. 직접 확인해보세요. 다만 벤치마크는 참고 정도로만 — 우리 각자 사용 방식이 다르니까요.</p>
+<p>셋째, Fable 5는 가장 강력하지만 가장 비싼 모델이기도 합니다. 입력 $10/백만 토큰, 출력 $50/백만 토큰으로 Opus의 2배 비용입니다. Max 플랜이 아니라면 신중하게 사용해야 합니다.</p>
+<p>넷째, Fable 5는 6월 22일까지만 구독에 포함됩니다. 즉 지금부터 12~13일 남았습니다. Anthropic 공지에 따르면 그 이후로는 usage credits(종량제 충전) 방식으로만 사용 가능하다고 합니다. Pro, Max, Team, Enterprise 플랜에 포함된 기간이 6월 22일까지이고, 6월 23일부터는 구독 외 추가 충전이 필요합니다.</p>
+<p>자, 그럼 이 모델이 실제로 어떻게 동작하는지 6가지 테스트로 확인해보겠습니다. 비교 대상은 Opus 4.8, 그리고 시장에서 가장 인기 있는 모델 중 하나인 GPT-5.5(Codex)입니다.</p>
+<p><strong>테스트 1 — 원샷 탑다운 슈터 게임</strong></p>
+<p>프롬프트: "탑다운 슈터 게임을 만들어줘. HTML 파일 하나, 브라우저에서 바로 열리게. 이동과 사격, 적, 기본 게임 기능 포함. 조명·깊이·시각 효과를 최대한 살려서." 결과를 비교해봤습니다.</p>
+<p>Opus 4.8은 꽤 잘 만들었습니다. 복셀 캐릭터, 다양한 적, 다양한 무기가 포함돼 기능적으로 문제없었습니다. 꽤 좋은 기준선입니다.</p>
+<p>Fable 5는 달랐습니다. 전체적인 룩앤필이 훨씬 완성도 있고, 사운드 이펙트도 훨씬 뛰어났습니다. 그리드 사이의 글로우 효과도 더 정교합니다. 대시 기동도 가능하고요. 맞았을 때 이펙트도 훨씬 세련됐고, 게임 오버 시 "wrecked" 메시지가 뜹니다. 이게 단 하나의 프롬프트에서 나온 결과입니다. 정말 제대로 된 게임이라고 할 수 있습니다.</p>
+<p>Codex(GPT-5.5)는 "Vox Rush"라는 이름의 게임을 만들었습니다. 기능은 작동하지만 사운드 이펙트가 없고, Fable 5의 완성도와 비교하면 훨씬 아래입니다. 원샷 게임에서는 Fable 5가 표준을 세웠다고 할 수 있습니다.</p>
+<p><strong>테스트 2 — 브라우저 3D 탐험 월드 (마법학교)</strong></p>
+<p>프롬프트: "학생이 마법학교 성을 탐험하는 브라우저 3D 체험. 홀을 걷고, 계단을 오르고, 마법 주문 여러 개가 실제로 작동해야 함." 여기서 저는 <code>command loop</code>를 추가로 지시했습니다 — 모델이 성 전체를 직접 걸어다니며 모든 것이 검증됐는지 확인하도록. 이 테스트는 30~40분 동안 실행됐고, 모델이 직접 브라우저를 열어 게임을 테스트하는 모습이 꽤 인상적이었습니다.</p>
+<p>Fable 5 결과: "Castle of Whispers"라는 이름의 3D 성. 들어가면 "성을 탐험하세요. 그레이트홀은 동쪽, 탑 계단은 북쪽"이라는 안내가 나옵니다. <code>Lumos</code> 주문을 입력하면 지팡이로 조명이 켜지고, <code>Leviosa</code>를 입력하면 물체가 부양합니다. 숨겨진 문도 열립니다. 단일 프롬프트와 몇 분 작업으로 이 전체 3D 환경을 만들었습니다. 그래픽이 최상은 아니지만, 로컬에서 실행되는 것치고는 상당한 퀄리티입니다.</p>
+<p>Opus 4.8 결과: 방식은 비슷하지만 주문이 실제로 작동하지 않습니다. <code>Lumos</code> 후에도 여전히 어둡고, <code>Wingardium Leviosa</code>도 부양이 되지 않았습니다. 건너갈 수 없는 구역이 있는데도 자체 검증이 되지 않았습니다. Opus 4.8은 이 테스트를 통과하지 못했습니다.</p>
+<p>여러 기능을 검증해야 하는 앱이나 게임이라면 Fable 5가 확실히 한 단계 위입니다.</p>
+<p><strong>테스트 3 — AI SaaS 랜딩페이지</strong></p>
+<p>프롬프트: "'Rover'라는 AI 툴의 풀 랜딩페이지, HTML 파일 하나. 이 소프트웨어는 에이전시와 서비스 비즈니스의 클라이언트 커뮤니케이션을 처리하는 AI 오퍼레이터입니다. 디자인을 최대한 잘 만들어줘."</p>
+<p>결과는 솔직히 아쉬웠습니다. Opus 4.8과 Fable 5 모두를 봤는데, 아무리 mythos급 모델이라도 AI가 만든 티를 완전히 피하지는 못했습니다. Fable 5가 약 10~15% 낫지만, 두 결과물 모두 퍼플 그라디언트가 남아있고 태그라인도 워크샵이 더 필요한 수준입니다.</p>
+<p>그래도 Fable 5가 개선된 점: 인박스 뷰 컴포넌트가 자연스럽게 포함됐고, 기능 섹션·절차·증언·가격 페이지 구성이 더 적절합니다.</p>
+<p>Codex 결과는 이미지 자동 생성이 가능하고, 덜 템플릿화된 느낌이지만 디자인 완성도는 여전히 갈 길이 멉니다.</p>
+<p>저는 자체 디자인 시스템을 적용해 더 전문적인 랜딩페이지를 만들 수 있었습니다. 이런 내용을 더 배우고 싶다면 Robo Nuggets 커뮤니티에서 다루고 있습니다(링크 참조).</p>
+<p><strong>테스트 4 — 세일즈 대시보드</strong></p>
+<p>Opus와 Fable에게 세일즈 CSV 데이터로 대시보드를 만들라고 했습니다. 카드, 차트, 사이드바 포함, 실제 클라이언트에게 팔 수 있는 수준으로.</p>
+<p>Opus 4.8: 예상대로 한 번에 보라색 vibe코드 티가 납니다. 그리고 항상 보이는 문제 — 데이터 제목 텍스트가 심하게 오프센터입니다. 엔터프라이즈 납품에는 용납할 수 없는 수준이에요. 데이터 정확성은 오프라인 검증 결과 맞았지만, 이런 정렬 문제를 잡으려면 추가 가이딩이 필요합니다.</p>
+<p>Fable 5: 디자인과 폰트는 취향에 따라 더 개선할 수 있지만, 기본적으로 모든 텍스트가 제대로 정렬돼 있고 전반적으로 더 전문적입니다. 그리고 프롬프트에 요청하지 않았는데도 PDF 내보내기 기능을 자체적으로 추가했습니다. 대시보드라는 걸 파악하고, 클라이언트에게 주간·월간 리포트를 보내야 할 것이라고 판단한 것입니다. 실제로 내보낸 PDF 레이아웃도 깔끔하게 잡혀 있어 클라이언트에게 바로 보낼 수 있는 수준입니다.</p>
+<p><strong>테스트 5 — 무드 저널 앱</strong></p>
+<p>프롬프트: "무드 저널 앱, HTML 파일 하나. 현재 감정을 선택하고 하루에 한 줄 메모. 과거 기록이 재방문 시 유지돼야 함."</p>
+<p>Opus 4.8: 달력 뷰, 기능은 작동합니다.</p>
+<p>Fable 5: 보기 좋은 감정 아이콘, 달 아이콘, 로그된 날 목록, 아이콘 클릭 인터랙션이 잘 작동, 최근 12주 그리드뷰 포함. 전반적으로 더 완성도 있습니다.</p>
+<p>Codex: 라이트모드 기본 폰트와 스타일, 작동은 하지만 Fable 5에 비해 훨씬 아래입니다. Anthropic에 박수를 보냅니다.</p>
+<p><strong>테스트 6 — 뮤직 비주얼라이저</strong></p>
+<p>프롬프트: "소리에 맞춰 도형과 색이 춤추는 뮤직 비주얼라이저, 시각적으로 최대한 강렬하게."</p>
+<p>Opus 4.8: 파란색·보라색 그라디언트 기본값. 여러 시각화 옵션 제공.</p>
+<p>Fable 5: 미니멀 디자인. "Pick a sound source, then sit back"이라는 안내. 오디오 파일을 드래그앤드롭하면 실제로 재생되며 비주얼이 반응합니다. 팔레트 색상 변경, 풀스크린 가능. 다만 복수 시각화 옵션은 없습니다.</p>
+<p>Codex: 시각화 옵션 버튼은 있지만 실제로 비주얼이 변경되지 않는 버그가 있습니다.</p>
+<p><strong>최종 정리</strong></p>
+<p>첫째, Fable 5는 Opus 4.8 대비 확실히 큰 발전입니다. 제대로 완성해야 할 때, 최고 수준이 필요할 때는 비용과 토큰을 쓸 가치가 있습니다. 많은 테스트에서 Fable 5가 단순히 보라색 그라디언트를 기본값으로 내뱉는 것이 아니라, 받은 브리프에 취향을 적용하기 시작했습니다.</p>
+<p>단, 사용 목적에 따라 다릅니다. 랜딩페이지 테스트처럼 모델을 완전히 믿으면 AI 티가 여전히 남습니다. 이 모델들에서 항상 맞는 조합은 사람의 취향과 판단을 더해 모델 출력을 훨씬 나은 결과물로 발전시키는 것입니다.</p>
+<p>시청해주셔서 감사합니다. 다음에 또 만나겠습니다.</p>
+</details>
+</body></html>

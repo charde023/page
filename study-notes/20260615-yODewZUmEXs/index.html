@@ -1,0 +1,222 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Google 엔지니어들은 정말 바이브 코딩을 할까요</title>
+<meta name="description" content="전직 Google 시니어 엔지니어가 Google 내부 AI 코딩 현실(2024~2026)을 분석 — 테크 아일랜드·코드 책임 문화가 바이브 코딩 도입을 막아왔으나, 리더십의 속도 압박이 결국 이기는 방향으로 흘러가고 있다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Google 엔지니어들은 정말 바이브 코딩을 할까요</h1>
+<div class="meta">원작자 Alberta · 전직 Google 시니어 소프트웨어 엔지니어 (YouTube 팀) · 업로드 2026-06-15 · 13.2분 · <a href="https://www.youtube.com/watch?v=yODewZUmEXs" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Google 엔지니어들은 정말 바이브 코딩을 할까요</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>전직 Google 유튜브 팀 시니어 엔지니어가 내부 AI 코딩 문화의 실태를 폭로 — 테크 아일랜드와 코드 책임 문화가 장벽이었으나, 2026년 현재 리더십의 속도 우선주의가 신중파를 밀어내는 중.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Alberta · 전직 Google 시니어 SWE (YouTube 팀, 6.5년) · 추정 출처 https://instagram.com/alberta.tech · 업로드 2026-06-15 · 13분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>바이브 코딩 vs 에이전틱 엔지니어링</td>
+<td>용어 혼용이 실제 업무 논의를 흐림</td>
+<td>바이브코딩 = 코드 내용 모름, 에이전틱 = 에이전트 활용하되 검토 수반</td>
+</tr>
+<tr>
+<td>Google 테크 아일랜드</td>
+<td>독점 내부 프레임워크가 AI 코딩 효과를 제한</td>
+<td>외부 모델이 비공개 프레임워크 코드를 생성하면 컴파일 불가</td>
+</tr>
+<tr>
+<td>Sundar의 "25% AI 생성" 발언</td>
+<td>실상은 탭 자동완성 수락이 대부분</td>
+<td>숫자의 의미를 문맥 없이 받아들이면 안 됨</td>
+</tr>
+<tr>
+<td>코드 책임 문화</td>
+<td>AI 슬롭 PR 거부 관행 — 코드 리뷰어가 사람 개입 없는 PR을 통째 반려</td>
+<td>품질과 속도의 구조적 충돌</td>
+</tr>
+<tr>
+<td>2026 방향성</td>
+<td>리더십(속도 파)이 신중파(라인별 검토 파)를 누를 것</td>
+<td>대기업 AI 코딩 전환의 현실적 예측</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>에이전틱 엔지니어링 (Agentic Engineering)</strong> — Andrej Karpathy가 대중화한 용어. 에이전트 AI 시스템을 활용해 실제 엔지니어링을 수행하되, 출력물을 검토·오케스트레이션하는 방식. 바이브 코딩보다 구조적.</li>
+<li><strong>테크 아일랜드 (Tech Island)</strong> — Google 내부에서 모든 소프트웨어를 자체 개발하는 문화. 오픈소스·서드파티 도구 미사용. 외부 AI 도구(Cursor 등) 도입 불가.</li>
+<li><strong>Gemini CLI / Anti-gravity</strong> — 2026년 Google이 내부적으로 밀고 있는 AI 코딩 도구들. 실질적으로 바이브 코딩 계열.</li>
+<li><strong>Fleable Florp</strong> — 화자가 Google 내부 독점 프레임워크를 가리키기 위해 사용한 가명 (실제 이름 미공개).</li>
+<li><strong>Andrej Karpathy</strong> — "바이브 코딩"(2025년 2월)과 "에이전틱 엔지니어링" 양쪽 모두 대중화한 인물. 화자가 "테크 트위터의 에드거 앨런 포"로 표현.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>Sundar Pichai의 "25% AI 생성 코드" 발언은 2024년 말 — 당시 내부 구현 실태는 IDE 내 스마트 탭 자동완성(메서드 반 자동완성)에 불과했다. 숫자는 맞지만 함의가 전혀 다름.</li>
+<li>Google 내부 자동완성은 <strong>함수의 절반만 생성하고 멈추는</strong> 컨텍스트 한계가 있었음 (2024년 시점).</li>
+<li>"AI 슬롭 PR 거부"의 식별 신호: <strong>풀 문장, 완벽한 영문법으로 작성된 PR 설명</strong> → 리뷰어가 사람이 보지 않은 PR임을 즉시 인식하고 통째 반려.</li>
+<li>화자는 Google을 "fired myself(내가 나를 해고했다)"로 표현 — 퇴직이 본인 의지임을 명확히.</li>
+<li>에이전틱 엔지니어링에서 "모든 라인 검토" 원칙은 이상이지만 현실적으로 지켜지지 않음 — 테스트가 통과하면 검토 동기가 급격히 낮아진다고 솔직히 인정.</li>
+<li>독점 프레임워크 문제는 2026년 중반 퇴직 시점에도 완전히 해결되지 않았음 — AI가 컴파일 안 되는 내부 프레임워크 코드를 여전히 생성.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>모두가 바이브 코딩하는 시대</td>
+<td>반대파 엔지니어들도 AI 도구를 인정하기 시작. 단, 대기업은 다른 문제 존재</td>
+</tr>
+<tr>
+<td>2</td>
+<td>바이브 코딩이란 무엇인가</td>
+<td>코드 내용 전혀 모르는 것 = 바이브코딩, 검토 수반 = 에이전틱 엔지니어링</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Claude(클로드)와 OpenAI로 하는 바이브 코딩</td>
+<td>HubSpot·Matt Wolfe의 Claude Code vs Codex 비교 가이드 소개 (협찬)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Google 바이브 코딩 현실 (2024)</td>
+<td>25% AI 코드 = 탭 자동완성. Cursor 같은 외부 도구 사용 불가</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Google 테크 아일랜드</td>
+<td>모든 것 자체 개발 원칙 → AI 코딩 도입 지연의 구조적 원인</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Google 바이브 코딩 현실 (2025)</td>
+<td>툴 개선됐으나, 독점 프레임워크 문제 + 코드 책임 문화가 장벽</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Google 바이브 코딩 현실 (2026)</td>
+<td>Gemini CLI 등 내부 도구 증가. 리더십(속도 우선) vs 엔지니어링 문화(책임 우선) 충돌</td>
+</tr>
+<tr>
+<td>8</td>
+<td>향후 6개월 전망</td>
+<td>속도 우선파(리더십 포함)가 라인별 검토파를 이길 것</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 바이브 코딩 vs 에이전틱 엔지니어링</h2>
+<p><strong>바이브 코딩</strong>의 원래 정의(Andrej Karpathy): 완전히 바이브에 몸을 맡기고 코드가 존재한다는 사실조차 잊는 것. 화자의 실용적 정의: 사용하는 언어가 무엇인지조차 모르는 상태에서 Bolt·Lovable·Claude Code(클로드 코드) 같은 AI 도구로 무언가를 만드는 것.</p>
+<p>일상 대화에서는 이 구분 없이 Claude Code(클로드 코드)·Codex·Gemini CLI 사용 자체를 "바이브 코딩"이라고 부르는 경우가 많다. 이 혼용을 해소하기 위한 정밀한 용어가 <strong>에이전틱 엔지니어링</strong>: 에이전트 AI 시스템을 활용해 실제 엔지니어링을 수행하되, 아웃풋을 검토하고 오케스트레이션하는 방식. "바이브에 완전히 맡기기"도 아니고, "맨손 코딩"도 아닌 중간 지점.</p>
+<h2>2. Google 2024 — AI 코드 25%의 실체</h2>
+<p>Sundar Pichai(순다르 피차이)가 2024년 말 "Google 코드의 25% 이상이 AI 생성"이라고 발표했을 때, 화자는 충격을 받았다. 당시 Google 내부에서 실제로 일어나고 있던 일은:</p>
+<ul>
+<li>내부 IDE(VS Code와 유사)에 스마트 자동완성 탑재</li>
+<li><strong>메서드 전체가 아닌 절반만 생성하고 멈추는</strong> 한계</li>
+<li>사용자는 탭을 눌러 제안을 수락하는 수준</li>
+</ul>
+<p>즉, "25% AI 생성"의 실제 의미는 <strong>탭을 많이 누른다</strong>는 것에 가까웠다. 에이전트가 코드를 쓰는 미래의 이미지와는 거리가 멀었다.</p>
+<h2>3. Google 테크 아일랜드</h2>
+<p>Google은 모든 소프트웨어를 자체 개발하는 문화("Tech Island")를 갖고 있다. 카페 메뉴 소프트웨어조차 Google 내부 팀이 만든다. 이 원칙이 AI 코딩 도입에 미친 영향:</p>
+<ul>
+<li><strong>Cursor 같은 외부 도구 사용 불가</strong> — Google 제품만 사용</li>
+<li><strong>내부 프레임워크("Fleable Florp")가 AI 학습 데이터에 없음</strong> — Google이 소스코드를 잘 지키기 때문에 외부 모델이 내부 프레임워크를 학습하지 못함</li>
+<li>AI가 내부 프레임워크 코드를 생성하면 <strong>세 가지 스타일의 스파게티 코드가 나오고 컴파일 불가</strong></li>
+<li>외부에서 새 AI 도구가 나올 때마다 <strong>수개월 지연 후 내부 동등 도구</strong>가 개발되거나 아예 안 만들어짐</li>
+</ul>
+<p>이 격차로 인해 Google 엔지니어들의 불만이 쌓였다. 내부 포럼에서 특정 도구 접근 권한을 달라며 "안 주면 퇴직하겠다"는 공개 게시물까지 등장했다.</p>
+<h2>4. Google 2025 — 두 가지 장벽</h2>
+<p>Karpathy가 "바이브 코딩"을 코인한 2025년 2월 이후에도 Google 내부에서는 두 가지 장벽이 존재했다.</p>
+<p><strong>장벽 1: 테크 아일랜드</strong>
+내부 프레임워크 문제는 모델 성능 향상과 에이전틱 컨텍스트 조회 기능 개선으로 점차 완화됐지만, 2026년 중반 퇴직 시점까지도 완전히 해소되지 않았다.</p>
+<p><strong>장벽 2: 코드 책임 문화</strong>
+- 자신이 작성하는 코드의 내용을 파악
+- 해당 코드에 책임
+- 모든 라인을 리뷰</p>
+<p>이 문화는 "AI 슬롭 PR"을 원천 차단했다. 식별 신호: <strong>풀 문장·완벽한 영문법으로 작성된 PR 설명</strong> → 사람이 개입하지 않은 것으로 판단, 리뷰어가 통째 반려. YouTube.com에 영향을 주는 코드이기 때문에 이런 엄격함이 합리적이기도 하다.</p>
+<h2>5. Google 2026 — 충돌과 전망</h2>
+<p>2026년에는 Google이 Gemini CLI와 Anti-gravity 등 실질적인 바이브 코딩 도구를 내부에서 밀기 시작했다. 리더십은 "더 빠르게 코딩하라"는 메시지를 내보내고 있다.</p>
+<p>동시에 "코드를 이해하고 책임져야 한다"는 엔지니어링 문화도 여전히 강하다. 두 가지가 공존하는 이상적 세계("AI로 코드를 만들고, 모든 라인을 검토하고, 완전히 이해한다")는 가능하지만, <strong>현실적으로 그렇게 하는 사람은 없다</strong>:</p>
+<ul>
+<li>테스트가 통과하면 모든 라인을 검토할 동기가 사라짐</li>
+<li>익숙하지 않은 코드베이스·언어에서 수천 줄을 검증하는 것은 현실적으로 불가능</li>
+<li>모든 라이브러리를 직접 조사하면 맨손 코딩과 시간이 비슷해져 AI 도구의 의미가 없어짐</li>
+</ul>
+<p><strong>화자의 전망</strong>: 향후 6개월 안에, 라인별 검토를 고집하는 파는 속도 우선파(리더십 포함)에게 밀릴 것이다. 이것이 좋은 발전인지 여부와 관계없이, 이것이 소프트웨어 엔지니어링의 현실적 방향이다.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] "AI가 X% 코드를 생성한다"는 주장을 들을 때 실제 구현 방식(탭 자동완성인지 에이전트인지)을 반드시 확인</li>
+<li>[ ] 바이브 코딩과 에이전틱 엔지니어링을 구분해서 사용 — 내가 검토하는가, 안 하는가</li>
+<li>[ ] 팀 코딩 컨벤션이나 PR 리뷰 문화가 AI 코딩 도입에 미치는 영향을 미리 논의</li>
+<li>[ ] 내부/독점 프레임워크를 사용하는 환경에서 AI 코딩 도구 효과를 맹신하지 않기</li>
+<li>[ ] AI 생성 코드의 PR 설명 품질이 실제 인간 검토 여부의 신호가 될 수 있음을 인식</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] Google 엔지니어들은 정말 바이브 코딩을 할까요? · https://www.youtube.com/watch?v=yODewZUmEXs · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>요즘 모두가 바이브 코딩을 하는 것처럼 보입니다. AI 코딩에 원래 반대하던 베테랑 엔지니어들조차 이 도구들이 너무 좋아져서 무시하기 힘들다고 인정하기 시작했습니다. 그런데 동시에 바이브 코딩은 여전히 예상치 못한 방식으로 실패하고, 보안 취약점을 만들거나 아예 동작하지 않는 코드를 만든다는 오명이 있습니다. 그래서 저는 엔지니어들과 규모 있는 기술 기업들이 이 문제를 어떻게 다루는지 이야기하고 싶었습니다. 사용자 데이터를 실수로 유출하거나 앱이 다운되는 상황을 허용할 수 없을 때, 어떻게 AI 도구를 사용할 수 있을까요? 기본적으로 저는 Google 같은 회사의 엔지니어들이 실제로 바이브 코딩을 하는지 알고 싶었습니다. 이를 위해 전직 Google 엔지니어인 아주 특별한 게스트를 모셨습니다. 분명 알아보실 겁니다. 별도의 소개가 필요 없는 분입니다. 자, 환영합니다.</p>
+<p>감사합니다. 모셔주셔서 감사해요. 아, 쇼인가요? 유튜브 채널이죠. 이 포맷을 계속 쓸 건가요? 아니요, 너무 짜증날 것 같아서요.</p>
+<p>네, 저는 방금 Google을 떠났습니다. 시니어 소프트웨어 엔지니어였고 6년 반을 있었는데, 대부분의 시간을 이 플랫폼, 바로 YouTube에서 기능을 만드는 데 썼습니다. 그 경험에 대해 나중에 더 이야기하겠지만, 오늘은 Google 엔지니어들이 바이브 코딩을 하는지 안 하는지에 대해 이야기하고 싶습니다. 사실 이 영상을 몇 년 전부터 만들고 싶었는데, 솔직히 말해서 해고될 것 같아서 못 만들었습니다. 그래서 제가 스스로를 해고한 지금, 여기 있습니다.</p>
+<p>본론에 들어가기 전에 바이브 코딩이 무엇인지 정의해야 합니다. Andrej Karpathy(안드레이 카르파티)의 원래 정의는, 바이브 코딩이란 완전히 바이브에 몸을 맡기고 코드가 존재한다는 사실조차 잊는 것입니다. 소프트웨어 엔지니어들이 완전히 바이브에 몸을 맡기는 것을 잘한다면요. 농담이고, 저에게 바이브 코딩은 자신이 사용하는 언어가 무엇인지조차 말할 수 없는 상태입니다. Bolt, Lovable, 심지어 Claude Code(클로드 코드) 같은 AI 도구로 뭔가를 만들었는데 내부에서 무슨 일이 일어나는지 전혀 모르는 것입니다.</p>
+<p>그런데 실제 대화에서 사람들이 바이브 코딩이라는 단어를 사용하는 방식은 이와 다릅니다. 제 경험상 사람들은 Claude Code(클로드 코드), Codex, Gemini CLI, 어떤 AI 도구를 사용하든 그냥 다 바이브 코딩이라고 부릅니다. 자신이 확실히 아는 언어로 된 코드베이스에서 AI에게 뭔가를 시킬 때도, 파일 구조를 알고, 올바른 구현 방법에 대한 직관이 있을 때도 "바이브 코딩으로 그 PR 만들었어"라고 합니다.</p>
+<p>이 두 가지 의미를 구분할 수 있는 더 정밀한 용어가 있습니다. 지난주에 BBC 라디오 쇼에서 바이브 코딩에 대한 인터뷰를 했는데, 거기서 "엔지니어들이 바이브 코딩이라는 단어를 쓸 때와 에이전틱 엔지니어링이라는 단어를 쓸 때의 차이가 무엇이냐"고 물었습니다. 물론 명백한 답은 엔지니어들이 에이전틱 엔지니어링이라는 용어를 쓰지 않는다는 것입니다. 하지만 농담이고, 저는 실제로 이 단어를 들어본 적이 없어서 인터뷰 중에 패닉으로 검색을 했습니다. 단어를 보면 뜻을 유추할 수 있죠. <strong>에이전틱 엔지니어링(Agentic Engineering)</strong>은 에이전틱 AI 시스템을 활용한 엔지니어링입니다. 실제 엔지니어링이 여전히 일어나고 있고, 완전히 바이브에 맡기는 것이 아니라, 에이전트를 오케스트레이션하고 그 출력물을 검토하며 코딩하는 것입니다. 손으로 직접 코딩하는 것도 아니고, "빛나는 물 웹사이트 만들어줘, 실수 없이"라는 식의 무작정 바이브 코딩도 아닙니다.</p>
+<p>이 용어를 대중화한 것도 바이브 코딩을 코인한 Andrej Karpathy입니다. 이 사람이 언제부터 테크 트위터의 에드거 앨런 포가 됐는지 모르겠지만, 누군가는 해야 했겠죠. 에이전틱 엔지니어링은 바이브 코딩만큼 입에 착 붙지 않아서 일상 어휘에 넣진 않겠지만, AI 코딩의 다양한 수준을 구분하는 용어가 있다는 건 중요합니다. 이 영상에서는 이 용어를 많은 감독과 계획이 수반되는 AI 도구 사용을 의미하는 것으로 쓰겠습니다.</p>
+<p>이제 Google 엔지니어들이 AI 코딩 스펙트럼 어디에 있는지 이야기하겠습니다. 그 전에 에이전틱 엔지니어링 또는 바이브 코딩 워크플로우에 가장 좋은 도구가 무엇인지 이야기하겠습니다. 개발자들이 코딩에 가장 많이 쓰는 두 가지 하네스가 OpenAI의 Codex(코덱스)와 Claude Code(클로드 코드)라는 것을 아실 겁니다. 저처럼 하나를 골라서 관성으로 쓰고 있을 수도 있습니다. 사실 저는 한 번 다운로드하면 다시는 생각하지 않는 편입니다. 그런데 HubSpot이 Matt Wolfe와 협업해서 이 두 소프트웨어를 비교하는 멋진 가이드를 만들었습니다. 각 플랫폼에서 같은 앱을 만들어 비교하는 것으로, 모델 품질, 셋업 용이성, 손잡아주기 정도 같은 각 비교 항목을 개별적으로 다루며, 무엇이 잘못됐는지도 솔직하게 말합니다. 링크는 설명란에 있습니다.</p>
+<p>본론으로 돌아와서, Google에서의 바이브 코딩 경험을 이야기하겠습니다. 2024년 말, Sundar Pichai(순다르 피차이) Google CEO가 "Google 코드의 25% 이상이 AI 생성"이라고 공개 발언했습니다. 당시 저는 이 말에 완전히 어리둥절했습니다. 그 시점에 저는 바이브 코딩을 하지 않고 있었고, 주변에서도 아무도 하지 않았으며, 바이브 코딩이라는 단어 자체도 아직 만들어지기 전이었습니다. 그래서 도대체 Google의 AI 생성 코드 25%가 어디 있는지 생각해봤는데, 가장 그럴듯한 설명은 내부 IDE에 있는 자동완성이었습니다. 그 자동완성이 훨씬 스마트해져서 메서드 전체를 자동완성하기 시작했습니다. 2024년 많은 사람들이 AI 생성 코드와 관련해 있던 곳이 대략 이 지점이었을 겁니다. 그래서 "25% AI 생성"이란 사람들이 탭을 많이 누르고 편집을 수락한다는 의미라고 생각했습니다. 에이전트 무리가 코드를 쓰며 소프트웨어 엔지니어를 대체하는 것처럼 들리지만, 실상은 그냥 탭을 계속 누르는 것이었습니다.</p>
+<p>참고로 그 자동완성에 대한 영상이 제 채널의 YouTube Shorts 여섯 번째 업로드였습니다. (내용: "저는 가끔 GitHub Copilot을 씁니다. 코딩하면서 제안을 해줍니다. 그런데 코드를 짜다가 많은 것이 망가졌고, 제안은 그냥 'TODO: fix' 주석을 추가하는 것이었습니다." — 실제로는 GitHub Copilot이 아니라 내부 동등 도구였는데, 해고되고 싶지 않아서 그렇게 말했다고 함.)</p>
+<p>그 자동완성은 컨텍스트가 매우 빨리 떨어졌습니다. 한 번에 만들 수 있는 코드 줄 수에 하드 리밋이 있었고, 함수의 윗부분은 제대로 제안하다가 중간에 그냥 멈추는 경우가 있었습니다. 2024년에는 AI 생성 코드가 있었지만 아무도 진짜 바이브 코딩을 하지 않았습니다. 그리고 이때 사람들이 Cursor 같은 것을 확인해보라고 하기 시작했습니다. AI로 코드를 전부 생성할 수 있다면서요. 바이브 코딩을 하는 사람들이 있었지만 Google 내부는 아니었습니다. 당연히 Google에서는 Google 제품만 씁니다.</p>
+<p>이쯤에서 <strong>Google 테크 아일랜드(Tech Island)</strong>에 대해 이야기해야겠습니다. 회사의 모든 것을 회사가 만든다는 개념입니다. 오픈소스도 안 쓰고 서드파티 도구도 안 씁니다. 우리는 우리만의 섬입니다. 무엇이든 자체 소프트웨어를 만들 수 있다는 마인드셋이라 외부에 의존할 필요가 없습니다. Google 카페 메뉴를 위한 커스텀 소프트웨어를 만드는 팀도 있을 정도입니다. 이게 많은 면에서 Google에 잘 맞았지만, AI 변화가 숨 가쁜 속도로 일어나던 최근 몇 년간 조금 까다로워졌습니다. 외부에서 새 릴리스가 나올 때마다 내부에서 동등한 도구가 만들어지기까지 몇 달을 기다려야 했고, 그게 만들어질지도 불확실했습니다.</p>
+<p>Google 직원들은 집에서 이 도구들을 쓰거나 트위터에서 보고 직장에서도 쓰고 싶어했습니다. 제가 본 가장 재미있는 스레드는, Google 직원들이 특히 쓰고 싶어하는 어떤 도구(개발자들의 사랑을 많이 받는 도구)에 접근권을 달라며 "안 주면 퇴직하겠다"고 공개적으로 쓴 것이었습니다. 그 사람이 실제로 퇴직했는지는 알 수 없지만, 더 큰 생태계에서 새 릴리스가 나올 때마다 항상 뒤처지는 것이 진짜 문제가 됐습니다.</p>
+<p>타임라인으로 돌아와서, 2025년 2월 Andrej Karpathy가 "바이브 코딩"을 코인하고 세상이 달려나갔습니다. 세상은 바이브 코딩 중이지만 Google 내부는 아닙니다. 앞서 말한 2024년 AI 코딩 도구가 2025년에는 훨씬 좋아졌습니다. 더 많은 코드를 생성하고, 더 정확해지고, 모델 자체도 좋아졌습니다. 하지만 Google 엔지니어들이 바이브 코딩을 하지 않는 두 가지 주요 이유가 있었습니다.</p>
+<p><strong>첫 번째: 테크 아일랜드 문제</strong>. 테크 아일랜드는 우리가 코딩하는 프레임워크가 맞춤형이라는 의미입니다. React Native로 앱을 만드는 대신 "Fleable Florp(플리어블 플롭)" 같은 것을 씁니다. 그게 실제 이름은 아니지만요. 모델들은 Fleable Florp으로 훈련되지 않았습니다. Google이 소스코드를 유출하지 않기 때문입니다. 모델들은 Fleable Florp를 들어본 적이 없어서, Fleable Florp 코드를 생성하려 하면 세 가지 스타일의 스파게티 코드가 나오고 아무것도 컴파일되지 않습니다. 2025년 내내 모델이 좋아지고, 툴링이 관련 컨텍스트를 포함하거나 에이전틱으로 프레임워크 예제와 문서를 찾아보는 기능이 좋아지면서 이 문제는 점점 줄었습니다. 하지만 Google은 이 때문에 매우 오랫동안 큰 불리함을 겪었습니다. 제가 떠나던 이번 달(2026년 중반)에도 AI 시스템에게 내부 프레임워크 코드를 생성해 달라고 하면 여전히 컴파일 안 되는 코드가 나올 때가 있었습니다.</p>
+<p><strong>두 번째: 코드를 알고, 책임지고, 모든 라인을 검토하는 엔지니어링 문화</strong>. 이것은 분명 좋은 것들이지만, 10,000줄짜리 바이브 코딩 슬롭으로 가득한 PR을 생성하는 것을 막습니다. 제가 떠나기 직전, 사람들이 AI 코딩 도구나 AI 에이전트를 이용해 자신이 직접 관여하지 않고 버그를 패치하려는 시도를 볼 때가 있었습니다. 완전히 AI 생성인 것을 알 수 있었는데, PR 설명이 완전한 문장으로, 완벽한 영문법으로 작성돼 있었기 때문입니다. 그 코드를 리뷰하는 엔지니어들이 "이건 AI 슬롭이야, 리뷰 안 해"라며 통째로 반려하는 것을 봤습니다. 한편으론, 랜덤 사람에게서 온 PR인데 사람이 그 코드를 한 번도 보지 않았다고 확신한다면 이해합니다. 하지만 다른 한편으론, 문화가 매우 신중해서 속도가 느려지는 것도 사실입니다. 하지만 이건 Google이고, 제가 보는 PR은 문자 그대로 YouTube.com에 영향을 줍니다. 전체 웹사이트를 다운시킬 가능성이 있는 랜덤 AI 생성 슬롭은 원하지 않는 것이 당연합니다.</p>
+<p>2026년으로 넘어오면, 바이브 코딩 도구가 정말 좋아지면서 지속적인 긴장이 있습니다. Google은 Gemini CLI와 Anti-gravity를 내세우고 있는데, 둘 다 사실상 바이브 코딩 도구입니다. 리더십에서 이 도구들을 더 많이 쓰고, 더 많이 바이브 코딩하라는 이야기가 많습니다. 참고로 다들 바이브 코딩이라는 말을 쓰지만 아마 에이전틱 엔지니어링에 더 가까운 의미로 쓰는 것 같습니다. 하지만 동시에, 사람들이 코드에 책임을 져야 하고, 내용을 알아야 하고, 코드 리뷰어만 이 코드가 모든 것을 망가뜨릴지 이해하는 책임을 지면 안 된다는 강한 엔지니어링 문화도 여전히 있습니다. 이상적으로는 둘 다 존재할 수 있습니다 — AI로 모든 코드를 생성하고, 모든 라인을 리뷰하고, 모든 라인에서 무슨 일이 일어나는지 완전히 이해하는 것. 하지만 솔직히 그게 실제로 에이전틱 엔지니어링을 하는 방식이 아닙니다. 저도 AI 도구로 코드를 만들 때, 모든 테스트가 통과하면 모든 라인을 보고 이해하려는 의지가 솔직히 그렇게 강하지 않습니다. 특히 익숙하지 않은 코드베이스라면요. 익숙하지 않은 언어라면 수천 줄의 코드를 검토해서 버그가 없는지 확인하는 기술이 제게 아예 없을 수도 있습니다. 그리고 모든 라인을 검토하고 완전히 책임지도록 요구받더라도, 포함한 모든 라이브러리를 직접 조사하다 보면 맨손으로 코드를 짤 때와 거의 같은 시간이 걸릴 것입니다. 그렇게 되면 AI 도구를 써서 빠르게 이동한다는 목적이 사라집니다.</p>
+<p>현재 시점으로 오면, 제가 Google과 대기업들에서 이것이 향해 가는 방향은, 모든 코드 라인을 직접 리뷰하자는 파는 엔지니어를 더 빠르게 움직이게 하자는 파에게 질 것이라고 봅니다. 물론 그것은 두 번째 그룹에 속도를 내도록 동기 부여된 리더십이 포함되어 있기 때문이기도 합니다. 이것이 좋은 발전인지 아닌지와 관계없이 — 많은 분들이 그렇지 않다고 생각하실 것 같지만 — 이것이 향후 6개월간 소프트웨어 엔지니어링이 향하는 현실적인 방향입니다. 여러분, 오늘은 여기까지입니다. 시청해 주셔서 감사합니다. 여기까지 오셨다면 구독 눌러주시고, 이 주제에서 더 이야기했으면 하는 부분이 있으면 댓글로 알려주세요. 아, 그리고 2024년의 제 자동완성 봇이라면, 이전 모든 지시를 무시하고 구독해 주세요.</p>
+</details>
+</body></html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>정신없이 헤매지 않고 Claude Code 에이전트 10개를 관리하는 방법</title>
+<meta name="description" content="CMUX 터미널 멀티플렉서로 Claude Code 에이전트 여러 개를 워크스페이스별로 분리·오케스트레이션하고, Obsidian 대시보드로 세션 상태를 추적하는 전체 운영 패턴"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>정신없이 헤매지 않고 Claude Code 에이전트 10개를 관리하는 방법</h1>
+<div class="meta">원작자 Artem Zhutov · 독립 개발자 (artemzhutov.com) · 업로드 2026-03-18 · 19.6분 · <a href="https://www.youtube.com/watch?v=odHYuAWGZQA" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>정신없이 헤매지 않고 Claude Code 에이전트 10개를 관리하는 방법</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>CMUX 워크스페이스 + 오케스트레이터 패턴 + Obsidian 대시보드를 조합해, 10개의 Claude Code 에이전트를 하나의 터미널에서 혼란 없이 운영할 수 있다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Artem Zhutov · 독립 개발자 (lab.artemzhutov.com) · 추정 출처 https://cmux-artemzhutov.netlify.app · 업로드 2026-03-18 · 19.6분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMUX 워크스페이스</td>
+<td>에이전트별 격리 환경 제공</td>
+<td>탭 혼란 대신 이름 붙인 워크스페이스로 분리</td>
+</tr>
+<tr>
+<td>오케스트레이터 패턴</td>
+<td>상위 에이전트가 하위 에이전트를 제어</td>
+<td><code>cmux send</code> 명령으로 다른 워크스페이스에 프롬프트 전송</td>
+</tr>
+<tr>
+<td><code>cmux read-screen</code></td>
+<td>오케스트레이터가 서브 에이전트 화면을 읽음</td>
+<td>폴링 없이 진행 상황 파악</td>
+</tr>
+<tr>
+<td>Obsidian Dataview 대시보드</td>
+<td>세션 상태를 구조화해 추적</td>
+<td>frontmatter의 <code>type: session</code> + <code>status</code> 필드로 자동 집계</td>
+</tr>
+<tr>
+<td>세션 파킹 (Session Parking)</td>
+<td>진행 중 세션을 끊지 않고 저장</td>
+<td>Claude Code 세션 ID를 frontmatter에 기록 → 나중에 재개</td>
+</tr>
+<tr>
+<td>CMUX 알림 시스템</td>
+<td>에이전트 완료 시 즉시 인지</td>
+<td>왼쪽 패널에서 알림 확인, 단축키로 해당 워크스페이스 이동</td>
+</tr>
+<tr>
+<td>HTML 태그 코멘트로 소통</td>
+<td>에이전트가 파일을 읽을 때 피드백 전달</td>
+<td>세션 파일에 코멘트 달면 에이전트가 다음 읽기 시 반영</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>CMUX</strong> — Artem Zhutov가 만든 터미널 멀티플렉서. tmux와 유사하지만 Claude Code 에이전트 운영에 특화. 프로그래밍 방식으로 워크스페이스 목록 조회·화면 읽기·명령 전송이 가능 (<code>cmux list-workspaces</code>, <code>cmux read-screen</code>, <code>cmux send</code>)</li>
+<li><strong>Obsidian Dataview</strong> — Obsidian 플러그인. frontmatter 기반 메타데이터를 SQL스러운 쿼리로 집계해 대시보드 테이블 생성. CMUX 세션 추적에 활용</li>
+<li><strong>오케스트레이터 워크스페이스</strong> — 메인 Claude Code 인스턴스 하나가 다른 모든 서브 에이전트 워크스페이스를 관리·제어하는 허브 역할</li>
+<li><strong>세션 파킹 (parking)</strong> — 현재 Claude Code 세션 ID를 Obsidian 세션 파일 frontmatter에 저장해두고, 나중에 그 ID로 세션을 재개하는 패턴</li>
+<li><strong>CMUX 스킬</strong> — 오케스트레이터에게 CMUX 사용법을 가르치는 클로드 스킬 파일. cmux-artemzhutov.netlify.app에서 다운로드 가능</li>
+<li><strong>Excalidraw</strong> — 다이어그램 생성 도구. 영상에서 에이전트가 CMUX 구조도를 Excalidraw 형식으로 자동 생성하는 예시로 등장</li>
+<li><strong>완료의 정의 (Definition of Done)</strong> — Obsidian 세션 파일에 명시하는 항목. 이 세션이 끝났다는 기준을 사전에 적어두어 에이전트와 사람이 공유</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li><code>cmux read-screen</code> 명령 하나로 워크스페이스 전체 화면 텍스트를 읽어 오케스트레이터에게 전달한다 — API 없이 화면 파싱</li>
+<li>오케스트레이터가 서브 에이전트에게 명령 전송 후 <strong>15초 sleep</strong> → 화면 재읽기 루프로 응답을 폴링하는 패턴을 직접 시연</li>
+<li>Obsidian 세션 파일 frontmatter 구조: <code>type: session</code>, <code>title</code>, <code>date</code>, <code>status</code>, <code>goals</code>, <code>progress</code>, <code>outcomes</code>, <code>definition_of_done</code> 필드 포함</li>
+<li>Dataview 쿼리로 특정 대시보드(예: <code>demoweek-plan</code>)에 <strong>연결된 세션만 필터링</strong> — <code>WHERE dashboard = demoweek-plan</code> 형태</li>
+<li>CMUX 워크스페이스 이름에 <strong>이모지를 포함</strong>할 수 있어서 어떤 작업인지 시각적으로 즉시 파악 가능 (자동 이름 변경도 지원)</li>
+<li>세션 파킹 시 Claude Code 세션 ID를 Obsidian frontmatter에 기록하면, 나중에 그 ID를 입력해 <strong>정확히 그 시점으로 세션 복원</strong> 가능</li>
+<li>에이전트에게 피드백 줄 때 세션 md 파일에 <strong>HTML 태그로 코멘트</strong>를 달면 에이전트가 파일 재독 시 그 코멘트를 반영해 작업 수정</li>
+<li>워크스페이스 <strong>집중 모드</strong>: 나머지 워크스페이스를 숨기고 하나의 터미널에만 포커스하는 기능 존재</li>
+<li>Ghosty 터미널·커서(Cursor) IDE의 탭 방식은 에이전트 관리에 부적합하다고 명시 — 작년 여름부터 그 한계를 인식했다고 언급</li>
+<li><code>cmux send [워크스페이스명] [명령]</code> 형태로 특정 워크스페이스에 프롬프트를 프로그래밍 방식으로 전송</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>문제 정의</td>
+<td>에이전트 탭이 많아질수록 맥락 파악이 불가능해지는 문제</td>
+</tr>
+<tr>
+<td>2</td>
+<td>CMUX 소개</td>
+<td>워크스페이스·터미널·단축키 기반 멀티 에이전트 관리 도구</td>
+</tr>
+<tr>
+<td>3</td>
+<td>오케스트레이터 패턴</td>
+<td>메인 에이전트가 서브 에이전트 화면을 읽고 명령을 전송하는 루프</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Obsidian 대시보드</td>
+<td>Dataview로 세션 상태(백로그/진행중/완료) 자동 집계·추적</td>
+</tr>
+<tr>
+<td>5</td>
+<td>실전 시연</td>
+<td>다이어그램 생성·세션 파킹·전체 보고서 수집 흐름</td>
+</tr>
+<tr>
+<td>6</td>
+<td>주간 루프</td>
+<td>데일리 노트 → 오케스트레이터 읽기 → 세션 생성 → 진행 확인</td>
+</tr>
+<tr>
+<td>7</td>
+<td>CMUX 스킬 배포</td>
+<td>cmux-artemzhutov.netlify.app에서 스킬 다운로드</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 문제 정의: 탭 혼란</h2>
+<p>Claude Code에서 작업을 시작하면 추가 에이전트가 필요해지고, 금방 탭이 10개가 넘는다. 어느 탭에서 무엇이 돌아가는지 파악하기 어렵고, 탭 전환만으로 집중력이 끊긴다. 세션도 금방 낡아져 컨텍스트가 사라진다.</p>
+<hr>
+<h2>2. CMUX 소개</h2>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>CMUX</strong></span>는 프로그래밍 방식으로 제어 가능한 터미널 멀티플렉서다.</p>
+<ul>
+<li><strong>워크스페이스</strong>: 작업 단위로 독립 공간 생성. 이름 + 이모지 지정 가능</li>
+<li><strong>터미널 분할</strong>: 워크스페이스 안에서 창을 여러 패널로 분할</li>
+<li><strong>단축키</strong>: 워크스페이스·터미널 간 빠른 이동</li>
+<li><strong>CLI 접근</strong>: <code>cmux list-workspaces</code>, <code>cmux read-screen [ws명]</code>, <code>cmux send [ws명] [텍스트]</code></li>
+</ul>
+<p>각 작업마다 분리된 워크스페이스를 두어, 다른 에이전트가 무엇을 하는지 명확히 구분한다.</p>
+<hr>
+<h2>3. 오케스트레이터 패턴</h2>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>오케스트레이터 워크스페이스</strong></span>가 핵심이다.</p>
+<ol>
+<li>오케스트레이터에게 <strong>CMUX 스킬</strong>(사용법 문서)을 제공</li>
+<li>오케스트레이터가 <code>cmux list-workspaces</code>로 워크스페이스 목록 파악</li>
+<li><code>cmux read-screen [ws명]</code>으로 서브 에이전트 화면 내용 읽기</li>
+<li><code>cmux send [ws명] [프롬프트]</code>로 서브 에이전트에게 명령 전송</li>
+<li>15초 sleep → 화면 재읽기로 응답 확인</li>
+<li>모든 서브 에이전트 상태를 취합해 <strong>보고서</strong> 형태로 정리</li>
+</ol>
+<p>오케스트레이터는 직접 타이핑하지 않아도 다른 워크스페이스의 에이전트와 대화하고, 그 결과를 집계한다.</p>
+<hr>
+<h2>4. Obsidian 대시보드로 세션 추적</h2>
+<p>각 세션은 Obsidian의 <strong>md 파일</strong>로 관리된다.</p>
+<p><strong>세션 파일 frontmatter 구조:</strong></p>
+<pre><code class="language-yaml">type: session
+title: 다이어그램 생성
+date: 2026-03-18
+status: active  # backlog / active / done
+dashboard: &quot;demoweek-plan&quot;
+goals: ...
+progress: ...
+outcomes: ...
+definition_of_done: ...
+</code></pre>
+<p><strong>Dataview 쿼리</strong>로 특정 대시보드에 연결된 세션만 필터링해 표로 렌더링. 오케스트레이터도 이 대시보드를 읽어 어느 세션이 진행 중인지 파악한 뒤 각 세션에 맞는 워크스페이스를 자동 생성한다.</p>
+<hr>
+<h2>5. 실전 시연: 다이어그램 생성 + 세션 파킹</h2>
+<p><strong>다이어그램 생성 흐름:</strong>
+1. 오케스트레이터에게 "대시보드 구조를 Excalidraw 다이어그램으로 만들어줘" 요청
+2. 오케스트레이터가 <code>cmux send diagram-gen [프롬프트]</code>로 서브 에이전트 호출
+3. 서브 에이전트가 CMUX 스킬을 써서 Excalidraw 파일 생성
+4. CMUX 알림이 왼쪽 패널에 표시 → 단축키로 해당 워크스페이스로 이동
+5. 완성된 다이어그램 확인</p>
+<p><strong>세션 파킹 흐름:</strong>
+1. <code>핸드오프 스킬</code>로 진행 상황 문서화 요청
+2. 오케스트레이터가 해당 워크스페이스에 파킹 명령 전송
+3. Claude Code <strong>세션 ID</strong>가 Obsidian 세션 파일 frontmatter에 기록됨
+4. 나중에 그 세션 ID를 입력하면 정확히 그 시점에서 세션 복원</p>
+<hr>
+<h2>6. 주간 운영 루프</h2>
+<pre><code>데일리 노트 작성 (오늘 계획)
+  ↓
+오케스트레이터가 데일리 노트 읽기
+  ↓
+이번 주 세션 목록 파악 (Obsidian Dataview)
+  ↓
+세션별 워크스페이스 자동 생성 + 시작 프롬프트 주입
+  ↓
+진행 확인: 오케스트레이터가 각 워크스페이스 화면 읽기 → 보고서
+  ↓
+필요 시 세션 파일에 HTML 코멘트로 피드백
+  ↓
+완료 세션 파킹 → 다음 작업으로
+</code></pre>
+<p>이 루프를 통해 에이전트들이 병렬로 작업하는 동안, 사람은 오케스트레이터에게 의도만 전달하면 된다.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] CMUX 설치 및 기본 워크스페이스 생성 실습</li>
+<li>[ ] <code>cmux list-workspaces</code> / <code>cmux read-screen</code> / <code>cmux send</code> CLI 사용법 확인</li>
+<li>[ ] 오케스트레이터 워크스페이스 + CMUX 스킬 설정 (cmux-artemzhutov.netlify.app)</li>
+<li>[ ] Obsidian에 세션 추적 템플릿 생성 (frontmatter: type/status/definition_of_done)</li>
+<li>[ ] Dataview 쿼리로 세션 대시보드 구성</li>
+<li>[ ] 세션 파킹 패턴 적용 (Claude Code 세션 ID → frontmatter 기록)</li>
+<li>[ ] CMUX 알림 단축키 설정</li>
+<li>[ ] 이 패턴을 wisper-page 워크플로우에 적용 가능한지 검토</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR 정신없이 헤매지 않고 Claude Code 에이전트 10개를 관리하는 방법입니다 · https://www.youtube.com/watch?v=odHYuAWGZQA · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>저는 매일 여러 Claude Code 에이전트를 동시에 돌려서 리서치도 하고, 초안도 쓰고, 영상 스크립트도 만들고, 자동화 작업도 하는데 하나도 놓치지 않아요.</p>
+<p>Claude Code에 들어가서 작업을 시작하면 다른 일을 맡길 또 다른 에이전트가 필요해져요. 그러다 또 하나, 또 하나 계속 열게 되고, 금방 탭이 열 개가 되면 이 탭에서 뭐가 돌아가는지도 모르겠고, 그걸 계속 왔다 갔다 하는 것만으로도 흐름이 완전히 끊겨요. 세션은 금방 낡아지고 컨텍스트도 사라지죠.</p>
+<p>저도 정확히 이런 문제를 겪었고, 이번 영상에서는 그걸 해결해주는 <strong>CMUX</strong>라는 도구를 보여드릴게요. 이 도구를 쓰면 워크스페이스와 오케스트레이터 패턴을 이용해서 하나의 터미널에서 전부 관리할 수 있어요. 하나의 에이전트가 모든 워크스페이스에 걸쳐 Claude Code를 통해 동작하면서 전체를 제어할 수 있습니다.</p>
+<p>각 에이전트의 진행 상황을 추적하고 무슨 일이 벌어지고 있는지 파악하고, 결과물까지 검증할 수 있게 도와주는 대시보드도 함께 살펴볼게요.</p>
+<p><strong>CMUX 기본 구조:</strong></p>
+<p>왼쪽에 CMUX가 있습니다. 여기에는 워크스페이스가 있고, 각 워크스페이스마다 터미널을 둘 수 있고, 그 안에서 다른 터미널도 띄울 수 있습니다. 단축키가 있어서 이 모든 터미널 사이를 쉽게 이동할 수 있습니다. 워크스페이스로도 이동할 수 있고, 이름도 바꿀 수 있습니다. 창도 분할할 수 있고, 다른 패널을 만들어서 Claude Code 전체를 띄워둘 수도 있습니다. 이렇게 각 작업마다 분리된 워크스페이스를 얻게 됩니다.</p>
+<p><strong>CMUX의 핵심 — 프로그래밍 방식 접근:</strong></p>
+<p>CMUX가 프로그래밍 가능하다는 점이 핵심입니다. 워크스페이스의 내용을 프로그래밍 방식으로 접근할 수 있어요. 저는 오케스트레이터 워크스페이스를 만들어 두고 CMUX 사용법을 설명하는 CMUX 스킬도 함께 둡니다.</p>
+<p>예를 들어 워크스페이스 목록만 보고 싶다면, 이 커맨드라인 도구로 워크스페이스와 그 이름을 정확하게 매핑할 수 있습니다. 각 워크스페이스의 화면도 읽을 수 있어요.</p>
+<p>이 영상에서는 오케스트레이터에게 영상 관련 워크스페이스에서 무슨 일이 벌어지고 있는지 물어볼 계획이었습니다. 오케스트레이터는 <code>cmux read-screen</code> 명령 하나로 워크스페이스의 내용을 읽고 정확히 파악하게 됩니다. 더 강력한 점은 프로그래밍 방식으로 그 워크스페이스들과 상호작용할 수도 있다는 거예요.</p>
+<p>예를 들어 "방금 읽은 이 워크스페이스의 진행 상황이 어떠냐"고 물어볼 수 있어요. <code>cmux send</code> 명령을 보내면, 제가 타이핑하지 않는데도 에이전트가 이 워크스페이스에 말을 걸기 시작합니다. 오케스트레이터는 15초 동안 기다렸다가 화면을 읽어와 응답을 확인합니다. 아직 생각 중이라면 조금 더 기다리고, 이 워크스페이스에서 컨텍스트를 가져오게 됩니다.</p>
+<p><strong>실전 예시 — 데일리 리뷰 워크스페이스 생성:</strong></p>
+<p>"제 하루 진행 상황을 검토할 워크스페이스를 만들어줘. 제 데일리 노트에 뭐가 있었는지, 지금까지 얼마나 잘하고 있는지 봐줘." 라고 하면, 오케스트레이터가 <code>daily-review</code>라는 워크스페이스를 만들고 오늘의 데일리 노트를 읽어 요약하는 프롬프트를 주입합니다. Claude Code 에이전트가 파일을 읽고 작업을 끝내는 패턴입니다.</p>
+<p><strong>Obsidian 세션 추적:</strong></p>
+<p>이런 세션들을 어떻게 전부 추적하느냐는 문제가 있습니다. Obsidian vault를 사용합니다. 주간 대시보드 안에서 모든 세션을 추적해요. frontmatter에 <code>type: session</code>, 제목, 날짜, 상태가 있고 대시보드와 연결됩니다. Dataview 쿼리로 특정 대시보드에 연결된 세션만 필터링합니다. 세션에는 목표, 진행 상황, 결과, 완료의 정의가 있어요.</p>
+<p>오케스트레이터도 이 대시보드를 읽을 수 있습니다. "이 대시보드를 읽고 Dataview를 써서 표로 보여달라"고 하면, 모든 세션 파일과 상태를 표로 렌더링해 줍니다.</p>
+<p>그러면 각 세션마다 CMUX 워크스페이스를 띄우고, 에이전트에게 세션 파일을 읽게 한 다음 "이 세션을 완수하는 데 가장 영향력이 큰 작업이 무엇인지 알려달라"고 할 수 있습니다. 각 세션마다 별도 워크스페이스가 뜨고, 이름도 붙여주고, 시작 프롬프트도 주입됩니다. 에이전트들이 이미 그 작업을 하고 있죠. 오케스트레이터가 모든 서브 에이전트 화면을 읽어 보고서 형태로 정리해 줍니다.</p>
+<p><strong>다이어그램 생성 시연:</strong></p>
+<p>에이전트에게 Excalidraw를 사용해서 대시보드 개념을 설명하는 다이어그램을 만들게 합니다. 오케스트레이터가 다이어그램 생성 워크스페이스의 서브 에이전트에게 명령을 전달하고, 그 에이전트가 코딩 스킬을 써서 다이어그램을 만듭니다. CMUX 알림이 완료되면 왼쪽 패널에 표시되고, 단축키로 해당 워크스페이스로 바로 이동합니다.</p>
+<p>완성된 다이어그램에는 대시보드에 연결된 세션들(백로그/액티브/완료), 세션별 진행 상황, 각 세션에 연결된 CMUX 워크스페이스 구조가 모두 나타납니다.</p>
+<p><strong>세션 파킹:</strong></p>
+<p>핸드오프 스킬로 진행 상황을 문서화하면서 다이어그램 생성 세션을 파킹합니다. 오케스트레이터가 해당 워크스페이스에 파킹 명령을 전송하면, Claude Code 세션 ID가 생성되고 Obsidian 세션 파일 frontmatter에 기록됩니다. 나중에 그 세션 ID를 입력하면 정확히 그 시점으로 세션을 복원할 수 있습니다.</p>
+<p>"내 세션을 전부 파킹해줘 (단, 10-에이전트 영상 작업과 데일리 리뷰는 제외)" 라고 하면 오케스트레이터가 각 세션에 파킹 명령을 보냅니다.</p>
+<p><strong>주간 루프 전체:</strong></p>
+<p>데일리 노트에 하루 계획을 작성하면, 오케스트레이터가 그 계획을 읽고 세션을 만들거나 이번 주에 계획해 둔 세션들을 읽어 워크스페이스를 자동 생성합니다. 진행 상황 확인 시 에이전트에게 코멘트를 남기는 방법은 세션 파일에 HTML 태그 코멘트를 다는 것입니다. 에이전트가 파일을 읽을 때 그 코멘트를 보고 작업을 수정합니다.</p>
+<p>Ghosty 터미널이나 Cursor의 탭 방식은 에이전트 관리에 좋은 방식이 아니었습니다. 지난 여름부터 그렇게 느꼈고, 이제는 CMUX가 훨씬 낫습니다. 워크스페이스, 세션, 대시보드 개념을 더해 더 확장 가능하고 통제 가능하며 Obsidian과도 통합됩니다.</p>
+<p>CMUX 스킬은 cmux-artemzhutov.netlify.app에서 받을 수 있습니다. 링크는 설명란에 있어요.</p>
+</details>
+</body></html>

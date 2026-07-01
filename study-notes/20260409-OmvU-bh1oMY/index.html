@@ -1,0 +1,282 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Claude Code Ultra Plan 실전 분석 - 내부 구조와 실제 차이</title>
+<meta name="description" content="Claude Code Ultra Plan을 로컬 플랜과 10회씩 비교한 결과 - 속도 2배, UI 개선, 내부 세 가지 변형 모드(Simple/Visual/Deep) 존재, 서버가 A/B 테스트로 모드를 배정함"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Claude Code Ultra Plan 실전 분석 - 내부 구조와 실제 차이</h1>
+<div class="meta">원작자 Ray Amjad · masterclaudecode.com · 업로드 2026-04-09 · 8.2분 · <a href="https://www.youtube.com/watch?v=OmvU-bh1oMY" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Claude Code Ultra Plan 실전 분석 - 내부 구조와 실제 차이</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Ultra Plan은 로컬 플랜 대비 약 2배 빠르고 UI가 낫지만, 품질 차이는 내부적으로 A/B 배정되는 세 가지 변형 모드에 달려 있다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Ray Amjad · masterclaudecode.com · 추정 출처 https://www.masterclaudecode.com/ · 업로드 2026-04-09 · 8.2분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ultra Plan 트리거</td>
+<td><code>/ultra plan</code> 슬래시 커맨드로 발동</td>
+<td>로컬 플랜과 다른 실행 경로</td>
+</tr>
+<tr>
+<td>클라우드 실행 + 세션 URL</td>
+<td>클라우드에서 돌아가며 별도 웹 URL 제공</td>
+<td>멀티태스킹 시 여러 플랜 병렬 가능</td>
+</tr>
+<tr>
+<td>인라인 댓글 피드백</td>
+<td>웹 UI에서 플랜 특정 지점에 댓글 달기</td>
+<td>플랜을 버리지 않고 부분 수정 가능</td>
+</tr>
+<tr>
+<td>내부 세 가지 변형 모드</td>
+<td>Simple / Visual / Deep(Critic 포함)</td>
+<td>어떤 모드가 배정됐는지 사용자가 모름</td>
+</tr>
+<tr>
+<td>A/B 배정 구조</td>
+<td>서버가 원격 설정으로 모드 결정</td>
+<td>품질 차이가 일관되지 않는 이유</td>
+</tr>
+<tr>
+<td>Deep Plan 구조</td>
+<td>4개 에이전트 + 1개 Critic</td>
+<td>의존성 범위가 넓을수록 유리</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Ultra Plan 모드</strong>: Claude Code 웹 버전(<code>code.claude.com</code>)에서 플랜이 실행되는 별도 인터페이스</li>
+<li><strong>ASCII/Mermaid 다이어그램 자동 생성</strong>: Visual Plan 변형에서만 출력됨 — 항상 나오지 않는 이유</li>
+<li><strong>Critic 에이전트</strong>: 플랜 완성 후 빠진 단계·위험·대응책을 재검토하는 전용 에이전트</li>
+<li><strong>바이너리 문자열 탐색</strong>: Claude Code 실행 파일에서 <code>strings</code> 등으로 숨겨진 시스템 프롬프트를 추출하는 리버스 엔지니어링 기법</li>
+<li><strong>A/B 테스트(Remote Config)</strong>: 서버가 사용자 모르게 다른 프롬프트·모델 변형을 배정해 수락률을 측정하는 방식</li>
+<li><strong>tRPC</strong>: 타입세이프 API 레이어 라이브러리 — v10 → v11 마이그레이션 예시로 언급</li>
+<li><strong>Gemma 4 (Gemma4)</strong>: 구글의 로컬 LLM — 영상에서 로컬 모델 교체 대상으로 언급</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>실험 규모: Ultra Plan 10회, 로컬 플랜 10회를 <strong>같은 프롬프트</strong>로 1:1 비교 — 체감이 아닌 반복 측정.</li>
+<li>속도: Ultra Plan은 <strong>모든 10개 경우에서</strong> 로컬 플랜보다 <strong>약 2배 빠르게</strong> 완료됨.</li>
+<li>품질 유리한 경우: 의존성 업데이트처럼 <strong>앱 전체에 영향이 퍼지는 작업</strong> — tRPC v10 → v11 마이그레이션에서 Ultra가 잠재 이슈를 더 많이 탐지.</li>
+<li>품질 차이 없는 경우: QN3.5 제거 → Gemma 4 교체처럼 <strong>국소적 변경</strong>은 Ultra와 로컬이 거의 동일.</li>
+<li>내부 변형 3종: <code>simple_plan</code>, <code>visual_plan</code>, <code>pre-sub agent plan with critic</code> — <strong>바이너리에서 직접 추출한 시스템 프롬프트</strong>로 확인.</li>
+<li>Visual Plan = 기본 플랜 + <strong>ASCII 또는 Mermaid 다이어그램 추가</strong> 지시만 다름.</li>
+<li>Deep Plan(pre-sub agent) 구성: 에이전트 4종</li>
+<li>코드·아키텍처 이해 에이전트</li>
+<li>수정 필요 파일 탐색 에이전트</li>
+<li>위험·엣지케이스·의존성 분석 에이전트</li>
+<li>빠진 단계·위험·대응책 재검토 에이전트 (Critic)</li>
+<li>모드 배정: <strong>서버 원격 설정</strong>으로 결정 — 사용자가 직접 고를 수 없음. Anthropic이 수락률 측정용 A/B 테스트 운용 중으로 추정.</li>
+<li>화자 계획: Ultra Plan 기본 사용 중단 → <strong>Deep Plan 시스템 프롬프트를 커스텀 스킬로 직접</strong> 적용.</li>
+<li>멀티태스킹 활용법: 터미널에서 Ultra Plan 여러 개 동시에 띄우고, 웹 UI에서 한꺼번에 검토 가능.</li>
+<li>폐기 편의성: 플랜이 마음에 안 들면 <strong>대화 히스토리를 더럽히지 않고</strong> 그냥 버릴 수 있음.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Ultra Plan 데모</td>
+<td><code>/ultra plan</code> 입력 → 웹 URL + 클라우드 실행</td>
+</tr>
+<tr>
+<td>2</td>
+<td>웹 UI 기능</td>
+<td>인라인 댓글, 엄지 반응, 승인/거절, 터미널 복귀</td>
+</tr>
+<tr>
+<td>3</td>
+<td>로컬 vs Ultra 10회 비교</td>
+<td>속도 2배; 품질은 작업 유형에 따라 다름</td>
+</tr>
+<tr>
+<td>4</td>
+<td>내부 변형 3종 발견</td>
+<td>바이너리 탐색으로 simple/visual/deep 확인</td>
+</tr>
+<tr>
+<td>5</td>
+<td>A/B 배정 구조</td>
+<td>서버가 모드·모델 결정, 수락률로 최적화 중</td>
+</tr>
+<tr>
+<td>6</td>
+<td>화자 결론</td>
+<td>Ultra 직접 사용 대신 Deep Plan 프롬프트 커스텀 추천</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. Ultra Plan 작동 방식 데모</h2>
+<p><code>/ultra plan</code> 뒤에 작업 설명을 입력하면 Claude Code가 <strong>클라우드에서 플랜을 생성</strong>하고 세션 URL을 함께 반환한다. 해당 URL을 열면 Claude Code 웹 버전(<code>code.claude.com</code>)으로 이동해 플랜이 실시간으로 만들어지는 과정을 볼 수 있다.</p>
+<p>웹 UI에서는:
+- 플랜 항목별 <strong>인라인 댓글</strong> 추가 ("추천 샘플링 파라미터 써달라" 등)
+- 엄지 올림/내림, 이모티콘 반응
+- <strong>Approve Plan</strong> 버튼으로 승인 후 클라우드 실행 또는 로컬 터미널로 복귀
+- 로컬 플랜 세션에서도 "웹에서 Ultra Plan으로 다듬기" 옵션이 나타나는 경우 있음</p>
+<p>터미널에서는 준비 완료 메시지 → 아래 방향키 + 엔터 → 중단/뒤로/웹 검토 중 선택 가능.</p>
+<hr>
+<h2>2. 로컬 플랜 vs Ultra Plan — 10회 비교 결과</h2>
+<p>화자가 같은 프롬프트로 각 10회씩 직접 비교한 결과:</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Ultra Plan</th>
+<th>로컬 플랜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>속도</td>
+<td><strong>2배 빠름</strong> (전 10회)</td>
+<td>기준</td>
+</tr>
+<tr>
+<td>UI</td>
+<td>웹 인터페이스, 인라인 댓글</td>
+<td>터미널 텍스트</td>
+</tr>
+<tr>
+<td>품질 — 광범위 변경</td>
+<td><strong>우수</strong> (위험·영향 범위 더 잘 탐지)</td>
+<td>빌드 단계가 잡아준다고 넘어가는 경향</td>
+</tr>
+<tr>
+<td>품질 — 국소 변경</td>
+<td>로컬과 거의 동일</td>
+<td>동일</td>
+</tr>
+<tr>
+<td>멀티태스킹</td>
+<td><strong>여러 개 동시 실행 가능</strong></td>
+<td>한 세션에 귀속</td>
+</tr>
+<tr>
+<td>폐기</td>
+<td>히스토리 오염 없이 버리기 쉬움</td>
+<td>대화 내 처리 필요</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>3. 내부 세 가지 변형 모드</h2>
+<p>화자가 Claude Code 바이너리에서 문자열을 탐색해 시스템 프롬프트를 확인한 결과:</p>
+<p><strong>Simple Plan</strong>: 기본 플랜과 동일한 구조.</p>
+<p><strong>Visual Plan</strong>: Simple Plan + ASCII/Mermaid 다이어그램 생성 지시 추가. 다이어그램이 나올 때와 안 나올 때의 차이가 이 모드 배정 여부.</p>
+<p><strong>Deep Plan (pre-sub agent plan with critic)</strong>: 가장 강력한 변형. 에이전트 4종이 순차 협업:
+1. 코드·기존 아키텍처 이해
+2. 수정 필요 파일 탐색
+3. 위험·엣지케이스·의존성 분석
+4. 빠진 단계·위험·미비 대응책 재검토 (Critic)</p>
+<hr>
+<h2>4. A/B 배정 구조와 Anthropic의 의도</h2>
+<p>서버가 <strong>원격 설정(remote config)</strong>으로 모드를 결정하며 사용자는 고를 수 없다. 화자의 해석:</p>
+<ul>
+<li>Anthropic이 각 변형의 <strong>플랜 수락률</strong>을 측정해 어느 모드·프롬프트가 사용자에게 더 나은지 A/B 테스트 중</li>
+<li>향후 비공개 신모델을 Ultra Plan으로 먼저 테스트해 <strong>어떤 모델이 플래닝에 적합한지</strong> 측정하는 용도로도 활용 가능</li>
+</ul>
+<p>결론: 어떤 때는 Deep Plan에 배정돼 좋은 결과를 받고, 어떤 때는 Simple Plan에 배정돼 로컬과 차이가 없는 것이 이 A/B 구조 때문.</p>
+<hr>
+<h2>5. 화자의 권고 및 다음 단계</h2>
+<ul>
+<li><strong>Ultra Plan 기본 사용 중단 예정</strong> — 모드 배정 불투명, 항상 Deep Plan을 받는다는 보장 없음</li>
+<li><strong>Deep Plan 시스템 프롬프트를 커스텀 스킬로 직접 사용</strong> 예정 — 영상 설명란에 프롬프트 공개</li>
+<li>Deep Plan 프롬프트가 일반 플랜 프롬프트보다 "더 괜찮아 보인다"는 화자 의견</li>
+<li>Ultra Plan이 유용한 상황: <strong>여러 플랜을 병렬로 돌리며 웹 UI에서 검토</strong>할 때, <strong>빠른 프로토타이핑</strong></li>
+</ul>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] <code>/ultra plan</code> 트리거로 플랜 실행 → 웹 UI 인라인 댓글 기능 직접 써보기</li>
+<li>[ ] tRPC v10 → v11 같은 광범위 의존성 마이그레이션에서 Ultra vs 로컬 비교 실험</li>
+<li>[ ] 화자 설명란의 Deep Plan 시스템 프롬프트 확인 → Claude Code 커스텀 스킬로 등록</li>
+<li>[ ] 클로드 코드 바이너리 문자열 탐색으로 내부 시스템 프롬프트 확인하는 기법 메모</li>
+<li>[ ] Ultra Plan 여러 개 병렬 실행 → 웹 UI 일괄 검토 워크플로우 실험</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR "Anthropic이 Claude Code용 Ultra Plan을 공개했습니다" · https://www.youtube.com/watch?v=OmvU-bh1oMY · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>이번 영상에서는 클로드 코드에 새로 들어간 Ultra Plan 모드를 살펴봅니다.
+이름은 Ultra지만 막상 써보면 생각보다 별거 없다고 느낄 수도 있습니다.</p>
+<p>기본적으로 Claude Code에서 <code>/ultra plan</code>을 입력하면 프롬프트를 줄 수 있습니다. 예를 들어 제 파이포이스(py-voice) 프로젝트에서 <code>QN3</code>를 바꾸고 싶다고 해보겠습니다. 로컬 모델을 Gemma 4로 바꾸려는 상황입니다. 즉 <code>QN3</code>로 되어 있는 것을 바꾸는 겁니다. LlamaOS 앱의 로컬 모델을 Gemma 4로 바꿔달라고 입력하고 엔터를 누릅니다.</p>
+<p>그러면 Ultra Plan을 클라우드에서 돌린다고 나오고, 세션 URL도 함께 줍니다. 거기서 플랜이 만들어지는 과정을 보고, 나온 계획에 직접 답할 수도 있습니다. 이 URL을 누르면 Claude Code 웹 버전으로 이동합니다. 그러면 Ultra Plan이 실제로 돌아가는 모습이 보입니다.</p>
+<p>저는 어제 Ultra Plan을 10번 돌려봤습니다. 그리고 로컬 플래닝도 10번 돌려서 Ultra Plan과 비교해봤습니다. Ultra Plan이 제시되면 화면은 대체로 이렇게 보입니다. UI도 꽤 깔끔해서 여기저기 항목을 선택하거나, 엄지 표시나 웃는 얼굴 같은 반응도 남길 수 있습니다. 그리고 여러 위치에 댓글도 달 수 있습니다.</p>
+<p>예를 들어 "추천 샘플링 파라미터를 써달라"고 댓글을 남길 수 있고, 플랜을 읽어본 뒤 이런 의견을 Claude에 다시 보내서 클라우드 쪽 계획을 조정할 수 있습니다. 또 Claude에 플랜을 승인하고 클라우드 버전에서 바로 코딩을 시작할 수도 있고, 터미널로 다시 돌아갈 수도 있습니다.</p>
+<p>여기서 두 가지가 눈에 띕니다.</p>
+<p>첫째, Ultra Plan은 클라우드에서 정말 빠릅니다. 같은 프롬프트 기준으로 로컬 플랜보다 훨씬 빠릅니다. 그리고 어떤 경우에는 ASCII 다이어그램이나 Mermaid 다이어그램이 함께 나옵니다. 어떤 때는 다이어그램이 아예 안 나옵니다.</p>
+<p>그리고 터미널에서는 Ultra Plan이 준비되면 준비됐다는 메시지가 뜹니다. 아래 방향키를 누르고 엔터를 치면 Ultra Plan을 중단하거나, 뒤로 가거나, Claude Code 웹에서 검토할 수 있습니다. 웹에서 검토한 뒤에는 "Approve Plan"을 누르고 다시 터미널로 돌아올 수 있습니다. 그러면 이 플랜이 다시 터미널로 넘어옵니다. 그 다음에 현재 세션의 플랜을 누르면, 세션에서 바로 구현할지, 아니면 이 플랜으로 새 세션을 시작할지 고를 수 있습니다. 새 세션을 시작하면 Ultra Plan이 포함된 상태로 그 세션으로 넘어갑니다.</p>
+<p>즉, 일반 플래닝 모드와의 차이는 트리거 단어로 <code>/ultra plan</code>을 쓴다는 점입니다. 그러면 Claude Code 웹 버전이 그 작업을 받아서 조사하고 초안 플랜을 만듭니다. 그리고 플랜의 인라인 댓글도 달 수 있습니다. 플랜이 마음에 들면 승인한 뒤, 클라우드에서 실행하거나 다시 로컬 세션으로 가져올 수 있습니다. 그리고 다른 세션에서 로컬 플랜을 돌릴 때도 메뉴가 보이는데, 웹의 Claude Code에서 Ultra Plan으로 다시 다듬기 같은 옵션이 나타날 때가 있습니다.</p>
+<p>이제 아마 가장 궁금한 건 이거일 겁니다. Ultra Plan이 Claude Code의 일반 플래닝보다 정말 더 좋을까?</p>
+<p>어제 저는 Ultra Plan 10개와 로컬 플랜 10개를 각각 돌려봤습니다. 그리고 같은 프롬프트끼리 비교해봤습니다. 차이가 있긴 했지만, 그 차이가 항상 뚜렷하게 나오지는 않았습니다.</p>
+<p>제가 느낀 차이 중 하나는 앱 전체에 작게 퍼지는 변경일 때였습니다. 의존성 업데이트처럼 여기저기 영향을 주는 작업에서는 Ultra Plan이 영향 범위를 더 잘 훑고, 위험도 더 잘 짚어주는 편이었습니다. 반면 로컬 플랜은 조금 달랐습니다. 의존성을 올릴 때 놓친 부분이 있어도, "빌드 단계나 빌드 명령이 알아서 잡아주겠지"하고 넘어가는 느낌이었습니다.</p>
+<p>실제로 한 번은 tRPC 버전 10에서 버전 11로 옮기는 작업을 했는데, Ultra Plan이 로컬 플랜보다 잠재 이슈를 더 많이 잡아냈습니다. 하지만 다른 경우에는 QN3.5를 빼고 Gemma 4를 쓰는 작업에서 Ultra Plan이 플랜을 특별히 더 좋게 만들지는 못했습니다.</p>
+<p>결국 눈에 띄는 차이는, 더 보기 좋은 UI에서 플랜을 검토하고 원하는 지점에 댓글을 남길 수 있다는 정도였습니다.</p>
+<p>(뉴스레터 광고 생략)</p>
+<p>그래서 저는 이런 생각이 들었습니다. 왜 Ultra Plan은 어떤 경우에는 정말 괜찮은데, 어떤 경우에는 그냥 무난하거나 로컬 플랜과 거의 비슷할까?</p>
+<p>그래서 저는 Claude Code에게 바이너리에서 읽을 수 있는 문자열을 좀 뒤져보라고 했습니다. Ultra Plan 안에 플래닝 모드가 세 가지 있다는 걸 찾아냈습니다. Simple Plan, Visual Plan, 그리고 Critic이 붙은 Pre-sub Agent Plan입니다. 그리고 여기 보이는 게 각 플래닝 모드의 시스템 프롬프트입니다.</p>
+<p>Visual Plan은 기본 플랜과 거의 같습니다. 다만 ASCII 다이어그램이나 Mermaid 다이어그램을 더 만들어 줍니다. 그래서 어떤 때는 Ultra Plan 모드에서 Mermaid 다이어그램이 나오고, 어떤 때는 안 나오는 게 이 플래닝 모드의 차이입니다.</p>
+<p>그리고 가장 흥미로운 건 이 플래닝 모드입니다. 이걸 Deep Plan이라고 부르는데, 쉽게 말해 여러 에이전트가 탐색하고, 마지막에 Critic까지 한 번 더 도는 방식입니다. 관련 코드와 기존 아키텍처를 이해하는 에이전트가 하나 있고, 수정이 필요한 파일을 찾는 에이전트가 하나 있고, 위험 요소와 엣지 케이스, 의존성을 찾는 에이전트가 하나 있고, 마지막으로 빠진 단계나 위험, 대응책이 없는지 다시 검토하는 에이전트가 있습니다.</p>
+<p>결국 Anthropic은 뒤에서 원격 설정을 써서, 어떤 시스템을 사용할지 보고 어떤 변형(variant) A/B 플랜 모드로 보낼지 결정하고 있는 겁니다. 이건 전부 서버에서 정하고, 사용자는 직접 고를 수 없습니다.</p>
+<p>그래서 저는 어떤 때는 정말 좋은 플랜을 받았는데, 그건 여러 에이전트와 Critic이 붙은 모드에 배정됐기 때문이라고 봅니다. 반대로 어떤 때는 그냥 평범한 플랜을 받았고, 사실상 로컬 플랜과 비슷했습니다.</p>
+<p>결국 제가 보기엔 Anthropic이 각 변형안을 사람들이 얼마나 수락하는지 측정해서, 어떤 플래닝 모드와 어떤 프롬프트가 사용자에게 더 나은지 판단하려는 것 같습니다. 그래서 어떤 시스템 프롬프트를 써야 할지 알아보려는 A/B 테스트처럼 보입니다.</p>
+<p>다만 이 구조를 활용하면 다른 실험도 할 수 있을 것 같습니다. 예를 들어 앞으로 나올 새 모델이 있다면, 아직 공개되지 않은 그 모델로 플랜을 만들게 한 뒤, 사람들이 그 플랜을 얼마나 수락하는지 보고, 어떤 프롬프트나 어떤 모델이 플래닝에 더 적합한지 판단할 수 있을 겁니다. 그래서 이런 A/B 테스트를 계속하면, Ultra Plan으로 플래닝이 얼마나 잘 되는지 더 잘 알게 될 수도 있습니다.</p>
+<p>하지만 결국 저는 지금 내가 정확히 어떤 플래닝 모드에 배정됐는지가 알고 싶습니다. 그래서 저는 Ultra Plan의 Deep Plan 프롬프트를, 일종의 커스텀 스킬처럼 직접 써볼 생각입니다. 관심 있으신 분들을 위해 이 내용은 아래에 남겨두겠습니다. 프롬프트를 읽어보니 일반 플랜 프롬프트보다 이 방식이 더 괜찮을 수도 있어 보입니다.</p>
+<p>아무튼 결론만 말하면, Ultra Plan은 확실히 더 빠릅니다. 제가 돌린 10개 모든 경우에서 같은 프롬프트 기준 Ultra Plan은 로컬 플랜보다 대략 2배 빨리 끝났습니다. 멀티태스킹에도 더 낫다고 생각합니다. Ultra Plan을 여러 개 띄워둘 수 있으니까요. 터미널에서 여러 Ultra Plan을 띄워놓고, 더 보기 좋은 UI에서 한꺼번에 검토할 수 있습니다. 그리고 빠르게 프로토타이핑하고 반복하는 데도 꽤 편합니다. 클라우드 쪽 Ultra Plan의 변경을 던져보고, 어떤 결과가 나오는지 바로 확인할 수 있기 때문입니다. 만약 플랜이 마음에 안 들면, 대화 전체를 어지럽히지 않고도 쉽게 버릴 수 있습니다.</p>
+<p>아무튼 저는 당분간 Ultra Plan 자체는 피하려고 합니다. 대신 Critic이 붙은 Pre-sub Agent 구성을 커스텀 스킬처럼 써보려고 합니다. 그리고 Claude Code를 더 깊게 배우고 싶으시다면, 이 주제를 다루는 제 전체 마스터 클래스도 있습니다.</p>
+</details>
+</body></html>

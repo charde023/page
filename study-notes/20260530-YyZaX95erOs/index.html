@@ -1,0 +1,247 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>AI Dev 26 x SF - 앤드루 응 - 소프트웨어 엔지니어링의 미래</title>
+<meta name="description" content="AI 코딩 에이전트 시대에 소프트웨어 개발의 병목이 어디로 이동하는지, 그리고 개발자가 갖춰야 할 역량은 무엇인지 Andrew Ng이 ContextHub·CodeDream과 함께 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>AI Dev 26 x SF - 앤드루 응 - 소프트웨어 엔지니어링의 미래</h1>
+<div class="meta">원작자 Andrew Ng · DeepLearning.AI · 업로드 2026-05-30 · 19.4분 · <a href="https://www.youtube.com/watch?v=YyZaX95erOs" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>AI Dev 26 x SF - 앤드루 응 - 소프트웨어 엔지니어링의 미래</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>AI 코딩 에이전트가 개발 속도를 10~100배 높이면서 PM·디자인·법무·마케팅이 새로운 병목으로 부상하고, 미래 개발자는 범용 제너럴리스트여야 한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Andrew Ng · DeepLearning.AI · 추정 출처 https://www.youtube.com/watch?v=YyZaX95erOs · 업로드 2026-05-30 · 19.4분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>100% AI 코딩 vs 80% AI 코딩</strong></td>
+<td>20% 직접 검토가 인간 병목을 만든다</td>
+<td>리뷰까지 AI에 맡겨야 속도 제대로 남</td>
+</tr>
+<tr>
+<td><strong>PM-엔지니어 비율 역전</strong></td>
+<td>1:8이었던 비율이 1:1→합체로 수렴</td>
+<td>무엇을 만들지 결정하는 능력이 희소해짐</td>
+</tr>
+<tr>
+<td><strong>2차 효과 병목 목록</strong></td>
+<td>디자인·법무·마케팅·영업이 새 병목</td>
+<td>개발 속도 가속 시 주변 프로세스 전체 재설계 필요</td>
+</tr>
+<tr>
+<td><strong>빌딩 블록 레고 프레임</strong></td>
+<td>API·프레임워크·도구를 레고 블록으로 봐야 조합 가능</td>
+<td>블록 수가 늘수록 조합 가능성은 지수적으로 증가</td>
+</tr>
+<tr>
+<td><strong>병렬 스킬 개발 (Parallel Skill Development)</strong></td>
+<td>AI 에이전트 역량과 인간 역량을 동시에 키워야</td>
+<td>에이전트가 강해질수록 그것을 잘 지휘하는 능력도 중요</td>
+</tr>
+<tr>
+<td><strong>ContextHub</strong></td>
+<td>에이전트의 지식 컷오프로 인한 환각·구식 API 사용 문제 해결</td>
+<td>최신 문서를 실시간 주입해 올바른 API 호출 유도</td>
+</tr>
+<tr>
+<td><strong>CodeDream</strong></td>
+<td>강의 대신 대화형 실습 환경으로 스킬 습득</td>
+<td>AI 버전 강사와 대화하며 코딩 에이전트+빌딩 블록 실습</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>ContextHub</strong>: Andrew Ng이 동료(Rohit Prasad, Senior Hotel[?])와 만든 도구. AI 에이전트에게 최신 문서를 주입하는 MCP 서버 형태. <code>npm install chub</code>로 설치.</li>
+<li><strong>CodeDream</strong>: DeepLearning.AI의 새 학습 플랫폼. 영상+대화형 실습 환경. 브라우저 터미널 포함. 2026-05-30 기준 preview 공개.</li>
+<li><strong>OpenCode</strong>: Claude Code, OpenAI Codex CLI의 오픈소스 대안으로 언급된 코딩 에이전트.</li>
+<li><strong>Responses API (OpenAI)</strong>: chat completions API의 후속 신규 API. 에이전트 기본값이 아직 구식 API를 쓰는 문제의 사례로 언급.</li>
+<li><strong>RAG (Retrieval-Augmented Generation)</strong>: AI 빌딩 블록 중 하나로 언급. 용어노트</li>
+<li><strong>Agentic workflow</strong>: AI 빌딩 블록 범주 중 하나. 용어노트</li>
+<li><strong>Federal Reserve Bank of Philadelphia 연구</strong>: 기업들이 AI로 인해 인력 감축을 계획하는 비율이 낮다는 내용을 인용해 AI 일자리 종말론 반박.</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>Andrew Ng 본인의 코딩은 <strong>거의 100% AI</strong>가 작성한다고 직접 밝힘.</li>
+<li>80% AI 코딩 팀은 나머지 20%를 인간이 검토하느라 시간이 오래 걸려 체감 속도 차이가 크다 — "80% vs 100%의 차이가 크다".</li>
+<li><strong>PM:엔지니어 비율</strong> 역사적 수치: 1 PM이 7~8명 엔지니어를 감당하던 것에서 최근 1:2 → 1:1 → 한 사람으로 합체되는 방향으로 이동.</li>
+<li>Claude Code를 예시로 들어 "지금 <code>claude code</code>에 OpenAI API 호출하라고 하면 구식 <code>chat completions</code> API와 오래된 모델을 쓴다"고 구체적으로 지적.</li>
+<li>ContextHub가 반환하는 문서 파일은 <strong>약 600줄짜리 마크다운</strong> — 인간이 읽기엔 길지만 에이전트용 컨텍스트로 적합.</li>
+<li>CodeDream 데모는 <code>npm install chub</code> → OpenCode 실행 → OpticJS API 문서 연동 → 조크 생성기 앱 빌드 순으로 진행.</li>
+<li>법무 작업 관련 실용 조언: "AI로 초안 작성 → 실제 변호사에게 최종 사인오프"를 본인이 직접 사용한다고 언급.</li>
+<li>100명짜리 팀도 <strong>명확한 API 경계 + 제한된 커뮤니케이션</strong>으로 AI-native 소규모 팀들로 분산하면 확장 가능하다는 아키텍처 관점 언급.</li>
+<li>AI 일자리 종말론에 대해: "비즈니스 미디어는 정확하게 보도할 인센티브가 있고, 최근 몇 달간 종말론이 과장이라는 방향으로 기사가 나오고 있다"며 낙관론 피력.</li>
+<li><strong>CodeDream은 이 강연 참석자들이 세계 최초 공개 대상</strong>이라고 강조.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>빌딩 블록 레고 비유</td>
+<td>API·프레임워크를 레고로 보면 조합 가능성이 지수적으로 증가</td>
+</tr>
+<tr>
+<td>2</td>
+<td>80% vs 100% AI 코딩</td>
+<td>리뷰까지 AI에 맡겨야 진짜 가속, 80%는 인간이 병목</td>
+</tr>
+<tr>
+<td>3</td>
+<td>PM 병목 → 일반화 병목</td>
+<td>개발 10~100배 빠르면 PM·디자인·법무·마케팅 전부 병목 됨</td>
+</tr>
+<tr>
+<td>4</td>
+<td>미래 엔지니어 프로필</td>
+<td>코딩 에이전트 활용 + 빌딩 블록 지식 + 제너럴리스트 스킬</td>
+</tr>
+<tr>
+<td>5</td>
+<td>AI 일자리 종말론 반박</td>
+<td>실제 채용 수요 여전, 비즈니스 미디어도 종말론 과장 인정 추세</td>
+</tr>
+<tr>
+<td>6</td>
+<td>병렬 스킬 개발 프레임</td>
+<td>에이전트 역량↑ + 인간 보완 역량↑를 동시에 키워야</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ContextHub 소개</td>
+<td>에이전트 지식 컷오프 문제 해결, 최신 API 문서 실시간 주입</td>
+</tr>
+<tr>
+<td>8</td>
+<td>CodeDream 발표</td>
+<td>대화형 실습 환경 preview 공개, ContextHub + 코딩 에이전트 실습</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 빌딩 블록 레고 프레임</h2>
+<p>Andrew Ng은 1년 전 첫 AI Dev에서도 같은 레고 비유를 썼다고 언급한다. 흰색 레고 블록만 있으면 단조로운 것을 만들 수 있지만, 검정·파랑·빨강·노랑 블록이 섞이면 조합 가능성이 지수적으로 늘어난다. AI 코딩 에이전트 시대에는 LLM 프롬프팅, RAG, 에이전트 워크플로우, UI 컴포넌트, 데이터베이스, 인증 관리자 등 빌딩 블록이 매일 새롭게 쏟아지고 있다. 이 블록들을 AI 에이전트가 조합해주기 때문에 개발 속도가 폭발적으로 빨라진다.</p>
+<h2>2. 80% vs 100% AI 코딩 — 마지막 20%의 무게</h2>
+<p>Andrew Ng이 강조하는 핵심 인사이트 중 하나다. 많은 팀이 "코드는 AI가 작성, 리뷰는 인간"이라는 방식을 쓰는데, 이 경우 인간 리뷰어가 병목이 되어 결국 80%와 100% 사이에 큰 체감 차이가 생긴다. 본인 팀은 코드 작성과 리뷰 모두를 AI가 담당한다. 우주선 50줄처럼 극히 중요한 코드는 예외지만, 일반 소프트웨어에서는 인간 리뷰를 최소화해야 진짜 가속이 일어난다.</p>
+<h2>3. PM 병목에서 전방위 병목으로</h2>
+<p>AI 코딩이 10~100배 빨라지면 그동안 속도를 맞추던 주변 기능들이 연쇄적으로 병목이 된다.</p>
+<ul>
+<li><strong>PM(제품 기획)</strong>: 무엇을 만들지 결정하는 속도가 이제 소프트웨어 속도보다 느려짐.</li>
+<li><strong>디자인</strong>: Figma 없이 코드로 바로 디자인을 구현하는 디자이너-개발자 합체가 더 빠름.</li>
+<li><strong>법무/컴플라이언스</strong>: 코드 작성 1일, 법무 승인 1개월이라는 극단적 불균형 발생.</li>
+<li><strong>마케팅</strong>: 제품이 너무 빠르게 나와서 마케팅이 따라가지 못함.</li>
+</ul>
+<p>이 때문에 소규모 AI-native 팀은 각 구성원이 여러 기능 영역을 AI 도움으로 소화해야 한다.</p>
+<h2>4. 미래 엔지니어 프로필</h2>
+<p>Andrew Ng 팀이 채용 시 찾는 조건 세 가지:</p>
+<ol>
+<li><span style="color:#ef6c00; font-size:1.1em"><strong>코딩 에이전트 활용 능력</strong></span> — Claude Code, OpenCode, OpenAI Codex CLI 등 능숙하게 사용.</li>
+<li><span style="font-size:1.1em"><strong>빌딩 블록 지식</strong></span> — 쏟아지는 도구를 파악하고 조합할 줄 알아야 함. 가장 어렵고 빠르게 변하는 부분.</li>
+<li><strong>제너럴리스트 스킬</strong> — 기본 PM, 디자인, 마케팅, 법무 초안 작성 정도는 AI로 처리할 수 있어야.</li>
+</ol>
+<p>이 조합의 인재가 턱없이 부족하며, 본인 팀도 구하기 어렵다고 인정.</p>
+<h2>5. AI 일자리 종말론 반박</h2>
+<p>Andrew Ng은 잡 어포칼립스(Job Apocalypse)론에 동의하지 않는다. 근거:</p>
+<ul>
+<li>필라델피아 연방준비은행 연구: 기업 중 AI로 인해 인력을 줄일 계획이 있다고 응답한 비율이 낮음.</li>
+<li>최근 비즈니스 미디어들이 종말론 과장을 인정하는 기사를 내고 있음.</li>
+<li>팬데믹 기간 과잉 채용·저금리 기간 채용 여파로 인한 해고가 AI 때문으로 오인되는 측면 있음.</li>
+<li>오히려 AI-native 엔지니어 수요는 공급을 크게 초과함.</li>
+</ul>
+<h2>6. 병렬 스킬 개발 프레임</h2>
+<p>AI 에이전트 자체의 역량이 향상되는 것과 별개로, 인간이 에이전트를 올바른 방향으로 지휘하는 <strong>보완 역량</strong>을 동시에 키워야 한다. 에이전트 역량↑와 인간 스킬↑이 병렬로 진행될 때 최대 효과를 낸다.</p>
+<h2>7. ContextHub</h2>
+<p>코딩 에이전트는 지식 컷오프가 있어 최신 API나 도구를 모른다. 심한 경우 훨씬 오래된 API를 쓰거나 존재하지 않는 파라미터를 환각한다. ContextHub는 <code>npm install chub</code>으로 설치 후 코딩 에이전트와 연동하면 최신 문서(약 600줄 마크다운)를 컨텍스트로 주입해 올바른 API 호출을 생성하게 도와준다. 예시로 Claude Code에 OpenAI API를 쓰게 하면 구식 <code>chat completions</code> API를 쓰는 문제를, ContextHub 연동 후에는 신규 <code>responses</code> API와 GPT-5.5 정보까지 알고 올바른 코드를 생성한다고 시연.</p>
+<h2>8. CodeDream 발표</h2>
+<p>DeepLearning.AI의 새 학습 플랫폼으로, 이 강연에서 세계 최초로 공개됐다. 기존 강의(슬라이드+비디오) 형식이 아닌 <strong>대화형 실습 환경</strong>이다.</p>
+<ul>
+<li>브라우저 내 터미널: 슬라이드에서 명령어 복사 → 바로 붙여넣기 실행 가능.</li>
+<li>AI 버전 Andrew Ng과 음성 대화 가능(마이크 버튼 제공).</li>
+<li>첫 번째 실습: ContextHub + OpenCode를 이용해 조크 생성기 앱 빌드.</li>
+<li>2026-05-30 기준 preview 공개.</li>
+</ul>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 현재 내 코드 작성·리뷰에서 AI 비중을 측정해보기</li>
+<li>[ ] ContextHub 설치하고 기존 프로젝트에서 API 환각 개선 여부 실험 (<code>npm install chub</code>)</li>
+<li>[ ] CodeDream preview 접속해보기 (https://learn.deeplearning.ai 계열 확인)</li>
+<li>[ ] 현재 프로젝트의 "비개발 병목" 파악 — PM·디자인·법무 중 어디가 느린가</li>
+<li>[ ] OpenCode (오픈소스 코딩 에이전트) 살펴보기</li>
+<li>[ ] OpenAI <code>responses</code> API vs <code>chat completions</code> API 차이 학습</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] AI Dev 26 x SF: 앤드루 응: 소프트웨어 엔지니어링의 미래 · https://www.youtube.com/watch?v=YyZaX95erOs · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>여기 모두 뵙게 되어 정말 반갑습니다. "모두를 위한 AI 프롬프팅" 강좌 발표 외에, 오늘 발표에서 중요한 공지가 하나 더 있습니다. 여러분이 이 내용을 세계 최초로 듣게 될 것입니다. 발표 후반에 말씀드리겠습니다.</p>
+<p>오늘은 AI 코딩과 관련한 소프트웨어 엔지니어링의 미래에서 제가 보고 있는 것들을 공유하고, ContextHub와 새로운 발표 내용을 소개하겠습니다.</p>
+<p>1년 전 첫 AI Dev에서 저는 소프트웨어를 여러 빌딩 블록의 조합으로 보는 슬라이드를 발표했습니다. 소프트웨어 도구, 프레임워크, API를 레고 블록처럼 생각하곤 합니다. 흰색 레고 블록만 있으면 뭔가를 만들 수 있지만 흥미롭지 않습니다. 검정 블록을 섞으면 더 흥미로운 것을 만들 수 있고, 파랑, 빨강, 노랑을 섞으면 더욱 다양해집니다. 개별 빌딩 블록 수가 늘어날수록 조합해서 만들 수 있는 흥미로운 소프트웨어는 기하급수적으로 증가합니다.</p>
+<p>지난 1년 동안 AI 코딩 에이전트의 등장으로 이 빌딩 블록들을 빠르게 조합해 놀라운 것들을 만드는 것이 훨씬 효과적이 됐습니다. 여기에는 프롬프팅 가능한 대형 언어 모델, RAG, 에이전트 워크플로우 같은 AI 빌딩 블록과 UI 컴포넌트, 데이터베이스, 인증 관리자 같은 비AI 빌딩 블록이 모두 포함됩니다. AI 코딩 덕분에 이 블록들이 전례 없는 속도로 증식하고 있습니다.</p>
+<p>스타트업, 학계, 대기업 팀들과 이야기할 때 자주 나오는 질문이 있습니다. "AI 코딩 에이전트를 얼마나 써야 하나?" 어떤 팀은 "우리는 80%를 AI로 코딩합니다"라고 말합니다. 나쁘지 않습니다. 하지만 저 자신의 코딩은 사실상 100% AI입니다.</p>
+<p>왜 이 마지막 차이가 중요한지 설명하겠습니다. 80% AI 코딩 팀에서는 나머지 20%를 인간이 리뷰하는 데 엄청난 시간이 걸립니다. 반면 100% AI 코딩 팀은 짧은 시간에 훨씬 더 많은 것을 해냅니다. 이건 코드 작성뿐만 아니라 리뷰에도 적용됩니다. AI가 코드를 작성하고 인간이 모든 줄을 검토하는 방식으로 시작하는 팀이 많은데, 제가 리뷰를 해야 한다면 제가 병목이 됩니다.</p>
+<p>물론 NASA에서 우주선 코드 50줄을 직접 써야 한다면 그렇게 하세요. 이건 종교가 아닙니다. 다만 최전선 팀들은 거의 100% AI 코딩으로 향하고 있고, 80%에서 100%로 가는 그 차이가 체감상 매우 크다는 것입니다.</p>
+<p>AI 코딩이 빨라지면서 흥미로운 2차 효과가 생깁니다. 작년 7월 배치(The Batch) 뉴스레터에 PM 병목에 대해 썼습니다. 아이디어 → 프로토타입 제작 → 사용자 피드백 → 제품 개선의 사이클에서 AI 코딩이 10~100배 빠르게 만드니, 무엇을 만들지 결정하는 PM 작업이 새로운 병목이 됩니다.</p>
+<p>1년~1년 반 전부터 이상한 트렌드를 보기 시작했습니다. 과거 PM:엔지니어 비율이 1:8, 1:7이던 것이 1:2 → 1:1로 좁혀졌습니다. 그리고 이제 엔지니어 1명 + PM 1명보다 이 두 역할을 한 사람이 맡는 것이 더 빠릅니다. 제품 감각 있는 엔지니어나 코딩할 줄 아는 PM이 정말 빠르게 움직입니다.</p>
+<p>하지만 모든 것을 1인 팀으로 할 수는 없습니다. AI-native 팀의 트렌드는 매우 작은 팀이 모두 제너럴리스트가 되는 것입니다. 엔지니어가 PM 일을 일부 하고, PM이 엔지니어링 일을 일부 하며, 모두가 거의 모든 것을 아는 방식입니다.</p>
+<p>실리콘밸리에서 "일자리 종말론"이 유행하지만, 솔직히 저는 그것을 보고 있지 않습니다. 미래 AI 엔지니어는 매우 밝은 미래를 갖고 있습니다. 제 팀이 채용 시 보는 것은 첫째 코딩 에이전트 효과적 사용 능력(Claude Code [?Cline], OpenCode, OpenAI Codex 등), 둘째 빌딩 블록에 대한 탄탄한 지식(너무 많고 너무 빠르게 변하지만 이게 핵심), 셋째 PM 등 제너럴리스트 스킬입니다. 이런 조합의 인재 수요가 엄청난데 공급이 따라오지 않습니다. 저희 팀도 못 찾을 정도입니다.</p>
+<p>개발 속도가 10~100배 빨라지면 다른 모든 것이 느리게 보입니다. PM 병목 외에 디자인 병목(디자인 도구 없이 코드로 바로 구현하는 게 더 빠를 수 있음), 법무 컴플라이언스 병목(코드 작성 1일, 법무 승인 1개월이 되면 고통), 마케팅 병목, 영업 병목 등이 생깁니다. 그래서 엔지니어와 제너럴리스트로 구성된 팀이 빠르게 움직일 수 있습니다. 마케터가 아닌 엔지니어도 AI로 기본 마케팅 작업은 할 수 있습니다. AI가 내리는 마케팅 결정이 완벽하지는 않지만 기본은 됩니다. 저도 법무 초안은 AI로 하고 실제 변호사에게 최종 확인을 받습니다.</p>
+<p>100인 팀이나 여러 AI-native 팀이 협력할 때는 명확한 API 경계와 제한된 커뮤니케이션으로 소규모 팀의 장점을 유지할 수 있습니다.</p>
+<p>소프트웨어를 만드는 데 필요한 일 중 코드 작성은 작은 일부에 불과합니다. AI 일자리 종말론에 대해 덧붙이면, 비즈니스 미디어는 정확하게 보도할 인센티브가 있고 최근 몇 달간 종말론이 과장이라는 방향으로 기사가 나오고 있습니다. 필라델피아 연방준비은행 연구에서도 AI로 인해 인력을 줄이려는 기업이 소수라는 결과가 있습니다. 많은 분들이 직업 불안을 느끼는 것은 알지만, 이는 팬데믹·저금리 기간 과잉 채용 여파인 측면이 큽니다. 일자리 종말론은 일부에서 과장됩니다.</p>
+<p>이제 가장 흥미롭고 중요하며 어려운 도전 — 빌딩 블록 마스터하기 — 을 위한 병렬 스킬 개발 프레임워크를 소개하겠습니다. 코딩 에이전트의 역량이 향상되는 것과 함께, 사람으로서의 우리도 에이전트를 올바른 방향으로 이끄는 보완 역량을 길러야 합니다.</p>
+<p><strong>ContextHub</strong>: 빌딩 블록이 너무 빠르게 증식하다 보니 지식 컷오프가 있는 코딩 에이전트들이 환각을 일으키거나 구식 API를 씁니다. 오늘도 Claude Code에 OpenAI API를 쓰라고 하면 구식 <code>chat completions</code> API와 오래된 모델을 사용합니다. 최신 API가 나온 지 오래됐음에도 인터넷 학습 데이터 대부분이 구식 API를 쓰기 때문입니다. ContextHub는 Rohit Prasad, Senior Hotel[?] 그리고 제가 만든 도구로 에이전트에게 최신 문서를 제공합니다. ContextHub와 Claude Code를 함께 쓰면 신규 <code>responses</code> API로 코드를 생성합니다. 시연: <code>chub search openai</code> → 패키지 목록 반환 → <code>chub get openai/chat</code> → GPT-5.5, responses API 정보가 담긴 약 600줄 마크다운 문서 생성 → 에이전트에게 주입. OpenAI, Gemini, 각종 데이터베이스 서비스에 잘못된 API 호출을 하는 환각 문제를 해결할 수 있습니다.</p>
+<p><strong>CodeDream</strong> (세계 최초 공개): 온라인 강좌와는 다른 대화형 학습 환경입니다. 마치 식사 자리에서 대화하는 것처럼, 발표 중 언제든 마이크 버튼으로 저에게(혹은 AI 버전 저에게) 질문할 수 있습니다. CodeDream에는 브라우저 내 터미널이 있어 슬라이드에서 명령어를 복사해 바로 붙여넣고 실행할 수 있습니다. 예: <code>npm install chub</code> → OpenCode 시작 → ContextHub와 연동해 OpticJS[?] API 문서를 참고하며 조크 생성기 앱 빌드. AI 코딩 에이전트와 ContextHub를 함께 쓰는 현대적 코딩 방식을 익힐 수 있는 실습 환경입니다. 2026-05-30 기준 preview로 공개되었습니다.</p>
+<p>마무리: 코딩 에이전트가 빌딩 블록을 빠르게 조합해 소프트웨어를 만드는 가속은 실재합니다. 새로운 병목이 어디인지는 아직 정리되고 있습니다. 일자리 수요는 충분히 있고 종말론은 과장입니다. 빌딩 블록과 스킬을 계속 익혀야 하고, 병렬 스킬 개발을 통해 에이전트와 인간이 함께 발전해야 합니다. ContextHub는 에이전트에게 최신 컨텍스트를 주고, CodeDream은 인간의 스킬 개발을 돕습니다. 감사합니다.</p>
+</details>
+</body></html>

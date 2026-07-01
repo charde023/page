@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Codex만 붙였는데 Claude Code 프로젝트가 10배 좋아졌습니다</title>
+<meta name="description" content="OpenAI 공식 Codex 플러그인을 Claude Code 워크플로에 붙여 코드 리뷰·게임 빌드 비교 실험한 결과, Codex(adversarial review)와 Claude Code(계획·구현)의 역할 분리가 효과적임을 보여줌"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Codex만 붙였는데 Claude Code 프로젝트가 10배 좋아졌습니다</h1>
+<div class="meta">원작자 Nate Herk · AI Automation Society / UppitAI · 업로드 2026-04-02 · 13.8분 · <a href="https://www.youtube.com/watch?v=xOSrKwPpH9Y" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Codex만 붙였는데 Claude Code 프로젝트가 10배 좋아졌습니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>OpenAI 공식 Codex 플러그인을 Claude Code에 붙여 adversarial review 역할을 맡기면, Claude Code가 놓친 버그를 잡고 코드 품질이 눈에 띄게 올라간다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Nate Herk · AI Automation Society / UppitAI · 추정 출처 https://uppitai.com · 업로드 2026-04-02 · 13.8분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Codex 플러그인 설치 3단계</td>
+<td>Claude Code 워크플로에 Codex를 바로 연결</td>
+<td>marketplace → plugin → config 순으로 실행</td>
+</tr>
+<tr>
+<td>review vs adversarial review 차이</td>
+<td>용도가 다르므로 상황에 맞게 선택해야 함</td>
+<td>전자는 일반 점검, 후자는 트레이드오프·실패 모드 압박 테스트</td>
+</tr>
+<tr>
+<td>Codex 무료 사용 조건</td>
+<td>비용 없이 Claude Code 보완 도구로 활용 가능</td>
+<td>무료 ChatGPT 구독만 있으면 됨</td>
+</tr>
+<tr>
+<td>Opus 4.6 vs GPT-5.4 벤치마크 차이</td>
+<td>모델 선택 전략에 영향</td>
+<td>SWE 제외 대부분 항목에서 GPT-5.4가 앞서고 가격도 저렴</td>
+</tr>
+<tr>
+<td>Claude Code + Codex 역할 분리 패턴</td>
+<td>각 도구의 약점을 상호 보완</td>
+<td>Claude Code = 계획·창의·구현, Codex = 리뷰·검증·엣지케이스</td>
+</tr>
+<tr>
+<td>adversarial review 출력 구조</td>
+<td>결과를 읽고 바로 액션 가능</td>
+<td>대상·판정·우선순위 점수·권장사항·다음 단계로 구성</td>
+</tr>
+<tr>
+<td>소프트락(softlock) 버그 탐지</td>
+<td>게임 로직의 치명적 결함을 자동 발견</td>
+<td>10층 부적 미수집 → 11층 진입 시 런 불가 케이스를 Codex가 잡아냄</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>adversarial review</strong> — 단순 코드 점검이 아니라 선택한 구현·설계를 지속적으로 따져보고 트레이드오프, 실패 모드, 대안 접근의 안전성·단순성까지 압박 테스트하는 리뷰 모드. 읽기 전용.</li>
+<li><strong>소프트락(softlock)</strong> — 게임에서 플레이어가 진행 불가 상태에 빠지지만 게임이 강제 종료되지 않는 버그. 이 영상에서는 10층 계단을 밟은 뒤 부적 없이 11층에 갇히는 케이스.</li>
+<li><strong>롤백 버그(rollback bug)</strong> — "계속하기" 기능이 있는 게임에서 저장 타이밍 문제로 실제 진행 데이터가 이전 상태로 되돌아가는 버그.</li>
+<li><strong>Skool (AI Automation Society)</strong> — Nate Herk가 운영하는 AI 자동화 커뮤니티 플랫폼. 플러스(유료)·무료 버전 모두 존재.</li>
+<li><strong>UppitAI</strong> — 화자 Nate Herk의 AI 관련 서비스/제품 링크 (<code>uppitai.com</code>).</li>
+<li><strong>플랜 모드(plan mode)</strong> — Claude Code의 실행 전 계획 수립 전용 모드. 변경 없이 접근 방식만 논의.</li>
+<li><strong>권한 우회 모드</strong> — Claude Code에서 승인 없이 자동으로 변경을 적용하는 모드 (yolo / auto-approve).</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>Codex는 <strong>무료 ChatGPT 구독</strong>만 있으면 쓸 수 있다 — Pro 불필요.</li>
+<li>OpenAI 개발자 경험 책임자 발언: 코드 리뷰에는 Codex, 복잡한 작업에는 <strong>GPT-5.4</strong> 사용.</li>
+<li>벤치마크 수치 (Opus 4.6 vs GPT-5.4): SWE에서 Opus가 약 1점 앞서고, 나머지 항목에서 GPT-5.4가 <strong>13점·10점·1점·2.5점·3.5점</strong> 차이로 앞섬.</li>
+<li>화자는 정식 소프트웨어 공학 배경이 없고, 그래서 Claude Code가 더 <strong>"관대하게" 느껴진다</strong>고 표현.</li>
+<li>현재 사용 비율: Claude Code 약 80%, Codex 약 20% → 언젠가 역전될 가능성도 열어둠.</li>
+<li>Codex adversarial review 결과에는 <strong>우선순위 점수</strong>가 포함됨 — 배포 불필요 항목도 명시.</li>
+<li>Windows 환경에서 Codex 플러그인 사용 시 <strong>PATH 문제 관련 버그</strong>가 몇 번 있었지만 자동으로 조사·수정됨.</li>
+<li>Codex를 background 플래그와 wait 플래그 조합으로 돌리면 추가 고급 기능 활용 가능.</li>
+<li>같은 원샷 프롬프트 게임 빌드 비교에서 <strong>속도는 Claude Code(Opus)가 훨씬 빠름</strong>, 결과물 완성도는 Codex가 더 다듬어진 느낌.</li>
+<li>Codex review는 <strong>커밋되지 않은 변경사항</strong> 또는 <strong>브랜치 비교</strong> 방식으로 동작 — 실제 diff가 없으면 리뷰 브랜치를 먼저 만들어야 정확한 결과가 나옴.</li>
+<li>X에서 많이 보이는 패턴: Claude Code로 계획·구현 → Codex로 실행·리뷰·프로덕션 push.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Codex 플러그인 발표</td>
+<td>OpenAI 공식 Claude Code용 Codex 플러그인 출시, 기존 조합 사용보다 훨씬 쉬워짐</td>
+</tr>
+<tr>
+<td>2</td>
+<td>벤치마크 비교</td>
+<td>GPT-5.4가 대부분 항목에서 Opus 4.6을 앞서고 가격도 저렴</td>
+</tr>
+<tr>
+<td>3</td>
+<td>강점·약점 비교</td>
+<td>Claude Code: 계획·창의력 강, 토큰 많이 소비 / Codex: 리뷰·검증 강, 계획·창의력 약</td>
+</tr>
+<tr>
+<td>4</td>
+<td>설치 및 사용법</td>
+<td>3개 명령 실행으로 설치, <code>/codex</code> 입력 시 review·adversarial review 등 선택</td>
+</tr>
+<tr>
+<td>5</td>
+<td>adversarial review 실연</td>
+<td>대시보드 프로젝트에서 adversarial review 실행 → 우선순위 포함 상세 결과 출력</td>
+</tr>
+<tr>
+<td>6</td>
+<td>게임 빌드 비교</td>
+<td>같은 프롬프트로 Opus vs Codex 게임 생성 → Codex 결과물이 더 세련됨, Opus가 훨씬 빠름</td>
+</tr>
+<tr>
+<td>7</td>
+<td>버그 탐지 실연</td>
+<td>Codex adversarial review가 소프트락·롤백 버그 2건 발견 + 수정 방법 제안</td>
+</tr>
+<tr>
+<td>8</td>
+<td>결론</td>
+<td>두 도구 역할 분리 전략이 효과적, 직접 써보고 비율 조절 권장</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. Codex 플러그인 발표 배경</h2>
+<p>OpenAI가 Claude Code 전용 공식 Codex 플러그인을 공개. 기존에도 두 도구를 조합해 쓰는 사람들이 있었지만 이 플러그인으로 훨씬 쉬워졌다. OpenAI 개발자 경험 책임자도 "코드 리뷰는 Codex, 복잡한 작업은 GPT-5.4"라고 발언. Codex는 무료 ChatGPT 구독만 있으면 사용 가능하므로 안 써볼 이유가 거의 없다.</p>
+<h2>2. 벤치마크 비교 — Opus 4.6 vs GPT-5.4</h2>
+<p>여러 코딩 벤치마크에서 GPT-5.4(초록)가 Opus 4.6(보라)을 대부분 항목에서 앞섬. SWE에서만 Opus가 약 1점 앞서고, 나머지는 13점·10점·1점·2.5점·3.5점 차이로 GPT-5.4 우위. 여기에 Opus 4/5가 GPT-5.4보다 훨씬 비싸다는 점까지 고려하면 다시 생각하게 된다. 다만 벤치마크는 참고용이며 직접 써보고 판단하는 것이 중요.</p>
+<h2>3. 강점·약점 비교 (X·Reddit 사용자 반응)</h2>
+<p><strong>Claude Code 약점</strong>: 과잉 설계, 토큰 소비 많음, 장기 실행 시 흐트러짐, 엣지케이스 누락, 자기 코드 재검토 시 놓치는 경우 있음.</p>
+<p><strong>Codex 약점</strong>: 계획 수립 약함, 적절한 질문 잘 못 던짐, 창의적 결과물 부족, 다소 딱딱함.</p>
+<p>두 도구의 약점이 서로의 강점과 정확히 맞아떨어짐. X에서 자주 보이는 패턴: Claude Code(계획·구현) → Codex(실행·리뷰·프로덕션 push).</p>
+<h2>4. 설치 및 기본 사용법</h2>
+<p>설치는 3개 명령만 실행:
+1. <code>marketplace</code> 설치
+2. Codex 플러그인 설치
+3. 설정 명령 실행</p>
+<p>Claude Code 세션에서 <code>/codex</code> 입력 시 사용 가능한 항목 목록 표시. 이 항목들은 Opus 대신 GPT-5.4를 사용. background·wait 플래그를 추가하면 고급 기능도 활용 가능.</p>
+<h2>5. adversarial review 실연 (대시보드 프로젝트)</h2>
+<p>내부 시스템 대시보드 프로젝트(목업 데이터 기반)에서 adversarial review 실행. 리뷰 시작 시 컨텍스트 파악 → staged/unstaged diff 확인 → 리뷰 방향 질문 순으로 진행. 결과 출력 구성:</p>
+<ul>
+<li>대상 및 판정</li>
+<li>배포 불필요 항목 목록</li>
+<li>발견된 문제 (우선순위 점수 포함)</li>
+<li>권장 사항</li>
+<li>중간 우선순위 항목 및 다음 단계</li>
+</ul>
+<p>읽기 전용 도구이므로 코드 자체는 변경하지 않음.</p>
+<h2>6. 게임 빌드 원샷 비교 (Opus vs Codex)</h2>
+<p>동일 프롬프트(로그라이크 던전 크롤러 게임 사양)를 두 도구에 동시 입력.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Claude Code (Opus)</th>
+<th>Codex (GPT-5.4)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>완료 속도</td>
+<td>훨씬 빠름</td>
+<td>훨씬 오래 걸림</td>
+</tr>
+<tr>
+<td>UI 완성도</td>
+<td>픽셀 거친 느낌, 기능적</td>
+<td>훨씬 덜 픽셀, 앱 같은 느낌</td>
+</tr>
+<tr>
+<td>완성 상태</td>
+<td>"플레이 가능하지만 아직 할 일 많음" 인정</td>
+<td>더 다듬어진 첫 결과물</td>
+</tr>
+</tbody>
+</table>
+<p>결론: 첫 원샷 프롬프트 기준으로는 Codex가 Claude Code보다 게임을 더 잘 만들었다. 다만 화자는 "UI 디자인은 Codex가 더 못한다"는 일반적 인식이 이 예시에서는 해당되지 않았다고 언급.</p>
+<h2>7. adversarial review로 버그 탐지 및 수정</h2>
+<p>Claude Code로 만든 게임을 리뷰 브랜치에 올려 Codex adversarial review 실행. 발견된 주요 버그 2건:</p>
+<p><strong>버그 1 — 소프트락 (치명적)</strong>
+- 고대 부적은 오직 10층에서만 생성
+- 10층 계단을 밟기 전에 부적을 못 모은 상태로 11층에 가면 승리 불가
+- 위로 올라가는 대응 기믹 없음 → 런 영구 소프트락</p>
+<p><strong>버그 2 — 롤백 버그</strong>
+- "계속하기" 기능이 있는 게임에서 실제 데이터 날아갈 수 있음</p>
+<p><strong>수정 제안</strong>:
+- 10층 계단을 부적 수집 전까지 막기
+- 플레이어 상태 변경 행동 뒤 즉시 저장, 또는 주요 이벤트마다 자동 저장 딜레이 처리</p>
+<p>화자가 Claude Code 플랜 모드로 계획 수립 후 변경 적용 → 문제 해결 확인.</p>
+<h2>8. 결론 및 도구 비율 전략</h2>
+<p>현재 화자 사용 비율: Claude Code 80%, Codex 20%. 언젠가 역전될 수도 있다고 열어둠. 핵심 메시지는 "이것 하나에 올인"이 아니라 용도별로 비율을 달리 가져가는 것. Codex 플러그인은 코드 리뷰·추가 기능 개발에서 계속 활용 예정.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] Claude Code 프로젝트에 Codex 플러그인 실제 설치해보기 (3단계 명령 실행)</li>
+<li>[ ] adversarial review와 일반 review 각각 돌려보고 출력 차이 직접 확인</li>
+<li>[ ] 같은 태스크를 Opus와 GPT-5.4에 동시 실행해서 결과 비교 실험</li>
+<li>[ ] 무료 ChatGPT 구독으로 Codex 접근 가능한지 확인</li>
+<li>[ ] background + wait 플래그 조합으로 Codex 고급 기능 탐색</li>
+<li>[ ] 현재 진행 중인 프로젝트에서 소프트락·롤백 유형 버그가 있는지 adversarial review로 점검</li>
+<li>[ ] 용도별 Claude Code vs Codex 비율 기준 직접 정해보기</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR (Tech Bridge) · Codex만 붙였는데 Claude Code 프로젝트가 10배 좋아졌습니다 · https://www.youtube.com/watch?v=xOSrKwPpH9Y · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>오늘 OpenAI가 Claude Code용 공식 Codex 플러그인을 공개했습니다.</p>
+<p>"이미 Claude Code를 쓰고 있다면 이 Codex 플러그인으로 같은 워크플로에 Codex를 쉽게 넣을 수 있습니다."라고 되어 있습니다.</p>
+<p>이게 엄청 혁신적인 기술은 아닙니다. 이미 사람들이 어느 정도는 조합해서 써왔거든요. Codex와 Claude Code를 함께 쓰고 있었지만 이 플러그인이 훨씬 쉽게 만들어줍니다.</p>
+<p>저도 당연히 Claude Code에 많이 집중해왔지만 Codex도 조금 써봤고, 제 느낌엔 둘이 꽤 비슷했습니다. 그런데 최근에는 Codex를 쓰고 있다는 얘기를 점점 더 많이 보게 됐습니다. Claude Code 워크플로와 프로젝트 안에서 코드 리뷰를 하거나 코드의 두 번째 시선을 더하는 용도로 쓰더라고요.</p>
+<p>OpenAI의 개발자 경험 책임자가 이런 이야기를 했습니다. "코드 리뷰에는 Codex를 쓰고, 좀 더 복잡한 작업에는 GPT-5.4를 쓴다"고 했습니다. 그래서 이런 걸 내놓게 된 것 같습니다.</p>
+<p>그리고 제가 몰랐던 건데, Codex는 무료로 쓸 수 있습니다. 그냥 무료 ChatGPT 구독만 있어도 되니까요. 그러니 소프트웨어나 게임 같은 걸 만드는 Claude Code 프로젝트에 이 플러그인을 넣고 코드 리뷰를 맡겨서 Claude Code가 놓친 부분이 있는지 볼 수 있습니다. 사실 안 써볼 이유가 거의 없죠.</p>
+<p>그래서 이런 생각도 들 수 있습니다. "그냥 과한 거고 진짜 필요한 걸까?" 저도 똑같이 생각해서 벤치마크를 비교해보려고 조금 조사해봤습니다.</p>
+<p>먼저 Opus 4.6과 GPT-5.4를 보자면요. Opus는 보라색이고 GPT는 초록색입니다. 여러 코딩 벤치마크입니다. SWE에서는 Opus가 조금 앞서지만, 다른 항목들을 보면 GPT-5.4가 사실상 Opus 4.6보다 앞섭니다. 직접 1대1로 보면 SWE의 벤치 베리파이드(bench verified)에서는 Opus가 거의 1점 앞서지만, 다른 항목들에서는 13점·10점·1점·2.5점·3.5점 차이로 GPT-5.4가 Opus 4.6보다 좋습니다.</p>
+<p>이런 벤치마크를 보고 나서 Opus 4·5가 GPT-5.4보다 훨씬 비싸다는 걸 알게 되면 확실히 다시 생각하게 됩니다. 물론 이건 전부 벤치마크 이야기죠. 그래서 이런 지표는 늘 중요하게 봐야 하고, 어떤 모델이 무엇에 강한지 알아두는 것도 좋습니다. 하지만 저는 벤치마크만 믿기보다 직접 써보고, 손에 익혀보고, 어떤 느낌인지 확인하고 싶습니다.</p>
+<p>그래서 X와 Reddit에서 좀 조사해봤습니다. 둘 다 많이 써본 사람들의 의견과 정보를 모아서 각자의 단점을 정리해봤습니다. 재미있는 건 둘의 약점을 듣고 나면 오히려 서로의 강점이 아주 잘 보완된다는 점입니다.</p>
+<p>Claude Code의 약점으로 사람들이 자주 말하는 건 이런 점들입니다. 과하게 설계하고, 토큰을 엄청 많이 먹고, 장기 실행에서는 흐트러질 수 있다는 겁니다. 그래서 엣지 케이스를 놓치고, 그냥 boilerplate(버블)을 만들기도 합니다. 중요한 건 자기 코드를 다시 검토할 때도 가끔은 그걸 못 본다는 겁니다. 그냥 보이지 않기 때문이죠.</p>
+<p>반면 이런 부분들은 Codex가 특히 잘하는 걸로 알려져 있습니다. 그런데 Codex의 약점을 말하면 계획을 세우는 데 아주 강하지 않고, 적절한 질문을 잘 던지지 못한다고들 합니다. 그리고 가끔은 창의적인 결과도 많이 못 뽑아 냅니다. 그래서 그런 면에서는 조금 더 딱딱하게 느껴집니다.</p>
+<p>흥미로운 건 사람들이 Codex를 두고 불만을 말하는 그 점들을 Claude Code나 Opus는 아주 잘한다는 겁니다. 그래서 X에서 많은 사람들이 이렇게 말하더라고요. Claude Code로 계획·구현을 하고, 그 다음엔 Codex를 붙여서 나머지를 실행하고, 실제 프로덕션으로 밀어넣고, 리뷰까지 맡긴다고 말하는 걸 자주 보게 됩니다.</p>
+<p>이걸 보면 결국 떠오르는 건 여러 도구를 직접 써보고, 어디서 같이 쓰면 좋은지 이해해야 한다는 점입니다. 항상 "이것 하나만 쓴다"는 식은 아닙니다. 즉, 이 특정 용도에서는 Claude를 30%, OpenAI를 70%쯤 쓰고, 다음 용도에서는 끝까지 사용할 수 있는 식이죠.</p>
+<p>설정은 정말 간단합니다. 그냥 이 3개 명령을 순서대로 실행하면 됩니다. 이건 마켓플레이스를 설치하고, 이건 플러그인을 설치하고, 마지막 거는 설정을 도와줍니다. GitHub 문서도 볼 수 있는데, 출시 이후 별표도 꽤 빠르게 늘고 있습니다. 무료 ChatGPT 구독도 다시 쓸 수 있다는 걸 볼 수 있는데, 그냥 이 순서대로 실행하면 됩니다.</p>
+<p>기능도 전부 정리되어 있습니다. 일반 review도 있고, adversarial review도 있고, masks [?다른 기능]도 있고, 이렇게 여러 기능을 실행할 수 있어서, 이제는 거의 skills처럼 생각해도 됩니다. 그리고 background로 돌리거나 기다리게 하는 플래그를 더하면, 꽤 멋진 다른 기능도 쓸 수 있습니다.</p>
+<p>Claude Code 세션에서 <code>/codex</code>를 치면, 일단 그 마켓플레이스를 설치해야 하는데, OpenAI Codex용 항목이 있습니다. Codex 플러그인이 설치되고 활성화된 상태에서 <code>/codex</code>를 치면 실제로 부를 수 있는 여러 항목이 보입니다. 이런 것들은 모두 Opus 대신 GPT-5.4를 사용하게 됩니다.</p>
+<p>여기서는 내부 시스템용 대시보드를 만드는 프로젝트를 보여드리는데, 이건 대부분 목업 데이터라는 점을 알아두세요. 이건 제가 최근에 막 만들어 본 겁니다. 지금은 데이터 동기화보다 흐름이랑 사용감 다듬는 데 집중하고 있고, 이건 당연히 Opus로 만들었습니다.</p>
+<p>이 프로젝트에서 <code>/codex</code>를 치면 실행할 수 있는 것들이 다 보이고, 지금은 review로 할지 adversarial review로 할지 고르고 있습니다. 차이를 보면 이렇습니다. review는 현재 작업에 대해 일반적인 Codex 리뷰를 돌리는 거고, Codex 안에서 리뷰를 직접 실행하는 것과 같은 수준입니다. 커밋 안된 변경사항을 보거나 브랜치를 비교할 때 쓸 수 있고, 읽기 전용 스킬입니다.</p>
+<p>반면 adversarial review는 말 그대로 더 강하게 파고드는 리뷰예요. 방향을 줄 수 있고, 선택한 구현과 설계를 계속 따져봅니다. 그래서 압박 테스트를 하듯이 트레이드오프, 실패 모드, 다른 접근이 더 안전하거나 단순한지도 볼 수 있습니다. 이것도 코드 자체는 바꾸지 않습니다. 결국 둘 다 읽기 전용 점검 도구입니다.</p>
+<p>그래서 여기서 adversarial review를 한번 써보겠습니다. 시작하자마자 환경을 파악해야 해서 컨텍스트 크기부터 볼 겁니다. staged된 것과 안된 것의 차이도 확인하고, 그 다음엔 이 리뷰를 어떻게 돌릴지 물어올 겁니다. 지금 그걸 묻고 있어서 바로 보내보겠습니다. 이게 꽤 큰 리뷰라고도 나오네요? 얼마나 걸릴지 보겠습니다.</p>
+<p>참고로 저는 Windows를 쓰는데, 이걸 사용할 때 PATH 문제에 비슷한 버그가 몇 번 있었습니다. 그런데 알아서 조사해서 고쳐주더라고요.</p>
+<p>adversarial review가 끝났습니다. 결과를 한번 보겠습니다. 대상도 나오고, 판정도 나옵니다. 지금 배포하지 않아도 되는 항목도 알려주고, 여기서 찾아낸 문제들도 보여줍니다. 우선순위 점수도 있는 것 같네요? 권장 사항도 있고, 중간 우선순위 항목이랑 다음 단계도 있습니다.</p>
+<p>이제부터는 Codex로 계속 이 변경 사항을 만들지, 아니면 Claude Code로 돌아갈지는 본인이 정하면 됩니다. 제 생각엔 둘로 나눠서 하나는 Opus로, 하나는 GPT로 해보고, 뭐가 더 나은지 비교할 것 같습니다. 이런 게 제가 X에서 많이 보던 사용 사례들이고, 또 제가 이걸 맛보기 시작했을 때도 그런 느낌이었죠.</p>
+<p>그래도 당연히 한번 해보고 싶었습니다. 둘 다 똑같은 프롬프트를 주고 결과를 비교해보자는 거죠. 그래서 둘 다 이 프롬프트를 줬는데, 핵심은 게임을 만들어 달라는 거였습니다. 몇 가지 사양도 같이 줬고, 자세하긴 하지만 아주 세세하진 않았습니다. 플랜 모드로는 안 넣었습니다.</p>
+<p>자, 결과를 보기 전에 먼저 두 가지를 말씀드리겠습니다. 첫 번째는 Opus가 Codex보다 훨씬 빨리 끝났다는 겁니다. 이걸 좋게 볼지 나쁘게 볼지는 모르겠지만, 일단 말씀드리면 Codex는 훨씬 오래 실행됐습니다. 두 번째는 Opus가 돌아와서 대충 이렇게 말했어요. "서버가 시작됐으니 열어보시면 되고, 게임을 하실 수 있습니다." 그러면서 사실상 이렇게 말한 셈이었죠. "이건 세 가지 작업 중 첫 번째일 뿐이지만, 게임은 끝났고 바로 플레이하실 수 있습니다." 제가 "좋아요, 그럼 게임이 다 끝난 건가요?" 라고 물었더니, "완전히는 아니고, 로컬에서 플레이는 가능하지만 아직 제가 해야 할 일이 많이 남았습니다. 원래 사양을 맞추려면 더 해야 할 게 많습니다."라고 답했어요.</p>
+<p>첫 번째 버전은 Claude Code로 만든 버전입니다. 로그라이크 어드벤처인 던전 크롤러가 있습니다. 오른쪽에는 작은 네비게이션 바가 있고, 층수·체력·능력치·경험치·장비·골드·전투로그 같은 게 보입니다. 작은 미니맵도 있고, 조작 방법도 있습니다. 이렇게 움직여 보면 고블린도 있고, 스켈레톤도 있고, 골드도 있습니다. 2D로 플레이할 수 있는 게임인데, 엄청 대단한 건 아니지만, 한 번의 원샷 프롬프트에 대략 5분 정도 작업한 걸 생각하면 나쁘지 않습니다.</p>
+<p>이제 Codex 버전으로 넘어가 보겠습니다. 처음 UI가 이렇게 보이는데, 벌써부터 좀 더 다듬어진 느낌이고, 앱 같아 보입니다. 새 게임을 시작해 보겠습니다. 이건 벌써 픽셀이 훨씬 덜 거슬리고, 전체적으로 조금 더 세련된 느낌입니다. 미니맵은 아래쪽에 여전히 있습니다. 첫 번째 원샷 프롬프트에서는 Codex가 Claude Code보다 이 게임을 더 잘 만든 게 분명하다고 말하겠습니다.</p>
+<p>그래서 지금 제가 할 일은, Claude Code로 만든 이 게임으로 다시 돌아가서 adversarial review를 해보는 겁니다. 그리고 Codex가 이 리뷰를 다 해오면, 저는 Opus에게 그냥 "이 변경 사항 전부 구현해 주세요"라고 할 겁니다. 그리고 나서 게임을 다시 열어서 얼마나 달라졌는지 볼 겁니다.</p>
+<p>어떤 사람들은 말하길, "Codex는 UI 디자인을 더 못한다"는 얘기도 있었는데, 같은 프롬프트로 본 이 예시만 봐도 제 생각엔 Codex 쪽이 훨씬 더 좋았습니다.</p>
+<p>Codex가 더 좋고 더 싸기까지 하면 왜 그냥 Codex를 안 쓰지? 라는 질문이 정말 타당한데, 제가 드릴 수 있는 답은 "다운로드해서 직접 써보고, 뭐가 더 좋은지 보면 됩니다"입니다. 지금까지 써본 바로는 Codex가 Claude Code보다 확실히 더 나은 부분도 분명히 있습니다. 하지만 전체적으로는 Claude Code의 느낌이 더 좋습니다. 훨씬 더 관대하게 느껴지고, 특히 저는 정식 소프트웨어 공학 배경이 없어서 더 그렇게 느껴집니다.</p>
+<p>Codex status를 보면 어떤 작업이 돌고 있는지, 얼마나 오래 돌고 있는지 정확히 보여줍니다. 이제 또 다른 출력이 나왔습니다. 이 변경 사항은 아마 UI랑은 별 관련이 없을 거라서 눈에 띄는 변화는 거의 없을 겁니다. 게임 플레이와 코드의 실제 기능, 작동 방식에 관한 겁니다.</p>
+<p>핵심은 딱 두 가지입니다. 최종 층 계단 때문에 플레이어가 런을 영구적으로 소프트락 당할 수 있는데, 고대 부적은 오직 10층일 때만 생성됩니다. 위로 올라가는 대응 기믹이 없고, 승리도 부적을 써야만 발생합니다. 그래서 플레이어가 10층 계단을 밟기 전에 부적을 아직 못 모은 상태로 11층으로 가버리면 그 런은 이길 수 없게 됩니다. 이건 분명히 Opus가 만든 방식의 결함입니다.</p>
+<p>그리고 또 다른 문제로, "계속하기" 기능이 있는 게임에서 실제 데이터가 날아갈 수 있는 롤백 버그입니다. 이 두 문제를 어떻게 고칠지도 제안해줍니다. 10층 계단을 막을 수도 있고, 상태를 바꾸는 플레이어 행동 뒤에 저장을 남기거나, 주요 이벤트마다 자동 저장을 조금 늦게 묶어서 처리할 수도 있습니다.</p>
+<p>저는 그냥 권한 우회 모드(auto-approve)로 가서 구현하라고 하겠습니다. 다만 이건 전부 데모에 가깝습니다. 저라면 이 피드백을 받은 뒤, 다시 Claude Code의 플랜 모드로 들어가고, 그 계획을 바탕으로 변경을 진행하게 했을 겁니다. 변경은 적용됐습니다. 게임 UI 자체는 크게 바뀐 게 없는데, 어쨌든 그 문제는 해결된 것 같습니다.</p>
+<p>보셨듯이 그 조합은 정말 강력했습니다. 그리고 Codex의 adversarial review도 인상적이었죠.</p>
+<p>이 채널에선 아직 Codex 영상을 안 올렸지만, 여러 도구를 이것저것 써보면서 주로 Claude Code에 집중해왔습니다. 너무 많은 도구를 한꺼번에 던져서 여러분을 헷갈리게 하고 싶진 않았거든요. 그래도 이건 분명히 한번 써볼 만한 도구입니다. 영상이 좋았거나 새로 배운 게 있었다면 좋아요 부탁드립니다. 다음 영상에서 뵙겠습니다. 감사합니다.</p>
+</details>
+</body></html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>소프트웨어 기본기가 그 어느 때보다 중요합니다</title>
+<meta name="description" content="AI 코딩 시대일수록 좋은 코드베이스·공통 언어·TDD·딥 모듈 등 소프트웨어 기본기가 오히려 더 중요해지며, 개발자는 AI의 전술 실행 위에서 전략적 설계자 역할을 해야 한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>소프트웨어 기본기가 그 어느 때보다 중요합니다</h1>
+<div class="meta">원작자 Matt Pocock · AI Hero (강사·콘텐츠 크리에이터) · 업로드 2026-04-27 · 18.6분 · <a href="https://www.youtube.com/watch?v=CNcVW8qUZLQ" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>소프트웨어 기본기가 그 어느 때보다 중요합니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>AI 코딩 도구가 발전할수록 좋은 코드베이스와 소프트웨어 기본기의 가치는 높아지며, 개발자는 전략적 설계자로서 AI를 전술적 실행자로 활용해야 한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Matt Pocock · AI Hero (강사·TypeScript 전문가) · 추정 출처 https://x.com/mattpocockuk · 업로드 2026-04-27 · 18.6분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>코드 품질의 역설</td>
+<td>AI 시대에 "코드는 싸다"는 말이 퍼졌지만 나쁜 코드는 AI 이점을 완전히 차단</td>
+<td>좋은 코드베이스일수록 AI도 잘 쓴다</td>
+</tr>
+<tr>
+<td>소프트웨어 엔트로피</td>
+<td>변경할 때마다 전체 설계 없이 하면 코드베이스는 점점 망가짐</td>
+<td>매 변경이 전체 설계에 투자여야 함</td>
+</tr>
+<tr>
+<td>디자인 콘셉트 (Design Concept)</td>
+<td>개발자와 AI 사이에 공유되지 않은 암묵적 설계 의도가 불일치의 근원</td>
+<td>협업 전에 공유된 이해를 먼저 만들어야 함</td>
+</tr>
+<tr>
+<td>유비쿼터스 언어 (Ubiquitous Language)</td>
+<td>도메인 용어 목록 공유 시 AI의 장황함이 줄고 구현이 계획에 맞아짐</td>
+<td>DDD 용어집을 AI와 공유하라</td>
+</tr>
+<tr>
+<td>TDD로 AI 제어</td>
+<td>LLM은 기본적으로 한 번에 너무 많이 하려 해서 피드백 루프를 못 씀</td>
+<td>TDD가 AI를 작은 단계로 강제한다</td>
+</tr>
+<tr>
+<td>딥 모듈 (Deep Module)</td>
+<td>얕은 모듈 범람 코드베이스는 AI가 탐색 못 함</td>
+<td>단순 인터페이스 + 깊은 구현 구조</td>
+</tr>
+<tr>
+<td>인터페이스 설계 위임 전략</td>
+<td>인터페이스는 개발자가, 구현은 AI가 — 인지 부하 대폭 감소</td>
+<td>회색 상자 접근법으로 피로 줄이기</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Specs-to-Code (스펙스2코드) 흐름</strong>: 명세서 먼저 작성 → AI가 코드 생성 → 문제 시 명세서만 수정하는 방식. Pocock은 이것이 결국 "이름만 다른 바이브 코딩"이라 비판.</li>
+<li><strong>A Philosophy of Software Design</strong> — John Ousterhout 저. 복잡성(=이해·수정하기 어렵게 만드는 모든 것)을 나쁜 코드의 정의로 사용. 용어노트</li>
+<li><strong>The Pragmatic Programmer</strong> — 소프트웨어 엔트로피 개념, "헤드라이트보다 빨리 달리지 말라(Don't Outrun Your Headlights)" 규칙 출처.</li>
+<li><strong>The Design of Design</strong> — Frederick P. Brooks 저. 디자인 콘셉트(Design Concept)와 디자인 트리(Design Tree) 개념의 출처.</li>
+<li><strong>딥 모듈 vs. 샬로 모듈</strong>: 딥 모듈은 단순 인터페이스 뒤에 복잡한 구현을 숨김. 샬로 모듈은 기능은 적고 인터페이스만 복잡함.</li>
+<li><strong>grill-me 스킬</strong>: Claude Code 기반 커스텀 스킬. AI가 프로젝트 계획의 모든 가정을 집요하게 인터뷰해서 디자인 콘셉트를 공유하게 만드는 도구. GitHub에서 별 13,000개.</li>
+<li><strong>ubiquitous-language 스킬</strong>: 코드베이스를 훑어 도메인 용어 목록을 마크다운 테이블로 자동 생성하는 Claude Code 스킬.</li>
+<li><strong>improve-codebase-architecture 스킬</strong>: 얕은 모듈 코드베이스를 딥 모듈 구조로 리팩터링하는 반복 단계를 가이드하는 스킬.</li>
+<li><strong>Kent Beck의 "매일 시스템 설계에 투자하라"</strong>: 스펙만 AI에 맡기면 설계 역량을 빼앗기는 것이라는 논거의 근거.</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>Pocock은 "진짜 엔지니어를 위한 Claude Code"라는 강의를 가르치는 강사이며, AI 코딩 커리큘럼 개발 과정에서 이 모든 통찰을 얻었다.</li>
+<li>grill-me 스킬 저장소가 바이럴이 돼서 <strong>별 13,000개</strong>가 넘었다고 직접 언급. 한 프로젝트에서 AI가 <strong>60~100개 질문</strong>을 던지며 인터뷰를 한다.</li>
+<li>Claude Code의 기본 Plan Mode는 "뭔가 만들어야 한다"는 충동 때문에 계획보다 실행에 급하다는 것이 Pocock의 비판. grill-me가 더 낫다고 주장.</li>
+<li>TypeScript를 안 쓰면서 프론트엔드를 만드는 건 "말이 안 된다"고 단호하게 언급. 정적 타입이 피드백 루프의 핵심 축.</li>
+<li>LLM에 브라우저 접근 권한을 반드시 주라고 강조 — "주변을 둘러볼 수 있게".</li>
+<li>딥 모듈의 <strong>구현은 AI에게 위임 가능하지만, 인터페이스 설계는 개발자가 충분히 통제</strong>해야 한다고 명확히 선을 그음.</li>
+<li>"금융처럼 중요한 영역"은 구현도 깊게 리뷰해야 한다고 예외를 인정. 무조건 위임 X.</li>
+<li>PRD(제품 요구사항 문서)나 이슈를 만들 때 <strong>어떤 모듈이 바뀌고 인터페이스가 어떻게 달라지는지</strong> 구체적으로 적는 것이 자신의 실천 방식.</li>
+<li>자신의 리소스: GitHub 저장소 <code>mapocock/skills</code> (정확한 슬러그는 발음 기준 추정), YouTube, Twitter(<code>@mattpocockuk</code>), <strong>AI Hero</strong> 사이트.</li>
+<li>Specs-to-Code를 직접 해봤더니 — 처음엔 그럭저럭, 다시 하면 더 나쁜 코드, 또 하면 더 나쁜 코드 → "결국 쓰레기만 남더라"는 1인칭 경험담.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>도입 — 기본기가 더 중요하다</td>
+<td>AI 시대에 소프트웨어 기본기가 오히려 더 중요해졌다는 역설 제시</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Specs-to-Code의 함정</td>
+<td>명세서만 고치는 방식은 이름만 다른 바이브 코딩, 코드베이스를 점점 망가뜨림</td>
+</tr>
+<tr>
+<td>3</td>
+<td>코드는 싸지 않다</td>
+<td>나쁜 코드베이스는 AI의 이점을 전부 막는다 — 코드 품질이 AI 생산성의 기반</td>
+</tr>
+<tr>
+<td>4</td>
+<td>실패 모드 1: AI가 딴 걸 해버린다</td>
+<td>디자인 콘셉트 미공유가 원인 → grill-me 스킬로 집요한 인터뷰</td>
+</tr>
+<tr>
+<td>5</td>
+<td>실패 모드 2: AI가 너무 장황하다</td>
+<td>공통 언어 부재 → DDD 유비쿼터스 언어 + 마크다운 용어집 스킬</td>
+</tr>
+<tr>
+<td>6</td>
+<td>실패 모드 3: 만들었는데 안 된다</td>
+<td>피드백 루프 부족 + AI가 한 번에 너무 많이 함 → TDD 스킬로 강제 소단계</td>
+</tr>
+<tr>
+<td>7</td>
+<td>딥 모듈 구조</td>
+<td>얕은 모듈 범람 코드베이스는 AI가 탐색 불가 → 딥 모듈로 리팩터링</td>
+</tr>
+<tr>
+<td>8</td>
+<td>인터페이스 설계 위임</td>
+<td>설계는 개발자, 구현은 AI — 회색 상자 접근으로 인지 부하 감소</td>
+</tr>
+<tr>
+<td>9</td>
+<td>결론 — 전략적 설계자로서의 개발자</td>
+<td>AI는 전술 실행자, 개발자는 20년 기본기를 바탕으로 전략 담당</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 도입 — 기본기가 더 중요해졌다</h2>
+<p>Pocock은 컨퍼런스 청중에게 "이 새로운 시대에 자기 기술이 더는 가치 없다고 느끼는 분들"을 위한 위로이자 주장을 꺼낸다. 자신은 강사로서 "진짜 엔지니어를 위한 Claude Code" 강의를 만들면서 AI 코딩 커리큘럼 개발이 "악몽"이었다고 토로한다. 모든 게 계속 바뀌고, AI는 완전히 새로운 패러다임이라 기존 규칙을 내려놓아야 한다는 분위기가 지배적이었다.</p>
+<hr>
+<h2>2. Specs-to-Code의 함정</h2>
+<p><strong>Specs-to-Code 흐름</strong>은 "앱이 어떻게 동작해야 하는지 명세서 먼저 → AI가 코드로 변환 → 문제 시 명세서만 수정"하는 방식이다. 코드는 보지 않아도 된다는 논리다. Pocock은 직접 해봤더니 처음엔 코드가 나오고, 재실행하면 더 나쁜 코드, 또 하면 더 나쁜 코드가 나왔다고 말한다. <strong>결국 쓰레기만 남았다.</strong></p>
+<p>이를 John Ousterhout의 개념으로 설명한다. 나쁜 코드 = <strong>복잡한 코드</strong> = 이해하고 수정하기 어렵게 만드는 구조. 코드베이스를 변경할 때 전체 시스템 설계를 생각하지 않으면 Pragmatic Programmer가 말하는 <strong>소프트웨어 엔트로피</strong>가 쌓인다. Specs-to-Code는 이 엔트로피를 가속한다.</p>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>핵심 주장: 코드는 싸지 않다. 나쁜 코드는 그 어느 때보다 비용이 크다.</strong></span> 좋은 코드베이스에서는 AI가 정말 잘 작동하고, 나쁜 코드베이스에서는 AI의 모든 이점을 누릴 수 없다.</p>
+<hr>
+<h2>3. 실패 모드 1 — AI가 딴 걸 해버린다 (grill-me 스킬)</h2>
+<p>AI가 완전히 다른 것을 만들어버리는 경험. Pragmatic Programmer는 "아무도 정확히 자기가 뭘 원하는지 모른다"고 말한다. 근본 원인은 <strong>디자인 콘셉트(Design Concept)</strong> 미공유다. Frederick Brooks의 The Design of Design에서 나온 개념으로, 여러 사람이 함께 설계할 때 형태가 잡히지 않은 아이디어가 공중에 떠다니는 것을 말한다. 이것은 마크다운 파일에 담을 수 없는, 보이지 않는 이론이다.</p>
+<p>해결책으로 <strong>grill-me 스킬</strong>을 만들었다. AI가 계획의 모든 부분을 집요하게 인터뷰하면서 서로 같은 이해에 도달할 때까지 질문을 멈추지 않는다. 디자인 트리의 각 갈래, 각 결정 사이의 의존성을 하나씩 풀어나가는 방식이다. 한 세션에서 60~100개의 질문이 오가기도 한다. 인터뷰가 끝난 후 그 대화를 PRD나 이슈로 변환해 AI 에이전트에게 넘긴다.</p>
+<p><span style="font-size:1.1em"><strong>팁 1: 먼저 AI와 디자인 콘셉트를 공유하라. Claude Code Plan Mode보다 grill-me 방식이 낫다.</strong></span></p>
+<hr>
+<h2>4. 실패 모드 2 — AI가 너무 장황하다 (유비쿼터스 언어 스킬)</h2>
+<p>AI와 대화할 때 같은 언어인데도 말이 안 맞는 느낌. 이는 도메인 전문가와 일할 때 공통 언어 없이 협업하는 상황과 동일하다. 개발자가 마이크로칩을 모르는 상태에서 마이크로칩 전문가와 일하면, 용어가 코드에 잘못 반영되고 전문가도 이해 못하는 코드가 나온다.</p>
+<p>DDD(도메인 주도 설계)의 <strong>유비쿼터스 언어(Ubiquitous Language)</strong> 개념으로 해결한다. 개발자·AI·도메인 전문가 모두 같은 용어를 사용하게 만드는 것. 이를 위해 <strong>ubiquitous-language 스킬</strong>을 만들었다. 코드베이스를 훑어 용어를 찾고, 마크다운 테이블 형태의 용어 사전을 자동 생성한다. AI에게 넘기고 계획 시 항상 열어두면, AI의 싱킹 트레이스를 보면 계획이 정교해지고 장황함이 줄어든다.</p>
+<p><span style="font-size:1.1em"><strong>팁 2: AI와 공통 언어를 만들어라. 유비쿼터스 언어 마크다운 파일을 프로젝트에 두고 항상 참조하게 하라.</strong></span></p>
+<hr>
+<h2>5. 실패 모드 3 — 만들었는데 작동 안 한다 (TDD 스킬)</h2>
+<p>피드백 루프(정적 타입, 브라우저 접근, 자동화 테스트)가 있어도 <strong>LLM은 이를 잘 활용하지 못한다</strong>. 경험 많은 개발자처럼 피드백 루프를 최대한 쓰는 게 아니라, 한 번에 너무 많은 코드를 만든 뒤에야 타입 체크나 테스트를 돌린다.</p>
+<p>Pragmatic Programmer의 "헤드라이트보다 빨리 달리지 마라(Don't Outrun Your Headlights)" — 피드백 속도가 고속도로 제한이라는 뜻. LLM을 작은 단계로 강제하는 해결책이 <strong>TDD</strong>다. 먼저 테스트를 통과시키고, 그 다음 리팩터링하면서 설계를 다듬는다.</p>
+<p>테스트 작성의 어려움(단위 크기 결정, 모킹 대상, 테스트할 동작 선택)은 사실 <strong>좋은 코드베이스일수록 테스트하기 쉽다</strong>는 진실을 가리킨다. 코드베이스가 좋을수록 피드백 루프가 좋아지고, LLM에 더 좋은 피드백이 주어질수록 더 좋은 코드가 나온다.</p>
+<p><span style="font-size:1.1em"><strong>팁 3: TDD 스킬로 AI를 작은 단계로 강제하라.</strong></span></p>
+<hr>
+<h2>6. 딥 모듈 구조 — AI가 탐색할 수 있는 코드베이스</h2>
+<p>좋은 코드베이스의 모습으로 <strong>딥 모듈(Deep Module)</strong> 개념을 소개한다(John Ousterhout).</p>
+<ul>
+<li><strong>딥 모듈</strong>: 단순한 인터페이스 뒤에 많은 기능·복잡함을 숨김. 인터페이스만 써도 됨.</li>
+<li><strong>샬로 모듈(Shallow Module)</strong>: 기능은 별로 없는데 인터페이스가 복잡함.</li>
+</ul>
+<p>샬로 모듈이 범람하는 코드베이스는 AI가 탐색할 아주 작은 덩어리들이 엄청나게 많은 구조다. AI는 오히려 이런 코드베이스를 잘 만들어내는 경향이 있어서 문제가 심화된다. AI가 코드 탐색 시 제때 맞는 모듈에 도달하지 못하거나 의존성을 전부 이해하지 못한다.</p>
+<p>해결: <strong>improve-codebase-architecture 스킬</strong>. 관련 코드를 찾아 한데 묶고 딥 모듈로 감싸는 반복 단계. 인터페이스 경계에서 테스트하면 TDD와도 잘 맞는다.</p>
+<hr>
+<h2>7. 인터페이스 설계 위임 — 개발자의 인지 부하 관리</h2>
+<p>더 많은 코드를 배포할 수 있지만 머리가 속도를 못 따라가는 피로 문제. 딥 모듈 구조를 <strong>회색 상자(Grey Box)</strong>처럼 다루면 해결된다. 인터페이스만 설계하고, 구현은 AI에게 위임. 구현을 깊게 리뷰하지 않아도 된다(단, 금융 등 중요 영역은 예외).</p>
+<p>조건: 모듈 바깥에 테스트 가능한 경계가 있고, 목적을 이해하고 외부에서 설계할 수 있어야 한다.</p>
+<p>PRD나 이슈 작성 시 <strong>어떤 모듈이 바뀌고 인터페이스가 어떻게 달라지는지</strong> 구체적으로 명시하는 것이 Pocock의 실천 방식. Kent Beck의 "매일 시스템 설계에 투자하라"를 인용 — Specs-to-Code는 설계에 투자하는 게 아니라 오히려 빼앗는 것이다.</p>
+<p><span style="font-size:1.1em"><strong>팁 5: 인터페이스는 개발자가 설계하고, 구현은 AI에게 위임하라. 단, 모듈 지도를 항상 머릿속에 두어라.</strong></span></p>
+<hr>
+<h2>8. 결론 — 전략적 설계자로서의 개발자</h2>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>AI를 전술 실행자로 보면, 그 위에서 전략적으로 생각하는 사람이 필요하다. 그게 바로 개발자다.</strong></span></p>
+<p>그 역할에는 20년 넘게 쌓아온 소프트웨어 기본기가 필요하다. 기본기가 더 이상 쓸모없다는 생각은 틀렸다 — 오히려 그 어느 때보다 중요하다.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] grill-me 스킬(또는 유사 접근) 도입해 새 기능 시작 전 디자인 콘셉트 공유 연습</li>
+<li>[ ] 현재 프로젝트에 유비쿼터스 언어 마크다운 파일 만들어 AI 컨텍스트에 항상 포함시키기</li>
+<li>[ ] TypeScript 미사용 프로젝트가 있다면 정적 타입 도입 검토</li>
+<li>[ ] AI에게 브라우저 접근 권한 주기 (Claude Code MCP 설정)</li>
+<li>[ ] 현재 코드베이스의 샬로 모듈을 딥 모듈로 리팩터링하는 계획 세우기</li>
+<li>[ ] PRD·이슈 작성 시 "어떤 모듈이, 인터페이스가 어떻게 바뀌는지" 명시 습관화</li>
+<li>[ ] Matt Pocock GitHub 저장소(mapocock/skills) 확인해 grill-me·ubiquitous-language 스킬 코드 분석</li>
+<li>[ ] John Ousterhout 『A Philosophy of Software Design』 읽기</li>
+<li>[ ] Kent Beck의 매일 설계 투자 원칙을 팀 워크플로우에 반영</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR "[한국어더빙] 소프트웨어 기본기가 그 어느 때보다 중요합니다 — Matt Pocock" · https://www.youtube.com/watch?v=CNcVW8qUZLQ · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요, 여러분. 컨퍼런스 잘 즐기고 계신가요? 좋네요, 멋집니다.</p>
+<p>여러분께 꼭 전하고 싶은 메시지가 있습니다. 어떤 분들께는 조금이나마 위로가 되었으면 합니다. 이 새로운 시대에 자기 기술이 더는 가치 없다고 느끼는 분들께 — 저는 소프트웨어 기본기가 지금이야말로 그 어느 때보다 중요하다고 말씀드리고 싶습니다.</p>
+<p>저는 강사이고 최근에는 "진짜 엔지니어를 위한 Claude Code"라는 강의를 가르치고 있습니다. 이름도 꽤 도발적이죠. 그 강의를 준비하면서 AI 코딩 커리큘럼을 만들어야 했는데 이게 꽤 악몽이었습니다. 모든 게 계속 바뀌니까요. AI는 완전히 새로운 패러다임이고, 새로운 걸 받아들이려면 기존 규칙은 당연히 다 내려놓아야 한다는 분위기죠.</p>
+<p>그래서 이와 관련해 <strong>Specs-to-Code</strong> 흐름이 생겼습니다. 앱이 어떻게 동작해야 하는지 명세서를 먼저 쓰고, 그 다음 AI를 써서 코드로 바꾸는 방식입니다. 앱에 문제가 생기면 다시 명세서로 돌아가면 됩니다. 코드를 굳이 볼 필요 없이 명세서만 바꾸고 컴파일러를 다시 돌리면 코드가 더 나옵니다.</p>
+<p>저도 해봤습니다. 그런데 코드 안 보려고 해도 결국 보게 됐습니다. 처음엔 코드가 나오고, 실행하면 더 나쁜 코드가, 다시 하면 또 더 나쁜 코드가 나왔습니다. 결국 쓰레기만 남더군요. 코드를 그냥 무시하고 알아서 관리되게 두면 된다는 생각은 결국 이름만 다른 바이브 코딩일 뿐이었습니다.</p>
+<p>그럼 어떻게 해야 매번 나쁜 코드, 더 나쁜 코드가 나오지 않게 할 수 있을까요? LLM에게 좋은 코드베이스가 어떤 모습인지 설명해줘야겠다고 생각했습니다. 예전에 정말 좋아하던 책 — John Ousterhout의 『A Philosophy of Software Design』을 꺼냈습니다. 거기서 나쁜 코드를 <strong>복잡한 코드</strong>라고 정의합니다. "복잡성은 소프트웨어 시스템의 구조와 관련되어 그 시스템을 이해하고 수정하기 어렵게 만드는 모든 것"입니다.</p>
+<p>그러니까 나쁜 코드베이스는 바꾸기 어려운 코드베이스입니다. 좋은 코드베이스는 쉽게 바꿀 수 있습니다. 『The Pragmatic Programmer』의 소프트웨어 엔트로피 챕터도 봤습니다. 엔트로피는 사물들이 점점 재난 쪽으로, 서로 흩어지고 무너지는 경향입니다. 코드베이스를 바꿀 때마다 그 변경 하나만 생각하고 전체 시스템 설계를 생각하지 않으면 코드베이스는 점점 더 나빠집니다. Specs-to-Code 방식으로 컴파일러만 계속 다시 돌리면 전부 더 나쁜 코드를 만들고 있었던 거죠.</p>
+<p>Specs-to-Code 흐름을 떠받치는 생각 중 하나는 "코드가 싸다(Code is Cheap)"는 겁니다. 저는 그 말이 맞지 않다고 생각합니다. 코드는 싸지 않아요. 나쁜 코드는 그 어느 때보다 비용이 큽니다. 바꾸기 어려운 코드베이스를 갖고 있으면 AI가 줄 수 있는 수많은 이점을 가져갈 수 없습니다. 좋은 코드베이스에서는 AI가 정말 잘 작동합니다. 그래서 소프트웨어 기본기도 그 어느 때보다 중요해집니다.</p>
+<p>이게 이 강연의 핵심입니다. 이제 AI를 쓰면서 겪었거나 아직 겪지 않았을 여러 실패 사례를 이야기하고, 오래된 책들로 돌아가 좋은 소프트웨어 관행이 어떻게 피할 수 있게 해주는지 살펴보겠습니다.</p>
+<p><strong>첫 번째 실패 모드 — AI가 내가 원하는 대로 해주지 않는다.</strong></p>
+<p>머릿속엔 좋은 아이디어가 있다고 생각했는데 AI가 완전히 딴 걸 해버렸습니다. 내가 원하지도 않은 명세 같은 걸 만들어버리는 거죠. 『The Pragmatic Programmer』에서는 "아무도 정확히 자기가 뭘 원하는지 모른다"고 말합니다. AI와 대화할 때는 일종의 요구사항 수집을 AI가 하고 있는 셈입니다. 그러다 Frederick P. Brooks의 『The Design of Design』을 알게 됐습니다. 그 책에서 <strong>디자인 콘셉트(Design Concept)</strong>라는 개념을 이야기합니다. 여러 사람이 함께 뭔가를 설계할 때 그 사이에 아직 형태가 잡히지 않은 아이디어가 떠다닌다는 뜻입니다. 그건 자산이 아니고 마크다운 파일에 넣어둘 수 있는 것도 아닙니다. 우리가 만들고 있는 것에 대한 보이지 않는 이론 같은 것이죠.</p>
+<p>저와 AI는 디자인 콘셉트를 공유하지 못하고 있었던 겁니다. 그래서 <strong>grill-me 스킬</strong>을 만들었습니다. 아주 단순한 스킬입니다 — 이 계획의 모든 부분을 끝까지 집요하게 물어보면서 서로 같은 이해에 도달할 때까지 계속 인터뷰해 주세요. 프레더릭 브룩스가 말한 디자인 트리의 각 갈래를 하나씩 따라가고, 각 결정 사이의 의존성을 하나씩 풀어나가는 겁니다. 이 스킬이 들어있는 저장소는 별이 13,000개가 넘을 정도로 완전히 바이럴이 됐습니다. AI가 한 프로젝트에서 60개 질문을 던지고, 어떤 사람들에게는 서로 이해가 됐다고 판단할 때까지 100개 질문을 하기도 했습니다. AI가 일종의 논쟁 상대처럼 바뀌는 거예요. 계속 아이디어를 던지면서 둘이 같은 이해에 도달하려고 붙잡고 있는 거죠. 그 대화를 PRD로 바꾸거나 이슈로 만들어 다음 에이전트가 이어서 처리하게 할 수 있습니다.</p>
+<p>제가 쓰는 Claude Code의 기본 Plan Mode보다 이게 더 낫다고 생각합니다. Plan Mode는 뭔가 결과물을 만들고 싶어 안달이 나 있고, 그냥 계획을 만들려고 하죠. 저는 먼저 디자인 콘셉트를 공유하는 게 훨씬 좋다고 생각합니다. 첫 번째 팁입니다.</p>
+<p><strong>두 번째 실패 모드 — AI가 너무 장황하다.</strong></p>
+<p>AI와 거의 서로 말이 안 맞는 느낌. AI가 지금 뭘 하고 있는지 설명하려고 말이 너무 많아지는 것 같습니다. 분명 같은 언어로 대화하는데도요. 이건 도메인 전문가와 함께 일할 때의 경험과 똑같습니다. 마이크로칩 관련 뭔가를 만들어야 하는데 나는 마이크로칩이 뭔지도 모르는 상황. 공통 언어를 먼저 만들어야 하고, 그렇지 않으면 나도 제대로 이해 못하는 코드로 옮기게 되죠. 그래서 저는 <strong>도메인 주도 설계(DDD)</strong>로 돌아갔습니다. DDD의 <strong>유비쿼터스 언어(Ubiquitous Language)</strong> 개념을 쓰면 개발자들끼리의 대화, 코드의 표현, 도메인 전문가와의 대화가 모두 같은 도메인 모델에서 나옵니다.</p>
+<p>여러분과 AI가 공유하는 용어 목록이 담긴 마크다운 파일 같은 겁니다. 이를 위한 스킬도 만들었습니다 — 코드베이스를 훑어서 용어를 찾고 마크다운 테이블로 정리해주는 스킬. AI에게 넘기고 계획할 때도 늘 열어둡니다. AI의 싱킹 트레이스를 읽어보면서 알게 된 건 — 계획을 더 잘하게 해줄 뿐 아니라 AI가 덜 장황하게 생각하게 만들고, 실제 구현도 계획한 것과 더 잘 맞게 해줍니다. 두 번째 팁: AI와 공통 언어를 만드세요.</p>
+<p><strong>세 번째 실패 모드 — AI와 생각을 맞췄는데 작동을 안 한다.</strong></p>
+<p>피드백 루프를 쓰는 게 방법입니다. 정적 타입(TypeScript를 안 쓰고 있다면 말이 안 되죠), 브라우저 접근 권한, 자동화된 테스트. 문제는 LLM이 이런 피드백 루프가 있어도 잘 활용하지 못한다는 점입니다. 경험 많은 개발자처럼 쓰지 못하고, 한 번에 너무 많은 코드를 만든 뒤에야 타입 체크나 테스트를 돌립니다. Pragmatic Programmer는 "헤드라이트보다 빨리 달리지 마라" — 피드백 속도가 고속도로 제한이라는 뜻입니다. 그러니 진행하면서 테스트를 돌리고 작게 한 걸음씩 가야 합니다.</p>
+<p>세 번째 스킬은 <strong>TDD</strong>입니다. LLM이 정말 작은 단계로 움직이게 강제해주기 때문입니다. 먼저 테스트를 통과시키고, 그 다음 코드를 더 보기 좋게 리팩터링하면서 설계를 다듬습니다. 테스트가 어려운 이유는 — 어느 정도 크기의 단위를 테스트할지, 무엇을 모킹할지, 어떤 동작을 테스트할지 결정해야 하고 이 결정들이 전부 서로 영향을 주기 때문입니다. 우리가 발견한 건 <strong>좋은 코드베이스일수록 테스트하기도 쉽다</strong>는 점입니다. 코드베이스가 좋을수록 피드백 루프가 좋아지고, LLM에 더 좋은 피드백을 줄수록 더 좋은 코드가 나옵니다.</p>
+<p><strong>딥 모듈 구조</strong></p>
+<p>좋은, 테스트하기 좋은 코드베이스가 어떤 모습인지 생각해봤습니다. John Ousterhout은 코드베이스에 <strong>딥 모듈(Deep Module)</strong>이 있어야 한다고 말합니다. 많은 함수를 노출하는 모듈이 잔뜩 있는 구조가 아닌, 비교적 적은 수의 크고 깊은 모듈 — 단순한 인터페이스입니다.</p>
+<p>딥 모듈: 단순한 인터페이스 뒤에 많은 기능과 복잡함을 숨깁니다. 그냥 인터페이스만 쓰면 됩니다. 샬로 모듈: 기능은 별로 없는데 인터페이스가 복잡합니다. 샬로 모듈로 가득한 코드베이스는 AI가 지나가야 할 아주 작은 덩어리들이 엄청나게 많은 구조입니다. AI가 탐색하기 정말 어렵습니다. 오히려 AI는 이런 코드베이스를 잘 만들어내는 경향이 있습니다. 결국 AI가 코드가 뭘 하는지 이해하지 못하고, 의존성도 파악하지 못하게 됩니다.</p>
+<p>딥 모듈 구조로 바꾸는 <strong>improve-codebase-architecture 스킬</strong>: 코드베이스를 살펴보면서 관련 있는 코드를 찾아 한데 묶고 딥 모듈로 감쌉니다. 경계가 단순해져서 인터페이스에서 테스트하고 검증할 수 있어 TDD와 잘 맞습니다.</p>
+<p><strong>인터페이스 설계 위임 — 피로 해소</strong></p>
+<p>AI 시대에 더 많은 코드를 배포할 수 있지만 머리가 속도를 못 따라갑니다. 딥 모듈로 가득한 구조는 읽고 이해하기도 훨씬 쉽습니다. 이 모듈들을 <strong>회색 상자(Grey Box)</strong>처럼 다룰 수 있습니다 — 인터페이스만 설계하고 구현은 너무 걱정하지 않겠다고요. 앱에서 덜 중요한 부분은 구현을 자세히 리뷰하지 않아도 됩니다. 금융처럼 중요한 영역은 예외. 모듈 바깥에 테스트 가능한 경계가 있고 그 목적을 이해하고 바깥에서 설계할 수 있다면 구현을 깊게 파고들 필요 없습니다.</p>
+<p>다섯 번째 팁: <strong>인터페이스를 설계하고 구현은 위임하세요.</strong> 단, 코드를 만지거나 계획을 세울 때마다 모듈을 함께 생각해야 합니다. 어떤 모듈들이 있는지 그 지도를 잘 알아야 하고, 그것이 팀의 공통 언어가 되어야 합니다. PRD를 쓸 때 어떤 모듈이 바뀌고 인터페이스가 어떻게 달라지는지 구체적으로 적습니다.</p>
+<p>이 생각은 Kent Beck에게서 온 것입니다 — "매일 시스템 설계에 투자하세요." 스펙이 코드를 만들게만 두면 시스템 설계에 투자하는 게 아니라 오히려 빼앗고 있는 겁니다.</p>
+<p><strong>결론</strong></p>
+<p>코드는 싸지 않습니다. AI를 코드를 직접 바꾸는 전술 담당자로 본다면 그 위에 전략적으로 생각하는 사람이 필요합니다. 그 사람이 바로 여러분입니다. 그리고 거기에는 20년 넘게 써온 소프트웨어 기본기가 필요합니다.</p>
+<p>소개한 스킬들은 GitHub 저장소 mapocock/skills에 있습니다. 교육이나 무료 자료는 YouTube, Twitter, AI Hero에서 확인하세요.</p>
+<p>이 새로운 AI 시대에 여러분도 좋은 영향을 만들 수 있다는 자신감을 얻으셨으면 합니다. 감사합니다.</p>
+</details>
+</body></html>
