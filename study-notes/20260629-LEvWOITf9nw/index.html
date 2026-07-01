@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>AI가 코드를 쓰는 시대, 무엇을 가르쳐야 할까요? (Rainer Stropek, TEDxLinz)</title>
+<meta name="description" content="AI가 코딩을 대신 쓰는 시대 — 잃는 건 결과가 아니라 &#x27;과정&#x27;이라는 상실(grief). 화자의 답은 &quot;한 단계 위 추상 레이어로 올라가라&quot; — 나는 coder가 아니라 developer다. 새 프로그래밍 언어는 &#x27;명확성(clarity)&#x27;이고, 이건 모든 지식노동자의 보편 역량이 된다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>AI가 코드를 쓰는 시대, 무엇을 가르쳐야 할까요? (Rainer Stropek, TEDxLinz)</h1>
+<div class="meta">원작자 Rainer Stropek · Linz (CoderDojo Linz 멘토 / AI 전문가·개발자) · 업로드 2026-06-29 · 18.3분 · <a href="https://youtu.be/LEvWOITf9nw" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>AI가 코드를 쓰는 시대, 무엇을 가르쳐야 할까요? (Rainer Stropek, TEDxLinz)</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>AI가 코드를 대신 쓰면서 개발자가 느끼는 건 기술 공포가 아니라 <strong>상실(grief)</strong> — 사라지는 건 결과가 아니라 사랑했던 '과정'이다. 화자의 답은 "도구와 싸우지 말고 <strong>한 단계 위 추상 레이어로 올라가라</strong>" — 나는 coder가 아니라 developer다. 새로운 프로그래밍 언어는 <strong>명확성(clarity)</strong>이고, 이건 개발자뿐 아니라 모든 지식노동자의 보편 역량이 된다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Rainer Stropek · AI 전문가·개발자, CoderDojo Linz 멘토 · 추정 출처 linz.coderdojo.net · TEDxLinz 강연 · 업로드 2026-06-29 · 18.3분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>저항은 공포가 아니라 상실(grief)</td>
+<td>AI 거부 정서의 정체를 잘못 짚으면 대응도 틀림</td>
+<td>잃는 건 결과가 아니라 사랑했던 '과정'</td>
+</tr>
+<tr>
+<td>coder가 아니라 developer</td>
+<td>정체성을 도구가 아닌 본질에 두면 AI가 위협이 아니라 확장이 됨</td>
+<td>나는 코딩이 아니라 '만드는 것'을 사랑했다</td>
+</tr>
+<tr>
+<td>AI = 또 하나의 추상 레이어</td>
+<td>고급언어가 기계어를 가렸듯 AI도 도구일 뿐</td>
+<td>역할을 줄이는 게 아니라 일하는 '레벨'을 올림</td>
+</tr>
+<tr>
+<td>효율이 아니라 경험</td>
+<td>코딩이 안 사라지는 이유의 핵심 논리</td>
+<td>기계가 이겨도 체스·달리기는 남는다</td>
+</tr>
+<tr>
+<td>마지막 1%의 가치</td>
+<td>AI 시대 인간 개발자의 경제적 가치가 어디 있는지</td>
+<td>"거의 맞음 → 실제로 맞음" 사이를 메우는 사람</td>
+</tr>
+<tr>
+<td>새 언어 = 명확성(clarity)</td>
+<td>문법이 아니라 의도 전달이 병목이 됨</td>
+<td>"원하는 걸 정확히 설명할 수 있는가"가 기술이 됨</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>grief (상실/애도)</strong> — 화자가 개발자의 AI 저항을 설명하는 핵심 단어. 두려움(fear)이 아니라, 사랑하던 무언가를 잃는 데서 오는 슬픔. 목공이 로봇에게 일을 뺏길 때 잃는 건 결과물이 아니라 나무를 깎는 '과정'이라는 비유. → grief vs fear</li>
+<li><strong>self-efficacy (자기효능감)</strong> — 심리학 용어. "내 아이디어가 현실을 바꿀 수 있다"는 느낌. 화자가 10대 때 몇 줄 코드로 화면에 패턴을 띄웠을 때 처음 느꼈고, 지금 AI와 일하며 그 감각을 다시 느낀다고 말함.</li>
+<li><strong>canary in the coal mine (탄광 속 카나리아)</strong> — 위험을 가장 먼저 감지하는 존재. 프로그래밍이 AI에 의해 가장 먼저 도전받은 직업 = 카나리아이고, 이제 "탄광은 어디에나 있다"(모든 지식노동으로 번진다).</li>
+<li><strong>the layer above (한 단계 위 레이어)</strong> — 화자의 처방. 도구와 싸우지 말고 그 위 추상 레이어에서 자기를 재정의하라. coder→developer, pixel pusher→visual thinker, sentence crafter→storyteller, diagnosis machine→healer.</li>
+<li><strong>clarity as a programming language (언어로서의 명확성)</strong> — 강연의 테제. 자연어가 프로그래밍 인터페이스가 되면서 문법이 아니라 "원하는 걸 명확히 기술하는 능력"이 새 병목이자 핵심 기술이 됨.</li>
+<li><strong>Commodore C128</strong> — 화자가 1987년(10대) 처음 가진 컴퓨터. 잡지의 코드를 한 줄씩 타이핑하며 프로그래밍에 빠진 출발점으로 등장. (시대적 맥락, 용어 자체는 부차적)</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·비유·뉘앙스. 원어 병기.</p>
+</blockquote>
+<ol>
+<li><strong>출발점은 "교사로서의 위기"</strong> — 화자는 본업이 AI 전문가(개발자에게 AI 워크플로 통합을 돕는)이고, 부업으로 밤에 학생을 가르친다(mentor). 어느 저녁 학생용 코딩 연습문제를 만들다 "AI가 이걸 다 무의미하게 만드는 거 아닌가"라는 생각에 정통으로 맞은 게 강연의 발단.</li>
+<li><strong>상실의 정체 — "공포가 아니라 grief"</strong> — 숙련 개발자들이 AI에 저항하는 건 신기술 공포가 아니다. 그들은 prestige(명망) 때문이 아니라 "코드로 뭔가 만드는 게 그냥 좋아서" 이 길을 택한 사람들이고, 기계가 그 부분을 더 잘하면 "그럼 나한텐 뭐가 남지?"라고 묻는다.</li>
+<li><strong>목공-로봇 비유(핵심)</strong> — 나무 냄새, 재료의 저항감, 손으로 형태를 빚는 느낌을 사랑하는 목공. 로봇이 더 빠르고 정밀하게 쉬지 않고 같은 일을 한다. 목공이 로봇 프로그래밍을 배울 수는 있지만 <strong>사라지는 건 결과가 아니라 과정(not the result, the process)</strong>이다.</li>
+<li><strong>화자 본인은 두렵지도 슬프지도 않다(모순)</strong> — 헤드라인대로면 "대체될" 처지인데, 정작 AI와 일하며 <strong>수년 만에 가장 재미있게</strong> 개발하고 있다. 이유: <strong>아이디어와 현실 사이의 거리가 극적으로 짧아져서(distance between idea and reality has shortened)</strong> — 10대 때의 self-efficacy를 다시 느낀다.</li>
+<li><strong>"나는 코딩을 사랑한 게 아니었다"</strong> — 깨달음의 핵심. 그가 사랑한 건 코딩이 아니라 <strong>developing things</strong> — 멘탈 모델 구축, 아이디어를 형태로 빚기, 모호한 생각을 쓸 만한 실체로 바꾸기. 코드는 도구였을 뿐. → "I'm not just a coder. I'm a developer."</li>
+<li><strong>AI는 또 하나의 추상 레이어</strong> — 고급 프로그래밍 언어가 레지스터·메모리주소·기계어를 안 보게 해줬듯, AI도 강력하지만 결국 추상 레이어. <strong>역할을 줄이는(shrink) 게 아니라 확장한다(expand)</strong> — 목표는 더 커지고 탐색할 아이디어는 더 야심차진다. AI는 창의성을 뺏는 게 아니라 <strong>마찰(friction)을 없앤다</strong>.</li>
+<li><strong>코딩이 안 사라지는 이유 ① 효율 아닌 경험</strong> — 기계가 매번 이겨도 체스를 두고, 엔진이 더 빨라도 달리기·자전거·요트를 한다. <strong>효율이 핵심이었던 적이 없다. 경험이 핵심이었다.</strong> 손으로 만든(handmade) 소프트웨어가 비효율적이지만 의도적(intentional)이라는 이유로 언젠가 가치를 인정받을지도.</li>
+<li><strong>코딩이 안 사라지는 이유 ② 사고 훈련</strong> — 코딩은 정밀함·논리·인내를 가르치고, "컴퓨터가 내가 시킨 그대로 했을 때의 감각"을 가르친다.</li>
+<li><strong>코딩이 안 사라지는 이유 ③ 마지막 1%</strong> — AI는 실수한다. 시간이 갈수록 줄겠지만 0은 안 된다. <strong>"거의 맞음(almost correct)"과 "실제로 맞음(actually correct)" 사이의 마지막 몇 %가 비싸고 가치 있다.</strong> 코드를 진짜로 이해하는 사람의 가치는 전부 쓰는 게 아니라 <strong>뭐가 틀렸는지 아는 것</strong> — 디버그·검증·간극 메우기.</li>
+<li><strong>이건 프로그래밍만의 이야기가 아니다</strong> — 디자이너·작가·번역가·변호사·회계사·건축가·의사 모두 같은 감정 여정을 겪는다: <strong>부정(denial) → 공포(fear) → 상실(grief) → 재정의(redefinition)</strong>. 프로그래밍은 first frontier(첫 전선)일 뿐.</li>
+<li><strong>처방 = the layer above</strong> — 도구와 싸우지 말고 그 위 레이어에서 재정의하라. coder→developer, pixel pusher→visual thinker, sentence crafter→storyteller, diagnosis machine→<strong>맥락·공포·희망을 이해하는 healer</strong>. 각 직업이 "내 일의 본질은 뭔가, 무엇이 대체 불가능한가"를 스스로 물어야 함.</li>
+<li><strong>교육은 어떻게 바뀌나</strong> — "AI 없이 코딩을 배우는 게 여전히 의미 있나?" → <strong>그렇다, 절대적으로.</strong> 에세이를 쓴다고 다 작가가 되는 게 아니고, 미적분을 배운다고 다 수학자가 되는 게 아니듯, 코딩은 <strong>사고방식을 빚는 일반 교양(general education)</strong>으로 math·language·music처럼 남는다. 단 <strong>가르치는 방식</strong>이 바뀐다.</li>
+<li><strong>테제 — "The new programming language is clarity"</strong> — 자연어가 프로그래밍 인터페이스가 되면 문법은 더 이상 병목이 아니다. <strong>명확성이 새 병목.</strong> 원하는 걸 기술할 수 있는가? 예시를 줄 수 있는가? 제약을 설정할 수 있는가? "좋은 결과"가 뭔지 설명할 수 있는가? 결과가 의도와 맞는지 테스트할 수 있는가? → <strong>소통(communication)이 기술 역량(technical skill)이 된다.</strong> 다이어그램·예시·공유된 이해가 중요해짐.</li>
+<li><strong>clarity는 보편 역량</strong> — 변호사가 AI를 쓸 때, 디자이너가 이미지 생성기에 프롬프트할 때, 매니저가 AI 에이전트에게 업무를 위임할 때 모두 명확성이 핵심. <strong>"모호한 아이디어를 정밀한 명세로 바꾸는 능력"</strong>은 과거 프로그래머의 초능력이었지만 이제 모두의 필수 요건이 됨.</li>
+<li><strong>화자가 도달한 결론</strong> — 가르치기를 그만두지 않았다. 다만 <strong>"문법을 가르치는 사람"이라는 자기규정을 그만뒀다.</strong> 이제 가르치는 건 <strong>주체성(agency)·명확성(clarity), 그리고 추상 레이어를 넘나들며 아이디어를 현실로 바꾸는 기예.</strong> 코딩은 여전히 사랑하지만 그것으로 직업 정체성 전체를 정의하지 않는다. "중심이 이동했고, 그래도 괜찮다(the center has moved and that's okay)."</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>발단 — 교사의 밤</td>
+<td>학생 연습문제를 만들다 "AI가 이걸 무의미하게 만드나" 자문</td>
+</tr>
+<tr>
+<td>2</td>
+<td>출발점으로 — 1987</td>
+<td>C128로 처음 느낀 코딩의 마법 = self-efficacy</td>
+</tr>
+<tr>
+<td>3</td>
+<td>"프로그래밍은 죽었다"</td>
+<td>진짜 문제는 AI가 코드를 잘 짜는 게 아니라 '과정'을 앗아가는 것 = grief</td>
+</tr>
+<tr>
+<td>4</td>
+<td>화자의 모순</td>
+<td>정작 본인은 수년 만에 가장 즐겁다 — 아이디어와 현실의 거리가 짧아져서</td>
+</tr>
+<tr>
+<td>5</td>
+<td>coder→developer</td>
+<td>사랑한 건 코딩이 아니라 '만드는 것'. AI는 또 하나의 추상 레이어</td>
+</tr>
+<tr>
+<td>6</td>
+<td>코딩이 남는 이유</td>
+<td>효율 아닌 경험 + 사고훈련 + 마지막 1%(뭐가 틀렸는지 아는 가치)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>카나리아</td>
+<td>프로그래밍은 첫 전선일 뿐, 모든 지식노동이 같은 여정을 겪는다</td>
+</tr>
+<tr>
+<td>8</td>
+<td>처방</td>
+<td>the layer above — 도구와 싸우지 말고 위 레이어에서 재정의</td>
+</tr>
+<tr>
+<td>9</td>
+<td>교육·테제</td>
+<td>코딩은 교양으로 남되 방식이 바뀐다. 새 언어 = clarity(보편 역량)</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 발단 — 어느 교사의 밤</h2>
+<p>화자는 본업 AI 전문가이자 부업 멘토. 어느 저녁 학생용 코딩 연습문제를 만들다 정통으로 맞은 생각: "AI가 이 모든 걸 무의미하게 만드는 거 아닌가." 아이러니하게도 그는 매일 AI를 쓰며 도구가 어설픈 자동완성에서 진짜 강력한 시스템으로 진화하는 걸 직접 봐온 사람이라, 질문이 더 아프게 박혔다. 프로그래밍은 그의 직업을 넘어 정체성이었고, 가르치는 일은 그의 목적(purpose)이었기 때문.</p>
+<h2>2. 출발점으로 돌아가다 — 1987</h2>
+<p>그날 밤 그의 생각은 첫 컴퓨터 Commodore C128로 거슬러 올라간다. 잡지의 코드를 한 줄씩 타이핑하면 대개 작동하지 않았지만(한 글자만 틀려도 멈춤), 작동하는 순간엔 마법 같았다. 그에게 프로그래밍은 음악 같았다 — 머릿속 이미지를 코드로 번역하고, 잡지는 악보, 화면의 픽셀은 소리였다. 그때 처음 느낀 <strong>self-efficacy</strong>(내 아이디어가 현실을 바꾼다는 감각). 기술이 아니라 <strong>표현과 경험</strong>이 핵심이었다.</p>
+<h2>3. "프로그래밍은 죽었다"</h2>
+<p>오늘날 어디서나 듣는 말. 사람들은 흥분·안도·심지어 자부심으로 말한다. 기술적으론 틀린 말이 아니다. 하지만 <strong>진짜 문제는 AI가 코드를 더 잘 짜는 게 아니라, 우리가 사랑에 빠졌던 부분을 앗아간다는 것.</strong> 이 저항은 기술 공포가 아니라 <strong>상실(grief)</strong>이다 — 목공-로봇 비유처럼, 사라지는 건 결과가 아니라 <strong>과정</strong>이다. 교사로서 이게 무섭다: 기계가 시스템 전체를 생성한다면, 나는 학생을 무엇을 위해 준비시키는가?</p>
+<h2>4. 화자의 모순</h2>
+<p>그런데 정작 그 자신은 두렵지도 슬프지도 않다. 헤드라인대로면 "대체될" 처지인데 AI와 일하며 <strong>수년 만에 가장 즐겁다.</strong> 이유는 AI가 대신 일해줘서가 아니라, <strong>아이디어와 현실 사이의 거리가 극적으로 짧아졌기</strong> 때문 — 10대 때의 그 감각을 다시 느낀다.</p>
+<h2>5. coder가 아니라 developer</h2>
+<p>여기서 깨닫는다. <strong>그가 사랑한 건 코딩이 아니라 "만드는 것"</strong> — 멘탈 모델을 세우고, 아이디어를 빚고, 모호한 생각을 쓸 만한 실체로 바꾸는 일. 코드는 도구였을 뿐이다. 프로그래밍 언어가 늘 추상화였듯(레지스터·기계어를 가려줌), <strong>AI도 강력하지만 또 하나의 추상 레이어</strong>다. 역할을 줄이는 게 아니라 확장하고, 창의성을 뺏는 게 아니라 <strong>마찰을 없앤다</strong>.</p>
+<h2>6. 그래도 코딩은 남는다 — 세 가지 이유</h2>
+<ul>
+<li><strong>효율 아닌 경험</strong>: 기계가 매번 이겨도 체스를 두고, 엔진이 빨라도 달린다. 효율이 핵심이었던 적이 없다. 손으로 만든 소프트웨어가 "비효율적이지만 의도적"이라는 이유로 가치를 얻을 날이 올지도.</li>
+<li><strong>사고 훈련</strong>: 코딩은 정밀함·논리·인내, 그리고 "컴퓨터가 시킨 그대로 했을 때의 감각"을 가르친다.</li>
+<li><strong>마지막 1%</strong>: AI는 실수를 0으로 줄이지 못한다. <strong>"거의 맞음"과 "실제로 맞음" 사이</strong>가 비싸고 가치 있다. 코드를 진짜 아는 사람의 가치는 전부 쓰는 게 아니라 <strong>뭐가 틀렸는지 아는 것</strong>(디버그·검증·간극 메우기).</li>
+</ul>
+<h2>7. 카나리아 — 프로그래밍은 첫 전선일 뿐</h2>
+<p>이건 프로그래밍만의 이야기가 아니다. 프로그래밍은 AI가 "우리를 가치 있게 만든다고 믿었던 것"에 처음 도전한 직업 = <strong>탄광 속 카나리아</strong>이고, 이제 탄광은 어디에나 있다. 디자이너·작가·번역가·변호사·회계사·건축가·의사 모두 같은 여정을 겪는다: <strong>부정 → 공포 → 상실 → (바라건대) 재정의.</strong> "나는 무엇을 사랑했던가, 그걸 어떻게 계속할 것인가."</p>
+<h2>8. 처방 — the layer above</h2>
+<p>답은 도구와 싸우는 게 아니라 <strong>그 위 레이어를 찾는 것.</strong> 화자에겐 그게 "나는 coder가 아니라 developer"였다. 디자이너에겐 "pixel pusher가 아니라 visual thinker", 작가에겐 "sentence crafter가 아니라 storyteller", 의사에겐 "진단 기계가 아니라 맥락·공포·희망을 이해하는 healer". 각 직업이 "내 일의 본질은 뭔가, 무엇이 대체 불가능한가 — 기계가 못 해서가 아니라 <strong>해선 안 되기에</strong>"를 물어야 한다.</p>
+<h2>9. 교육의 변화와 테제 — 새 언어는 명확성</h2>
+<p>"AI 없이 코딩을 배우는 게 의미 있나?" → <strong>그렇다.</strong> 코딩은 사고방식을 빚는 <strong>일반 교양</strong>으로 math·language·music처럼 남는다. 단 가르치는 방식이 바뀐다. 자연어가 프로그래밍 인터페이스가 되면서 <strong>문법은 더 이상 병목이 아니다 — 명확성(clarity)이 새 병목.</strong></p>
+<blockquote>
+<p><strong>The new programming language is clarity.</strong>
+원하는 걸 기술할 수 있는가? 예시를 줄 수 있는가? 제약을 설정할 수 있는가? "좋은 결과"가 뭔지 설명할 수 있는가? 결과가 의도와 맞는지 테스트할 수 있는가?</p>
+</blockquote>
+<p>소통이 기술 역량이 되고, <strong>"모호한 아이디어를 정밀한 명세로 바꾸는 능력"</strong>은 과거 프로그래머의 초능력에서 모두의 필수 요건이 된다. 화자는 가르치기를 그만두지 않았다. 다만 "문법을 가르치는 사람"이라는 규정을 버리고, <strong>주체성(agency)·명확성·아이디어를 현실로 바꾸는 기예</strong>를 가르친다. "중심이 이동했고, 그래도 괜찮다."</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 내가(차드가) AI에 느끼는 저항이 '공포'인지 '상실(grief)'인지 구분 — 사라지는 게 결과인지 과정인지 점검</li>
+<li>[ ] 내 일의 "the layer above" 한 문장 만들기 ("나는 <strong><em>가 아니라 </em></strong>다")</li>
+<li>[ ] AI 위임 시 <strong>clarity 체크리스트</strong> 적용: ①원하는 것 기술 ②예시 ③제약 ④"좋은 결과" 정의 ⑤의도-결과 검증</li>
+<li>[ ] AI 산출물의 "마지막 1%"(거의 맞음→실제로 맞음)를 누가/어떻게 검증하는지 워크플로에 명시</li>
+<li>[ ] 다리오 아모데이의 "코딩 배워야 하나" 관점과 대조 → 지금 코딩을 배워야 할까요 - Anthropic CEO 다리오 아모데이</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] AI가 코드를 쓰는 시대, 무엇을 가르쳐야 할까요? | Rainer Stropek | TEDxLinz · https://youtu.be/LEvWOITf9nw · 전사: Whisper large-v3 (auto)
+추정 원작: Rainer Stropek (CoderDojo Linz / TEDxLinz) — linz.coderdojo.net, ted.com/tedx</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>얼마 전, 겉보기엔 따분해 보일 법한 어느 저녁이 있었습니다. 풀타임 근무를 마치고 집 책상에 앉아 있었고, 화면엔 수업 계획과 연습문제 — 학생들을 위한 작은 코딩 챌린지들 — 이 떠 있었죠. 본업 외에 저는 가르치고 멘토링을 하는데, 그걸 여가 시간에 합니다. 그 연습문제들을 바라보다 생각했습니다. "내가 지금 뭘 하고 있는 거지?" 소중한 시간과 저녁, 자원을 들여 기술과 프로그래밍 교육을 준비하고 있었는데, 문득 이런 생각이 들었죠. "AI가 이 모든 걸 무의미하게 만드는 거 아닌가?"</p>
+<p>아이러니가 여기 있습니다. 직업적으로 저는 AI 전문가입니다. 개발자들이 워크플로에 AI를 통합하도록 돕는 게 제 일이죠. 이 도구들이 어설픈 자동완성에서 진정으로 강력한 시스템으로 진화하는 걸 지켜봤습니다 — 매일 쓰니까요. 바로 그래서 이 질문이 그토록 세게 박혔습니다. 저는 단지 "프로그래밍은 죽었다"는 말을 들은 게 아니라, 제 에디터 안에서 그게 실제로 일어나는 걸 보고 있었습니다. 문장 몇 개의 설명에서 함수 전체, 기능 전체가 생성됐죠. 그리고 수십 년 만에 처음으로 자문했습니다. 내가 사랑하는 것, 내가 가르치는 것이 곧 무의미해지는 건가? 프로그래밍은 단지 직업이 아니라 제 삶 대부분 동안 정체성의 일부였고, 가르치는 일은 제 목적의 일부였기에, 그 질문은 예상보다 아팠습니다.</p>
+<p>그래서 그날 밤, 또 다른 연습문제를 쓰는 대신 제 생각은 맨 처음으로, 제가 프로그래밍과 사랑에 빠진 그 순간으로 흘러갔습니다. 1987년, 10대였던 저는 첫 컴퓨터 Commodore C128을 갖게 됐습니다. 오늘날 기준으론 완전히 쓸모없죠 — 메모리도, 화려한 그래픽도, 인터넷도 없으니까요. 40년도 더 전의 일입니다. 그런데도 그게 제 삶을 완전히 바꿨습니다. 컴퓨터 잡지의 코드를 한 줄씩, 한 페이지씩 몇 시간이고 타이핑했습니다. 거의 항상 작동하지 않았죠. 글자 하나 빠지거나 오타 하나면 아무 일도 안 일어났습니다. 하지만 작동했을 때, 화면에 작은 게임이나 단순한 패턴이 떴을 때, 그건 마법 같았습니다. 처음으로 중첩 루프를 짜서 화면에 패턴을 그렸을 때, 그 프로그램이 너무 자랑스러워 부모님, 조부모님, 봐줄 만한 누구에게나 보여줬죠. 심지어 동네 전자제품 가게(현지인들에겐 옛 Pluskauf의 Hartlauer)에 가서, Commodore 컴퓨터를 팔던 그곳 직원들이 팔 줄을 몰라, 전시된 컴퓨터에 제 작은 프로그램을 타이핑했습니다. 패턴이 떠오르고 선이 나타나자 사람들이 감탄했죠. 그리고 가게에 들어온 부모들에게 직원이 말했습니다. "보세요, 프로그래밍이 미래입니다. 아이가 미래의 일부가 되길 바라면 이 기계를 사야 합니다."</p>
+<p>그때 제게 프로그래밍은 음악 같았습니다. 머릿속에 무언가를 상상하고 그걸 코드로 번역했죠. 완전 초보였던 제게 컴퓨터 잡지는 악보였고, 화면에 그려지는 픽셀은 제 소리였습니다. 그 나이의 제게 프로그래밍은 기술이 아니라 표현과 경험, 아이디어를 실체로 바꾸는 일이었습니다. 그리고 그때 확실히 알았죠. 이건 단지 즐기는 게 아니라, 남은 평생 매일 하고 싶은 일이라고.</p>
+<p>이제 오늘날로 빨리 감아봅시다. 가는 곳마다 같은 문장을 듣습니다. "프로그래밍은 죽었다." 사람들은 흥분으로, 안도로, 때론 자부심으로 말합니다. "이제 AI가 코드를 쓴다. 원하는 걸 설명하기만 하면 끝이다." 기술적으론 틀린 말이 아닙니다. 그런데 이상한 부분이 여기 있습니다. 문제는 AI가 우리보다 코드를 더 잘 쓴다는 게 아닙니다. 문제는 AI가 <strong>우리 중 많은 이가 사랑에 빠졌던 그 부분을 앗아간다</strong>는 겁니다. 숙련 개발자들에게서 늘 봅니다. 명망 때문이 아니라 그저 코드로 무언가 만드는 게 좋아서 이 길을 택한 사람들이, 갑자기 자문하죠. "기계가 이 부분을 나보다 더 잘하면, 나한텐 뭐가 남지?" 이 저항은 기술 공포가 아닙니다. 그건 상실입니다.</p>
+<p>나무를 사랑하는 목공을 상상해보세요. 냄새, 재료의 저항감, 손으로 형태를 빚는 느낌. 이제 같은 일을 더 빠르고 정밀하게, 쉬지 않고 밤낮으로 하는 로봇을 상상해보세요. 물론 목공은 로봇 프로그래밍을 배울 수 있습니다. 하지만 중요한 무언가가 사라집니다. 결과가 아니라 과정이요. 지금 많은 개발자가 바로 그 지점에서 힘들어합니다. 그리고 교사로서 그건 무섭습니다. 기계가 시스템 전체를 생성한다면, 저는 정확히 무엇을 위해 학생들을 준비시키는 걸까요? 그들이 졸업할 즈음엔 같은 형태로 존재하지 않을 기예를 훈련시키는 건 아닐까요?</p>
+<p>무엇을 가르쳐야 할지 자문하던 그 저녁, 저는 한 가지 모순을 깨달았습니다. 저는 매일 AI와 일하는데, 개인적으로 두려움이나 상실을 느끼지 않습니다. 오히려 수년 만에 가장 즐겁게 소프트웨어를 개발하고 있죠. 그게 놀라웠습니다. 헤드라인대로면 저는 쓸모없어졌다고, 대체됐다고 느껴야 마땅하니까요. 하지만 에디터를 열고 AI와 일할 때 제가 느끼는 건 그게 아닙니다. 저는 강력해진 느낌을 받습니다. AI가 저 대신 일해서가 아니라, 갑자기 <strong>아이디어와 현실 사이의 거리가 극적으로 짧아졌기</strong> 때문입니다.</p>
+<p>AI와 함께하는 이 느낌은 제 과거를 떠올리게 합니다. 10대 때 코드 몇 줄로 저를 놀라게 할 무언가를 만들 수 있었죠. 코드가 완벽해서가 아니라 제가 무언가를 일어나게 만들었기 때문에요. 그때 처음으로 심리학자들이 자기효능감(self-efficacy)이라 부르는 것 — 내 아이디어가 현실을 바꿀 수 있다는 느낌 — 을 느꼈습니다. 그리고 수십 년 뒤 매일 AI와 나란히 일하며 그 느낌을 다시 알아봅니다. 머릿속에 아이디어가 있고, AI가 그걸 더 빠르게, 더 큰 규모로, 더 적은 장벽으로 현실화하도록 돕죠.</p>
+<p>그때 중요한 걸 깨달았습니다. 저는 애초에 코딩 자체를 사랑한 게 아니었습니다. 저는 <strong>무언가를 개발하는 것</strong>을 사랑했습니다 — 멘탈 모델을 세우고, 아이디어를 빚고, 모호한 생각을 실재하고 쓸모 있는 것으로 바꾸는 일을요. 코드는 그저 도구였습니다. 그제서야 그 문장이 딱 들어맞았죠. <strong>나는 단지 coder가 아니다. 나는 developer다.</strong> 프로그래밍 언어는 늘 추상화였습니다. 레지스터, 메모리 주소, 기계어를 생각하지 않게 해줬죠. AI는 또 하나의 추상화 레이어입니다. 강력하긴 하지만 여전히 도구일 뿐이죠. 그건 제가 하는 일을 대체하지 않습니다. 제가 일하는 <strong>레벨</strong>을 바꿀 뿐입니다. 제 역할을 줄이지 않고 오히려 확장합니다. 목표는 더 커지고, 탐색할 아이디어는 더 야심차집니다. AI는 제 창의성을 뺏지 않습니다. 그저 마찰을 없앨 뿐입니다.</p>
+<p>하지만 그래도 원래의 아픔은 남습니다. 저는 코딩을 사랑하니까요. 진심으로요. 제한된 수단 — 정밀한 문법, 정밀한 의미론 — 으로 무언가를 기술하는 그 지적 도전을 잃고 싶지 않습니다. 그럼 코딩은 어떻게 될까요? 저는 코딩이 사라질 거라 생각하지 않습니다. 기계가 매번 이겨도 우리는 여전히 체스를 둡니다. 엔진이 더 빠르고 효율적이어도 우리는 여전히 달리고, 자전거를 타고, 항해합니다. <strong>효율이 핵심이었던 적은 없습니다. 경험이 핵심이었죠.</strong> 무언가가 더 이상 가장 효율적인 길이 아니라고 해서 가치가 없어지는 건 아닙니다. 코딩은 남을 겁니다 — 소프트웨어를 만드는 가장 빠른 길이어서가 아니라, 특정한 사고방식을 훈련하는 강력한 방법이기 때문입니다. 코딩은 정밀함, 논리, 인내를 가르칩니다. 컴퓨터가 내가 시킨 바로 그대로 했을 때의 감각을 가르치죠. 언젠가는 손으로 만든(handmade) 소프트웨어를, 효율적이지 않아서가 아니라 <strong>의도적(intentional)</strong>이기 때문에 가치 있게 여기게 될지도 모릅니다.</p>
+<p>코딩이 여전히 중요한 또 다른 이유가 있습니다. AI는 실수를 합니다. 시간이 지나면 줄겠지만 0이 되진 않을 겁니다. 그리고 "거의 맞음"과 "실제로 맞음" 사이의 마지막 몇 퍼센트가 비싸고 가치 있습니다. 바로 거기서 코드를 진정으로 이해하는 사람들이 엄청나게 가치 있어집니다. 모든 걸 쓰기 위해서가 아니라 무엇이 틀렸는지 알기 위해서요. 디버그하고, 검증하고, 간극을 메우기 위해서요.</p>
+<p>이제 제가 보기까지 더 오래 걸린 부분입니다. 지금까지 저는 프로그래머, 개발자, 제 세계 이야기를 했습니다. 하지만 이 이야기는 프로그래밍만의 것이 아닙니다. 프로그래밍은 첫 번째 전선(frontier)일 뿐입니다. AI가 "우리를 가치 있게 만든다고 믿었던 것"에 도전할 만큼 충분히 좋아진 첫 번째 직업이죠. 우리는 탄광 속 카나리아이고, 요즘 탄광은 어디에나 있습니다. 생각해보세요. 제가 묘사한 이 상실, 이 정체성 위기, "나한텐 뭐가 남지"라는 질문 — 디자이너들이 지금 그걸 묻고, 작가들이, 번역가, 변호사, 회계사, 건축가, 심지어 의사들도 묻고 있습니다. AI는 코드만 쓰는 게 아니라 계약서를 쓰고, 이미지를 생성하고, 법률 의견서 초안을 잡고, 엑스레이를 분석하니까요. 그 모든 분야에서 사람들이 제가 겪은 것과 같은 감정 여정을 지나고 있습니다. 먼저 부정 — "AI가 그건 못 해." 그다음 공포 — "잠깐, 할 수 있는 건가?" 그다음 상실 — "하지만 난 그걸 사랑하는데." 그리고 마지막으로, 바라건대 일종의 재정의 — "내가 진짜로 사랑했던 건 뭐였지? 그걸 어떻게 계속하지?"</p>
+<p>앞서 말한 목공은 단지 프로그래머의 은유가 아닙니다. AI가 자기가 수년간 통달한 그 일에서 점점 더 잘하는 걸 지켜보는 모든 지식노동자입니다. 하지만 최전선에 있으며 배운 게 있습니다. 답은 도구와 싸우는 게 아닙니다. 답은 <strong>그 위의 레이어를 찾는 것</strong>입니다. 제겐 그 레이어가 "나는 단지 coder가 아니라 developer다"였습니다. 디자이너에겐 "나는 픽셀을 미는 사람이 아니라 visual thinker다"일 수 있고, 작가에겐 "나는 문장 장인이 아니라 storyteller다", 의사에겐 "나는 진단 기계가 아니라 맥락과 공포와 희망을 이해하는 healer다"일 수 있죠. 모든 직업이 자기만의 그 문장을 찾아야 합니다. 불편한 일입니다. 우리에게 묻게 만드니까요. 내가 하는 일의 본질은 무엇인가? 내 일의 어떤 부분이 대체 불가능한가? 어쩌면 기계가 못 해서가 아니라 <strong>해선 안 되기</strong> 때문에요. 프로그래밍이 거기 먼저 도달했지만, 세상의 나머지가 뒤따를 겁니다.</p>
+<p>이건 가르침으로 이어집니다. 개발자로서 제 정체성이 바뀌었다면, 제가 전하는 것도 바뀌어야 하니까요. 그럼 AI 없이 코딩을 배우는 게 여전히 의미가 있을까요? 네, 절대적으로요. 우리는 많은 것을 가르칩니다 — 모두가 프로가 되어서가 아니라 그것이 우리의 사고방식을 빚기 때문입니다. 에세이를 쓰는 모두가 전문 작가가 되는 건 아니고, 미적분을 배우는 모두가 수학자가 되는 것도 아니며, 합창단에서 노래하는 모두가 노래로 돈을 버는 것도 아닙니다. 그리고 프로그래밍을 배우는 모두가 전문 소프트웨어 엔지니어가 될 필요도 없습니다. 코딩은 math처럼, language처럼, music처럼 일반 교양의 일부가 될 수 있습니다. 특정한 사고방식을 길러주니까요. 하지만 <strong>가르치는 방식은 바뀌어야 합니다.</strong> AI와 함께 자연어가 프로그래밍 인터페이스가 되기 때문이죠.</p>
+<p>그리고 이게 이 강연에서 여러분이 기억했으면 하는 테제입니다. <strong>새로운 프로그래밍 언어는 명확성(clarity)입니다.</strong> 수년간 프로그래밍은 아이디어를 문법으로 번역하는 일이었습니다. 하지만 문법은 더 이상 병목이 아닙니다. 명확성이 새 병목입니다. 원하는 걸 기술할 수 있습니까? 예시를 제공할 수 있습니까? 제약을 설정할 수 있습니까? 무엇이 좋은 것인지 설명할 수 있습니까? 결과가 의도와 맞는지 테스트할 수 있습니까? 소통이 기술 역량이 됩니다. 다이어그램이 중요하고, 예시가 중요하고, 공유된 이해가 중요해집니다. 그리고 그것이 2026년에 프로그래밍을 배운다는 것의 의미를 바꿉니다. 코드를 쓸 수 있느냐만이 아니라, AI가 여러분이 원하는 걸 실행할 수 있도록 의도를 표현할 수 있느냐죠.</p>
+<p>그리고 이건 프로그래밍에만 해당하는 게 아닙니다. 변호사가 AI를 쓸 때 명확성이 중요합니다. 디자이너가 이미지 생성기에 프롬프트할 때 명확성이 중요합니다. 매니저가 AI 에이전트에게 업무를 위임할 때 명확성이 중요합니다. <strong>모호한 아이디어를 정밀한 명세로 바꾸는 기술</strong> — 한때 프로그래머의 초능력이었던 것이 이제 보편적 요건이 되고 있습니다.</p>
+<p>그래서 그 저녁 책상 앞에서 제가 도달한 결론은 이렇습니다. 저는 가르치기를 멈추지 않았습니다. 다만 제 자신을 "문법을 가르치는 사람"으로 여기기를 멈췄습니다. 저는 주체성(agency)을 가르치고, 명확성(clarity)을 가르치고, 추상 레이어를 넘나들며 아이디어를 현실로 바꾸는 기예를 가르칩니다. 저는 여전히 코딩을 합니다. 진심으로 사랑하죠. 하지만 더 이상 그것으로 제 직업 인생 전체, 직업 정체성 전체를 정의하지 않습니다. 중심이 이동했고, 그래도 괜찮으니까요. 저는 단지 coder가 아니라 developer이고, 제 새로운 프로그래밍 언어는 명확성입니다. 감사합니다.</p>
+</details>
+</body></html>
