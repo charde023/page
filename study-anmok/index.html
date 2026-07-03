@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>오늘의공부 · 안목 훈련</title>
+<meta name="description" content="옵시디언 오늘의공부 시리즈를 직접 채워 넣는 인터랙티브 학습 노트">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← page 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>오늘의 공부 — 1주차</h1>
+  <div class="meta">매일 배운 개념을 직접 채워 넣는 인터랙티브 학습 노트 · 총 10일</div>
+</div>
+<ul class="card-list">
+<li><a class="card" href="day01/"><h2>Day 01 · 복리</h2><div class="cmeta">G6 (경제사) · M1 (질문 목적)</div><div class="csum">복리는 어제의 결과가 오늘의 씨앗이 되는 구조이고, 그 씨앗이 자라는 걸 눈으로 확인하기 전까지는 아무도 그게 자라고 있는 줄 모른다.</div></a></li>
+<li><a class="card" href="day02/"><h2>Day 02 · 해자</h2><div class="cmeta">G2 (전쟁사) · M2 (본질 파악)</div><div class="csum">해자는 만드는 게 아니라 시간이 파주는 것이고, 그 시간이 유효한 건 딱 그 시대의 공격 기술 안에서뿐이다.</div></a></li>
+<li><a class="card" href="day03/"><h2>Day 03 · 멱등성</h2><div class="cmeta">G1 (언어·어원) · M3 (숨은 전제 찾기)</div><div class="csum">세상은 몇 번을 다시 시도해도, 결과가 흔들리지 않는 것들 위에서만 안전하게 돌아간다.</div></a></li>
+<li><a class="card" href="day04/"><h2>Day 04 · 임계점</h2><div class="cmeta">G4 (과학) · M4 (맥락 판단)</div><div class="csum">세상은 대개 계단식으로 변하는데, 우리 눈에는 그 계단이 안 보여서 늘 &quot;왜 안 되지&quot;라고 먼저 묻는다.</div></a></li>
+<li><a class="card" href="day05/"><h2>Day 05 · 플라이휠</h2><div class="cmeta">G7 (공예·예술) · M5 (구별력)</div><div class="csum">플라이휠은 처음 한 번 세게 밀어 넣은 힘을 관성으로 저장해두는 바퀴다 — 잘 만든 구조는 두 번째 힘부터 내가 안 밀어도 스스로 돈다.</div></a></li>
+<li><a class="card" href="day06/"><h2>Day 06 · SSOT</h2><div class="cmeta">G6 (경제사) · M6 (사람 이해)</div><div class="csum">같은 사실이 두 곳에 적히는 순간, 그 둘은 언젠가 어긋난다.</div></a></li>
+<li><a class="card" href="day07/"><h2>Day 07 · 캘리브레이션</h2><div class="cmeta">G5 (심리·행동경제학) · M7 (리스크 점검)</div><div class="csum">&quot;확신한다&quot;는 말은 감정이 아니라 숫자다 — 그 숫자가 맞았는지 세어본 적 없다면, 확신은 그냥 목소리 크기일 뿐이다.</div></a></li>
+<li><a class="card" href="day08/"><h2>Day 08 · MECE·피라미드원칙</h2><div class="cmeta">G3 (철학·논리학) · M8 (가치 판단)</div><div class="csum">분류가 어긋나면 생각도 어긋난다 — 나눌 땐 겹치지도 빠지지도 않게(MECE), 쌓을 땐 결론부터 위로(피라미드), 전할 땐 납득부터 흐르게(SCQA) 만드는 게 정리된 사고의 뼈대다.</div></a></li>
+<li><a class="card" href="day09/"><h2>Day 09 · 안전재고</h2><div class="cmeta">G7 (고전·문학) · M9 (실행 가능성)</div><div class="csum">안전재고는 낭비가 아니라 흉년이 올 걸 미리 아는 사람이 풍년 한가운데서 미리 내는 보험료다.</div></a></li>
+<li><a class="card" href="day10/"><h2>Day 10 · 네트워크효과</h2><div class="cmeta">G1 (언어) · M10 (검증·복기)</div><div class="csum">재화의 가치가 물건 자체가 아니라 그걸 쓰는 사람의 숫자에서 나올 때, 그건 이미 언어와 같은 것이 되어 있다.</div></a></li>
+</ul>
+</body>
+</html>

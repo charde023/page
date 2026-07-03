@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 10 · 네트워크효과</title>
+<meta name="description" content="재화의 가치가 물건 자체가 아니라 그걸 쓰는 사람의 숫자에서 나올 때, 그건 이미 언어와 같은 것이 되어 있다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 10 · 네트워크효과</h1>
+  <div class="meta">G1 (언어) · M10 (검증·복기)</div>
+</div>
+
+<div class="oneliner">재화의 가치가 물건 자체가 아니라 그걸 쓰는 사람의 숫자에서 나올 때, 그건 이미 언어와 같은 것이 되어 있다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day10_frontmatter_date">
+  <span class="save-status" data-for="day10_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Network-effect-네트워크효과">Network-effect-네트워크효과</span></h2>
+<p><span style="color:#ef6c00"><strong>Network effect</strong></span> [ˈnɛtwɜːrk ɪˈfɛkt] · 네트워크 효과는 한 문장으로 이거야. 사용자가 늘수록 각 사용자가 얻는 효용이 커지는 재화. 보통 재화는 반대야 — 사과 한 알을 100명이 나눠 먹으면 몫이 줄어들지. 전화기는 정반대야. 딱 한 대 있으면 쓸모가 0이야(걸 사람이 없으니까), 100만 대가 되면 내 전화기 한 대의 가치가 훨씬 가파르게 뛰어.</p>
+<p>이 직관을 숫자로 표현한 게 <span style="color:#ef6c00"><strong>메트칼프의 법칙</strong></span>(Metcalfe's Law)이야. 네트워크의 가치는 대략 참여자 수의 제곱(n²)에 비례한다는 경향적 직관이야. 정밀히 증명된 물리 법칙이라기보단 "이렇게 폭발적으로 커진다"는 감을 잡아주는 어림식이지. 참여자가 10명이면 가능한 연결(쌍)은 45개, 100명이면 약 4,950개 — 사람은 10배 늘었는데 연결은 100배 넘게 늘어.</p>
+<p>노트에 정리된 구분은 둘이야. <span style="color:#ef6c00"><strong>직접 네트워크 효과</strong></span>는 같은 집단끼리 연결되는 경우(전화, 카카오톡). <span style="color:#ef6c00"><strong>간접 네트워크 효과</strong></span>는 서로 다른 두 집단이 서로를 끌어당기는 경우(양면시장) — 쿠팡이 대표적이야. 구매자가 많아지면 판매자가 몰리고, 판매자가 늘어 상품이 다양해지면 구매자가 더 몰리는 순환이야.</p>
+<p>여기서 <span class="wikiterm" title="옵시디언 원노트: Threshold-임계점">Threshold-임계점</span>과 만나는 지점이 핵심이야. 네트워크재는 임계 규모(critical mass)를 넘기 전까지는 거의 무가치해. 그런데 안 쓰는 사람이 오히려 손해를 보는 지점을 넘으면, 밀어주지 않아도 스스로 굴러가. 이 임계점을 먼저 넘은 쪽은 사실상 따라잡히지 않아 — 이미 다들 저쪽에 모여 있으면 나 혼자 옮겨봤자 얘기할 사람이 없거든. 그래서 네트워크 효과는 <span class="wikiterm" title="옵시디언 원노트: Moat-해자">Moat-해자</span> 중에서도 가장 깊은 해자로 꼽혀. 성벽처럼 물리적으로 부술 수 있는 게 아니라 사람들의 관성과 상호 의존으로 만들어진 해자라, 대포로도 못 뚫어.</p>
+<h2>② 다른 장르의 창 — 링구아 프랑카, 인류 최초의 네트워크재</h2>
+<p>중세 지중해 항구에는 이상한 말이 하나 떠돌았어. 제노바 상인, 베네치아 선원, 아랍 무역상, 오스만 관리가 한자리에서 물건값을 흥정하는데, 누구의 모국어도 아닌 혼성어를 썼어. 이탈리아어를 뼈대로 프랑스어·스페인어·아랍어·그리스어 단어가 뒤섞인 실용어였지. 사람들은 이 말을 <span style="color:#ef6c00"><strong>링구아 프랑카</strong></span>(lingua franca)라고 불렀어. 문자 그대로 옮기면 "프랑크인의 말"이야.</p>
+<p>흥미로운 게 "프랑크인"이라는 이름이야. 원래 서유럽 게르만계 한 부족의 이름이었는데, 십자군 전쟁 이후 아랍어권·그리스어권 사람들이 서유럽에서 온 사람이면 국적을 안 가리고 뭉뚱그려 "프랑크인"이라 불렀고, 이 항구 혼성어도 그렇게 이름이 붙었어. 정작 어느 한 민족의 순수한 모어는 아니었는데 말이야. 이 이름은 오늘날 언어학에서 "여러 모어를 가진 사람들이 공유하는 매개 언어" 전체를 가리키는 일반명사가 됐어.</p>
+<p>여기서 짚어야 할 통찰이 하나 있어. <span style="color:#ef6c00"><strong>어떤 언어가 링구아 프랑카가 되는 이유는 문법이 아름다워서가 아니야.</strong></span> 그 말을 쓰는 사람 숫자, 그 사람들과 거래할 필요성 때문이야. 지중해 상인들이 이 말을 배운 건 아름다워서가 아니라, 모르면 흥정이 안 됐기 때문이야.</p>
+<p>이 원리는 역사 속에서 몇 번이고 반복돼. 조선의 선비와 일본의 학승, 베트남의 관리는 입으로는 한마디도 안 통했지만, 붓과 종이만 있으면 필담(筆談)이 가능했어. 한문이라는 문자 네트워크를 공유했기 때문이야. 한자를 배운다는 건 중국어를 배운다기보다, 동아시아 지식인 네트워크의 회원증을 얻는 일에 가까웠어.</p>
+<p>중세~근대 초 유럽 학문 세계에서는 라틴어가 그 역할을 했어. 뉴턴이 『프린키피아』를 라틴어로 쓴 건 라틴어가 특별히 과학적이어서가 아니야. 그 시대 학자들의 네트워크가 라틴어로 연결돼 있었기 때문이야 — 라틴어는 학문 세계의 공용 화폐였던 셈이야.</p>
+<p>오늘날의 영어도 다르지 않아. 대영제국의 팽창과 20세기 미국의 패권이라는 역사적 우연이 겹치면서 영어 사용자의 숫자와 영향력이 임계점을 넘었고, 그 뒤론 "다들 쓰니까 나도 배운다"는 자기강화 순환이 굴러가는 거야. 언어를 배운다는 것 자체가 네트워크에 접속하는 행위였던 거지.</p>
+<h2>③ 다리 놓기 — 개념과 이야기, 그리고 내 사업</h2>
+<p>링구아 프랑카의 역사가 보여주는 건 이거야. <span style="color:#ef6c00"><strong>언어는 인류가 발명한 최초의, 가장 오래된 네트워크재다.</strong></span> 전화기나 플랫폼이 나오기 수천 년 전부터, 인간은 이미 "많은 사람이 쓸수록 가치가 커지는 도구"를 갖고 살았어.</p>
+<p>이걸 에이폼에 대입해보면 뼈아픈 지점이 있어. <span style="color:#ef6c00"><strong>쿠팡이 강한 이유는 상품이 좋아서가 아니야.</strong></span> 라틴어가 아름다워서 학자들이 쓴 게 아니었던 것처럼, 쿠팡도 상품력이 아니라 구매자·판매자 두 집단의 네트워크 그 자체가 힘의 원천이야. 그 순환을 소유한 건 쿠팡이고, 나는 그 안에서 장사하는 셀러 — 네트워크에 접속해 쓰는 참여자일 뿐, 소유자는 아니야. 링구아 프랑카를 유창하게 구사하는 상인이지, 그 언어를 발명한 사람은 아닌 거야.</p>
+<p>그럼 질문은 이거야. <span style="color:#ef6c00"><strong>내가 소유할 수 있는 나만의 작은 네트워크는 무엇인가?</strong></span> 쿠팡이라는 큰 네트워크는 못 가져도, 그 안에서 내가 직접 키우는 작은 네트워크는 있어 — 반복해서 사는 단골, 후기를 남겨주는 리뷰어, 입소문 내주는 체험단. 쿠팡 안의 트래픽은 알고리즘이 바뀌면 사라지지만, 내가 쌓은 이 네트워크는 플랫폼이 흔들려도 나를 따라와.</p>
+<p><strong>이어달리기</strong>: Day 2의 해자 ↔ Day 10의 네트워크효과 — 열흘의 수미상관. 열흘 전엔 "해자는 시간이 파주는 것"이라고 배웠는데, 결국 가장 깊게 파이는 해자는 성벽이나 데이터가 아니라 사람들 사이의 연결 그 자체였어. 성벽은 대포 한 방에 뚫리지만, 서로 연결된 사람들의 관성은 뚫을 대포가 없어.</p>
+<h2>④ 오늘의 안목 훈련 — M10 검증·복기 + 1주 미니 복기</h2>
+<p>M10은 앞의 아홉 렌즈와 성격이 달라. 지금까지는 "이번 판단을 어떻게 잘할까"를 훈련했다면, M10은 <span style="color:#ef6c00"><strong>이미 내린 판단을 되짚어 다음 판단의 정확도를 올리는 렌즈</strong></span>야. 순서는 이래.</p>
+<ol>
+<li>처음 판단이 뭐였나 2. 그 근거는 뭐였나 3. 실제 결과는 어땠나 4. 맞은 부분 5. 틀린 부분 6. 운이었던 부분 7. 실력이었던 부분 8. 반복되는 착각 9. 다음에 바꿀 기준 10. 뽑아낼 원리.</li>
+</ol>
+<p>핵심은 8번이야. <span style="color:#ef6c00"><strong>칭찬만 하고 끝내지 말고, 반복되는 착각의 패턴을 찾아야 진짜 복기다.</strong></span> "잘했다/못했다"로 끝내면 다음번에 또 같은 실수를 해. "이런 상황에서 나는 항상 이걸 과소평가한다"는 패턴을 뽑아내야 다음 판단이 달라져.</p>
+<p>오늘은 M10을 그대로 쓰되, 소재를 하나의 결정이 아니라 <span style="color:#ef6c00"><strong>지난 열흘의 공부 자체</strong></span>로 잡아볼게. Day 1~9의 개념을 한 줄씩 다시 불러서, 지금 내 사업 어디에 그게 있는지 스스로 적어보는 표야.</p>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>개념</th>
+<th>한 줄 정수</th>
+<th>내 사업 지금 어디?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>복리</td>
+<td>작은 게 매일 쌓이면 도약처럼 보인다</td>
+<td><input type="text" class="field-input field-input-cell" data-key="day10_s4_row1" data-label="복리"><span class="save-status" data-for="day10_s4_row1"></span></td>
+</tr>
+<tr>
+<td>2</td>
+<td>해자</td>
+<td>해자는 시간이 파주는 것</td>
+<td><input type="text" class="field-input field-input-cell" data-key="day10_s4_row2" data-label="해자"><span class="save-status" data-for="day10_s4_row2"></span></td>
+</tr>
+<tr>
+<td>3</td>
+<td>멱등성</td>
+<td>몇 번 눌러도 결과는 한 번이어야 안전</td>
+<td><input type="text" class="field-input field-input-cell" data-key="day10_s4_row3" data-label="멱등성"><span class="save-status" data-for="day10_s4_row3"></span></td>
+</tr>
+<tr>
+<td>4</td>
+<td>임계점</td>
+<td>넘기 전 무의미, 넘으면 세상이 달라짐</td>
+<td><input type="text" class="field-input field-input-cell" data-key="day10_s4_row4" data-label="임계점"><span class="save-status" data-for="day10_s4_row4"></span></td>
+</tr>
+<tr>
+<td>5</td>
+<td>플라이휠</td>
+<td>돌리기 어렵지, 돌면 관성이 돕는다</td>
+<td><input type="text" class="field-input field-input-cell" data-key="day10_s4_row5" data-label="플라이휠"><span class="save-status" data-for="day10_s4_row5"></span></td>
+</tr>
+<tr>
+<td>6</td>
+<td>SSOT</td>
+<td>장부는 하나, 나머지는 사본이다</td>
+<td><input type="text" class="field-input field-input-cell" data-key="day10_s4_row6" data-label="SSOT"><span class="save-status" data-for="day10_s4_row6"></span></td>
+</tr>
+<tr>
+<td>7</td>
+<td>캘리브레이션</td>
+<td>확신의 온도가 적중률과 맞아야 한다</td>
+<td><input type="text" class="field-input field-input-cell" data-key="day10_s4_row7" data-label="캘리브레이션"><span class="save-status" data-for="day10_s4_row7"></span></td>
+</tr>
+<tr>
+<td>8</td>
+<td>MECE·피라미드</td>
+<td>안 겹치고 안 빠지게, 결론부터</td>
+<td><input type="text" class="field-input field-input-cell" data-key="day10_s4_row8" data-label="MECE·피라미드"><span class="save-status" data-for="day10_s4_row8"></span></td>
+</tr>
+<tr>
+<td>9</td>
+<td>안전재고</td>
+<td>풍년에 흉년 대비 여유분을 쌓는다</td>
+<td><input type="text" class="field-input field-input-cell" data-key="day10_s4_row9" data-label="안전재고"><span class="save-status" data-for="day10_s4_row9"></span></td>
+</tr>
+<tr>
+<td>10</td>
+<td>네트워크효과</td>
+<td>쓸수록 가치 커지는, 가장 깊은 해자</td>
+<td><input type="text" class="field-input field-input-cell" data-key="day10_s4_row10" data-label="네트워크효과"><span class="save-status" data-for="day10_s4_row10"></span></td>
+</tr>
+</tbody>
+</table>
+<p>마지막으로 하나만. <span style="color:#ef6c00"><strong>열흘 중 가장 크게 생각이 바뀐 개념 하나는?</strong></span> (왜 바뀌었는지 한 줄로)</p>
+<div class="field"><div class="field-label">직접 적어보기</div><textarea class="field-input" data-key="day10_s4_extra" rows="2"></textarea><span class="save-status" data-for="day10_s4_extra"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question"><strong>1.</strong> 쿠팡 네트워크 안에서 나는 참여자일 뿐 소유자가 아니야. 5년을 들여서라도 직접 소유할 가치가 있는 &quot;내 작은 네트워크&quot;는 리뷰어·단골·체험단 중 어느 쪽이고, 왜 그쪽부터인가? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day10_s5_a1" rows="2"></textarea><span class="save-status" data-for="day10_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>2.</strong> 메트칼프의 법칙대로면 네트워크가 쪼그라들 때 가치도 n²으로 빠르게 무너져. 지금 내가 의존하는 네트워크 중, 참여자가 줄면 가장 먼저·가장 빠르게 무너질 곳은 어디인가? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day10_s5_a2" rows="2"></textarea><span class="save-status" data-for="day10_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>3.</strong> 오늘 내릴 작은 결정 하나: 이 &#x27;오늘의 공부&#x27; 시리즈, 1주차 열 편이 끝났어. 2주차(Day 11~24)를 계속할지, 계속한다면 뭘 바꿀지 — 시리즈 자체를 결정 대상으로 복기해본다면? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day10_s5_decision" rows="2"></textarea><span class="save-status" data-for="day10_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day09/">← Day 09</a>
+  <span></span>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      window.localStorage.setItem(key(field), field.value);
+      if(st){ st.textContent = field.value ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        field.value = v;
+        var st = statusEl(field);
+        if(st && v){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      field.addEventListener("input", function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = field.value.trim() || "(비어있음)";
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

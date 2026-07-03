@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 08 · MECE·피라미드원칙</title>
+<meta name="description" content="분류가 어긋나면 생각도 어긋난다 — 나눌 땐 겹치지도 빠지지도 않게(MECE), 쌓을 땐 결론부터 위로(피라미드), 전할 땐 납득부터 흐르게(SCQA) 만드는 게 정리된 사고의 뼈대다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 08 · MECE·피라미드원칙</h1>
+  <div class="meta">G3 (철학·논리학) · M8 (가치 판단)</div>
+</div>
+
+<div class="oneliner">분류가 어긋나면 생각도 어긋난다 — 나눌 땐 겹치지도 빠지지도 않게(MECE), 쌓을 땐 결론부터 위로(피라미드), 전할 땐 납득부터 흐르게(SCQA) 만드는 게 정리된 사고의 뼈대다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day08_frontmatter_date">
+  <span class="save-status" data-for="day08_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — MECE와 피라미드 원칙</h2>
+<p><span style="color:#ef6c00"><strong><span class="wikiterm" title="옵시디언 원노트: MECE-미씨">MECE-미씨</span></strong></span>는 Mutually Exclusive, Collectively Exhaustive의 앞글자야 — "서로 겹치지 않고(ME), 모으면 빠짐없이 전체를 덮는다(CE)". 두 조건은 서로 다른 실패를 각각 막아. ME가 무너지면 같은 걸 두 번 세는 이중집계가 생기고, CE가 무너지면 "그럼 이건?"이라는 반박이 뒤늦게 들어와. 매출 하락을 "광고 문제"와 "키워드 효율 하락"으로 나누면 같은 말을 두 번 한 ME 위반이고, "판매량 감소"와 "단가 하락"만 보고 상품 믹스 변화를 빠뜨리면 CE 위반이야.</p>
+<p>이 원칙을 <span class="wikiterm" title="옵시디언 원노트: Pyramid-Principle-피라미드원칙">피라미드 원칙</span>과 함께 체계로 정리한 사람이 맥킨지의 바버라 민토(Barbara Minto)야. 1960~70년대에 세운 이 틀은 지금 맥킨지·BCG·베인을 넘어 기업 보고서 작성법의 표준 뼈대가 됐지. 핵심은 이거야 — <span style="color:#ef6c00"><strong>생각은 아래에서 위로 쌓지만, 전달은 꼭대기부터 던진다.</strong></span> 분석은 데이터→패턴→결론의 상향식이지만, 보고할 땐 순서를 뒤집어 결론(꼭대기) 한 문장을 먼저 던지고, 근거 3~5개(중간층)를 대고, 그걸 데이터(바닥층)로 증명해. 이때 중간층 근거들이 바로 MECE여야 해 — 근거끼리 겹치면 설득력이 부풀려 보이고, 빠지면 "그건 왜 얘기 안 해요?"가 나오니까.</p>
+<p>그리고 결론을 던지기 전에 "왜 지금 이걸 들어야 하나"를 청중이 스스로 납득하게 만드는 도입부가 <span class="wikiterm" title="옵시디언 원노트: SCQA-상황복잡질문답">SCQA</span>야. Situation(이미 합의된 현재 상태) → Complication(뭐가 바뀌었나) → Question(자연히 떠오르는 질문) → Answer(권고, 곧 피라미드 꼭대기). 여기서 S는 반드시 청중이 이미 동의하는 사실이어야 해 — 논쟁적인 얘기로 시작하면 청중이 방어부터 하거든. 정리하면 이 셋은 한 벌의 도구야. <span style="color:#ef6c00"><strong>나눌 때는 MECE, 쌓을 때는 피라미드, 흘려보낼 때는 SCQA.</strong></span> 나누기(분류)가 먼저고, 그 위에 구조(전달)가 서고, 마지막에 이야기(설득)가 감싼다.</p>
+<h2>② 다른 장르의 창 — 나눈다는 것의 기술: 아리스토텔레스에서 린네까지</h2>
+<p>"분류"라는 행위를 인류가 처음 진지하게 다룬 건 고대 그리스 철학이야. 플라톤은 대화편 『소피스트』와 『정치가』에서 <span style="color:#ef6c00"><strong>디아이레시스(diairesis)</strong></span>, 즉 "나눔의 방법"을 제시해. 큰 부류를 잡고 계속 둘로 쪼개며 원하는 대상에 도달할 때까지 내려가라는 거야. "낚시꾼이란 무엇인가"를 정의할 때 기술 전체 → 생산기술/획득기술 → 그 안에서 다시 이분법으로 갈라 내려가 낚시꾼이 걸리는 자리를 찾는 식이지. 나눔 자체가 정의(definition)에 이르는 길이라고 본 거야.</p>
+<p>이걸 이어받아 체계화한 사람이 제자 아리스토텔레스야. 그는 어떤 것을 정의하는 방법을 딱 두 요소로 압축했어 — <span style="color:#ef6c00"><strong>유(genus, 큰 울타리)와 종차(differentia, 그 울타리 안에서의 차이)</strong></span>. "인간은 이성적 동물이다"라는 고전적 정의를 뜯어보면, "동물"이 유(더 큰 범주)이고 "이성적"이 종차(동물이라는 범주 안에서 인간만의 차이)야. 정의란 결국 큰 울타리를 먼저 정하고, 그 안에서 다른 것들과 구별되는 차이로 잘라내는 작업이라는 거지. 이 방식이 서양 논리학에서 수천 년간 "정의를 내리는 법"의 표준 틀이 됐어.</p>
+<p>이 유·종차의 사고방식이 근대에 가장 극적으로 꽃핀 자리가 생물 분류학이야. 18세기 스웨덴의 칼 폰 린네(Carl Linnaeus)는 뒤죽박죽이던 생물 이름 체계를 계-문-강-목-과-속-종의 위계로 정리했어. 여기서 '속(genus)'이라는 단어 자체가 아리스토텔레스의 그 genus와 같은 말이야 — 생물 하나하나를 "더 큰 범주(속) 안에서 종만의 차이(종차)로 잘라낸 이름"으로 부르는 이명법(예: Homo sapiens)을 완성한 거지. 이 체계의 설계 목표가 바로, 모든 생물이 일곱 단계 어딘가에 겹치지 않고(개과이면서 동시에 고양이과일 수 없다) 빠짐없이(모든 생물은 반드시 계 하나엔 속한다) 자리 잡는 것이었어. 사실상 <span style="color:#ef6c00"><strong>아리스토텔레스의 나눔의 원칙을 린네가 자연 전체에 적용해 본 2천 년짜리 프로젝트</strong></span>였던 셈이지.</p>
+<p>여기서 어원 하나. '카테고리(category)'는 그리스어 <span style="color:#ef6c00"><strong>카테고리아(katēgoria)</strong></span>에서 왔는데, 원래 "고발하다, 진술하다"에 가까운 법정 용어였어. 법정에서 "이것은 이러이러하다"고 못 박아 진술하던 말이 아리스토텔레스의 『범주론(Categoriae)』을 거치며 "서술할 수 있는 근본 술어들의 목록"이라는 철학 용어가 됐고, 거기서 오늘날 "분류 항목"이라는 뜻까지 흘러왔어. 무언가를 카테고리에 넣는 건 원래 법정에서 진술하듯 단정 짓는 무게를 가진 행위였던 거지.</p>
+<h2>③ 다리 놓기 — 분류의 철학과 에이폼</h2>
+<p>아리스토텔레스의 유·종차, 린네의 칠단 분류, 민토의 MECE는 결국 같은 질문을 서로 다른 시대에 되풀이해서 물은 거야 — <span style="color:#ef6c00"><strong>"이 전체를 겹치지도 빠지지도 않게 나누는 기준은 뭔가?"</strong></span> 이 질문은 에이폼 실무 어디에나 숨어 있어. 상품 카테고리에서 "여름용품"과 "물놀이용품"이 겹치면 분수물총이 두 카테고리에 동시에 잡혀 매출 집계가 이중으로 잡히고, "실내용품"이라는 울타리에서 빠진 신상품은 어느 리포트에도 안 걸리는 고아가 돼. 비용 항목을 광고비·물류비·인건비로 나눌 때도 "포장재비"가 어디 걸치는지 애매하면 그 비용은 새거나 두 번 잡혀. 할일보드 레인도 마찬가지야 — "급함"과 "이번주"가 겹치면 카드 하나가 두 레인에 다 들어갈 수 있고, 애매하게 낀 할일은 어느 레인에도 안 들어가고 방치돼.</p>
+<p>이건 AI에게 일을 시킬 때 특히 중요해 — <span style="color:#ef6c00"><strong>AI에게 좋은 위임이란 결국 MECE한 분해다.</strong></span> "상세페이지 개선해줘"처럼 안 나눠진 지시는 AI가 뭘 먼저 할지 스스로 쪼개야 하고, 그 쪼갬이 겹치거나 빠지면 결과물도 그렇게 나와. 반대로 "카피 3안, 이미지 배치안, FAQ 보강"으로 미리 나눠 지시하면 사람이 검수하기 쉬운 단위로 결과가 떨어져.</p>
+<p><strong>이어달리기</strong>: Day 7의 캘리브레이션(<span class="wikiterm" title="옵시디언 원노트: calibration-캘리브레이션">calibration-캘리브레이션</span>)과 오늘의 MECE는 순서가 있는 관계야. 판단을 점검(캘리브레이션)하려면 먼저 그 판단을 겹치지도 빠지지도 않게 나눠 적어야 해 — 뭉뚱그린 "감"으로는 어디가 맞고 틀렸는지 쪼갤 수 없거든. 나눠 적기(MECE)가 점검의 전제 조건인 셈이지.</p>
+<h2>④ 오늘의 안목 훈련 — M8 가치 판단</h2>
+<p>M8 가치 판단 렌즈는 <span style="color:#ef6c00"><strong>"이게 되는가"를 넘어 "이게 맞는가"를 묻는 훈련</strong></span>이야. AI가 대신 결정해주는 자리가 아니라 사람이 최종으로 누르는 버튼이지. 핵심 질문은 — 돈이 되는가, 사람에게 좋은가, 오래가는가, 책임질 수 있는가, 내 기준과 맞는가, 단기 이익과 장기 신뢰 중 뭘 택하는가. 같은 선택지도 기준에 따라 답이 완전히 달라진다는 게 요점이야.</p>
+<p>연습 — 매출을 늘리는 옵션 3개가 있어: <span style="color:#ef6c00"><strong>① 광고 증액 ② 신상품 출시 ③ 가격 인하.</strong></span> 이 셋을 돈(단기 매출)·지속성(6개월 뒤에도 유효한가)·브랜드(고객이 우리를 어떻게 기억하나) 세 기준으로 각각 판단해봐. 채워보면 같은 옵션이 한 기준에선 1등, 다른 기준에선 꼴찌가 되는 걸 직접 보게 돼.</p>
+<div class="field-label">광고 증액</div>
+<div class="inline-group"><label class="inline-field"><span class="inline-field-label">돈</span><input type="text" class="field-input" data-key="day08_s4_q1"><span class="save-status" data-for="day08_s4_q1"></span></label><label class="inline-field"><span class="inline-field-label">지속성</span><input type="text" class="field-input" data-key="day08_s4_q2"><span class="save-status" data-for="day08_s4_q2"></span></label><label class="inline-field"><span class="inline-field-label">브랜드</span><input type="text" class="field-input" data-key="day08_s4_q3"><span class="save-status" data-for="day08_s4_q3"></span></label></div>
+<div class="field-label">신상품 출시</div>
+<div class="inline-group"><label class="inline-field"><span class="inline-field-label">돈</span><input type="text" class="field-input" data-key="day08_s4_q4"><span class="save-status" data-for="day08_s4_q4"></span></label><label class="inline-field"><span class="inline-field-label">지속성</span><input type="text" class="field-input" data-key="day08_s4_q5"><span class="save-status" data-for="day08_s4_q5"></span></label><label class="inline-field"><span class="inline-field-label">브랜드</span><input type="text" class="field-input" data-key="day08_s4_q6"><span class="save-status" data-for="day08_s4_q6"></span></label></div>
+<div class="field-label">가격 인하</div>
+<div class="inline-group"><label class="inline-field"><span class="inline-field-label">돈</span><input type="text" class="field-input" data-key="day08_s4_q7"><span class="save-status" data-for="day08_s4_q7"></span></label><label class="inline-field"><span class="inline-field-label">지속성</span><input type="text" class="field-input" data-key="day08_s4_q8"><span class="save-status" data-for="day08_s4_q8"></span></label><label class="inline-field"><span class="inline-field-label">브랜드</span><input type="text" class="field-input" data-key="day08_s4_q9"><span class="save-status" data-for="day08_s4_q9"></span></label></div>
+<div class="field"><div class="field-label">세 기준으로 봤을 때, 결과가 가장 크게 엇갈린 옵션은 무엇이고 왜 그럴까:</div><textarea class="field-input" data-key="day08_s4_q10" rows="2"></textarea><span class="save-status" data-for="day08_s4_q10"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question"><strong>1.</strong> 지금 내 비용 항목 분류(광고비·물류비·인건비·기타)를 MECE 두 질문(겹치나? 빠졌나?)으로 점검하면, 어디가 겹치고 어디가 빠져 있을까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day08_s5_a1" rows="2"></textarea><span class="save-status" data-for="day08_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>2.</strong> 최근에 누군가에게(AI든 직원이든) 지시를 내렸는데 결과가 기대와 다르게 나온 적이 있다면, 그 지시가 MECE하게 나뉘어 있었는지 돌아보면 뭐가 보일까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day08_s5_a2" rows="2"></textarea><span class="save-status" data-for="day08_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>3.</strong> 오늘 내릴 작은 결정 하나: 지금 헷갈리게 겹쳐 있거나 어중간하게 걸쳐 있는 카테고리(상품·비용·할일보드 레인 중) 하나를 골라 MECE 기준으로 다시 그어본다면 어느 것을 고를까? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day08_s5_decision" rows="2"></textarea><span class="save-status" data-for="day08_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day07/">← Day 07</a>
+  <a href="../day09/">Day 09 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      window.localStorage.setItem(key(field), field.value);
+      if(st){ st.textContent = field.value ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        field.value = v;
+        var st = statusEl(field);
+        if(st && v){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      field.addEventListener("input", function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = field.value.trim() || "(비어있음)";
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

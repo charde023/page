@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 04 · 임계점</title>
+<meta name="description" content="세상은 대개 계단식으로 변하는데, 우리 눈에는 그 계단이 안 보여서 늘 &quot;왜 안 되지&quot;라고 먼저 묻는다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 04 · 임계점</h1>
+  <div class="meta">G4 (과학) · M4 (맥락 판단)</div>
+</div>
+
+<div class="oneliner">세상은 대개 계단식으로 변하는데, 우리 눈에는 그 계단이 안 보여서 늘 &quot;왜 안 되지&quot;라고 먼저 묻는다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day04_frontmatter_date">
+  <span class="save-status" data-for="day04_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Threshold-임계점">Threshold-임계점</span></h2>
+<p>영어 threshold는 고대 영어 þrescold(스레스콜드)에서 왔어. 뜻은 "문지방"이야. 유력한 어원 가설은 "밟다·타작하다(thresh)"와 "나무" 계열이 합쳐졌다는 설 — 곡식 타작하던 자리가 결국 문 앞이라, 안과 밖을 가르는 경계 바닥이 됐다는 얘기지. 확실한 건 하나야. <span style="color:#ef6c00"><strong>문지방은 넘기 전과 후가 다른 공간</strong></span>이라는 것. 발 하나 옮기는 것뿐인데 세계가 바뀐다.</p>
+<p>한자 임계(臨界)도 결이 같아. 임(臨)은 "다다르다", 계(界)는 "경계". 동서양이 각자 다른 이미지(문지방 vs 경계선)로 같은 구조를 가리킨 거야 — 양이 계속 쌓이다가 어느 한 점에서 질이 바뀐다는 구조.</p>
+<p>여기서 짚어야 할 게 있어. 우리 대부분은 세상을 <span style="color:#ef6c00"><strong>선형(linear) 세계관</strong></span>으로 그려 — 노력 1엔 결과 1, 노력 2엔 결과 2. 이 눈으로 보면 결과가 안 보이는 순간 "틀렸다"고 판단해버려. 하지만 임계점이 있는 세계는 <span style="color:#ef6c00"><strong>비선형(nonlinear)</strong></span>이야. 노력이 90% 쌓일 때까지 겉보기 결과는 0에 가깝다가, 남은 구간에서 튀어 오른다. <span class="wikiterm" title="옵시디언 원노트: Exponential-지수적">Exponential-지수적</span> 곡선의 초반부가 거의 평평해 보이는 것도 같은 이유 — 곡선은 처음부터 같은 법칙으로 움직였는데, 우리 눈이 초반의 완만함에 속는 것뿐이야.</p>
+<p>함정은 여기서 생겨. 임계점 전 구간에서는 <span style="color:#ef6c00"><strong>노력과 결과가 심리적으로 분리되어 보인다</strong></span>. 사람은 눈에 보이는 즉각적 피드백으로 행동을 강화하거나 포기하는데, 임계점 이전은 정확히 "일하는데 안 보이는" 구간이야. 그래서 정상 궤도를 달리던 시도가 문지방 몇 걸음 앞에서 포기당한다.</p>
+<h2>② 다른 장르의 창 — 끓는점 위의 세계</h2>
+<p>물을 냄비에 올려두고 불을 켜봐. 온도계가 60도, 70도, 90도, 99도까지 올라가도 냄비 안은 여전히 <span style="color:#ef6c00"><strong>물</strong></span>이야. 액체. 흐르고 출렁인다. 그런데 100도에 닿는 순간, 겉보기엔 딱 1도 차이인데 물 분자들이 서로를 붙들던 힘을 놓아버리고 기체로 뛰쳐나가. 이걸 <span style="color:#ef6c00"><strong>상전이(phase transition)</strong></span>라고 불러 — 물질의 상태(고체·액체·기체)가 바뀌는 지점. 온도는 연속적으로 올라갔는데 상태는 계단처럼 끊어져서 바뀐다.</p>
+<p>더 흥미로운 건 100도에 도달한 다음이야. 물이 100도에서 끓고 있어도, 완전히 증발할 때까지 계속 불을 넣어야 해. 왜냐면 그 열에너지가 이제 온도를 올리는 게 아니라 <span style="color:#ef6c00"><strong>물 분자의 결합구조를 깨는 데</strong></span> 쓰이기 때문이야. 이걸 <span style="color:#ef6c00"><strong>잠열(latent heat)</strong></span>이라고 해 — 온도계 눈금엔 안 나타나지만 분명히 에너지가 투입되는 구간. 100도의 물이나 100도의 수증기나 온도는 똑같이 100도지만, 그 사이에 에너지가 조용히 소모된다. 숫자만 보면 아무 일도 안 일어나는 것 같지만, 실제론 구조가 재편되고 있는 거야.</p>
+<p>임계점의 또 다른 얼굴은 <span style="color:#ef6c00"><strong>과냉각수(supercooled water)</strong></span>야. 흔들림 없는 깨끗한 물은 어는점 0도 아래로 내려가도 얼음 결정의 '씨앗'이 없으면 액체를 유지해. 영하 몇 도까지도 액체로 남아있다가, 병을 툭 치거나 얼음 조각 하나 떨어뜨리는 순간 — 눈앞에서 물 전체가 순식간에 얼어붙어. 조건은 이미 갖춰져 있었는데, 방아쇠 하나가 없어서 안 넘어가고 버티고 있었던 거야.</p>
+<p>핵물리학의 <span style="color:#ef6c00"><strong>임계질량(critical mass)</strong></span>도 같은 구조야. 우라늄 같은 핵분열 물질이 스스로 연쇄반응을 지속할 최소 질량 — 못 미치면 반응이 사그라들고, 넘으면 스스로를 먹으며 폭발적으로 지속돼. 자연은 여러 층위에서 같은 메시지를 반복해. <span style="color:#ef6c00"><strong>변화는 매끄러운 경사가 아니라 계단이다.</strong></span></p>
+<h2>③ 다리 놓기 — 개념과 이야기, 그리고 내 사업</h2>
+<p>잠열 구간 — 온도계는 100도에서 안 움직이는데 에너지는 계속 들어가는 그 구간 — 이게 딱 <span style="color:#ef6c00"><strong>성과 없는 축적 구간</strong></span>의 물리학 버전이야. 겉으로 보이는 숫자(매출·순위·리뷰수)는 안 움직이는데 계속 힘을 쏟는 시기. 그 순간 "이거 안 되는구나"라고 판단하기 쉽지만, 사실 에너지는 온도(보이는 지표) 대신 구조(안 보이는 신뢰·데이터)를 바꾸는 데 쓰이고 있었던 걸 수도 있어.</p>
+<p>에이폼 실무로 가져와보자. 리뷰 개수가 일정 수를 넘어야 전환율이 확 뛰는 경험, 차드도 봤을 거야. 리뷰 10개와 50개는 전환율이 비슷하다가, 어느 순간을 넘으면 구매 버튼 누르는 사람이 늘어. 상품 페이지의 임계점이지. 광고도 마찬가지 — <span style="color:#ef6c00"><strong>손익분기 ROAS</strong></span>는 "적자"에서 "흑자"로 넘어가는 문지방이야. ROAS 150%와 200%는 숫자로는 완만한 차이지만, 손익분기선을 넘는 순간 그 광고의 의미 자체가 바뀐다 — 돈 태우는 활동에서 돈 버는 활동으로.</p>
+<p>여기서 진짜 안목이 필요해. 신상품이 지금 <span style="color:#ef6c00"><strong>잠열 구간(곧 끓을 물)</strong></span>인지, <span style="color:#ef6c00"><strong>불 꺼진 냄비(더 넣어도 안 오를 물)</strong></span>인지 구분하는 것. 겉보기 신호(매출 정체)는 같아 보여도 안쪽 사정은 다르거든. 노출은 느는데 전환만 안 붙는지, 노출 자체가 죽어가는지. 매출 하나만 보면 못 가르지만, 다른 계기판(노출·클릭·재구매·리뷰 증가 속도)을 같이 보면 불이 붙어있는지 꺼져있는지 갈린다.</p>
+<p><strong>이어달리기</strong>: 어제의 멱등성 ↔ 오늘의 임계점 — <span class="wikiterm" title="옵시디언 원노트: Idempotency-멱등성">Idempotency-멱등성</span>은 "몇 번을 반복해도 결과가 그대로인 것"이고, 임계점은 "반복이 쌓이면 어느 순간 결과가 확 달라지는 것"이야. 둘 다 반복(反復)을 다루지만 정반대 얼굴이지. 하나는 반복의 안정성을, 하나는 반복의 폭발성을 말해준다.</p>
+<h2>④ 오늘의 안목 훈련 — M4 (맥락 판단)</h2>
+<p>AI나 일반론이 던지는 조언은 "일반적으로는 A"라는 형태야. 근데 그 A가 항상 네 상황에 맞는 건 아니야. M4 맥락 판단 렌즈는 "이 조언이 어떤 조건에서 맞고 어떤 조건에서 틀리는가"를 떼어서 보는 훈련이야. 물어야 할 것: 누구의 상황을 말하는 조언인가, 어떤 카테고리·가격대를 전제로 한 숫자인가, 내 사업의 자본·시간·경쟁 강도는 그 전제와 같은가, 다른 조건이면 임계점 위치 자체가 옮겨지는가.</p>
+<p><strong>연습</strong>: "리뷰 100개가 전환율 임계점"이라는 말, 한 번쯤 들어봤을 거야. 특정 카테고리·가격대에서 관찰된 하나의 사례일 뿐, 모든 상품에 적용되는 물리 법칙은 아니야. 차드의 실제 카테고리·가격대로 이 통설을 다시 따져봐.</p>
+<div class="field"><div class="field-label">이 통설이 나온 배경(어떤 카테고리·가격대를 전제로 했을지 추정):</div><textarea class="field-input" data-key="day04_s4_q1" rows="2"></textarea><span class="save-status" data-for="day04_s4_q1"></span></div>
+<div class="field"><div class="field-label">내 카테고리에서는 신뢰가 리뷰 개수보다 다른 신호(Q&amp;A, 판매량 배지, 브랜드 인지도)에 더 좌우되지 않는가:</div><textarea class="field-input" data-key="day04_s4_q2" rows="2"></textarea><span class="save-status" data-for="day04_s4_q2"></span></div>
+<div class="field"><div class="field-label">내 가격대에서 &quot;100개&quot;가 너무 낮거나 높은 목표는 아닌지:</div><textarea class="field-input" data-key="day04_s4_q3" rows="2"></textarea><span class="save-status" data-for="day04_s4_q3"></span></div>
+<div class="field"><div class="field-label">그래서 내 상품의 진짜 임계점은 몇 개, 혹은 리뷰 개수가 아닌 다른 지표일 가능성:</div><textarea class="field-input" data-key="day04_s4_q4" rows="2"></textarea><span class="save-status" data-for="day04_s4_q4"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question"><strong>1.</strong> 지금 &quot;아직 잠열 구간이라 계속 불을 넣고 있다&quot;고 믿는 것들 중에, 사실은 이미 불이 꺼져서 더 넣어도 온도(=결과)가 절대 안 오르는 게 있지 않을까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day04_s5_a1" rows="2"></textarea><span class="save-status" data-for="day04_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>2.</strong> 반대로, 겉보기엔 &quot;안 되는 것 같아서&quot; 이미 손을 뗀 일 중에 사실 문지방 코앞까지 가 있던 건 없었을까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day04_s5_a2" rows="2"></textarea><span class="save-status" data-for="day04_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>3.</strong> 오늘 내릴 작은 결정 하나: 지금 진행 중인 일 중 딱 하나를 골라, &quot;이건 잠열 구간이니 계속 간다&quot; 또는 &quot;이건 불 꺼진 냄비니 멈춘다&quot; 중 하나로 오늘 판단해본다면? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day04_s5_decision" rows="2"></textarea><span class="save-status" data-for="day04_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day03/">← Day 03</a>
+  <a href="../day05/">Day 05 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      window.localStorage.setItem(key(field), field.value);
+      if(st){ st.textContent = field.value ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        field.value = v;
+        var st = statusEl(field);
+        if(st && v){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      field.addEventListener("input", function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = field.value.trim() || "(비어있음)";
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

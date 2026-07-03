@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 09 · 안전재고</title>
+<meta name="description" content="안전재고는 낭비가 아니라 흉년이 올 걸 미리 아는 사람이 풍년 한가운데서 미리 내는 보험료다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 09 · 안전재고</h1>
+  <div class="meta">G7 (고전·문학) · M9 (실행 가능성)</div>
+</div>
+
+<div class="oneliner">안전재고는 낭비가 아니라 흉년이 올 걸 미리 아는 사람이 풍년 한가운데서 미리 내는 보험료다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day09_frontmatter_date">
+  <span class="save-status" data-for="day09_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — 안전재고</h2>
+<p><span style="color:#ef6c00"><strong><span class="wikiterm" title="옵시디언 원노트: Safety-Stock-안전재고">Safety-Stock-안전재고</span></strong></span>는 영어로 safety stock, 말 그대로 "안전을 위해 쌓아두는 재고"야. 그런데 이 단어를 처음 들으면 다들 오해부터 해. "안전재고 = 그냥 넉넉하게 쌓아둔 여윳돈 같은 것"이라고. 틀린 건 아닌데, 이 개념의 진짜 무게는 "왜 필요한가"가 아니라 "그게 얼마여야 하는가"를 수학으로 답할 수 있다는 데 있어.</p>
+<p>핵심은 <span style="color:#ef6c00"><strong>변동성(variability)</strong></span>이야. 세상이 완벽하게 예측 가능하다면 안전재고는 0이어도 돼 — 오늘 팔릴 양을 정확히 알고, 발주하면 정확히 며칠 뒤 도착한다면, 딱 그만큼만 쌓아두면 되니까. 문제는 두 가지가 동시에 흔들린다는 거야. 하나는 수요(하루에 몇 개가 팔릴지), 하나는 리드타임(<span class="wikiterm" title="옵시디언 원노트: ROP-재발주점">ROP-재발주점</span> 노트가 다루는, 발주부터 입고까지 걸리는 시간). 이 두 흔들림이 겹치는 구간에서 재고가 바닥나는 사고가 난다. 그래서 공식이 <code>Z × σd × √L</code> — 여기서 √(제곱근)이 붙는 이유가 재밌어. 변동성은 단순히 더해지는 게 아니라 통계적으로 "루트 시간에 비례해서" 쌓이거든. 리드타임이 2배로 길어지면 필요한 버퍼는 2배가 아니라 √2배(약 1.41배)만 늘면 된다는 뜻이고, 반대로 말하면 <span style="color:#ef6c00"><strong>변동성이 큰 사업일수록 버퍼는 산술급수가 아니라 그보다 완만하지만 분명하게 커져야 한다</strong></span>는 수학적 직관을 준다.</p>
+<p>여기서 진짜 하고 싶은 재해석 하나. 안전재고를 "비용"으로만 보면 계속 줄이고 싶어져. 창고비 나가지, 자본 묶이지, 안 팔리면 재고자산으로 남지. 그런데 저울의 반대편을 보면 얘기가 달라져. 품절이 났을 때 잃는 건 그날 못 판 매출 하나가 전부가 아니야. 쿠팡 같은 플랫폼에서 품절은 검색 노출 순위를 깎고, 오랜만에 찾아온 손님을 경쟁사 상품으로 넘겨주고, 그 손님이 다음에 다시 안 돌아올 확률까지 같이 만들어. 반면 안전재고 때문에 남는 초과 보관비는 딱 그만큼만 손해고, 팔리기만 하면 회수된다. 즉 <span style="color:#ef6c00"><strong>품절 비용과 보관 비용은 대칭이 아니야. 품절은 비선형적으로 더 아프다.</strong></span> 그래서 안전재고는 낭비가 아니라 이 비대칭을 상쇄하는 보험료로 보는 게 맞아 — 보험료도 "안 쓰면 아까운 돈"처럼 보이지만, 안 쓰이는 게 보험의 성공이지.</p>
+<p>이 개념은 혼자 있지 않아. <span class="wikiterm" title="옵시디언 원노트: EOQ-경제적주문량">EOQ-경제적주문량</span>은 "한 번에 얼마나 발주할까"를 답하고, <span class="wikiterm" title="옵시디언 원노트: DoS-공급일수">DoS-공급일수</span>는 "지금 재고로 며칠 버티나"를 실시간으로 보여주는 계기판이야. 안전재고는 이 셋 중에서 유일하게 "최악의 순간에도 버티는 바닥"을 정의하는 역할을 해. EOQ가 발주의 리듬이고 DoS가 오늘의 온도계라면, 안전재고는 그 밑에 깔린 지반이야.</p>
+<h2>② 다른 장르의 창 — 요셉의 일곱 해 흉년</h2>
+<p>이집트의 파라오가 어느 밤 이상한 꿈을 꾼다. 나일강에서 살지고 아름다운 암소 일곱 마리가 올라와 갈밭에서 풀을 뜯는데, 뒤이어 흉하고 파리한 암소 일곱 마리가 강에서 올라와 그 살진 암소 일곱을 잡아먹는다. 그런데도 파리한 소들의 몸은 여전히 파리하다. 다시 잠들어 꾼 두 번째 꿈에서는, 한 줄기에서 무성하고 알찬 이삭 일곱이 나오고 뒤이어 동풍에 마른 쭉정이 이삭 일곱이 그 알찬 이삭 일곱을 삼켜버린다.</p>
+<p>이집트의 모든 점술가와 지혜자도 이 꿈을 풀지 못하자, 술 맡은 관원장이 예전 감옥에서 자신의 꿈을 정확히 풀어준 히브리 청년 하나를 떠올린다. 그 청년의 이름이 요셉이다 — 형들에게 배신당해 노예로 팔려왔고 누명을 써서 감옥에 갇혔던 사람. 파라오 앞에 불려온 요셉은 이렇게 풀이한다. 살진 소 일곱과 알찬 이삭 일곱은 앞으로 올 <span style="color:#ef6c00"><strong>일곱 해의 큰 풍년</strong></span>이고, 파리한 소 일곱과 마른 이삭 일곱은 그 뒤에 닥칠 <span style="color:#ef6c00"><strong>일곱 해의 극심한 흉년</strong></span>이라고. 흉년이 얼마나 혹독할지, 앞의 풍년은 이집트 땅에서 기억조차 나지 않을 정도라고 그는 덧붙인다.</p>
+<p>요셉은 여기서 멈추지 않고 실행안을 낸다. 명철하고 지혜로운 사람을 세워 이집트 온 땅을 다스리게 하고, 풍년의 일곱 해 동안 매해 소출의 <span style="color:#ef6c00"><strong>오분의 일(1/5)</strong></span>을 거두어 각 성읍에 곡식을 저장하게 하라고. 그래야 다가올 흉년으로 이 땅이 망하지 않는다는 것. 파라오는 그 말이 옳다고 여겨 요셉을 이집트 전역을 다스리는 자리에 세운다.</p>
+<p>풍년의 일곱 해 동안 땅이 심히 소출을 내자, 요셉은 각 성읍 부근의 밭에서 나는 곡물을 그 성읍 안에 저장한다. 그 양이 바다의 모래같이 많아 세기를 그쳤을 정도라고 전해진다. 그리고 정말로 풍년이 끝나고 흉년의 일곱 해가 시작된다. 각국에는 기근이 들지만 이집트 온 땅에는 양식이 있었고, 온 세상 사람들이 곡식을 사려고 요셉에게로 몰려온다. 풍년의 한가운데서 아무도 흉년을 믿지 않을 때, 미리 준비해둔 창고 하나가 온 세상의 목숨을 쥐게 된 것이다.</p>
+<h2>③ 다리 놓기 — 개념과 이야기, 그리고 내 사업</h2>
+<p>요셉이 한 일을 뜯어보면 지금 안전재고 공식이 하는 일과 구조가 똑같아. <span style="color:#ef6c00"><strong>수요(흉년)의 변동성을 미리 인식</strong></span>하고, <span style="color:#ef6c00"><strong>풍년의 한가운데서 비축을 시작</strong></span>했으며 — 소출이 잘 나올 때일수록 "이 좋은 걸 다 팔아버리자"는 유혹이 세지는데 정확히 그 순간에 1/5을 떼어 저장했다 — <span style="color:#ef6c00"><strong>각 성읍에 분산해서 저장</strong></span>했다. 지금으로 치면 이지어드민 창고에 SKU별로 재고를 나눠 관리하는 것과 다르지 않아.</p>
+<p>에이폼도 정확히 같은 저울질을 여름마다 하고 있어. 분수 물총 같은 시즌 상품은 성수기 몇 달에 매출이 몰려. 재고를 너무 적게 잡으면 한창 잘 팔릴 때 품절이 나서 노출 순위가 꺾이고 그 시즌 최대 매출을 놓친다 — 흉년을 대비 안 한 나라 꼴이야. 반대로 너무 많이 잡으면 시즌이 끝난 뒤 아무도 안 사는 물총이 창고에 쌓여 악성재고가 된다 — 요셉은 저지르지 않은, "필요 이상으로 쌓아 다음 흉년과 무관하게 썩히는" 실패 조건이야. 안전재고 계산이 하는 일은 정확히 이 둘 사이, 품절 리스크와 악성재고 리스크가 만나는 지점을 숫자로 짚어주는 것.</p>
+<p>이 개념은 재고에만 갇힐 필요도 없어. <span style="color:#ef6c00"><strong>현금에도 안전재고 개념이 그대로 적용돼</strong></span> — 성수기에 번 돈을 전부 다음 시즌 확장에 쏟아붓지 않고, 비수기 운영비와 예상치 못한 광고 단가 급등을 버틸 현금 버퍼를 따로 떼어두는 것. 풍년일 때 흉년을 준비하는 사람만이 흉년에도 살아남고, 흉년이 끝난 뒤엔 오히려 시장을 쥐게 된다.</p>
+<p><strong>이어달리기</strong>: Day 8의 <span class="wikiterm" title="옵시디언 원노트: MECE-미씨">MECE-미씨</span>(나눔의 기술)와 오늘의 안전재고는 순서가 있는 관계야. 재고를 SKU별·시즌별로 겹침 없이 빠짐없이 정확하게 나눠서 집계하지 못하면, 애초에 어떤 SKU에 얼마의 버퍼가 필요한지 계산할 수조차 없어. <span style="color:#ef6c00"><strong>나눔이 먼저고, 대비는 그 다음이다.</strong></span></p>
+<h2>④ 오늘의 안목 훈련 — M9 실행 가능성</h2>
+<p>M9 렌즈는 좋은 생각과 좋은 실행 사이의 간극을 메우는 도구야. "안전재고를 계산해서 관리하자"는 말은 누구나 할 수 있어. 안목이 갈리는 지점은 그 다음이야 — <span style="color:#ef6c00"><strong>지금 당장 할 수 있는 첫 행동이 뭔지, 24시간 안에 뭘 확인할 수 있는지, 7일 안에 뭘로 검증할지</strong></span>를 최소 단위로 쪼갤 수 있느냐. 큰 그림("전 품목 안전재고 시스템 구축")은 오히려 실행을 막아. 너무 커서 어디서부터 손대야 할지 모르는 일은, 결국 아무 데도 손을 못 댄다.</p>
+<p>연습 — "안전재고를 데이터로 다시 계산해보자"를 최소 실행 단위까지 쪼개봐. 아래 빈칸에 직접 적어봐:</p>
+<div class="field"><div class="field-label">지금 당장(오늘) 할 첫 행동: 대표 SKU 1개를 골라 최근 품절 이력을 확인한다 →</div><div class="field-hint">(어떤 SKU를 고를지 직접 적기)</div><textarea class="field-input" data-key="day09_s4_q1" rows="2"></textarea><span class="save-status" data-for="day09_s4_q1"></span></div>
+<div class="field"><div class="field-label">24시간 안에 할 일: 그 SKU의 실제 리드타임을 최근 발주 이력으로 실측한다(공식 요구 리드타임이 아니라 진짜 걸린 날짜) →</div><textarea class="field-input" data-key="day09_s4_q2" rows="2"></textarea><span class="save-status" data-for="day09_s4_q2"></span></div>
+<div class="field"><div class="field-label">7일 안에 검증할 일: 계산한 안전재고 숫자로 그 SKU 하나의 버퍼를 실제로 재설정하고, 일주일 뒤 품절 여부·재고 소진 속도를 확인한다 →</div><textarea class="field-input" data-key="day09_s4_q3" rows="2"></textarea><span class="save-status" data-for="day09_s4_q3"></span></div>
+<div class="field"><div class="field-label">너무 크게 잡아서 지금 당장은 버릴 부분:</div><div class="field-hint">(예: 전 품목 동시 적용, 완벽한 자동화 시스템 등)</div><textarea class="field-input" data-key="day09_s4_q4" rows="2"></textarea><span class="save-status" data-for="day09_s4_q4"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question"><strong>1.</strong> 품절과 과잉 재고 중, 내가 실제로 더 두려워하는 쪽은 어느 쪽일까? 그 두려움은 지난 데이터(품절로 잃은 매출, 악성재고로 손절한 금액)에 근거한 걸까, 아니면 그냥 최근에 크게 데인 기억 하나에 근거한 걸까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day09_s5_a1" rows="2"></textarea><span class="save-status" data-for="day09_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>2.</strong> 요셉은 풍년의 한가운데서, 아무도 믿지 않을 때 비축을 시작했다. 지금 에이폼에서 &quot;잘 되고 있으니까 나중에 생각하자&quot;고 미뤄두고 있는 대비가 있다면 무엇일까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day09_s5_a2" rows="2"></textarea><span class="save-status" data-for="day09_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>3.</strong> 오늘 내릴 작은 결정 하나: 대표 SKU 1개를 골라 이번 주 안에 안전재고 숫자를 실제로 다시 계산해본다면, 어떤 상품을 고를까(가장 잘 팔리는 것, 가장 최근에 품절났던 것, 가장 변동성이 큰 것 중)? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day09_s5_decision" rows="2"></textarea><span class="save-status" data-for="day09_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day08/">← Day 08</a>
+  <a href="../day10/">Day 10 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      window.localStorage.setItem(key(field), field.value);
+      if(st){ st.textContent = field.value ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        field.value = v;
+        var st = statusEl(field);
+        if(st && v){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      field.addEventListener("input", function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = field.value.trim() || "(비어있음)";
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

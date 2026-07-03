@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 06 · SSOT</title>
+<meta name="description" content="같은 사실이 두 곳에 적히는 순간, 그 둘은 언젠가 어긋난다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 06 · SSOT</h1>
+  <div class="meta">G6 (경제사) · M6 (사람 이해)</div>
+</div>
+
+<div class="oneliner">같은 사실이 두 곳에 적히는 순간, 그 둘은 언젠가 어긋난다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day06_frontmatter_date">
+  <span class="save-status" data-for="day06_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — SSOT(단일진실공급원)</h2>
+<p><span class="wikiterm" title="옵시디언 원노트: SSOT-단일진실공급원">SSOT-단일진실공급원</span>의 원리는 사실 아주 단순해. <span style="color:#ef6c00"><strong>"같은 정보를 한 곳에서만 관리하고, 나머지는 거기서 가져다 쓰게 한다"</strong></span>는 것뿐이야. 이게 왜 중요하냐면, "복사본은 반드시 늙는다"는 사실 때문이야. 전화번호를 메모장, 계약서, 명함에 따로 적어두면 그중 하나만 바뀌어도 어느 게 맞는지 확신할 수 없게 되지. 처음엔 세 곳 다 같았어도, 시간이 지나면 반드시 하나는 낡은 값을 들고 있게 돼. 이게 <span style="color:#ef6c00"><strong>드리프트(Drift)</strong></span>야 — 같았던 것들이 시간이 흐르며 슬금슬금 벌어지는 현상.</p>
+<p><span class="wikiterm" title="옵시디언 원노트: Ledger-원장">Ledger-원장</span> 노트가 SSOT의 뼈대를 채워줘. <code>ledger</code>는 회계의 "원장"에서 왔는데, 원장(元帳)을 한자로 뜯어보면 元(으뜸 원)에 帳(장부 장) — "으뜸이 되는 장부"라는 뜻이야. 영어의 "original"(원본의), "origin"(기원)도 같은 뿌리 의식을 담고 있어 — "맨 처음, 가장 근본이 되는 것". 원장이라는 개념이 언어권을 넘어 "이게 진짜다, 나머지는 여기서 파생됐다"는 사고를 공유하는 셈이야. 원장은 잔액이 아니라 <span style="font-size:1.1em"><strong>변동 내역 그 자체</strong></span>를 시간순으로 쌓는다. 입고 <code>+N</code>, 출고 <code>−N</code>처럼. 지금 이 순간의 잔액(position)은 원장을 처음부터 끝까지 다 더하면 반드시 나와야 하는 <span style="color:#ef6c00"><strong>파생값</strong></span>이어야 해. 원장이 원인이고 잔액은 결과라는 방향이 뒤집히면 안 돼.</p>
+<p><span class="wikiterm" title="옵시디언 원노트: Single-writer-단일라이터">Single-writer-단일라이터</span>는 이 원장을 지키는 문지기야. "진짜 장부는 하나"라고 정해놔도, 그 장부에 여러 사람이 동시에 손을 대면 얘기가 달라져. 장부 한 권에 직원 두 명이 동시에 숫자를 적으면 글씨가 겹치고 순서가 엉키듯, 데이터도 여러 주체가 동시에 쓰면 값이 깨진다. 그래서 "쓰기는 한 번에 하나의 주체만" 하도록 강제하는 구조가 필요해. 읽기는 몇 명이 봐도 상관없지만, 쓰는 손은 반드시 하나여야 한다는 거야.</p>
+<p>셋을 붙이면 이렇게 정리돼. <span style="color:#ef6c00"><strong>SSOT는 "기준이 하나여야 한다"는 원칙</strong></span>, <span style="color:#ef6c00"><strong>원장은 그 기준이 담기는 그릇</strong></span>, <span style="color:#ef6c00"><strong>단일 라이터는 그 그릇에 아무나 손대지 못하게 하는 잠금장치</strong></span>야. 원칙 → 그릇 → 잠금장치, 이 세 겹이 갖춰져야 "이 숫자는 믿을 수 있다"는 말을 할 수 있어. 사본은 얼마든지 만들어도 괜찮아. 다만 그 사본들이 전부 "어느 하나의 원본"을 가리켜야 한다는 것, 그게 핵심이야. 데이터가 어긋났을 때 사람들이 던지는 "어느 쪽이 맞아?"라는 질문, 그 자체가 이미 비용이 새고 있다는 증거야. 확인하러 다니는 시간, 다른 숫자를 들고 언쟁하는 시간, 전부 SSOT가 무너진 대가로 치르는 세금인 셈이지.</p>
+<h2>② 다른 장르의 창 — 파치올리와 복식부기, 장부가 스스로를 검증하다</h2>
+<p>1494년, 베네치아. 프란체스코회 수사이자 수학자였던 <span style="color:#ef6c00"><strong>루카 파치올리(Luca Pacioli)</strong></span>가 『산술집성(Summa de Arithmetica)』이라는 방대한 수학 백과사전을 출간해. 이 책 안에 딱 한 챕터, 상인들의 부기법을 정리한 대목이 있는데, 이게 후대에 "복식부기(double-entry bookkeeping)를 최초로 체계화한 문헌"으로 불리게 돼.</p>
+<p>짚어야 할 게 하나 있어. 파치올리는 복식부기를 <span style="font-size:1.1em"><strong>발명한 사람이 아니야</strong></span>. 이미 베네치아·제노바 상인들이 100~200년 전부터 실무로 써오던 관행을 처음 글로 정리하고 체계화한 사람이었어. 그는 레오나르도 다 빈치와 친구였고, 다 빈치에게 수학(비례·기하학)을 가르친 스승이기도 했다고 전해진다.</p>
+<p>복식부기의 핵심은 이거야. 모든 거래를 <span style="color:#ef6c00"><strong>차변(왼쪽)과 대변(오른쪽), 두 곳에 동시에</strong></span> 적는다. 상품을 현금 주고 샀다면 "재고가 늘었다"와 "현금이 줄었다"를 동시에 기록해. 그러면 장부 전체의 차변 합과 대변 합은 언제나 같아야 하고, 안 맞으면 어딘가에 실수가 있다는 뜻이야. 이게 바로 <span style="font-size:1.1em"><strong>장부가 스스로 오류를 검증하는 구조</strong></span>야. 감사관이 오기 전에, 장부 그 자체가 "나 지금 틀렸어"라고 신호를 보낼 수 있게 설계된 거지. 단식부기(한 줄만 적는 방식)에는 이 자기검증 장치가 없었어 — 그저 "얼마 들어왔다, 얼마 나갔다"만 적을 뿐, 어디서 실수가 났는지 장부 스스로는 알려주지 않았거든.</p>
+<p>훗날 독일의 대문호 괴테는 소설 『빌헬름 마이스터의 수업시대』에서 등장인물의 입을 빌려, 복식부기를 두고 <span style="color:#ef6c00"><strong>"인간 정신이 만들어낸 가장 아름다운 발명품 중 하나"</strong></span>라고 말하게 했다고 전해진다. 괴테 본인의 논문이 아니라 소설 속 인물의 대사로 나온 표현이지만, 그만큼 당대 지식인들 눈에 이 회계 기술이 지적 성취로 비쳤다는 걸 보여줘. 신뢰할 수 있는 장부가 있어야 상인은 낯선 동업자와 손잡고, 은행은 낯선 상인에게 돈을 빌려줄 수 있었어. 신용과 자본, 나아가 자본주의라는 체제 자체가 "검증 가능한 장부" 위에서 자라났다고 보는 시각도 있어.</p>
+<h2>③ 다리 놓기 — 개념과 이야기, 그리고 내 사업</h2>
+<p>파치올리의 복식부기와 오늘의 SSOT는 같은 문제를 다른 시대의 도구로 풀고 있어. 복식부기는 "장부가 스스로 틀렸다고 말할 수 있게 만들자"였고, SSOT는 "애초에 틀릴 여지가 있는 사본을 여러 개 만들지 말자"야. 방향은 다르지만 목적지는 똑같아 — <span style="color:#ef6c00"><strong>"이 숫자, 믿어도 되나?"라는 질문에 즉시 "그렇다"고 답할 수 있는 구조</strong></span>. 차변·대변이 서로를 검증하듯, 원장과 잔액도 서로 검증 관계에 있어야 하고("원장을 다 더하면 잔액이 나와야 한다"), 그 관계가 깨지면 파치올리식으로는 "장부가 안 맞는" 사고인 거지.</p>
+<p>에이폼 실무로 끌고 와보자. 재고 수량이 쿠팡 판매자센터, 창고 엑셀, 담당자 머릿속, 이렇게 세 곳에 따로 있다고 해봐. 어느 날 숫자가 안 맞으면 "어느 쪽이 진짜야?"라는 질문이 튀어나오는데, 이 질문 자체가 이미 SSOT가 없다는 증거야. "재고의 진실은 여기 하나"라고 정해뒀다면 나머지 둘은 그저 그 하나를 들여다보는 창문일 뿐, 어긋날 일이 없었을 거야. <span class="wikiterm" title="옵시디언 원노트: Ledger-원장">Ledger-원장</span> 노트의 우리 발견이 딱 이 사례야 — APOM의 재고 원장이 채널 판매만 기록하고 창고 물리이동은 안 담아서, 자사창고 잔고와 원장 합이 95% 어긋나 있었어. "원장=잔고 파생"이라는 원칙이 실제 운영(prod)에서는 거짓이었던 거지. 그래서 창고 물리이동 전용의 <span class="wikiterm" title="옵시디언 원노트: 물리원장">물리원장</span>을 따로 세워 이 원칙을 다시 살렸어.</p>
+<p>할일보드가 SSOT여야 하는 이유도 같은 맥락이야. 할 일이 보드·캔버스·메모·카톡·머릿속에 흩어져 있으면 "이거 안 끝났나?"를 확인하려고 여러 곳을 뒤져야 해. 보드 하나만 진실이고 캔버스·간트는 거기서 따라오는 사본이라고 정해두면 그 확인 비용 자체가 사라진다. 데이터센터 원장 설계도 같아 — "누가 마지막에 이 값을 썼는가"를 하나의 라이터로 못박아야, 어떤 리포트를 뽑아도 서로 싸우지 않는 숫자가 나와.</p>
+<p><strong>이어달리기</strong>: Day 5의 <span class="wikiterm" title="옵시디언 원노트: Flywheel-플라이휠">Flywheel-플라이휠</span>이 "돌수록 데이터가 쌓인다"는 이야기였다면, 오늘의 SSOT는 그 쌓이는 곳이 하나여야 진짜 복리가 붙는다는 이야기야. 데이터가 세 곳에 흩어져 쌓이면 플라이휠은 세 배 빠르게 도는 게 아니라, 세 바퀴가 서로 다른 방향으로 돌다 부딪혀 멈춘다.</p>
+<h2>④ 오늘의 안목 훈련 — M6 사람 이해</h2>
+<p>M6 렌즈는 사람이 겉으로 말하는 니즈와 실제 속마음을 분리해서 보는 훈련이야. 사람은 대개 자기 욕구를 있는 그대로 말하지 않아. 두려움이나 통제 욕구를 그럴듯한 업무상 이유로 포장하는 경우가 많거든. 겉 니즈, 실제 원하는 것, 두려움, 망설이는 지점 같은 항목을 하나씩 뜯어보며 "이 사람이 진짜 원하는 게 뭘까"를 캐내는 렌즈야.</p>
+<p>연습해보자. 직원이 "재고는 제가 엑셀로 따로 관리할게요"라고 말하는 상황이야. 이 말 안에 숨어 있을 법한 겉 니즈와 속마음을 빈칸에 적어봐.</p>
+<div class="field"><div class="field-label">겉 니즈(말 그대로)</div><textarea class="field-input" data-key="day06_s4_q1" rows="2"></textarea><span class="save-status" data-for="day06_s4_q1"></span></div>
+<div class="field"><div class="field-label">실제 원하는 것(엑셀을 고집하는 진짜 이유 — 통제감·익숙함 관련)</div><textarea class="field-input" data-key="day06_s4_q2" rows="2"></textarea><span class="save-status" data-for="day06_s4_q2"></span></div>
+<div class="field"><div class="field-label">두려움(새 시스템에 대해 무엇을 겁내고 있을까)</div><textarea class="field-input" data-key="day06_s4_q3" rows="2"></textarea><span class="save-status" data-for="day06_s4_q3"></span></div>
+<p>참고로 이런 반응 뒤엔 대개 셋 중 하나가 깔려 있어. 손에 익은 도구를 놓으면 일을 못할까 걱정되는 <span style="color:#ef6c00"><strong>통제감의 상실</strong></span>, 새 시스템이 언제 또 바뀌거나 막힐지 몰라 안 믿는 <span style="font-size:1.1em"><strong>시스템 불신</strong></span>, 새로 배우는 시간과 실수 위험이 부담스러운 <span style="font-size:1.1em"><strong>학습 부담</strong></span>. "엑셀 쓰지 마세요"라고 규칙만 들이미는 대신, 이 통제감을 존중하며 SSOT 안으로 끌어들이는 쪽이 훨씬 잘 먹혀.</p>
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question"><strong>1.</strong> 지금 에이폼에서 같은 숫자(재고·매출·발주 수량 등)가 두 곳 이상에 따로 적히고 있는 곳은 어디일까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day06_s5_a1" rows="2"></textarea><span class="save-status" data-for="day06_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>2.</strong> 만약 그 두 곳이 어긋난 채로 한 달을 더 방치한다면, 그 대가(회의 시간·오배송·잘못된 발주 등)는 구체적으로 무엇일까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day06_s5_a2" rows="2"></textarea><span class="save-status" data-for="day06_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>3.</strong> 오늘 내릴 작은 결정 하나: 위에서 찾은 &quot;이중 기록&quot; 중 하나를 골라, 어느 쪽을 진짜 원본(SSOT)으로 못박을지 지금 정한다면? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day06_s5_decision" rows="2"></textarea><span class="save-status" data-for="day06_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day05/">← Day 05</a>
+  <a href="../day07/">Day 07 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      window.localStorage.setItem(key(field), field.value);
+      if(st){ st.textContent = field.value ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        field.value = v;
+        var st = statusEl(field);
+        if(st && v){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      field.addEventListener("input", function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = field.value.trim() || "(비어있음)";
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

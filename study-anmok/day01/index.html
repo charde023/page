@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 01 · 복리</title>
+<meta name="description" content="복리는 어제의 결과가 오늘의 씨앗이 되는 구조이고, 그 씨앗이 자라는 걸 눈으로 확인하기 전까지는 아무도 그게 자라고 있는 줄 모른다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 01 · 복리</h1>
+  <div class="meta">G6 (경제사) · M1 (질문 목적)</div>
+</div>
+
+<div class="oneliner">복리는 어제의 결과가 오늘의 씨앗이 되는 구조이고, 그 씨앗이 자라는 걸 눈으로 확인하기 전까지는 아무도 그게 자라고 있는 줄 모른다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day01_frontmatter_date">
+  <span class="save-status" data-for="day01_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Compounding-복리">Compounding-복리</span></h2>
+<p><span style="color:#ef6c00"><strong>Compounding</strong></span>이라는 단어부터 뜯어보자. 라틴어 <strong>componere</strong>(com- '함께' + ponere '놓다')에서 왔어. 화학의 화합물(compound), 담장 안에 여러 건물을 '함께 놓은' 무술도장(compound)도 같은 뿌리다. 핵심 그림은 "따로 있던 것들이 합쳐져 하나의 덩어리가 된다"는 것.</p>
+<p>복리가 특별한 이유는 이 '함께 놓기'가 <strong>재귀적</strong>이라는 데 있어. 단리는 원금에만 이자가 붙지만, 복리는 "원금+이자"라는 새 덩어리 전체에 다시 이자가 붙는다. 즉 <strong>이번 결과물이 다음 계산의 재료(밑돌)가 되는 구조</strong>야. <span class="wikiterm" title="옵시디언 원노트: Compounding-복리">Compounding-복리</span> 노트의 숫자를 보면 감이 온다 — 100만 원을 연 10%로 굴리면 10년 뒤 259만 원, 20년 뒤 673만 원, 30년 뒤 1,745만 원. 매 구간 "같은 양"이 아니라 "같은 비율"이 곱해지므로, 초반엔 선형 성장과 구별이 안 되다가 어느 순간 격차가 폭발적으로 벌어진다 — <strong><span class="wikiterm" title="옵시디언 원노트: Exponential-지수적">지수 성장</span></strong>이다.</p>
+<p>문제는 그 "어느 순간"이 오기 전까지는 <strong>눈에 거의 안 보인다</strong>는 거야. <span class="wikiterm" title="옵시디언 원노트: Threshold-임계점">Threshold-임계점</span>의 비유처럼, 물은 99도에서도 그냥 물이다가 1도만 더 오르면 완전히 다른 상태로 넘어간다. 복리 곡선도 초반은 밋밋하다가 임계점을 넘는 순간 거의 수직으로 꺾인다. 이 <strong>안 보이는 구간을 버텨내는 것</strong> 자체가 복리 전략의 절반이다. 원 노트의 데이터 복리 루프("구매 데이터 → 추천 CTR 향상 → 더 많은 데이터")도 같은 구조 — 오늘 쌓은 데이터가 내일 판단력의 재료가 된다. <strong>한번 쌓인 것은 다음 단계의 지반이 된다</strong> — 선형 성장(매번 같은 노력 반복)과 다른 결정적 지점이다.</p>
+<h2>② 다른 장르의 창 — 수메르 진흙판 위의 이자</h2>
+<p>인류가 남긴 가장 오래된 "숫자 계약" 중 하나가 이자 대출이다. 기원전 3천 년대 메소포타미아, 수메르인들은 곡물과 은을 빌려주고 갚을 때 더 많이 받는 관행을 쐐기문자 점토판에 새겨 놓았다고 전해진다. 흥미로운 건 단어다 — 수메르어로 이자를 뜻하는 <strong>마쉬(mash)</strong>는 동시에 '송아지'를 뜻했다고 한다. 소를 빌려주면 새끼를 낳듯, 은이나 곡물을 빌려주면 시간이 지나 "새끼"가 붙어 돌아온다고 여긴 것 — 돈이 스스로 번식하는 생물처럼 취급된 셈이다.</p>
+<p>이 관념은 훗날 법으로 정리된다. 기원전 18세기 함무라비 법전에는 이자율 상한이 명시돼 있는데, 곡물 대출은 연 33⅓%, 은 대출은 연 20%까지 허용했다고 알려져 있다(조문 해석엔 학설 차이가 있어 "~로 전해진다" 정도로 받아들이는 게 안전하다). 이자 자체를 금지한 게 아니라 <strong>상한을 정해 과도한 착취를 막으려 했다</strong>는 것 — 그 시절 이미 "이자가 이자를 낳는" 팽창의 위험을 제도로 눌러놨다는 뜻이다.</p>
+<p>그리스로 넘어가면 논쟁이 더 뾰족해진다. 그리스어로 이자는 <strong>토코스(tokos)</strong>, 원뜻은 '출산·새끼를 낳는 것'이다. 아리스토텔레스는 『정치학』에서 이를 비판했다고 알려져 있다 — 화폐(nomisma)는 교환 수단으로 만들어진 것인데, 돈이 돈을 낳는 것(토코스)은 화폐 본래 목적을 벗어난 부자연스러운 일이라는 논지였다. 이 관념은 중세 기독교 세계로 이어져 이자를 죄악시하는 흐름(usury 금지)으로 확장됐고, 특히 <strong>복리(라틴어 anatocismus)는 단리보다 더 엄격히 금지</strong>됐다고 전해진다 — 부당함이 스스로 증식한다고 여겨졌기 때문이다. 수천 년 전 사람들도 이미 복리의 힘과, 그 힘이 통제 없이 풀렸을 때의 위험을 본능적으로 알아챘던 셈이다.</p>
+<h2>③ 다리 놓기 — 이자 논쟁과 에이폼의 두 종류 지출</h2>
+<p>수메르인이 "마쉬(송아지)"로 이자를 부른 이유를 다시 보자. 핵심은 <strong>"스스로 번식하느냐"</strong>였다. 에이폼에 대입하면 지출이 두 종류로 갈린다.</p>
+<p><strong>광고비</strong>는 이번 달 태우면 이번 달 매출만 오르고, 다음 달엔 효과가 거의 안 남아 처음부터 다시 태워야 한다 — 소가 아니라 사료값, 먹인 게 다음 먹이의 밑천이 안 된다. 반면 <strong>리뷰·상세페이지 신뢰·데이터</strong>는 다르다. 쌓인 리뷰가 <span class="wikiterm" title="옵시디언 원노트: Threshold-임계점">임계점</span>을 넘으면 신뢰는 다음 달에도 남아 전환율을 밀어올리고, 그 전환율이 다시 판매와 리뷰를 부른다 — 이게 진짜 "마쉬"다. 아리스토텔레스가 비판한 "돈이 스스로 새끼치는" 구조가, 사업에서는 <strong>의도적으로 설계해야 할 자산</strong>인 셈이다. 매달 같은 액수를 광고에 태우는 건 선형 성장, 리뷰·데이터·검색 순위에 투자하는 건 복리 성장이다.</p>
+<p><strong>이어달리기</strong>: Day 1이라 어제 개념은 없다. 대신 한 줄 — 이 시리즈도 매일 쌓이면 그것도 복리다. 오늘의 한 줄이 내일의 배경지식이 되어 다음 개념을 더 빨리 흡수하게 만든다.</p>
+<h2>④ 오늘의 안목 훈련 — M1 질문 목적 점검</h2>
+<p>M1 렌즈는 <strong>정보를 받았을 때, 그게 ①정보 수집 ②의사결정 ③아이디어 발상 ④실행 계획 ⑤리스크 점검 ⑥사람·시장 이해 ⑦내 생각 검증 — 이 중 무엇을 위한 것인지부터 구분하라</strong>고 말한다. 목적이 다르면 기준도 다르다 — 정보 수집은 정확성, 의사결정은 판단 기준, 아이디어 발상은 가능성·차별성이 생명이다. 목적을 안 정하면 정확성이 필요한 자리에 그럴듯한 이야기만 채우게 된다.</p>
+<p>연습: "아인슈타인이 복리를 '세계 8대 불가사의'라 불렀다"는 아주 유명한 인용이지만, 정작 그가 이 말을 했다는 확실한 출처는 발견되지 않는다 — <strong>출처 불명의 명언</strong>이다. 이 문장을 어디선가 접했다고 하자. M1 렌즈로 분해해보자.</p>
+<div class="field"><div class="field-label">이 인용을 접한 목적은 무엇이었나 (정보 수집인가, 이미 내려진 결정을 정당화하려는 것인가)?</div><textarea class="field-input" data-key="day01_s4_q1" rows="2"></textarea><span class="save-status" data-for="day01_s4_q1"></span></div>
+<div class="field"><div class="field-label">목적이 &quot;정보 수집&quot;이라면, 확인해야 할 정확성 항목은 무엇인가 (누가 언제 한 말인지)?</div><textarea class="field-input" data-key="day01_s4_q2" rows="2"></textarea><span class="save-status" data-for="day01_s4_q2"></span></div>
+<div class="field"><div class="field-label">이 문장이 &quot;복리는 좋은 것&quot;이라는 믿음을 강화하는 용도로만 쓰였다면, 그건 무엇을 하고 있던 것인가?</div><textarea class="field-input" data-key="day01_s4_q3" rows="2"></textarea><span class="save-status" data-for="day01_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question"><strong>1.</strong> 아리스토텔레스는 &quot;돈이 돈을 낳는 건 부자연스럽다&quot;고 봤지만, 오늘날 복리는 성장의 기본 원리로 받아들여진다. 무엇이 달라졌을까 — 화폐의 본질인가, 자연을 보는 관점인가?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day01_s5_a1" rows="2"></textarea><span class="save-status" data-for="day01_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>2.</strong> 함무라비 법전의 이자 상한과 현대 대출 규제의 이자율 상한은 수천 년 차이가 나지만 같은 우려에서 나왔다. 그 우려란 무엇이며, 왜 지금도 완전히 해소되지 않았을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day01_s5_a2" rows="2"></textarea><span class="save-status" data-for="day01_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>3.</strong> 오늘 내릴 작은 결정 하나: 에이폼에서 지금 복리로 쌓이고 있는 자산(누적 리뷰, 재구매 고객군, 검색 노출 이력 등) 하나를 지목해보자. 그 자산을 임계점 너머로 더 빨리 밀어붙일 행동 하나를 오늘 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day01_s5_decision" rows="2"></textarea><span class="save-status" data-for="day01_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <span></span>
+  <a href="../day02/">Day 02 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      window.localStorage.setItem(key(field), field.value);
+      if(st){ st.textContent = field.value ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        field.value = v;
+        var st = statusEl(field);
+        if(st && v){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      field.addEventListener("input", function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = field.value.trim() || "(비어있음)";
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

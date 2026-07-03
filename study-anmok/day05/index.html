@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 05 · 플라이휠</title>
+<meta name="description" content="플라이휠은 처음 한 번 세게 밀어 넣은 힘을 관성으로 저장해두는 바퀴다 — 잘 만든 구조는 두 번째 힘부터 내가 안 밀어도 스스로 돈다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 05 · 플라이휠</h1>
+  <div class="meta">G7 (공예·예술) · M5 (구별력)</div>
+</div>
+
+<div class="oneliner">플라이휠은 처음 한 번 세게 밀어 넣은 힘을 관성으로 저장해두는 바퀴다 — 잘 만든 구조는 두 번째 힘부터 내가 안 밀어도 스스로 돈다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day05_frontmatter_date">
+  <span class="save-status" data-for="day05_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — 플라이휠</h2>
+<p><span style="color:#ef6c00"><strong><span class="wikiterm" title="옵시디언 원노트: Flywheel-플라이휠">Flywheel-플라이휠</span></strong></span>이라는 단어부터 뜯어보자. flywheel은 fly(날다·회전하다) + wheel(바퀴)의 합성어야. 원래 산업혁명 시대 증기기관에서 실제로 쓰던 부품 이름이었어 — 피스톤이 폭발적으로 힘을 줄 때만 에너지가 들어오고 나머지 순간엔 힘이 끊기는데, 무거운 금속 바퀴를 축에 달아두면 그 회전 관성(rotational inertia)이 에너지를 저장했다가 힘이 끊긴 구간에도 회전을 균일하게 유지시켜줘. 즉 원래 뜻부터가 "힘의 공백을 관성으로 메꾸는 저장 장치"야.</p>
+<p>이 물리적 비유를 경영 언어로 처음 제대로 박아넣은 사람이 짐 콜린스(Jim Collins)야. 『Good to Great』(2001)에서 그는 위대한 기업들이 어느 날 갑자기 도약한 게 아니라, 무거운 바퀴를 한 방향으로 계속 밀어서 결국 관성이 붙는 순간을 지나온 거라고 설명해. 처음 한 바퀴를 돌리는 데 필요한 힘과, 그 다음 바퀴를 돌리는 데 필요한 힘이 다르다는 게 핵심이야. 방향만 바꾸지 않으면, 매 바퀴가 이전 바퀴의 결과 위에 힘을 보태는 구조가 된다.</p>
+<p>제프 베조스의 냅킨 스케치 일화도 같은 원리야. 흔히 전해지는 이야기로는, 아마존 초기에 베조스가 냅킨에 동그란 원을 그리고 그 위에 화살표로 이렇게 이어 붙였다고 해: <span style="color:#ef6c00"><strong>저원가 구조 → 낮은 가격 → 고객 경험 향상 → 트래픽 증가 → 셀러(판매자) 유입 → 상품 구색(selection) 확대 → 다시 고객 경험 향상 → 규모의 경제로 저원가 강화</strong></span>. 이 다이어그램의 힘은 화살표가 원을 그리며 자기 자신에게 돌아온다는 데 있어. 어느 한 지점만 밀어도 전체가 같이 굴러가.</p>
+<p>여기서 어제·오늘 개념이 이어지는데, 플라이휠은 사실 <span class="wikiterm" title="옵시디언 원노트: Closed-loop-폐루프">Closed-loop-폐루프</span>에 관성(inertia)이라는 물리적 성질 하나를 더 얹은 거야. 폐루프는 "출력이 다시 입력으로 되먹임되는 구조" 자체를 말해 — 그것만으로는 힘을 안 주면 멈춰. 그런데 그 폐루프가 <span class="wikiterm" title="옵시디언 원노트: Learning-loop-학습루프">Learning-loop-학습루프</span>처럼 한 바퀴 돌 때마다 다음 바퀴를 돌리기 더 쉽게 만들어주는 구조라면, 그때 비로소 플라이휠이라 부를 수 있어. 즉 <span style="color:#ef6c00"><strong>플라이휠 = 폐루프 + 관성(복리로 쌓이는 이점)</strong></span>이라는 공식이 성립해. 폐루프는 구조를 말하고, 플라이휠은 그 구조가 시간이 갈수록 "덜 힘들어진다"는 방향성까지 포함한 개념이야.</p>
+<h2>② 다른 장르의 창 — 도공의 물레</h2>
+<p>인류가 만든 최초의 플라이휠은 증기기관이 아니야. <span style="color:#ef6c00"><strong>도공의 물레(potter's wheel)</strong></span>야. 기원전 4천년경으로 추정되는 시기, 메소포타미아 우바이드 문화권에서 회전판 위에 흙을 올리고 손으로 형태를 잡는 도구가 등장했다고 전해져. 처음엔 그냥 손으로 밀어 돌리는 느린 회전판이었다가, 시간이 지나며 발로 차서 돌리는 킥휠(kick wheel) 형태로 발전했어.</p>
+<p>킥휠의 구조를 뜯어보면 완벽한 플라이휠이야. 위쪽엔 작업할 흙을 올리는 작은 원판이 있고, 그 아래 축으로 연결된 하단에는 훨씬 무겁고 큰 돌판이 붙어 있어. 도공은 이 무거운 돌판을 발로 세게 차서 돌린다. 그러면 그 회전이 축을 타고 위쪽 작업판까지 전달되는데, 무거운 돌판의 관성 덕분에 한 번 세게 찬 회전이 꽤 오래 유지돼. 도공은 계속 차지 않아. 몇 번 세게 차서 충분한 속도를 만든 다음, 그 관성 위에 손을 얹고 정작 중요한 일 — 흙을 밀어 올리고 벽을 얇게 뽑아내는 섬세한 작업 — 에 집중한다.</p>
+<p>이게 왜 혁명이었냐면, 물레 이전의 토기는 손으로 흙가래(coil)를 쌓아 올리거나 손빚음으로 만들었어. 그러다 보니 완벽한 원형 대칭을 만들기가 아주 어려웠고, 손이 닿는 압력이 미세하게 달라질 때마다 그릇이 살짝 삐뚤어졌지. 그런데 물레가 등장하면서 회전축을 중심으로 흙이 스스로 대칭을 만들어주는 원리가 생겼어. 도공의 손은 이제 형태를 '만드는' 게 아니라 회전하는 흙에 '개입'하는 역할로 바뀐 거야. 회전(관성)이 대칭이라는 선물을 공짜로 주니까, 사람은 더 얇고 더 정교한 그릇을 만드는 데만 집중할 수 있게 됐어.</p>
+<p>조선의 사기장들이 쓰던 발물레도 이 원리 그대로야. 무거운 하부 원반을 발로 밀어 돌리고, 그 관성으로 상부의 흙을 다루지. 좋은 도공과 서투른 도공의 차이 중 하나는 물레를 얼마나 자주 다시 차야 하느냐에도 있다고 해 — 관성을 잘 읽는 손은 물레가 스스로 도는 구간을 길게 쓰고, 서투른 손은 자꾸 회전이 죽어서 다시 차야 해.</p>
+<h2>③ 다리 놓기 — 개념과 이야기, 그리고 내 사업</h2>
+<p>물레가 아름다운 이유는, 도공이 매번 손으로 그릇을 미는 게 아니라 <span style="color:#ef6c00"><strong>한 번의 세찬 킥이 그 다음 여러 손동작을 무료로 지탱해준다</strong></span>는 데 있어. 사업의 플라이휠도 똑같아. 에이폼의 리뷰 → 노출 → 판매 → 리뷰 루프를 생각해보면, 좋은 리뷰가 쌓이면 검색 노출이 좋아지고, 노출이 좋아지면 판매가 늘고, 판매가 늘면 리뷰가 또 쌓여. 이 루프가 폐루프인 건 맞는데, 진짜 관성이 붙었는지는 다른 질문이야 — 한 바퀴 도는 데 내가 매번 광고비를 똑같이 밀어 넣어야 한다면, 그건 아직 발로 매번 차야 하는 물레지 관성이 붙은 물레가 아니야.</p>
+<p>여기서 스스로 물어볼 질문 하나: <span style="color:#ef6c00"><strong>"지금 나는 매일 물레를 처음부터 다시 돌리고 있는 일이 뭐지?"</strong></span> AI 에이전트가 매일 반품 사유를 새로 분류하고, 광고 지표를 매일 새로 검토하고, 상세페이지 카피를 매번 처음부터 다시 고민한다면 — 그건 아직 킥휠이 아니라 손물레야. 관성이 붙으려면 어제 분류한 판단이 오늘의 판단을 더 쉽게 만들어줘야 하고(<span class="wikiterm" title="옵시디언 원노트: eval-골든셋">eval-골든셋</span>에 쌓이는 것처럼), 오늘 정리한 노트가 내일 다시 검색·재사용될 수 있어야 해. AI 에이전트가 쌓는 데이터와 노트의 관성도 결국 이 질문 하나로 판별할 수 있어 — "이번 결과가 다음 번 일을 더 가볍게 만드나, 아니면 매번 도돌이표인가."</p>
+<p><strong>이어달리기</strong>: Day 4의 임계점(<span class="wikiterm" title="옵시디언 원노트: Threshold-임계점">Threshold-임계점</span>)과 오늘의 플라이휠은 순서가 있는 관계야. 임계점을 넘기 전까지는 플라이휠도 그냥 무거운 돌일 뿐이다 — 아무리 좋은 구조를 설계해도, 초기의 저 무거운 돌판을 임계 속도까지 밀어올리는 구간(콜드스타트)을 통과하지 못하면 관성은 붙지 않고 그냥 힘만 뺀 킥이 된다.</p>
+<h2>④ 오늘의 안목 훈련 — M5 구별력</h2>
+<p>M5 구별력 렌즈는 겉보기엔 다 그럴싸해 보이는 말들 속에서 <span style="color:#ef6c00"><strong>평범한 부분과 날카로운 부분을 억지로 분리해서 말하는 훈련</strong></span>이야. "좋은 아이디어"와 "정말 좋은 아이디어"는 겉으로 문장 구조가 똑같아서 구별이 잘 안 되거든. 그래서 이 렌즈는 항상 짝을 강제해: 흔한 말 vs 실제 통찰, 좋아 보이지만 약한 것 vs 작아 보이지만 강한 가능성, 다른 선택지와 진짜 다른 점이 뭔가.</p>
+<p>연습 — "우리도 플라이휠을 만들자"는 말 안에서 평범한 부분과 날카로운 부분을 나눠봐. 진짜 플라이휠인지 아닌지를 가르는 단 하나의 질문은 이거야: <span style="color:#ef6c00"><strong>각 단계가 다음 단계를 '자동으로' 미는가, 아니면 매번 내가(또는 광고비가) 밀어야 하는가.</strong></span></p>
+<p>빈칸에 직접 적어봐:</p>
+<div class="field"><div class="field-label">평범한 부분(흔한 말):</div><textarea class="field-input" data-key="day05_s4_q1" rows="2"></textarea><span class="save-status" data-for="day05_s4_q1"></span></div>
+<div class="field"><div class="field-label">날카로운 부분(실제로 관성이 붙는 지점):</div><textarea class="field-input" data-key="day05_s4_q2" rows="2"></textarea><span class="save-status" data-for="day05_s4_q2"></span></div>
+<div class="field"><div class="field-label">지금 우리 루프에서 &quot;내가 매번 발로 차야 하는&quot; 단계:</div><textarea class="field-input" data-key="day05_s4_q3" rows="2"></textarea><span class="save-status" data-for="day05_s4_q3"></span></div>
+<div class="field"><div class="field-label">그 단계를 자동으로 미는 단계로 바꾸려면 무엇이 필요한가:</div><textarea class="field-input" data-key="day05_s4_q4" rows="2"></textarea><span class="save-status" data-for="day05_s4_q4"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question"><strong>1.</strong> 내 사업의 리뷰→노출→판매 루프에서, 지금 정말로 &quot;관성&quot;이 붙은 구간은 어디고, 아직 매번 내가 힘을 넣어야 하는 구간은 어디일까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day05_s5_a1" rows="2"></textarea><span class="save-status" data-for="day05_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>2.</strong> 도공이 물레를 세게 차고 손을 떼는 순간과, 내가 사업에서 &quot;이제 이 일은 시스템에 맡기고 손을 떼도 된다&quot;고 판단하는 순간은 어떤 신호로 알아챌 수 있을까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day05_s5_a2" rows="2"></textarea><span class="save-status" data-for="day05_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question"><strong>3.</strong> 오늘 내릴 작은 결정 하나: 에이폼 안에서 &quot;한 바퀴가 다음 바퀴를 자동으로 미는&quot; 루프 하나를 오늘 그려본다면, 어느 루프를 고를까(리뷰-노출-판매, 반품 데이터-AI 학습, 상세페이지-전환율 중)? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day05_s5_decision" rows="2"></textarea><span class="save-status" data-for="day05_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day04/">← Day 04</a>
+  <a href="../day06/">Day 06 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      window.localStorage.setItem(key(field), field.value);
+      if(st){ st.textContent = field.value ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        field.value = v;
+        var st = statusEl(field);
+        if(st && v){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      field.addEventListener("input", function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = field.value.trim() || "(비어있음)";
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>
