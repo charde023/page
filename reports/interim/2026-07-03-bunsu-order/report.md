@@ -191,6 +191,9 @@ toc: false
 
 ## 상세 근거
 
+<details markdown="1">
+<summary style="cursor:pointer;font-weight:700;color:#194a86;padding:6px 0">상세 근거 펼치기 — 재고 · 가격·판매 · 계절성 · 발주 산출 · 시뮬 · 리스크 · 출처</summary>
+
 ### 재고 실측 (2026-07-03)
 | 위치 | 세트 |
 |---|---|
@@ -257,9 +260,11 @@ toc: false
 | 시장 검색량·계절성 | 네이버 데이터랩·셀하 | 3년 |
 | 경쟁사 | 쿠팡 판매순위 수집 | 2026-07-02 |
 
+</details>
+
 ---
 
-<details>
+<details markdown="1">
 <summary><b>부록 — 경쟁사 리뷰로 시장·경쟁 판매를 추정하는 방법 (향후 도구)</b></summary>
 
 이번 발주량 결정과는 별개로, 다음 시즌부터 경쟁사 판매 규모를 실시간으로 가늠하기 위한 방법입니다.
