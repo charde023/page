@@ -5,224 +5,259 @@ date: 2026-07-03
 period: 2026 여름 시즌
 owner: 인원
 project: APOM
-description: 분수물총 2026 여름 추가 발주량 결정 보고 — 결론 3,000세트, 근거는 그래프, 상세는 하단
+description: 분수물총 2026 여름 추가 발주량 결정 보고 — 결론 3,000세트, 근거는 그래프, 상세는 표
 toc: false
 ---
 
 # 분수물총, 얼마나 발주할 것인가
 
-> APOM 발주 결정 보고 · 2026-07-03 · 대상 상품: 에이폼 분수물총 회오리 물놀이 물총
-
----
-
-<div style="background:#0f2f4a;color:#fff;border-radius:14px;padding:20px 22px;margin:8px 0 4px">
-<div style="font-size:13px;letter-spacing:1px;opacity:.75">결론</div>
-<div style="font-size:30px;font-weight:800;line-height:1.25;margin:6px 0">추가 발주 <span style="color:#7fd1a8">3,000세트</span> — 지금 즉시</div>
-<div style="font-size:15px;opacity:.9;line-height:1.6">리드타임 10일이면 <b>7월 13일 도착 = 성수기 정중앙</b>. 재주문 없이 이 한 번으로 여름 시즌을 끝낸다.<br>단, 발주보다 <b>FC(로켓) 재고 보충이 더 급하다</b> — 오늘 바로 시작해야 한다.</div>
+<div style="background:linear-gradient(135deg,#12385f,#194a86);color:#fff;border-radius:14px;padding:22px 24px;margin:4px 0 6px">
+<div style="font-size:13px;letter-spacing:2px;opacity:.72">결 론</div>
+<div style="font-size:31px;font-weight:800;line-height:1.25;margin:6px 0 10px">추가 발주 <span style="color:#3fae63">3,000세트</span> — 지금 즉시</div>
+<div style="font-size:15px;opacity:.94;line-height:1.65">리드타임 10일이면 <b>7월 13일 도착 = 성수기 정중앙</b>. 재주문 없이 이 한 번으로 여름 시즌을 끝낸다.<br>단, 발주보다 <b style="color:#3fae63">FC(로켓) 재고 보충이 더 급하다</b> — 오늘 바로 시작해야 한다.</div>
 </div>
 
 <table>
-<tr><td><b>현재 확보 재고</b></td><td>2,052세트 (창고 1,679 · FC 132 · 이동중 241)</td></tr>
-<tr><td><b>여름 예상 판매</b></td><td>약 4,810세트</td></tr>
-<tr><td><b>부족분</b></td><td>약 2,760세트 → 발주 3,000으로 메움</td></tr>
+<thead><tr><th>항목</th><th style="text-align:right">세트</th></tr></thead>
+<tbody>
+<tr><td>여름 예상 판매 (A)</td><td style="text-align:right">4,810</td></tr>
+<tr><td>현재 확보 재고 (B)</td><td style="text-align:right">2,052</td></tr>
+<tr><td>순수 부족분 (A−B)</td><td style="text-align:right"><b>2,758</b></td></tr>
+<tr><td>안전재고 (품절 버퍼·판매 3일치)</td><td style="text-align:right">+242</td></tr>
+<tr><td style="background:#eef4fb"><b>발주량</b></td><td style="text-align:right;background:#eef4fb"><b style="color:#1a8043">3,000</b></td></tr>
+</tbody>
 </table>
+
+<div style="font-size:12.5px;color:#7c8896;margin:-4px 0 4px"><b style="color:#194a86">근거</b> · 부족분(2,758)만 발주하면 시즌말 재고 0 → 판매 급증 시 즉시 품절. 최소 안전재고 242를 더해 3,000으로 확정.</div>
 
 ---
 
 ## 근거 1 — 판매가 폭발하고 있다
 
-<div class="chart" style="background:#fff;border:1px solid #e7ebf0;border-radius:12px;padding:14px 10px 6px;margin:14px 0">
+<div style="background:#fff;border:1px solid #dbe3ec;border-radius:12px;padding:14px 12px 4px;margin:12px 0">
 <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%;height:auto;font-family:inherit">
-<line x1="46" y1="254" x2="664" y2="254" stroke="#dfe3ea" stroke-width="1"/>
-<line x1="46" y1="174.0" x2="664" y2="174.0" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="178.0" font-size="11" fill="#8a93a0" text-anchor="end">64</text>
-<line x1="46" y1="94.0" x2="664" y2="94.0" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="98.0" font-size="11" fill="#8a93a0" text-anchor="end">127</text>
-<line x1="46" y1="14.0" x2="664" y2="14.0" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="18.0" font-size="11" fill="#8a93a0" text-anchor="end">191</text>
-<rect x="55.0" y="227.6" width="29.5" height="26.4" rx="3" fill="#4a6da7"/>
-<text x="69.8" y="220.6" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">21</text>
-<text x="69.8" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">6/9</text>
-<rect x="102.6" y="241.4" width="29.5" height="12.6" rx="3" fill="#4a6da7"/>
-<text x="117.3" y="234.4" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">10</text>
-<text x="117.3" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">6/11</text>
-<rect x="150.1" y="238.9" width="29.5" height="15.1" rx="3" fill="#4a6da7"/>
-<text x="164.8" y="231.9" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">12</text>
-<text x="164.8" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">6/13</text>
-<rect x="197.6" y="235.1" width="29.5" height="18.9" rx="3" fill="#4a6da7"/>
-<text x="212.4" y="228.1" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">15</text>
-<text x="212.4" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">6/15</text>
-<rect x="245.2" y="236.4" width="29.5" height="17.6" rx="3" fill="#4a6da7"/>
-<text x="259.9" y="229.4" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">14</text>
-<text x="259.9" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">6/17</text>
-<rect x="292.7" y="238.9" width="29.5" height="15.1" rx="3" fill="#4a6da7"/>
-<text x="307.5" y="231.9" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">12</text>
-<text x="307.5" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">6/19</text>
-<rect x="340.3" y="246.5" width="29.5" height="7.5" rx="3" fill="#4a6da7"/>
-<text x="355.0" y="239.5" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">6</text>
-<text x="355.0" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">6/21</text>
-<rect x="387.8" y="247.7" width="29.5" height="6.3" rx="3" fill="#4a6da7"/>
-<text x="402.5" y="240.7" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">5</text>
-<text x="402.5" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">6/23</text>
-<rect x="435.3" y="243.9" width="29.5" height="10.1" rx="3" fill="#4a6da7"/>
-<text x="450.1" y="236.9" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">8</text>
-<text x="450.1" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">6/25</text>
-<rect x="482.9" y="243.9" width="29.5" height="10.1" rx="3" fill="#4a6da7"/>
-<text x="497.6" y="236.9" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">8</text>
-<text x="497.6" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">6/27</text>
-<rect x="530.4" y="196.2" width="29.5" height="57.8" rx="3" fill="#4a6da7"/>
-<text x="545.2" y="189.2" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">46</text>
-<text x="545.2" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">6/29</text>
-<rect x="578.0" y="220.1" width="29.5" height="33.9" rx="3" fill="#4a6da7"/>
-<text x="592.7" y="213.1" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">27</text>
-<text x="592.7" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">7/1</text>
-<rect x="625.5" y="45.3" width="29.5" height="208.7" rx="3" fill="#e0524d"/>
-<text x="640.2" y="38.3" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">166</text>
-<text x="640.2" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">7/2</text>
+<line x1="50" y1="254" x2="664" y2="254" stroke="#cfd8e3" stroke-width="1"/>
+<line x1="50" y1="174.7" x2="664" y2="174.7" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="178.7" font-size="11" fill="#7c8896" text-anchor="end">64</text>
+<line x1="50" y1="95.3" x2="664" y2="95.3" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="99.3" font-size="11" fill="#7c8896" text-anchor="end">128</text>
+<line x1="50" y1="16.0" x2="664" y2="16.0" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="20.0" font-size="11" fill="#7c8896" text-anchor="end">193</text>
+<rect x="59.9" y="228.0" width="27.4" height="26.0" rx="3" fill="#2f6bb0"/>
+<text x="73.6" y="221.0" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">21</text>
+<text x="73.6" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">6/9</text>
+<rect x="107.1" y="241.6" width="27.4" height="12.4" rx="3" fill="#2f6bb0"/>
+<text x="120.8" y="234.6" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">10</text>
+<text x="120.8" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">6/11</text>
+<rect x="154.4" y="239.2" width="27.4" height="14.8" rx="3" fill="#2f6bb0"/>
+<text x="168.1" y="232.2" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">12</text>
+<text x="168.1" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">6/13</text>
+<rect x="201.6" y="235.5" width="27.4" height="18.5" rx="3" fill="#2f6bb0"/>
+<text x="215.3" y="228.5" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">15</text>
+<text x="215.3" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">6/15</text>
+<rect x="248.8" y="236.7" width="27.4" height="17.3" rx="3" fill="#2f6bb0"/>
+<text x="262.5" y="229.7" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">14</text>
+<text x="262.5" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">6/17</text>
+<rect x="296.1" y="239.2" width="27.4" height="14.8" rx="3" fill="#2f6bb0"/>
+<text x="309.8" y="232.2" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">12</text>
+<text x="309.8" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">6/19</text>
+<rect x="343.3" y="246.6" width="27.4" height="7.4" rx="3" fill="#2f6bb0"/>
+<text x="357.0" y="239.6" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">6</text>
+<text x="357.0" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">6/21</text>
+<rect x="390.5" y="247.8" width="27.4" height="6.2" rx="3" fill="#2f6bb0"/>
+<text x="404.2" y="240.8" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">5</text>
+<text x="404.2" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">6/23</text>
+<rect x="437.8" y="244.1" width="27.4" height="9.9" rx="3" fill="#2f6bb0"/>
+<text x="451.5" y="237.1" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">8</text>
+<text x="451.5" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">6/25</text>
+<rect x="485.0" y="244.1" width="27.4" height="9.9" rx="3" fill="#2f6bb0"/>
+<text x="498.7" y="237.1" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">8</text>
+<text x="498.7" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">6/27</text>
+<rect x="532.2" y="197.1" width="27.4" height="56.9" rx="3" fill="#2f6bb0"/>
+<text x="545.9" y="190.1" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">46</text>
+<text x="545.9" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">6/29</text>
+<rect x="579.5" y="220.6" width="27.4" height="33.4" rx="3" fill="#2f6bb0"/>
+<text x="593.2" y="213.6" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">27</text>
+<text x="593.2" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">7/1</text>
+<rect x="626.7" y="48.8" width="27.4" height="205.2" rx="3" fill="#c33a2e"/>
+<text x="640.4" y="41.8" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">166</text>
+<text x="640.4" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">7/2</text>
 </svg>
+<div style="border-top:1px solid #eef2f7;margin-top:8px;padding:7px 4px 3px;font-size:12px;color:#7c8896"><b style="color:#194a86">자료</b> · 쿠팡 윙 일별 판매 실측 (2026-06-09 ~ 07-02, 판매 세트 수). 빨강 = 어제(7/2) 166세트</div>
 </div>
 
-일 판매량 (세트). 6월 중순 하루 12개 수준에서 **어제(7/2) 166개**로 튀었다. 최근 3일 평균만 봐도 하루 71개로, 지금 확보 재고는 이 속도를 오래 못 버틴다.
+6월 중순 하루 12세트 수준에서 **어제 166세트**로 급등. 최근 3일 평균만 봐도 하루 71세트로, 현재 재고로는 이 속도를 오래 버틸 수 없다.
 
 ## 근거 2 — 시장은 줄지만, 우리는 역주행 중이다
 
-<div class="chart" style="background:#fff;border:1px solid #e7ebf0;border-radius:12px;padding:14px 10px 6px;margin:14px 0">
-<svg viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%;height:auto;font-family:inherit">
-<line x1="46" y1="234" x2="664" y2="234" stroke="#dfe3ea" stroke-width="1"/>
-<line x1="46" y1="160.7" x2="664" y2="160.7" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="164.7" font-size="11" fill="#8a93a0" text-anchor="end">38,333</text>
-<line x1="46" y1="87.3" x2="664" y2="87.3" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="91.3" font-size="11" fill="#8a93a0" text-anchor="end">76,667</text>
-<line x1="46" y1="14.0" x2="664" y2="14.0" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="18.0" font-size="11" fill="#8a93a0" text-anchor="end">115,000</text>
-<rect x="122.0" y="42.7" width="54.0" height="191.3" rx="3" fill="#b8c0cc"/>
-<text x="149.0" y="35.7" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">100,000</text>
-<text x="149.0" y="252.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">2023년 7월</text>
-<rect x="328.0" y="105.2" width="54.0" height="128.8" rx="3" fill="#b8c0cc"/>
-<text x="355.0" y="98.2" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">67,344</text>
-<text x="355.0" y="252.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">2024년 7월</text>
-<rect x="534.0" y="125.0" width="54.0" height="109.0" rx="3" fill="#b8c0cc"/>
-<text x="561.0" y="118.0" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">57,000</text>
-<text x="561.0" y="252.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">2025년 7월</text>
+<div style="background:#fff;border:1px solid #dbe3ec;border-radius:12px;padding:14px 12px 4px;margin:12px 0">
+<svg viewBox="0 0 680 270" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%;height:auto;font-family:inherit">
+<line x1="50" y1="224" x2="664" y2="224" stroke="#cfd8e3" stroke-width="1"/>
+<line x1="50" y1="154.7" x2="664" y2="154.7" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="158.7" font-size="11" fill="#7c8896" text-anchor="end">38,667</text>
+<line x1="50" y1="85.3" x2="664" y2="85.3" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="89.3" font-size="11" fill="#7c8896" text-anchor="end">77,333</text>
+<line x1="50" y1="16.0" x2="664" y2="16.0" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="20.0" font-size="11" fill="#7c8896" text-anchor="end">116,000</text>
+<rect x="122.3" y="44.7" width="60.0" height="179.3" rx="3" fill="#9aa7b5"/>
+<text x="152.3" y="37.7" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">10.0만</text>
+<text x="152.3" y="242.0" font-size="11.5" fill="#7c8896" text-anchor="middle">2023년 7월</text>
+<rect x="327.0" y="103.2" width="60.0" height="120.8" rx="3" fill="#9aa7b5"/>
+<text x="357.0" y="96.2" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">6.7만</text>
+<text x="357.0" y="242.0" font-size="11.5" fill="#7c8896" text-anchor="middle">2024년 7월</text>
+<rect x="531.7" y="121.8" width="60.0" height="102.2" rx="3" fill="#9aa7b5"/>
+<text x="561.7" y="114.8" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">5.7만</text>
+<text x="561.7" y="242.0" font-size="11.5" fill="#7c8896" text-anchor="middle">2025년 7월</text>
 </svg>
+<div style="border-top:1px solid #eef2f7;margin-top:8px;padding:7px 4px 3px;font-size:12px;color:#7c8896"><b style="color:#194a86">자료</b> · 네이버 검색량 추이 (셀하·데이터랩, 검색어 '물총' 매년 7월, 최근 3년)</div>
 </div>
 
-물총 시장의 7월 검색량(네이버 기준)은 3년째 줄고 있다(10만 → 6.7만 → 5.7만). **그런데 우리 판매는 반대로 급성장 중이다.** 시장 순풍이 아니라 우리가 점유율을 빼앗아 오는 국면이라는 뜻 — 후발주자가 치고 올라가는 지금이 재고를 실을 때다.
+물총 시장 자체는 3년째 축소(7월 검색량 10만 → 6.7만 → 5.7만). **그런데 우리 판매는 반대로 급성장** — 시장 순풍이 아니라 점유율을 빼앗아 오는 국면이라, 후발주자가 치고 올라가는 지금이 재고를 실을 때다.
 
 ## 근거 3 — 공급이 여름 수요에 크게 못 미친다
 
-<div class="chart" style="background:#fff;border:1px solid #e7ebf0;border-radius:12px;padding:14px 10px 6px;margin:14px 0">
+<div style="background:#fff;border:1px solid #dbe3ec;border-radius:12px;padding:14px 12px 4px;margin:12px 0">
 <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%;height:auto;font-family:inherit">
-<line x1="46" y1="254" x2="664" y2="254" stroke="#dfe3ea" stroke-width="1"/>
-<line x1="46" y1="174.0" x2="664" y2="174.0" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="178.0" font-size="11" fill="#8a93a0" text-anchor="end">1,844</text>
-<line x1="46" y1="94.0" x2="664" y2="94.0" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="98.0" font-size="11" fill="#8a93a0" text-anchor="end">3,688</text>
-<line x1="46" y1="14.0" x2="664" y2="14.0" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="18.0" font-size="11" fill="#8a93a0" text-anchor="end">5,532</text>
-<rect x="122.0" y="165.0" width="54.0" height="89.0" rx="3" fill="#b8c0cc"/>
-<text x="149.0" y="158.0" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">2,052</text>
-<text x="149.0" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">현재 공급</text>
-<rect x="328.0" y="45.3" width="54.0" height="208.7" rx="3" fill="#e0524d"/>
-<text x="355.0" y="38.3" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">4,810</text>
-<text x="355.0" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">여름 수요</text>
-<rect x="534.0" y="123.8" width="54.0" height="130.2" rx="3" fill="#2e9d6e"/>
-<text x="561.0" y="116.8" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">3,000</text>
-<text x="561.0" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">→ 추가 발주</text>
+<line x1="50" y1="254" x2="664" y2="254" stroke="#cfd8e3" stroke-width="1"/>
+<line x1="50" y1="174.7" x2="664" y2="174.7" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="178.7" font-size="11" fill="#7c8896" text-anchor="end">1,860</text>
+<line x1="50" y1="95.3" x2="664" y2="95.3" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="99.3" font-size="11" fill="#7c8896" text-anchor="end">3,720</text>
+<line x1="50" y1="16.0" x2="664" y2="16.0" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="20.0" font-size="11" fill="#7c8896" text-anchor="end">5,580</text>
+<rect x="122.3" y="166.5" width="60.0" height="87.5" rx="3" fill="#2f6bb0"/>
+<text x="152.3" y="159.5" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">2,052</text>
+<text x="152.3" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">현재 확보</text>
+<text x="152.3" y="286.0" font-size="11.5" fill="#7c8896" text-anchor="middle">재고</text>
+<rect x="327.0" y="48.8" width="60.0" height="205.2" rx="3" fill="#194a86"/>
+<text x="357.0" y="41.8" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">4,810</text>
+<text x="357.0" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">여름 예상</text>
+<text x="357.0" y="286.0" font-size="11.5" fill="#7c8896" text-anchor="middle">판매</text>
+<rect x="531.7" y="126.0" width="60.0" height="128.0" rx="3" fill="#1a8043"/>
+<text x="561.7" y="119.0" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">3,000</text>
+<text x="561.7" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">추가 발주</text>
 </svg>
+<div style="border-top:1px solid #eef2f7;margin-top:8px;padding:7px 4px 3px;font-size:12px;color:#7c8896"><b style="color:#194a86">자료</b> · 이지어드민 재고 실측(2026-07-03) + 여름 수요 추정(하단 '여름 수요 산출' 표). 초록 = 이번 발주</div>
 </div>
 
-지금 확보한 2,052세트로는 여름 예상 수요 4,810세트를 못 채운다. 격차 약 2,760세트를 발주 3,000으로 메운다. (물총은 상하지 않아 남으면 내년 여름 재사용 가능 — 품절 손실이 잔여 손실보다 훨씬 크다.)
+현재 확보 2,052세트로는 여름 수요 4,810세트를 못 채운다. 부족분 2,758에 안전재고를 더해 **3,000세트**를 발주한다.
 
 ## 근거 4 — 3,000이면 시즌을 안전하게 넘긴다
 
-<div class="chart" style="background:#fff;border:1px solid #e7ebf0;border-radius:12px;padding:14px 10px 6px;margin:14px 0">
+<div style="background:#fff;border:1px solid #dbe3ec;border-radius:12px;padding:14px 12px 4px;margin:12px 0">
 <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%;height:auto;font-family:inherit">
-<line x1="46" y1="254" x2="664" y2="254" stroke="#dfe3ea" stroke-width="1"/>
-<line x1="46" y1="174.0" x2="664" y2="174.0" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="178.0" font-size="11" fill="#8a93a0" text-anchor="end">700</text>
-<line x1="46" y1="94.0" x2="664" y2="94.0" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="98.0" font-size="11" fill="#8a93a0" text-anchor="end">1,400</text>
-<line x1="46" y1="14.0" x2="664" y2="14.0" stroke="#eef1f5" stroke-width="1"/>
-<text x="38" y="18.0" font-size="11" fill="#8a93a0" text-anchor="end">2,100</text>
-<rect x="122.0" y="42.6" width="54.0" height="211.4" rx="3" fill="#2e9d6e"/>
-<text x="149.0" y="35.6" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">1,850</text>
-<text x="149.0" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">보수 시나리오</text>
-<rect x="328.0" y="226.3" width="54.0" height="27.7" rx="3" fill="#2e9d6e"/>
-<text x="355.0" y="219.3" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">242</text>
-<text x="355.0" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">기본(중심)</text>
-<rect x="534.0" y="254.0" width="54.0" height="85.7" rx="3" fill="#e0524d"/>
-<text x="561.0" y="353.7" font-size="12.5" font-weight="700" fill="#2b2f36" text-anchor="middle">-750</text>
-<text x="561.0" y="272.0" font-size="11.5" fill="#8a93a0" text-anchor="middle">공격 시나리오</text>
+<line x1="50" y1="254" x2="664" y2="254" stroke="#cfd8e3" stroke-width="1"/>
+<line x1="50" y1="174.7" x2="664" y2="174.7" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="178.7" font-size="11" fill="#7c8896" text-anchor="end">700</text>
+<line x1="50" y1="95.3" x2="664" y2="95.3" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="99.3" font-size="11" fill="#7c8896" text-anchor="end">1,400</text>
+<line x1="50" y1="16.0" x2="664" y2="16.0" stroke="#eaf0f6" stroke-width="1"/>
+<text x="42" y="20.0" font-size="11" fill="#7c8896" text-anchor="end">2,100</text>
+<rect x="122.3" y="44.3" width="60.0" height="209.7" rx="3" fill="#2f6bb0"/>
+<text x="152.3" y="37.3" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">+1,850</text>
+<text x="152.3" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">보수</text>
+<rect x="327.0" y="226.6" width="60.0" height="27.4" rx="3" fill="#1a8043"/>
+<text x="357.0" y="219.6" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">+242</text>
+<text x="357.0" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">기본(중심)</text>
+<rect x="531.7" y="254.0" width="60.0" height="85.0" rx="3" fill="#c33a2e"/>
+<text x="561.7" y="354.0" font-size="13" font-weight="700" fill="#14304d" text-anchor="middle">-750</text>
+<text x="561.7" y="272.0" font-size="11.5" fill="#7c8896" text-anchor="middle">공격</text>
 </svg>
+<div style="border-top:1px solid #eef2f7;margin-top:8px;padding:7px 4px 3px;font-size:12px;color:#7c8896"><b style="color:#194a86">자료</b> · 발주 3,000세트 가정, 시나리오별 시즌말(8/31) 잔여 재고. 초록 = 중심 시나리오(+242 안전)</div>
 </div>
 
-발주 3,000세트를 더한 총 5,052세트로 시즌을 시뮬레이션한 결과(시즌말 남는 재고). 기본 시나리오에서 딱 맞고(+242), 판매가 예상보다 약해도 남는 건 내년 재고일 뿐이다. 어제처럼 폭발이 이어지는 공격 시나리오에서만 소폭 부족(-750)해, 그때만 3,500세트로 올리면 된다.
+발주 3,000을 더한 총 5,052세트 시뮬레이션(시즌말 남는 재고). 기본 시나리오에서 딱 맞고, 약해도 남는 건 내년 재고일 뿐. 어제 같은 폭발이 이어지는 공격 시나리오에서만 소폭 부족(-750)해, 그때만 3,500으로 올리면 된다.
 
 ---
 
 ## 지금 당장 할 일
 
-1. **FC(로켓) 입고신청 대량 추가 — 최우선.** 발주분은 7/13 도착이라, 그 전 열흘은 창고 재고를 FC로 얼마나 빨리 보내느냐가 판매를 좌우한다. 지금 FC엔 하루치도 안 되는 재고뿐이다.
-2. **중국 발주 3,000세트 진행.** 발주일·도착일을 기록해 다음 발주의 리드타임 기준을 만든다.
-3. **어제 166개 급증 원인 확인**(쿠폰·딜·랭킹). 일시적이 아니라 구조적이면 3,500세트로 상향.
+| 순위 | 실행 | 이유 |
+|---|---|---|
+| 1 | **FC(로켓) 입고신청 대량 추가** | 발주분 7/13 도착 전 열흘은 창고→FC 이동 속도가 판매 상한. 현재 FC엔 하루치도 안 됨 |
+| 2 | **중국 발주 3,000세트** | 발주일·도착일 기록 → 다음 발주 리드타임 기준 확보 |
+| 3 | 어제 166 급증 원인 확인 | 쿠폰·딜·랭킹 점검 → 구조적이면 3,500으로 상향 |
 
 ---
 
-<details>
-<summary><b>상세 근거 (숫자·계산·리스크) 펼치기</b></summary>
+## 상세 근거
 
 ### 재고 실측 (2026-07-03)
 | 위치 | 세트 |
 |---|---|
-| 자사 창고(이지어드민) | 1,679 (불량 0) |
+| 자사 창고 (이지어드민) | 1,679 (불량 0) |
 | 쿠팡 FC | 132 |
 | 창고→FC 이동중 | 241 |
 | **가시 공급 합계** | **2,052** |
 | 중국 추가 발주 | 0 |
 
-### 여름 수요 계산 (7/3~8/31)
+<div style="font-size:12.5px;color:#7c8896;margin-top:-6px"><b style="color:#194a86">근거</b> · 이지어드민 자동수집(당일) · 쿠팡 FC 재고 API · 그로스 입고 이동중 물량</div>
+
+### 여름 수요 산출 (7/3 ~ 8/31)
 | 구간 | 일수 | 일판매 | 소계 |
 |---|---|---|---|
-| 7/3~7/12 (도착 전) | 10 | 80 | 800 |
-| 7/13~7/31 (도착 후·피크) | 19 | 110 | 2,090 |
+| 7/3~7/12 (발주 도착 전) | 10 | 80 | 800 |
+| 7/13~7/31 (도착 후·성수기) | 19 | 110 | 2,090 |
 | 8/1~8/15 | 15 | 80 | 1,200 |
-| 8/16~8/31 | 16 | 45 | 720 |
-| **합계** | | | **약 4,810** |
+| 8/16~8/31 (계절 감소) | 16 | 45 | 720 |
+| **합계** | | | **4,810** |
 
-시즌 수요 4,810 − 공급 2,052 = 순부족 2,760 → 품절 버퍼를 더해 **발주 3,000**.
+<div style="font-size:12.5px;color:#7c8896;margin-top:-6px"><b style="color:#194a86">근거</b> · 최근 판매 실측(3일 71/일)에서 성수기 램프업 + 8월 계절 감소(네이버 계절성: 물총 6·7월 피크) 반영</div>
+
+### 발주량 산출
+| 항목 | 세트 |
+|---|---|
+| 여름 예상 판매 (A) | 4,810 |
+| 현재 확보 재고 (B) | 2,052 |
+| 순수 부족분 (A−B) | 2,758 |
+| 안전재고 (품절 버퍼) | +242 |
+| **발주량** | **3,000** |
+
+<div style="font-size:12.5px;color:#7c8896;margin-top:-6px"><b style="color:#194a86">근거</b> · 순부족만 발주 시 시즌말 재고 0 → 판매 변동(어제 166) 시 품절 위험. 판매 3일치를 안전재고로 가산</div>
 
 ### 발주 3,000 재고 시뮬레이션
 | 시나리오 | 여름 판매 | 시즌말 잔여 |
 |---|---|---|
-| 보수 | ~3,200 | +1,850 (내년 이월) |
-| 기본(중심) | ~4,810 | +242 (안전 버퍼) |
-| 공격 | ~5,800 | -750 (막판 소폭 품절) |
+| 보수 | 3,200 | +1,850 (내년 이월) |
+| 기본 (중심) | 4,810 | +242 (안전 버퍼) |
+| 공격 | 5,800 | −750 (막판 소폭 품절) |
 
-### 리스크
-- **시장이 3년째 감소** → 맞지만 우리 성장은 점유율 확보라 시장과 분리. 단 랭킹·광고 유지에 의존하므로 취약성 인지.
-- **어제 166이 일시적일 가능성** → 그래서 공격 시나리오 전체가 아니라 순부족+버퍼만 반영한 3,000. 남아도 비부패라 이월.
-- **원가 미등록** → 발주 금액·마진은 원가 등록 후 산출 예정.
+<div style="font-size:12.5px;color:#7c8896;margin-top:-6px"><b style="color:#194a86">근거</b> · 총공급 5,052(현재 2,052 + 발주 3,000) − 시나리오별 여름 판매</div>
+
+### 리스크 점검
+| 리스크 | 평가 |
+|---|---|
+| 시장이 3년째 감소 | 맞지만 우리 성장은 점유율 확보라 시장과 분리. 단 랭킹·광고 유지에 의존(취약성 인지) |
+| 어제 166이 일시적일 가능성 | 그래서 공격 전체가 아닌 순부족+버퍼만 반영한 3,000. 남아도 비부패라 내년 이월 |
+| 원가 미등록 | 발주 금액·마진은 원가 등록 후 별도 산출 |
+
+<div style="font-size:12.5px;color:#7c8896;margin-top:-6px"><b style="color:#194a86">근거</b> · 리스크 비대칭(성수기 품절 손실 &gt; 잔여재고 손실) 하에서의 보수적 판단</div>
 
 ### 데이터 출처
-재고=이지어드민 자동수집(당일) · 판매/광고=쿠팡 윙(~7/2) · 시장 검색량=네이버(셀하·데이터랩 3년) · 경쟁사=쿠팡 판매순위 수집.
+| 항목 | 출처 | 기준 |
+|---|---|---|
+| 재고 | 이지어드민 자동수집 | 2026-07-03 |
+| 판매·광고 | 쿠팡 윙 | ~2026-07-02 |
+| 시장 검색량 | 네이버(셀하·데이터랩) | 3년 |
+| 경쟁사 | 쿠팡 판매순위 수집 | 2026-07-02 |
 
-</details>
+---
 
 <details>
 <summary><b>부록 — 경쟁사 리뷰로 시장·경쟁 판매를 추정하는 방법 (향후 도구)</b></summary>
 
-이번 발주량 결정과는 별개로, 다음 시즌부터 **경쟁사 판매 규모를 실시간으로 가늠**하기 위한 방법을 정리해 둔다.
+이번 발주량 결정과는 별개로, 다음 시즌부터 경쟁사 판매 규모를 실시간으로 가늠하기 위한 방법.
 
-- **원리**: 리뷰 수 × 배수(업계 통용 ×10~×50)로 경쟁사 판매량을 역산. 단 절대량이 아니라 **경쟁 서열·추세** 파악용.
-- **가구매 보정이 핵심**: 리뷰가 (a) 짧은 기간 몰렸다 급락하거나 (b) 부자연스럽게 균일하면 가구매로 판단해 제외. 리뷰 300개 미만 상품은 가구매가 많고, 1,000개 이상은 거의 없다. → **리뷰 작성 시간 패턴**으로만 정확히 걸러지므로, 경쟁사 리뷰 날짜 수집이 관건.
-- **우리 위치(참고)**: 분수물총 판매순 상위 경쟁사 리뷰 — 어반픽스 872 · 하이제이비 733 · 아라 503 · 아오라 432 … 에이폼(우리) 96(13위). 리뷰(과거 누적)로는 13위지만 현재 판매 속도는 상위권 = 후발 급성장.
-- **더 나은 축**: 리뷰보다 **판매순위(이미 수집 중)**가 리뷰 조작에 덜 오염돼, 리뷰·순위·평점 세 신호가 일치할 때만 신뢰한다.
-
-(상세 방법론·구현 로드맵은 내부 기획서 별도 정리.)
+| 항목 | 내용 |
+|---|---|
+| 원리 | 리뷰 수 × 배수(업계 ×10~×50)로 경쟁사 판매 역산 — 절대량 아닌 **서열·추세**용 |
+| 가구매 보정 | 리뷰가 (a) 짧게 몰렸다 급락 (b) 부자연스럽게 균일 = 가구매로 제외. 리뷰 1,000+ 상품은 가구매 거의 없음 |
+| 관건 | **리뷰 작성 시간 패턴**으로만 정확히 판별 → 경쟁사 리뷰 날짜 수집이 핵심 |
+| 우리 위치 | 분수물총 판매순 상위 리뷰: 어반픽스 872·하이제이비 733·아라 503 … 에이폼 96(13위). 누적 리뷰는 13위지만 현재 판매속도는 상위권 |
+| 더 나은 축 | 리뷰보다 **판매순위**(이미 수집)가 조작에 덜 오염 → 리뷰·순위·평점 3신호 일치 시만 신뢰 |
 
 </details>
 
 ---
 
-*본 보고서는 이지어드민·쿠팡·네이버 실측 데이터 기반으로 작성되었습니다. 발주 실행 시 원가 등록 후 발주 금액·예상 마진을 추가 보고합니다.*
+*본 보고서는 이지어드민·쿠팡·네이버 실측 데이터 기반. 발주 실행 시 원가 등록 후 발주 금액·예상 마진을 추가 보고합니다.*
