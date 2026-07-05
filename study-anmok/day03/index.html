@@ -128,10 +128,10 @@ button.act:hover{opacity:.9}
 <p><strong>이어달리기</strong>: Day 2의 <span class="wikiterm" title="옵시디언 원노트: Moat-해자">Moat-해자</span>가 외부의 공격(경쟁자)을 막아내는 방어선이었다면, 오늘의 멱등성은 내부의 실수(재시도·중복 실행)를 막아내는 안전장치야. 해자가 바깥을 향한 방패라면, 멱등성은 안쪽을 향한 방패인 셈이지.</p>
 <h2>④ 오늘의 안목 훈련 — M3 숨은 전제 찾기</h2>
 <p>M3 렌즈는 "당연히 그렇다"고 믿고 지나가는 전제를 끄집어내는 훈련이야. 결정을 내릴 때 눈에 보이는 조건만 따지고, 밑에 깔린 무의식적 가정은 검증 없이 통과시키기 쉽다. 특히 자동화처럼 "한 번 만들어놓으면 알아서 잘 돌겠지" 싶은 영역일수록 숨은 전제가 잘 숨는다. 핵심 질문은 "이 믿음이 틀릴 가능성은?"이야.</p>
-<p>연습해보자. "이 자동화는 한 번만 실행될 거야"라는 믿음, 이 안에 숨은 전제 3개를 직접 적어봐.</p>
-<div class="field"><div class="field-label">숨은 전제 1 (네트워크 재시도 관련)</div><textarea class="field-input" data-key="day03_s4_q1" rows="2"></textarea><span class="save-status" data-for="day03_s4_q1"></span></div>
-<div class="field"><div class="field-label">숨은 전제 2 (사람의 더블클릭·중복 조작 관련)</div><textarea class="field-input" data-key="day03_s4_q2" rows="2"></textarea><span class="save-status" data-for="day03_s4_q2"></span></div>
-<div class="field"><div class="field-label">숨은 전제 3 (스케줄러 자체의 중복 기동 관련)</div><textarea class="field-input" data-key="day03_s4_q3" rows="2"></textarea><span class="save-status" data-for="day03_s4_q3"></span></div>
+<p>연습해보자. "이 자동화는 한 번만 실행될 거야"라는 믿음 — 이 말이 참이 되려면 밑에 어떤 전제가 숨어 있어야 할까? 그 숨은 전제 3개를 직접 찾아 적어봐. (거꾸로 생각하면 쉬워: "무엇이 이걸 두 번 실행시킬 수 있지?"를 떠올리고, 그게 안 일어난다는 게 바로 숨은 전제야.)</p>
+<div class="field"><div class="field-label">숨은 전제 1</div><textarea class="field-input" data-key="day03_s4_q1" rows="2"></textarea><span class="save-status" data-for="day03_s4_q1"></span></div>
+<div class="field"><div class="field-label">숨은 전제 2</div><textarea class="field-input" data-key="day03_s4_q2" rows="2"></textarea><span class="save-status" data-for="day03_s4_q2"></span></div>
+<div class="field"><div class="field-label">숨은 전제 3</div><textarea class="field-input" data-key="day03_s4_q3" rows="2"></textarea><span class="save-status" data-for="day03_s4_q3"></span></div>
 <p>참고로 셋 다 실제로 자주 벌어지는 일이야. 네트워크가 응답을 못 받으면 클라이언트가 재시도를 쏘고, 사람은 화면이 안 넘어가면 버튼을 반사적으로 다시 누르고, cron·스케줄러는 재부팅·시계 오차·중복 등록으로 같은 작업을 두 번 깨운다. "한 번만 실행된다"는 전제는 생각보다 자주 깨진다.</p>
 <h2>⑤ 스스로 생각할 질문 3개</h2>
 <div class="qa-block"><div class="qa-question"><strong>1.</strong> 내가 관리하는 자동화 중에, &quot;재실행해도 안전한가?&quot;를 한 번도 검증해보지 않은 게 있다면 무엇일까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day03_s5_a1" rows="2"></textarea><span class="save-status" data-for="day03_s5_a1"></span></div></div>
