@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>테오도시우스 성벽 — 천 년을 버틴 벽, 그리고 그 벽을 무너뜨린 것</title>
+<meta name="description" content="Day 02 심화. 신의 선물이라는 이름을 가진 벽이 어떻게 천 년을 버텼고, 왜 결국 대포 앞에 무너졌나 — 어원·구조·60일의 기적·우르반의 대포·함락의 진짜 교훈까지.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.75; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.7rem; margin:0 0 8px; line-height:1.35}
+h2{font-size:1.28rem; margin:44px 0 14px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+h3{font-size:1.05rem; margin:26px 0 8px; color:var(--accent)}
+p{margin:14px 0}
+a{color:var(--accent)}
+strong{font-weight:700}
+.o{color:var(--orange); font-weight:700}
+.gk{font-style:normal; color:var(--text-soft); font-feature-settings:"kern"}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 24px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:8px}
+.lede{margin:18px 0 6px; padding:16px 18px; border-radius:12px; border:1px solid var(--border);
+  background:var(--surface); font-size:1.02rem; color:var(--text); box-shadow:var(--shadow)}
+
+/* pull quote */
+.pull{margin:30px 0; padding:20px 22px; border-left:4px solid var(--orange);
+  background:linear-gradient(120deg,#fff7ef 0%, var(--surface) 100%); border-radius:0 12px 12px 0;
+  font-size:1.12rem; font-weight:600; color:var(--text)}
+
+/* table */
+.tablewrap{overflow-x:auto; margin:18px 0}
+table{border-collapse:collapse; width:100%; font-size:.92rem; min-width:440px}
+th,td{border:1px solid var(--border); padding:9px 11px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft); color:var(--accent)}
+td .u{color:var(--text-soft); font-size:.86rem}
+
+/* cross-section figure */
+figure{margin:22px 0}
+.svgwrap{overflow-x:auto; border:1px solid var(--border); border-radius:14px; background:var(--surface);
+  box-shadow:var(--shadow); padding:6px}
+.svgwrap svg{display:block; width:100%; min-width:640px; height:auto}
+figcaption{font-size:.84rem; color:var(--text-soft); margin-top:8px; text-align:center}
+
+/* timeline */
+.timeline{list-style:none; padding:0; margin:20px 0; border-left:2px solid var(--accent-soft)}
+.timeline li{position:relative; padding:2px 0 18px 22px}
+.timeline li::before{content:""; position:absolute; left:-7px; top:8px; width:12px; height:12px;
+  border-radius:50%; background:var(--accent); border:2px solid #fff; box-shadow:0 0 0 1px var(--accent-soft)}
+.timeline li.fall::before{background:var(--orange); box-shadow:0 0 0 1px #fde3cc}
+.timeline .yr{font-weight:700; color:var(--accent); margin-right:8px}
+.timeline .fall .yr{color:var(--orange)}
+
+/* lesson cards */
+.cards{display:flex; flex-direction:column; gap:14px; margin:20px 0}
+.lcard{padding:16px 18px; border:1px solid var(--border); border-radius:12px; background:var(--surface);
+  box-shadow:var(--shadow)}
+.lcard .n{display:inline-block; font-size:.78rem; font-weight:700; color:#fff; background:var(--accent);
+  border-radius:7px; padding:2px 9px; margin-bottom:8px}
+.lcard h3{margin:0 0 6px; color:var(--text)}
+.lcard p{margin:6px 0 0; font-size:.96rem; color:var(--text-soft)}
+.lcard p b{color:var(--text)}
+
+/* callout */
+.note{margin:20px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--warn-border);
+  background:var(--warn-bg); font-size:.9rem; color:var(--warn)}
+.note strong{color:var(--warn)}
+
+/* sources */
+.src{font-size:.88rem; color:var(--text-soft)}
+.src li{margin:5px 0}
+
+.daynav{display:flex; justify-content:space-between; align-items:center; margin-top:44px;
+  padding-top:18px; border-top:1px solid var(--border); font-size:.92rem}
+.daynav a{text-decoration:none; font-weight:600}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  h1{font-size:1.42rem}
+  .header{margin:-24px -16px 20px; padding:24px 16px 20px}
+  .pull{font-size:1.04rem}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← Day 02 · 해자로 돌아가기</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · Day 02 심화</div>
+  <h1>테오도시우스 성벽 —<br>천 년을 버틴 벽, 그리고 그 벽을 무너뜨린 것</h1>
+  <div class="meta">콘스탄티노플의 3중 성벽 · 413년~1453년 · 어원 · 구조 · 함락의 교훈</div>
+</div>
+
+<div class="lede">Day 02에서 이 벽을 "해자는 그 시대의 공격 기술 안에서만 강하다"는 한 문장의 증거로 잠깐 봤지. 여기선 그 벽을 처음부터 끝까지 뜯어본다. <span class="o">이름의 뜻</span>부터, 누가 지었는지, 왜 세 겹이었는지, 무너졌을 때 어떻게 60일 만에 다시 세웠는지, 그리고 천 년을 버틴 벽이 <span class="o">왜 51일 만에</span> 무너졌는지까지. 그리고 그 전부를 네 사업으로 다시 가져온다.</div>
+
+<h2>① 이름부터 — "신의 선물"이 쌓은 벽</h2>
+<p>먼저 이름을 풀어보자. 벽에 이름을 준 황제 <span class="o">테오도시우스</span>(Theodosius, <span class="gk">Θεοδόσιος</span>)는 두 그리스어가 붙은 이름이야. <span class="gk">θεός</span>(theos, 신) + <span class="gk">δόσις</span>(dosis, 줌·선물 — 동사 <span class="gk">δίδωμι</span> didōmi '주다'에서 왔어). 그대로 옮기면 <strong>"신이 준 것", 신의 선물</strong>이야. 천 년을 버틴 벽의 이름이 '신의 선물'이었다는 건, 지나고 보면 묘하게 어울리는 우연이지.</p>
+<p>도시 이름 <strong>콘스탄티노플</strong>도 마찬가지로 투명해. <span class="gk">Κωνσταντινούπολις</span> = 콘스탄티누스(Constantine) + <span class="gk">πόλις</span>(polis, 도시) = "콘스탄티누스의 도시". 330년 로마 황제 콘스탄티누스가 자기 이름을 박아 세운 새 수도라는 뜻이 이름에 그대로 남아 있어.</p>
+<p>재밌는 건 성벽의 <strong>부위 이름들이 곧 설계도</strong>라는 점이야. 그리스인들은 벽을 <span class="gk">τεῖχος</span>(teichos)라 불렀고, 바깥에 덧댄 벽은 <span class="o">προτείχισμα</span>(proteichisma) — <span class="gk">προ</span>(pro, 앞) + teichos, 즉 "앞벽"이야. 두 벽 사이의 공간은 <span class="gk">περίβολος</span>(peribolos, '둘러친 것'), 맨 앞의 도랑은 <span class="gk">τάφρος</span>(taphros, 참호)라 했어. 이름만 순서대로 읽어도 <strong>앞벽 → 사이 공간 → 본벽</strong>이라는 3중 구조가 그려져. 로마인은 방어를 '벽 하나'가 아니라 '층'으로 생각했다는 게 단어에 이미 들어 있는 거야.</p>
+
+<h2>② 누가 지었나 — 열두 살 황제와 진짜 설계자</h2>
+<p>벽에는 테오도시우스 2세의 이름이 붙어 있지만, land wall(육지 성벽)의 본체가 완공된 <span class="o">413년</span>에 그는 <strong>겨우 열두 살 소년</strong>이었어. 벽을 실제로 기획하고 밀어붙인 사람은 따로 있었어. 어린 황제를 대신해 제국을 운영하던 섭정이자 동방 근위대장(praetorian prefect) <span class="o">안테미우스</span>(Anthemius)였지. 그가 도시의 방어선을 서쪽으로 크게 넓혀 도시 면적을 거의 두 배로 키웠고, 후대 역사가 J. B. 베리는 그를 두고 <strong>"어떤 의미에선 콘스탄티노플의 두 번째 창건자"</strong>라고 불렀어.</p>
+<p>여기서 벌써 하나 건질 게 있어. <span class="o">위대한 방어물에 이름을 남기는 사람과, 실제로 그걸 세우는 사람은 다르다.</span> 역사에 이름이 남는 건 황제지만, 밤새 돌을 나르고 설계를 책임진 건 실무를 쥔 관료였어. 네 사업에서도 마찬가지야 — 간판(브랜드)과 실제 해자를 파는 손(시스템·운영)은 구분해서 봐야 해.</p>
+
+<h2>③ 3중 방어의 해부 — 왜 한 겹이 아니라 세 겹인가</h2>
+<p>이 벽의 진짜 천재성은 "높이"가 아니라 <span class="o">"층"</span>에 있었어. 바깥에서 도시로 들어오려는 적은 아래 그림처럼 <strong>네 개의 장애물을 순서대로</strong> 넘어야 했어.</p>
+
+<figure>
+<div class="svgwrap">
+<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="테오도시우스 성벽 3중 방어 단면도: 바깥에서부터 해자, 외벽, 사이 테라스, 내벽, 도시 순서">
+  <defs>
+    <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d8c8ab"/><stop offset="1" stop-color="#b9a481"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a9cbe4"/><stop offset="1" stop-color="#6f9dc0"/>
+    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f1fb"/><stop offset="1" stop-color="#fbfaff"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="720" height="360" fill="url(#sky)"/>
+  <!-- ground -->
+  <rect x="0" y="250" width="720" height="110" fill="#e7dcc6"/>
+
+  <!-- attack direction -->
+  <text x="16" y="40" font-size="13" fill="#ef6c00" font-weight="700">공격 방향</text>
+  <line x1="16" y1="50" x2="120" y2="50" stroke="#ef6c00" stroke-width="2"/>
+  <polygon points="120,44 134,50 120,56" fill="#ef6c00"/>
+
+  <!-- MOAT (taphros) -->
+  <path d="M60,250 L70,320 L160,320 L170,250 Z" fill="url(#water)" stroke="#5f89ab" stroke-width="1.5"/>
+  <text x="115" y="288" font-size="12" fill="#0f3a55" text-anchor="middle" font-weight="700">해자</text>
+  <text x="115" y="304" font-size="10" fill="#1c4a67" text-anchor="middle">폭 20m · 깊이 7m</text>
+  <!-- low breastwork -->
+  <rect x="170" y="228" width="10" height="22" fill="url(#stone)" stroke="#8a7658" stroke-width="1"/>
+
+  <!-- OUTER WALL (proteichisma) -->
+  <rect x="255" y="160" width="34" height="90" fill="url(#stone)" stroke="#8a7658" stroke-width="1.5"/>
+  <!-- battlements -->
+  <g fill="url(#stone)" stroke="#8a7658" stroke-width="1">
+    <rect x="255" y="150" width="9" height="12"/><rect x="271" y="150" width="9" height="12"/>
+  </g>
+  <text x="272" y="205" font-size="11" fill="#5c3d16" text-anchor="middle" transform="rotate(-90 272 205)" font-weight="700">외벽</text>
+
+  <!-- INNER TERRACE (peribolos) label -->
+  <text x="330" y="242" font-size="10" fill="#645d7a" text-anchor="middle">사이 테라스</text>
+  <text x="330" y="255" font-size="9" fill="#8a84a0" text-anchor="middle">(peribolos)</text>
+
+  <!-- INNER WALL (mega teichos) + tower -->
+  <rect x="392" y="72" width="26" height="178" fill="#c7b48f" stroke="#7d6a4c" stroke-width="1.5"/>
+  <g fill="#c7b48f" stroke="#7d6a4c" stroke-width="1">
+    <rect x="392" y="62" width="8" height="12"/><rect x="404" y="62" width="8" height="12"/>
+  </g>
+  <text x="405" y="150" font-size="9" fill="#fff" text-anchor="middle" transform="rotate(-90 405 150)" font-weight="700">탑 ~20m</text>
+  <rect x="418" y="130" width="40" height="120" fill="url(#stone)" stroke="#8a7658" stroke-width="1.5"/>
+  <g fill="url(#stone)" stroke="#8a7658" stroke-width="1">
+    <rect x="418" y="120" width="10" height="12"/><rect x="436" y="120" width="10" height="12"/><rect x="448" y="120" width="10" height="12"/>
+  </g>
+  <!-- brick bands on inner wall -->
+  <g stroke="#b5533a" stroke-width="2" opacity="0.55">
+    <line x1="418" y1="165" x2="458" y2="165"/><line x1="418" y1="200" x2="458" y2="200"/>
+  </g>
+  <text x="438" y="196" font-size="11" fill="#5c3d16" text-anchor="middle" transform="rotate(-90 438 196)" font-weight="700">내벽 12m</text>
+
+  <!-- CITY -->
+  <g fill="#d9cff0" stroke="#b7a9dd" stroke-width="1">
+    <rect x="500" y="205" width="30" height="45"/><rect x="540" y="190" width="26" height="60"/>
+    <rect x="576" y="212" width="24" height="38"/>
+  </g>
+  <polygon points="553,175 540,190 566,190" fill="#c9bce8" stroke="#b7a9dd" stroke-width="1"/>
+  <text x="590" y="150" font-size="13" fill="#5b21b6" text-anchor="middle" font-weight="700">도시</text>
+  <text x="590" y="166" font-size="10" fill="#7a6fa0" text-anchor="middle">(콘스탄티노플)</text>
+
+  <!-- order numbers -->
+  <g font-size="12" font-weight="700" fill="#fff">
+    <circle cx="115" cy="338" r="10" fill="#ef6c00"/><text x="115" y="342" text-anchor="middle">1</text>
+    <circle cx="272" cy="338" r="10" fill="#ef6c00"/><text x="272" y="342" text-anchor="middle">2</text>
+    <circle cx="330" cy="338" r="10" fill="#8a84a0"/><text x="330" y="342" text-anchor="middle">3</text>
+    <circle cx="438" cy="338" r="10" fill="#5b21b6"/><text x="438" y="342" text-anchor="middle">4</text>
+  </g>
+</svg>
+</div>
+<figcaption>바깥(왼쪽) → 도시(오른쪽) 단면. ① 해자 → ② 외벽 → ③ 사이 테라스 → ④ 내벽. 높이는 대략 비례, 가로 폭은 압축했어.</figcaption>
+</figure>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>층</th><th>제원</th><th>구실</th></tr></thead>
+<tbody>
+<tr><td><b>해자</b> <span class="u">taphros</span></td><td>폭 약 20m · 깊이 최대 7m</td><td>물을 채워 공성탑·사다리 접근을 막음. 첫 관문.</td></tr>
+<tr><td><b>외벽</b> <span class="u">proteichisma</span></td><td>높이 ~9m · 두께 ~2m · 탑 92개</td><td>얇지만 궁수를 올려 해자 건너는 적을 사격.</td></tr>
+<tr><td><b>사이 테라스</b> <span class="u">peribolos</span></td><td>폭 16~21m</td><td>외벽을 넘은 적이 갇히는 <span class="o">'죽음의 마당'</span>.</td></tr>
+<tr><td><b>내벽</b> <span class="u">mega teichos</span></td><td>높이 12m · 두께 4.5~6m · 탑 96개(~20m)</td><td>본벽. 최후 방어선이자 화력의 중심.</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>총 길이는 마르마라 해에서 골든혼(블라케르나이)까지 <strong>약 5.7km</strong>, 탑은 다 합쳐 <strong>약 188개</strong>였어. 그런데 이 벽의 핵심은 숫자가 아니야. <span class="o">내벽의 탑과 외벽의 탑을 서로 엇갈리게 배치</span>해서, 외벽 탑이 만드는 사각(그늘)을 내벽 탑이 덮게 했어. 어디에 서든 최소 두 곳에서 화살이 날아오게 만든 거지.</p>
+<p>진짜 무서운 건 여기야. 적이 죽을힘을 다해 외벽을 넘으면, 그다음 만나는 건 도시가 아니라 <strong>두 벽 사이의 좁고 긴 마당(peribolos)</strong>이야. 그 위로는 훨씬 높은 내벽이 내려다보고 있고, 뒤로는 방금 넘어온 외벽이 퇴로를 막아. <span class="o">한 겹을 뚫을수록 더 불리해지는 구조</span> — 이게 오늘날 보안·군사에서 말하는 <strong>종심방어(defense in depth)</strong>야. 벽 세 개를 더한 게 아니라, 벽 세 개를 <em>곱한</em> 거지.</p>
+<p>엔지니어링 디테일 하나 더. 벽은 석회암 블록과 <span class="o">붉은 벽돌 띠를 번갈아</span> 쌓았어(단면도의 붉은 선). 벽돌 층은 장식이 아니라, 지진의 충격을 벽 전체로 분산시켜 균열이 한 줄로 쫙 가는 걸 막는 구실을 했어. 지진이 잦은 이 땅에서 천 년을 버틴 비결 중 하나야.</p>
+
+<h2>④ 447년 — 지진, 아틸라, 그리고 60일의 기적</h2>
+<p>천 년을 버텼다지만, 이 벽도 딱 한 번 완전히 무너질 뻔했어. <span class="o">447년 11월 6일</span>, 거대한 지진이 성벽을 강타해 큰 구간이 붕괴하고 <strong>탑 57개</strong>가 쓰러졌어. 하필 그때 <strong>아틸라의 훈족</strong>이 발칸을 휩쓸며 코앞까지 와 있었어. 도시의 방패가 뻥 뚫린 채로 사상 최강의 침략자를 맞게 된 거야.</p>
+<p>여기서 콘스탄티노플이 보여준 게 진짜다. 황제는 근위대장 콘스탄티누스에게 복구를 맡겼고, 동원한 인력이 놀라워. 정규군이 아니라 <span class="o">전차경주 팬덤, 서커스 파벌</span>이었어. 도시를 둘로 갈라 응원하던 라이벌 <strong>청군(Blues)과 녹군(Greens)</strong>이 무려 <strong>1만 6천 명</strong>을 내놓고, 청군은 블라케르나이~미리안드리온 구간을, 녹군은 거기서 마르마라 해까지 나눠 맡았어. 결과는 — <span class="o">단 60일 만에 복구 완료.</span> 레기온 문(오늘날 메블레비하네) 근처에 이걸 자랑하는 비문이 지금도 남아 있어. 그리고 이 재건 때 외벽과 해자가 더 보강되면서, 우리가 아는 <strong>완전한 3중 시스템</strong>이 이때 자리를 잡았어.</p>
+<p class="pull">벽의 강함은 처음 쌓은 높이가 아니라, 무너졌을 때 다시 세우는 속도다. 그리고 그걸 가능케 한 건 군대가 아니라, 라이벌 팬덤마저 하나로 묶은 '공동체'였다.</p>
+
+<h2>⑤ 천 년의 기록 — 이 벽이 막아낸 것들</h2>
+<p>테오도시우스 성벽은 완공 이후 천 년 동안 무수한 포위를 튕겨냈어. 굵직한 것만 추려도 이 정도야.</p>
+<ul class="timeline">
+  <li><span class="yr">626</span>아바르족 + 사산조 페르시아 연합의 대포위 — 막아냄.</li>
+  <li><span class="yr">674–678</span>아랍(우마이야) 1차 대포위 — '그리스의 불'로 함대를 태우며 막아냄.</li>
+  <li><span class="yr">717–718</span>아랍 2차 대포위 — 다시 막아냄. 유럽이 이슬람 확장에서 지켜진 분기점으로 꼽힘.</li>
+  <li><span class="yr">9–10세기</span>불가르족·루스(바이킹-슬라브)의 반복된 공격 — 대부분 육벽 앞에서 좌절.</li>
+  <li><span class="yr">1204</span>4차 십자군에 도시가 함락 — 단, 뚫린 건 <strong>골든혼의 바다 성벽</strong>이었어. 육지의 테오도시우스 벽은 여전히 직접 공격으로는 뚫리지 않았어.</li>
+  <li class="fall"><span class="yr">1453</span>오스만의 대포 앞에 마침내 함락 — 아래에서 자세히.</li>
+</ul>
+<p>정리하면 5세기부터 15세기까지, 거의 천 년간 콘스탄티노플은 <span class="o">"육로로는 함락되지 않는 도시"</span>라는 명성을 지켰어. 이 명성 자체가 하나의 방어였어 — 많은 적이 벽을 보기도 전에 포기했으니까.</p>
+
+<h2>⑥ 1453년 — 살 수 없었던 대포</h2>
+<p>천 년의 벽을 끝낸 건 더 큰 군대가 아니라 <span class="o">새로운 물리학</span>이었어. 그 중심에 <strong>우르반</strong>(Orban, 헝가리 출신 대포 주조 기술자)이 있어. 이 이야기의 아이러니가 소름 돋아.</p>
+<p>우르반은 <span class="o">1452년, 먼저 비잔틴 황제 콘스탄티노스 11세를 찾아가</span> 성벽을 부술 대포를 제안했어. 그런데 쇠락한 제국엔 그 값을 치를 돈이 없었어. 거절당한 우르반은 곧장 오스만의 술탄 <strong>메흐메트 2세</strong>에게 갔고, 메흐메트는 값을 후하게 치르고 에디르네(아드리아노플)에서 대포를 주조하게 했어.</p>
+<p>그렇게 만들어진 대형 공성포 <strong>'바실리카(Basilica)'</strong>의 제원은 이래 — 길이 약 <strong>8m</strong>(27피트), 청동 포신 두께 8인치, 구경 30인치. 무게 <span class="o">270kg에서 최대 반 톤이 넘는 돌포탄</span>을 1.5km 넘게 날렸어. 역사상 첫 대규모 포격전이었지. 단점도 컸어 — 재장전에 몇 시간이 걸려 하루 몇 발밖에 못 쐈고, 과열로 포신에 금이 갔어. 그런데도 천 년을 버틴 벽을 <strong>서서히, 확실하게</strong> 갈아냈어.</p>
+<p>공성은 <span class="o">1453년 4월 6일부터 5월 29일까지</span> 이어졌어. 마지막 로마 황제 <strong>콘스탄티노스 11세 팔라이올로고스</strong>는 황제의 표식을 벗어던지고 병사들 틈에 섞여 싸우다 전사했어. 그의 시신은 끝내 확인되지 않았어 — 마지막 로마 황제는 진흙 속 이름 없는 병사로 사라진 거야. 방어는 제노바 용병 대장 <strong>주스티니아니</strong>가 지휘했는데, 그가 부상으로 이탈하면서 방어선이 흔들렸다고 전해져.</p>
+<div class="note"><strong>케르코포르타 전설</strong>: 작은 쪽문(Kerkoporta) 하나가 잠기지 않아 오스만군이 그리로 들어왔다는 유명한 이야기가 있어. 다만 학계는 회의적이야 — 당대 목격자와 대부분의 연대기는 이 사건을 언급하지 않고, 후대 역사가 두카스 한 사람에게서 나온 서사에 가까워. "가장 튼튼한 벽이 가장 작은 문에서 뚫린다"는 <em>교훈으로는</em> 완벽하지만, <strong>사실로 단정하진 말자.</strong></div>
+<p>1453년 5월 29일, 콘스탄티노플은 함락됐어. 이건 단순한 도시 하나의 몰락이 아니라 <span class="o">동로마(비잔틴) 제국의 완전한 종말</span>이자, 흔히 <strong>중세의 끝</strong>, 그리고 <strong>'벽의 시대'의 끝</strong>을 알리는 상징적 사건으로 이야기돼.</p>
+
+<h2>⑦ 왜 무너졌나 — 벽이 약해진 게 아니다</h2>
+<p>여기가 Day 02의 핵심이자, 이 벽 이야기의 진짜 교훈이야. <span class="o">벽은 1453년에도 물리적으로 약해지지 않았어.</span> 447년에 다시 세운 그 벽 그대로였고, 여전히 12m 높이에 두께 6m였어. 바뀐 건 벽이 아니라 <strong>"공격 기술의 상한선"</strong>이었어.</p>
+<p>검·활·투석기·공성탑이 지배하던 천 년 동안, 이 벽은 그 기술들의 물리적 한계를 <em>초과해서</em> 설계돼 있었어. 어떤 사다리보다 높았고, 어떤 투석기보다 두꺼웠지. 그 '초과분'이 곧 난공불락의 정체였어. 그런데 화약이 등장해 공격 기술의 상한선을 단번에 끌어올리자, 그 초과분이 <span class="o">하룻밤 새 0이 됐어.</span> 벽은 절대적으로 강했던 적이 없어. 언제나 <strong>"특정 공격 기술 대비 상대적으로" 강했을 뿐</strong>이야.</p>
+<p class="pull">벽은 약해진 적이 없다. 세상이 벽을 우회하는 법을 배웠을 뿐이다.</p>
+
+<h2>⑧ 차드의 사업으로 — 다섯 개의 삽</h2>
+<p>이 벽 하나에서 네 사업(쿠팡 의존 90%, 자사몰 샵마마, 어린이 물총, 물류)으로 곧장 가져올 수 있는 게 최소 다섯 개야.</p>
+<div class="cards">
+  <div class="lcard"><span class="n">삽 1</span><h3>해자는 겹쳐 파라 — 종심방어</h3><p>큰 벽 하나(예: "쿠팡 상위노출")에 걸지 마. <b>데이터 → 락인 → 네트워크 → 브랜드</b>를 <em>한 겹 뚫으면 다음 겹에 더 노출되게</em> 배치해. 자사몰 회원 → 구매이력 → 정기구독 → 단골 커뮤니티. 경쟁사가 가격으로 한 겹을 뚫어도, 그다음 '죽음의 마당'에 갇히게.</p></div>
+  <div class="lcard"><span class="n">삽 2</span><h3>재건 속도가 진짜 회복력이다 — 447년</h3><p>벽 높이보다 <b>복구 60일</b>이 더 중요했어. 쿠팡 정책이 바뀌거나 계정이 흔들리는 '지진'이 왔을 때, 팀·고객·커뮤니티를 얼마나 빨리 동원해 매출을 다른 채널로 옮길 수 있나. 회복력 = 위기 시 재건 속도.</p></div>
+  <div class="lcard"><span class="n">삽 3</span><h3>못 잡은 인재가 적의 대포가 된다 — 우르반</h3><p>비잔틴이 <b>값을 못 치른</b> 그 기술자가, 자기들 벽을 부순 대포를 만들었어. 핵심 인재·핵심 파트너(개발자, 물류 파트너, 좋은 셀러)를 놓치면 그게 그대로 경쟁자의 무기가 돼. 잡을 사람은 값을 치르고 잡아.</p></div>
+  <div class="lcard"><span class="n">삽 4</span><h3>가장 작은 잠기지 않은 문 — 케르코포르타</h3><p>전설이라도 교훈은 진짜야. 아무리 튼튼해도 <b>운영 규율의 빈틈 하나</b>가 전체를 무너뜨려. 재고 오차, 정산 누락, 비번 공유 같은 '작은 쪽문'을 주기적으로 잠갔는지 점검해.</p></div>
+  <div class="lcard"><span class="n">삽 5</span><h3>내 해자의 '화약'은 뭔가</h3><p>시대의 공격 기술이 바뀌면 벽은 하루아침에 무의미해져. 지금 <b>네 해자를 무력화할 새 기술/변화</b>를 미리 지목해봐 — 플랫폼 정책 변경, AI 커머스, 새 채널(쇼츠·라방). 화약이 오기 전에 이름부터 불러두는 게 방어의 시작이야.</p></div>
+</div>
+
+<h2>⑨ 한 줄로</h2>
+<p class="pull">테오도시우스 성벽은 '얼마나 높이 쌓느냐'가 아니라 '얼마나 겹쳐 쌓고, 무너지면 얼마나 빨리 다시 세우며, 어떤 새 기술 앞에서 무너지는가'를 가르친다 — 해자는 절대적 강함이 아니라, 시대와 맺은 한시적 계약이다.</p>
+
+<h2>더 파보기</h2>
+<ul class="src">
+  <li><a href="https://en.wikipedia.org/wiki/Walls_of_Constantinople" target="_blank" rel="noopener">Walls of Constantinople — Wikipedia</a> (구조·제원·역사 총정리)</li>
+  <li><a href="https://www.thebyzantinelegacy.com/theodosian-walls" target="_blank" rel="noopener">Theodosian Walls — The Byzantine Legacy</a> (사진·현장 답사)</li>
+  <li><a href="https://www.worldhistory.org/Theodosian_Walls/" target="_blank" rel="noopener">Theodosian Walls — World History Encyclopedia</a></li>
+  <li><a href="https://www.heritagedaily.com/2021/02/how-chariot-racing-teams-saved-constantinople-from-the-huns/137070" target="_blank" rel="noopener">전차경주 팀이 훈족에게서 콘스탄티노플을 구한 이야기 — HeritageDaily</a> (447년 60일 재건)</li>
+  <li><a href="https://en.wikipedia.org/wiki/Basilic_(cannon)" target="_blank" rel="noopener">Basilic (cannon) — Wikipedia</a> (우르반의 대포)</li>
+  <li><a href="https://hispanatolia.com/en/the-mystery-of-the-kerkoporta-did-an-open-gate-cause-the-fall-of-constantinople/" target="_blank" rel="noopener">케르코포르타의 미스터리</a> (전설의 진위 논쟁)</li>
+</ul>
+
+<div class="daynav">
+  <a href="../">← Day 02 · 해자</a>
+  <a href="../../">오늘의 공부 목록 →</a>
+</div>
+
+</body>
+</html>

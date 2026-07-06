@@ -90,6 +90,19 @@ button.act:hover{opacity:.9}
 .card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
 .card .csum{color:var(--text-soft); font-size:.92rem}
 
+/* ⑥ 생각의 꼬리 — 영구 기록(옵시디언 미러, localStorage 아님) */
+.dialogue{display:flex; flex-direction:column; gap:14px; margin:18px 0}
+.turn{padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--surface)}
+.turn > *:first-child{margin-top:0}
+.turn > *:last-child{margin-bottom:0}
+.turn-who{font-weight:700; font-size:.82rem; margin-bottom:8px; letter-spacing:.01em}
+.turn-chad{border-left:4px solid var(--orange)}
+.turn-chad .turn-who{color:var(--orange)}
+.turn-sigma{border-left:4px solid var(--accent); background:var(--accent-soft)}
+.turn-sigma .turn-who{color:var(--accent)}
+.turn-next{border:1px dashed var(--accent); background:transparent; color:var(--text-soft)}
+.turn-next .turn-who{color:var(--accent)}
+
 @media (max-width:640px){
   body{padding:24px 16px 80px; font-size:16px}
   .header{margin:-24px -16px 20px; padding:24px 16px 18px}
@@ -148,10 +161,18 @@ button.act:hover{opacity:.9}
 </table>
 <p>여기서 본질적인 걸 하나 짚어야 해. <span style="color:#ef6c00"><strong>해자는 어느 날 계약서에 도장 찍듯 "만드는" 게 아니야.</strong></span> 성벽을 하루 만에 쌓을 순 있어도, 그 앞의 도랑에 물이 고이고 진흙이 쌓여 정말 건너기 힘든 늪이 되는 데는 시간이 걸려. 사업도 마찬가지야. 데이터는 하루아침에 안 쌓이고, 락인은 고객이 서비스에 정말 익숙해져야 생기고, 네트워크 효과는 임계점을 넘을 때까지 버텨야 나타나. 해자는 설계도가 아니라 <strong>누적</strong>의 결과물이야. 즉 <span class="wikiterm" title="옵시디언 원노트: Compounding-복리">Compounding-복리</span>가 파는 삽이고, 해자는 그 삽질이 오래 쌓인 결과다.</p>
 <h2>② 다른 장르의 창 — 천 년을 버틴 성벽, 그리고 대포 한 방</h2>
-<p>콘스탄티노플(지금의 이스탄불)은 330년 로마 황제 콘스탄티누스가 새 수도로 세운 도시야. 이 도시를 천 년 가까이 지켜낸 건 5세기 초 테오도시우스 2세 때 완성된 <span style="color:#ef6c00"><strong>테오도시우스 성벽</strong></span>이었어.</p>
+<p>콘스탄티노플(지금의 이스탄불)은 330년 로마 황제 콘스탄티누스가 새 수도로 세운 도시야. 이 도시를 천 년 가까이 지켜낸 건 5세기 초 테오도시우스 2세 때 완성된 <a href="theodosian-walls/" style="color:#ef6c00;font-weight:700;border-bottom:2px solid #ef6c00;text-decoration:none">테오도시우스 성벽</a>이었어.</p>
 <p>이 성벽은 단순한 담이 아니라 3중 방어 시스템이었어. 도시 쪽부터 순서대로 보면 — 가장 안쪽에 높이 12미터가 넘는 내성(內城), 그 앞에 조금 낮은 외성(外城), 그리고 맨 바깥에 폭 20미터 가까운 깊은 해자가 있었다고 전해져. 적군이 도시에 닿으려면 먼저 물 찬 도랑을 건너야 하고, 그다음 낮은 외벽을 넘어야 하고, 마지막으로 그보다 훨씬 높은 내벽을 뚫어야 했어. 공격 한 번에 세 겹의 장애물을 순서대로 이겨내야 하는 구조인 거야.</p>
 <p>이 성벽은 정말로 오래 버텼어. 아바르족, 아랍 칼리프국, 불가르족을 비롯해 역사에 기록된 것만 수십 차례의 포위 공격을 막아냈다고 해. 5세기부터 15세기까지 거의 천 년 동안 콘스탄티노플은 육로로는 함락되지 않는 도시라는 평판을 얻었어.</p>
 <p>그런데 1453년, 오스만 제국의 술탄 메흐메트 2세가 이 성벽 앞에 섰을 때 상황이 달라졌어. 그는 헝가리 출신 기술자 우르반이 만든 거대한 청동 대포를 동원했어. 이 대포는 무게가 수백 킬로그램에 달하는 돌포탄을 쏘아 성벽을 직접 부수는 방식이었어. 활과 창, 공성탑, 사다리로는 뚫지 못했던 그 두꺼운 성벽이 화약의 힘 앞에서는 서서히 무너지기 시작했어. 결국 51일간의 포위 끝에 콘스탄티노플은 함락되었고, 이는 로마 제국(동로마)의 완전한 종말이자, 성벽이라는 방어 기술 자체의 시대가 저무는 상징적 사건이 되었다고 흔히 이야기돼.</p>
+<div style="margin:20px 0">
+<a href="theodosian-walls/" style="display:block;padding:16px 18px;border:1px solid #d9b78f;border-radius:12px;background:linear-gradient(120deg,#fff7ef 0%,#ffffff 100%);text-decoration:none;color:#241f36;box-shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07)">
+<span style="display:block;font-size:.78rem;font-weight:700;color:#ef6c00;margin-bottom:6px">🏛️ 심화 학습 · 더 깊이 파보기 ↗</span>
+<span style="display:block;font-weight:700;font-size:1.02rem;margin-bottom:4px">테오도시우스 성벽 — 천 년을 버틴 3중 성벽의 전체 이야기</span>
+<span style="display:block;font-size:.9rem;color:#645d7a">이름의 뜻(신의 선물)·열두 살 황제와 진짜 설계자·3중 방어 단면도·447년 60일의 기적·우르반의 대포·함락의 진짜 교훈, 그리고 내 사업으로 가져올 다섯 개의 삽까지.</span>
+</a>
+</div>
+
 <h2>③ 다리 놓기 — 개념과 이야기, 그리고 내 사업</h2>
 <p>테오도시우스 성벽의 교훈은 이거야. <span style="color:#ef6c00"><strong>해자는 절대적으로 강한 게 아니라, "그 시대의 공격 기술 안에서" 강한 것이다.</strong></span> 검과 활, 공성탑이 지배하던 천 년 동안 이 성벽은 난공불락이었어. 하지만 화약이라는 새 기술 하나가 등장하자, 천 년짜리 방어 시스템이 51일 만에 뚫렸어. 해자 자체가 약해진 게 아니라, 그 해자를 만든 전제(공격 기술의 한계)가 바뀐 거야.</p>
 <p>이걸 에이폼에 그대로 대입해볼 수 있어. 지금 에이폼 매출의 90%가 쿠팡에서 나온다는 건, <span style="color:#ef6c00"><strong>남의 성 안에서 장사하는 상인</strong></span>이라는 뜻이야. 쿠팡이라는 성벽과 해자(물류망, 검색 알고리즘, 로켓배송 신뢰) 덕분에 우리도 보호받고 있지만, 동시에 그 성의 규칙(수수료, 정책, 노출 알고리즘)이 바뀌는 순간 우리 사업의 기반도 같이 흔들려. 쿠팡의 정책 변경 한 번이 우리에게는 메흐메트 2세의 대포와 같은 셈이야.</p>
