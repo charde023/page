@@ -19,13 +19,15 @@ sys.path.insert(0, str(Path(__file__).parent))
 import markdown  # type: ignore[import]
 
 from frontmatter import split_frontmatter
-from blanks import transform_section4, transform_section5, transform_essay, preprocess_wikilinks
+from blanks import transform_section4, transform_section5, transform_essay, transform_dialogue, preprocess_wikilinks
 from template import CSS, AUTOSAVE_JS, PAGE_TEMPLATE, INDEX_TEMPLATE, CARD_TEMPLATE
 
-H2_SPLIT = re.compile(r"^## ([①②③④⑤])[^\n]*\n", re.MULTILINE)
-H2_HEADING_LINE = re.compile(r"^## ([①②③④⑤])([^\n]*)$", re.MULTILINE)
+# ⑥ = 생각의 꼬리 dialogue (차드↔시그마). Unlike ④⑤ it is NOT localStorage input;
+# it is committed text mirrored from the vault so it persists across devices.
+H2_SPLIT = re.compile(r"^## ([①②③④⑤⑥])[^\n]*\n", re.MULTILINE)
+H2_HEADING_LINE = re.compile(r"^## ([①②③④⑤⑥])([^\n]*)$", re.MULTILINE)
 ONELINER_RE = re.compile(r"^>\s*오늘의 한 문장:\s*(.+)$", re.MULTILINE)
-NUM_MAP = {"①": 1, "②": 2, "③": 3, "④": 4, "⑤": 5}
+NUM_MAP = {"①": 1, "②": 2, "③": 3, "④": 4, "⑤": 5, "⑥": 6}
 
 
 def split_sections(body: str) -> dict[int, str]:
@@ -74,6 +76,8 @@ def build_page(md_path: Path, all_days: list[int]) -> tuple[int, str]:
             sections[4] = transform_section4(sections[4], day_num)
         if 5 in sections:
             sections[5] = transform_section5(sections[5], day_num)
+        if 6 in sections:
+            sections[6] = transform_dialogue(sections[6], day_num)
 
     parts = []
     for n in present:

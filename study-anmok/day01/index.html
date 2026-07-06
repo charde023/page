@@ -90,6 +90,19 @@ button.act:hover{opacity:.9}
 .card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
 .card .csum{color:var(--text-soft); font-size:.92rem}
 
+/* ⑥ 생각의 꼬리 — 영구 기록(옵시디언 미러, localStorage 아님) */
+.dialogue{display:flex; flex-direction:column; gap:14px; margin:18px 0}
+.turn{padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--surface)}
+.turn > *:first-child{margin-top:0}
+.turn > *:last-child{margin-bottom:0}
+.turn-who{font-weight:700; font-size:.82rem; margin-bottom:8px; letter-spacing:.01em}
+.turn-chad{border-left:4px solid var(--orange)}
+.turn-chad .turn-who{color:var(--orange)}
+.turn-sigma{border-left:4px solid var(--accent); background:var(--accent-soft)}
+.turn-sigma .turn-who{color:var(--accent)}
+.turn-next{border:1px dashed var(--accent); background:transparent; color:var(--text-soft)}
+.turn-next .turn-who{color:var(--accent)}
+
 @media (max-width:640px){
   body{padding:24px 16px 80px; font-size:16px}
   .header{margin:-24px -16px 20px; padding:24px 16px 18px}
@@ -139,6 +152,27 @@ button.act:hover{opacity:.9}
 <div class="qa-block"><div class="qa-question">1. 아리스토텔레스는 &quot;돈이 돈을 낳는 건 부자연스럽다&quot;고 봤지만, 오늘날 복리는 성장의 기본 원리로 받아들여진다. 무엇이 달라졌을까 — 화폐의 본질인가, 자연을 보는 관점인가?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day01_s5_a1" rows="2"></textarea><span class="save-status" data-for="day01_s5_a1"></span></div></div>
 <div class="qa-block"><div class="qa-question">2. 함무라비 법전의 이자 상한과 현대 대출 규제의 이자율 상한은 수천 년 차이가 나지만 같은 우려에서 나왔다. 그 우려란 무엇이며, 왜 지금도 완전히 해소되지 않았을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day01_s5_a2" rows="2"></textarea><span class="save-status" data-for="day01_s5_a2"></span></div></div>
 <div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 에이폼에서 지금 복리로 쌓이고 있는 자산(누적 리뷰, 재구매 고객군, 검색 노출 이력 등) 하나를 지목해보자. 그 자산을 임계점 너머로 더 빨리 밀어붙일 행동 하나를 오늘 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day01_s5_decision" rows="2"></textarea><span class="save-status" data-for="day01_s5_decision"></span></div></div>
+
+<h2>⑥ 생각의 꼬리 — 차드 ↔ 시그마</h2>
+<blockquote>
+<p>이 칸은 <strong>localStorage(기기 저장)가 아니라</strong> 옵시디언 원본에 남는 영구 기록이야. 여기 적힌 건 폰·PC 어디서든 똑같이 보이고, 웹페이지에도 그대로 미러링된다. 차드가 쓰고 → 시그마가 받고 → 다시 차드가 잇는 식으로 계속 쌓으면 돼.</p>
+</blockquote>
+<div class="dialogue"><div class="turn turn-chad"><div class="turn-who">차드 · 2026-07-06 — 오늘 내 답</div><p><strong>④-1 · 이 인용을 볼 때 내 속마음은 (A) 확인 쪽 / (B) 정당화 쪽?</strong></p>
+<p>아이슈타인처럼 똑똑한 사람도 이해하기 힘들 정도의 복리의 무서움을 강조하려고 만든 말. 복리에 대해 알아보다가, 아이슈타인마저도 불가사의라고 말했다는 것에 눈길을 끌었을 것이다. 접한 목적은 복리에 대한 궁금증을 시작으로 검색을 했을 것.</p>
+<p><em>(차드 메모: "근데, 질문 자체가 이해가 안되네… 이 인용을 접한 목적이 무었이었나? 이게 무슨 질문이지…")</em></p>
+<p><strong>④-2 · (A) 확인이 목적이었다면, 지금 따져봐야 할 사실은?</strong></p>
+<p>아인슈타인이 한 말이 맞는지에 대한 팩트체크, 7대 불가사의가 이미 있는 상태에서 8대 불가사의가 맞는지를 확인해야겠지.</p>
+<p><strong>④-3 · (B) 정당화였다면, 나는 '출처 불명'을 어떻게 넘겼나?</strong></p>
+<p>사실과 무관하게, 아인슈타인 — 그 천재의 신뢰성을 이어받게 하려는 의도다. 아인슈타인이 이렇게 말했으면 그만큼 중요하겠지 라는 설득을 만들어 냈다.</p>
+<p><strong>⑤-1 · 무엇이 달라졌나 — 화폐의 본질인가, 자연을 보는 관점인가?</strong></p>
+<p>가치를 바라보는 관점이 달라졌다. 과거에는 상품이나 물건의 교환으로서의 화폐를 하나의 수단으로 바라봤지만, 현대에 들어서는 화폐가 가치를 측정하는 하나의 기준이 되었다. 수단이 수단을 낳는 것은 부자연스럽지만, 가치가 가치를 낳는 것은 자연스럽다. 그래서 성장의 기본 원리가 가치의 상승을 목적으로 한다면 복리는 너무나 유용하고 엄청난 가치를 상승시킨다. 복리가 기본 원리가 되었을 때, 시간의 흐름 위에서 엄청난 성장을 가져올 것이다.</p>
+<p><strong>⑤-2 · 함무라비의 이자 상한, 그 우려는 무엇이었나?</strong></p>
+<p>임계점을 넘는 순간 그 이자는 감당할 수 없는 수준까지 오르기 때문.</p>
+<p><strong>⑤-3 · 오늘의 결정 — 복리로 쌓이는 자산 하나 + 밀어붙일 행동</strong></p>
+<p>쿠팡, 이지어드민, 네이버 등의 데이터들을 기본적으로 모으고 있다. 또한 올해 2월까지만 해도 개발을 전혀 할 줄 모르던 내가 계속 공부하고 실제 업무에 접목시키면서 성장하고 있다. 내 지식과 이커머스 지식, 개발지식, 경영지식이 접목되면서, 시간이 지남에 따라 J커브 성장을 할것이라 나는 믿는다. 임계점 너머로 올리는 것은 내 지식과 경험이고 새로운 지식의 접목이다. 지식과 경험의 융합은 더 빠르게 성장 그래프를 끌어올릴 것이다.</p></div><div class="turn turn-sigma"><div class="turn-who">시그마 — 코치 노트 (네 답 받고)</div><p>먼저 ④-1. "질문 자체가 이해가 안 된다"고 한 거 — 그거 오답 아니라 M1을 실전으로 한 거야. 질문이 애매했거든(그래서 나중에 문구를 고쳤어). 원래 묻고 싶었던 건 "그 문장을 봤을 때 <strong>네 첫 반응</strong>이 (A) '이거 진짜야?' 의심 쪽이냐, (B) '거봐 복리 중요하지' 반가움 쪽이냐"였어. '왜 이 인용이 만들어졌나'가 아니라 '네 머릿속 반사'를 묻는 거였지. 질문이 뭘 묻는지 모호하다고 감지한 것 자체가 M1이 훈련시키려는 감각이다.</p>
+<p>근데 재밌는 건, ④-1은 헷갈렸다면서 ④-2·④-3은 교과서보다 잘 짚었어. ④-2에서 "아인슈타인이 한 말 맞나 + 7대가 이미 있는데 8대가 맞나" — 팩트체크 항목을 스스로 두 개나 뽑았지. 이건 완전히 (A) 확인 모드야. ④-3의 "천재의 신뢰성을 이어받게 하려는 의도"는 이름이 있어 — <strong>후광효과(halo effect)</strong>이자 <strong>권위에의 호소</strong>. 즉 네 반사는 이미 (A)에 가깝고, (B)가 어떻게 작동하는지까지 해부했어. ④-1이 헷갈린 건 네 안목이 모자라서가 아니라 질문이 삐뚤어서였다.</p>
+<p>⑤-1이 오늘 제일 좋았어. "수단이 수단을 낳는 건 부자연스럽지만, 가치가 가치를 낳는 건 자연스럽다" — 교과서 프레임보다 한 수 위다. 아리스토텔레스는 화폐를 '수단'으로만 봤고, 넌 화폐가 '가치의 척도'로 바뀐 지점을 짚었어. 딱 한 번만 더 의심해보자 — 가치가 가치를 낳는 게 <em>항상</em> 자연스럽나? 튤립·닷컴 버블은 "가치가 가치를 낳는다"는 믿음만으로 부풀다 터졌어. 그래서 네 ⑤-2 답("임계점 넘으면 감당 못 할 수준")이 ⑤-1의 안전핀이야 — 자연스러운 복리에도 상한·통제가 필요하다는 것, 두 답이 사실 한 쌍이다.</p>
+<p>⑤-3. 네가 지목한 자산이 남들과 달라 — 리뷰 더미가 아니라 <strong>네 지식·경험의 복리</strong>야. 데이터(쿠팡·이지어드민·네이버) 위에 개발·경영·이커머스 지식이 얹히는 J커브. 이건 ①의 '데이터 복리 루프'랑 같은 구조다 — 오늘 쌓은 게 내일 흡수 속도의 재료가 되니까. 그래서 이 복리의 진짜 적은 이자율이 아니라 <strong>중간 이탈(학습 중단)</strong>이야. 광고는 끄면 0이 되듯, 지식 복리도 끊기면 곡선이 눕는다. 임계점 너머로 미는 건 '새 지식 접목'이 맞고, 안 눕게 하는 건 '실제 업무에 붙여 피드백 받기'다 — 너 2월부터 이미 그렇게 해왔잖아. 오늘의 조준 한 줄: 이번 주에 접목할 새 지식 딱 하나를 정해서, 실제 업무 한 건에 붙이고 결과를 여기 ⑥에 남겨봐. 그 기록이 다음 곡선의 밑돌이 된다.</p></div><div class="turn turn-next"><div class="turn-who">차드 — 이어서 (여기 적기)</div><p><em>여기서부터 이어서 써. 꼬리에 꼬리를 물수록 좋아. 옵시디언 이 노트에 바로 적으면 되고, 웹에도 올려달라고 하면 미러링해줄게.</em></p></div></div>
 
 <div class="toolbar">
   <button type="button" id="export-btn" class="act">답변 내보내기</button>

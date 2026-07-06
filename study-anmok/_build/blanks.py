@@ -350,3 +350,53 @@ def transform_essay(text: str, day_num: int) -> str:
 
     text = CHECKBOX_LINE.sub(crepl, text)
     return text
+
+
+# ---------------------------------------------------------------------------
+# ⑥ section — 생각의 꼬리 (차드 ↔ 시그마) persistent dialogue.
+#
+# Unlike ④⑤, this is NOT a localStorage input field. It is committed text
+# mirrored from the vault note, so it reads identically on phone and PC and
+# survives cache-clears. Turns are delimited by a bold-ONLY marker line whose
+# first word is 차드 or 시그마:
+#     **차드 · 2026-07-06 — 오늘 내 답**
+#     **시그마 — 코치 노트**
+#     **차드 — 이어서 (여기 적기)**
+# Everything up to the next marker (or the end) is that turn's body, rendered
+# as ordinary markdown. A marker mentioning "이어서" becomes a dashed "your turn"
+# block. Any preamble before the first marker is kept as-is.
+# ---------------------------------------------------------------------------
+
+DIALOGUE_MARKER = re.compile(
+    r"^\*\*\s*(?P<label>(?P<who>차드|시그마)[^*\n]*)\*\*\s*$",
+    re.MULTILINE,
+)
+
+
+def transform_dialogue(text: str, day_num: int) -> str:
+    import markdown  # local import; markdown is a generate.py dependency
+
+    def render(md: str) -> str:
+        return markdown.markdown(md.strip(), extensions=["tables", "fenced_code"])
+
+    markers = list(DIALOGUE_MARKER.finditer(text))
+    if not markers:
+        return text  # nothing to structure — leave the section untouched
+
+    preamble = text[: markers[0].start()].strip()
+    turns = []
+    for i, m in enumerate(markers):
+        label = m.group("label").strip()
+        who = m.group("who")
+        body_end = markers[i + 1].start() if i + 1 < len(markers) else len(text)
+        body = text[m.end():body_end].strip()
+        role = "next" if "이어서" in label else ("sigma" if who == "시그마" else "chad")
+        body_html = render(body) if body else ""
+        turns.append(
+            f'<div class="turn turn-{role}">'
+            f'<div class="turn-who">{html.escape(label)}</div>'
+            f'{body_html}'
+            f'</div>'
+        )
+    block = '<div class="dialogue">' + "".join(turns) + "</div>"
+    return (preamble + "\n\n" + block) if preamble else block
