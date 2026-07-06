@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 59 · 관세·HS코드</title>
+<meta name="description" content="국경을 넘는 값은 정해져 있지 않고, 그 물건을 어떤 이름으로 부르느냐에 따라 달라진다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 59 · 관세·HS코드</h1>
+  <div class="meta">G2 (경제사) · M4 (맥락 판단)</div>
+</div>
+
+<div class="oneliner">국경을 넘는 값은 정해져 있지 않고, 그 물건을 어떤 이름으로 부르느냐에 따라 달라진다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day59_frontmatter_date">
+  <span class="save-status" data-for="day59_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Tariff-관세">Tariff-관세</span></h2>
+<p><span style="color:#ef6c00"><strong>Tariff</strong></span>(관세)는 아랍어 <strong>ta'rif</strong>(알림·공지)에서 왔다고 전해진다. 지브롤터 해협 근처 항구 도시 타리파(Tarifa)를 거쳐 유럽어로 넘어가며 "정해진 요금표"라는 뜻으로 굳었다는 설이 유력하다 — 항구에서 "이 물건은 얼마"라고 게시하던 요금판이 그대로 단어가 됐다. 처음부터 관세는 <strong>"미리 붙여 놓은 값"</strong>이라는 뜻을 품고 있었다는 얘기다.</p>
+<p>문제는 그 "정해진 값"이 물건마다 다르다는 것, 그리고 그 값을 정하는 게 물건 자체가 아니라 <strong>분류</strong>라는 것이다. <span style="color:#ef6c00"><strong>HS코드</strong></span>(Harmonized System, 통일상품명 및 부호체계)가 그 분류표다. 세계관세기구(WCO)가 정한 국제 공통 6자리에 각 나라가 자릿수를 더 붙여 세분화하는데(한국은 보통 10자리), 겉보기엔 비슷한 두 물건도 이 코드에서 다른 호(戶)에 들어가면 세율이 갈린다. <strong>분류 하나가 곧 돈</strong>이라는 뜻이다 — 관세는 물건에 붙는 게 아니라 그 물건에 매긴 "이름"에 붙는다.</p>
+<p>여기에 두 변수가 더 얹힌다. <strong>원산지</strong>다. 한국이 맺은 자유무역협정(FTA) 대상국산 물건임을 원산지증명서로 증명하면 관세를 낮추거나 없앨 수 있다(FTA 특혜관세). 그리고 <strong>관세환급</strong>이다. 수출용으로 쓸 원재료에 이미 관세를 냈다면, 실제로 수출됐음을 증명해 그 관세를 되돌려받을 수 있다. 셋을 합치면 결론은 하나다 — 관세는 그냥 내는 고정비가 아니라 <strong>분류·원산지·용도</strong>에 따라 통제 가능한 원가 변수이고, 여기서 나오는 차액이 그대로 <span class="wikiterm" title="옵시디언 원노트: Gross-매출총이익">매출총이익</span>에 얹힌다.</p>
+<h2>② 다른 장르의 창 — 곡물법, 빵값을 지킨 관세</h2>
+<p>1815년, 나폴레옹 전쟁이 끝나자 영국 의회는 <span style="color:#ef6c00"><strong>곡물법(Corn Laws)</strong></span>을 통과시켰다. 전쟁 중 유럽 대륙에서 곡물이 안 들어오니 영국산 밀 가격이 치솟았고, 이 높은 가격에 이미 익숙해진 지주들이 전쟁이 끝나 값싼 수입 곡물이 들어오면 자기들 이익이 무너질까 두려워했다고 전해진다. 곡물법은 국내 밀 가격이 일정 수준 아래로 떨어지면 수입 곡물에 사실상 관세 장벽을 세워 막는 법이었다.</p>
+<p>결과는 명확했다. 빵값이 높게 유지됐고, 빵이 생활비의 큰 몫을 차지하던 노동자와, 그 노동자 임금을 낮게 유지하고 싶던 공장주 양쪽 모두 이 법에 반발했다. 지주 계급의 이익과 산업가·노동자의 이익이 정면으로 충돌한 것이다. 여기에 데이비드 리카도의 <strong>비교우위</strong> 이론 — 각국이 자기가 상대적으로 더 잘 만드는 것에 집중하고 나머지는 무역으로 채우는 게 서로에게 이득이라는 논리 — 이 자유무역 진영의 지적 무기가 됐다. 반곡물법동맹(Anti-Corn Law League)의 오랜 캠페인 끝에, 곡물법은 1846년 결국 폐지됐다고 전해진다.</p>
+<p>한 세기 가까이 지난 1930년, 미국은 대공황 초입에서 <strong>스무트-홀리 관세법</strong>으로 2만여 품목에 고율 관세를 매겼다. 자국 산업을 보호하려는 취지였지만, 여러 교역 상대국이 보복관세로 맞대응하면서 세계 무역량이 급격히 줄었고, 이것이 대공황을 더 깊고 길게 만든 요인 중 하나로 평가된다(단, 대공황의 원인을 이 법 하나로 돌리는 건 지나친 단순화라는 반론도 있다는 점은 짚어둘 만하다). 곡물법이든 스무트-홀리든, 관세는 늘 같은 질문을 던진다 — <strong>누구를 보호하고, 누구에게 세금을 물리는가.</strong></p>
+<h2>③ 다리 놓기 — 분류가 바뀌면 마진이 바뀐다</h2>
+<p>곡물법과 스무트-홀리 모두 결국은 "이 물건을 어떻게 취급할 것인가"의 정치였다. 에이폼도 똑같은 질문 앞에 서 있다 — 다만 정치가 아니라 <strong>실무</strong>의 형태로. 내가 수입하는 물총·완구가 정확한 HS코드로 분류되어 있는지, FTA 원산지증명으로 관세를 줄일 여지가 있는지, 이런 확인은 지주와 노동자의 싸움만큼 거창하진 않아도 원가에 실제로 영향을 미친다.</p>
+<p>여기서 함정이 하나 있다. "관세는 대표가 원가 담당이니 알아서 하겠지"라는 생각이다. 대표가 큰 흐름을 잘 챙기고 있어도, HS코드 오분류나 FTA 미적용, 환급 누락 같은 디테일은 <strong>본인이 직접 확인하지 않으면 아무도 모르고 지나갈 수 있는 항목</strong>이다. 관세는 정치가 아니라 서류 한 장, 코드 숫자 하나의 문제이기 때문이다.</p>
+<p><strong>이어달리기</strong>: 인코텀즈가 '어디서부터 어디까지가 내 책임인가'라는 <strong>책임의 경계</strong>를 그었다면, 오늘의 관세는 그 경계를 넘는 순간 물어야 하는 <strong>통행료</strong>다. 경계를 정했으니 이제 그 경계를 넘을 때의 값을 알 차례다.</p>
+<h2>④ 오늘의 안목 훈련 — M4 맥락 판단</h2>
+<p>M4 렌즈는 <strong>"일반적으로는 A지만, 내 상황에서는 B가 더 중요하다"</strong>는 형태로 답하라고 말한다. 좋은 조언이나 일반론을 그대로 받아들이지 말고, 그게 맞는 조건과 틀리는 조건, 그리고 내 상황과의 차이를 먼저 짚는 훈련이다.</p>
+<p>연습: "관세는 대표가 알아서 처리하니 신경 안 써도 된다"는 문장은 일반적으로는 맞는 말처럼 들린다(대표가 원가·발주 실무를 맡고 있으니까). 하지만 이 일반론이 내 상황에서 틀릴 수 있는 지점을 M4 렌즈로 짚어보자.</p>
+<div class="field"><div class="field-label">이 조언이 맞으려면 어떤 조건이 갖춰져 있어야 하나 (예: 대표가 매 품목의 HS코드·FTA 적용 여부를 정기적으로 재확인하고 있다는 전제)?</div><textarea class="field-input" data-key="day59_s4_q1" rows="2"></textarea><span class="save-status" data-for="day59_s4_q1"></span></div>
+<div class="field"><div class="field-label">그 조건이 실제로는 충족되지 않을 수 있는 지점은 어디인가 (FTA 미적용·HS 오분류·환급 누락 중 어느 쪽이 가장 의심되나)?</div><textarea class="field-input" data-key="day59_s4_q2" rows="2"></textarea><span class="save-status" data-for="day59_s4_q2"></span></div>
+<div class="field"><div class="field-label">일반론과 내 상황의 차이를 좁히기 위해, 지금 가장 먼저 확인할 변수 하나는 무엇인가?</div><textarea class="field-input" data-key="day59_s4_q3" rows="2"></textarea><span class="save-status" data-for="day59_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 2개</h2>
+<div class="qa-block"><div class="qa-question">1. 곡물법은 지주의 이익을 지키려다 노동자·공장주와 충돌했고, 결국 자유무역 논리에 밀려 폐지됐다. 관세로 누군가를 보호하면 반드시 다른 누군가는 비용을 치른다는 이 구조가, 오늘날 각국의 보호무역 논쟁에도 그대로 적용될까, 아니면 100여 년 전과 달라진 지점이 있을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day59_s5_a1" rows="2"></textarea><span class="save-status" data-for="day59_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 오늘 내릴 작은 결정 하나: 내 주력 수입품의 HS코드가 정확한지, 관세율이 얼마인지, FTA 특혜관세가 적용되는지 — 이 세 가지를 이번 주 안에 한 번 직접 확인해볼지 정한다면, 어떤 방식으로(대표에게 물어보기, 관세청 사이트 조회, 관세사 문의 중) 확인할 것인가?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day59_s5_decision" rows="2"></textarea><span class="save-status" data-for="day59_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day58/">← Day 58</a>
+  <a href="../day60/">Day 60 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

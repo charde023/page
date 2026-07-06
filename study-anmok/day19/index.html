@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 19 · USP·차별화</title>
+<meta name="description" content="장점을 다 말하면 아무것도 안 남고, 값비싼 하나만 외치면 그것만 남는다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 19 · USP·차별화</h1>
+  <div class="meta">G4 (진화생물학) · M18 (아이디어 평가)</div>
+</div>
+
+<div class="oneliner">장점을 다 말하면 아무것도 안 남고, 값비싼 하나만 외치면 그것만 남는다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day19_frontmatter_date">
+  <span class="save-status" data-for="day19_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: USP-고유판매제안">USP-고유판매제안</span></h2>
+<p>로저 리브스(Rosser Reeves)는 미국 광고업계의 전설적 카피라이터였고, 1961년 『Reality in Advertising』에서 자신의 실무 경험을 <span style="color:#ef6c00"><strong>Unique Selling Proposition(USP)</strong></span>이라는 이름으로 정리했다. 그가 지적한 광고주들의 공통된 실수는 단순했다 — 제품의 장점을 최대한 많이 나열하고 싶어 한다는 것. 헤드라인에 "품질도 좋고, 가격도 착하고, 배송도 빠르고, 안전하고, 디자인도 예쁘고"를 다 욱여넣는다.</p>
+<p>리브스의 처방은 정반대였다. USP가 성립하려면 세 가지 조건을 동시에 만족해야 한다. 첫째, <span style="color:#ef6c00"><strong>구체적 편익 제안</strong></span>이어야 한다 — 분위기나 이미지가 아니라 "이걸 사면 이런 이익을 얻는다"는 명확한 약속. 둘째, <span style="color:#ef6c00"><strong>경쟁자가 못 하거나 안 하는 것</strong></span>이어야 한다 — 남들도 다 하는 말이면 애초에 고유성이 없다. 셋째, <span style="color:#ef6c00"><strong>수백만 명을 움직일 만큼 강력</strong></span>해야 한다 — 사실이어도 힘이 약하면 USP 자격이 없다.</p>
+<p>여기서 진짜 핵심은 "여러 장점의 나열은 아무것도 아닌 것과 같다"는 명제다. 인간의 기억은 자리가 좁다. 다섯 개를 동시에 말하면 다섯 개가 서로 밀어내며 전부 흐릿해진다. 반면 하나를 골라 반복하면, 그 하나가 브랜드와 통째로 동일시된다. USP는 결국 "무엇을 더 말할까"가 아니라 "무엇을 빼고 하나만 남길까"를 정하는 기술이다. <span class="wikiterm" title="옵시디언 원노트: Action-title-액션타이틀">Action-title-액션타이틀</span>이 슬라이드 제목에서 결론 하나만 남기라고 요구하는 것과 정확히 같은 압축의 원리다.</p>
+<h2>② 다른 장르의 창 — 공작의 꼬리, 다윈을 멀미하게 만든 것</h2>
+<p>찰스 다윈은 자연선택 이론을 완성해가던 중 한 가지 현상 앞에서 오래 멈춰 섰다. 공작 수컷의 꼬리다. 그 거대하고 화려한 깃털은 날기엔 짐이 되고, 포식자 눈엔 잘 띄고, 만드는 데 엄청난 에너지가 든다. 생존에는 명백히 불리한 장식이 왜 진화로 남았는가. 다윈은 친구에게 보낸 편지에서 "공작의 꼬리 깃털을 볼 때마다 속이 메스꺼워진다(makes me sick)"고 썼다고 전해진다 — 자신의 이론으로 설명이 안 되는 사례였기 때문이다.</p>
+<p>다윈은 결국 답을 하나 더 만들었다. <span style="color:#ef6c00"><strong>성선택(sexual selection)</strong></span>이다. 생존에 유리한 형질만 남는 게 아니라, 짝짓기 상대에게 선택받는 데 유리한 형질도 남는다는 이론이었다. 하지만 "왜 암컷이 저런 비효율적인 꼬리를 선호하는가"라는 질문은 백 년 넘게 완전히 풀리지 않았다.</p>
+<p>1975년, 이스라엘의 생물학자 아모츠 자하비(Amotz Zahavi)가 <span style="color:#ef6c00"><strong>핸디캡 원리(Handicap Principle)</strong></span>를 내놓았다. 논리는 이렇다 — 만약 신호를 만드는 데 비용이 거의 안 든다면, 약한 개체도 얼마든지 그 신호를 흉내 낼 수 있다. 거짓 신호가 넘쳐나면 신호 자체가 무의미해진다. 하지만 신호를 만드는 비용이 감당하기 힘들 만큼 크다면, 그 신호를 실제로 만들어낸 개체는 "이걸 감당하고도 살아남을 만큼 건강하다"는 사실을 증명한 것과 같다. 공작의 거대한 꼬리는 정확히 그런 신호다 — "이렇게 비효율적인 짐을 지고도 포식자를 피해 여기까지 살아남았다"는, 위조가 불가능한 증거다. 비용이야말로 신호를 진짜로 만드는 요소라는 이 발상은 이후 진화생물학의 신호이론 전체를 떠받치는 원리로 자리잡았다.</p>
+<h2>③ 다리 놓기 — 값비싼 신호와 USP</h2>
+<p>공작 꼬리와 USP는 겉보기엔 전혀 다른 세계지만, 구조는 같은 자리를 가리킨다. 자하비의 핸디캡 원리를 한 줄로 옮기면 이렇다 — <span style="color:#ef6c00"><strong>"위조 비용이 큰 신호만 신뢰받는다."</strong></span> 값싸게 흉내 낼 수 있는 신호는 아무리 그럴듯해도 시장에서 무시된다.</p>
+<p>상세페이지 헤드라인에 대입하면 정확히 겹친다. "고급 소재", "프리미엄", "안전 인증" 같은 말은 아무 업체나 공짜로 갖다 붙일 수 있는 저비용 신호다 — 위조가 쉬우니 소비자도 믿지 않는다. 반면 검사성적서 번호를 직접 박거나, 실측 영상을 그대로 올리는 건 <span style="color:#ef6c00"><strong>만들기 어렵고 흉내 내기 어려운 값비싼 신호</strong></span>다. 경쟁자가 진짜로 검사를 받고, 진짜로 실측 영상을 찍어야만 흉내 낼 수 있다 — 리브스가 말한 "경쟁자가 못 하거나 안 하는 것"의 생물학적 버전이 바로 이거다.</p>
+<p><strong>이어달리기</strong>: 어제(Day 18)의 포지셔닝이 "인식의 사다리 어느 칸을 차지할까"를 정하는 지도였다면, 오늘의 USP는 그 칸에 자리 잡은 다음 그 자리에서 외칠 단 한 문장을 고르는 일이다. 칸을 정하는 것과 그 칸에서 할 말을 고르는 것은 순서가 있는 두 단계다.</p>
+<h2>④ 오늘의 안목 훈련 — M18 아이디어 평가</h2>
+<p>M18은 아이디어를 볼 때 "이거 괜찮아 보이는데"로 뭉뚱그리지 않고 쪼개서 본다. 오늘은 그중 두 축만 빌려 쓰자 — <span style="color:#ef6c00"><strong>"기존 대안 대비 진짜 차별점"</strong></span>과 <span style="color:#ef6c00"><strong>"그 차별점을 흉내 내기 얼마나 어려운가(위조 비용)"</strong></span>. 리브스의 USP 조건과 자하비의 핸디캡 원리를 합치면, 좋은 USP는 결국 "말로만 다른 게 아니라 만들기 자체가 힘든 것"이어야 한다는 하나의 잣대로 좁혀진다.</p>
+<p>연습: 지금 팔고 있는 상품(예: 분수 물총) 하나를 떠올려보자. 그 상품의 상세페이지 헤드라인이 지금 편익을 몇 개 말하고 있는지부터 세어보고, 그중 값비싼(위조하기 어려운) 신호가 있는지 골라보자.</p>
+<div class="field"><div class="field-label">지금 헤드라인이 말하는 편익은 몇 개인가? 하나로 줄인다면 무엇을 남기겠나?</div><textarea class="field-input" data-key="day19_s4_q1" rows="2"></textarea><span class="save-status" data-for="day19_s4_q1"></span></div>
+<div class="field"><div class="field-label">그중 경쟁자가 값싸게 흉내 낼 수 있는 말(저비용 신호)은 어떤 것인가?</div><textarea class="field-input" data-key="day19_s4_q2" rows="2"></textarea><span class="save-status" data-for="day19_s4_q2"></span></div>
+<div class="field"><div class="field-label">검사성적서·실측 영상처럼 흉내 내기 어려운 증거를 이 상품에 붙인다면 무엇이 가능한가?</div><textarea class="field-input" data-key="day19_s4_q3" rows="2"></textarea><span class="save-status" data-for="day19_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 리브스는 &quot;여러 장점을 나열하면 아무것도 안 남는다&quot;고 했다. 그런데도 많은 상세페이지가 여전히 장점을 나열하는 이유는 무엇일까 — 하나만 고르는 게 왜 더 어려울까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day19_s5_a1" rows="2"></textarea><span class="save-status" data-for="day19_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 다윈이 공작 꼬리 앞에서 멈춰 섰던 것처럼, &quot;왜 저 경쟁사 상품이 저렇게 비효율적인 걸 자랑하는데도 잘 팔리지&quot;라는 의문이 든 적이 있나? 그게 사실은 위조 불가능한 값비싼 신호였을 가능성은?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day19_s5_a2" rows="2"></textarea><span class="save-status" data-for="day19_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 지금 파는 상품 중 하나를 골라, 헤드라인에서 뺄 편익 하나와 남길 편익 하나를 오늘 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day19_s5_decision" rows="2"></textarea><span class="save-status" data-for="day19_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day18/">← Day 18</a>
+  <a href="../day20/">Day 20 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

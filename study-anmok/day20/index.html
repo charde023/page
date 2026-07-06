@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 20 · 브랜드</title>
+<meta name="description" content="브랜드는 지워지지 않는 낙인에서 시작해, 지금은 고객이 매번 다시 검증할 필요를 없애주는 신뢰의 저금통이 됐다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 20 · 브랜드</h1>
+  <div class="meta">G1 (어원+역사) · M19 (콘텐츠 판단)</div>
+</div>
+
+<div class="oneliner">브랜드는 지워지지 않는 낙인에서 시작해, 지금은 고객이 매번 다시 검증할 필요를 없애주는 신뢰의 저금통이 됐다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day20_frontmatter_date">
+  <span class="save-status" data-for="day20_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Brand-브랜드">Brand-브랜드</span></h2>
+<p><span style="color:#ef6c00"><strong>Brand</strong></span>라는 단어의 뿌리부터 보자. 고대 노르드어 <strong>brandr</strong> — 불타는 나무, 횃불이라는 뜻이다. 여기서 "불로 지지다"라는 동사가 갈라져 나와 가축의 낙인(cattle brand)을 가리키게 됐어. 지워지지 않는 표시니까, 어느 목장 소인지 한눈에 아는 방법이었던 셈이다. 소유를 주장하는 가장 원초적인 방식 — 불로 지진다는 것 자체가 이미 "되돌릴 수 없다"는 무게를 담고 있다.</p>
+<p>이 낙인이 사람 손을 타고 의미를 바꾸는 지점이 중세다. 길드 장인들이 자기가 만든 물건에 자기 마크를 찍기 시작했다 — 은세공품의 각인, 도자기 밑바닥 도장, 칼날에 새긴 대장장이 표식. 이건 단순한 "내 것" 표시가 아니었다. <strong>"이 물건이 잘못되면 내가 책임진다"는 서명</strong>이었어. 낙인이 소유 표시에서 품질 보증으로 의미가 넘어간 순간이다. 근대에 들어 이 보증이 법으로 정리되며 상표법(trademark law)이 만들어졌고, "브랜드"는 불로 지진 표시에서 법이 지켜주는 무형자산으로 완전히 탈바꿈했다.</p>
+<p>그래서 브랜드의 본질은 로고나 색깔이 아니라 <span style="color:#ef6c00"><strong>저장된 신뢰</strong></span>다. <span class="wikiterm" title="옵시디언 원노트: Brand-브랜드">Brand-브랜드</span> 노트에서 정리했듯, 고객이 매번 "이거 사도 되나"를 처음부터 검증하지 않고 이름만 보고 지갑을 여는 상태 — 이게 브랜드 자산(brand equity)이다. 인지도(이름을 아는가), 연상(이름을 들으면 뭐가 떠오르는가), 충성(다른 게 싸도 이걸 다시 사는가) 세 축으로 쌓인다.</p>
+<p>여기서 긴장이 하나 생긴다. <strong>퍼포먼스 광고</strong>는 당장 팔기 위한 도구고, <strong>브랜드</strong>는 내일도 팔리게 하는 자산이다. 광고를 끄면 매출도 같이 꺼지지만, 브랜드는 광고 없이도 검색·재구매·추천을 불러온다. 둘 다 필요하지만 성격이 다른 지출이라는 걸 구분 못 하면, 매달 같은 액수를 태우고도 아무것도 남지 않는 상태가 반복된다.</p>
+<h2>② 다른 장르의 창 — 지워지지 않는 표시의 역사</h2>
+<p>가축에 낙인을 찍는 관행은 고대부터 있었다고 전해진다. 소 떼가 섞이는 방목지에서, 불로 지진 표시는 지울 수도 위조하기도 어려워 소유권을 가장 확실하게 증명하는 방법이었다. 미국 서부 개척 시대의 목장주들이 저마다 독특한 낙인 도안을 등록하고 지역 관청에 신고한 관행도 이 오래된 논리의 연장선이다 — "이 소는 내 것"이라는 주장을, 말이 아니라 몸에 새긴 흔적으로 증명한 것.</p>
+<p>이 관행이 상업의 세계로 넘어가면서 성격이 바뀐다. 중세 유럽의 길드는 물건의 품질을 통제하는 자율 규제 조직이었는데, 은세공 길드는 순도를 인증하는 각인(hallmark)을 물건에 찍었다고 알려져 있다. 이 각인이 없으면 시장에서 팔 수 없었고, 잘못된 물건에 각인을 찍은 장인은 길드에서 처벌받았다. 즉 낙인이 "누구 소유인가"에서 "누가 책임지는가"로 의미가 넘어간 것 — 소유의 표시가 보증의 서명이 된 순간이다.</p>
+<p>근대 산업화 이후엔 이 서명이 법의 보호를 받는 재산이 됐다. 19세기 영국에서 상표 등록 제도가 정비되며, 눈에 보이는 마크 하나가 회사의 평판 전체를 대표하는 법적 실체로 인정받기 시작했다. 불로 지진 표시가 오늘날 화면 속 로고 한 줄로 진화하기까지, 핵심 질문은 한 번도 바뀌지 않았다 — <strong>"이 표시를 보고 누구를 믿을 수 있는가."</strong></p>
+<h2>③ 다리 놓기 — 낙인의 역사와 에이폼의 익명성 문제</h2>
+<p>낙인의 역사를 관통하는 한 가지 — 표시는 늘 "누가 책임지는가"를 대신 말해주는 장치였다. 그럼 지금 쿠팡에서 물건을 사는 고객은, 그 물건을 누가 책임지는지 알고 사는 걸까?</p>
+<p>쿠팡 입점 셀러 구조에서는 대부분 그렇지 않다. 고객은 상품명과 썸네일, 리뷰 별점만 보고 결정하지 <span style="color:#ef6c00"><strong>어느 회사가 이 물건을 보증하는지 거의 인지하지 못한다</strong></span>. 판매자명이 화면 어딘가 작게 있어도 기억되지 않는다. 이건 길드 각인이 없는 물건, 즉 누가 만들었는지 표시만 있고 그 표시가 아무 의미를 못 갖는 상태와 같다 — 문제가 생겨도 고객은 "그 회사"가 아니라 "쿠팡에서 산 그거"로 기억한다.</p>
+<p>자사몰·스토어명·패키지 디자인이 하는 일이 바로 이 공백을 메우는 것이다. 패키지에 반복해서 노출되는 이름, 자사몰에서만 볼 수 있는 브랜드 스토리, 재구매할 때 검색창에 직접 치는 스토어명 — 이런 것들이 쌓이면 고객 머릿속에 "이건 그 회사 거"라는 낙인이 찍힌다. 한 번 찍히면 쿠팡이 아니라 다른 채널로 옮겨가도 고객이 따라온다. <strong>이어달리기</strong>: 어제(Day 19, USP·차별화)의 개념이 "이 물건이 왜 다른가"를 한 문장으로 못박는 약속이었다면, 브랜드는 그 약속을 계속 지켰을 때 시간이 지나며 굳어버린 결과물이다 — USP가 계약서라면 브랜드는 그 계약이 여러 번 이행되며 남은 신용 등급이다.</p>
+<p>이건 Day 2의 <span class="wikiterm" title="옵시디언 원노트: Moat-해자">Moat-해자</span>와도 바로 연결된다. 데이터 해자나 락인 해자는 대개 플랫폼에 묶여 있어서, 쿠팡을 떠나면 함께 사라진다. 하지만 브랜드는 <span style="color:#ef6c00"><strong>옮겨갈 수 있는 해자</strong></span>다 — 고객 머릿속에 저장된 신뢰이기 때문에, 플랫폼을 갈아타도 그 신뢰는 고객을 따라 이동한다. 쿠팡 의존을 낮추는 실전 전략 중 브랜드가 가장 근본적인 이유가 여기에 있다.</p>
+<h2>④ 오늘의 안목 훈련 — M19 콘텐츠 판단</h2>
+<p>M19 렌즈는 콘텐츠(상세페이지, 광고 카피, 패키지 문구 등)를 볼 때 핵심 메시지·대상·독자 이익·건드리는 감정·제목 강도·뻔한 말 여부·차별적 관점·사례 충분성·추상에서 구체로의 전환·읽은 뒤의 행동·신뢰 근거·불필요한 부분·한 문장으로 남는 기억 — 이 항목들을 하나씩 짚어보라고 말한다. 오늘 개념과 겹치는 지점은 "신뢰 근거"와 "한 문장으로 남는 기억"이다. 브랜드 콘텐츠는 당장 사게 만드는 게 아니라 <strong>다음에 또 볼 때 알아보게 만드는</strong> 것이 목적이라서, 이 두 항목의 비중이 퍼포먼스 카피보다 훨씬 높아야 한다.</p>
+<p>연습: 지금 에이폼 패키지나 자사몰 소개 문구 하나를 떠올려보자. 거기에 "이 회사가 계속 책임진다"는 신뢰 근거가 담겨 있는가, 아니면 그 순간의 할인·혜택만 말하고 있는가?</p>
+<div class="field"><div class="field-label">그 문구가 다음 구매 때도 고객 머릿속에 한 문장으로 남을 만한가?</div><textarea class="field-input" data-key="day20_s4_q1" rows="2"></textarea><span class="save-status" data-for="day20_s4_q1"></span></div>
+<div class="field"><div class="field-label">신뢰 근거(품질 보증, 후속 대응, 반복 노출된 이름)가 들어 있는가, 없다면 무엇을 채워야 하나?</div><textarea class="field-input" data-key="day20_s4_q2" rows="2"></textarea><span class="save-status" data-for="day20_s4_q2"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 길드의 각인은 &quot;잘못되면 처벌받는다&quot;는 강제가 있었기에 신뢰를 만들었다. 지금 에이폼의 브랜드 표시(패키지, 스토어명)에는 그런 강제나 대가가 걸려 있는가, 아니면 그냥 이름표에 그치는가?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day20_s5_a1" rows="2"></textarea><span class="save-status" data-for="day20_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 쿠팡 고객이 판매자를 기억 못 하는 건 플랫폼 구조 탓일까, 아니면 브랜드 쪽에서 기억될 만한 걸 안 심었기 때문일까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day20_s5_a2" rows="2"></textarea><span class="save-status" data-for="day20_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 패키지, 상세페이지, 자사몰 중 고객 머릿속에 &quot;이건 그 회사 거&quot;라는 낙인을 가장 빨리 찍을 수 있는 접점 하나를 고른다면 어디이고, 거기에 오늘 무엇을 하나 더할 것인가?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day20_s5_decision" rows="2"></textarea><span class="save-status" data-for="day20_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day19/">← Day 19</a>
+  <a href="../day21/">Day 21 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

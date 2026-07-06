@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 50 · 융합 에세이 ⑧ + 3기 총복기</title>
+<meta name="description" content="">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 50 · 융합 에세이 ⑧ + 3기 총복기</h1>
+  <div class="meta">에세이(쓰기) · M16(월간복기)</div>
+</div>
+
+<div class="oneliner"></div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day50_frontmatter_date">
+  <span class="save-status" data-for="day50_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 3기 개념 복습</h2>
+<ul>
+<li><a class="daylink" href="../day39/">수사학</a> — 설득은 에토스·파토스·로고스, 세 다리로 서는 의자.</li>
+<li><a class="daylink" href="../day40/">카이로스</a> — 같은 말도 때(때맞음)가 아니면 안 먹힌다.</li>
+<li><a class="daylink" href="../day41/">엔티메마</a> — 논증의 한 조각을 비워두면 청중이 스스로 채우며 설득된다.</li>
+<li><a class="daylink" href="../day42/">BATNA</a> — 협상장을 떠나도 갈 수 있는 대안이 곧 협상력의 바닥이다.</li>
+<li><a class="daylink" href="../day44/">채찍효과</a> — 작은 수요 변화가 공급망 위로 갈수록 증폭된다.</li>
+<li><a class="daylink" href="../day45/">저량과유량</a> — 재고(양)와 판매(속도)는 다른 차원이라 같이 봐야 한다.</li>
+<li><a class="daylink" href="../day46/">지연</a> — 원인과 결과 사이의 시간차가 시스템을 흔들고 진동을 만든다.</li>
+<li><a class="daylink" href="../day47/">2차효과</a> — 1차 효과 다음에 오는, 의도 안 한 다음의 다음.</li>
+<li><a class="daylink" href="../day48/">레드퀸</a> — 경쟁자도 함께 진화하니 멈추면 상대적으로 도태된다.</li>
+<li><a class="daylink" href="../day49/">니치</a> — 같은 자리를 두고 정면충돌하는 대신 틈새로 갈라져 공존한다.</li>
+</ul>
+<h2>② 3기 총복기 표</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>한 줄 정의 (내가 채우기)</th>
+<th>에이폼 어디에 있나 (내가 채우기)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="wikiterm" title="옵시디언 원노트: Rhetoric-수사학">Rhetoric-수사학</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><span class="wikiterm" title="옵시디언 원노트: Kairos-카이로스">Kairos-카이로스</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><span class="wikiterm" title="옵시디언 원노트: Enthymeme-엔티메마">Enthymeme-엔티메마</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><span class="wikiterm" title="옵시디언 원노트: BATNA-배트나">BATNA-배트나</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><span class="wikiterm" title="옵시디언 원노트: Bullwhip-effect-채찍효과">Bullwhip-effect-채찍효과</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><span class="wikiterm" title="옵시디언 원노트: Stock-and-flow-저량과유량">Stock-and-flow-저량과유량</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><span class="wikiterm" title="옵시디언 원노트: Delay-지연">Delay-지연</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><span class="wikiterm" title="옵시디언 원노트: Second-order-effect-2차효과">Second-order-effect-2차효과</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><span class="wikiterm" title="옵시디언 원노트: Red-Queen-레드퀸">Red-Queen-레드퀸</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><span class="wikiterm" title="옵시디언 원노트: Niche-니치">Niche-니치</span></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>③ 주제 후보 3개</h2>
+<ol>
+<li>
+<p><strong>설득 트랙 — 에이폼 상페는 로고스(스펙·인증)에만 기대고 카이로스(때)를 놓치고 있는 것 아닌가?</strong>
+   여름 성수기가 시작되기 전, 아직 아무도 "물총"을 검색하지 않을 때 이미 상페와 광고를 완성해두는 게 맞는지, 아니면 검색이 붙기 시작하는 바로 그 타이밍에 맞춰 헤드라인·이미지를 손보는 게 진짜 카이로스를 잡는 것인지 — 지금 발행 시점이 우연인지 설계된 것인지 따져보는 논제.</p>
+</li>
+<li>
+<p><strong>시스템 트랙 — 로켓그로스 재고 경고에 즉각 반응하는 발주 습관은 채찍효과를 스스로 만드는 것 아닌가?</strong>
+   플랫폼이 보여주는 "재고 부족" 신호를 실제 소비자 수요로 착각해 발주를 부풀리면, 그 부풀린 신호가 공장 쪽 원자재 확보로 다시 한번 증폭된다. 지연(리드타임)까지 겹치면 결품 걱정에 넣은 발주가 몇 달 뒤 악성재고로 돌아오는 구조를, 실제 발주 데이터로 짚어보는 논제.</p>
+</li>
+<li>
+<p><strong>생태 트랙 — 쿠팡 한 채널·비슷한 아동용품군에 몰린 지금, 니치로 갈라서야 하나 레드퀸처럼 계속 달려야 하나?</strong>
+   경쟁사와 같은 검색어·같은 니치를 두고 정면으로 겹치면 결국 한쪽이 밀려난다는 경쟁배제 원리를 받아들인다면, 지금 에이폼이 해야 할 선택은 "더 빨리 달리기(레드퀸)"인지 "다른 틈새로 비껴가기(니치 분화)"인지 — 상품군 하나를 놓고 직접 답해보는 논제.</p>
+</li>
+</ol>
+<h2>④ 쓰는 곳 + M16 월간 복기</h2>
+<p>주제 후보 중 하나를 골라(또는 직접 논제를 세워) 아래에 내 주장을 쓴다. 개념 반 장 + 에이폼 실제 사례 반 장 비율을 지킨다.</p>
+<div class="field"><div class="field-label">오늘의 논제</div><input type="text" class="field-input" data-key="day50_essay_topic1"><span class="save-status" data-for="day50_essay_topic1"></span></div>
+<div class="field"><div class="field-label">본문</div><textarea class="field-input field-input-big" data-key="day50_essay_body2" rows="10"></textarea><span class="save-status" data-for="day50_essay_body2"></span></div>
+<hr />
+<p><strong>M16 월간 복기 (3기 전체를 놓고 답한다)</strong></p>
+<div class="qa-block"><div class="qa-question">1. 3기 10개념 중 &lt;span style=&quot;color:#ef6c00&quot;&gt;가장 크게 생각이 바뀐 개념&lt;/span&gt;은 무엇인가 — 왜 그게 바뀌었나?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day50_essay_q1" rows="2"></textarea><span class="save-status" data-for="day50_essay_q1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 이미 &lt;span style=&quot;color:#ef6c00&quot;&gt;써먹은 개념&lt;/span&gt;은 무엇인가 — 어디에, 어떻게 썼나?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day50_essay_q2" rows="2"></textarea><span class="save-status" data-for="day50_essay_q2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 아직 &lt;span style=&quot;color:#ef6c00&quot;&gt;머리로만 아는 개념&lt;/span&gt;은 무엇인가 — 다음 한 주 안에 어디서 시험해볼 건가?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day50_essay_q3" rows="2"></textarea><span class="save-status" data-for="day50_essay_q3"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day49/">← Day 49</a>
+  <a href="../day51/">Day 51 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

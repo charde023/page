@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 35 · 팻테일</title>
+<meta name="description" content="평균을 믿어도 되는 세계가 있고, 평균이 거짓말이 되는 세계가 있다 — 물총 매출은 후자다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 35 · 팻테일</h1>
+  <div class="meta">G7 (우화) · M2 (본질 파악, 실전)</div>
+</div>
+
+<div class="oneliner">평균을 믿어도 되는 세계가 있고, 평균이 거짓말이 되는 세계가 있다 — 물총 매출은 후자다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day35_frontmatter_date">
+  <span class="save-status" data-for="day35_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Fat-tail-팻테일">Fat-tail-팻테일</span></h2>
+<p>세상에는 두 종류의 분포가 있다. 사람 키를 1만 명 재보면 대부분 150~190cm 사이에 몰리고, 아무리 표본을 늘려도 "키 10미터인 사람" 한 명이 나타나 평균을 뒤집는 일은 없다. 이런 세계를 나심 탈레브는 <strong>"평범의 왕국"</strong>이라 불렀다 — 정규분포(종형 곡선)가 지배하고, <span style="color:#ef6c00"><strong>평균이 대표값으로서 의미가 있는</strong></span> 세계다.</p>
+<p>그런데 재산·매출·SNS 팔로워 수·베스트셀러 판매량을 같은 방식으로 재보면 전혀 다른 그림이 나온다. 100명의 재산을 더했는데 그중 한 명이 나머지 99명을 합친 것보다 부자인 경우가 흔하다. 탈레브는 이걸 <strong>"극단의 왕국"</strong>이라 불렀다 — 표본 하나가 전체 합을 통째로 뒤집을 수 있는 세계. 이 세계의 분포는 꼬리(극단값이 나오는 구간) 부분의 확률이 정규분포보다 훨씬 두껍다고 해서 <strong><span class="wikiterm" title="옵시디언 원노트: Fat-tail-팻테일">팻테일</span>(fat tail)</strong>이라 부른다.</p>
+<p>핵심은 이거다 — 팻테일 세계에서는 <span style="color:#ef6c00"><strong>평균이 무의미해진다</strong></span>. 정규분포는 평균과 표준편차만 알면 전체를 거의 설명할 수 있지만, 팻테일 분포는 극단값 하나가 들어오고 나가는 것만으로 평균 자체가 출렁인다. 그래서 "평시 데이터"만 보고 안심하는 순간이 가장 위험하다 — 지금까지 안 일어났다는 사실이 앞으로도 안 일어난다는 증거가 되지 않기 때문이다. 이 위험한 극단 사건을 탈레브는 <strong>블랙 스완</strong>이라 이름 붙였다. 발생 전엔 상상도 못 했다가, 일어나고 나면 전체 결과를 지배하고, 사후에는 "사실 신호가 있었다"는 설명이 뒤늦게 따라붙는 사건이다. 유럽인들이 실제로 검은 백조를 보기 전까지 "백조는 다 희다"고 믿었던 데서 따온 이름이라고 전해진다 — "본 적 없다"를 "없다"로 착각하는 것 자체가 팻테일 세계에서 저지르는 가장 흔한 실수다.</p>
+<p><span class="wikiterm" title="옵시디언 원노트: Lumpiness-럼피니스">Lumpiness-럼피니스</span> 노트에서 다룬 "수요가 덩어리로 몰려온다"는 관찰은 사실 팻테일의 표면 증상이다. 럼피니스가 "봤더니 들쭉날쭉하더라"는 서술이라면, 팻테일은 "왜 그 들쭉날쭉함이 평균으로 수렴하지 않고 계속 극단으로 튀는가"에 대한 구조적 설명이다.</p>
+<h2>② 다른 장르의 창 — 탈레브의 칠면조</h2>
+<p>한 농장에 칠면조 한 마리가 있다. 첫날, 사람이 다가와 먹이를 준다. 칠면조는 아무것도 모른 채 먹는다. 둘째 날도 먹이가 온다. 셋째 날도, 열흘째도, 백일째도 온다. 칠면조는 점점 확신하게 된다 — "이 사람은 나를 아끼는구나. 매일 먹이를 주는 걸 보니, 앞으로도 계속 그럴 거야." 900일째, 1,000일째가 되도록 매일 같은 손이 같은 시간에 먹이를 가져온다. 칠면조의 통계적 확신은 그 어느 때보다 높다 — 1,000일치 데이터가 "내일도 먹이가 온다"는 결론을 뒷받침한다.</p>
+<p>1,001일째, 추수감사절 전날이다. 그 손은 먹이 대신 도끼를 들고 온다.</p>
+<p>이 우화는 나심 탈레브가 『블랙 스완』에서 귀납의 함정을 설명하며 든 이야기이며, 원형은 그보다 앞서 철학자 버트런드 러셀이 든 "매일 모이를 주던 사람이 어느 날 닭의 목을 비튼다"는 닭의 비유라고 전해진다. 칠면조 입장에선 잘못이 없다 — 관찰 가능한 모든 데이터가 한 방향을 가리켰다. 문제는 <span style="color:#ef6c00"><strong>정보의 방향</strong></span>에 있었다. 1,000일 동안 관찰한 건 "먹이 주는 손"이었지, "그 손이 왜 먹이를 주는가"라는 진짜 이유가 아니었다. 패턴이 길고 안정적일수록, 그게 끊기는 하루의 충격은 오히려 더 크다.</p>
+<h2>③ 다리 놓기 — 기저율의 두꺼운 꼬리, 그리고 물총의 여름</h2>
+<p><strong>이어달리기</strong>: 기저율(어제 개념)이 "평상시엔 이런 확률로 일이 벌어진다"는 평평한 배경음이라면, 오늘의 팻테일은 그 배경음 위에 "그런데 가끔 배경음을 통째로 뒤엎는 소리가 들린다"를 얹는 것이다 — 기저율은 분포의 몸통이고, 팻테일은 그 분포의 꼬리가 유난히 두꺼운 경우를 말한다.</p>
+<p>에이폼의 매출 구조를 팻테일로 다시 보자. 물총은 여름 3개월(대략 6~8월)에 연 매출의 대부분이 몰린다. 이건 럼피니스이자 동시에 팻테일이다 — "월 평균 매출"이라는 숫자를 내면, 7월의 폭증과 겨울철의 거의 0에 가까운 매출이 뒤섞여 아무 의미 없는 중간값이 나온다. 칠면조가 1,000일의 평온한 데이터로 "내일도 평온하다"고 확신했듯, 겨울철 매출 데이터만 보고 "우리 회사 평균 월매출은 이 정도"라고 계획하면 여름 성수기의 실제 자금 소요·재고 소요를 완전히 과소평가하게 된다. 반대로 성수기 한복판의 폭발적 숫자만 연장해서 연간 계획을 짜면 비수기 자금이 바닥난다 — 어느 쪽으로 평균을 내도 팻테일 세계에서는 틀린다.</p>
+<p>실전 적용점은 두 가지다. 첫째, <span class="wikiterm" title="옵시디언 원노트: Safety-Stock-안전재고">안전재고</span>(Day 9)를 "평균 수요 × 며칠분" 식으로 계산하면 안 된다 — 팻테일 세계의 안전재고는 평균이 아니라 <strong>최악의 극단 구간(성수기 피크 수요)</strong>을 기준으로 다시 짜야 한다. 둘째, 현금 버퍼도 마찬가지다 — "월 평균 현금흐름"으로 여유자금을 잡으면 비수기에 성수기용 발주 대금이 이미 빠져나간 뒤라 정작 필요한 순간에 돈이 없다. 팻테일 사업의 재무 계획은 평시용·피크용 두 시나리오를 따로 짜야 한다.</p>
+<h2>④ 오늘의 안목 훈련 — M2 본질 파악 (실전)</h2>
+<p>M2 렌즈는 표면 문제와 진짜 문제를 분리하고, 그 문제를 만든 구조까지 파고드는 훈련이다. 오늘은 실전 모드 — 이론 설명 대신, 방금 다룬 팻테일 개념을 에이폼의 실제 결정 하나에 바로 적용해본다.</p>
+<p>표면적으로 보이는 것: "물총은 여름에만 잘 팔린다." 하지만 M2는 여기서 멈추지 않는다 — 진짜 문제는 "여름에 잘 팔린다"가 아니라 "<strong>한 해 생존이 3개월의 결과에 전적으로 달려 있다</strong>"는 구조다. 이 구조가 반복되는 이유는 계절 상품이라는 특성 자체에 있고, 방치했을 때의 손실은 단순히 "매출이 적은 달이 있다"가 아니라 "그 3개월을 잘못 준비하면 회사 전체 현금이 마른다"는 것이다.</p>
+<p>연습: 지금 에이폼의 안전재고 또는 현금 버퍼 계획 중 하나를 골라, "평균 기준"으로 짜여 있는지 "피크 기준"으로 짜여 있는지 점검해보자.</p>
+<div class="field"><div class="field-label">지금 이 계획은 어떤 숫자(평균 vs 피크)를 기준으로 짜여 있나?</div><textarea class="field-input" data-key="day35_s4_q1" rows="2"></textarea><span class="save-status" data-for="day35_s4_q1"></span></div>
+<div class="field"><div class="field-label">그 기준이 팻테일 구조(3개월 집중)를 충분히 반영하고 있는가, 아니면 &quot;칠면조의 1,000일&quot;처럼 평온한 기간 데이터에 안심하고 있는가?</div><textarea class="field-input" data-key="day35_s4_q2" rows="2"></textarea><span class="save-status" data-for="day35_s4_q2"></span></div>
+<div class="field"><div class="field-label">만약 기준을 바꾼다면(평균→피크), 오늘 당장 조정할 수 있는 항목 하나는 무엇인가?</div><textarea class="field-input" data-key="day35_s4_q3" rows="2"></textarea><span class="save-status" data-for="day35_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 정규분포 세계(키·시험점수)와 팻테일 세계(재산·매출)를 가르는 결정적 차이는 &quot;표본 하나가 전체 합을 뒤집을 수 있는가&quot;였다. 에이폼의 SKU별 매출을 이 기준으로 나눠보면, 어떤 상품군이 팻테일에 가깝고 어떤 것이 정규분포에 가까운가?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day35_s5_a1" rows="2"></textarea><span class="save-status" data-for="day35_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 칠면조는 1,000일의 데이터를 갖고도 1,001일째를 예측하지 못했다. 지금 에이폼이 &quot;지금까지 늘 그래왔으니까&quot;라는 근거로 안심하고 있는 가정이 있다면 무엇인가?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day35_s5_a2" rows="2"></textarea><span class="save-status" data-for="day35_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 안전재고나 현금 버퍼 중 하나를 골라, &quot;평균 기준&quot;에서 &quot;성수기 피크 기준&quot;으로 다시 계산해볼 항목 하나를 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day35_s5_decision" rows="2"></textarea><span class="save-status" data-for="day35_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day34/">← Day 34</a>
+  <a href="../day36/">Day 36 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

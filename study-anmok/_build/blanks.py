@@ -47,10 +47,20 @@ def _field_html(day_num: int, section: int, slot: str, label: str, kind: str = "
 # ⑤ section — universal two-line "답:"/"결정:" pattern (all 10 Days confirmed)
 # ---------------------------------------------------------------------------
 
-QA_TWOLINE = re.compile(
-    r"^(?P<num>\d+)\.\s(?P<question>[^\n]+)\n[ \t]*(?P<label>답|결정)[:：]\s*$",
+# Any non-empty line immediately followed by a line that is just "답:" or
+# "결정:". Covers numbered questions ("1. ...\n답:"), bold decision prompts
+# ("**오늘 내릴 작은 결정**: ...\n결정:"), and essay M16 questions — the format
+# varies across Day11~72.
+GENERIC_QA = re.compile(
+    r"^(?P<qline>[^\n]+)\n[ \t]*(?P<label>답|결정)[:：]\s*$",
     re.MULTILINE,
 )
+
+
+def _qa_block(day_num: int, section: int, slot: str, label: str, qline: str) -> str:
+    qtext = html.escape(qline.strip().replace("**", ""))
+    field = _field_html(day_num, section, slot, label, kind="textarea")
+    return f'<div class="qa-block"><div class="qa-question">{qtext}</div>{field}</div>'
 
 
 def transform_section5(text: str, day_num: int) -> str:
@@ -58,26 +68,14 @@ def transform_section5(text: str, day_num: int) -> str:
 
     def repl(m: re.Match) -> str:
         label = m.group("label")
-        question = html.escape(m.group("question").strip())
-        num = m.group("num")
         if label == "결정":
             slot = "decision"
         else:
             counter["a"] += 1
             slot = f"a{counter['a']}"
-        field = _field_html(day_num, 5, slot, label, kind="textarea")
-        # Rendered as a self-contained HTML block (not markdown list syntax) so
-        # each question keeps its own number instead of every fragment resetting
-        # to "1." (markdown would otherwise treat each isolated "N. ..." line as
-        # the start of a brand-new single-item <ol>).
-        return (
-            f'<div class="qa-block">'
-            f'<div class="qa-question"><strong>{num}.</strong> {question}</div>'
-            f'{field}'
-            f'</div>'
-        )
+        return _qa_block(day_num, 5, slot, label, m.group("qline"))
 
-    return QA_TWOLINE.sub(repl, text)
+    return GENERIC_QA.sub(repl, text)
 
 
 # ---------------------------------------------------------------------------
@@ -86,42 +84,52 @@ def transform_section5(text: str, day_num: int) -> str:
 
 TABLE_ROW = re.compile(r"^\|(?P<cells>.+)\|\s*$", re.MULTILINE)
 SEP_ROW = re.compile(r"^\|[\s:|-]+\|\s*$")
-BLANK_CELL = re.compile(r"^_{3,}$")
+BLANK_RUN = re.compile(r"_{3,}")
 
 
 def _transform_table_blanks(text: str, day_num: int) -> str:
     lines = text.split("\n")
     out_lines = []
-    row_idx = 0
+    counter = {"row": 0}
+    headers: list[str] = []
+    saw_header = False
     for line in lines:
         m = TABLE_ROW.match(line)
-        if not m or SEP_ROW.match(line):
+        if not m:
             out_lines.append(line)
+            headers, saw_header = [], False  # table ended
+            continue
+        if SEP_ROW.match(line):
+            out_lines.append(line)
+            saw_header = True
             continue
         cells = m.group("cells").split("|")
-        changed = False
+        if not saw_header and not headers:
+            # First row of a table is the header — capture column names for
+            # the export labels (rows aren't wrapped in a .field-label div).
+            headers = [c.strip() for c in cells]
+            out_lines.append(line)
+            continue
         new_cells = []
-        # Row label for the export feature: prefer the 2nd column (개념 name),
-        # since table rows aren't wrapped in a .field-label div like other blanks.
-        row_label = cells[1].strip() if len(cells) > 1 else f"행 {row_idx + 1}"
-        for cell in cells:
-            stripped = cell.strip()
-            if BLANK_CELL.match(stripped):
-                row_idx += 1
-                key = f"day{day_num:02d}_s4_row{row_idx}"
-                label_attr = html.escape(row_label, quote=True)
-                new_cells.append(
-                    f' <input type="text" class="field-input field-input-cell" '
-                    f'data-key="{key}" data-label="{label_attr}">'
-                    f'<span class="save-status" data-for="{key}"></span> '
-                )
+        changed = False
+        for ci, cell in enumerate(cells):
+            if BLANK_RUN.search(cell):
+                col_label = headers[ci].strip() if ci < len(headers) and headers[ci].strip() else "표 입력"
+
+                def sub_run(_m: re.Match) -> str:
+                    counter["row"] += 1
+                    key = f"day{day_num:02d}_s4_row{counter['row']}"
+                    return (
+                        f'<input type="text" class="field-input field-input-cell" '
+                        f'data-key="{key}" data-label="{html.escape(col_label, quote=True)}">'
+                        f'<span class="save-status" data-for="{key}"></span>'
+                    )
+
+                new_cells.append(BLANK_RUN.sub(sub_run, cell))
                 changed = True
             else:
                 new_cells.append(cell)
-        if changed:
-            out_lines.append("|" + "|".join(new_cells) + "|")
-        else:
-            out_lines.append(line)
+        out_lines.append(("|" + "|".join(new_cells) + "|") if changed else line)
     return "\n".join(out_lines)
 
 
@@ -255,15 +263,90 @@ def transform_section4(text: str, day_num: int) -> str:
 
 
 WIKILINK = re.compile(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]")
+DAYNUM_RE = re.compile(r"^Day(\d+)_")
 
 
 def preprocess_wikilinks(text: str) -> str:
     def repl(m: re.Match) -> str:
         target = m.group(1).strip()
         display = (m.group(2) or target).strip()
+        dm = DAYNUM_RE.match(target)
+        if dm:
+            # Links to other Day pages are internal to study-anmok → clickable.
+            n = int(dm.group(1))
+            return f'<a class="daylink" href="../day{n:02d}/">{html.escape(display)}</a>'
+        # Links to 학습노트 (not published here) → non-clickable styled term.
         return (
             f'<span class="wikiterm" title="옵시디언 원노트: {html.escape(target)}">'
             f'{html.escape(display)}</span>'
         )
 
     return WIKILINK.sub(repl, text)
+
+
+# ---------------------------------------------------------------------------
+# Essay pages (Day17/24/31/38/43/50/57/61/67/72) — different structure:
+#   ① 복습(Day링크) ② 주제후보/총복기표 ③ 캐묻기 ④ 쓰는 곳 + 체크박스/M16.
+# Interactive elements are spread across sections, so essays are transformed as
+# a whole-section pass rather than the ④/⑤-specific passes.
+# ---------------------------------------------------------------------------
+
+CHECKBOX_LINE = re.compile(r"^-\s*\[ ?\]\s*(?P<label>.+?)\s*$", re.MULTILINE)
+ESSAY_WRITE_LINE = re.compile(
+    r"^\*{0,2}(?P<label>오늘의 논제|논제|본문|주제|논증)[:：]\*{0,2}\s*$",
+    re.MULTILINE,
+)
+
+
+def _essay_field(day_num: int, slot: str, label: str, kind: str) -> str:
+    key = f"day{day_num:02d}_essay_{slot}"
+    label_html = html.escape(label.strip())
+    if kind == "input":
+        inp = f'<input type="text" class="field-input" data-key="{key}">'
+    elif kind == "big":
+        inp = f'<textarea class="field-input field-input-big" data-key="{key}" rows="10"></textarea>'
+    else:
+        inp = f'<textarea class="field-input" data-key="{key}" rows="2"></textarea>'
+    return (
+        f'<div class="field"><div class="field-label">{label_html}</div>{inp}'
+        f'<span class="save-status" data-for="{key}"></span></div>'
+    )
+
+
+def transform_essay(text: str, day_num: int) -> str:
+    counter = {"q": 0, "w": 0, "c": 0}
+
+    # 1. 총복기 표 빈칸 (일부 에세이의 ②)
+    text = _transform_table_blanks(text, day_num)
+
+    # 2. 쓰는 곳 프롬프트: 오늘의 논제/주제 → 한 줄, 본문/논증 → 큰 칸
+    def wrepl(m: re.Match) -> str:
+        label = m.group("label")
+        counter["w"] += 1
+        if label in ("본문", "논증"):
+            return _essay_field(day_num, f"body{counter['w']}", label, "big")
+        return _essay_field(day_num, f"topic{counter['w']}", label, "input")
+
+    text = ESSAY_WRITE_LINE.sub(wrepl, text)
+
+    # 3. M16/후속 질문 (질문\n   답:)
+    def qrepl(m: re.Match) -> str:
+        counter["q"] += 1
+        qtext = html.escape(m.group("qline").strip().replace("**", ""))
+        field = _essay_field(day_num, f"q{counter['q']}", m.group("label"), "textarea")
+        return f'<div class="qa-block"><div class="qa-question">{qtext}</div>{field}</div>'
+
+    text = GENERIC_QA.sub(qrepl, text)
+
+    # 4. M23/M16 체크박스
+    def crepl(m: re.Match) -> str:
+        counter["c"] += 1
+        key = f"day{day_num:02d}_essay_chk{counter['c']}"
+        label = html.escape(m.group("label"))
+        return (
+            f'<label class="checkfield"><input type="checkbox" data-key="{key}">'
+            f'<span>{label}</span></label>'
+        )
+
+    text = CHECKBOX_LINE.sub(crepl, text)
+    return text

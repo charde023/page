@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 71 · 손자병법</title>
+<meta name="description" content="최고의 전략은 이기는 기술이 아니라, 애초에 안 싸워도 되게 만드는 계산이다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 71 · 손자병법</h1>
+  <div class="meta">G7 (고전) · M1 (질문 목적, 실전)</div>
+</div>
+
+<div class="oneliner">최고의 전략은 이기는 기술이 아니라, 애초에 안 싸워도 되게 만드는 계산이다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day71_frontmatter_date">
+  <span class="save-status" data-for="day71_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Sun-Tzu-손자병법">Sun-Tzu-손자병법</span></h2>
+<p>『손자(孫子)』는 기원전 5세기 무렵 춘추시대 오나라의 손무(孫武)가 지었다고 전해지는 13편짜리 병서다. 오나라 왕 합려 앞에서 궁녀들을 실제 군대처럼 조련해 보였다는 일화가 전해지는데 — 명령을 안 듣는 대장 격 궁녀를 가차 없이 처형해 기강을 세웠다는 이야기다. 사실 그대로인지는 "~라고 전해진다" 수준으로 받아들이는 게 안전하지만, 이 일화 하나가 손자병법의 성격을 압축한다 — 이건 이론서가 아니라 <strong>실행의 기술</strong>이다.</p>
+<p>그런데 이 책의 핵심은 흔한 오해와 정반대다. 손자병법은 "어떻게 잘 싸우는가"가 아니라 <span style="color:#ef6c00"><strong>"싸움을 어떻게 피하거나 최소화하는가"</strong></span>의 사상서다. 「모공편(謀攻篇)」의 유명한 위계를 보자 — 가장 좋은 건 적의 계략을 미리 깨는 것(<span style="color:#ef6c00"><strong>상병벌모, 上兵伐謀</strong></span>), 그 다음은 외교로 적의 동맹을 끊는 것, 그 다음이 군대로 맞붙는 것, 가장 하책이 성을 직접 공격하는 것이다. 무력 충돌은 순서상 맨 마지막 수단이다.</p>
+<p>이 사상을 압축한 문장이 <span style="color:#ef6c00"><strong>부전이굴인지병(不戰而屈人之兵), 선지선자야(善之善者也)</strong></span> — "싸우지 않고 적의 군대를 굴복시키는 것, 그것이 최선 중의 최선이다." 손자는 심지어 "싸워서 백 번 이기는 것"도 최선이 아니라고 잘라 말한다. 싸움 자체가 이미 비용이자 리스크이기 때문이다. 그럼 언제 싸우는가. 답은 <span style="color:#ef6c00"><strong>지피지기 백전불태(知彼知己, 百戰不殆)</strong></span> — 적을 알고 나를 알면 백 번 싸워도 위태롭지 않다. "이긴다"가 아니라 "위태롭지 않다"는 냉정한 표현인 걸 눈여겨보자. 그리고 승패는 싸우기 전에 이미 계산으로 갈린다 — 「시계편(始計篇)」의 "다산승, 소산불승(多算勝, 少算不勝)", 계산을 많이 한 쪽이 이기고 적게 한 쪽은 못 이긴다. 그 계산이 다 끝난 다음에야 싸움을 시작하라는 게 「군형편」의 <span style="color:#ef6c00"><strong>선승이후구전(先勝而後求戰)</strong></span> — 먼저 이겨놓고 나서야 싸움을 구한다. 그리고 「시계편」 첫 구절 <span style="color:#ef6c00"><strong>"병자, 궤도야(兵者, 詭道也)"</strong></span> — 병법이란 속임수의 길이다. 전쟁은 감정이 아니라 정보와 계산으로 움직이는 냉정한 기술이라는 선언이다.</p>
+<h2>② 다른 장르의 창 — 2천 년을 건넌 열세 편</h2>
+<p>『손자』가 놀라운 건 문장의 밀도다. 「시계편」 첫머리는 이렇게 시작한다고 전해진다 — "병자, 국지대사, 사생지지, 존망지도, 불가불찰야(兵者, 國之大事, 死生之地, 存亡之道, 不可不察也)" — 전쟁은 나라의 큰일이고, 죽고 사는 자리이며, 살고 망하는 길이니 살피지 않을 수 없다. 첫 문장부터 전쟁을 낭만이 아니라 계산의 대상으로 못 박는다.</p>
+<p>이 책이 특이한 또 하나의 지점은, 저자로 알려진 손무 본인의 삶이 뚜렷한 기록으로 남아있지 않다는 것이다. 오나라를 강국으로 만든 실전 지휘관이었다고 전해지지만, 후대 학자들 사이에서는 손무라는 인물이 실존했는지, 혹은 여러 저자의 글이 후대에 한 이름으로 묶인 것인지에 대한 논쟁이 있다고 알려져 있다. 저자가 불확실한 채로도 텍스트 자체는 2천 년 넘게 동아시아 전략서의 정점으로 읽혀왔다는 사실 자체가 흥미롭다 — 사람보다 문장이 살아남은 드문 사례다. 이후 조조(曹操)가 이 책에 최초의 주석을 달았다고 전해지며, 그 주석본이 오늘날까지 원문 이해의 기준 중 하나로 남아있다.</p>
+<h2>③ 다리 놓기 — 정면 전쟁은 최악의 승리</h2>
+<p>손자의 핵심을 에이폼에 그대로 대입해보자. 가격 출혈 경쟁 — 대형 브랜드와 같은 카테고리에서 서로 마진을 깎아가며 붙는 것 — 은 손자 기준으로 최악의 승리 방식이다. 설사 그 싸움에서 이겨도 이미 원가와 체력을 깎아먹은 뒤이기 때문이다. 손자라면 이렇게 물을 것이다 — 애초에 안 싸워도 되는 자리는 없었는가. 니치를 파고들거나, 확실한 차별화를 만들어 <span style="color:#ef6c00"><strong>전장 자체를 비껴가는 것</strong></span>이 상병벌모다. 경쟁사와 정면으로 붙기 전에 먼저 할 일은 지피지기 — 내 원가·재고·BATNA(협상 결렬 시 대안)를 먼저 알고, 상대의 그것도 먼저 안다. 계산이 안 끝났으면 아직 싸울 때가 아니다.</p>
+<p><strong>이어달리기</strong>: Day 68(란체스터)이 "이미 붙은 싸움을 어디서 좁혀야 이기는가"였다면, 손자는 한 걸음 더 앞선 질문이다 — <strong>애초에 이 싸움을 할 것인가, 언제 할 것인가</strong>. 란체스터·포터·본원전략이 "어떻게 싸우나"의 전술이었다면, 손자는 그 전술을 쓸지 말지를 정하는 상위 판단이다.</p>
+<h2>④ 오늘의 안목 훈련 — M1 질문 목적 점검 (실전)</h2>
+<p>M1 렌즈는 <strong>어떤 정보·상황을 마주했을 때 이게 ①정보 수집 ②의사결정 ③아이디어 발상 ④실행 계획 ⑤리스크 점검 ⑥사람·시장 이해 ⑦내 생각 검증 — 이 중 무엇을 위한 것인지부터 구분하라</strong>고 말한다. 오늘은 이 렌즈를 손자의 "지피지기"에 그대로 겹쳐 쓴다 — 경쟁 국면에서 내가 지금 하려는 행동이 "정보 수집(지피지기 단계)"인지 "이미 감정으로 결정해놓고 정당화를 찾는 것"인지부터 구분하는 것이다.</p>
+<p>연습: 지금 벌이려 하거나 이미 벌이고 있는 경쟁(가격 인하·광고 물량전 등) 하나를 떠올려보자.</p>
+<div class="field"><div class="field-label">그 경쟁, 지금까지 지피지기(내 원가·재고·상대 상황)를 얼마나 계산했고, 무엇이 그 판단을 움직였는가?</div><textarea class="field-input" data-key="day71_s4_q1" rows="2"></textarea><span class="save-status" data-for="day71_s4_q1"></span></div>
+<div class="field"><div class="field-label">계산이 아직 안 끝났다면, 지금 당장 확인해야 할 숫자 하나는 무엇인가?</div><textarea class="field-input" data-key="day71_s4_q2" rows="2"></textarea><span class="save-status" data-for="day71_s4_q2"></span></div>
+<div class="field"><div class="field-label">이 싸움, 안 붙고 옆으로 비껴갈 자리(상병벌모)가 있다면 어디인가?</div><textarea class="field-input" data-key="day71_s4_q3" rows="2"></textarea><span class="save-status" data-for="day71_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 2개</h2>
+<div class="qa-block"><div class="qa-question">1. 손자는 &quot;백전백승도 최선이 아니다&quot;라고 했다. 그런데 사업에서는 종종 &quot;일단 이기고 보자&quot;는 조급함이 더 크게 작용한다. 이 둘 사이 간극은 어디서 오는 걸까 — 손자 시대엔 없던 무엇이 지금은 조급함을 부추기고 있을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day71_s5_a1" rows="2"></textarea><span class="save-status" data-for="day71_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. &quot;병자, 궤도야(속임수의 길)&quot;라는 문장은 전쟁뿐 아니라 협상·마케팅에도 적용될 법한데, 어디까지가 정당한 &quot;전략적 정보 비대칭&quot;이고 어디부터가 &quot;기만&quot;일까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day71_s5_a2" rows="2"></textarea><span class="save-status" data-for="day71_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 지금 안 싸워도 되는데 감정(조급함·자존심)으로 뛰어들고 있는 전장을 하나 지목한다면 무엇이고, 이번 주 그 전장에서 한 걸음 물러나 지피지기부터 다시 계산할 것인가?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day71_s5_decision" rows="2"></textarea><span class="save-status" data-for="day71_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day70/">← Day 70</a>
+  <a href="../day72/">Day 72 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 11 · 시스템1과 시스템2</title>
+<meta name="description" content="직관은 마법이 아니라 압축이다 — 수천 번 본 사람의 머릿속에서만 믿을 만하게 압축된다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 11 · 시스템1과 시스템2</h1>
+  <div class="meta">G2 (역사) · M11 (직관과 숙고)</div>
+</div>
+
+<div class="oneliner">직관은 마법이 아니라 압축이다 — 수천 번 본 사람의 머릿속에서만 믿을 만하게 압축된다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day11_frontmatter_date">
+  <span class="save-status" data-for="day11_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: System-1-System-2-시스템1-시스템2">System-1-System-2-시스템1-시스템2</span></h2>
+<p>심리학자 대니얼 카너먼은 사람의 사고를 두 체계로 나눠 설명했어. <span style="color:#ef6c00"><strong>시스템1</strong></span>은 빠르고 자동적이고 힘이 안 든다 — 2+2를 보면 "4"가 저절로 튀어나오는 것처럼. <span style="color:#ef6c00"><strong>시스템2</strong></span>는 느리고 애써야 나온다 — 17×24를 암산하려면 멈춰서 계산해야 하는 것처럼. 뇌 속에 실제로 나뉜 두 부위가 있는 게 아니라, 사고의 <strong>성격</strong>을 구분하는 이름이야.</p>
+<p>문제는 시스템2가 게으르다는 거야. 사람은 웬만하면 시스템1이 던진 첫 답을 그대로 채택하고, 시스템2는 뭔가 명백히 이상할 때만 마지못해 나선다. 그래서 여러 인지 편향이 여기서 생겨 — 시스템2가 검토도 없이 시스템1의 답에 도장을 찍어버리니까.</p>
+<p>여기서 중요한 오해를 짚어야 해. <span style="color:#ef6c00"><strong>직관은 육감이나 초능력이 아니야.</strong></span> 카너먼은 오랫동안 직관을 의심하는 쪽이었고, "현장 전문가의 직관은 믿을 만하다"고 주장하던 심리학자 게리 클라인과 정면으로 대립했어. 두 사람은 서로 다른 진영에서 논쟁하다가, 결국 2009년 공동 논문을 써서 의견을 모았어. 결론은 이거야 — <strong>숙련된 직관이 믿을 만하려면 조건이 둘 있다.</strong></p>
+<ol>
+<li>세상이 어느 정도 규칙적이어야 한다(패턴이 반복되는 환경).</li>
+<li>그 패턴에 대해 빠르고 명확한 피드백을 받아왔어야 한다.</li>
+</ol>
+<p>이 두 조건을 오래 채운 사람(소방대장, 체스 기사, 마취과 의사)의 직관은 실제로 믿을 만해 — 그 "느낌"은 수천 번의 반복이 패턴으로 압축돼 저장된 결과물이거든. 반대로 패턴이 불규칙하고 결과를 한참 뒤에야 알 수 있는 영역(장기 주가 전망, 정치 예측)에서 "감이 온다"는 건 대부분 착각이야. 그러니까 시스템1을 끄는 게 목표가 아니라, <strong>지금 이 판단이 시스템1만으로 충분한 자리인지, 반드시 시스템2를 불러야 하는 자리인지부터 구별하는 것</strong>이 핵심이야.</p>
+<h2>② 다른 장르의 창 — 나폴레옹의 쿠데유, 한눈에 전장을 읽는 눈</h2>
+<p>나폴레옹을 따르던 장교들이 두고두고 감탄한 것이 하나 있다. 지도도, 참모의 보고도 다 듣기 전에, 나폴레옹이 능선 위에서 전장을 한 번 훑어보고는 어디에 병력을 몰아야 할지, 적의 약점이 어디인지 곧바로 짚어냈다는 것이다. 프랑스어로 이 능력을 <span style="color:#ef6c00"><strong>쿠데유</strong></span>(coup d'œil), 직역하면 "한눈의 눈길(a stroke of the eye)"이라 불렀다.</p>
+<p>이 말을 군사 이론의 언어로 끌어올린 사람이 프로이센의 장군이자 이론가 <strong>카를 폰 클라우제비츠</strong>였다. 그는 나폴레옹 전쟁을 직접 겪은 세대로, 자신의 경험과 관찰을 담아 대작 『전쟁론』(Vom Kriege)을 썼다고 전해진다(이 책은 그의 사후 1832년에 부인이 유고를 정리해 출간했다). 클라우제비츠는 쿠데유를 단순한 "눈이 좋다"는 뜻이 아니라, <strong>전장의 안개(fog of war) 속에서 결정적 요소를 곧바로 알아채는 정신적 능력</strong>으로 정의했다. 그는 이것이 타고난 재능이 아니라, 수많은 실전 경험이 장군의 머릿속에 축적되어야 나오는 것이라고 봤다.</p>
+<p>흥미로운 지점은 이거다. 클라우제비츠 자신도, 쿠데유가 아무 장군에게나 통하는 게 아니라고 못 박았다. 전장은 매번 다른 지형, 다른 적, 다른 날씨로 바뀌는데도 그 밑에는 반복되는 전술적 패턴이 있다 — 측면이 열렸는지, 보급선이 끊겼는지, 병력이 지쳤는지. 이 패턴을 수십 번의 실전에서 몸으로 겪고, 그때마다 이겼는지 졌는지 뼈아픈 피드백을 받은 장군만이 한눈에 정확히 읽어낼 수 있었다는 것이다. 반대로 실전 경험 없이 병법서만 읽은 장교의 "직감"은 종종 재앙으로 끝났다고 전해진다.</p>
+<h2>③ 다리 놓기 — 개념과 이야기, 그리고 내 사업</h2>
+<p>클라우제비츠가 말한 쿠데유는 결국 카너먼-클라인이 백 년도 더 지나 학술 논문으로 증명한 것과 같은 이야기다. <span style="color:#ef6c00"><strong>나폴레옹의 "한눈"은 육감이 아니라, 수십 번의 전장에서 규칙적인 패턴과 즉각적인 승패 피드백을 반복해서 압축한 결과였다.</strong></span> 장군의 머릿속 직관과 소방대장의 직관, 체스 기사의 직관은 다 같은 재료로 만들어진다 — 반복 + 빠른 확인.</p>
+<p><strong>이어달리기</strong>: Day 10의 네트워크효과는 사람들 사이의 <strong>구조</strong>를 봤어 — 연결이 늘수록 가치가 커지는 판. 오늘 시스템1/2는 그 구조 안에서 실제로 판단을 내리는 <strong>한 사람의 머리 속</strong>을 들여다본 거야. 1기는 바깥의 판을 봤고, 2기는 그 판 위에서 뛰는 사람의 마음을 본다.</p>
+<p>에이폼 얘기로 넘어가면, 차드의 "발주 감"도 똑같이 갈라 봐야 한다. 여름 시즌 물총·분수완구처럼 <strong>매년 반복되고, 판매 데이터가 빠르게(하루~며칠 안에) 확인되는 상품</strong>은 차드의 직관이 진짜 쿠데유다 — 수년치 시즌을 겪으며 압축된 판단이니까 믿어도 된다. 반면 <strong>한 번도 안 팔아본 신상품</strong>, 혹은 <strong>광고 반응이 몇 주는 지나야 드러나는 결정</strong>은 조건이 안 채워진 영역이다 — 여기서 "느낌이 좋다"는 그냥 첫 번째 답에 시스템2 검토 없이 도장을 찍은 착각일 수 있다. 감이 좋은 영역과 감을 의심해야 할 영역을 구별하는 것, 그게 오늘의 렌즈다.</p>
+<h2>④ 오늘의 안목 훈련 — M11 직관과 숙고</h2>
+<p>이 렌즈는 판단이 떠올랐을 때 <strong>"이건 시스템1의 답인가, 시스템2가 검토한 답인가"</strong>부터 묻는다. 그다음 카너먼-클라인의 두 조건을 대본다 — ① 이 영역은 패턴이 규칙적인가 ② 내가 이 패턴에 대해 빠르고 정확한 피드백을 여러 번 받아봤는가. 둘 다 "그렇다"면 직관을 믿어도 좋다. 하나라도 "아니다"면, 그 직관은 검증되지 않은 첫 느낌일 뿐이니 반드시 시스템2(숫자, 체크리스트, 다른 사람 의견)를 불러 세워야 한다.</p>
+<p>연습: 차드가 최근 내린 발주 또는 광고 예산 결정 하나를 떠올려보자.</p>
+<div class="field"><div class="field-label">그 결정은 몇 번이나 반복해본 패턴이었나(같은 시즌·같은 카테고리로 몇 번째인가)?</div><textarea class="field-input" data-key="day11_s4_q1" rows="2"></textarea><span class="save-status" data-for="day11_s4_q1"></span></div>
+<div class="field"><div class="field-label">그 결정의 결과를 확인하기까지 얼마나 걸렸었나(하루, 일주일, 한 시즌 전체)?</div><textarea class="field-input" data-key="day11_s4_q2" rows="2"></textarea><span class="save-status" data-for="day11_s4_q2"></span></div>
+<div class="field"><div class="field-label">위 두 답을 보고, 그 판단은 &quot;믿을 만한 쿠데유&quot;였나 &quot;검증 안 된 첫 느낌&quot;이었나?</div><textarea class="field-input" data-key="day11_s4_q3" rows="2"></textarea><span class="save-status" data-for="day11_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 2개</h2>
+<div class="qa-block"><div class="qa-question">1. 카너먼과 클라인은 정반대 입장에서 출발해 결국 하나의 결론(조건부 신뢰)으로 합의했다. 두 사람이 원래 서로 틀렸다고 여겼던 부분은 각각 무엇이었을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day11_s5_a1" rows="2"></textarea><span class="save-status" data-for="day11_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 클라우제비츠가 &quot;쿠데유는 타고난 재능이 아니라 축적된 경험&quot;이라고 본 게 맞다면, 경험이 전혀 없는 신입도 훈련만으로 그 눈을 가질 수 있다는 뜻일까, 아니면 실전만이 줄 수 있는 무언가가 따로 있다는 뜻일까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day11_s5_a2" rows="2"></textarea><span class="save-status" data-for="day11_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 지금 에이폼에서 &quot;감으로&quot; 굴러가는 결정 하나를 골라, 그게 반복 패턴 + 빠른 피드백 조건을 채우는지 오늘 안에 체크해본다면 무엇을 고르겠나?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day11_s5_decision" rows="2"></textarea><span class="save-status" data-for="day11_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day10/">← Day 10</a>
+  <a href="../day12/">Day 12 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 60 · 환율 리스크</title>
+<meta name="description" content="같은 물건을 같은 단가에 사 와도, 계약서에 도장 찍은 날과 대금을 치르는 날 사이 환율이 움직이면 원가는 저절로 바뀐다 — 그 사이를 통제할 방법은 없고, 대비할 방법만 있다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 60 · 환율 리스크</h1>
+  <div class="meta">G6 (경제사) · M17 (의사결정 체크리스트, 실전)</div>
+</div>
+
+<div class="oneliner">같은 물건을 같은 단가에 사 와도, 계약서에 도장 찍은 날과 대금을 치르는 날 사이 환율이 움직이면 원가는 저절로 바뀐다 — 그 사이를 통제할 방법은 없고, 대비할 방법만 있다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day60_frontmatter_date">
+  <span class="save-status" data-for="day60_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: FX-risk-환율리스크">FX-risk-환율리스크</span></h2>
+<p>수입 원가는 원/달러(또는 원/위안)에 그대로 묶여 있다. 계약서에 적힌 단가는 외화 기준으로 고정돼 있지만, 그 단가를 원화로 환산하는 순간 환율이라는 두 번째 변수가 끼어든다. 1달러=1,300원일 때 세워둔 원가 계획이, 실제 결제 시점에 1,380원이 되면 물건도 단가도 그대로인데 원화 원가만 6% 넘게 뛴다. 마진은 원가와 판매가의 차이에서 나오는데, 원가의 절반(외화 결제분)이 통제 밖에서 흔들리는 셈이다.</p>
+<p>이 위험이 특히 성가신 이유는 <span style="color:#ef6c00"><strong>시차</strong></span> 때문이다. 발주 → 선적 → 통관 → 입고 → 결제까지, 수입 소싱은 보통 짧게는 몇 주, 길게는 몇 달이 걸린다. 그 사이 환율은 하루 단위로 오르내리는 외부 변수라, 발주 당일엔 결제일 환율을 아무도 확정할 수 없다. 그래서 환율은 "예측"이 아니라 "대비"의 대상이다 — 정확히 맞히려는 시도는 헛수고에 가깝고, 흔들려도 계획이 무너지지 않게 미리 여유를 잡아두는 쪽이 실전적이다.</p>
+<p>대비의 대표 수단이 <span style="color:#ef6c00"><strong>환헤지(forward, 선물환)</strong></span>다. 지금 시점에 "몇 달 뒤 이 환율로 거래하겠다"고 은행과 미리 약정해 미래 환율을 고정하는 방식이다. 실제 환율이 오르든 내리든 약정한 환율로 결제하니 원가가 안정된다. 대신 환율이 유리하게 움직여도 그 이득은 포기하는 구조라, 이건 이익을 늘리는 도구가 아니라 변동성을 없애는 보험에 가깝다. 이 실행 자체는 은행 거래·자금 계획이 얽힌 대표·전문 영역이니 여기선 개념만 잡는다 — 사업 운영자에게 필요한 건 "우리 원가에 이 위험이 실재한다"는 감각과, 대량 발주 타이밍을 환율 흐름과 겹쳐 볼 줄 아는 눈이다. 매출에서 원가만 뺀 첫 이익(<span class="wikiterm" title="옵시디언 원노트: Gross-매출총이익">Gross</span>)이 환율 하나로 흔들릴 수 있다는 걸 알면, 원가를 대표 혼자만의 숫자로 여기지 않게 된다.</p>
+<h2>② 다른 장르의 창 — 벤치가 부서진 자리에서 태어난 은행</h2>
+<p>먼 길을 금화 자루를 이고 가는 건 예나 지금이나 위험한 일이다. 중세 이탈리아의 상인과 환전상들은 이 문제를 증서 하나로 풀었다고 전해진다 — 한 도시에서 돈을 맡기고, 다른 도시·다른 통화로 지급을 약속받는 <span style="color:#ef6c00"><strong>환어음(bill of exchange)</strong></span>이다. 금화를 직접 옮기는 대신 종이 한 장이 대신 여행했고, 그 종이를 현금으로 바꿔주는 사람이 환전상이었다.</p>
+<p>이 환전상들은 광장에 벤치(이탈리아어 banco)를 놓고 앉아 환전과 대출을 취급했다고 한다. 여기서 <span style="color:#ef6c00"><strong>은행(bank)</strong></span>이라는 말이 나왔다는 어원 설명이 널리 퍼져 있다. 더 나아가, 환전상이 약속을 못 지키면 사람들이 그 벤치를 부숴버렸고(이탈리아어 banca rotta, '부서진 벤치'), 여기서 <span style="color:#ef6c00"><strong>파산(bankrupt)</strong></span>이라는 말이 왔다는 이야기도 함께 전해진다 — 다만 이 어원 계보는 여러 자료에서 되풀이되지만 확정된 정설이라기보다 널리 통용되는 유래담에 가까우니, "~라고 전해진다" 정도로 받아들이는 게 안전하다.</p>
+<p>시대를 건너뛰면 환율의 성격 자체가 바뀌는 순간들이 있다. 근대엔 각국 통화가 금 보유량에 값을 고정하는 <span style="color:#ef6c00"><strong>금본위제</strong></span>였고, 2차대전 이후엔 브레튼우즈 체제(1944)가 달러를 금에, 다른 통화를 달러에 고정했다. 그러다 1971년 닉슨 쇼크로 달러의 금 태환이 정지되면서 주요국 환율은 시장에서 매일 움직이는 <span style="color:#ef6c00"><strong>변동환율제</strong></span>로 넘어갔다고 알려져 있다. 이때부터 환율은 "가끔 바뀌는 숫자"가 아니라 "매일 흔들리는 숫자"가 됐고, 오늘날 모든 수입업자가 마주하는 환리스크도 이 전환 이후에 상시화된 것이다.</p>
+<h2>③ 다리 놓기 — 원가는 바다 건너에서 정해진다</h2>
+<p>환어음이 풀어낸 문제는 "돈을 어떻게 안전하게 옮기느냐"였지만, 오늘날 수입 소싱이 마주한 문제는 "그 돈의 값어치가 옮기는 동안 얼마나 변하느냐"다. 에이폼도 성수기 대비 대량 발주를 넣을 때 이 문제를 그대로 안는다. 발주 시점에 세워둔 원가·마진 계획이, 결제 시점 환율이 급등하면 통째로 흔들린다 — 물량이 클수록 흔들리는 절대 금액도 커진다.</p>
+<p>여기서 참여할 부분은 실행이 아니라 <span style="color:#ef6c00"><strong>타이밍 판단</strong></span>이다. 환헤지 계약 자체는 대표·전문 영역이지만, "지금이 환율이 유리한 구간인지, 대량 발주를 서두를지 미룰지"를 함께 볼 눈은 운영자에게도 필요하다. 위임한 지식이라도 언어를 알아야 대등하게 논의할 수 있다는 게 이 트랙(수입의 언어)의 목적이기도 하다.</p>
+<p><strong>이어달리기</strong>: Day 59의 관세가 세율표에 박혀 매번 정해진 값을 내는 "정해진 통행료"였다면, 환율은 계약과 결제 사이에서 매일 값이 바뀌는 "흔들리는 통행료"다. 둘 다 원가에 얹히는 외부 비용이지만, 하나는 예측 가능하고 하나는 대비만 가능하다는 점에서 다루는 방식이 갈린다.</p>
+<h2>④ 오늘의 안목 훈련 — M17 의사결정 체크리스트 (실전)</h2>
+<p>M17 렌즈는 결정을 내리기 전에 진짜 결정할 것이 뭔지부터 명확히 하고, 선택지·장단점·되돌림 가능성·최대 리스크·작은 실험·감정적으로 끌리는 선택과 회피 중인 선택까지 훑은 뒤, 마지막에 "결정하지 않음으로써 생기는 비용"까지 짚으라고 말한다. 환율처럼 통제 불가능한 변수 앞에서는 "맞히려는 결정"이 아니라 "흔들려도 버티는 결정"을 세우는 게 이 렌즈의 쓸모다.</p>
+<p>연습: "환율이 더 오르기 전에, 계획보다 더 서둘러서 대량 발주를 넣을까?"를 M17로 점검해보자.</p>
+<div class="field"><div class="field-label">진짜 결정할 것은 무엇인가 (발주량인가, 발주 시점인가, 아니면 결제 방식·헤지 여부인가)?</div><textarea class="field-input" data-key="day60_s4_q1" rows="2"></textarea><span class="save-status" data-for="day60_s4_q1"></span></div>
+<div class="field"><div class="field-label">이 결정을 되돌릴 수 있나 (발주를 넣고 나면 취소·축소가 가능한가, 아니면 되돌릴 수 없는 확정인가)?</div><textarea class="field-input" data-key="day60_s4_q2" rows="2"></textarea><span class="save-status" data-for="day60_s4_q2"></span></div>
+<div class="field"><div class="field-label">최대 리스크는 무엇인가 (환율이 예상과 반대로 움직였을 때 현금이 묶이는 정도는 어디까지인가)?</div><textarea class="field-input" data-key="day60_s4_q3" rows="2"></textarea><span class="save-status" data-for="day60_s4_q3"></span></div>
+<div class="field"><div class="field-label">결정하지 않고 미루는 것 자체의 비용은 무엇인가 (더 기다리면 환율이 더 오를 수도, 안정될 수도 있다는 불확실성을 안고 가는 대가)?</div><textarea class="field-input" data-key="day60_s4_q4" rows="2"></textarea><span class="save-status" data-for="day60_s4_q4"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 환어음에서 은행이, 은행에서 파산이 나왔다는 이야기가 사실이든 아니든, 왜 이런 이야기는 이렇게 오래 살아남아 반복될까 — 어원 자체의 힘일까, 이야기가 주는 설득력 때문일까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day60_s5_a1" rows="2"></textarea><span class="save-status" data-for="day60_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 금본위제·브레튼우즈·변동환율로 이어진 흐름은 &quot;환율을 고정할 것인가, 시장에 맡길 것인가&quot;라는 오래된 줄다리기다. 지금의 변동환율제가 수입업자에게 유리한 점과 불리한 점은 각각 무엇일까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day60_s5_a2" rows="2"></textarea><span class="save-status" data-for="day60_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 다음 발주 계획을 세울 때, 환율이 원가에 미치는 영향을 계산에 한 번 넣어볼지 — 넣는다면 어떤 방식으로(예: 환율 변동 시나리오 한 줄 추가) 넣어볼지 정해보자.</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day60_s5_decision" rows="2"></textarea><span class="save-status" data-for="day60_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day59/">← Day 59</a>
+  <a href="../day61/">Day 61 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

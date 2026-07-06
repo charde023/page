@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 55 · 단위경제학</title>
+<meta name="description" content="회사 전체 매출은 거짓말을 안 해도 사람을 속일 수 있다 — 진실은 언제나 &quot;한 개&quot;에 있다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 55 · 단위경제학</h1>
+  <div class="meta">G6 (경제사) · M5 (구별력)</div>
+</div>
+
+<div class="oneliner">회사 전체 매출은 거짓말을 안 해도 사람을 속일 수 있다 — 진실은 언제나 &quot;한 개&quot;에 있다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day55_frontmatter_date">
+  <span class="save-status" data-for="day55_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Unit-economics-단위경제학">Unit-economics-단위경제학</span></h2>
+<p><span style="color:#ef6c00"><strong>Unit economics</strong></span>, 단위경제학이라는 이름부터 뜯어보자. unit은 라틴어 <strong>unus</strong>('하나')에서 왔고, economics는 그리스어 <strong>오이코노미아(oikonomia)</strong> — oikos(집)+nomos(관리법), 즉 "집안 살림 관리술"이다. 두 단어를 합치면 "하나짜리 살림살이" — 회사 전체가 아니라 <strong>거래 하나, 상품 하나를 놓고 하는 살림 계산</strong>이라는 뜻이 그대로 담겨 있다.</p>
+<p>왜 굳이 "하나"로 좁혀서 보는가. <span class="wikiterm" title="옵시디언 원노트: Contribution-Margin-기여이익">기여이익</span> 노트에서 이미 본 것처럼, 판매가에서 원가·수수료·물류비·광고비·반품비를 다 빼면 상품마다 진짜 남는 돈이 다르다. 단위경제학은 이 계산을 <strong>의사결정의 기본 단위</strong>로 삼자는 관점이다. 회사 전체 손익(P&amp;L)은 고정비와 변동비, 이 상품 저 상품이 뒤섞여 있어서 "이번 달 총이익이 늘었다"는 말만 봐서는 어디서 벌고 어디서 새는지 안 보인다. 확대경으로 전체를 보는 대신, 세포 하나를 현미경으로 들여다보는 셈이다.</p>
+<p>핵심 명제는 하나다. <span style="color:#ef6c00"><strong>"규모로 단위 손실을 메울 수 없다."</strong></span> 한 개 팔 때 1,000원 밑지는 상품이 있다면, 그걸 하루 10개 팔든 1,000개 팔든 결과는 "더 크게 밑진다"는 것만 달라진다. 많이 판다고 마이너스가 플러스로 바뀌지 않는다 — 오히려 그 반대다. 이게 매출·GMV(총거래액)의 착시와 정반대에 서는 지점이다. 매출은 늘수록 좋아 보이지만, 단위경제가 마이너스인 채로 매출만 커지는 건 "더 크게, 더 빨리 밑지는 길"을 걷는 것과 같다. "잘 팔리는 상품"과 "남는 상품"은 다른 말이라는 게 이 개념의 정수다.</p>
+<h2>② 다른 장르의 창 — 봉마르셰, 정찰제라는 도박</h2>
+<p>19세기 중반 파리, 아리스티드 부시코라는 사람이 작은 포목점을 인수해 <strong>봉마르셰(Le Bon Marché, "좋은 거래"라는 뜻)</strong>라는 가게로 키워냈다고 전해진다. 그가 세운 원칙은 당시 상업 관행을 완전히 뒤집는 것이었다 — 흥정 없는 <strong>정찰제</strong>, 손님이 물건에 손을 대고 마음껏 구경할 자유, 그리고 마음에 안 들면 <strong>반품을 받아주는 것</strong>. 옛 방식은 한 손님에게 최대한 비싸게 흥정해서 큰 마진을 남기는 것이었다면, 부시코는 반대로 갔다 — 낱개 마진을 낮추는 대신 손님이 많이 오고, 자주 오고, 부담 없이 사게 만들어 <strong>회전으로 버는</strong> 구조를 세웠다고 평가된다. 이게 오늘날 백화점이라는 업태의 원형으로 꼽힌다.</p>
+<p>그런데 이 모델에는 눈에 안 보이는 전제가 하나 숨어 있다. <strong>낮은 마진은 반드시 빠른 회전이 있어야만 성립한다</strong>는 것. 물건 하나에서 남기는 돈이 적은데 그 물건이 안 팔리고 창고에 오래 머물면, "박리다매"는 다매(多賣) 없이 박리(薄利)만 남는다 — 낮은 마진에 낮은 회전이 겹치면 그냥 "적게 남고 오래 묶인다"는 이중의 손해가 된다. 부시코의 성공담은 회전이 마진의 부족분을 메워준 특수한 균형이었지, "무조건 싸게 많이 팔면 남는다"는 만능 공식이 아니었던 셈이다. 겉으로는 같은 "박리다매"라는 말인데, 회전이 받쳐주느냐 아니냐에 따라 완전히 다른 결과로 갈린다 — 화려한 성공 서사 뒤에 있는 조건을 놓치면, 이야기의 절반만 베끼는 것이 된다.</p>
+<h2>③ 다리 놓기 — 낱개 마진 × 회전, 그리고 에이폼의 착시</h2>
+<p>부시코의 교훈을 한 줄로 요약하면 이렇다. <span style="color:#ef6c00"><strong>낱개 마진과 회전은 곱셈 관계다.</strong></span> 낱개가 적어도 회전이 크면 버티고, 낱개가 마이너스면 회전이 아무리 커도 밑진다. 에이폼도 똑같은 곱셈식 위에 서 있다.</p>
+<p>쿠팡에서 "잘 팔린다"는 말은 회전이 좋다는 뜻이다. 하지만 판매가에서 쿠팡 판매수수료, 로켓 물류비, 주문당 광고비, 반품 비용까지 다 빼고 나면 그 "잘 팔리는" 상품이 실제로는 한 개당 몇백 원 밑지고 있을 수 있다 — 이럴 때 회전(잘 팔림)은 손실을 가리는 연막이 된다. 매출 순위표만 보면 이 상품이 "효자"로 보이지만, 단위경제학의 렌즈로 한 겹 벗겨보면 "많이 팔릴수록 더 크게 새는 구멍"일 수 있다. 반대로 회전은 느려도 한 개당 남기는 돈이 확실한 상품은, 매출 순위는 낮아도 실제로는 회사를 지탱하는 기둥일 수 있다. "잘 팔리는 상품"과 "남는 상품"이 다르다는 게 여기서 실감 나게 드러난다.</p>
+<p><strong>이어달리기</strong>: 어제 <span class="wikiterm" title="옵시디언 원노트: Cash-conversion-cycle-현금전환주기">현금전환주기(CCC)</span>가 "현금이 한 바퀴 돌아 다시 내 손에 오기까지 걸리는 속도"를 봤다면, 오늘 단위경제학은 "그 한 바퀴가 돌 때 실제로 남는 게 있는가"를 본다. 속도(CCC)와 진실(단위경제)은 서로 다른 질문이다 — 아무리 빨리 돌아도 돌 때마다 밑지면 회전은 오히려 손실을 가속시킬 뿐이다.</p>
+<h2>④ 오늘의 안목 훈련 — M5 구별력</h2>
+<p>M5 렌즈는 <span style="color:#ef6c00"><strong>평범한 것과 날카로운 것을 갈라서 말하라</strong></span>고 요구한다. 좋아 보이지만 사실은 약한 것, 반대로 작아 보이지만 진짜 힘을 가진 것을 구별하는 훈련이다. 흔한 말과 실제 통찰은 겉모습이 비슷해서 의도적으로 나눠보지 않으면 섞여버린다.</p>
+<p>연습: 내 대표 SKU 하나를 골라, 판매가에서 항목별로 하나씩 빼보자. 그리고 그 결과를 놓고 "잘 팔리지만 안 남는 것"과 "안 팔리지만 남는 것"을 구별해보는 빈칸이다.</p>
+<div class="field"><div class="field-label">판매가 − 원가 − 쿠팡수수료 − 물류비 − 광고비 − 반품비 = 단위 손익. 이 SKU의 단위 손익은 얼마인가?</div><textarea class="field-input" data-key="day55_s4_q1" rows="2"></textarea><span class="save-status" data-for="day55_s4_q1"></span></div>
+<div class="field"><div class="field-label">이 상품의 매출 순위(판매량 기준)는 전체 SKU 중 어느 정도 위치인가?</div><textarea class="field-input" data-key="day55_s4_q2" rows="2"></textarea><span class="save-status" data-for="day55_s4_q2"></span></div>
+<div class="field"><div class="field-label">두 답을 나란히 놓았을 때, 이 상품은 &quot;잘 팔리지만 안 남는 것&quot;과 &quot;안 팔리지만 남는 것&quot; 중 어느 쪽에 더 가까운가 — 그리고 그 이유는?</div><textarea class="field-input" data-key="day55_s4_q3" rows="2"></textarea><span class="save-status" data-for="day55_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 2개</h2>
+<div class="qa-block"><div class="qa-question">1. 봉마르셰의 정찰제·반품 허용은 손님 신뢰를 얻는 대신 낱개 마진을 낮추는 선택이었다. 에이폼에서 &quot;손님 신뢰를 위해 낱개 마진을 일부러 낮추는&quot; 선택과, &quot;단위경제가 안 맞아서 어쩔 수 없이 낮은&quot; 선택을 어떻게 구별할 수 있을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day55_s5_a1" rows="2"></textarea><span class="save-status" data-for="day55_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 오늘 내릴 작은 결정 하나: 지금 팔고 있는 상품 중, 단위 손익이 마이너스이거나 애매한데도 &quot;잘 팔린다&quot;는 이유만으로 계속 두고 있는 상품이 있는지 하나 점검해보자. 있다면 그 상품을 어떻게 할지 오늘 하나만 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day55_s5_decision" rows="2"></textarea><span class="save-status" data-for="day55_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day54/">← Day 54</a>
+  <a href="../day56/">Day 56 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

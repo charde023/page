@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 18 · 포지셔닝 — 인식의 사다리</title>
+<meta name="description" content="싸움터는 제품이 아니라 고객의 머릿속이고, 그 머릿속 사다리엔 칸이 몇 개 없다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 18 · 포지셔닝 — 인식의 사다리</h1>
+  <div class="meta">G4 (인지과학) · M17 (의사결정 체크리스트)</div>
+</div>
+
+<div class="oneliner">싸움터는 제품이 아니라 고객의 머릿속이고, 그 머릿속 사다리엔 칸이 몇 개 없다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day18_frontmatter_date">
+  <span class="save-status" data-for="day18_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — 포지셔닝(Positioning)</h2>
+<p>1972년 알 리스(Al Ries)와 잭 트라우트(Jack Trout)가 광고 전문지에 연재한 글에서 시작해 1981년 책 『Positioning: The Battle for Your Mind』로 묶인 개념이야. 제목부터가 선언이다 — <span style="color:#ef6c00"><strong>전쟁터는 시장이 아니라 '마음(mind)'</strong></span>이라는 것.</p>
+<p>핵심 주장은 단순하다. 좋은 제품을 만드는 것과, 고객 머릿속에 자리를 잡는 것은 <strong>완전히 다른 일</strong>이다. 제품은 공장에서 하는 일이지만 포지셔닝은 "잠재고객의 마음속에서 하는 일"이라고 리스와 트라우트는 못박는다. 이미 머릿속엔 브랜드가 가득 차 있어서, 새 정보를 받아들이는 게 아니라 <strong>기존에 아는 것에 새 정보를 끼워 맞추는</strong> 쪽으로 작동한다는 게 이 책의 출발점이야.</p>
+<p>여기서 나오는 그림이 <span style="color:#ef6c00"><strong>"인식의 사다리(ladder in the mind)"</strong></span>다. 사람은 한 카테고리에 대해 마음속에 계단식 순위표를 갖고 있다 — 렌터카 하면 허츠가 1칸, 에이비스가 2칸, 그 밑은 거의 안 보인다는 식. 그런데 이 사다리는 <strong>칸 수가 극히 적다</strong>(리스·트라우트는 보통 서너 개 정도로 본다). 그래서 나온 결론이 유명한 원노트 <span class="wikiterm" title="옵시디언 원노트: 포지셔닝-맵-Positioning-Map">포지셔닝-맵-Positioning-Map</span>과 이어지는 두 가지 전략이야.</p>
+<p>전략은 두 가지다. 첫째, <strong>이미 있는 사다리의 1등이 못 될 것 같으면, 아예 새 사다리를 만들어라.</strong> 미국 렌터카 3위였던 내셔널(National)이 허츠·에이비스와 같은 사다리에서 싸우는 대신 스스로를 다른 축으로 세우려 했던 사례가 대표적으로 소개된다. 둘째, 1등이 확고하면 정면 부정 말고 <strong>오히려 인정하며 반대편에 서라.</strong> "우리는 2등, 그래서 더 열심히 합니다"라는 에이비스 캠페인이 교과서 예시로 인용된다.</p>
+<p>여기서 중요한 건 포지셔닝이 "광고 카피"가 아니라는 점이야. 카피는 결과물이고, 포지셔닝은 그 이전의 <strong>전략적 선택</strong> — 어느 사다리, 몇 번째 칸을 노릴지 정하는 일이다. <span class="wikiterm" title="옵시디언 원노트: Share-of-Shelf-진열점유율">Share-of-Shelf-진열점유율</span>이 물리적 진열대 싸움이었다면, 포지셔닝은 그 이전, <strong>머릿속 진열대</strong> 싸움이다.</p>
+<h2>② 다른 장르의 창 — 마법의 수 7, 그리고 왜 우리는 한 번에 몇 개밖에 못 들고 있나</h2>
+<p>1956년, 프린스턴대 심리학자 조지 밀러(George A. Miller)는 「The Magical Number Seven, Plus or Minus Two」라는 논문을 발표한다. 제목부터 이미 답을 담고 있다 — 사람이 <strong>작업기억(working memory)</strong>에 한 번에 붙들 수 있는 항목의 개수는 대략 7개, 위아래로 2개쯤 오차가 있다는 것.</p>
+<p>밀러는 여러 심리 실험 결과를 모아 이 패턴을 발견했다고 전해진다. 순서대로 숫자를 불러주고 그대로 따라 외우게 하면, 대부분 5~9개 사이에서 한계가 온다. 신기한 건 숫자든 글자든 단어든 종류를 가리지 않고 비슷하게 나타난다는 점 — 마치 머릿속에 "칸이 정해진 서랍"이 있는 것처럼.</p>
+<p>당시 미국 전화번호가 국번+가입자번호를 7자리로 설계했다는 사실이 이 논문과 함께 자주 언급된다(설계자들이 이 연구를 실제로 참고했는지는 논쟁의 여지가 있지만, "7자리가 외우기 좋은 상한선"이라는 이야기로 널리 회자돼왔다). 밀러 자신은 이 숫자에 신비한 의미를 부여하려는 세간의 해석을 오히려 경계했다고 알려져 있다.</p>
+<p>밀러가 제시한 탈출구가 <span style="color:#ef6c00"><strong>청킹(chunking, 덩어리 짓기)</strong></span>이다. "1-9-4-5" 넉 자를 따로 외우면 4칸을 쓰지만, "1945년"으로 묶으면 1칸만 쓴다. 서랍 개수는 고정이지만, <strong>한 칸에 얼마나 큰 덩어리를 눌러 담을지는 조직하기 나름</strong>이라는 것.</p>
+<h2>③ 다리 놓기 — 사다리와 서랍, 그리고 에이폼의 한 단어</h2>
+<p>밀러의 서랍(작업기억)과 리스·트라우트의 사다리(카테고리 인식)는 사실 같은 병목을 다른 각도에서 본 것이다. 사람 머릿속엔 카테고리당 자리가 몇 칸 안 남아있는 이유가, 애초에 뭐든 한 번에 붙들 수 있는 슬롯 자체가 5~9개뿐이기 때문이다. 그러니 브랜드 입장에서 선택은 둘뿐이다. <strong>좁은 서랍 속 이미 있는 칸을 뺏거나(1등 부정 전략), 아예 새 서랍(새 카테고리)을 만들거나.</strong></p>
+<p>에이폼에 대입하면 이건 곧 쿠팡 검색결과에서 내 상품이 차지하려는 <strong>"한 단어"</strong>의 문제다. 여름 물놀이 상품을 생각해보자 — 고객 머릿속엔 이미 "물총"이라는 서랍이 있고, 그 안엔 몇 개 브랜드만 칸을 차지하고 있다. 여기서 싸우면 좁은 사다리의 3~4번째 칸을 두고 다투는 셈이다. 반면 상품을 "분수매트"나 "미니 워터파크"로 카테고리 자체를 다르게 명명하면, 그건 아직 칸이 안 채워진 새 서랍을 여는 일이다. 실제로 "분수매트 vs 물놀이터 vs 워터파크"라는 이름 선택 하나가 곧 <span style="color:#ef6c00"><strong>포지셔닝 전략 그 자체</strong></span>다 — 상세페이지 문구를 다듬기 전에, "이 상품은 어느 사다리에 오를 것인가"를 먼저 정해야 한다는 뜻.</p>
+<p><strong>이어달리기</strong>: 1주차(2기-A)가 "사는 마음"이었다면 — 손실회피·앵커링·희소성처럼 고객이 왜 사고 싶어지는지의 심리였다면, 오늘부터 2기-B는 그 마음의 <strong>어느 칸에 내 상품을 놓을지</strong>, 파는 쪽의 기술로 넘어간다.</p>
+<h2>④ 오늘의 안목 훈련 — M17 의사결정 체크리스트</h2>
+<p>M17 렌즈는 결정 앞에서 이렇게 묻는다 — <strong>진짜 결정할 것, 선택지별 장단점, 단기·장기 유불리, 되돌릴 수 있는지, 최대 리스크와 그걸 줄일 작은 실험, 핵심 판단 기준, 감정적으로 끌리는 선택과 회피 중인 선택 구별, 제3자·1년 뒤의 나라면, 다음 행동</strong>. 그리고 "결정하지 않음으로써 생기는 비용"까지 짚으라고 한다 — 카테고리 이름을 안 정하고 미루는 것도 이미 결정이다.</p>
+<p>연습: 여름 시즌 물놀이 상품(예: 분수매트류) 하나를 떠올려 M17 항목 몇 개만 채워보자.</p>
+<div class="field"><div class="field-label">진짜 결정할 것: 이 상품을 &quot;물총&quot; 사다리에 올릴지, &quot;분수매트/미니워터파크&quot; 새 사다리를 만들지.</div><textarea class="field-input" data-key="day18_s4_q1" rows="2"></textarea><span class="save-status" data-for="day18_s4_q1"></span></div>
+<div class="field"><div class="field-label">각 선택의 단기 유불리 (기존 사다리는 검색량은 크지만 경쟁 칸이 이미 찼고, 새 사다리는 검색량은 작지만 1등 칸이 비어있다):</div><textarea class="field-input" data-key="day18_s4_q2" rows="2"></textarea><span class="save-status" data-for="day18_s4_q2"></span></div>
+<div class="field"><div class="field-label">되돌릴 수 있는가 (상품명·카테고리는 나중에 바꿀 수 있나, 바꾸면 무엇을 잃나 — 누적 리뷰·검색 이력이 새 이름으로 안 옮겨갈 수 있음에 유의):</div><textarea class="field-input" data-key="day18_s4_q3" rows="2"></textarea><span class="save-status" data-for="day18_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 에이비스는 &quot;우리는 2등&quot;이라고 스스로 밝히는 캠페인으로 오히려 주목을 받았다고 전해진다. 이 전략이 통하려면 어떤 전제가 필요할까 — 아무 2등이나 이렇게 말해도 통할까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day18_s5_a1" rows="2"></textarea><span class="save-status" data-for="day18_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 밀러의 &quot;7±2&quot;는 이후 심리학에서 그 숫자 자체가 실제보다 더 신화화됐다는 비판도 받아왔다(작업기억 용량이 항목 종류·과제에 따라 3~4개에 가깝다는 후속 연구도 있다). 그럼에도 이 숫자가 지금까지 널리 회자되는 이유는 무엇일까 — 과학적 정확성과 별개로?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day18_s5_a2" rows="2"></textarea><span class="save-status" data-for="day18_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 지금 파는 상품 중 하나를 골라, 고객 머릿속 어느 &quot;사다리&quot;에 올라 있는지(혹은 올라 있지 못한지) 한 단어로 적어보자. 그 사다리에서 몇 번째 칸을 노릴지, 아니면 새 사다리를 열 것인지 오늘 하나만 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day18_s5_decision" rows="2"></textarea><span class="save-status" data-for="day18_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day17/">← Day 17</a>
+  <a href="../day19/">Day 19 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

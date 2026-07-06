@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 63 · 생존편향</title>
+<meta name="description" content="눈앞에 있는 데이터는 전부 &quot;살아남은&quot; 것들이고, 진짜 답은 사라져서 안 보이는 것들 속에 있을 때가 많다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 63 · 생존편향</h1>
+  <div class="meta">G2 (역사) · M2 (본질 파악, 실전)</div>
+</div>
+
+<div class="oneliner">눈앞에 있는 데이터는 전부 &quot;살아남은&quot; 것들이고, 진짜 답은 사라져서 안 보이는 것들 속에 있을 때가 많다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day63_frontmatter_date">
+  <span class="save-status" data-for="day63_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Survivorship-bias-생존편향">Survivorship-bias-생존편향</span></h2>
+<p><span style="color:#ef6c00"><strong>Survivorship bias</strong></span>, 생존편향. 단어 자체는 간단하다 — survive(살아남다)한 것들만 표본에 남아서 생기는 편향(bias). 그런데 이 간단한 정의가 생각보다 훨씬 넓은 곳에 숨어 있어.</p>
+<p>핵심은 이거다 — <strong>어떤 집단을 관찰할 때, 그 집단은 이미 "살아남았다"는 조건을 통과한 것들로만 구성돼 있다.</strong> 그래서 살아남은 것들 사이의 공통점을 발견하면, 그게 "성공의 비결"처럼 보인다. 하지만 그 공통점이 정말 성공의 원인인지 확인하려면, <strong>실패한 쪽도 같은 공통점을 갖고 있었는지</strong>를 봐야 한다. 예를 들어 "성공한 창업자는 다 대학을 중퇴했다"는 말 — 이건 중퇴하고 성공한 극소수만 세고, 중퇴하고 망한 압도적 다수는 애초에 뉴스에도 안 나오고 조사 대상에서도 빠진 거야. 분모(전체 시도자)를 모르는 채 분자(성공 사례)만 보고 있는 셈이다.</p>
+<p>이게 왜 잘 안 보이냐면, <strong>사라진 것들은 스스로 "나 여기 있었다"고 말을 못 하기 때문</strong>이야. 망한 가게는 간판을 내리고 조용히 사라진다. 실패한 펀드는 청산되면서 통계에서 빠진다. 인터뷰에 나오는 것도, 책을 쓰는 것도, 기록에 남는 것도 전부 살아남은 쪽이다. 그래서 우리가 접하는 "성공 사례"는 항상 실제보다 더 그럴듯하고, 더 재현 가능해 보인다 — 표본 자체가 이미 편향돼 있는데 그걸 모르고 결론만 보기 때문이다. 원 노트 <span class="wikiterm" title="옵시디언 원노트: Survivorship-bias-생존편향">Survivorship-bias-생존편향</span>에서 다루듯, 이건 데이터가 틀린 게 아니라 <strong>데이터를 모은 방식 자체가 걸러져 있다</strong>는 문제라서, 아무리 숫자를 정교하게 분석해도 못 고친다. 애초에 "안 보이는 쪽"을 세는 습관이 필요하다.</p>
+<h2>② 다른 장르의 창 — 왈드와 폭격기의 탄흔</h2>
+<p>2차대전 중, 미군은 유럽 상공으로 폭격 임무를 나갔다가 살아 돌아온 폭격기들을 조사했다. 기체 곳곳에 총알과 대공포 파편이 남긴 탄흔이 있었는데, 유독 날개와 동체 뒷부분에 탄흔이 몰려 있었다고 전해진다. 군 지휘부의 결론은 상식적이었다 — 탄흔이 많은 곳에 장갑을 덧대자. 총알이 자주 맞는 자리니까.</p>
+<p>이때 통계학자 <span style="color:#ef6c00"><strong>에이브러햄 왈드(Abraham Wald)</strong></span>가 제동을 걸었다고 알려져 있다. 그는 헝가리 출신 수학자로, 컬럼비아 대학의 통계연구그룹(SRG)에서 미군의 여러 통계 문제를 자문했다. 그의 논리는 이랬다 — 지금 조사하고 있는 비행기들은 <strong>전부 살아 돌아온 기체</strong>다. 그 말은, 날개와 동체에 탄흔을 맞고도 무사히 귀환했다는 뜻이다. 그렇다면 정작 위험한 부위는 어디일까? <strong>탄흔이 '거의 없는' 엔진과 조종석, 연료 계통</strong>이다. 왜 없냐면, 그곳을 맞은 비행기는 격추당해서 애초에 돌아오지 못했으니까 — 조사 대상 표본에 들어오지도 못한 것이다.</p>
+<p>이 통찰은 반직관적이지만 명료하다. 눈앞에 놓인 탄흔 지도는 "살아남은 것들의 흔적"일 뿐이고, 진짜 치명적인 약점은 그 지도에 아예 나타나지 않는다. 왈드의 조언대로 군은 엔진과 조종석 쪽 방어를 강화했다고 전해지며, 이 일화는 오늘날 생존편향을 설명할 때 가장 널리 인용되는 사례가 됐다(정확한 수치나 세부 경위는 출처마다 조금씩 다르게 전해지니, 핵심 논리로 받아들이는 게 안전하다).</p>
+<h2>③ 다리 놓기 — 돌아온 기체와 에이폼의 벤치마킹</h2>
+<p>왈드의 통찰을 한 문장으로 옮기면 이거다 — <strong>"돌아온 기체만 보고 판단하면 틀린다."</strong> 이걸 그대로 에이폼에 대입해보자.</p>
+<p>경쟁사 상세페이지를 벤치마킹할 때, 우리가 보는 건 항상 <strong>"지금 잘 팔리고 있는" 상페</strong>다. 그런데 그 상페 스타일로 만들었다가 조용히 묻힌 다른 수십 개는 우리 눈에 안 보인다. "이 레이아웃이 잘 먹히는구나"라고 결론 내리는 순간, 사실은 탄흔이 몰린 날개만 보고 장갑을 대는 것과 같은 실수를 할 수 있다. 같은 원리로 <strong>내 히트상품도 생존자 표본</strong>이다 — 비슷한 시기에 비슷한 전략으로 냈다가 안 팔려서 조용히 단종된 다른 상품들이 있었을 거고, 그 히트상품의 성공 요인이 정말 재현 가능한 것인지, 아니면 운 좋게 살아남은 것뿐인지는 실패한 것들과 비교해봐야 알 수 있다. 베스트셀러 순위나 성공 사례 몇 개만 보고 전략을 세우면, 그 성공 뒤에 안 보이는 실패 표본을 놓치는 셈이다.</p>
+<p><strong>이어달리기</strong>: 어제(Day 62)의 <span class="wikiterm" title="옵시디언 원노트: Confounder-교란변수">Confounder-교란변수</span>가 "결과에 숨어 있는 원인"을 찾는 훈련이었다면, 오늘의 생존편향은 "결과 자체에서 사라진 표본"을 찾는 훈련이다. 교란변수는 보이는 데이터 안에서 진짜 원인을 가려내는 문제고, 생존편향은 애초에 데이터에 들어오지도 못한 것들을 세는 문제 — 둘 다 "눈앞의 그럴듯한 설명을 의심하라"는 같은 뿌리에서 나온 두 가지 함정이다.</p>
+<h2>④ 오늘의 안목 훈련 — M2 본질 파악 (실전)</h2>
+<p>M2 렌즈는 표면 문제에서 멈추지 않고 <strong>표면 → 본질 → 그 문제를 만든 구조 → 진짜 의미</strong>의 순서로 파고드는 훈련이다. "탄흔이 많은 곳을 보강하자"는 표면적으로는 합리적이지만, 본질(무엇이 진짜 치명적인가)까지 가면 정반대 결론이 나온다 — 표면과 본질이 어긋날 수 있다는 걸 보여주는 가장 좋은 사례다.</p>
+<p>연습: 최근에 참고했던(또는 벤치마킹한) 성공 사례 하나를 떠올려보자 — 잘 팔린 경쟁 상품, 잘된 광고 캠페인, 존경하는 사업가의 성공담 등 무엇이든 좋다.</p>
+<div class="field"><div class="field-label">그 성공 사례는 정확히 무엇인가?</div><textarea class="field-input" data-key="day63_s4_q1" rows="2"></textarea><span class="save-status" data-for="day63_s4_q1"></span></div>
+<div class="field"><div class="field-label">표면적으로 내가 배우려 했던 &quot;성공 요인&quot;은 무엇이었나?</div><textarea class="field-input" data-key="day63_s4_q2" rows="2"></textarea><span class="save-status" data-for="day63_s4_q2"></span></div>
+<div class="field"><div class="field-label">같은 방식·시기·조건으로 시도했다가 &quot;안 보이는 곳으로 사라진&quot; 실패 사례는 무엇이 있을지 짐작해보자(탄흔이 없는 자리 — 없다고 확신하지 말고, 어디쯤 있을지 추정만 해봐도 된다).</div><textarea class="field-input" data-key="day63_s4_q3" rows="2"></textarea><span class="save-status" data-for="day63_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 2개 + 오늘의 결정</h2>
+<div class="qa-block"><div class="qa-question">1. 왈드는 눈에 보이는 데이터를 뒤집어 정반대로 해석했다. 지금 내 사업에서 &quot;다들 당연하다고 보는 데이터 해석&quot;을 하나 골라 왈드처럼 뒤집어본다면?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day63_s5_a1" rows="2"></textarea><span class="save-status" data-for="day63_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 성공 사례를 다룰 때 &quot;실패한 쪽은 얼마나 있었는가&quot;를 확인하기 어려운 이유는 뭘까 — 정보가 없어서일까, 아니면 굳이 찾으려 하지 않아서일까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day63_s5_a2" rows="2"></textarea><span class="save-status" data-for="day63_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 최근 &quot;성공 사례만 보고&quot; 내린 판단을 하나 떠올려, 그 판단의 근거가 된 표본에서 빠져 있었을 실패 사례를 감안하면 결론이 그대로 유지되는지 다시 점검해본다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day63_s5_decision" rows="2"></textarea><span class="save-status" data-for="day63_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day62/">← Day 62</a>
+  <a href="../day64/">Day 64 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

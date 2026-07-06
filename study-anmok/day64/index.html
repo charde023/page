@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 64 · 선택편향</title>
+<meta name="description" content="표본이 커도 뽑는 방식이 치우쳐 있으면 결과는 처음부터 틀려 있다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 64 · 선택편향</h1>
+  <div class="meta">G2 (역사) · M4 (맥락 판단)</div>
+</div>
+
+<div class="oneliner">표본이 커도 뽑는 방식이 치우쳐 있으면 결과는 처음부터 틀려 있다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day64_frontmatter_date">
+  <span class="save-status" data-for="day64_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Selection-bias-선택편향">Selection-bias-선택편향</span></h2>
+<p><span style="color:#ef6c00"><strong>Select</strong></span>라는 단어부터 뜯어보자. 라틴어 <strong>se-</strong>(따로, 분리) + <strong>legere</strong>(고르다, 모으다)에서 왔어. legere는 '읽다(read)'와도 뿌리가 같다 — 원래 "흩어진 것들 중에서 눈여겨 하나씩 골라 모으는" 행위를 가리켰다. 선택편향은 이 '고르는 손'이 무작위가 아니라 어떤 기준으로 미리 걸러져 있을 때 생기는 왜곡이야.</p>
+<p>핵심은 표본이 작아서가 아니라 <strong>"어떻게 뽑혔는가"</strong>라는 데 있다. 어제 <span class="wikiterm" title="옵시디언 원노트: Survivorship-bias-생존편향">생존편향</span>에서 본 게 딱 이 문제의 특수한 경우였어 — 실패해서 사라진 것들이 표본에서 통째로 빠지는 케이스. 오늘은 좀 더 넓은 얘기다. 살아남았느냐 죽었느냐를 떠나서, <strong>누가 그 표본에 들어오기로 '선택'됐는지</strong> 자체가 왜곡의 원인이 될 수 있다.</p>
+<p>가장 흔한 형태 둘이 있다. 하나는 <strong>자기선택편향(self-selection)</strong> — 응답 여부를 본인이 결정하는 경우다. 설문이든 리뷰든, 아주 만족했거나 아주 화난 사람만 시간을 들여 의견을 남긴다. 조용히 만족하고 넘어간 다수는 애초에 표본에 안 들어온다. 다른 하나는 <strong>무응답편향(non-response bias)</strong> — 설문을 보냈는데 회수율이 10%라면, 답한 10%가 응답 안 한 90%와 성향이 다를 가능성이 항상 있다. 안 답한 사람이 왜 안 답했는지는 데이터에 안 남는다. 이 두 형태 모두 <span class="wikiterm" title="옵시디언 원노트: VoC-고객의소리">VoC</span> 데이터가 태생적으로 안고 있는 함정이다.</p>
+<h2>② 다른 장르의 창 — 1936년, 230만 명이 틀렸던 날</h2>
+<p>1936년 미국 대선을 앞두고 당시 가장 권위 있던 잡지 『리터러리 다이제스트』가 대규모 여론조사를 했다. 우편 설문지를 1천만 장 넘게 뿌려 230만 명이 넘는 응답을 받았고, 결과는 공화당 후보 알프 랜던의 압도적 승리였다. 표본 크기만 보면 역사상 손꼽히는 대형 조사였다.</p>
+<p>실제 선거 결과는 정반대였다. 프랭클린 루스벨트가 압승했다. 잡지사는 이 오판으로 신뢰를 잃었고 얼마 못 가 폐간했다고 전해진다.</p>
+<p>무엇이 잘못됐던 걸까. 설문 대상 명단을 자동차 등록부, 전화번호부, 자사 잡지 구독자 명부에서 뽑았던 것이 화근이었다. 대공황 한복판이던 그 시절, 자동차와 전화와 잡지 구독을 감당할 수 있는 계층은 사회 전체에서 상당히 부유한 쪽에 쏠려 있었다. 즉 표본 자체가 "선거에서 공화당을 지지할 가능성이 상대적으로 높은 사람들"로 미리 걸러진 셈이었다. 230만이라는 숫자의 압도적 크기가 오히려 착시를 키웠다 — 사람들은 표본이 크면 당연히 정확하다고 믿었으니까.</p>
+<p>같은 해, 조지 갤럽이라는 젊은 여론조사가는 훨씬 적은 수천 명 규모의 표본으로 정반대 결과, 즉 루스벨트의 승리를 정확히 예측했다고 알려져 있다. 그가 한 일은 표본을 늘리는 게 아니라 <strong>사회 각 계층의 비율을 실제 인구 구성에 맞춰 대표성 있게 뽑는 것</strong>이었다. 이 사건 이후로 "표본은 크기보다 대표성"이라는 원칙이 여론조사·통계학의 기본 교훈으로 자리 잡았다고 전해진다.</p>
+<h2>③ 다리 놓기 — 누가 뽑혔는지가 답을 정한다</h2>
+<p>『리터러리 다이제스트』의 실수는 "많이 물어봤다"는 착각이었다. 실제로는 "특정 계층에게만 물어본 것"이었다. 에이폼의 리뷰·별점도 똑같은 구조다. 별점을 남기는 고객은 전체 구매자 중 자발적으로 시간을 들이기로 '선택'한 소수이고, 그 선택은 무작위가 아니라 <strong>감정이 극단으로 치우쳤을 때</strong> 일어난다. 매우 만족했거나 매우 화가 났거나. 조용히 제품을 잘 쓰고 넘어간 다수는 잡지 구독자 명단에 없던 그 시절의 노동자·농민처럼, 우리 데이터에도 안 잡힌다.</p>
+<p>그래서 리뷰 평균 별점만 보고 "고객 만족도는 이 정도"라고 결론 내리면, 『리터러리 다이제스트』가 230만 명 응답으로 낸 오답과 같은 함정에 빠지는 셈이다. <span class="wikiterm" title="옵시디언 원노트: VoC-고객의소리">VoC</span>를 진짜 대표성 있게 보려면 별점 뒤에 숨은 조용한 다수를 상상하고, 필요하면 무작위로 몇 명에게 직접 물어보는 절차(구매자 랜덤 인터뷰 같은)로 보완해야 한다. 갤럽이 표본을 늘리는 대신 계층 비율을 맞췄듯, 우리도 리뷰 '양'을 늘리는 것보다 <strong>누구의 목소리가 빠져 있는지</strong>를 먼저 물어야 한다.</p>
+<p><strong>이어달리기</strong>: 어제(Day 63) 생존편향이 "실패해서 사라진 표본이 안 보이는" 문제였다면, 오늘(Day 64) 선택편향은 그보다 넓다 — 사라졌든 안 사라졌든 애초에 <strong>치우친 방식으로 뽑혔다는 것 자체</strong>가 문제다. 생존편향은 선택편향이라는 큰 우산 안의 한 종류였던 셈이다.</p>
+<h2>④ 오늘의 안목 훈련 — M4 맥락 판단</h2>
+<p>M4 렌즈는 일반론을 그대로 받아들이지 말고 <strong>"이건 누구의 상황이고, 어떤 조건에서만 맞는 말인가"</strong>를 따로 물으라고 한다. 통계도 마찬가지야 — "표본이 크다"는 정보 하나만으로는 부족하다. 그 표본이 <strong>내 상황(에이폼 고객군)을 대표하는 방식으로 뽑혔는가</strong>를 항상 따져야 일반론(표본이 크면 믿을 만하다)과 내 상황(표본이 커도 뽑는 방식이 치우쳤을 수 있다)의 차이가 보인다.</p>
+<p>연습: 지금 보고 있는 고객 데이터(리뷰·CS 문의·설문 응답 등) 하나를 떠올려보자.</p>
+<div class="field"><div class="field-label">그 데이터는 &quot;누구를 뽑아 본 것&quot;인가 — 어떤 경로로, 어떤 사람들이 표본에 들어왔나?</div><textarea class="field-input" data-key="day64_s4_q1" rows="2"></textarea><span class="save-status" data-for="day64_s4_q1"></span></div>
+<div class="field"><div class="field-label">그 표본에서 빠져 있을 가능성이 높은 사람은 누구인가 (조용히 만족한 사람? 이미 이탈해서 답할 기회조차 없는 사람?)?</div><textarea class="field-input" data-key="day64_s4_q2" rows="2"></textarea><span class="save-status" data-for="day64_s4_q2"></span></div>
+<div class="field"><div class="field-label">이 데이터만으로 내린 판단이 있다면, 그 판단을 무작위 표본으로 다시 확인한다면 어떻게 확인할 수 있을까?</div><textarea class="field-input" data-key="day64_s4_q3" rows="2"></textarea><span class="save-status" data-for="day64_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 2개 + 오늘의 결정</h2>
+<div class="qa-block"><div class="qa-question">1. 『리터러리 다이제스트』는 표본이 230만 명이나 됐는데도 틀렸다. &quot;숫자가 크면 믿을 만하다&quot;는 직관은 왜 이렇게 강하게 작동할까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day64_s5_a1" rows="2"></textarea><span class="save-status" data-for="day64_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 에이폼에서 지금 별점·리뷰 데이터만으로 &quot;고객은 만족한다&quot;고 믿고 있는 부분이 있다면, 조용한 다수의 의견은 어느 쪽으로 다를 가능성이 있을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day64_s5_a2" rows="2"></textarea><span class="save-status" data-for="day64_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 최근에 치우친 표본(리뷰·문의처럼 자발적으로 온 목소리)만 보고 내린 판단이 하나 있다면, 그 판단을 다시 점검하기 위해 이번 주 안에 확인해볼 무작위 소스(직접 문의, 무작위 구매자 연락 등) 하나를 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day64_s5_decision" rows="2"></textarea><span class="save-status" data-for="day64_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day63/">← Day 63</a>
+  <a href="../day65/">Day 65 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

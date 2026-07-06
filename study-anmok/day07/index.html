@@ -38,6 +38,11 @@ a.back:hover{color:var(--accent)}
   border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
 .callout-warn strong{color:var(--warn)}
 span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
 table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
 th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
 th{background:var(--accent-soft)}
@@ -136,9 +141,9 @@ button.act:hover{opacity:.9}
 <div class="field"><div class="field-label">실패 조건 3 (작년과 달라진 내부 요인, 예: 가격·리뷰·재고운영 변화 관련)</div><textarea class="field-input" data-key="day07_s4_q3" rows="2"></textarea><span class="save-status" data-for="day07_s4_q3"></span></div>
 <p>다 적고 나서 다시 자문해봐 — 그래도 여전히 90%인가, 아니면 조금 낮아졌나? 그 차이가 M7이 캘리브레이션에 기여하는 지점이야.</p>
 <h2>⑤ 스스로 생각할 질문 3개</h2>
-<div class="qa-block"><div class="qa-question"><strong>1.</strong> 내가 최근에 &quot;확실하다&quot;고 말했던 판단 중, 결과가 어떻게 나왔는지 아직 확인해보지 않은 것은 무엇일까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day07_s5_a1" rows="2"></textarea><span class="save-status" data-for="day07_s5_a1"></span></div></div>
-<div class="qa-block"><div class="qa-question"><strong>2.</strong> 내가 &quot;촉이 좋다&quot;고 자부하는 영역이 있다면, 그 촉을 진짜 캘리브레이션(예측을 적고 결과와 대조)해본 적이 있나, 아니면 맞았던 기억만 남고 틀렸던 기억은 잊어버린 건 아닐까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day07_s5_a2" rows="2"></textarea><span class="save-status" data-for="day07_s5_a2"></span></div></div>
-<div class="qa-block"><div class="qa-question"><strong>3.</strong> 오늘 내릴 작은 결정 하나: 이번 주 내릴 예측 하나를 골라서 확률(%)로 적고, 결과를 확인할 날짜를 지금 정한다면? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day07_s5_decision" rows="2"></textarea><span class="save-status" data-for="day07_s5_decision"></span></div></div>
+<div class="qa-block"><div class="qa-question">1. 내가 최근에 &quot;확실하다&quot;고 말했던 판단 중, 결과가 어떻게 나왔는지 아직 확인해보지 않은 것은 무엇일까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day07_s5_a1" rows="2"></textarea><span class="save-status" data-for="day07_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 내가 &quot;촉이 좋다&quot;고 자부하는 영역이 있다면, 그 촉을 진짜 캘리브레이션(예측을 적고 결과와 대조)해본 적이 있나, 아니면 맞았던 기억만 남고 틀렸던 기억은 잊어버린 건 아닐까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day07_s5_a2" rows="2"></textarea><span class="save-status" data-for="day07_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 이번 주 내릴 예측 하나를 골라서 확률(%)로 적고, 결과를 확인할 날짜를 지금 정한다면? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day07_s5_decision" rows="2"></textarea><span class="save-status" data-for="day07_s5_decision"></span></div></div>
 
 <div class="toolbar">
   <button type="button" id="export-btn" class="act">답변 내보내기</button>
@@ -166,12 +171,13 @@ button.act:hover{opacity:.9}
   if(!OK && warnEl){ warnEl.style.display = "block"; }
 
   function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
 
   var timers = {};
   function debounceSave(field){
     var k = field.dataset.key;
     if(timers[k]) clearTimeout(timers[k]);
-    timers[k] = setTimeout(function(){ saveField(field); }, 500);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
   }
 
   function statusEl(field){
@@ -185,8 +191,9 @@ button.act:hover{opacity:.9}
       return;
     }
     try{
-      window.localStorage.setItem(key(field), field.value);
-      if(st){ st.textContent = field.value ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
     }catch(e){
       if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
     }
@@ -197,9 +204,10 @@ button.act:hover{opacity:.9}
     document.querySelectorAll("[data-key]").forEach(function(field){
       var v = window.localStorage.getItem(key(field));
       if(v !== null){
-        field.value = v;
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
         var st = statusEl(field);
-        if(st && v){ st.textContent = "저장된 값 불러옴"; }
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
       }
     });
   }
@@ -207,7 +215,8 @@ button.act:hover{opacity:.9}
   document.addEventListener("DOMContentLoaded", function(){
     restoreAll();
     document.querySelectorAll("[data-key]").forEach(function(field){
-      field.addEventListener("input", function(){ debounceSave(field); });
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
     });
 
     var exportBtn = document.getElementById("export-btn");
@@ -217,11 +226,11 @@ button.act:hover{opacity:.9}
         document.querySelectorAll("[data-key]").forEach(function(field){
           var label = field.dataset.label;
           if(!label){
-            var wrap = field.closest(".field") || field.closest(".inline-field");
-            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label") : null;
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
             label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
           }
-          var value = field.value.trim() || "(비어있음)";
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
           lines.push(label + "\n" + value + "\n");
         });
         var text = lines.join("\n---\n");

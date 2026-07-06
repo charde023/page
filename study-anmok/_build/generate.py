@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import markdown  # type: ignore[import]
 
 from frontmatter import split_frontmatter
-from blanks import transform_section4, transform_section5, preprocess_wikilinks
+from blanks import transform_section4, transform_section5, transform_essay, preprocess_wikilinks
 from template import CSS, AUTOSAVE_JS, PAGE_TEMPLATE, INDEX_TEMPLATE, CARD_TEMPLATE
 
 H2_SPLIT = re.compile(r"^## ([①②③④⑤])[^\n]*\n", re.MULTILINE)
@@ -60,12 +60,23 @@ def build_page(md_path: Path, all_days: list[int]) -> tuple[int, str]:
     body = preprocess_wikilinks(body)
     headings = section_headings(body)
     sections = split_sections(body)
+    present = sorted(sections.keys())
 
-    sections[4] = transform_section4(sections[4], day_num)
-    sections[5] = transform_section5(sections[5], day_num)
+    is_essay = meta.get("장르", "").startswith("에세이") or "에세이" in meta.get("주제", "")
+
+    if is_essay:
+        # Essays have interactive elements spread across sections and only
+        # ①~④ (no ⑤); transform each section's body with the essay pass.
+        for n in present:
+            sections[n] = transform_essay(sections[n], day_num)
+    else:
+        if 4 in sections:
+            sections[4] = transform_section4(sections[4], day_num)
+        if 5 in sections:
+            sections[5] = transform_section5(sections[5], day_num)
 
     parts = []
-    for n in (1, 2, 3, 4, 5):
+    for n in present:
         heading_text = headings.get(n, str(n))
         parts.append(f"## {heading_text}\n\n{sections.get(n, '')}")
     full_md = "\n\n".join(parts)

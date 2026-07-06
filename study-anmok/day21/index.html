@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 21 · 상호성</title>
+<meta name="description" content="공짜는 없다 — 받는 순간 이미 갚아야 할 빚이 하나 생긴다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 21 · 상호성</h1>
+  <div class="meta">G3 (철학·인류학) · M20 (사람 판단)</div>
+</div>
+
+<div class="oneliner">공짜는 없다 — 받는 순간 이미 갚아야 할 빚이 하나 생긴다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day21_frontmatter_date">
+  <span class="save-status" data-for="day21_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Reciprocity-상호성">Reciprocity-상호성</span></h2>
+<p>로버트 치알디니가 『설득의 심리학』에서 정리한 여섯 가지 설득 원칙 중 첫 번째가 <span style="color:#ef6c00"><strong>상호성(Reciprocity)</strong></span>이다. 사람은 누군가에게 뭔가를 받으면 — 그게 공짜여도, 부탁하지 않았어도 — 그걸 갚아야 한다는 심리적 부채감을 느낀다는 것. 이 부채감은 이성이 아니라 거의 반사에 가깝다.</p>
+<p>치알디니가 드는 사례 하나가 유명하다. 1985년 멕시코시티에 대지진이 났을 때, 경제적으로 훨씬 어려운 처지였던 에티오피아 적십자가 멕시코에 구호금을 보냈다고 전해진다. 이유를 추적해보니 1935년 이탈리아가 에티오피아를 침공했을 때 멕시코가 외교적 지지를 보낸 적이 있었다는 것. 반세기가 지나 상황이 완전히 뒤바뀌었는데도, "받은 것"에 대한 의무감은 지워지지 않고 남아 있었다. 받은 기억은 세월을 이긴다.</p>
+<p>일상에서 가장 흔한 응용은 공짜 시식·샘플이다. 마트 시식 코너에서 한 입 먹고도 안 사면 괜히 미안한 기분이 드는 것 — 이게 상호성 압력이다. 받는 순간 "안 사면 나쁜 사람"이라는 감정이 자동으로 딸려온다. 치알디니는 이 원칙의 변형판도 함께 정리했는데, <strong>양보의 상호성</strong>(문전박대 기법)이다. 처음에 일부러 크고 무리한 부탁을 해서 거절당한 뒤, 원래 원했던 더 작은 부탁을 하면 수락률이 확 오른다. 상대가 물건이 아니라 "상대가 양보했으니 나도 양보해야지"라는 <strong>양보 자체</strong>를 갚는 것이다. 두 경우 모두 핵심은 같다 — 먼저 움직인 쪽이 판을 짠다는 것.</p>
+<h2>② 다른 장르의 창 — 선물엔 공짜가 없다</h2>
+<p>1925년 프랑스 인류학자 마르셀 모스는 『증여론』이라는 짧지만 강력한 책을 낸다. 그는 폴리네시아·멜라네시아·북미 원주민 사회의 선물 교환 관습을 비교하며 하나의 결론에 이른다 — <span style="color:#ef6c00"><strong>공짜 선물은 세상에 없다</strong></span>는 것. 모든 선물에는 세 가지 의무가 짝을 이뤄 따라온다고 그는 정리했다. 주어야 할 의무, 받아야 할 의무, 그리고 갚아야 할 의무. 이 세 의무 중 하나라도 어기면 관계 자체가 깨진다.</p>
+<p>모스가 특히 주목한 것이 북미 태평양 연안 원주민의 <strong>포틀래치(potlatch)</strong> 의식이다. 부족의 추장이나 유력자가 잔치를 열어 손님들에게 담요·구리 방패·카누 같은 값진 물건을 아낌없이 나눠주는데, 때로는 재산을 일부러 불태우거나 바다에 던지기까지 했다고 기록되어 있다. 얼핏 낭비로 보이지만 실제로는 정반대다 — 더 많이 줄수록 그 사람의 지위와 명예가 올라갔고, 받은 사람은 언젠가 그보다 더 크게 갚아야 하는 의무를 지게 됐다. 포틀래치는 단순한 파티가 아니라 <strong>선물의 크기로 겨루는 지위 경쟁</strong>이었던 셈이다.</p>
+<p>모스의 통찰은 여기서 한 걸음 더 나간다 — 선물은 물건의 이동이 아니라 <strong>사람과 사람을 묶는 끈</strong>이라는 것. 물건 자체보다 그 물건에 딸려 오는 "준 사람의 일부"가 받는 사람에게 전해지고, 그래서 갚지 않으면 그 사람의 일부를 빚진 채로 살게 된다. 선물이 사회를 만드는 접착제라는 이 관점은 지금도 인류학의 고전으로 남아 있다.</p>
+<h2>③ 다리 놓기 — 받는 순간 관계가 시작된다</h2>
+<p>치알디니의 상호성과 모스의 증여론은 결국 같은 그림을 다른 각도에서 그린다. 치알디니는 개인의 머릿속 부채감을 실험으로 쪼갰고, 모스는 그 부채감이 사회 전체를 묶는 구조라는 걸 백 년 앞서 봤다. 공통점은 하나다 — <strong>먼저 주는 쪽이 관계의 시작 버튼을 누른다.</strong></p>
+<p>에이폼에 대입하면 이 원칙은 이미 익숙한 실무들과 곧바로 연결된다. 사은품 동봉, 체험분 추가, 손편지 한 장, 예상 못 한 덤 — 전부 "먼저 주기"다. 다만 모스식으로 보면 이 물건들이 하는 일은 단순히 고객을 기쁘게 하는 게 아니라 <strong>빚을 지우는 것</strong>이다. 받은 고객이 그 빚을 갚는 방법은 크게 두 가지 — 좋은 리뷰를 남기거나 재구매하는 것. 체험단 설계도 마찬가지 뼈대다. 제품을 무료로 준다는 건 단순한 마케팅비 지출이 아니라, 포틀래치의 축소판처럼 "이만큼 줬으니 갚아달라"는 사회적 계약을 거는 행위다. 다만 여기서 잊지 말아야 할 게 있다 — 상호성은 압력이지 명령이 아니다. 받은 만큼도 안 되는 성의 없는 사은품은 애초에 빚을 지우지도 못한다.</p>
+<p><strong>이어달리기</strong>: 어제(Day 20)의 브랜드가 오래 쌓인 신뢰의 저금통이라면, 오늘(Day 21)의 상호성은 그 저금통에 넣는 <strong>첫 입금</strong>이다 — 브랜드는 하루아침에 안 생기지만, 상호성은 사은품 하나로 오늘 당장 첫 입금을 만들 수 있다.</p>
+<h2>④ 오늘의 안목 훈련 — M20 사람 판단</h2>
+<p>M20 렌즈는 상대의 <span style="color:#ef6c00"><strong>언행일치·행동 패턴·약속 이행 여부</strong></span>를 보고 "이 사람을 얼마나 믿어도 되는가"를 판단하는 도구다. 오늘은 이 렌즈를 거꾸로 돌려본다 — 사람이 아니라, "받으면 갚는 사람인가"를 미리 가늠하는 훈련이다. 상호성이 통하려면 상대가 애초에 갚을 마음이 있는 사람이어야 한다. 공짜만 챙기고 사라지는 사람과, 받은 만큼 리뷰·재구매로 돌려주는 사람은 행동 패턴에서 이미 갈린다 — 과거에 체험 제품을 받고 실제로 후기를 남겼는지, 문의에 성실히 답했는지, 약속한 조건(리뷰 기한 등)을 지켰는지가 신호다.</p>
+<p>연습: 최근 체험단·협찬을 보낸 인플루언서나 고객 중 한 명을 떠올려보자.</p>
+<div class="field"><div class="field-label">이 사람은 과거에 뭔가를 받았을 때 실제로 갚았나 (리뷰·후기·재구매로)?</div><textarea class="field-input" data-key="day21_s4_q1" rows="2"></textarea><span class="save-status" data-for="day21_s4_q1"></span></div>
+<div class="field"><div class="field-label">&quot;기대해도 되는 부분&quot;과 &quot;조심해야 할 부분&quot;을 하나씩 꼽는다면?</div><textarea class="field-input" data-key="day21_s4_q2" rows="2"></textarea><span class="save-status" data-for="day21_s4_q2"></span></div>
+<div class="field"><div class="field-label">다음에 뭔가를 줄 때, 이 사람에게는 얼마만큼 먼저 내줘도 안전할까?</div><textarea class="field-input" data-key="day21_s4_q3" rows="2"></textarea><span class="save-status" data-for="day21_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 2개</h2>
+<div class="qa-block"><div class="qa-question">1. 모스는 &quot;공짜 선물은 없다&quot;고 했다. 그렇다면 에이폼이 고객에게 주는 사은품·체험분도 결국 대가를 바라는 거래인데, 고객이 그걸 거래로 느끼면 오히려 역효과가 나지 않을까 — 그 경계는 어디에 있을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day21_s5_a1" rows="2"></textarea><span class="save-status" data-for="day21_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 포틀래치는 &quot;더 많이 줄수록 지위가 올라간다&quot;는 경쟁이었다. 에이폼이 경쟁사보다 더 후한 사은품·체험단 조건을 계속 얹어가는 게 지속 가능한 전략일까, 아니면 언젠가 멈춰야 할 군비 경쟁일까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day21_s5_a2" rows="2"></textarea><span class="save-status" data-for="day21_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 지금 준비 중이거나 최근 보낸 체험단·사은품 중 하나를 골라, 받는 사람이 &quot;갚아야겠다&quot;고 확실히 느끼게 할 요소(손편지, 예상 밖의 덤, 개인화된 메시지 등) 하나를 오늘 추가한다면 무엇으로 할까?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day21_s5_decision" rows="2"></textarea><span class="save-status" data-for="day21_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day20/">← Day 20</a>
+  <a href="../day22/">Day 22 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

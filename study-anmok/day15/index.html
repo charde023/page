@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 15 · 사회적 증거</title>
+<meta name="description" content="뭐가 맞는지 확신이 없을 때 사람은 자기 눈이 아니라 남들의 행동을 증거로 채택한다 — 그리고 그 &quot;남들&quot;이 만드는 정답은 가끔 틀린다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 15 · 사회적 증거</h1>
+  <div class="meta">G2 (역사) · M15 (주간 케이스 스터디)</div>
+</div>
+
+<div class="oneliner">뭐가 맞는지 확신이 없을 때 사람은 자기 눈이 아니라 남들의 행동을 증거로 채택한다 — 그리고 그 &quot;남들&quot;이 만드는 정답은 가끔 틀린다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day15_frontmatter_date">
+  <span class="save-status" data-for="day15_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Social-proof-사회적증거">Social-proof-사회적증거</span></h2>
+<p>심리학자 로버트 치알디니는 『설득의 심리학』에서 사람을 움직이는 여섯 원칙 중 하나로 <span style="color:#ef6c00"><strong>사회적 증거(social proof)</strong></span>를 꼽았다. 정의는 단순하다 — <strong>불확실한 상황에서, 사람은 무엇이 옳은 행동인지를 남들의 행동을 보고 판단한다.</strong> 식당 앞에 줄이 길면 "맛집이니까 줄이 길겠지"라고 믿고 나도 줄을 선다. 논리로 따지면 이상하다 — 줄이 길다는 사실 자체는 맛을 증명하지 않는다. 그런데도 우리 뇌는 "여러 사람이 이미 검증했다"는 신호로 그 줄을 읽는다.</p>
+<p>이 원리를 가장 극적으로 보여준 게 1950년대 솔로몬 애쉬(Solomon Asch)의 동조 실험이다. 피험자에게 기준 선분 하나와 길이가 다른 선분 세 개를 보여주고 "어느 게 기준과 같은 길이냐"를 물었다. 답은 눈으로만 봐도 명백했다. 그런데 방 안의 다른 참가자들(사실은 실험 협조자)이 미리 짜고 일부러 틀린 답을 차례로 말하면, 진짜 피험자 중 상당수가 <strong>자기 눈에 뻔히 보이는 정답 대신 다수의 틀린 답</strong>을 따라갔다. 정보가 부족해서가 아니다. 답은 쉬웠다. 그런데도 "다수와 다른 말을 하는 것"에 대한 사회적 부담이 판단을 눌렀다.</p>
+<p>치알디니는 이 힘이 커지는 조건 두 가지를 짚는다. 첫째, <strong>불확실성</strong> — 낯설고 처음 겪는 상황일수록 남의 행동을 더 신뢰한다. 둘째, <strong>유사성</strong> — "나와 비슷한 사람들"의 선택일수록 증거력이 세진다. 완전히 다른 부류의 사람이 산 것보다, "나 같은 사람 여럿"이 산 것이 훨씬 강하게 작동한다. 이 두 조건을 기억해두자 — 오늘 ③, ④에서 그대로 다시 쓴다.</p>
+<h2>② 다른 장르의 창 — 튤립 한 뿌리, 집값과 맞바꾸다</h2>
+<p>17세기 초 네덜란드는 튤립에 미쳐 있었다고 전해진다. 오스만 제국에서 들여온 이 낯선 꽃은 부유층 정원을 장식하는 사치품이 됐고, 특히 바이러스 감염으로 꽃잎에 불꽃 무늬가 생긴 품종 — 그중 <strong>셈페르 아우구스투스(Semper Augustus)</strong>라 불리던 구근 — 은 희귀하고 아름답다는 이유로 값이 천정부지로 치솟았다고 알려져 있다. 1630년대 절정기엔 구근 한 뿌리가 암스테르담의 좋은 집 한 채와 맞먹는 값에 거래됐다는 기록도 전해진다. 사람들은 구근을 보지도 않고 선물(先物) 계약서만 사고팔았고, 값이 오른다는 사실 자체가 "다음 사람도 더 비싸게 사줄 것"이라는 증거가 되어 값을 또 밀어올렸다. 그러다 1637년 2월, 한 경매에서 처음으로 사려는 사람이 나타나지 않는 순간이 왔고, 그 신호가 퍼지자 시장 전체가 며칠 사이 무너져내렸다고 전해진다.</p>
+<p>그런데 이 이야기엔 뒤집기가 하나 있다. 경제사학자 앤 골드가(Anne Goldgar)는 당대 공증·거래 문서를 뒤져 "튤립 광풍으로 온 나라가 파산했다"는 통설이 후대에 크게 부풀려졌다고 지적한다. 값이 폭등·급락한 건 사실이지만 실제 거래 참여자는 상인·전문가 계층 일부에 국한됐고, "집 한 채와 맞바꾼 구근" 같은 극단적 사례도 소수 기록이 크게 일반화된 것에 가깝다는 것이다. 즉 <strong>"튤립 광풍" 전설 자체도, 여러 사람이 되풀이해 전하는 사이 부풀려진 사회적 증거의 산물</strong>일 수 있다 — 군중이 가격을 만든 사건을, 후대의 군중이 다시 신화로 부풀린 이중 구조다.</p>
+<h2>③ 다리 놓기 — 남이 만들어주는 정답, 그리고 리뷰라는 줄</h2>
+<p>애쉬의 실험실과 튤립 시장은 같은 회로로 돌아간다. <strong>가격이든 답이든, "이미 여럿이 선택했다"는 사실 자체가 다음 사람의 판단 기준이 된다.</strong> 튤립을 산 사람은 꽃의 아름다움이 아니라 "지금 이 값에도 사려는 사람이 줄 서 있다"는 사실을 보고 샀다. 그 값이 정당한지 스스로 따지는 대신, 시장이라는 "다수"가 이미 검증했다고 믿은 것이다.</p>
+<p>에이폼의 상세페이지에서 리뷰 수·평점·"이미 3,412명이 구매"라는 문구가 하는 일이 정확히 이거다. 처음 보는 물총 하나를 두고 소비자는 품질을 직접 확인할 방법이 없다(치알디니가 말한 첫 조건 — <strong>불확실성</strong>). 그래서 별점과 리뷰 개수를 대리 증거로 쓴다. 여기에 <strong><span class="wikiterm" title="옵시디언 원노트: 헤일로효과-Halo Effect">헤일로 효과</span></strong>가 겹친다 — 리뷰와 판매량이 쌓이면 플랫폼 알고리즘도 이걸 "잘 팔리는 상품"의 신호로 읽어 검색 순위를 올려주고, 그 노출이 다시 판매와 리뷰를 부른다. 사회적 증거가 사람의 마음뿐 아니라 알고리즘의 판단까지 흔드는 것이다. 특히 후기가 "우리 아이도 이거 쓰는데" 식으로 <strong>나와 비슷한 엄마</strong>의 목소리로 쓰였을 때(치알디니의 두 번째 조건 — <strong>유사성</strong>) 설득력이 훨씬 세진다는 것도 짚어둘 만하다.</p>
+<p>체험단의 본질도 여기 있다. 체험단이 궁극적으로 만드는 건 "무료로 준 물건"이 아니라 <strong>초기의 사회적 증거 그 자체</strong>다 — 아직 아무도 안 산 상품에 최초의 "줄"을 만들어주는 일. <a class="daylink" href="../day04/">리뷰가 임계점</a>을 넘기 전까지 상품은 낯설고 불확실한 상태에 머문다. 체험단은 그 초반 구간을 인위적으로 건너뛰게 해주는 장치다.</p>
+<p><strong>이어달리기</strong>: 어제(Day 14) 다룬 프레이밍은 "같은 사실을 어떤 액자에 담아 보여줄까"를 <strong>내가</strong> 결정하는 문제였다. 오늘의 사회적 증거는 그 액자를 <strong>내가 아니라 남들이</strong> 만들어준다는 점에서 다르다 — 내가 아무리 좋은 문구를 써도, "이미 3천 명이 샀다"는 한 줄이 더 힘이 세다.</p>
+<h2>④ 오늘의 안목 훈련 — M15 주간 케이스 스터디</h2>
+<p>M15 렌즈는 어떤 성공·실패 사례를 볼 때 이 순서로 뜯어보라고 한다: 표면적 성패 → 진짜 원인 → 타이밍 → 건드린 욕망 → 경쟁자와 다른 점 → 유통/브랜딩/제품/가격/신뢰 중 핵심 → AI가 놓치기 쉬운 인간적 요소 → 가져갈 원리 → 내 일에 적용 시 변화 → 잘못 해석하면 빠질 착각. 끝은 항상 "가져갈 한 가지 원리"로 맺는다.</p>
+<p>연습: 최근 리뷰·판매량이 갑자기 붙기 시작한 상품(또는 반대로, 붙지 않고 정체된 상품) 하나를 떠올려서 이 렌즈로 짚어보자.</p>
+<div class="field"><div class="field-label">표면적 성패는 무엇이었나 (판매량·순위가 실제로 어떻게 움직였나)?</div><textarea class="field-input" data-key="day15_s4_q1" rows="2"></textarea><span class="save-status" data-for="day15_s4_q1"></span></div>
+<div class="field"><div class="field-label">진짜 원인이 &quot;제품력&quot;이었나, 아니면 &quot;초반 사회적 증거(리뷰·체험단·베스트 배지)가 먼저 붙어서&quot; 였나?</div><textarea class="field-input" data-key="day15_s4_q2" rows="2"></textarea><span class="save-status" data-for="day15_s4_q2"></span></div>
+<div class="field"><div class="field-label">잘못 해석하면 빠질 착각이 있다면 (예: &quot;제품이 좋아서 잘 팔렸다&quot;고만 결론짓는 것)?</div><textarea class="field-input" data-key="day15_s4_q3" rows="2"></textarea><span class="save-status" data-for="day15_s4_q3"></span></div>
+<div class="field"><div class="field-label">가져갈 한 가지 원리:</div><textarea class="field-input" data-key="day15_s4_q4" rows="2"></textarea><span class="save-status" data-for="day15_s4_q4"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 애쉬의 동조 실험 속 피험자는 답이 뻔히 보이는데도 다수를 따라갔다. 정보가 부족해서가 아니라면, 그때 그 사람 안에서 실제로 이기고 있던 것은 무엇이었을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day15_s5_a1" rows="2"></textarea><span class="save-status" data-for="day15_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 골드가의 연구는 &quot;튤립 광풍 신화&quot; 자체가 후대에 부풀려졌다고 말한다. 우리가 지금 당연하게 믿는 &quot;요즘 다들 그렇게 한다더라&quot;류의 이야기 중에도, 사실은 부풀려진 사회적 증거가 있지 않을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day15_s5_a2" rows="2"></textarea><span class="save-status" data-for="day15_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 지금 리뷰·판매량이 부족해 &quot;줄&quot;이 안 서 있는 상품이 있다면, 그 초반 사회적 증거를 만들기 위해 오늘 할 수 있는 작은 행동 하나는?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day15_s5_decision" rows="2"></textarea><span class="save-status" data-for="day15_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day14/">← Day 14</a>
+  <a href="../day16/">Day 16 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

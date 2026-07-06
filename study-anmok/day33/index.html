@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 33 · 평균회귀</title>
+<meta name="description" content="유난히 튄 숫자 다음에 평범한 숫자가 오는 건, 대개 실력이 바뀐 게 아니라 운이 제자리로 돌아온 것뿐이다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 33 · 평균회귀</h1>
+  <div class="meta">G2 (인물사) · M5 (구별력, 실전)</div>
+</div>
+
+<div class="oneliner">유난히 튄 숫자 다음에 평범한 숫자가 오는 건, 대개 실력이 바뀐 게 아니라 운이 제자리로 돌아온 것뿐이다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day33_frontmatter_date">
+  <span class="save-status" data-for="day33_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Regression-to-the-mean-평균회귀">평균회귀(Regression to the Mean)</span></h2>
+<p>모든 측정값은 두 부분으로 이뤄져 있다. <strong>변하지 않는 진짜 실력</strong>과 <strong>그날그날 흔들리는 운</strong>. 어느 주에 매출이 확 튀었다면, 그건 실력이 갑자기 좋아졌다기보다 운 좋은 요소들(경쟁사 품절, 우연한 트렌드 편승, 광고 알고리즘이 그날 유독 잘 태워줌)이 한꺼번에 맞아떨어진 결과일 확률이 높다. 다음 주엔 그 운 좋은 요소들이 다시 무작위로 뽑히니, 평균적으로 값은 원래 자리로 돌아온다 — 이게 <span style="color:#ef6c00"><strong>평균회귀</strong></span>다.</p>
+<p>문제는 이게 인과관계로 착각하기 딱 좋다는 것. 대니얼 카너먼이 소개한 이스라엘 공군 비행교관 일화가 유명하다. 교관들은 "칭찬하면 다음 비행이 나빠지고, 질책하면 좋아진다"고 굳게 믿었다. 카너먼이 짚은 실제 구조는 이렇다 — 유난히 잘한 생도는 다음번에 평균으로 돌아오니 "칭찬 후 나빠진 것"처럼 보이고, 유난히 못한 생도는 다음번에 평균으로 돌아오니 "질책 후 좋아진 것"처럼 보인다. 칭찬·질책엔 애초에 효과가 없었을 수도 있는데, 통계적 되돌림이 "질책이 약"이라는 믿음으로 굳어버린 것이다.</p>
+<p>여기서 볼트의 <span class="wikiterm" title="옵시디언 원노트: Regression-회귀">Regression-회귀</span>(소프트웨어의 "회귀 테스트·가드" — 예전엔 되던 기능이 새 변경으로 다시 깨지는 것)와 명확히 구분해야 한다. 이름은 같은 라틴어 어원(regressus, '되돌아감')이지만, 하나는 "코드가 나쁜 과거 상태로 되돌아가는 것"을 막는 공학 개념이고, 오늘 다룬 건 "측정값이 통계적으로 평균 상태로 되돌아가는 것"을 설명하는 확률 개념이다. 이름만 보고 같은 것으로 넘겨짚지 않는 것도 안목이다.</p>
+<h2>② 다른 장르의 창 — 골턴의 정원, 부모보다 작아지는 자식들</h2>
+<p>19세기 영국의 박물학자 <span style="color:#ef6c00"><strong>프랜시스 골턴(Francis Galton)</strong></span>은 사촌 찰스 다윈의 진화론에 영향을 받아 "유전으로 무엇이 얼마나 물려지는가"를 숫자로 재보려 했다. 먼저 손댄 건 완두콩이었다 — 큰 콩의 씨앗을 심으면 다음 세대 콩도 클 것 같지만, 실제론 부모 콩보다 평균 쪽으로 살짝 작아지는 경향을 관찰했다고 전해진다.</p>
+<p>1886년 골턴은 이 관찰을 사람에게 옮겨 928명의 부모-자식 키 데이터를 모았다. 키 큰 부모의 자식은 평균보다 크긴 했지만 부모만큼은 아니었고, 키 작은 부모의 자식도 평균보다 작긴 했지만 부모만큼은 아니었다. 극단에 있던 부모 세대가 자식 세대에서는 전체 평균 쪽으로 끌려오는 모양이었다. 골턴은 이 현상을 논문 제목에 그대로 담았다 — <strong>"Regression towards Mediocrity in Hereditary Stature"</strong>(유전적 키에서 평범함을 향한 회귀). 여기서 "회귀(regression)"라는 말이 통계학 용어로 처음 자리 잡았다고 알려져 있다 — 원래는 "퇴보"에 가까운 부정적 뉘앙스였는데, 지금은 가치중립적인 통계 용어로 굳어졌다.</p>
+<p>이 발견은 스포츠 저널리즘에도 이름을 남겼다. 미국 잡지 《스포츠 일러스트레이티드》 표지에 실린 선수·팀이 얼마 안 가 부진에 빠지는 현상을 "<strong>스포츠 일러스트레이티드 징크스</strong>"라 부르는데, 실은 저주가 아니라 평균회귀다 — 표지에 실릴 정도로 유난히 좋았던 극단적 성적이 자연히 평균으로 돌아온 것뿐이라는 설명이 널리 받아들여진다.</p>
+<h2>③ 다리 놓기 — 골턴의 정원에서 이번 주 매출표까지</h2>
+<p>골턴이 완두콩과 사람 키에서 본 건 정확히 같은 구조가 매출 그래프에도 있다는 뜻이다. <strong>이어달리기</strong>: 어제(Day 32) 다룬 "적은 표본의 극단값은 다음 측정에서 평균으로 돌아온다"는 원리가, 오늘은 그 되돌림에 이름과 얼굴(골턴·비행교관)을 붙인 셈이다 — 작은 표본 착시가 만드는 구체적 현상 하나가 바로 평균회귀다.</p>
+<p>에이폼 실전 — 대박 주 다음 주에 매출이 꺾이면 사장 입장에선 두 가지로 해석할 수 있다. ① "트렌드가 꺾였다, 광고 전략을 바꿔야 한다" ② "원래 평균으로 돌아온 것뿐이다, 지난주가 예외적으로 좋았다". 이 둘을 구별하는 게 바로 M5 안목의 구별력이다. 구별하는 질문 세 가지를 실무에 걸어두면 된다 — 첫째, <strong>표본</strong>: 지난주 대박이 하루이틀 반짝이었나, 7일 내내 고르게 좋았나(하루이틀 반짝이면 회귀 가능성 큼). 둘째, <strong>기저율</strong>: 이 카테고리·시즌의 평소 평균 주간 매출이 얼마인가(지난주가 그 평균에서 몇 표준편차 떨어져 있었나). 셋째, <strong>경쟁 변화</strong>: 경쟁사 품절·이슈·시즌 특수처럼 이번 주에만 있었다가 사라질 요인이 있었나. 셋 다 "일시적 요인"을 가리키면 평균회귀고, 반대로 검색 순위가 구조적으로 올라갔거나 신규 리뷰가 임계점을 넘겼다면 진짜 추세다.</p>
+<p>가장 위험한 건 <strong>광고 성과 급등 직후의 증액</strong>이다. 어느 날 ROAS가 유난히 잘 나왔다고 바로 예산을 크게 올리면, 다음날 성과가 평균으로 돌아오면서 "증액했더니 효율이 떨어졌다"는 착시에 빠지기 쉽다. 실은 증액과 상관없이 원래 돌아올 자리로 돌아온 것뿐일 수 있다. 그래서 급등한 날의 예산 결정은 최소 3~7일치 평균을 보고 내리는 게 안전하다.</p>
+<h2>④ 오늘의 안목 훈련 — M5 구별력 (실전)</h2>
+<p>M5 렌즈는 "평범한 것과 날카로운 것을 구분하라"는 안목의 핵심 도구다. 오늘은 이 렌즈를 이론 없이 바로 실전에 건다 — <strong>"트렌드가 꺾였다"는 흔한 해석(평범한 것)과 "그냥 평균으로 돌아온 것"이라는 실제 통찰(날카로운 것)을 구별하는 연습</strong>이다.</p>
+<p>연습: 최근 에이폼 실적(매출·광고 ROAS·전환율 중 하나)에서 유난히 좋았거나 나빴던 한 주를 떠올려보자.</p>
+<div class="field"><div class="field-label">그 극단값이 나온 표본은 얼마나 작았나(하루? 일주일? 전체 시즌?):</div><textarea class="field-input" data-key="day33_s4_q1" rows="2"></textarea><span class="save-status" data-for="day33_s4_q1"></span></div>
+<div class="field"><div class="field-label">그 지표의 평소 평균(기저율)은 얼마였고, 그 극단값은 평균에서 얼마나 떨어져 있었나:</div><textarea class="field-input" data-key="day33_s4_q2" rows="2"></textarea><span class="save-status" data-for="day33_s4_q2"></span></div>
+<div class="field"><div class="field-label">그 다음 주(또는 다음 측정)에 값이 평균 쪽으로 돌아왔다면, 그건 &quot;트렌드가 꺾인 것&quot;인가 &quot;평균회귀&quot;인가 — 판단 근거는:</div><textarea class="field-input" data-key="day33_s4_q3" rows="2"></textarea><span class="save-status" data-for="day33_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 골턴은 키 큰 부모의 자식이 부모보다 작아지는 걸 &quot;Regression towards Mediocrity(평범함을 향한 퇴보)&quot;라고 이름 붙였는데, 오늘날엔 이 말이 가치중립적 통계 용어로 쓰인다. 말의 뉘앙스가 바뀐 이유는 무엇일까 — 발견 당시의 편견이 벗겨진 걸까, 아니면 통계학이 원래 뜻을 일부러 순화한 걸까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day33_s5_a1" rows="2"></textarea><span class="save-status" data-for="day33_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 카너먼의 비행교관들은 수십 년간 &quot;질책이 효과 있다&quot;고 믿었다. 매일 반복되는 실전 경험조차 통계적 착각을 못 걸러낼 수 있다면, 우리는 무엇으로 이런 착각을 걸러낼 수 있을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day33_s5_a2" rows="2"></textarea><span class="save-status" data-for="day33_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 최근 대박이 났거나(또는 급락했던) 지표 하나를 지목하고, 그것이 평균회귀인지 진짜 추세인지 구별하기 위해 오늘 확인할 숫자(예: 지난 4주 평균, 표본 일수) 하나를 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day33_s5_decision" rows="2"></textarea><span class="save-status" data-for="day33_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day32/">← Day 32</a>
+  <a href="../day34/">Day 34 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

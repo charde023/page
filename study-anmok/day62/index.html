@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 62 · 상관≠인과·교란변수</title>
+<meta name="description" content="두 가지가 함께 움직인다고 해서 하나가 다른 하나를 일으켰다는 뜻은 아니다 — 무대 뒤에 숨어서 둘 다를 조종하는 제3의 손이 있을 수 있다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 62 · 상관≠인과·교란변수</h1>
+  <div class="meta">G5 (심리) · M3 (숨은 전제 찾기)</div>
+</div>
+
+<div class="oneliner">두 가지가 함께 움직인다고 해서 하나가 다른 하나를 일으켰다는 뜻은 아니다 — 무대 뒤에 숨어서 둘 다를 조종하는 제3의 손이 있을 수 있다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day62_frontmatter_date">
+  <span class="save-status" data-for="day62_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Confounder-교란변수">Confounder-교란변수</span></h2>
+<p><span style="color:#ef6c00"><strong>상관관계</strong></span>는 "같이 움직인다"는 뜻이고, <span style="color:#ef6c00"><strong>인과관계</strong></span>는 "하나가 다른 하나를 일으킨다"는 뜻이야. 이 둘은 완전히 다른 말인데, 숫자만 보면 자꾸 섞인다.</p>
+<p>고전적인 예를 하나 보자. 여름마다 아이스크림 판매량과 물놀이 익사 사고가 함께 늘어난다. 이 데이터만 보고 "아이스크림이 위험하다"고 결론 내리면 우스운 얘기가 된다. 진짜 원인은 <span style="color:#ef6c00"><strong>기온</strong></span>이다 — 더우면 사람들이 아이스크림도 더 사 먹고, 물놀이도 더 간다(그러니 익사 사고도 는다). 아이스크림과 익사는 서로 원인이 아니라 둘 다 '여름'이라는 숨은 손의 결과물이야. 이 숨은 손을 통계학에서 <span style="color:#ef6c00"><strong>교란변수(confounder)</strong></span>라고 부른다. 라틴어 confundere(함께+붓다, 뒤섞다)에서 왔는데, 말 그대로 진짜 원인과 겉보기 원인을 뒤섞어 헷갈리게 만드는 존재라는 뜻이야.</p>
+<p>여기에 함정이 하나 더 있어. "A 다음에 B가 왔다"(선후관계)와 "A가 B를 일으켰다"(인과관계)도 다른 얘기야. 광고를 튼 다음 날 매출이 올랐다고 광고 덕이라 단정하기 쉽지만, 그사이 시즌이 바뀌었거나 경쟁사가 품절됐거나 검색 알고리즘이 바뀌었을 수도 있다. 시간 순서는 인과의 필요조건이지 충분조건이 아니야. 숫자만 봐선 ①A가 B의 원인 ②B가 A의 원인 ③숨은 C가 A·B 둘 다의 원인, 이 세 가지 그림을 구별할 수 없다는 게 핵심이다. 자세한 건 <span class="wikiterm" title="옵시디언 원노트: Confounder-교란변수">Confounder-교란변수</span> 노트에.</p>
+<h2>② 다른 장르의 창 — 미신을 배우는 비둘기</h2>
+<p>1948년, 심리학자 스키너는 비둘기를 상자에 넣고 아주 단순한 실험을 했다. 비둘기가 뭘 하든 상관없이, 그냥 <span style="color:#ef6c00"><strong>정해진 시간마다 먹이를 무작위로 떨궈줬다</strong></span>. 비둘기의 행동과 먹이 사이엔 아무 관계도 없었다 — 완전한 우연이었다.</p>
+<p>그런데 놀라운 일이 벌어졌다. 먹이가 떨어지기 직전, 비둘기가 우연히 하고 있던 동작 — 고개를 한쪽으로 돌리거나, 제자리에서 빙글 돌거나, 바닥을 쪼는 시늉을 하던 — 그 동작이 있고 나서 먹이가 나오자, 비둘기들은 마치 그 동작이 먹이를 '불러온다'고 믿는 것처럼 그 행동을 반복하기 시작했다. 어떤 비둘기는 계속 고개를 까딱였고, 어떤 비둘기는 계속 제자리를 돌았다. 스키너는 이를 '미신적 행동(superstitious behavior)'이라 이름 붙였다.</p>
+<p>이 실험이 무서운 건, 비둘기의 뇌가 멍청해서가 아니라는 점이다. 오히려 그 반대다 — <span style="color:#ef6c00"><strong>패턴을 찾아내려는 본능이 너무 강해서</strong></span>, 우연의 연속에서도 기어이 인과관계를 지어낸다는 뜻이다. 사람도 똑같다. 우연히 이어진 두 사건을 보면 뇌는 자동으로 그 사이에 화살표를 그리려 한다. 착각적 상관(illusory correlation)이라 불리는 이 현상은, 인간의 뇌가 애초에 '인과를 만들어내도록' 설계돼 있다는 걸 보여준다. 없는 패턴을 보는 게 오히려 뇌의 기본값인 셈이다.</p>
+<h2>③ 다리 놓기 — 숫자가 착시라면, 인과는 신기루다</h2>
+<p>2기-D에서 다룬 확률 감각은 '숫자의 착시'를 다뤘다 — 작은 표본이 우연히 튀어 보이는 것, 평균으로 회귀하는 것들. 오늘부터 시작하는 5기는 그 후속편으로, '인과의 착시'를 다룬다. <strong>이어달리기</strong>: 작은 표본이 숫자를 부풀렸다면, 교란변수는 그 부풀려진 숫자에 '그럴듯한 이유'까지 붙여준다 — 착각이 두 배로 단단해지는 지점이다.</p>
+<p>에이폼에 대입해보면 바로 와닿는다. "상세페이지 문구를 바꿨더니 매출이 올랐다"는 판단, 정말 문구 덕분일까? 그 사이 시즌이 바뀌었을 수도 있고, 광고 예산을 올렸을 수도 있고, 경쟁 상품이 일시 품절됐을 수도 있다. 스키너의 비둘기가 우연한 동작을 먹이의 원인으로 믿었듯이, 우리도 우연히 함께 일어난 두 사건(상페 교체와 매출 상승) 사이에 서둘러 화살표를 그리기 쉽다. <span style="color:#ef6c00"><strong>한 번에 하나만 바꾸지 않으면, 진짜 원인이 뭔지 영영 알 수 없다</strong></span> — 이게 오늘 개념의 실전 버전이다.</p>
+<h2>④ 오늘의 안목 훈련 — M3 숨은 전제 찾기 (실전)</h2>
+<p>M3 렌즈는 어떤 판단을 내릴 때 "내가 지금 당연하게 믿고 있는 게 뭐지?"부터 캐묻는 훈련이야. 인과 판단이야말로 이 렌즈가 딱 맞는 자리다 — "X 때문에 Y가 됐다"는 문장 뒤엔 거의 항상 "다른 건 안 변했다"는 검증 안 된 전제가 숨어 있거든.</p>
+<p>연습: 최근에 "이것 때문에 저게 됐다"고 믿었던 판단을 하나 떠올려보자(매출·광고·재고·직원 관련 무엇이든 좋다). 그 판단 뒤에 숨어 있을 법한 <span style="color:#ef6c00"><strong>교란변수 후보 3개</strong></span>를 적어보자 — 계절·경쟁사·광고비 변화·플랫폼 정책·가격 변동처럼, 내가 지목한 원인 말고 그 결과를 동시에 흔들었을 수 있는 것들.</p>
+<div class="field"><div class="field-label">내가 믿은 판단:</div><textarea class="field-input" data-key="day62_s4_q1" rows="2"></textarea><span class="save-status" data-for="day62_s4_q1"></span></div>
+<div class="field"><div class="field-label">숨은 교란변수 후보 ①</div><textarea class="field-input" data-key="day62_s4_q2" rows="2"></textarea><span class="save-status" data-for="day62_s4_q2"></span></div>
+<div class="field"><div class="field-label">숨은 교란변수 후보 ②</div><textarea class="field-input" data-key="day62_s4_q3" rows="2"></textarea><span class="save-status" data-for="day62_s4_q3"></span></div>
+<div class="field"><div class="field-label">숨은 교란변수 후보 ③</div><textarea class="field-input" data-key="day62_s4_q4" rows="2"></textarea><span class="save-status" data-for="day62_s4_q4"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 아이스크림과 익사 사고 예시는 누구나 웃으며 넘기지만, 정작 내 사업 데이터를 볼 때는 왜 똑같은 착각에 잘 안 걸릴 거라 생각하게 될까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day62_s5_a1" rows="2"></textarea><span class="save-status" data-for="day62_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 스키너의 비둘기는 우연한 동작을 계속 반복했다. 지금 내가 &quot;이게 먹혀서&quot; 계속 반복하고 있는 행동 중, 사실은 효과와 무관하게 우연히 함께 있었을 뿐인 게 있을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day62_s5_a2" rows="2"></textarea><span class="save-status" data-for="day62_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 최근 &quot;이것 때문에 저렇게 됐다&quot;고 믿었던 판단 중 하나를 지목해서, 사실은 상관관계일 뿐 인과관계가 아닐 수 있다고 다시 봐야 할 것 하나를 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day62_s5_decision" rows="2"></textarea><span class="save-status" data-for="day62_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day61/">← Day 61</a>
+  <a href="../day63/">Day 63 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

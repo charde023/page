@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 56 · 영업레버리지</title>
+<meta name="description" content="고정비는 지렛대다 — 잘 걸면 작은 매출 변화가 큰 이익으로 돌아오고, 잘못 걸면 작은 매출 감소가 큰 손실로 돌아온다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 56 · 영업레버리지</h1>
+  <div class="meta">G4 (과학) · M8 (가치 판단)</div>
+</div>
+
+<div class="oneliner">고정비는 지렛대다 — 잘 걸면 작은 매출 변화가 큰 이익으로 돌아오고, 잘못 걸면 작은 매출 감소가 큰 손실로 돌아온다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day56_frontmatter_date">
+  <span class="save-status" data-for="day56_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Operating-leverage-영업레버리지">Operating-leverage-영업레버리지</span></h2>
+<p>비용을 두 종류로 나누는 데서 시작하자. <span style="color:#ef6c00"><strong>고정비</strong></span>는 매출이 있든 없든 그대로 나가는 돈 — 창고 임대료, 정규직 인건비. <span style="color:#ef6c00"><strong>변동비</strong></span>는 팔릴 때만 따라 늘어나는 돈 — 상품 원가, 쿠팡 수수료. 이 둘의 비율이 회사의 체질을 결정한다.</p>
+<p>고정비 비중이 높은 사업은 손익분기점(BEP)을 넘기 전까지는 팔아도 팔아도 적자다. 매출이 쌓여봤자 그 돈은 전부 이미 나가 있는 고정비를 메우는 데 들어갈 뿐이라서다. 그런데 <span class="wikiterm" title="옵시디언 원노트: Contribution-Margin-기여이익">기여이익</span>의 누적 합이 고정비 총액을 딱 넘어서는 순간, 판이 바뀐다. 그다음부터 파는 모든 개수의 기여이익은 고정비 상환 없이 그대로 이익으로 쌓인다. 그래서 BEP를 넘긴 뒤의 이익 곡선은 매출 곡선보다 훨씬 가파르게 꺾인다 — 이게 <span style="color:#ef6c00"><strong>영업레버리지</strong></span>다. 작은 매출 변화가 큰 이익 변화로 증폭되는 구조.</p>
+<p>문제는 이 증폭이 방향을 가리지 않는다는 것이다. 매출이 BEP를 넘기면 이익이 급증하지만, 반대로 매출이 BEP 아래로 떨어지면 손실도 똑같은 배율로 급락한다. 지렛대는 원래 그런 도구다 — 힘을 몇 배로 불려주지만, 어느 쪽으로 걸든 불려준다. 시즌 편중 사업이 위험한 지렛대인 이유가 여기 있다. 성수기엔 고정비 위로 매출이 쌓여 이익이 폭발하지만, 비수기엔 매출 없이 고정비만 계속 빠져나가 출혈이 난다 — 같은 지렛대, 다른 계절, 정반대 결과다. (<span class="wikiterm" title="옵시디언 원노트: Breakeven-ROAS-손익분기ROAS">손익분기 ROAS</span>가 광고 한 건 단위의 본전선이라면, 영업레버리지는 회사 비용구조 전체의 본전선이다.)</p>
+<h2>② 다른 장르의 창 — 아르키메데스, 받침점 하나로 지구를 들다</h2>
+<p>기원전 3세기 시라쿠사. 수학자이자 발명가였던 아르키메데스는 지렛대의 원리를 연구하며 이런 말을 남겼다고 전해진다 — "충분히 긴 지렛대와 그것을 놓을 받침점만 준다면, 나는 지구도 들어 보이겠다." 이 말을 실제로 그가 정확히 이 문장 그대로 말했는지는 후대 기록을 거치며 조금씩 각색됐을 가능성이 있어 "~라고 전해진다"로 받아들이는 게 안전하다. 다만 그 안에 담긴 물리 원리는 정확하다.</p>
+<p>지렛대는 세 점으로 이루어진다. 힘을 주는 <strong>힘점</strong>, 물체를 움직이는 <strong>작용점</strong>, 그리고 그 사이에서 축이 되는 <strong>받침점</strong>이다. 물리 법칙은 단순하다 — 힘 × 받침점까지의 거리가 양쪽에서 같아야 균형이 맞는다. 그래서 받침점을 힘점 가까이, 작용점 멀리 두면 작은 힘으로 무거운 물체를 들 수 있다. 받침점의 위치, 즉 지렛대의 설계 하나가 같은 힘을 몇 배로도, 몇 분의 1로도 만든다.</p>
+<p>여기서 중요한 사실 하나 — 지렛대는 힘의 방향을 뒤집기도 하고 증폭하기도 하지만, 스스로 "좋은 방향으로만" 작동해주지는 않는다. 지렛대를 잘못 받치면, 즉 힘을 반대 방향으로 걸면 작용점도 반대로, 그것도 몇 배로 움직인다. 증폭 자체는 중립적이다. 어느 쪽에 서느냐가 전부를 가른다.</p>
+<h2>③ 다리 놓기 — 지렛대는 이익도 손실도 증폭한다, 그리고 에이폼</h2>
+<p>아르키메데스의 지렛대에서 '받침점을 어디 두느냐'가 힘의 배율을 정했듯, 에이폼의 비용 구조에서 '고정비를 얼마나 두느냐'가 이익의 배율을 정한다. 창고를 늘리고 정규직을 늘리면 고정비 지렛대가 길어진다. 성수기엔 이 긴 지렛대가 매출을 몇 배로 뻥튀기된 이익으로 돌려준다. 하지만 물총 시즌처럼 짧고 뾰족한 장사에서는, 그 긴 지렛대가 비수기 몇 달 동안 아무 매출 없이 고정비만 새어나가는 구멍으로 그대로 뒤집힌다 — 받침점을 잘못 걸면 반대 방향으로도 증폭된다는 물리 원리, 그대로다.</p>
+<p>그래서 실무 선택지 하나가 명확해진다. 고정비를 변동비로 바꾸는 것 — 자체 창고 대신 3PL 외주, 정규직 대신 시즌 계약직. 지렛대를 짧게 줄이는 결정이다. 성수기 이익의 폭발력은 줄어들지만, 비수기에 지렛대가 거꾸로 돌 때의 낙폭도 함께 줄어든다. 지렛대를 길게 걸 것인가 짧게 걸 것인가는 결국 "이 사업의 매출이 얼마나 계절을 타는가"에 달린 질문이다.</p>
+<p><strong>이어달리기</strong>: 어제(Day 55) 단위경제학이 "상품 한 개를 팔 때 진짜 남는 돈이 얼마인가"를 본 자리였다면, 오늘은 그 개별 손익들이 고정비라는 하나의 큰 지렛대 위에서 합쳐졌을 때 회사 전체의 손익이 얼마나 예민하게 흔들리는지 — 구조 전체의 민감도 — 를 짚었다.</p>
+<h2>④ 오늘의 안목 훈련 — M8 가치 판단</h2>
+<p>M8 렌즈는 이 선택이 돈이 되는지를 넘어, 오래 갈 수 있는지·감당할 수 있는지·3년 뒤에도 부끄럽지 않은지를 묻는다. 지렛대를 길게 걸지 짧게 걸지는 계산기만으로 끝나지 않는다 — 그 선택을 몇 년간 감당하며 살아야 하는 사람은 결국 나이기 때문이다.</p>
+<p>연습: "창고를 늘려서 직접 운영할까, 3PL(외부 물류대행)로 넘길까"를 고정비 지렛대 관점에서 판단해보자.</p>
+<div class="field"><div class="field-label">성수기 이익 — 창고를 직접 운영하면(고정비 ↑, 지렛대 김) 성수기에 얼마나 더 벌 수 있을까?</div><textarea class="field-input" data-key="day56_s4_q1" rows="2"></textarea><span class="save-status" data-for="day56_s4_q1"></span></div>
+<div class="field"><div class="field-label">비수기 리스크 — 같은 선택이 비수기 몇 달 동안 얼마나 새어나가는 돈으로 돌아올까?</div><textarea class="field-input" data-key="day56_s4_q2" rows="2"></textarea><span class="save-status" data-for="day56_s4_q2"></span></div>
+<div class="field"><div class="field-label">되돌림 난이도 — 일단 창고를 늘리면(임대 계약·설비·인력) 다시 줄이는 데 얼마나 걸리고, 얼마나 비쌀까? 반대로 3PL로 갔다가 다시 직접 운영으로 되돌리는 건 어느 쪽이 더 쉬울까?</div><textarea class="field-input" data-key="day56_s4_q3" rows="2"></textarea><span class="save-status" data-for="day56_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 아르키메데스의 지렛대는 물리 법칙이라 방향을 가리지 않는다는 걸 누구나 안다. 그런데 사업에서는 왜 사람들이 고정비를 늘릴 때 &quot;이번엔 잘될 것&quot;이라며 증폭이 반대로도 작동한다는 사실을 자주 잊을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day56_s5_a1" rows="2"></textarea><span class="save-status" data-for="day56_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 고정비를 변동비로 바꾸는 것(3PL 외주)은 지렛대를 짧게 줄여 리스크를 낮추지만, 동시에 성수기의 최대 이익도 함께 깎는다. &quot;리스크를 줄이는 선택&quot;과 &quot;이익을 포기하는 선택&quot;이 사실은 같은 선택이라는 걸 받아들이기 어려운 이유는 뭘까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day56_s5_a2" rows="2"></textarea><span class="save-status" data-for="day56_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 지금 에이폼의 고정비 중에서, 변동비로 바꿀 수 있다면 바꿔보고 싶은 항목 하나를 지목한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day56_s5_decision" rows="2"></textarea><span class="save-status" data-for="day56_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day55/">← Day 55</a>
+  <a href="../day57/">Day 57 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

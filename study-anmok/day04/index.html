@@ -38,6 +38,11 @@ a.back:hover{color:var(--accent)}
   border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
 .callout-warn strong{color:var(--warn)}
 span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
 table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
 th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
 th{background:var(--accent-soft)}
@@ -135,9 +140,9 @@ button.act:hover{opacity:.9}
 <div class="field"><div class="field-label">그래서 내 상품의 진짜 임계점은 리뷰 몇 개쯤일까, 아니면 리뷰가 아닌 어떤 지표(재구매·문의 수 등)일까?:</div><textarea class="field-input" data-key="day04_s4_q4" rows="2"></textarea><span class="save-status" data-for="day04_s4_q4"></span></div>
 
 <h2>⑤ 스스로 생각할 질문 3개</h2>
-<div class="qa-block"><div class="qa-question"><strong>1.</strong> 지금 &quot;아직 잠열 구간이라 계속 불을 넣고 있다&quot;고 믿는 것들 중에, 사실은 이미 불이 꺼져서 더 넣어도 온도(=결과)가 절대 안 오르는 게 있지 않을까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day04_s5_a1" rows="2"></textarea><span class="save-status" data-for="day04_s5_a1"></span></div></div>
-<div class="qa-block"><div class="qa-question"><strong>2.</strong> 반대로, 겉보기엔 &quot;안 되는 것 같아서&quot; 이미 손을 뗀 일 중에 사실 문지방 코앞까지 가 있던 건 없었을까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day04_s5_a2" rows="2"></textarea><span class="save-status" data-for="day04_s5_a2"></span></div></div>
-<div class="qa-block"><div class="qa-question"><strong>3.</strong> 오늘 내릴 작은 결정 하나: 지금 진행 중인 일 중 딱 하나를 골라, &quot;이건 잠열 구간이니 계속 간다&quot; 또는 &quot;이건 불 꺼진 냄비니 멈춘다&quot; 중 하나로 오늘 판단해본다면? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day04_s5_decision" rows="2"></textarea><span class="save-status" data-for="day04_s5_decision"></span></div></div>
+<div class="qa-block"><div class="qa-question">1. 지금 &quot;아직 잠열 구간이라 계속 불을 넣고 있다&quot;고 믿는 것들 중에, 사실은 이미 불이 꺼져서 더 넣어도 온도(=결과)가 절대 안 오르는 게 있지 않을까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day04_s5_a1" rows="2"></textarea><span class="save-status" data-for="day04_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 반대로, 겉보기엔 &quot;안 되는 것 같아서&quot; 이미 손을 뗀 일 중에 사실 문지방 코앞까지 가 있던 건 없었을까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day04_s5_a2" rows="2"></textarea><span class="save-status" data-for="day04_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 지금 진행 중인 일 중 딱 하나를 골라, &quot;이건 잠열 구간이니 계속 간다&quot; 또는 &quot;이건 불 꺼진 냄비니 멈춘다&quot; 중 하나로 오늘 판단해본다면? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day04_s5_decision" rows="2"></textarea><span class="save-status" data-for="day04_s5_decision"></span></div></div>
 
 <div class="toolbar">
   <button type="button" id="export-btn" class="act">답변 내보내기</button>
@@ -165,12 +170,13 @@ button.act:hover{opacity:.9}
   if(!OK && warnEl){ warnEl.style.display = "block"; }
 
   function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
 
   var timers = {};
   function debounceSave(field){
     var k = field.dataset.key;
     if(timers[k]) clearTimeout(timers[k]);
-    timers[k] = setTimeout(function(){ saveField(field); }, 500);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
   }
 
   function statusEl(field){
@@ -184,8 +190,9 @@ button.act:hover{opacity:.9}
       return;
     }
     try{
-      window.localStorage.setItem(key(field), field.value);
-      if(st){ st.textContent = field.value ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
     }catch(e){
       if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
     }
@@ -196,9 +203,10 @@ button.act:hover{opacity:.9}
     document.querySelectorAll("[data-key]").forEach(function(field){
       var v = window.localStorage.getItem(key(field));
       if(v !== null){
-        field.value = v;
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
         var st = statusEl(field);
-        if(st && v){ st.textContent = "저장된 값 불러옴"; }
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
       }
     });
   }
@@ -206,7 +214,8 @@ button.act:hover{opacity:.9}
   document.addEventListener("DOMContentLoaded", function(){
     restoreAll();
     document.querySelectorAll("[data-key]").forEach(function(field){
-      field.addEventListener("input", function(){ debounceSave(field); });
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
     });
 
     var exportBtn = document.getElementById("export-btn");
@@ -216,11 +225,11 @@ button.act:hover{opacity:.9}
         document.querySelectorAll("[data-key]").forEach(function(field){
           var label = field.dataset.label;
           if(!label){
-            var wrap = field.closest(".field") || field.closest(".inline-field");
-            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label") : null;
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
             label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
           }
-          var value = field.value.trim() || "(비어있음)";
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
           lines.push(label + "\n" + value + "\n");
         });
         var text = lines.join("\n---\n");

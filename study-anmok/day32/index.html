@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 32 · 작은 표본의 착시</title>
+<meta name="description" content="표본이 작을수록 튀는 게 정상이다 — 문제는 그 튐을 &quot;패턴을 발견했다&quot;고 착각하는 내 머리 쪽에 있다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 32 · 작은 표본의 착시</h1>
+  <div class="meta">G4 (수학) · M7 실전 (리스크 점검)</div>
+</div>
+
+<div class="oneliner">표본이 작을수록 튀는 게 정상이다 — 문제는 그 튐을 &quot;패턴을 발견했다&quot;고 착각하는 내 머리 쪽에 있다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day32_frontmatter_date">
+  <span class="save-status" data-for="day32_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Law-of-small-numbers-작은수의법칙">Law-of-small-numbers-작은수의법칙</span></h2>
+<p>1971년, 대니얼 카너먼과 아모스 트버스키는 「작은 수의 법칙에 대한 믿음(Belief in the law of small numbers)」이라는 논문을 발표한다. 제목부터 아이러니하다 — "작은 수의 법칙"은 원래 존재하지 않는다. 통계학에 있는 건 <span style="color:#ef6c00"><strong>큰 수의 법칙</strong></span>(law of large numbers)뿐이다. 시행 횟수가 충분히 많아지면 관측 비율이 진짜 확률에 서서히 수렴한다는 정리인데, 사람들은 이 법칙을 시행 횟수가 몇 번 안 되는 작은 표본에도 그대로 적용해버린다. 그래서 논문 제목이 "그런 법칙에 대한 (잘못된) 믿음"이다.</p>
+<p>두 사람이 든 예시가 유명한 <span style="color:#ef6c00"><strong>작은 병원 문제</strong></span>다. 어느 도시에 큰 병원(하루 평균 출생 45명)과 작은 병원(하루 평균 출생 15명)이 있다. 어느 병원에서 "남아 비율이 60%를 넘는 날"이 더 많이 나올까? 실험 참가자 다수는 "병원 크기는 상관없다"고 답했지만, 정답은 <strong>작은 병원</strong>이다. 던지는 횟수가 적을수록 우연한 쏠림이 비율 전체를 크게 흔든다 — 표본이 작을수록 분산이 커진다. 45번 던지면 극단적인 비율이 나올 확률 자체가 낮아지지만, 15번 던지면 쉽게 튄다.</p>
+<p>이 착시가 무서운 이유는 방향이 대칭이라는 데 있다. 표본이 작으면 <strong>좋은 결과도 나쁜 결과도 둘 다 튀어나오기 쉽다.</strong> 그래서 전국 학교 성적 순위를 보면, 학생 수가 적은 작은 학교가 상위 랭킹에도 하위 랭킹에도 불균형하게 많이 등장한다. 특별히 잘 가르치거나 못 가르쳐서가 아니라, 표본(학생 수)이 적어 평균 자체의 변동폭이 크기 때문이다. 사람은 "1등이니까 뭔가 특별한 이유가 있겠지"라며 이야기를 지어내지만, 통계학이 말해주는 건 그저 "적은 숫자는 원래 잘 튄다"는 것뿐이다.</p>
+<p>여기서 실무로 이어지는 다리가 <span class="wikiterm" title="옵시디언 원노트: Bayesian-Shrinkage-베이지안수축">Bayesian-Shrinkage-베이지안수축</span>이다 — 표본이 적은 항목의 추정치를 전체 평균 쪽으로 끌어당겨 우연한 튐을 억누르는 계산법. <span class="wikiterm" title="옵시디언 원노트: Wilson-Interval-윌슨신뢰구간">Wilson-Interval-윌슨신뢰구간</span>은 "정확히 몇 퍼센트다"라고 점으로 말하는 대신 "이 범위 안에 있을 확률이 높다"는 구간으로 표시해, 표본이 부족하면 판단 자체를 유보하게 만든다. 둘 다 결국 카너먼·트버스키가 지적한 착각 — "작은 표본도 모집단의 축소판"이라는 직관을 수학으로 눌러주는 도구다.</p>
+<h2>② 다른 장르의 창 — 동전은 기억이 없다</h2>
+<p>1713년, 스위스 바젤에서 『추측술(Ars Conjectandi)』이라는 책이 출간된다. 저자는 야코프 베르누이. 이 책은 저자가 죽은 지 8년이 지나서야 세상에 나왔다 — 베르누이가 원고를 거의 20년 동안 다듬으며 완성을 미뤘다고 전해진다. 이유는 정확히 알 수 없지만, 그 침묵 끝에 확률론 역사에서 가장 중요한 정리 하나가 나왔다 — <span style="color:#ef6c00"><strong>큰 수의 법칙</strong></span>이다.</p>
+<p>베르누이가 증명한 건 단순하지만 강력하다. 흰 돌과 검은 돌이 특정 비율로 섞인 항아리에서 돌을 하나씩 뽑아 다시 넣기를 반복하면, 뽑은 비율은 시행 횟수가 늘어날수록 진짜 비율에 점점 가까워진다. 이 정리에는 중요한 전제가 숨어 있다 — "충분히 많이 반복해야" 한다는 것. 몇 번만 뽑아서는 전혀 보장이 안 된다.</p>
+<p>이 전제를 무시하고 생긴 게 <span style="color:#ef6c00"><strong>도박사의 오류(gambler's fallacy)</strong></span>다. 동전을 던져 앞면이 다섯 번 연속 나오면, 많은 사람이 "이번엔 뒷면이 나올 차례"라고 느낀다. 하지만 동전에는 기억이 없다. 여섯 번째 던지기의 확률은 여전히 정확히 50대 50이다 — 각 시행은 독립적이기 때문이다. 큰 수의 법칙이 말하는 "수렴"은 시행이 아주 많이 누적됐을 때 전체 비율이 평균에 가까워진다는 뜻이지, 다음 한 번의 결과가 앞선 결과를 "보상"해준다는 뜻이 아니다. 이 둘을 혼동하는 것이 도박사의 오류이자, 카너먼과 트버스키가 250년도 더 지나 심리학 실험으로 재확인한 착각의 뿌리다.</p>
+<h2>③ 다리 놓기 — 20년 원고, 250년 착각, 그리고 광고 3일치</h2>
+<p>베르누이가 20년을 다듬고서야 내놓을 만큼 신중했던 그 정리를, 사람의 직관은 매일 무시한다. 동전 다섯 번에서 패턴을 읽고, 병원 하루치 출생에서 성비 편향을 읽는다. 표본이 작을수록 결과가 "정상적으로" 튀는 건데, 그 튐을 "뭔가 있다"는 신호로 오해하는 것 — 이게 작은 수의 법칙에 대한 믿음이다.</p>
+<p>에이폼의 광고 대시보드도 매일 이 함정을 놓는다. 신규 키워드를 하루나 이틀 태워서 ROAS가 500%가 찍히면, 그 순간 "이 키워드가 대박이다"라는 이야기가 머릿속에서 완성된다. 하지만 클릭 몇 건, 주문 1~2건으로 나온 숫자는 베르누이의 항아리에서 돌을 다섯 번만 뽑은 것과 다르지 않다. <span class="wikiterm" title="옵시디언 원노트: Wilson-Interval-윌슨신뢰구간">Wilson-Interval-윌슨신뢰구간</span> 노트의 사례 그대로 — 클릭 3번에 주문 1번이면 진짜 전환율은 2%일 수도, 60%일 수도 있다. 구간이 넓다는 것 자체가 "아직 판단할 표본이 아니다"라는 정직한 신호인데, 눈에는 그냥 "전환율 33%"라는 확정된 숫자로만 보인다.</p>
+<p><strong>이어달리기</strong>: 3주차까지가 마음의 함정(과신, 인지부조화, 선택과부하)을 다뤘다면, 이번 주는 숫자의 함정으로 넘어간다 — 그 첫째가 오늘의 표본 문제다. 마음이 스스로를 속이는 법을 봤으니, 이제 숫자가 마음을 속이는 법을 볼 차례다.</p>
+<h2>④ 오늘의 안목 훈련 — M7 리스크 점검 (실전)</h2>
+<p>M7 렌즈는 그럴듯한 결론 앞에서 반드시 <span style="color:#ef6c00"><strong>"실패 가능성과 실패 조건"</strong></span>을 먼저 캐묻는다. 오늘은 이론 설명 없이 바로 실전이다 — 최근 광고 데이터나 리뷰 몇 개만 보고 어떤 판단을 내린 적이 있는지 하나 소환해보자. 신규 키워드 확대, 상품 우선순위 변경, "리뷰 반응이 좋아서" 발주를 늘린 결정 등 무엇이든 좋다.</p>
+<div class="field"><div class="field-label">그 판단, 실제로 표본이 몇 개였나 (n=몇 건의 클릭·주문·리뷰였나)?</div><textarea class="field-input" data-key="day32_s4_q1" rows="2"></textarea><span class="save-status" data-for="day32_s4_q1"></span></div>
+<div class="field"><div class="field-label">그 표본 크기에서 지금 본 결과(좋았든 나빴든)가 &quot;우연히 튀었을 가능성&quot;은 얼마나 되나? (감으로라도 답해보기)</div><textarea class="field-input" data-key="day32_s4_q2" rows="2"></textarea><span class="save-status" data-for="day32_s4_q2"></span></div>
+<div class="field"><div class="field-label">표본이 더 쌓일 때까지 기다렸다면, 어떤 결정으로 달라졌을 것 같은가?</div><textarea class="field-input" data-key="day32_s4_q3" rows="2"></textarea><span class="save-status" data-for="day32_s4_q3"></span></div>
+<p>오늘부터 결정저널에 항목 하나를 추가하자 — <span style="color:#ef6c00"><strong>"표본 n= ___"</strong></span> 체크박스. 판단을 적립할 때마다 그 판단이 몇 개의 데이터로 만들어졌는지부터 박제해두면, 나중에 복기할 때 "틀렸다"가 아니라 "표본이 적어서 원래 튀는 구간이었다"를 구별할 수 있게 된다.</p>
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 베르누이는 20년 동안 원고를 다듬으며 확신이 설 때까지 발표를 미뤘다. 반대로 사람은 데이터 서너 개만 보고도 바로 확신한다. 이 두 태도의 차이는 무엇이 만드는 걸까 — 성격인가, 판단 기준의 유무인가?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day32_s5_a1" rows="2"></textarea><span class="save-status" data-for="day32_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. &quot;작은 병원이 극단적인 성비가 더 자주 나온다&quot;는 사실을 알고 나서도, 왜 사람은 여전히 작은 표본에서 패턴을 읽고 싶어할까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day32_s5_a2" rows="2"></textarea><span class="save-status" data-for="day32_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 최근 표본이 적은 데이터(광고 며칠치, 리뷰 몇 개)로 내렸던 판단 중 하나를 골라, 표본이 더 쌓일 때까지 재검토를 미루기로 정한다면 어떤 판단이고 언제 다시 볼 것인가?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day32_s5_decision" rows="2"></textarea><span class="save-status" data-for="day32_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day31/">← Day 31</a>
+  <a href="../day33/">Day 33 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

@@ -38,6 +38,11 @@ a.back:hover{color:var(--accent)}
   border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
 .callout-warn strong{color:var(--warn)}
 span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
 table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
 th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
 th{background:var(--accent-soft)}
@@ -135,9 +140,9 @@ button.act:hover{opacity:.9}
 <div class="field"><div class="field-label">그 단계를 자동으로 미는 단계로 바꾸려면 무엇이 필요한가:</div><textarea class="field-input" data-key="day05_s4_q4" rows="2"></textarea><span class="save-status" data-for="day05_s4_q4"></span></div>
 
 <h2>⑤ 스스로 생각할 질문 3개</h2>
-<div class="qa-block"><div class="qa-question"><strong>1.</strong> 내 사업의 리뷰→노출→판매 루프에서, 지금 정말로 &quot;관성&quot;이 붙은 구간은 어디고, 아직 매번 내가 힘을 넣어야 하는 구간은 어디일까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day05_s5_a1" rows="2"></textarea><span class="save-status" data-for="day05_s5_a1"></span></div></div>
-<div class="qa-block"><div class="qa-question"><strong>2.</strong> 도공이 물레를 세게 차고 손을 떼는 순간과, 내가 사업에서 &quot;이제 이 일은 시스템에 맡기고 손을 떼도 된다&quot;고 판단하는 순간은 어떤 신호로 알아챌 수 있을까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day05_s5_a2" rows="2"></textarea><span class="save-status" data-for="day05_s5_a2"></span></div></div>
-<div class="qa-block"><div class="qa-question"><strong>3.</strong> 오늘 내릴 작은 결정 하나: 에이폼 안에서 &quot;한 바퀴가 다음 바퀴를 자동으로 미는&quot; 루프 하나를 오늘 그려본다면, 어느 루프를 고를까(리뷰-노출-판매, 반품 데이터-AI 학습, 상세페이지-전환율 중)? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day05_s5_decision" rows="2"></textarea><span class="save-status" data-for="day05_s5_decision"></span></div></div>
+<div class="qa-block"><div class="qa-question">1. 내 사업의 리뷰→노출→판매 루프에서, 지금 정말로 &quot;관성&quot;이 붙은 구간은 어디고, 아직 매번 내가 힘을 넣어야 하는 구간은 어디일까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day05_s5_a1" rows="2"></textarea><span class="save-status" data-for="day05_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 도공이 물레를 세게 차고 손을 떼는 순간과, 내가 사업에서 &quot;이제 이 일은 시스템에 맡기고 손을 떼도 된다&quot;고 판단하는 순간은 어떤 신호로 알아챌 수 있을까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day05_s5_a2" rows="2"></textarea><span class="save-status" data-for="day05_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 에이폼 안에서 &quot;한 바퀴가 다음 바퀴를 자동으로 미는&quot; 루프 하나를 오늘 그려본다면, 어느 루프를 고를까(리뷰-노출-판매, 반품 데이터-AI 학습, 상세페이지-전환율 중)? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day05_s5_decision" rows="2"></textarea><span class="save-status" data-for="day05_s5_decision"></span></div></div>
 
 <div class="toolbar">
   <button type="button" id="export-btn" class="act">답변 내보내기</button>
@@ -165,12 +170,13 @@ button.act:hover{opacity:.9}
   if(!OK && warnEl){ warnEl.style.display = "block"; }
 
   function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
 
   var timers = {};
   function debounceSave(field){
     var k = field.dataset.key;
     if(timers[k]) clearTimeout(timers[k]);
-    timers[k] = setTimeout(function(){ saveField(field); }, 500);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
   }
 
   function statusEl(field){
@@ -184,8 +190,9 @@ button.act:hover{opacity:.9}
       return;
     }
     try{
-      window.localStorage.setItem(key(field), field.value);
-      if(st){ st.textContent = field.value ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
     }catch(e){
       if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
     }
@@ -196,9 +203,10 @@ button.act:hover{opacity:.9}
     document.querySelectorAll("[data-key]").forEach(function(field){
       var v = window.localStorage.getItem(key(field));
       if(v !== null){
-        field.value = v;
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
         var st = statusEl(field);
-        if(st && v){ st.textContent = "저장된 값 불러옴"; }
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
       }
     });
   }
@@ -206,7 +214,8 @@ button.act:hover{opacity:.9}
   document.addEventListener("DOMContentLoaded", function(){
     restoreAll();
     document.querySelectorAll("[data-key]").forEach(function(field){
-      field.addEventListener("input", function(){ debounceSave(field); });
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
     });
 
     var exportBtn = document.getElementById("export-btn");
@@ -216,11 +225,11 @@ button.act:hover{opacity:.9}
         document.querySelectorAll("[data-key]").forEach(function(field){
           var label = field.dataset.label;
           if(!label){
-            var wrap = field.closest(".field") || field.closest(".inline-field");
-            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label") : null;
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
             label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
           }
-          var value = field.value.trim() || "(비어있음)";
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
           lines.push(label + "\n" + value + "\n");
         });
         var text = lines.join("\n---\n");

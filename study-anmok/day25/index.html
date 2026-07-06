@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 25 · 헤일로효과</title>
+<meta name="description" content="머리 뒤에 빛 하나만 그려 넣으면, 사람은 그 인물의 나머지 전부를 좋게 읽기 시작한다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 25 · 헤일로효과</h1>
+  <div class="meta">G7 (미술) · M20 (사람 판단·실전)</div>
+</div>
+
+<div class="oneliner">머리 뒤에 빛 하나만 그려 넣으면, 사람은 그 인물의 나머지 전부를 좋게 읽기 시작한다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day25_frontmatter_date">
+  <span class="save-status" data-for="day25_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: 헤일로효과-Halo Effect">헤일로효과-Halo Effect</span> 심화</h2>
+<p><span class="wikiterm" title="옵시디언 원노트: 헤일로효과-Halo Effect">헤일로효과-Halo Effect</span> 노트엔 이미 마케팅 버전이 적혀 있어 — 광고가 검색 랭킹을 올려 자연판매까지 끌어올리는 파급 효과. 근데 오늘 다룰 건 이 현상의 <strong>원조</strong>, 사람에 대한 판단에서 벌어지는 헤일로 효과야. 같은 이름, 같은 구조, 적용 대상만 다르다.</p>
+<p>시작은 1920년, 미국 심리학자 <span style="color:#ef6c00"><strong>에드워드 손다이크(Edward Thorndike)</strong></span>다. 그는 군 장교들에게 부하 병사를 지능·체격·리더십·성격·인품 등 여러 독립된 항목으로 평가해 달라고 시켰다. 논리적으로는 지능 점수와 체격 점수가 서로 무관해야 한다 — 머리 좋은 것과 어깨 넓은 건 별개니까. 그런데 실제 데이터를 보니 한 항목이 높으면 다른 무관한 항목까지 줄줄이 높게 매겨졌다. 잘생기고 체격 좋아 보이는 병사는 지능도, 리더십도, 인품까지 실제보다 후하게 평가받았다. 손다이크는 이 현상에 "<strong>halo</strong>"(후광)라는 이름을 붙였다 — 평가자의 머릿속에서 한 가지 좋은 인상이 마치 성인의 후광처럼 그 사람 전체를 감싸며 나머지 판단까지 밝게 물들인다는 뜻이었다.</p>
+<p>이 효과의 핵심 메커니즘은 <span style="color:#ef6c00"><strong>인지적 게으름</strong></span>이다. 사람의 뇌는 여러 독립 항목을 하나하나 따로 채점하는 걸 극도로 힘들어한다. 그래서 "이 사람 전체적으로 어떤 인상인가"라는 뭉뚱그린 느낌 하나를 만들어놓고, 그 느낌을 세부 항목에 그대로 복사해 붙인다. 실제로는 안 본 부분(성실성·정직성 같은)까지 "좋아 보이니까 좋을 것"이라고 채워 넣는 것 — 관찰이 아니라 <strong>추론을 관찰로 착각</strong>하는 것이다.</p>
+<p>반대 방향도 똑같이 작동한다 — <strong>역헤일로(horn effect, 뿔 효과)</strong>. 첫인상이 나쁘면 이후 모든 게 나쁘게 보인다. 지각 한 번 한 신입사원은 능력과 무관하게 계속 "책임감 없는 사람"으로 읽히고, 실수 한 번 한 거래처는 이후 잘한 일도 의심받는다. 하나의 강한 신호가 나머지 모든 신호의 색을 정해버리는 것 — 브랜드·상품·사람 평가 전방위에서 작동한다. 애플이 세련된 디자인 하나로 "제품은 다 잘 만들었을 것"이란 인상을 얻는 것도, 잘생긴 정치인이 유능해 보이는 것도 같은 회로다.</p>
+<h2>② 다른 장르의 창 — 머리 뒤의 빛, 광배의 미술사</h2>
+<p>"halo"라는 단어 자체가 미술에서 왔다. 그리스어 <strong>halos</strong>는 원래 태양이나 달 주위에 생기는 둥근 빛무리를 가리키는 말이었다 — 오늘날 대기광학에서 "달무리"를 뜻하는 그 halo와 같은 말이다. 이 자연 현상을 신적 존재를 그리는 시각 언어로 가져온 게 도상학의 오래된 발명품, <strong>광배(光背, nimbus)</strong>다.</p>
+<p>가장 오래된 계보는 고대 그리스·로마의 태양신 도상까지 거슬러 올라간다. 태양신 헬리오스나 로마 황제들은 머리 주위에 방사형 빛살 관(radiate crown)을 쓴 모습으로 조각·주화에 새겨졌다고 전해진다 — "이 존재는 태양처럼 빛난다"는 걸 관람자가 한눈에 알아보게 하는 장치였다. 이 문법은 종교 미술로 흘러 들어간다. 불교 도상에서는 부처와 보살의 머리·전신 뒤에 원형 광배가 그려지는데, 깨달음의 광명을 형상화한 것으로 간다라·인도 불상 조각에서부터 정립돼 동아시아 불화·불상까지 이어졌다.</p>
+<p>기독교 미술에서는 이 관습이 님버스(nimbus)로 정착된다. 그리스도와 성인들의 머리 뒤에 금색 원반이나 광선 형태로 그려지기 시작했고, 중세를 거치며 정교한 규칙 체계로 굳었다 — 그리스도는 십자가 무늬 광배, 일반 성인은 단순한 원형 금박 광배, 살아있는 인물은 광배를 받지 않는 식으로 위계가 나뉘었다고 전해진다. 관람자는 그림을 자세히 뜯어보지 않아도 머리 뒤 둥근 빛 하나만 확인하면 즉시 "이 인물은 성스럽다, 신뢰해도 된다"는 결론에 도달했다. 표정·자세·행동을 일일이 해석할 필요 없이, 광배 하나가 그 모든 판단을 미리 대신 내려준 것 — 이것이 시각 예술이 실행해 온 헤일로 효과의 원형이다.</p>
+<h2>③ 다리 놓기 — 광배 하나가 대신 내린 판단</h2>
+<p>미술사의 광배와 손다이크의 헤일로는 사실 <strong>똑같은 지름길</strong>이다. 중세 화가는 "이 사람이 성인인 이유"를 백 가지 디테일로 증명하는 대신 머리 뒤에 동그라미 하나를 그렸고, 우리 뇌는 "이 사람이 유능한 이유"를 열 가지 항목으로 따지는 대신 첫인상 하나로 전부를 채색한다. 둘 다 <strong>복잡한 판단을 그림 하나(또는 인상 하나)로 압축해버리는 것</strong> — 편리하지만, 그 압축 안에 진실이 있다는 보장은 없다.</p>
+<p><strong>이어달리기</strong>: 2주차가 "파는 기술"(포지셔닝·USP·브랜드·카피·퍼널)이었다면, 이번 주는 그 기술이 거꾸로 나를 속이는 순간들을 본다 — 첫 번째가 오늘의 헤일로 효과다. 팔 때 쓰던 무기가, 판단할 때는 함정이 된다.</p>
+<p>에이폼 실전으로 가져오면 이렇다. 거래처 미팅에서 대표가 말을 조리 있게 하고 사무실이 깔끔하면, 나는 그 회사의 납기 신뢰도·품질관리 수준까지 무의식중에 후하게 채점하고 있는 건 아닌가? 지원자 면접에서 첫인상이 좋으면, 검증 안 한 실무 역량까지 "잘할 것 같다"고 넘겨짚진 않았는가? 인플루언서 협업에서 팔로워 수와 화려한 피드가 좋아 보이면, 실제 전환율 데이터를 보기도 전에 "잘 팔릴 것"이라 결론부터 내리진 않았는가? 광배는 미술관에만 있지 않다 — 우리는 매일 누군가의 머리 뒤에 스스로 광배를 그려 넣고 있다.</p>
+<h2>④ 오늘의 안목 훈련 — M20 사람 판단 (실전)</h2>
+<p>M20 렌즈는 사람을 볼 때 <span style="color:#ef6c00"><strong>언행일치·압박 시 반응·책임 vs 회피·학습력·피드백 수용</strong></span> 같은 항목을 각각 따로 확인하라고 말한다. 핵심은 "전체적으로 좋아 보인다"는 뭉뚱그린 인상 하나로 결론 내지 말고, <strong>항목을 쪼개서 실제 관찰된 것과 추론으로 채운 것을 구분하는 것</strong>이다. 오늘은 이론을 더 쌓지 않는다 — 이미 M15(사회적 증거)에서 예고했던 개념이니, 오늘은 바로 실전에 적용한다.</p>
+<p>연습: 최근 사람을 판단한 실제 사례 1건을 골라보자 — 거래처, 지원자, 인플루언서 중 아무거나 좋다.</p>
+<div class="field"><div class="field-label">그 사람/회사에 대해 내가 **실제로 직접 관찰한 것**은 무엇인가 (말투, 결과물, 숫자 등 사실만)?</div><textarea class="field-input" data-key="day25_s4_q1" rows="2"></textarea><span class="save-status" data-for="day25_s4_q1"></span></div>
+<div class="field"><div class="field-label">그중 **하나의 강한 인상**(첫인상, 외모, 말솜씨, 화려한 프로필 등)이 있었다면 무엇이었나?</div><textarea class="field-input" data-key="day25_s4_q2" rows="2"></textarea><span class="save-status" data-for="day25_s4_q2"></span></div>
+<div class="field"><div class="field-label">그 인상 때문에 내가 **직접 확인하지 않고 그냥 좋게 넘겨짚은 항목**은 무엇인가 (실력·신뢰도·성실성 등)?</div><textarea class="field-input" data-key="day25_s4_q3" rows="2"></textarea><span class="save-status" data-for="day25_s4_q3"></span></div>
+<div class="field"><div class="field-label">결론 — 내가 본 건 **실력**이었나, **후광**이었나?</div><textarea class="field-input" data-key="day25_s4_q4" rows="2"></textarea><span class="save-status" data-for="day25_s4_q4"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 중세 화가는 광배를 그려 &quot;이 인물은 검증할 필요 없이 성스럽다&quot;는 신호를 줬다. 지금 시대에 그 광배 역할을 대신하는 시각 신호는 무엇일까 — 로고, 팔로워 수, 인증 마크, 아니면 또 다른 것일까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day25_s5_a1" rows="2"></textarea><span class="save-status" data-for="day25_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 손다이크의 장교들은 자기가 헤일로 효과에 빠졌다는 걸 전혀 몰랐다. 나는 지금 이 순간, 내가 헤일로에 빠져 있는지 아닌지를 어떻게 알 수 있을까 — 스스로 알아챌 방법이 있을까, 아니면 항상 남의 지적이 필요할까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day25_s5_a2" rows="2"></textarea><span class="save-status" data-for="day25_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 위 연습에서 &quot;후광 쪽&quot;에 가깝다고 판단한 사람/회사가 있다면, 그 판단을 다시 검증할 구체적 확인 행동 하나를 오늘 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day25_s5_decision" rows="2"></textarea><span class="save-status" data-for="day25_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day24/">← Day 24</a>
+  <a href="../day26/">Day 26 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

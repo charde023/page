@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 48 · 레드퀸·경쟁배제</title>
+<meta name="description" content="제자리에 있으려면 있는 힘껏 달려야 하고, 앞서 나가려면 그보다 두 배는 빨리 뛰어야 한다 — 시장은 멈춰 서 있는 사람을 봐주지 않는다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 48 · 레드퀸·경쟁배제</h1>
+  <div class="meta">G7 (문학) · M21 (사업 판단, 실전)</div>
+</div>
+
+<div class="oneliner">제자리에 있으려면 있는 힘껏 달려야 하고, 앞서 나가려면 그보다 두 배는 빨리 뛰어야 한다 — 시장은 멈춰 서 있는 사람을 봐주지 않는다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day48_frontmatter_date">
+  <span class="save-status" data-for="day48_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Red-Queen-레드퀸">레드퀸 효과</span></h2>
+<p>이 이름을 붙인 사람은 진화생물학자 <strong>밴 베일런(Leigh Van Valen)</strong>이다. 1973년, 그는 화석 기록을 오래 들여다보다가 이상한 걸 발견했다. 오래 살아남은 생물종도 시간이 지난다고 멸종률이 줄어들지 않더라는 것이다. 상식적으로는 오래 버틴 종일수록 환경에 잘 적응했으니 더 안전해야 할 것 같은데, 데이터는 그렇지 않았다. 그가 내린 결론은 이랬다 — <strong>한 종이 아무리 잘 적응해도, 그 포식자·먹이·경쟁자도 동시에 진화하고 있기 때문에 상대적인 위치는 절대 나아지지 않는다.</strong> 모두가 같이 뛰고 있으니, 누군가 멈추는 순간 그 자리만 뒤로 밀리는 것이다.</p>
+<p>그는 이 현상에 붙일 이름을 소설에서 빌려왔다. 루이스 캐럴의 『거울나라의 앨리스』(1871) 속 붉은 여왕이 한 말 — "여기서는 같은 자리에 있으려면 있는 힘껏 달려야 해." 화석 속 멸종 곡선이라는 딱딱한 통계에, 동화 속 여왕의 대사가 이름표로 붙은 셈이다. 딱딱한 과학 개념이 문학적 은유를 입은 흔치 않은 사례라, 지금도 진화생물학·경영학 양쪽에서 똑같은 이름으로 불린다.</p>
+<p>이 개념을 온전히 쓰려면 짝을 이루는 원리 하나를 더 알아야 한다. 생태학자 <strong>가우스(G.F. Gause)</strong>가 짚신벌레로 확인한 <strong>경쟁배제 원리</strong>다. 자원이 완전히 겹치는 두 종을 같은 배지에 넣으면, 처음엔 둘 다 자라다가 결국 하나만 남고 다른 하나는 사라진다. 니치(생태적 지위) 하나를 두 종이 영원히 나눠 가질 수는 없다는 뜻이다. 그래서 실제 생태계에서 살아남은 종들은 대개 조금씩 다른 틈새(먹이·시간대·서식지)로 비껴가 있다 — 완전히 같은 자리를 놓고 정면 승부를 벌인 종은 이미 도태됐기 때문이다.</p>
+<p>이 둘을 합치면 사업에도 그대로 적용되는 두 가지 함정이 보인다. 하나는 <strong>정지의 함정</strong> — 레드퀸처럼, 한번 잘 세팅해놓고 손을 떼는 순간 남들은 계속 달리고 있으니 상대적으로 뒤처진다. 다른 하나는 <strong>니치 충돌의 함정</strong> — 경쟁배제처럼, 남과 똑같은 자리를 놓고 정면으로 겹치면 결국 한쪽만 살아남는다. <span class="wikiterm" title="옵시디언 원노트: Moat-해자">해자</span>가 "한번 파놓으면 지켜주는" 정적 방어라면, 레드퀸은 "상대가 계속 진화하니 그 해자도 다시 파야 한다"는 동적 관점을 얹어준다. 정적 방어만 믿고 멈추면, 해자 자체가 낡아 메워진다.</p>
+<h2>② 다른 장르의 창 — 거울나라의 앨리스, 달려도 제자리인 나라</h2>
+<p>루이스 캐럴이 『이상한 나라의 앨리스』 후속작으로 쓴 『거울나라의 앨리스』에는, 거울 속 세상답게 모든 것이 뒤집힌 체스판 나라가 나온다. 앨리스는 붉은 여왕의 손을 잡고 나무 밑에서부터 있는 힘껏 달리기 시작한다. 숨이 턱까지 차오르도록 달렸는데, 눈을 들어 보니 나무도 주변 풍경도 하나도 달라지지 않았다. 앨리스가 놀라서 묻는다. "우리 나라에서는 이렇게 오래, 이렇게 빨리 달리면 보통 다른 곳에 도착하는데요." 붉은 여왕이 답한다.</p>
+<p>"느린 나라구나! 여기서는 봐라, 같은 자리에 있으려면 있는 힘껏 달려야 해. 어딘가 다른 곳에 가고 싶다면, 적어도 그보다 두 배는 빨리 뛰어야 하고."</p>
+<p>캐럴이 이 장면으로 정확히 무슨 사회 비평을 하려 했는지는 여러 해석이 갈린다 — 빅토리아 시대 계급 이동의 헛수고를 풍자했다는 읽기도 있고, 순수하게 거울 속 논리(반대로 뒤집힌 규칙)의 유희였다는 읽기도 있다. 어느 쪽이 맞는지 확정하기는 어렵다는 게 정직한 답이다. 다만 분명한 건, 이 장면이 그 자체로 하나의 완결된 이미지라는 것 — <strong>바닥 자체가 나와 같은 속도로 움직이는 세계에서는, 달리는 행위가 이동이 아니라 유지가 된다.</strong> 100여 년 뒤 한 생물학자가 이 대사를 화석 데이터에 붙였을 때, 그건 억지스러운 비유가 아니라 이미지 자체가 그만큼 정확했기 때문일 것이다.</p>
+<h2>③ 다리 놓기 — 멈추면 상대적으로 죽는다, 그리고 에이폼</h2>
+<p>앨리스가 달려도 제자리였던 이유는 나무도 같이 움직였기 때문이다. 에이폼의 바닥도 마찬가지로 움직인다. 쿠팡 알고리즘은 계속 업데이트되고, 경쟁사는 상세페이지를 계속 갈아엎고, 리뷰·순위·광고 입찰가는 매일 다시 계산된다. 지난달에 상세페이지를 잘 만들어놨다고, 이번 달에도 같은 전환율이 나온다는 보장이 없다 — 남들도 같이 뛰고 있기 때문이다. 여기서 중요한 건 <span class="wikiterm" title="옵시디언 원노트: Moat-해자">해자</span> 개념과의 차이다. 해자는 "한번 파놓으면 지켜주는 것"에 방점이 있는데, 레드퀸은 그 해자조차 <strong>상대가 진화하니 계속 다시 파야 유지된다</strong>는 걸 말해준다 — '방어'가 아니라 '레이스'로 봐야 한다는 뜻이다.</p>
+<p>경쟁배제 원리도 그대로 겹쳐 볼 수 있다. 쿠팡 의존 90%라는 건, 결국 <strong>남의 트랙 위에서, 남이 정한 니치 안에서 뛰고 있다</strong>는 것이다. 그 트랙 안에서 경쟁사와 완전히 같은 검색어·같은 포지션을 놓고 정면 승부를 걸면, 짚신벌레 실험처럼 결국 한쪽만 남는다. 완전히 겹치지 않는 틈새 — 자사몰, 특정 연령대 육아템, 특정 시즌 — 로 조금씩 비껴가는 것이 경쟁배제를 피하는 방법이다.</p>
+<p><strong>이어달리기</strong>: 어제까지의 3기-B(시스템 사고)가 '내 결정의 연쇄가 다음 결과를 낳는다'는 <strong>내부 구조</strong>의 이야기였다면(2차효과 — 결정 하나가 어떻게 다음 국면을 만드는가), 오늘의 레드퀸은 그 결정이 <strong>경쟁자·환경과 함께</strong> 계속 다시 계산돼야 한다는 <strong>외부 관계</strong>의 이야기다. 내 시스템만 완벽히 이해해도, 상대가 움직이면 그 이해는 다시 낡는다.</p>
+<h2>④ 오늘의 안목 훈련 — M21 사업 판단 (실전)</h2>
+<p>M21 렌즈는 사업 아이디어나 결정을 볼 때 이 축으로 점검하라고 한다 — 고객 고통의 명확성, 돈 낼 사람이 누구인지, 기존 대안 대비 우위가 어디서 나오는지, <strong>그 우위의 모방 난이도</strong>, 쌓이는 자산이 있는지, 법·윤리·브랜드 리스크. 오늘은 그중에서도 <strong>모방 난이도</strong>와 <strong>리스크</strong>를 레드퀸 관점으로 다시 본다 — "지금은 우위지만, 남이 따라오는 데 시간이 얼마나 걸리나? 그리고 나는 그동안 계속 달리고 있나?"</p>
+<p>연습: 지금 "한번 세팅해두고 멈춰 있는" 것 중, 레드퀸 레이스에서 상대적으로 뒤처지고 있을 만한 걸 하나만 적어보자.</p>
+<div class="field"><div class="field-label">그 항목은 무엇인가 (상세페이지 문구? 광고 세팅? 리뷰 응대 방식? 자사몰 구조?):</div><textarea class="field-input" data-key="day48_s4_q1" rows="2"></textarea><span class="save-status" data-for="day48_s4_q1"></span></div>
+<div class="field"><div class="field-label">마지막으로 손본 게 언제인가, 그동안 경쟁사는 몇 번 바뀌었을 것 같나:</div><textarea class="field-input" data-key="day48_s4_q2" rows="2"></textarea><span class="save-status" data-for="day48_s4_q2"></span></div>
+<div class="field"><div class="field-label">지금 다시 달리기 시작한다면, 이번 주 안에 할 수 있는 최소 행동 하나는:</div><textarea class="field-input" data-key="day48_s4_q3" rows="2"></textarea><span class="save-status" data-for="day48_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 밴 베일런은 &quot;오래 살아남은 종도 멸종률이 줄지 않는다&quot;는 데서 레드퀸 가설을 만들었어. 에이폼도 &quot;오래 해온 방식이니 안전하다&quot;는 착각을 하고 있는 영역이 있을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day48_s5_a1" rows="2"></textarea><span class="save-status" data-for="day48_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 경쟁배제 원리는 &quot;완전히 같은 자리를 두 종이 나눠 가질 수 없다&quot;고 말해. 쿠팡 안에서 경쟁사와 내가 정말 겹치는 자리(같은 검색어·같은 고객)는 어디이고, 겹치지 않는 틈새는 어디일까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day48_s5_a2" rows="2"></textarea><span class="save-status" data-for="day48_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 지금 &quot;계속 달려야 하는데 멈춰 있는&quot; 영역을 하나 지목해보자. 상세페이지, 광고, 아니면 다른 무엇이든 — 이번 주 안에 다시 뛰기 시작할 영역 하나를 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day48_s5_decision" rows="2"></textarea><span class="save-status" data-for="day48_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day47/">← Day 47</a>
+  <a href="../day49/">Day 49 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

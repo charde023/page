@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 39 · 수사학</title>
+<meta name="description" content="사람은 논리만으로 안 움직이고, 감정만으로도 안 움직이고, 믿을 만한 사람의 말이 아니면 더더욱 안 움직인다 — 설득은 세 다리로 서는 의자다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 39 · 수사학</h1>
+  <div class="meta">G2 (역사) · M19 (콘텐츠 판단, 실전)</div>
+</div>
+
+<div class="oneliner">사람은 논리만으로 안 움직이고, 감정만으로도 안 움직이고, 믿을 만한 사람의 말이 아니면 더더욱 안 움직인다 — 설득은 세 다리로 서는 의자다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day39_frontmatter_date">
+  <span class="save-status" data-for="day39_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Rhetoric-수사학">Rhetoric-수사학</span></h2>
+<p><span style="color:#ef6c00"><strong>Rhetoric</strong></span>이라는 말은 그리스어 <strong>rhētorikē</strong>, 곧 <strong>rhētōr</strong>(연설가)의 기술이라는 뜻에서 왔다. 아테네 민주정에서는 변호사를 사서 대신 말하게 하는 제도가 없었어 — 법정에 서면 자기 입으로 자기를 변호해야 했고, 의회에서 발언권을 얻으려면 대중 앞에서 스스로 논지를 세워야 했다. 그러니 말을 잘하는 기술은 취미가 아니라 <strong>생존과 권력의 도구</strong>였다.</p>
+<p>아리스토텔레스는 『수사학』에서 설득이 성립하는 근거를 세 가지로 나눴다. <span style="color:#ef6c00"><strong>에토스(ethos)</strong></span>는 화자의 인격과 신뢰 — "이 사람(회사) 말을 믿을 만한가"에서 나오는 힘이다. <span style="color:#ef6c00"><strong>파토스(pathos)</strong></span>는 청중의 감정 — 두려움·기쁨·연민을 건드려 판단을 움직이는 힘이다. <span style="color:#ef6c00"><strong>로고스(logos)</strong></span>는 논증 그 자체 — 근거와 결론이 논리적으로 이어지는가의 힘이다.</p>
+<p>세 축의 관계가 중요하다. 로고스만 있으면 맞는 말인데 아무도 안 듣고, 파토스만 있으면 그 순간엔 흔들려도 다음 날이면 후회하며 신뢰가 안 남고, 에토스만 있으면 "믿긴 하는데 왜 사야 하는지는 모르겠다"에서 멈춘다. 세 다리가 함께 있어야 사람은 "이해했고, 마음이 움직였고, 믿을 만하다"는 상태로 실제 행동까지 간다. 그래서 이 세 축은 지금도 <strong>설득 실패를 진단하는 표준 도구</strong>로 쓰인다 — 메시지가 안 먹히면 "이 셋 중 뭐가 비었나"부터 짚어보면 된다. 자세한 구조는 <span class="wikiterm" title="옵시디언 원노트: Rhetoric-수사학">Rhetoric-수사학</span> 노트에, 카피 문장 단위로 이걸 배치하는 실무는 <span class="wikiterm" title="옵시디언 원노트: Copywriting-카피라이팅">Copywriting-카피라이팅</span>과 <span class="wikiterm" title="옵시디언 원노트: PDP-상품상세페이지">PDP-상품상세페이지</span>에 이어진다.</p>
+<h2>② 다른 장르의 창 — 로마를 움직인 목소리, 키케로</h2>
+<p>기원전 63년, 로마 공화정 말기. 원로원 회의장에 한 남자가 일어선다. 마르쿠스 툴리우스 키케로 — 그해 집정관이었던 그는, 귀족 출신 정치인 카틸리나가 국가 전복을 꾀하고 있다고 확신하고 있었다. 하지만 손에 쥔 물증은 완벽하지 않았다. 그가 가진 건 오직 말뿐이었다.</p>
+<p>키케로는 원로원 앞에서, 당사자인 카틸리나가 그 자리에 앉아 있는 채로 첫 연설을 시작했다고 전해진다. 첫 문장부터 이렇게 몰아붙였다 — "카틸리나여, 대체 언제까지 우리의 인내심을 시험할 셈인가?" 물증을 나열하기 전에 이미 청중의 분노와 불안(파토스)을 끌어올리고, 자신이 국가를 지키는 집정관이라는 위치(에토스)를 앞세운 뒤에야 하나씩 정황 증거(로고스)를 쌓아갔다. 이 카틸리나 탄핵 연설 네 편은 로마 수사학의 정수로 오늘날까지 남아 있다.</p>
+<p>로마에서 웅변이 이렇게 중요했던 이유는 그리스와 마찬가지로 정치 구조에 있었다. 원로원과 민회에서 결정을 끌어내려면 설득해야 했고, 그러자면 어릴 때부터 문법·수사·논리(삼학, trivium)를 정식으로 배웠다. 로마 엘리트 교육의 정점은 철학이 아니라 <strong>웅변술</strong>이었다고 알려져 있다 — 칼로 싸우는 군인 못지않게, 말로 싸우는 정치가가 필요했던 사회였다.</p>
+<p>그리스로 눈을 돌리면 또 다른 장면이 있다. 아테네의 웅변가 데모스테네스는 마케도니아의 위협 앞에서 아테네가 무장하고 나서야 한다고 거듭 촉구했는데, 그의 연설에서 가장 유명한 대목은 "웅변가에게 가장 중요한 것이 무엇이냐"는 질문에 세 번 모두 "행동(hypokrisis, 전달의 힘)"이라고 답했다는 일화로 전해진다. 내용이 아무리 옳아도, <strong>전달되는 방식</strong>이 없으면 설득은 성립하지 않는다는 뜻이다 — 말의 기술이 실제로 칼보다 셌던 시대의 증언이다.</p>
+<h2>③ 다리 놓기 — 세 기둥으로 내 메시지 진단하기</h2>
+<p>키케로의 연설이 강했던 이유를 다시 보자. 집정관이라는 신뢰(에토스), 청중의 불안을 끌어올리는 문장(파토스), 그리고 정황 증거의 축적(로고스)이 한 연설 안에 순서대로 배치돼 있었다. 이 틀을 그대로 내 상세페이지·광고 문구에 대보면 진단이 된다.</p>
+<p>에이폼 상페 하나를 떠올려보자. <strong>에토스</strong>는 무엇으로 세우고 있나 — 판매량, 인증, 후기 개수, 브랜드 스토리 같은 "이 회사를 믿을 근거"가 있는가. <strong>파토스</strong>는 무엇을 건드리나 — 아이의 안전, 여름날의 즐거움, 다른 엄마들의 공감 같은 감정이 헤드라인이나 메인 이미지에 살아 있는가. <strong>로고스</strong>는 어디 있나 — 소재 성분, 안전 인증, 크기·용량 스펙 같은 "왜 맞는 말인지"의 증거가 표로 정리돼 있는가. 셋 중 하나가 비어 있으면, 그 페이지는 아무리 예뻐도 어딘가에서 구매 직전에 마음이 멈춘다.</p>
+<p><strong>이어달리기</strong>: 2기(Day 11~38)가 '사는 마음' — 손실회피·앵커링·프레이밍처럼 고객 머릿속에서 이미 벌어지는 심리 반응을 이해하는 과정이었다면, 3기(Day 39~)는 그 마음을 '움직이는 기술' — 내가 먼저 설계해서 그 반응을 끌어내는 기술이다. 어제까지는 관찰자였고, 오늘부터는 설계자다.</p>
+<h2>④ 오늘의 안목 훈련 — M19 콘텐츠 판단 (실전)</h2>
+<p>M19 렌즈는 콘텐츠를 볼 때 핵심 메시지·대상·독자 이익·건드리는 감정·제목 강도·뻔한 말 여부·차별적 관점·사례 충분성·추상에서 구체로의 전환·읽은 뒤의 행동·신뢰 근거·불필요한 부분·한 문장으로 남는 기억을 하나씩 짚으라고 말한다. 오늘의 세 기둥과 겹치는 지점은 명확하다 — "신뢰 근거"는 에토스, "건드리는 감정"은 파토스, "사례 충분성·구체성"은 로고스다. 즉 M19는 이미 아리스토텔레스의 틀을 실무 언어로 풀어놓은 체크리스트인 셈이다.</p>
+<p>연습: 지금 에이폼 대표 상페 하나의 헤드라인(첫 문장)을 떠올려보자. 그 한 줄이 에토스·파토스·로고스 중 어디에 서 있는지 표시해보고, 나머지 둘은 본문 어디서 채워지는지 찾아보자.</p>
+<div class="field"><div class="field-label">내 헤드라인은 세 기둥 중 어디를 맡고 있나(에토스/파토스/로고스 중 하나 적기)?</div><textarea class="field-input" data-key="day39_s4_q1" rows="2"></textarea><span class="save-status" data-for="day39_s4_q1"></span></div>
+<div class="field"><div class="field-label">본문에서 나머지 두 기둥은 각각 어느 문장·이미지가 채우고 있나?</div><textarea class="field-input" data-key="day39_s4_q2" rows="2"></textarea><span class="save-status" data-for="day39_s4_q2"></span></div>
+<div class="field"><div class="field-label">셋 중 지금 가장 약하거나 아예 없는 기둥은 무엇인가?</div><textarea class="field-input" data-key="day39_s4_q3" rows="2"></textarea><span class="save-status" data-for="day39_s4_q3"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 키케로는 물증이 완벽하지 않은 상태에서도 원로원을 움직였다. 논리(로고스)가 완벽하지 않아도 설득이 성립한다는 건, 우리가 &quot;합리적으로만 판단한다&quot;는 믿음에 대해 무엇을 말해주는가?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day39_s5_a1" rows="2"></textarea><span class="save-status" data-for="day39_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 데모스테네스가 &quot;가장 중요한 건 전달&quot;이라고 세 번 답했다는 일화가 사실이든 각색이든, 왜 이 이야기는 지금까지 반복해서 전해질까 — 사람들이 듣고 싶어 하는 진실이 그 안에 있어서는 아닐까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day39_s5_a2" rows="2"></textarea><span class="save-status" data-for="day39_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 내 설득(상페·광고·협상 어디든)에서 습관적으로 빠뜨리는 기둥 하나를 지목해보자 — 에토스, 파토스, 로고스 중 어느 것을 나는 자주 잊는가, 그리고 다음에 만들 콘텐츠 하나에 그 기둥을 채우기 위해 무엇을 넣을 것인가?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day39_s5_decision" rows="2"></textarea><span class="save-status" data-for="day39_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day38/">← Day 38</a>
+  <a href="../day40/">Day 40 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

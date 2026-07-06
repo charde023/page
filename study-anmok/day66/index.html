@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 66 · A/B 실험 설계</title>
+<meta name="description" content="인과를 확인하는 유일하게 확실한 방법은 하나만 바꾸고 나머지는 똑같이 맞춘 채, 나란히 놓고 비교하는 것이다.">
+<meta name="theme-color" content="#5b21b6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#f8f7fc; --surface:#fff; --text:#241f36; --text-soft:#645d7a;
+  --border:#e6e1f2; --accent:#5b21b6; --accent-soft:#ede9fe;
+  --orange:#ef6c00; --saved:#16a34a; --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --shadow:0 1px 2px rgba(36,31,54,.05),0 8px 24px rgba(36,31,54,.07);
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  line-height:1.7; max-width:820px; margin:0 auto; padding:32px 24px 96px;
+  color:var(--text); background:var(--bg); font-size:17px; word-break:keep-all;
+}
+h1{font-size:1.6rem; margin:0 0 6px}
+h2{font-size:1.25rem; margin:34px 0 12px; padding-bottom:.3em; border-bottom:1px solid var(--border)}
+a{color:var(--accent)}
+a.back{display:inline-block; margin-bottom:18px; font-size:.92rem; color:var(--text-soft); text-decoration:none}
+a.back:hover{color:var(--accent)}
+.eyebrow{display:inline-block; font-size:.78rem; font-weight:700; color:var(--accent);
+  background:var(--surface); padding:4px 10px; border-radius:999px; border:1px solid var(--accent-soft);
+  margin-bottom:12px}
+.header{margin:-32px -24px 24px; padding:30px 24px 22px;
+  background:linear-gradient(160deg,var(--accent-soft) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border)}
+.meta{color:var(--text-soft); font-size:.9rem; margin-top:6px}
+.oneliner{margin:18px 0; padding:14px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); font-size:.98rem; color:var(--text-soft)}
+.callout-warn{margin:18px 0; padding:14px 16px; border-radius:10px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
+.callout-warn strong{color:var(--warn)}
+span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft)}
+
+/* input fields */
+.qa-block{margin:22px 0}
+.qa-question{font-weight:600; margin-bottom:8px; line-height:1.6}
+.field{margin:16px 0}
+.field-label{font-weight:600; margin-bottom:6px; font-size:.95rem}
+.field-hint{font-size:.82rem; color:var(--text-soft); margin-bottom:6px}
+.field-input{
+  width:100%; font-family:inherit; font-size:16px; padding:10px 12px;
+  border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text);
+  resize:vertical;
+}
+.field-input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.field-input-cell{padding:6px 8px; font-size:.9rem}
+.inline-group{display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:4px}
+.inline-field{display:flex; flex-direction:column; gap:4px; flex:1 1 140px; min-width:120px}
+.inline-field-label{font-size:.82rem; color:var(--text-soft)}
+.save-status{display:block; font-size:.78rem; color:var(--saved); margin-top:4px; min-height:1.1em}
+.save-status.err{color:#dc2626}
+input[type=date].field-input{max-width:220px}
+
+/* buttons */
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px}
+button.act{
+  font-family:inherit; font-size:.88rem; font-weight:600; padding:9px 16px; border-radius:8px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer;
+}
+button.act.secondary{background:#fff; color:var(--accent)}
+button.act:hover{opacity:.9}
+.global-warning{display:none; margin:14px 0; padding:12px 14px; border-radius:8px;
+  border:1px solid var(--warn-border); background:var(--warn-bg); color:var(--warn); font-size:.85rem}
+
+.daynav{display:flex; justify-content:space-between; margin-top:36px; padding-top:16px; border-top:1px solid var(--border); font-size:.9rem}
+.daynav a{text-decoration:none}
+
+/* index page cards */
+.card-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.card{display:block; padding:18px 20px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card h2{margin:0 0 6px; font-size:1.08rem; border:0; padding:0; color:var(--text)}
+.card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
+.card .csum{color:var(--text-soft); font-size:.92rem}
+
+@media (max-width:640px){
+  body{padding:24px 16px 80px; font-size:16px}
+  .header{margin:-24px -16px 20px; padding:24px 16px 18px}
+  .inline-group{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← 오늘의 공부 목록</a>
+<div class="header">
+  <div class="eyebrow">오늘의공부 · 안목 훈련</div>
+  <h1>Day 66 · A/B 실험 설계</h1>
+  <div class="meta">G4 (의학) · M9 (실행 가능성)</div>
+</div>
+
+<div class="oneliner">인과를 확인하는 유일하게 확실한 방법은 하나만 바꾸고 나머지는 똑같이 맞춘 채, 나란히 놓고 비교하는 것이다.</div>
+
+<div class="field">
+  <div class="field-label">학습일 (오늘 공부한 날짜)</div>
+  <input type="date" class="field-input" data-key="day66_frontmatter_date">
+  <span class="save-status" data-for="day66_frontmatter_date"></span>
+</div>
+
+<div id="global-warning" class="global-warning">이 브라우저에서는 자동저장(localStorage)이 꺼져 있어요. 사생활 보호 모드를 해제하거나, 아래 <strong>답변 내보내기</strong> 버튼으로 답을 복사해 옵시디언 원본에 직접 옮겨 적어주세요.</div>
+<div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
+
+<h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Experiment-design-실험설계">Experiment-design-실험설계</span></h2>
+<p>지난 며칠 교란변수·생존편향·선택편향·심슨의 역설까지, 전부 "겉으로 보이는 상관관계를 인과로 착각하면 왜 틀리는가"를 파헤쳤다. 오늘은 반대편이다 — <strong>틀리지 않고 인과를 확인하려면 어떻게 해야 하는가</strong>. 답은 딱 두 개의 장치로 요약된다.</p>
+<p>첫째는 <span style="color:#ef6c00"><strong>통제군</strong></span>이다. 아무것도 안 바꾼 집단을 실험군 옆에 나란히 세워야 한다. "이번 주는 기존 상세페이지, 다음 주는 새 상세페이지"처럼 순서대로 돌리면 그 사이에 낀 시즌·요일·경쟁사 할인까지 결과에 다 섞여버린다. 같은 기간, 같은 조건에서 동시에 굴려야 "다른 건 다 같은데 이것 하나만 달랐다"는 문장이 성립한다.</p>
+<p>둘째는 <span style="color:#ef6c00"><strong>무작위 배정</strong></span>이다. 이게 진짜 핵심 장치다. 누구를 어느 그룹에 넣을지 사람이 골라 나누면 안 된다 — 무작위로 흩뿌려야 나이·습관·구매력처럼 눈에 안 보이는 교란변수까지 양쪽에 고르게 섞인다. 관찰만으로는 이 교란을 사후에 통계로 억지로 눌러야 하지만, 무작위 배정은 애초에 교란이 끼어들 자리를 없애버린다. 그래서 실험이 관찰보다 힘이 세다.</p>
+<p>문제는 이 두 장치가 힘을 쓰려면 <strong>표본이 충분해야</strong> 한다는 것. <span class="wikiterm" title="옵시디언 원노트: AB Test-A-B테스트">AB Test-A-B테스트</span> 노트에도 나오듯 변형당 최소 1만 방문·전환 300건 이상이 통계적으로 신뢰할 만한 최소선이다. 쿠팡 소수 SKU처럼 트래픽이 적으면 무작위로 나눠도 우연히 한쪽에 유리한 조건이 쏠릴 확률이 커진다 — 이게 어제까지 본 <span class="wikiterm" title="옵시디언 원노트: Law-of-small-numbers-작은수의법칙">작은 표본의 착시</span>다. 그러니까 "실험을 못 돌린다"는 건 실력 부족이 아니라, <strong>표본 부족을 알아채고 기간을 늘리거나 아예 안 돌리는 것</strong>이 더 정확한 판단이다.</p>
+<h2>② 다른 장르의 창 — 괴혈병, 열두 명의 선원</h2>
+<p>1747년, 영국 해군 군의관 제임스 린드는 항해 중인 배 솔즈베리 호에서 괴혈병을 앓는 선원 12명을 상대로 실험 하나를 했다고 전해진다. 12명을 6쌍으로 나누고, 각 쌍마다 서로 다른 처방을 주었다 — 사과주, 황산 희석액, 식초, 바닷물, 보리수와 마늘을 섞은 약, 그리고 오렌지와 레몬. 나머지 조건은 최대한 같게 맞췄다 — 같은 배, 같은 식사, 같은 항해 기간.</p>
+<p>결과는 극적이었다. 감귤류(오렌지·레몬)를 받은 두 명은 며칠 만에 눈에 띄게 회복했고, 그중 한 명은 곧 근무에 복귀할 만큼 나아졌다고 알려져 있다. 나머지 처방을 받은 선원들은 별다른 차도가 없었다. 12명이라는, 지금 기준으로는 턱없이 작은 표본이었지만 — 여러 처방을 <strong>동시에</strong>, <strong>같은 조건</strong>에서 나란히 비교했다는 설계 자체가 핵심이었다. 이 실험은 역사상 최초로 기록된 통제 임상시험 중 하나로 꼽힌다고 전해진다(당시엔 '무작위 배정' 개념이 명시적이진 않았고, 정식 통계이론은 20세기에야 정립됐다는 점은 짚어둘 만하다).</p>
+<p>린드가 증명한 건 비타민 C의 존재가 아니었다 — 그건 훨씬 나중에야 밝혀진다. 그가 증명한 건 "나란히 비교하면, 무엇이 원인인지 드러난다"는 방법론 그 자체였다.</p>
+<h2>③ 다리 놓기 — 나란히 비교해야 원인을 안다</h2>
+<p>린드가 12명을 6쌍으로 나눠 동시에 비교한 것처럼, 에이폼에서 상페 A/B를 돌린다면 같은 원칙이 적용된다. <strong>같은 기간, 같은 트래픽 안에서 나눠 돌려야</strong> 한다. 순차로 "이번 주는 A안, 다음 주는 B안"을 돌리면 그 사이 낀 시즌감·요일 분포·광고 예산 변화가 전부 결과에 섞여, 나중에 "B가 더 잘 팔린 게 안 때문인지 다음 주가 원래 대목이었기 때문인지" 구분이 안 된다. 순차 비교는 통제군이 없는 비교다.</p>
+<p>그런데 여기서 다시 표본 문제로 돌아온다. 트래픽이 적으면 나란히 돌려도 결과가 착시일 수 있다 — 그럴 땐 억지로 A/B를 강행하기보다 기간을 늘리거나(2주가 아니라 4주), 아예 A/B 대신 <span class="wikiterm" title="옵시디언 원노트: AB Test-A-B테스트">AB Test-A-B테스트</span> 노트의 before/after 비교(변경 전 14일 vs 후 14일, 시즌·광고비 변동은 별도 기록)로 방향을 트는 게 낫다. <strong>못 돌리는 실험을 억지로 돌려서 잘못된 확신을 얻는 것보다, 안 돌리는 판단이 더 나은 안목</strong>이다.</p>
+<p><strong>이어달리기</strong>: Day 62~65가 "인과의 함정들"(교란변수·생존편향·선택편향·심슨의 역설 — 겉보기 상관을 인과로 착각하는 방식들)이었다면, 오늘은 그 반대편 — "인과를 제대로 확인하려면 무엇을 갖춰야 하는가"다. 함정을 아는 것과 올바른 도구를 쓰는 것은 한 쌍이다.</p>
+<h2>④ 오늘의 안목 훈련 — M9 실행 가능성</h2>
+<p>M9 렌즈는 생각을 실행으로, 실행을 검증으로 잇는 눈이다. 아무리 좋은 가설도 "지금 당장 할 수 있는 최소 단위"로 쪼개지 않으면 머릿속에만 머문다. 핵심 질문은 이렇다 — 지금 당장 첫 행동은 무엇인가, 최소 실행 단위는 얼마나 작게 잡을 수 있는가, 그리고 무엇을 보면 "성공했다"고 판단할 것인가.</p>
+<p>연습: 지금 궁금한 인과 가설 하나를 골라, "무엇을 통제하고 무엇만 바꿀지"로 설계해보자.</p>
+<div class="field"><div class="field-label">확인하고 싶은 가설 (예: &quot;상세페이지 첫 이미지를 바꾸면 장바구니율이 오른다&quot;):</div><textarea class="field-input" data-key="day66_s4_q1" rows="2"></textarea><span class="save-status" data-for="day66_s4_q1"></span></div>
+<div class="field"><div class="field-label">통제군(그대로 둘 것)과 실험군(딱 하나만 바꿀 것) — 나머지 조건을 어떻게 같게 맞출 것인가:</div><textarea class="field-input" data-key="day66_s4_q2" rows="2"></textarea><span class="save-status" data-for="day66_s4_q2"></span></div>
+<div class="field"><div class="field-label">이 상품의 현재 트래픽·전환 건수로 볼 때, 실험 설계(기간·방식)를 어떻게 잡아야 표본이 충분해질까:</div><textarea class="field-input" data-key="day66_s4_q3" rows="2"></textarea><span class="save-status" data-for="day66_s4_q3"></span></div>
+<div class="field"><div class="field-label">성공 판단 지표는 무엇이고, 며칠 뒤 확인할 것인가:</div><textarea class="field-input" data-key="day66_s4_q4" rows="2"></textarea><span class="save-status" data-for="day66_s4_q4"></span></div>
+
+<h2>⑤ 스스로 생각할 질문 3개</h2>
+<div class="qa-block"><div class="qa-question">1. 순차 비교(이번 주 A, 다음 주 B)로 &quot;효과가 있다/없다&quot;고 판단했던 경험이 있다면, 그때 같이 끼어들었을 수 있는 다른 변수(시즌·요일·광고비)는 무엇이었을까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day66_s5_a1" rows="2"></textarea><span class="save-status" data-for="day66_s5_a1"></span></div></div>
+<div class="qa-block"><div class="qa-question">2. 린드의 괴혈병 실험은 겨우 12명으로도 역사에 남았다. 표본이 작아도 설계(통제·나란한 비교)가 정확하면 신뢰할 수 있는 경우와, 아무리 설계가 좋아도 표본이 작아 믿을 수 없는 경우는 어떻게 구분할까?</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day66_s5_a2" rows="2"></textarea><span class="save-status" data-for="day66_s5_a2"></span></div></div>
+<div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 최근에 순차 비교(선후 비교)만으로 판단했을 수 있는 상품·광고·상페 변경 하나를 짚어보고, 그 판단을 다시 검증할지 그냥 넘어갈지 정한다면?</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day66_s5_decision" rows="2"></textarea><span class="save-status" data-for="day66_s5_decision"></span></div></div>
+
+<div class="toolbar">
+  <button type="button" id="export-btn" class="act">답변 내보내기</button>
+  <button type="button" id="clear-btn" class="act secondary">이 페이지 저장 지우기</button>
+</div>
+
+<div class="daynav">
+  <a href="../day65/">← Day 65</a>
+  <a href="../day67/">Day 67 →</a>
+</div>
+
+<script>
+(function(){
+  var NS = "study-anmok";
+  function storageOk(){
+    try{
+      var t="__t__"+Date.now();
+      window.localStorage.setItem(t,"1");
+      window.localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  var OK = storageOk();
+  var warnEl = document.getElementById("global-warning");
+  if(!OK && warnEl){ warnEl.style.display = "block"; }
+
+  function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
+
+  var timers = {};
+  function debounceSave(field){
+    var k = field.dataset.key;
+    if(timers[k]) clearTimeout(timers[k]);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
+  }
+
+  function statusEl(field){
+    return document.querySelector('.save-status[data-for="' + field.dataset.key + '"]');
+  }
+
+  function saveField(field){
+    var st = statusEl(field);
+    if(!OK){
+      if(st){ st.textContent = "저장 실패 — 아래 내보내기로 백업하세요"; st.className = "save-status err"; }
+      return;
+    }
+    try{
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+    }catch(e){
+      if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
+    }
+  }
+
+  function restoreAll(){
+    if(!OK) return;
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var v = window.localStorage.getItem(key(field));
+      if(v !== null){
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
+        var st = statusEl(field);
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    restoreAll();
+    document.querySelectorAll("[data-key]").forEach(function(field){
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
+    });
+
+    var exportBtn = document.getElementById("export-btn");
+    if(exportBtn){
+      exportBtn.addEventListener("click", function(){
+        var lines = [];
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          var label = field.dataset.label;
+          if(!label){
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
+            label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
+          }
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
+          lines.push(label + "\n" + value + "\n");
+        });
+        var text = lines.join("\n---\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){
+            exportBtn.textContent = "복사됨 ✓";
+            setTimeout(function(){ exportBtn.textContent = "답변 내보내기"; }, 2000);
+          }).catch(function(){ downloadText(text); });
+        } else {
+          downloadText(text);
+        }
+      });
+    }
+
+    var clearBtn = document.getElementById("clear-btn");
+    if(clearBtn){
+      clearBtn.addEventListener("click", function(){
+        if(!window.confirm("이 페이지의 저장된 답변을 전부 지울까요? (다시 되돌릴 수 없어요)")) return;
+        document.querySelectorAll("[data-key]").forEach(function(field){
+          try{ window.localStorage.removeItem(key(field)); }catch(e){}
+          field.value = "";
+          var st = statusEl(field);
+          if(st){ st.textContent = ""; }
+        });
+      });
+    }
+  });
+
+  function downloadText(text){
+    var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = document.title.replace(/[^\w가-힣0-9]+/g,"_") + "_answers.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+</body>
+</html>

@@ -36,6 +36,11 @@ a.back:hover{color:var(--accent)}
   border:1px solid var(--warn-border); background:var(--warn-bg); font-size:.88rem; color:var(--warn)}
 .callout-warn strong{color:var(--warn)}
 span.wikiterm{border-bottom:1px dotted var(--accent); color:var(--accent); cursor:help}
+a.daylink{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+a.daylink:hover{border-bottom-color:var(--accent)}
+.field-input-big{min-height:200px}
+.checkfield{display:flex; align-items:flex-start; gap:9px; margin:8px 0; font-size:.95rem; cursor:pointer}
+.checkfield input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent); flex:none}
 table{border-collapse:collapse; width:100%; margin:16px 0; font-size:.93rem}
 th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
 th{background:var(--accent-soft)}
@@ -106,12 +111,13 @@ AUTOSAVE_JS = """
   if(!OK && warnEl){ warnEl.style.display = "block"; }
 
   function key(field){ return NS + ":" + field.dataset.key; }
+  function isCheck(field){ return field.type === "checkbox"; }
 
   var timers = {};
   function debounceSave(field){
     var k = field.dataset.key;
     if(timers[k]) clearTimeout(timers[k]);
-    timers[k] = setTimeout(function(){ saveField(field); }, 500);
+    timers[k] = setTimeout(function(){ saveField(field); }, isCheck(field) ? 0 : 500);
   }
 
   function statusEl(field){
@@ -125,8 +131,9 @@ AUTOSAVE_JS = """
       return;
     }
     try{
-      window.localStorage.setItem(key(field), field.value);
-      if(st){ st.textContent = field.value ? "저장됨 · 방금" : ""; st.className = "save-status"; }
+      var v = isCheck(field) ? (field.checked ? "1" : "0") : field.value;
+      window.localStorage.setItem(key(field), v);
+      if(st){ st.textContent = (isCheck(field) || field.value) ? "저장됨 · 방금" : ""; st.className = "save-status"; }
     }catch(e){
       if(st){ st.textContent = "저장 실패 — 내보내기로 백업하세요"; st.className = "save-status err"; }
     }
@@ -137,9 +144,10 @@ AUTOSAVE_JS = """
     document.querySelectorAll("[data-key]").forEach(function(field){
       var v = window.localStorage.getItem(key(field));
       if(v !== null){
-        field.value = v;
+        if(isCheck(field)){ field.checked = (v === "1"); }
+        else { field.value = v; }
         var st = statusEl(field);
-        if(st && v){ st.textContent = "저장된 값 불러옴"; }
+        if(st && (isCheck(field) ? v === "1" : v)){ st.textContent = "저장된 값 불러옴"; }
       }
     });
   }
@@ -147,7 +155,8 @@ AUTOSAVE_JS = """
   document.addEventListener("DOMContentLoaded", function(){
     restoreAll();
     document.querySelectorAll("[data-key]").forEach(function(field){
-      field.addEventListener("input", function(){ debounceSave(field); });
+      var ev = isCheck(field) ? "change" : "input";
+      field.addEventListener(ev, function(){ debounceSave(field); });
     });
 
     var exportBtn = document.getElementById("export-btn");
@@ -157,11 +166,11 @@ AUTOSAVE_JS = """
         document.querySelectorAll("[data-key]").forEach(function(field){
           var label = field.dataset.label;
           if(!label){
-            var wrap = field.closest(".field") || field.closest(".inline-field");
-            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label") : null;
+            var wrap = field.closest(".field") || field.closest(".inline-field") || field.closest(".checkfield") || field.closest(".qa-block");
+            var labelEl = wrap ? wrap.querySelector(".field-label, .inline-field-label, .qa-question, span") : null;
             label = labelEl ? labelEl.textContent.trim() : field.dataset.key;
           }
-          var value = field.value.trim() || "(비어있음)";
+          var value = isCheck(field) ? (field.checked ? "[v] 체크함" : "[ ] 안함") : (field.value.trim() || "(비어있음)");
           lines.push(label + "\\n" + value + "\\n");
         });
         var text = lines.join("\\n---\\n");
