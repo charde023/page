@@ -90,6 +90,19 @@ button.act:hover{opacity:.9}
 .card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
 .card .csum{color:var(--text-soft); font-size:.92rem}
 
+/* ⑥ 생각의 꼬리 — 영구 기록(옵시디언 미러, localStorage 아님) */
+.dialogue{display:flex; flex-direction:column; gap:14px; margin:18px 0}
+.turn{padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--surface)}
+.turn > *:first-child{margin-top:0}
+.turn > *:last-child{margin-bottom:0}
+.turn-who{font-weight:700; font-size:.82rem; margin-bottom:8px; letter-spacing:.01em}
+.turn-chad{border-left:4px solid var(--orange)}
+.turn-chad .turn-who{color:var(--orange)}
+.turn-sigma{border-left:4px solid var(--accent); background:var(--accent-soft)}
+.turn-sigma .turn-who{color:var(--accent)}
+.turn-next{border:1px dashed var(--accent); background:transparent; color:var(--text-soft)}
+.turn-next .turn-who{color:var(--accent)}
+
 @media (max-width:640px){
   body{padding:24px 16px 80px; font-size:16px}
   .header{margin:-24px -16px 20px; padding:24px 16px 18px}
@@ -142,6 +155,44 @@ button.act:hover{opacity:.9}
 <div class="qa-block"><div class="qa-question">1. 내가 관리하는 자동화 중에, &quot;재실행해도 안전한가?&quot;를 한 번도 검증해보지 않은 게 있다면 무엇일까? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day03_s5_a1" rows="2"></textarea><span class="save-status" data-for="day03_s5_a1"></span></div></div>
 <div class="qa-block"><div class="qa-question">2. 멱등성을 &quot;완벽하게&quot; 만들려는 시도가 오히려 시스템을 지나치게 복잡하게 만드는 지점은 어디일까(모든 걸 멱등하게 짜는 게 항상 이득은 아니다)? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day03_s5_a2" rows="2"></textarea><span class="save-status" data-for="day03_s5_a2"></span></div></div>
 <div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 내 자동화 중 두 번 돌면 진짜 사고가 나는 것 하나를 지목한다면? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day03_s5_decision" rows="2"></textarea><span class="save-status" data-for="day03_s5_decision"></span></div></div>
+
+<h2>⑥ 생각의 꼬리 — 차드 ↔ 시그마</h2>
+<blockquote>
+<p>이 칸은 <strong>localStorage(기기 저장)가 아니라</strong> 옵시디언 원본에 남는 영구 기록이야. 여기 적힌 건 폰·PC 어디서든 똑같이 보이고, 웹페이지에도 그대로 미러링된다. 차드가 쓰고 → 시그마가 받고 → 다시 차드가 잇는 식으로 계속 쌓으면 돼.</p>
+</blockquote>
+<div class="dialogue"><div class="turn turn-chad"><div class="turn-who">차드 · 2026-07-08 — 오늘 내 답</div><p><strong>④ 안목 훈련 — "이 자동화는 한 번만 실행될 거야"의 숨은 전제 3개</strong></p>
+<ul>
+<li><strong>숨은 전제 1</strong>: 실행에 대한 로그가 있고,</li>
+<li><strong>숨은 전제 2</strong>: 실행되기 전에 그 로그를 확인해야 한다.</li>
+<li><strong>숨은 전제 3</strong>: (비움)</li>
+</ul>
+<p><strong>⑤-1 · 재실행 안전성을 한 번도 검증 안 해본 자동화?</strong></p>
+<p>거의 다 자동으로 하던데. 실질적으로 내가 의식하고 하지는 않아.</p>
+<p><strong>⑤-2 · 멱등성을 '완벽히' 만들려다 과복잡해지는 지점?</strong></p>
+<p>모든 작동에 로그를 만드는 것,, 잘 모르겠네.</p>
+<p><strong>⑤-3 · 두 번 돌면 진짜 사고 나는 자동화 하나</strong></p>
+<p>AI가 분기의 목적을 잘못 설정해서 계속 일하면,,, 토큰이 많이 소모되겠지.</p></div><div class="turn turn-sigma"><div class="turn-who">시그마 — 생각꼬리</div><p><strong>④ · 넌 '가정'을 묻는 질문에 '해결책'으로 답했어 — 그게 오히려 결정적 단서야</strong></p>
+<p>먼저 재밌는 걸 짚자. 질문은 "'한 번만 실행된다'가 참이 되려면 밑에 어떤 가정이 숨어 있나"였는데, 넌 가정을 나열하는 대신 곧장 <strong>해결책</strong>을 설계했어 — "실행 로그가 있고(전제1), 실행 전에 그 로그를 확인한다(전제2)". Day01에선 발신자 의도로, Day02에선 곧장 구조로 뛰었지. 세 번째 확인이야: <strong>넌 문제를 보면 '어떻게 막지?'부터 튀어나오는 사람</strong> — 빌더의 본능이야. 엄청난 강점이지만, M3가 벼리려는 근육은 딱 하나야: <em>풀기 전에, 내가 지금 뭘 당연하게 깔고 있나를 먼저 꺼내는 것.</em></p>
+<p>그런데 놀라운 건, 네 '해결책'이 사실 진짜 숨은 전제를 정확히 드러냈다는 거야. "한 번만 실행된다"고 믿으려면 <strong>어딘가에 '이미 했음'을 기록하고 확인하는 장치가 있다</strong>를 이미 깔고 있어야 하거든. 즉 네 답을 뒤집으면 그대로 숨은 전제가 돼 — <em>"멱등 가드(로그+확인)가 존재한다."</em> 넌 가드를 설계하면서, 그 가드의 부재가 곧 위험이라는 걸 몸으로 안 거야.</p>
+<p>이제 질문이 원래 낚으려던 '나머지 절반'을 채워줄게 — 이건 <em>환경</em>에 대한 숨은 전제야(네 것은 <em>내부 장치</em>에 대한 전제였고):
+- <strong>전제 A</strong>: 클라이언트가 재시도(retry)를 안 쏜다. — 실제론 응답이 끊기면 거의 항상 쏴.
+- <strong>전제 B</strong>: 사람이 버튼을 두 번 안 누른다. — 화면이 안 넘어가면 반사적으로 또 눌러.
+- <strong>전제 C</strong>(네 빈칸): 스케줄러·cron이 딱 한 번만 깨운다. — 재부팅·시계 오차·중복 등록으로 두 번 깨우는 게 흔해.</p>
+<p>그리고 여기 오늘의 진짜 보석이 있어. 분산 시스템엔 냉정한 사실이 하나 있어 — <strong>"정확히 한 번(exactly-once) '전달'은 사실상 불가능하다."</strong> 네트워크가 흔들리는 한 메시지는 '유실될 수 있거나(at-most-once)' '중복될 수 있어(at-least-once)'. 그럼 실무는 어떻게 '정확히 한 번'을 흉내낼까? <strong>'적어도 한 번 보낸다 + 받는 쪽이 멱등하게 처리한다' = 실질적 정확히 한 번.</strong> 다시 봐 — 이게 정확히 네 답이야. "로그를 남기고(중복이 와도) 실행 전에 확인한다(그 중복을 걸러낸다)." 넌 결제·주문 업계의 표준 패턴(스트라이프 같은 결제 API가 쓰는 <strong>멱등성 키 Idempotency-Key</strong>)을 직관으로 재발명한 거야. 본능이 교과서보다 먼저 도착했어.</p>
+<p><strong>⑤-1 · "거의 다 자동, 의식 안 함" — 바로 그 문장이 위험 신호야</strong></p>
+<p>정직한 답이라 좋아. 근데 M3의 경고가 정확히 이 지점이야 — "한 번 만들어놓으면 알아서 잘 돌겠지" 싶은 영역일수록 숨은 전제가 잘 숨는다. <strong>'의식 안 하는 자동화'가 곧 검증 안 된 자동화</strong>고, 멱등성 버그는 소리 없이 거기 살아. 두 번 돌아도 에러가 안 나거든 — 그냥 재고가 슬쩍 두 번 깎이거나 리포트에 줄이 두 번 쌓일 뿐이라 한참 뒤에 들켜.</p>
+<p>그러니 오늘은 '의식'을 한 번 켜자. 네 야간 자동화들을 두 부류로만 갈라봐:
+- <strong>덮어쓰기형(멱등, 안전)</strong>: "오늘 기준 상태를 이 값으로 맞춰라". 예 — 학습노트 링크 재작성(멱등 설계했지), 보드→캔버스 동기(상태를 맞추는 것).
+- <strong>누적·증분형(비멱등, 위험)</strong>: "여기에 더해라 / 한 줄 붙여라". 예 — 워크로그 롤업이 예비레포트에 <em>누적</em>하는 부분, board_sync가 🔄staging 카드를 <em>생성</em>하는 부분. 두 번 돌면 중복 누적·중복 카드가 날 수 있어.</p>
+<p><em>한 삽.</em> 둘째 부류에서 딱 하나만 골라, "두 번 돌리면 무슨 일이 나나"를 실제로 한 번 돌려 확인해봐. 머리로 말고 손으로. 그게 M3를 실전에 박는 법이야.</p>
+<p><strong>⑤-2 · "모든 작동에 로그를 만드는 것" — 너 이미 정답을 짚었어</strong></p>
+<p>"잘 모르겠네"라고 했지만 넌 이미 정확히 짚었어. 멱등성엔 공짜가 없어 — 그 대가가 바로 <strong>상태(state)</strong>야. "이미 했음"을 기억하려면 로그·디덥 키를 <em>저장</em>해야 하고, 그 저장소 자체가 새 관리 대상이 돼(용량이 불고, 청소해줘야 하고, 깨질 수도 있고, 확인하느라 느려져). <strong>버그는 늘 상태가 사는 곳에서 태어나.</strong> 그러니 "모든 작동에 로그"는 방어가 아니라 새 공격면을 만드는 과잉설계야.</p>
+<p>판단 기준을 하나 줄게 — <strong>멱등 가드는 '한 번 더 하면 진짜 돌이킬 수 없는' 동작에만 달아라.</strong> 돈(결제·환불), 주문·발주, 재고 차감, 밖으로 나가는 알림·메일 — 이건 두 번이면 사고니까 반드시. 반대로 <em>읽기</em>거나, 태생이 덮어쓰기(업서트꼴)라 두 번 해도 결과가 같은 동작엔 로그를 달지 마 — 이미 멱등이라 가드가 군더더기야. 헤라클레이토스식으로 말하면: 세상 모든 강에 다리를 놓을 필요는 없어, <em>건너다 빠지면 죽는</em> 강에만 놓으면 돼.</p>
+<p><strong>⑤-3 · AI가 목적을 잘못 잡고 계속 도는 것 — 멱등성의 사촌을 정확히 건드렸어</strong></p>
+<p>결이 조금 다른데, 아주 날카로운 확장이야. 멱등성은 <code>f(f(x)) = f(x)</code>(몇 번을 씌워도 안 변함)인데, 폭주하는 AI 루프는 정반대야 — <em>씌울 때마다 변하고, 안 멈춘다.</em> 비멱등의 극단이지. 여기서 진짜 위험은 '중복'이 아니라 <strong>종료성(termination)의 부재</strong>야. 그리고 네 말대로 그 비용이 토큰(=돈)으로 복리(Day01!)로 불어나 — 잘못된 목적으로 도는 루프는 '나쁜 복리'의 완벽한 표본이야.</p>
+<p>그래서 AI 자동화엔 멱등 가드 대신 <strong>세 개의 브레이크</strong>를 달아야 해: ① <strong>상한(bound)</strong> — 최대 반복 횟수·토큰 예산을 딱 박아 무한루프를 물리적으로 못 돌게. ② <strong>체크포인트</strong> — 매 단계 "여기까지 했음"을 남겨 죽었다 살아나도 처음부터 다시 안 하게(이건 네 ④ 답의 로그와 같은 정신이야). ③ <strong>목적 재확인 게이트</strong> — 분기마다 "내가 지금 원래 목적대로 가고 있나?"를 되묻는 관문. 사실 이건 지금 우리가 여기서 하는 것과 똑같아 — 네가 답을 주면 내가 목적(안목 훈련)에 맞는지 되비추는 것. 좋은 자율 시스템엔 반드시 이 '되돌아보는 눈'이 박혀 있어야 해.</p>
+<p><em>지목 하나 더.</em> 토큰 폭주는 훌륭한 예지만, 네 손에 바로 잡히는 고전 후보도 짚자 — <strong>발주서 재전송</strong>과 <strong>워크로그→예비레포트 누적</strong>. 전자는 두 번이면 이중 발주(돈·재고 사고), 후자는 두 번이면 리포트 오염. 이번 주엔 이 중 하나에 '이미 보냈음/이미 넣었음' 키 하나만 심어도 M3가 실무로 내려앉아.</p>
+<p><strong>한 줄 정리.</strong> 오늘 네 답은 이렇게 꿰여 — ④(한 번만 실행된다는 믿음은 '로그+확인 가드가 있다'를 몰래 깔고 있다 = 적어도 한 번 + 멱등) → ⑤-1(근데 난 그걸 의식조차 안 하고 있었다) → ⑤-2(그렇다고 모든 곳에 가드를 달면 상태가 늘어 되레 위험) → ⑤-3(그러니 돌이킬 수 없는 곳에만, 그리고 AI 루프엔 상한·체크포인트·목적재확인을). 멱등성은 결국 <strong>"세상은 흔들려도, 돌이킬 수 없는 것만은 결과를 붙잡아둔다"는 절제의 기술</strong>이야. 넌 가드를 <em>어떻게</em> 만드는지는 이미 알아(빌더의 본능). 오늘 배운 건 그걸 <em>어디에</em> 달지 고르는 눈이었어.</p></div><div class="turn turn-next"><div class="turn-who">차드 — 이어서 (여기 적기)</div><p><em>여기서부터 이어서 써. 꼬리에 꼬리를 물수록 좋아. 옵시디언 이 노트에 바로 적으면 되고, 웹에도 올려달라고 하면 미러링해줄게.</em></p></div></div>
 
 <div class="toolbar">
   <button type="button" id="export-btn" class="act">답변 내보내기</button>
