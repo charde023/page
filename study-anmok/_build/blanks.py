@@ -392,10 +392,25 @@ def transform_dialogue(text: str, day_num: int) -> str:
         body = text[m.end():body_end].strip()
         role = "next" if "이어서" in label else ("sigma" if who == "시그마" else "chad")
         body_html = render(body) if body else ""
+        # "이어서" 턴은 정적 안내문 아래에 실제 입력란(textarea)을 단다. 자동저장
+        # (data-key)이 걸려 있어 하단 "답변 내보내기" 버튼에 자동 포함된다. 웹에서
+        # 바로 이어 쓰고 export로 복사해 시그마에게 주면 볼트 ⑥에 영구 기록된다.
+        # key 접미사에 마커 개수를 써서 대화가 길어지면 새 입력칸이 신선해진다
+        # (이전 라운드 초안이 새 칸에 되살아나지 않도록).
+        extra = ""
+        if role == "next":
+            key = f"day{day_num:02d}_tail{len(markers)}"
+            extra = (
+                f'<textarea class="field-input" data-key="{key}" rows="4" '
+                f'data-label="⑥ 생각의 꼬리 — 차드 이어서" '
+                f"placeholder=\"여기에 이어서 써 — 이 기기에 자동 저장돼. 영구 기록은 아래 '답변 내보내기'로 복사해 시그마에게 주면 볼트에 박아줄게.\"></textarea>"
+                f'<span class="save-status" data-for="{key}"></span>'
+            )
         turns.append(
             f'<div class="turn turn-{role}">'
             f'<div class="turn-who">{html.escape(label)}</div>'
             f'{body_html}'
+            f'{extra}'
             f'</div>'
         )
     block = '<div class="dialogue">' + "".join(turns) + "</div>"
