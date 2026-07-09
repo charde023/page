@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APOM LOGIS · 브랜드 컬러 팔레트 6종</title>
+<style>
+  :root{
+    --bg:#eceee7; --panel:#ffffff; --ink:#22271d; --ink-soft:#5b6153;
+    --hair:#dadcd0; --hair-2:#c6c9ba; --accent:#4b5740;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#12150e; --panel:#1c2016; --ink:#e9ede0; --ink-soft:#9aa389;
+      --hair:#2a2f22; --hair-2:#3a4030; --accent:#9db584;}
+  }
+  :root[data-theme="light"]{--bg:#eceee7;--panel:#ffffff;--ink:#22271d;--ink-soft:#5b6153;--hair:#dadcd0;--hair-2:#c6c9ba;--accent:#4b5740;}
+  :root[data-theme="dark"]{--bg:#12150e;--panel:#1c2016;--ink:#e9ede0;--ink-soft:#9aa389;--hair:#2a2f22;--hair-2:#3a4030;--accent:#9db584;}
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+    -webkit-font-smoothing:antialiased;word-break:keep-all;}
+  .wrap{max-width:960px;margin:0 auto;padding:56px 22px 90px;}
+
+  /* header */
+  .eyebrow{font-size:12px;letter-spacing:.26em;text-transform:uppercase;font-weight:800;
+    color:var(--accent);margin:0 0 16px;}
+  h1{font-size:clamp(28px,4.6vw,44px);line-height:1.08;margin:0 0 18px;font-weight:800;
+    letter-spacing:-.02em;text-wrap:balance;}
+  .lede{font-size:16.5px;color:var(--ink-soft);max-width:62ch;margin:0;}
+
+  .ref{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:28px;
+    padding:16px 18px;border:1px solid var(--hair);border-radius:14px;background:var(--panel);}
+  .ref .chip{width:52px;height:52px;border-radius:11px;background:#536048;flex:none;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);}
+  .ref b{font-weight:700;}
+  .ref .m{font-size:13.5px;color:var(--ink-soft);margin-top:2px;}
+  .ref code{font-family:var(--mono);font-size:12.5px;background:rgba(83,96,72,.12);
+    color:var(--ink);padding:1px 6px;border-radius:5px;}
+
+  .rule{display:flex;align-items:center;gap:14px;margin:44px 0 22px;}
+  .rule span{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);}
+  .rule i{flex:1;height:1px;background:var(--hair);}
+
+  /* cards */
+  .cards{display:flex;flex-direction:column;gap:20px;}
+  .card{border:1px solid var(--hair);border-radius:18px;overflow:hidden;background:var(--panel);}
+  .band{height:96px;display:flex;}
+  .band .seg{flex:1;}
+  .band .lead{flex:2.4;display:flex;align-items:flex-end;padding:12px 16px;}
+  .band .lead .no{font:800 13px/1 var(--mono);color:rgba(255,255,255,.82);}
+  .body{padding:20px 22px 22px;}
+  .head{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;margin-bottom:4px;}
+  .head h2{font-size:21px;margin:0;font-weight:800;letter-spacing:-.01em;}
+  .head .tag{font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:800;
+    padding:3px 9px;border-radius:999px;border:1px solid var(--hair-2);color:var(--ink-soft);}
+  .head .tag.rec{background:var(--accent);color:#fff;border-color:transparent;}
+  .desc{color:var(--ink-soft);font-size:14.5px;margin:8px 0 0;max-width:66ch;}
+  .desc b{color:var(--ink);font-weight:600;}
+
+  .tokens{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;}
+  .tok{display:flex;align-items:center;gap:7px;border:1px solid var(--hair);border-radius:8px;
+    padding:5px 9px 5px 6px;font-size:12px;}
+  .tok i{width:16px;height:16px;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);}
+  .tok .r{color:var(--ink-soft);font-weight:600;}
+  .tok .h{font-family:var(--mono);font-weight:600;}
+
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px;}
+  .view{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;
+    text-decoration:none;padding:10px 16px;border-radius:9px;color:#fff;}
+  .view.disabled{background:transparent;color:var(--ink-soft);border:1px dashed var(--hair-2);cursor:default;}
+  .cta-note{font-size:12.5px;color:var(--ink-soft);}
+  .cta-note b{color:var(--ink);font-weight:600;}
+
+  .close{margin-top:46px;padding:20px 22px;border:1px solid var(--hair);border-radius:14px;
+    background:var(--panel);font-size:13.5px;color:var(--ink-soft);}
+  .close b{color:var(--ink);}
+  .close ul{margin:10px 0 0;padding-left:18px;}
+  .close li{margin:5px 0;}
+
+  footer{margin-top:38px;text-align:center;color:var(--ink-soft);font-size:12.5px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">APOM LOGIS · Brand Color Study</p>
+  <h1>국방색을 축으로 한 브랜드 컬러 팔레트 6종</h1>
+  <p class="lede">로고에서 실측한 세이지·밀리터리 그린을 기준점으로, 온도·채도·명도를 달리한 여섯 방향입니다.
+    각 팔레트는 <b>logis.apom.kr 랜딩 전체</b>에 실제로 대입해 모니터(sRGB) 기준으로 검증했습니다.</p>
+
+  <div class="ref">
+    <div class="chip"></div>
+    <div>
+      <div><b>로고 배경 실측값</b> — 채도 낮고 회색기 있는 세이지 국방색</div>
+      <div class="m">Primary reference <code>#536048</code> · RGB(83, 96, 72) · HSL(97°, 14%, 33%)</div>
+    </div>
+  </div>
+
+  <div class="rule"><span>6 Directions</span><i></i></div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="close">
+    <b>공통 원칙</b>
+    <ul>
+      <li>여섯 방향 모두 로고 워드마크(흰색)와 정합하도록 Primary 명도를 잡았습니다.</li>
+      <li>각 팔레트는 <b>주색(Primary)</b> + <b>강조(CTA)</b> + 뉴트럴(배경·잉크·라인)로 구성됩니다. 정상/확인/지연 같은 상태색은 주색과 별도입니다.</li>
+      <li>색은 인쇄가 아니라 <b>화면(sRGB 모니터)</b> 기준으로 뽑았습니다. 실제 화주 대부분이 모니터로 포털을 봅니다.</li>
+      <li>실제 적용은 <code>web/src/app/globals.css</code> <code>@theme</code>의 색 토큰 교체 한 곳으로 끝납니다.</li>
+    </ul>
+  </div>
+
+  <footer>APOM LOGIS 브랜드 컬러 스터디 · 2026-07-09</footer>
+</div>
+
+<script>
+const P=[
+ {no:"01",name:"필드 올리브",tag:"원본 충실 · 안전",rec:false,
+  primary:"#536048",deep:"#3E4836",soft:"#EAEEE4",cta:"#C8894B",ink:"#24281F",muted:"#6B7264",bg:"#F4F5F1",
+  ctaName:"탄/앰버",
+  desc:"로고 배경색을 그대로 <b>Primary</b>로 쓰는 가장 정직한 선택. 웜한 탄/앰버를 CTA 포인트로 얹어 흙·현장 무드를 살렸습니다. 리스크가 가장 낮고 로고와 100% 정합.",
+  link:"https://charde023.github.io/page/2026-07-09-apom-logis-field-olive/"},
+ {no:"02",name:"딥 포레스트",tag:"신뢰 · 단단함",rec:true,
+  primary:"#2E3B2C",deep:"#20291F",soft:"#E5E9E0",cta:"#D9A441",ink:"#1A1F18",muted:"#697061",bg:"#F2F3EF",
+  ctaName:"브라스 골드",
+  desc:"국방색을 한 단계 더 어둡게 눌러 무게감과 신뢰를 극대화. 군용 놋쇠 느낌의 브라스 골드로 프리미엄 3PL 인상을 줍니다. “단단한 느낌”에 가장 직결되는 방향.",
+  link:"https://charde023.github.io/page/2026-07-09-apom-logis-deep-forest/"},
+ {no:"03",name:"클래식 레이싱 그린",tag:"채도 · 프리미엄",rec:false,
+  primary:"#16432E",deep:"#0E3122",soft:"#E2EDE6",cta:"#C0A062",ink:"#10261C",muted:"#5F6D63",bg:"#F0F4F0",
+  ctaName:"샴페인 골드",
+  desc:"국방색보다 채도를 살린 브리티시 레이싱 그린 계열. 회색기를 걷어내 더 또렷하고 고급스럽습니다. 샴페인 골드와 짝지어 정통·품격 있는 브랜드 인상.",
+  link:"https://charde023.github.io/page/2026-07-09-apom-logis-racing-green/"},
+ {no:"04",name:"세이지 모던",tag:"밝음 · 현대적",rec:false,
+  primary:"#6E7F63",deep:"#566349",soft:"#EBEEE5",cta:"#2C7A6B",ink:"#2A3025",muted:"#7C8474",bg:"#F6F7F3",
+  ctaName:"딥 틸",
+  desc:"국방색을 밝게 끌어올린 세이지로 화면에서 답답하지 않고 요즘 SaaS 같은 산뜻함. 보색 계열 딥 틸 포인트로 젊은 인상. 신뢰감은 유지하되 접근성이 좋습니다.",
+  link:"https://charde023.github.io/page/2026-07-09-apom-logis-sage-modern/"},
+ {no:"05",name:"올리브 · 네이비",tag:"물류 · 정통 대비",rec:false,
+  primary:"#4F5640",deep:"#3A3F2E",soft:"#E3E2D0",cta:"#274B6D",ink:"#2C2A22",muted:"#7A7565",bg:"#EDE7D8",
+  ctaName:"딥 네이비",
+  desc:"카키 올리브에 딥 네이비를 짝지은 클래식 조합. 웜한 샌드/크림 바탕이 종이·박스 질감을 연상시켜 물류 무드에 잘 맞습니다. 대비가 살아 정보 위계가 또렷.",
+  link:"https://charde023.github.io/page/2026-07-09-apom-logis-olive-navy/"},
+ {no:"06",name:"다크 택티컬",tag:"다크 UI · 테크",rec:false,
+  primary:"#9BC53D",deep:"#B6DC5C",soft:"#232B20",cta:"#9BC53D",ink:"#EEF2E4",muted:"#8B9678",bg:"#141810",
+  ctaName:"라임",
+  desc:"아주 어두운 택티컬 그린 바탕에 라임 옐로그린 포인트. 관제탑·실시간 배송 모니터 같은 화면에 강한 가장 모던한 방향. <b>주의:</b> 원본이 라이트 전용 디자인이라 흰 카드 일부는 별도 보정이 필요합니다.",
+  link:"https://charde023.github.io/page/2026-07-09-apom-logis-dark-tactical/"},
+];
+
+function tok(role,hex){return `<span class="tok"><i style="background:${hex}"></i><span class="r">${role}</span><span class="h">${hex}</span></span>`;}
+
+document.getElementById('cards').innerHTML = P.map(p=>{
+  const band = `
+    <div class="band">
+      <div class="lead" style="background:${p.primary}"><span class="no">${p.no}</span></div>
+      <div class="seg" style="background:${p.deep}"></div>
+      <div class="seg" style="background:${p.cta}"></div>
+      <div class="seg" style="background:${p.bg}"></div>
+      <div class="seg" style="background:${p.soft}"></div>
+    </div>`;
+  const tokens = tok('Primary',p.primary)+tok('Deep',p.deep)+tok('CTA · '+p.ctaName,p.cta)+tok('Ink',p.ink)+tok('Muted',p.muted)+tok('BG',p.bg);
+  const recTag = p.rec ? `<span class="tag rec">추천</span>` : '';
+  const btn = `<a class="view" href="${p.link}" target="_blank" rel="noopener" style="background:${p.primary}">랜딩 실물 보기 →</a>`;
+  return `<article class="card">
+    ${band}
+    <div class="body">
+      <div class="head"><h2>${p.name}</h2><span class="tag">${p.tag}</span>${recTag}</div>
+      <p class="desc">${p.desc}</p>
+      <div class="tokens">${tokens}</div>
+      <div class="foot">${btn}<span class="cta-note">주색 <b>${p.primary}</b> · 강조 <b>${p.cta}</b> (${p.ctaName})</span></div>
+    </div>
+  </article>`;
+}).join('');
+</script>
+</body>
+</html>
