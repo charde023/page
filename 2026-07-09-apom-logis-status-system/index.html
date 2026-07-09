@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>상태색 체계 · APOM LOGIS</title>
+<style>
+  :root{
+    --green:#16432E; --ink:#10261C; --muted:#5F6D63; --line:#DDE6DE; --bg:#EEF2EC; --panel:#FFFFFF;
+    --info:#185FA5; --info-soft:#E6F1FB; --info-dot:#378ADD; --info-text:#0C447C;
+    --warn:#BA7517; --warn-soft:#FAC775; --warn-dot:#EF9F27; --warn-text:#633806;
+    --danger:#C62F2F; --danger-soft:#F7C1C1; --danger-dot:#E24B4A; --danger-text:#791F1F;
+    --hold:#5F5E5A; --hold-soft:#E8E7E1; --hold-dot:#888780; --hold-text:#2C2C2A;
+    --ok:#2E9E5B; --ok-soft:#E3F5EA; --ok-text:#1C6B3D;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root{--bg:#0e140f;--panel:#161d16;--ink:#e7efe6;--muted:#93a394;--line:#26312a;}}
+  :root[data-theme="light"]{--bg:#EEF2EC;--panel:#FFFFFF;--ink:#10261C;--muted:#5F6D63;--line:#DDE6DE;}
+  :root[data-theme="dark"]{--bg:#0e140f;--panel:#161d16;--ink:#e7efe6;--muted:#93a394;--line:#26312a;}
+  *{box-sizing:border-box;}
+  html,body{margin:0;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
+    -webkit-font-smoothing:antialiased;word-break:keep-all;}
+  .wrap{max-width:900px;margin:0 auto;padding:48px 20px 84px;}
+  .eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:800;color:var(--muted);margin:0 0 12px;}
+  h1{font-size:clamp(24px,3.8vw,34px);margin:0 0 12px;font-weight:800;letter-spacing:-.02em;}
+  .lede{font-size:15.5px;color:var(--muted);max-width:66ch;margin:0;}
+  .lede b{color:var(--ink);font-weight:600;}
+
+  .rule{display:flex;align-items:center;gap:13px;margin:40px 0 16px;}
+  .rule h2{font-size:16px;font-weight:800;margin:0;letter-spacing:.01em;}
+  .rule i{flex:1;height:1px;background:var(--line);}
+  .rule .n{font-size:12px;font-weight:700;color:var(--muted);}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media(max-width:680px){.grid3{grid-template-columns:1fr;}}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr;}}
+
+  .card{border:1px solid var(--line);border-radius:15px;background:var(--panel);overflow:hidden;}
+  .card .cap{height:8px;}
+  .card .in{padding:16px 16px 17px;display:flex;flex-direction:column;gap:12px;}
+  .role{display:flex;align-items:center;gap:9px;}
+  .role .lamp{width:20px;height:20px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25);}
+  .role .nm{font-size:15px;font-weight:800;}
+  .role .en{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-left:auto;}
+  .use{font-size:13px;color:var(--muted);line-height:1.55;min-height:36px;}
+  .use b{color:var(--ink);font-weight:600;}
+  .demo{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;padding:4px 11px;border-radius:999px;}
+  .pill .d{width:7px;height:7px;border-radius:50%;}
+  .fill{font:800 12.5px var(--sans);border:0;padding:7px 13px;border-radius:8px;}
+  .hex{display:flex;gap:6px;flex-wrap:wrap;}
+  .hx{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 7px;border-radius:6px;border:1px solid var(--line);}
+  .hx .k{color:var(--muted);font-weight:700;margin-right:4px;}
+  .limited{font-size:11px;font-weight:800;color:#8a5a10;background:#FAECC9;padding:2px 8px;border-radius:999px;}
+
+  /* 예시 목록 */
+  .board{border:1px solid var(--line);border-radius:15px;background:var(--panel);padding:6px 16px;}
+  .brow{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line);}
+  .brow:first-child{border-top:0;}
+  .brow .id{font-family:var(--mono);font-size:12.5px;color:var(--muted);}
+  .brow .sp{flex:1;}
+  footer{margin-top:40px;text-align:center;color:var(--muted);font-size:12.5px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">APOM LOGIS · Status Color System</p>
+  <h1>상태색 체계 — 파 · 노 · 빨 (+ 회색 보류)</h1>
+  <p class="lede">주색이 딥 그린이라, 상태 체계의 주축은 <b>파랑·노랑·빨강</b>으로 잡았습니다.
+    <b>보류는 회색</b>, 정상 표시가 꼭 필요한 신호등식 화면에서만 <b>밝은 녹색</b>을 제한적으로 씁니다.
+    노랑·빨강은 채도를 올려 눈에 띄게 했고, 값은 표준 색상표(CDS 램프)에서 채택했습니다.</p>
+
+  <div class="rule"><h2>주축</h2><span class="n">기본 · 주의 · 위험</span><i></i></div>
+  <div class="grid3">
+    <div class="card">
+      <div class="cap" style="background:var(--info)"></div>
+      <div class="in">
+        <div class="role"><span class="lamp" style="background:var(--info-dot)"></span><span class="nm">파랑</span><span class="en">Info</span></div>
+        <div class="use"><b>기본·정보·진행중.</b> 집화 예정, 안내, 정상 진행 등 중립 상태의 기본값.</div>
+        <div class="demo">
+          <span class="pill" style="background:var(--info-soft);color:var(--info-text)"><span class="d" style="background:var(--info-dot)"></span>집화 예정</span>
+          <button class="fill" style="background:var(--info);color:#fff">안내 보기</button>
+        </div>
+        <div class="hex"><span class="hx"><span class="k">base</span>#185FA5</span><span class="hx"><span class="k">soft</span>#E6F1FB</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="cap" style="background:var(--warn-dot)"></div>
+      <div class="in">
+        <div class="role"><span class="lamp" style="background:var(--warn-dot)"></span><span class="nm">노랑</span><span class="en">Warn</span></div>
+        <div class="use"><b>주의·확인 필요.</b> 서류 검토 대기, 사진 확인 요청 등. 채도를 올려 눈에 띄게.</div>
+        <div class="demo">
+          <span class="pill" style="background:var(--warn-soft);color:var(--warn-text)"><span class="d" style="background:var(--warn-text)"></span>확인 필요</span>
+          <button class="fill" style="background:var(--warn-dot);color:#412402">지금 확인</button>
+        </div>
+        <div class="hex"><span class="hx"><span class="k">base</span>#BA7517</span><span class="hx"><span class="k">soft</span>#FAC775</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="cap" style="background:var(--danger-dot)"></div>
+      <div class="in">
+        <div class="role"><span class="lamp" style="background:var(--danger-dot)"></span><span class="nm">빨강</span><span class="en">Danger</span></div>
+        <div class="use"><b>위험·지연·오류.</b> 반품 문제, 예치금 부족, 마감 초과 등 즉시 조치. 선명하게.</div>
+        <div class="demo">
+          <span class="pill" style="background:var(--danger-soft);color:var(--danger-text)"><span class="d" style="background:var(--danger-text)"></span>배송 지연</span>
+          <button class="fill" style="background:var(--danger-dot);color:#fff">지연 신고</button>
+        </div>
+        <div class="hex"><span class="hx"><span class="k">base</span>#C62F2F</span><span class="hx"><span class="k">soft</span>#F7C1C1</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"><h2>보조</h2><span class="n">보류 · 정상(제한)</span><i></i></div>
+  <div class="grid2">
+    <div class="card">
+      <div class="cap" style="background:var(--hold-dot)"></div>
+      <div class="in">
+        <div class="role"><span class="lamp" style="background:var(--hold-dot)"></span><span class="nm">회색</span><span class="en">Hold</span></div>
+        <div class="use"><b>보류·대기.</b> 심사 대기, 일시중지, 미정 상태 등 판단 유보. 시선을 끌지 않음.</div>
+        <div class="demo">
+          <span class="pill" style="background:var(--hold-soft);color:var(--hold-text)"><span class="d" style="background:var(--hold-dot)"></span>심사 대기</span>
+          <button class="fill" style="background:var(--hold-soft);color:var(--hold-text);border:1px solid var(--line)">보류</button>
+        </div>
+        <div class="hex"><span class="hx"><span class="k">base</span>#5F5E5A</span><span class="hx"><span class="k">soft</span>#E8E7E1</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="cap" style="background:var(--ok)"></div>
+      <div class="in">
+        <div class="role"><span class="lamp" style="background:var(--ok)"></span><span class="nm">밝은 녹색</span><span class="limited">제한 사용</span><span class="en">OK</span></div>
+        <div class="use"><b>정상·완료.</b> 빨/노/초로 명확히 나눠야 하는 <b>신호등식 화면에서만</b>. 주색 그린과 채도로 구분.</div>
+        <div class="demo">
+          <span class="pill" style="background:var(--ok-soft);color:var(--ok-text)"><span class="d" style="background:var(--ok)"></span>정상 출고</span>
+          <button class="fill" style="background:var(--ok);color:#fff">완료</button>
+        </div>
+        <div class="hex"><span class="hx"><span class="k">base</span>#2E9E5B</span><span class="hx"><span class="k">soft</span>#E3F5EA</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"><h2>실제 목록 예시</h2><i></i></div>
+  <div class="board">
+    <div class="brow"><span class="id">1042-8891-2201</span><span class="sp"></span><span class="pill" style="background:var(--info-soft);color:var(--info-text)"><span class="d" style="background:var(--info-dot)"></span>집화 예정</span></div>
+    <div class="brow"><span class="id">1042-8891-2202</span><span class="sp"></span><span class="pill" style="background:var(--warn-soft);color:var(--warn-text)"><span class="d" style="background:var(--warn-text)"></span>확인 필요</span></div>
+    <div class="brow"><span class="id">1042-8891-2203</span><span class="sp"></span><span class="pill" style="background:var(--danger-soft);color:var(--danger-text)"><span class="d" style="background:var(--danger-text)"></span>반품 문제</span></div>
+    <div class="brow"><span class="id">1042-8891-2204</span><span class="sp"></span><span class="pill" style="background:var(--hold-soft);color:var(--hold-text)"><span class="d" style="background:var(--hold-dot)"></span>심사 대기</span></div>
+  </div>
+
+  <footer>주색 = 클래식 레이싱 그린 #16432E · 상태 주축 = 파/노/빨 · 보류 = 회색 · 정상(녹색) = 신호등 전용</footer>
+</div>
+</body>
+</html>
