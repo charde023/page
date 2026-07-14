@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>에이전트를 덜 지켜보게 된 방법</title>
+<meta name="description" content="AI 코딩 에이전트를 계속 감시하지 않기 위해, 시작 전 사고와 제약 정리를 강화하고 결과 검증은 자동화된 시각 자료로 확인하는 방식."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>에이전트를 덜 지켜보게 된 방법</h1>
+<div class="meta">업로드 2026-07-13 · 0.9분 · <a href="https://youtu.be/-8lQbtdy0lE" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>에이전트를 덜 지켜보게 된 방법 #Shorts</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>AI 코딩 에이전트를 20분씩 지켜보는 대신, <strong>초반에 방향을 더 명확히 잡고</strong> 격리 환경과 시각 검증 자동화를 통해 결과만 확인하는 방식으로 바뀌었다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 미상 · 소속 미상 · 추정 출처 https://www.youtube.com/channel/UC895rbZX2iXLTDfji7W4PfA · 업로드 2026-07-13 · 0.9분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>사전 사고(Up-front thinking)</td>
+<td>에이전트가 엉뚱한 방향으로 구현하는 시간을 줄인다</td>
+<td>시작 전에 원하는 결과, 제약, 검증 기준을 더 명확히 해야 한다</td>
+</tr>
+<tr>
+<td>에이전트 감시 줄이기</td>
+<td>사람이 계속 지켜보면 자동화의 장점이 사라진다</td>
+<td>구현 과정이 아니라 <strong>검증 가능한 결과물</strong>을 보도록 워크플로를 바꾼다</td>
+</tr>
+<tr>
+<td>시각 검증(Visual verification)</td>
+<td>UI 버그나 전후 차이를 빠르게 판단할 수 있다</td>
+<td>버그 상태와 수정 후 상태를 영상이나 GIF로 비교한다</td>
+</tr>
+<tr>
+<td>격리 작업 환경(Crabbox)</td>
+<td>에이전트가 안전하게 작업하고 자동화 결과를 만들 수 있다</td>
+<td>독립된 환경에서 구현, 테스트, 시각 자료 생성을 맡긴다</td>
+</tr>
+<tr>
+<td>병합 판단(Merge decision)</td>
+<td>최종 책임은 사람에게 남는다</td>
+<td>에이전트 결과를 보고 문제가 해결됐으면 병합한다</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li>크랩박스(Crabbox) — 에이전트가 격리된 환경에서 코드를 실행하고 결과물을 만들 수 있게 해주는 작업 환경으로 언급됨.</li>
+<li>클로드(Claude) — Anthropic의 AI 모델. 화자는 예전에는 원하는 대로 작동하지 않아 답답했다고 말함.</li>
+<li>시각 검증(Visual verification) — 테스트 결과를 텍스트 로그만 보는 것이 아니라, 수정 전후 화면을 이미지·영상·GIF로 확인하는 방식.</li>
+<li>병합(Merge) — 코드 변경 사항을 메인 브랜치나 기준 코드에 반영하는 작업.</li>
+<li>GIF 생성 — GitHub에서는 영상 표시가 제한적일 수 있어, 전후 상태를 보여주는 짧은 GIF로 대체할 수 있다는 맥락.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정값·명령어·뉘앙스. 원어 용어 괄호 병기, 맥락까지.</p>
+</blockquote>
+<ol>
+<li>“1년 전쯤”에는 클로드(Claude)에게 소리칠 정도였다고 표현 — 초창기에는 모델이 원하는 대로 움직이지 않아 사람이 계속 개입해야 했다는 의미.</li>
+<li>지금은 “앞에서 더 많이 생각한다”는 방식으로 바뀜 — 구현 중간 감시보다 <strong>요구사항 정리와 방향 설정</strong>이 더 중요해졌다는 뜻.</li>
+<li>구현에는 “1시간, 10시간”이 걸릴 수 있다고 말함 — 에이전트 작업 시간이 길어져도 사람이 계속 붙어 있을 필요는 없다는 맥락.</li>
+<li>크랩박스(Crabbox)가 있으면 비디오를 만드는 프롬프트를 쉽게 구현할 수 있다고 언급 — 코드 결과를 시각적으로 확인하는 자동화가 가능하다는 예시.</li>
+<li>GitHub에서는 영상이 잘 작동하지 않아 GIF를 만들 수 있다고 말함 — 협업 도구에서 결과를 공유하기 쉬운 포맷으로 바꾸는 실용적 디테일.</li>
+<li>“버그가 여기 있고, 수정이 여기 있다”를 직접 확인한 뒤 병합(Merge) — 최종 판단은 사람이 하되, 판단 자료를 에이전트가 준비하게 한다.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>초기의 문제</td>
+<td>모델이 원하는 대로 움직이지 않아 계속 감시하고 개입해야 했다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>방식의 변화</td>
+<td>구현 중간을 지켜보기보다 시작 전에 방향과 조건을 더 깊게 정리한다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>자동 검증</td>
+<td>Crabbox를 이용해 전후 화면을 영상·GIF로 만들어 시각적으로 검증한다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>최종 판단</td>
+<td>사람이 결과를 보고 버그와 수정 여부를 확인한 뒤 병합한다</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 초기에는 에이전트를 계속 감시해야 했다</h2>
+<p>화자는 처음 AI 코딩 에이전트를 쓸 때 상당히 답답했다고 말한다. 모델이 원하는 대로 작동하지 않았고, 심지어 클로드(Claude)에게 소리칠 정도였다고 표현한다.</p>
+<p>여기서 핵심은 AI 모델 자체가 “마법처럼 알아서” 일하는 것이 아니라는 점이다. 초기에 요구사항이 애매하거나, 검증 기준이 부족하거나, 작업 환경이 정리되어 있지 않으면 에이전트는 엉뚱한 방향으로 구현할 수 있다.</p>
+<p>그래서 사람은 계속 화면을 보며 “그거 아니야”, “다시 해”, “이 파일 말고 저 파일”처럼 개입하게 된다. 이러면 AI 에이전트를 쓰는 장점이 크게 줄어든다.</p>
+<h2>2. 지금은 시작 전에 더 많이 생각한다</h2>
+<p>화자는 현재 방식이 “앞에서 더 많이 생각하는 것”으로 바뀌었다고 말한다. 즉, 코딩 에이전트가 작업을 시작하기 전에 다음을 더 명확히 한다는 뜻이다.</p>
+<ul>
+<li>무엇을 고쳐야 하는가</li>
+<li>어떤 결과가 맞는가</li>
+<li>어떤 제약을 지켜야 하는가</li>
+<li>어떤 방식으로 검증할 것인가</li>
+<li>수정 전후를 어떻게 비교할 것인가</li>
+</ul>
+<p>이렇게 하면 에이전트가 실제 구현에 1시간 또는 10시간을 쓰더라도, 사람이 계속 옆에서 지켜볼 필요가 줄어든다.</p>
+<p>핵심은 <strong>에이전트가 오래 일하는 것 자체가 문제가 아니라, 사람이 그 시간을 계속 감시해야 하는 것이 문제</strong>라는 점이다.</p>
+<h2>3. Crabbox로 결과 검증 자료를 자동 생성한다</h2>
+<p>화자는 크랩박스(Crabbox)가 있으면 프롬프트를 통해 비디오를 만드는 기능도 쉽게 구현할 수 있다고 말한다. 이 기능의 목적은 단순히 멋진 영상을 만드는 것이 아니라, 수정 전후 상태를 비교하기 위한 것이다.</p>
+<p>예를 들어 UI 버그를 고친다고 하면 다음처럼 볼 수 있다.</p>
+<ul>
+<li>수정 전 화면: 버그가 보이는 상태</li>
+<li>수정 후 화면: 버그가 해결된 상태</li>
+<li>비교 자료: 영상 또는 GIF</li>
+</ul>
+<p>GitHub에서는 영상이 잘 동작하지 않을 수 있으므로 GIF로 만들 수 있다고 언급한다. 즉, 협업 도구에서 바로 확인 가능한 형태로 결과를 남기는 것이다.</p>
+<p>이 방식은 특히 프론트엔드, 관리자 페이지, 상품 상세 페이지, 장바구니, 결제 흐름처럼 <strong>눈으로 봐야 확실한 문제</strong>에 유용하다.</p>
+<h2>4. 사람은 최종 검증과 병합만 한다</h2>
+<p>화자의 최종 흐름은 간단하다.</p>
+<ol>
+<li>에이전트에게 명확한 작업 지시를 준다.</li>
+<li>에이전트가 격리 환경에서 구현한다.</li>
+<li>에이전트가 수정 전후 화면을 영상이나 GIF로 만든다.</li>
+<li>사람은 그 결과를 보고 “여기에 버그가 있었고, 여기에 수정이 됐다”고 확인한다.</li>
+<li>문제가 해결됐으면 병합(Merge)한다.</li>
+</ol>
+<p>이 방식의 장점은 사람이 구현 중간을 계속 감시하지 않아도 된다는 점이다. 대신 사람은 최종 판단자 역할을 한다.</p>
+<p>차드의 업무에 비유하면, 물류 직원이 일하는 모든 순간을 CCTV로 감시하는 것이 아니라, <strong>출고 전 검수표와 사진 증빙을 보고 승인하는 방식</strong>에 가깝다. AI 에이전트도 마찬가지로, 중간 과정을 일일이 감시하기보다 검증 가능한 결과물을 제출하게 만들어야 한다.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] AI 에이전트에게 작업을 맡기기 전에 원하는 결과와 금지 조건을 먼저 적는다.</li>
+<li>[ ] “어떻게 확인하면 완료로 볼 것인가”를 프롬프트에 포함한다.</li>
+<li>[ ] UI 작업이라면 수정 전후 스크린샷, 영상, GIF 생성을 요구한다.</li>
+<li>[ ] 구현 로그보다 사용자가 볼 결과 화면을 우선 확인한다.</li>
+<li>[ ] 에이전트 작업은 격리 환경에서 실행되도록 구성한다.</li>
+<li>[ ] 최종 병합 전에는 사람이 직접 버그 위치와 수정 결과를 확인한다.</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 에이전트를 덜 지켜보게 된 방법 #Shorts · https://youtu.be/-8lQbtdy0lE · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>처음에는 정말 답답했습니다. 모델이 제가 원하는 대로 움직이지 않았거든요. 1년 전쯤 시작했을 때는 클로드(Claude)에게 소리칠 때도 있었습니다.</p>
+<p>그런데 지금은 방식이 바뀌었습니다. 앞단에서 더 많이 생각합니다. 다만 실제 구현에는 1시간이 걸릴 수도 있고, 10시간이 걸릴 수도 있습니다.</p>
+<p>예를 들어 크랩박스(Crabbox)가 있으면 아주 쉽게 구현할 수 있는 것이 있습니다. 영상을 만드는 프롬프트를 만들 수 있습니다. 이것은 하나의 기능일 뿐입니다.</p>
+<p>GitHub에서는 영상이 잘 작동하지 않기 때문에 GIF를 만들 수도 있습니다. 그러면 수정 전 상태와 수정 후 상태를 모두 볼 수 있습니다.</p>
+<p>프롬프트를 통해 시각 검증(Visual verification) 자료가 생깁니다. “여기에 버그가 있었고, 여기에 수정이 됐구나”라고 확인할 수 있습니다. 그러면 병합(Merge)을 누르면 됩니다.</p>
+<p>그래서 지금은 훨씬 덜 지켜봐도 됩니다.</p>
+</details>
+</body></html>
