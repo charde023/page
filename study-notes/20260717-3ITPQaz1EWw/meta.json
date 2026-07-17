@@ -1,0 +1,1 @@
+{"slug": "20260717-3ITPQaz1EWw", "title": "Eval 없이 Skill을 배포하면 안 되는 진짜 이유 — Google DeepMind Philipp Schmid", "summary": "스킬(Skill)은 성능을 올릴 수 있지만, 평가(Eval) 없이 배포하면 호출 실패·과호출·퇴역 시점 판단 실패가 생긴다.", "upload_date": "2026-07-17", "original_creator": "Philipp Schmid", "url": "https://youtu.be/3ITPQaz1EWw"}
