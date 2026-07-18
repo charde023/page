@@ -90,6 +90,19 @@ button.act:hover{opacity:.9}
 .card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
 .card .csum{color:var(--text-soft); font-size:.92rem}
 
+/* ⑥ 생각의 꼬리 — 영구 기록(옵시디언 미러, localStorage 아님) */
+.dialogue{display:flex; flex-direction:column; gap:14px; margin:18px 0}
+.turn{padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--surface)}
+.turn > *:first-child{margin-top:0}
+.turn > *:last-child{margin-bottom:0}
+.turn-who{font-weight:700; font-size:.82rem; margin-bottom:8px; letter-spacing:.01em}
+.turn-chad{border-left:4px solid var(--orange)}
+.turn-chad .turn-who{color:var(--orange)}
+.turn-sigma{border-left:4px solid var(--accent); background:var(--accent-soft)}
+.turn-sigma .turn-who{color:var(--accent)}
+.turn-next{border:1px dashed var(--accent); background:transparent; color:var(--text-soft)}
+.turn-next .turn-who{color:var(--accent)}
+
 @media (max-width:640px){
   body{padding:24px 16px 80px; font-size:16px}
   .header{margin:-24px -16px 20px; padding:24px 16px 18px}

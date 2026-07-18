@@ -90,6 +90,19 @@ button.act:hover{opacity:.9}
 .card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
 .card .csum{color:var(--text-soft); font-size:.92rem}
 
+/* ⑥ 생각의 꼬리 — 영구 기록(옵시디언 미러, localStorage 아님) */
+.dialogue{display:flex; flex-direction:column; gap:14px; margin:18px 0}
+.turn{padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--surface)}
+.turn > *:first-child{margin-top:0}
+.turn > *:last-child{margin-bottom:0}
+.turn-who{font-weight:700; font-size:.82rem; margin-bottom:8px; letter-spacing:.01em}
+.turn-chad{border-left:4px solid var(--orange)}
+.turn-chad .turn-who{color:var(--orange)}
+.turn-sigma{border-left:4px solid var(--accent); background:var(--accent-soft)}
+.turn-sigma .turn-who{color:var(--accent)}
+.turn-next{border:1px dashed var(--accent); background:transparent; color:var(--text-soft)}
+.turn-next .turn-who{color:var(--accent)}
+
 @media (max-width:640px){
   body{padding:24px 16px 80px; font-size:16px}
   .header{margin:-24px -16px 20px; padding:24px 16px 18px}
@@ -117,12 +130,12 @@ button.act:hover{opacity:.9}
 <div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
 
 <h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Anchoring-앵커링">Anchoring-앵커링</span></h2>
-<p>1974년 카너먼과 트버스키가 한 가지 짓궂은 실험을 했어. 눈금 0~100짜리 룰렛을 돌리는데, 사실 이 룰렛은 10 아니면 65에서만 멈추게 조작돼 있었지. 룰렛 숫자를 보여준 다음 "UN 회원국 중 아프리카 국가 비율이 이 숫자보다 큰가 작은가"를 먼저 묻고, 그다음 "정확히 몇 %일 것 같은가"를 물었어. 결과는 10을 본 그룹 평균 추정치 25%, 65를 본 그룹 평균 추정치 45% — 무작위 숫자가 정답과 무관한데도 추정치를 20%p 가까이 벌려놓은 거야.</p>
-<p>이게 <span style="color:#ef6c00"><strong>앵커링</strong></span>이다. 메커니즘은 "정박(anchor)한 뒤 조정(adjust)한다" — 사람은 낯선 값을 추정할 때 맨땅에서 새로 계산하지 않고, 손에 잡히는 숫자 하나를 일단 붙잡은 다음 "이 정도는 아닌 것 같다"며 조금씩만 움직여. 문제는 이 조정이 늘 부족하게 끝난다는 것. 그래서 최종 판단은 원래 닻 근처에 계속 머물러.</p>
-<p>이 원리를 의도적으로 심어놓은 게 <span style="color:#ef6c00"><strong>준거가격</strong></span> 표기다. "정가 39,900원 → 19,900원"을 보면 소비자는 19,900원이 이 물건 자체로 적정한 값인지 새로 계산하지 않아. 대신 39,900원이라는 닻을 먼저 심고, 거기서 "많이 싸다"는 상대적 판단만 하게 되지. 정가가 실제 판매 이력 없는 가상의 숫자여도 효과는 작동해 — 그래서 각국 소비자보호 규정이 준거가격 표기를 규제하는 거야. 원리는 <span class="wikiterm" title="옵시디언 원노트: Anchoring-앵커링">Anchoring-앵커링</span> 노트에 정리해뒀다.</p>
-<p>이 개념은 오늘 하루로 끝나지 않는다. 앞으로 두 번 더 만나게 설계했어 — 협상·수사학 트랙에서 BATNA와 함께 다시 등장할 예정. 오늘은 "닻 내리기"라는 원형을 심리 쪽에서 먼저 만나는 <span style="color:#ef6c00"><strong>1회차</strong></span>다.</p>
+<p>1974년 카너먼(Daniel Kahneman [ˈdænjəl ˈkɑːnəmən] 노벨경제학상 수상 심리학자)과 트버스키(Amos Tversky [ˈeɪməs ˈtvɜːrski] 인지심리학자)가 한 가지 짓궂은 실험을 했어. 눈금 0~100짜리 룰렛을 돌리는데, 사실 이 룰렛은 10 아니면 65에서만 멈추게 조작돼 있었지. 룰렛 숫자를 보여준 다음 "UN 회원국 중 아프리카 국가 비율이 이 숫자보다 큰가 작은가"를 먼저 묻고, 그다음 "정확히 몇 %일 것 같은가"를 물었어. 결과는 10을 본 그룹 평균 추정치 25%, 65를 본 그룹 평균 추정치 45% — 무작위 숫자가 정답과 무관한데도 추정치를 20%p 가까이 벌려놓은 거야.</p>
+<p>이게 <span style="color:#ef6c00"><strong>앵커링</strong></span>(anchoring [ˈæŋkərɪŋ] 정박효과)이다. 메커니즘은 "정박(anchor [ˈæŋkər])한 뒤 조정(adjust [əˈdʒʌst])한다" — 사람은 낯선 값을 추정할 때 맨땅에서 새로 계산하지 않고, 손에 잡히는 숫자 하나를 일단 붙잡은 다음 "이 정도는 아닌 것 같다"며 조금씩만 움직여. 문제는 이 조정이 늘 부족하게 끝난다는 것. 그래서 최종 판단은 원래 닻 근처에 계속 머물러.</p>
+<p>이 원리를 의도적으로 심어놓은 게 <span style="color:#ef6c00"><strong>준거가격</strong></span>(reference price [ˈrɛfərəns praɪs] 비교 기준으로 내세우는 가격) 표기다. "정가 39,900원 → 19,900원"을 보면 소비자는 19,900원이 이 물건 자체로 적정한 값인지 새로 계산하지 않아. 대신 39,900원이라는 닻을 먼저 심고, 거기서 "많이 싸다"는 상대적 판단만 하게 되지. 정가가 실제 판매 이력 없는 가상의 숫자여도 효과는 작동해 — 그래서 각국 소비자보호 규정이 준거가격 표기를 규제하는 거야. 원리는 <span class="wikiterm" title="옵시디언 원노트: Anchoring-앵커링">Anchoring-앵커링</span> 노트에 정리해뒀다.</p>
+<p>이 개념은 오늘 하루로 끝나지 않는다. 앞으로 두 번 더 만나게 설계했어 — 협상·수사학 트랙에서 BATNA(Best Alternative To a Negotiated Agreement [ˈbɛst ɔːlˈtɜːrnətɪv] 협상 결렬 시 택할 최선의 대안)와 함께 다시 등장할 예정. 오늘은 "닻 내리기"라는 원형을 심리 쪽에서 먼저 만나는 <span style="color:#ef6c00"><strong>1회차</strong></span>다.</p>
 <h2>② 다른 장르의 창 — 닻과 경매, 두 언어의 여행</h2>
-<p><span style="color:#ef6c00"><strong>Anchor</strong></span>라는 단어의 여정부터 보자. 그리스어 <strong>ankyra</strong>(닻)에서 시작해 라틴어 <strong>ancora</strong>로, 그리고 고대 영어를 거쳐 지금의 <strong>anchor</strong>가 됐어. 배가 파도에 떠밀리지 않게 바닥에 박아 고정하는 도구 — 이 물리적 이미지가 그대로 "생각이 한 지점에 고정된다"는 은유로 옮겨간 거야. 배는 닻을 내린 자리에서 완전히 벗어나지 못하고 그 주변을 맴돌 뿐이지. 판단도 마찬가지로, 한번 내려진 숫자 주변을 맴돈다.</p>
+<p>방금 본 앵커링이라는 이름 자체가 어디서 왔는지, <span style="color:#ef6c00"><strong>Anchor</strong></span>라는 단어의 여정부터 보자. 그리스어 <strong>ankyra</strong>(닻)에서 시작해 라틴어 <strong>ancora</strong>로, 그리고 고대 영어를 거쳐 지금의 <strong>anchor</strong>가 됐어. 배가 파도에 떠밀리지 않게 바닥에 박아 고정하는 도구 — 이 물리적 이미지가 그대로 "생각이 한 지점에 고정된다"는 은유로 옮겨간 거야. 배는 닻을 내린 자리에서 완전히 벗어나지 못하고 그 주변을 맴돌 뿐이지. 판단도 마찬가지로, 한번 내려진 숫자 주변을 맴돈다.</p>
 <p>숫자 이야기가 나온 김에 옆 나라 언어 하나 더 보자. 영어 <strong>auction</strong>(경매)은 라틴어 <strong>auctio</strong>(증가시키는 것)에서 왔고, 이건 다시 동사 <strong>augere</strong>(늘리다 — augment의 어원)로 거슬러 올라가. 경매란 어원적으로 "값을 계속 늘려가는 행위"라는 뜻이야.</p>
 <p>로마의 경매는 특이한 방식으로 열렸다고 전해진다. 경매 대상 뒤에 창(hasta)을 세워두고 진행했는데, 이 때문에 로마의 공매를 <span style="color:#ef6c00"><strong>"sub hasta"(창 아래에서)</strong></span>라 불렀다고 알려져 있어. 전쟁 노획물을 처분하던 관행에서 나왔다는 설이 있으나 정확한 유래는 불확실해 "그렇게 전해진다" 정도로 받아들이는 게 안전하다. 확실한 건 경매가 예나 지금이나 첫 호가가 판 전체를 좌우한다는 지혜를 담고 있다는 사실 — 첫 숫자가 낮으면 낙찰가도 낮게 흐르고, 높으면 그 반대로 흐른다.</p>
 <h2>③ 다리 놓기 — 닻을 심는 기술과 에이폼의 진열</h2>

@@ -90,6 +90,19 @@ button.act:hover{opacity:.9}
 .card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
 .card .csum{color:var(--text-soft); font-size:.92rem}
 
+/* ⑥ 생각의 꼬리 — 영구 기록(옵시디언 미러, localStorage 아님) */
+.dialogue{display:flex; flex-direction:column; gap:14px; margin:18px 0}
+.turn{padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--surface)}
+.turn > *:first-child{margin-top:0}
+.turn > *:last-child{margin-bottom:0}
+.turn-who{font-weight:700; font-size:.82rem; margin-bottom:8px; letter-spacing:.01em}
+.turn-chad{border-left:4px solid var(--orange)}
+.turn-chad .turn-who{color:var(--orange)}
+.turn-sigma{border-left:4px solid var(--accent); background:var(--accent-soft)}
+.turn-sigma .turn-who{color:var(--accent)}
+.turn-next{border:1px dashed var(--accent); background:transparent; color:var(--text-soft)}
+.turn-next .turn-who{color:var(--accent)}
+
 @media (max-width:640px){
   body{padding:24px 16px 80px; font-size:16px}
   .header{margin:-24px -16px 20px; padding:24px 16px 18px}
@@ -117,8 +130,8 @@ button.act:hover{opacity:.9}
 <div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
 
 <h2>① 기둥 개념 — <span class="wikiterm" title="옵시디언 원노트: Social-proof-사회적증거">Social-proof-사회적증거</span></h2>
-<p>심리학자 로버트 치알디니는 『설득의 심리학』에서 사람을 움직이는 여섯 원칙 중 하나로 <span style="color:#ef6c00"><strong>사회적 증거(social proof)</strong></span>를 꼽았다. 정의는 단순하다 — <strong>불확실한 상황에서, 사람은 무엇이 옳은 행동인지를 남들의 행동을 보고 판단한다.</strong> 식당 앞에 줄이 길면 "맛집이니까 줄이 길겠지"라고 믿고 나도 줄을 선다. 논리로 따지면 이상하다 — 줄이 길다는 사실 자체는 맛을 증명하지 않는다. 그런데도 우리 뇌는 "여러 사람이 이미 검증했다"는 신호로 그 줄을 읽는다.</p>
-<p>이 원리를 가장 극적으로 보여준 게 1950년대 솔로몬 애쉬(Solomon Asch)의 동조 실험이다. 피험자에게 기준 선분 하나와 길이가 다른 선분 세 개를 보여주고 "어느 게 기준과 같은 길이냐"를 물었다. 답은 눈으로만 봐도 명백했다. 그런데 방 안의 다른 참가자들(사실은 실험 협조자)이 미리 짜고 일부러 틀린 답을 차례로 말하면, 진짜 피험자 중 상당수가 <strong>자기 눈에 뻔히 보이는 정답 대신 다수의 틀린 답</strong>을 따라갔다. 정보가 부족해서가 아니다. 답은 쉬웠다. 그런데도 "다수와 다른 말을 하는 것"에 대한 사회적 부담이 판단을 눌렀다.</p>
+<p>심리학자 로버트 치알디니(Robert Cialdini [tʃɑːlˈdiːni])는 『설득의 심리학』에서 사람을 움직이는 여섯 원칙 중 하나로 <span style="color:#ef6c00"><strong>사회적 증거(social proof [ˈsoʊʃəl pruːf])</strong></span>를 꼽았다. 정의는 단순하다 — <strong>불확실한 상황에서, 사람은 무엇이 옳은 행동인지를 남들의 행동을 보고 판단한다.</strong> 식당 앞에 줄이 길면 "맛집이니까 줄이 길겠지"라고 믿고 나도 줄을 선다. 논리로 따지면 이상하다 — 줄이 길다는 사실 자체는 맛을 증명하지 않는다. 그런데도 우리 뇌는 "여러 사람이 이미 검증했다"는 신호로 그 줄을 읽는다.</p>
+<p>이 원리를 가장 극적으로 보여준 게 1950년대 솔로몬 애쉬(Solomon Asch [ˈsɑːləmən æʃ])의 동조 실험이다. 피험자에게 기준 선분 하나와 길이가 다른 선분 세 개를 보여주고 "어느 게 기준과 같은 길이냐"를 물었다. 답은 눈으로만 봐도 명백했다. 그런데 방 안의 다른 참가자들(사실은 실험 협조자)이 미리 짜고 일부러 틀린 답을 차례로 말하면, 진짜 피험자 중 상당수가 <strong>자기 눈에 뻔히 보이는 정답 대신 다수의 틀린 답</strong>을 따라갔다. 정보가 부족해서가 아니다. 답은 쉬웠다. 그런데도 "다수와 다른 말을 하는 것"에 대한 사회적 부담이 판단을 눌렀다.</p>
 <p>치알디니는 이 힘이 커지는 조건 두 가지를 짚는다. 첫째, <strong>불확실성</strong> — 낯설고 처음 겪는 상황일수록 남의 행동을 더 신뢰한다. 둘째, <strong>유사성</strong> — "나와 비슷한 사람들"의 선택일수록 증거력이 세진다. 완전히 다른 부류의 사람이 산 것보다, "나 같은 사람 여럿"이 산 것이 훨씬 강하게 작동한다. 이 두 조건을 기억해두자 — 오늘 ③, ④에서 그대로 다시 쓴다.</p>
 <h2>② 다른 장르의 창 — 튤립 한 뿌리, 집값과 맞바꾸다</h2>
 <p>17세기 초 네덜란드는 튤립에 미쳐 있었다고 전해진다. 오스만 제국에서 들여온 이 낯선 꽃은 부유층 정원을 장식하는 사치품이 됐고, 특히 바이러스 감염으로 꽃잎에 불꽃 무늬가 생긴 품종 — 그중 <strong>셈페르 아우구스투스(Semper Augustus)</strong>라 불리던 구근 — 은 희귀하고 아름답다는 이유로 값이 천정부지로 치솟았다고 알려져 있다. 1630년대 절정기엔 구근 한 뿌리가 암스테르담의 좋은 집 한 채와 맞먹는 값에 거래됐다는 기록도 전해진다. 사람들은 구근을 보지도 않고 선물(先物) 계약서만 사고팔았고, 값이 오른다는 사실 자체가 "다음 사람도 더 비싸게 사줄 것"이라는 증거가 되어 값을 또 밀어올렸다. 그러다 1637년 2월, 한 경매에서 처음으로 사려는 사람이 나타나지 않는 순간이 왔고, 그 신호가 퍼지자 시장 전체가 며칠 사이 무너져내렸다고 전해진다.</p>

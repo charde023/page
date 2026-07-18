@@ -90,6 +90,19 @@ button.act:hover{opacity:.9}
 .card .cmeta{color:var(--accent); font-size:.82rem; margin-bottom:6px; font-weight:600}
 .card .csum{color:var(--text-soft); font-size:.92rem}
 
+/* ⑥ 생각의 꼬리 — 영구 기록(옵시디언 미러, localStorage 아님) */
+.dialogue{display:flex; flex-direction:column; gap:14px; margin:18px 0}
+.turn{padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--surface)}
+.turn > *:first-child{margin-top:0}
+.turn > *:last-child{margin-bottom:0}
+.turn-who{font-weight:700; font-size:.82rem; margin-bottom:8px; letter-spacing:.01em}
+.turn-chad{border-left:4px solid var(--orange)}
+.turn-chad .turn-who{color:var(--orange)}
+.turn-sigma{border-left:4px solid var(--accent); background:var(--accent-soft)}
+.turn-sigma .turn-who{color:var(--accent)}
+.turn-next{border:1px dashed var(--accent); background:transparent; color:var(--text-soft)}
+.turn-next .turn-who{color:var(--accent)}
+
 @media (max-width:640px){
   body{padding:24px 16px 80px; font-size:16px}
   .header{margin:-24px -16px 20px; padding:24px 16px 18px}
@@ -117,16 +130,16 @@ button.act:hover{opacity:.9}
 <div class="callout-warn"><strong>저장 안내</strong>: 입력값은 이 브라우저(이 기기)에만 저장됩니다. 다른 기기·시크릿 모드·캐시 삭제 시 사라질 수 있어요. 중요한 답은 <strong>답변 내보내기</strong>로 옵시디언 원본에 옮겨 적어두는 걸 권장합니다.</div>
 
 <h2>① 기둥 개념 — 포지셔닝(Positioning)</h2>
-<p>1972년 알 리스(Al Ries)와 잭 트라우트(Jack Trout)가 광고 전문지에 연재한 글에서 시작해 1981년 책 『Positioning: The Battle for Your Mind』로 묶인 개념이야. 제목부터가 선언이다 — <span style="color:#ef6c00"><strong>전쟁터는 시장이 아니라 '마음(mind)'</strong></span>이라는 것.</p>
-<p>핵심 주장은 단순하다. 좋은 제품을 만드는 것과, 고객 머릿속에 자리를 잡는 것은 <strong>완전히 다른 일</strong>이다. 제품은 공장에서 하는 일이지만 포지셔닝은 "잠재고객의 마음속에서 하는 일"이라고 리스와 트라우트는 못박는다. 이미 머릿속엔 브랜드가 가득 차 있어서, 새 정보를 받아들이는 게 아니라 <strong>기존에 아는 것에 새 정보를 끼워 맞추는</strong> 쪽으로 작동한다는 게 이 책의 출발점이야.</p>
-<p>여기서 나오는 그림이 <span style="color:#ef6c00"><strong>"인식의 사다리(ladder in the mind)"</strong></span>다. 사람은 한 카테고리에 대해 마음속에 계단식 순위표를 갖고 있다 — 렌터카 하면 허츠가 1칸, 에이비스가 2칸, 그 밑은 거의 안 보인다는 식. 그런데 이 사다리는 <strong>칸 수가 극히 적다</strong>(리스·트라우트는 보통 서너 개 정도로 본다). 그래서 나온 결론이 유명한 원노트 <span class="wikiterm" title="옵시디언 원노트: 포지셔닝-맵-Positioning-Map">포지셔닝-맵-Positioning-Map</span>과 이어지는 두 가지 전략이야.</p>
+<p>1972년 알 리스(Al Ries [æl riːs])와 잭 트라우트(Jack Trout [dʒæk traʊt])가 광고 전문지에 연재한 글에서 시작해 1981년 책 『Positioning: The Battle for Your Mind』로 묶인 개념이야. 제목부터가 선언이다 — <span style="color:#ef6c00"><strong>전쟁터는 시장이 아니라 '마음(mind)'</strong></span>이라는 것.</p>
+<p>핵심 주장은 단순하다. 좋은 제품을 만드는 것과, 고객 머릿속에 자리를 잡는 것은 <strong>완전히 다른 일</strong>이다. 제품은 공장에서 하는 일이지만 포지셔닝(positioning [pəˈzɪʃənɪŋ], 고객 머릿속에 내 자리를 잡는 일)은 "잠재고객의 마음속에서 하는 일"이라고 리스와 트라우트는 못박는다. 이미 머릿속엔 브랜드가 가득 차 있어서, 새 정보를 받아들이는 게 아니라 <strong>기존에 아는 것에 새 정보를 끼워 맞추는</strong> 쪽으로 작동한다는 게 이 책의 출발점이야.</p>
+<p>여기서 나오는 그림, 즉 인식(perception [pərˈsɛpʃən], 머릿속에서 정보를 받아들이고 정리하는 방식)을 계단으로 그린 게 바로 <span style="color:#ef6c00"><strong>"인식의 사다리(ladder in the mind)"</strong></span>다. 사람은 한 카테고리(category [ˈkætəˌɡɔːri], 상품·업종을 나누는 분류 칸)에 대해 마음속에 계단식 순위표를 갖고 있다 — 렌터카 하면 허츠가 1칸, 에이비스가 2칸, 그 밑은 거의 안 보인다는 식. 그런데 이 사다리는 <strong>칸 수가 극히 적다</strong>(리스·트라우트는 보통 서너 개 정도로 본다). 그래서 나온 결론이 유명한 원노트 <span class="wikiterm" title="옵시디언 원노트: 포지셔닝-맵-Positioning-Map">포지셔닝-맵-Positioning-Map</span>과 이어지는 두 가지 전략이야.</p>
 <p>전략은 두 가지다. 첫째, <strong>이미 있는 사다리의 1등이 못 될 것 같으면, 아예 새 사다리를 만들어라.</strong> 미국 렌터카 3위였던 내셔널(National)이 허츠·에이비스와 같은 사다리에서 싸우는 대신 스스로를 다른 축으로 세우려 했던 사례가 대표적으로 소개된다. 둘째, 1등이 확고하면 정면 부정 말고 <strong>오히려 인정하며 반대편에 서라.</strong> "우리는 2등, 그래서 더 열심히 합니다"라는 에이비스 캠페인이 교과서 예시로 인용된다.</p>
 <p>여기서 중요한 건 포지셔닝이 "광고 카피"가 아니라는 점이야. 카피는 결과물이고, 포지셔닝은 그 이전의 <strong>전략적 선택</strong> — 어느 사다리, 몇 번째 칸을 노릴지 정하는 일이다. <span class="wikiterm" title="옵시디언 원노트: Share-of-Shelf-진열점유율">Share-of-Shelf-진열점유율</span>이 물리적 진열대 싸움이었다면, 포지셔닝은 그 이전, <strong>머릿속 진열대</strong> 싸움이다.</p>
 <h2>② 다른 장르의 창 — 마법의 수 7, 그리고 왜 우리는 한 번에 몇 개밖에 못 들고 있나</h2>
-<p>1956년, 프린스턴대 심리학자 조지 밀러(George A. Miller)는 「The Magical Number Seven, Plus or Minus Two」라는 논문을 발표한다. 제목부터 이미 답을 담고 있다 — 사람이 <strong>작업기억(working memory)</strong>에 한 번에 붙들 수 있는 항목의 개수는 대략 7개, 위아래로 2개쯤 오차가 있다는 것.</p>
+<p>1956년, 프린스턴대 심리학자 조지 밀러(George A. Miller [dʒɔːrdʒ ˈeɪ ˈmɪlɚ])는 「The Magical Number Seven, Plus or Minus Two」라는 논문을 발표한다. 제목부터 이미 답을 담고 있다 — 사람이 <strong>작업기억(working memory [ˈwɜːrkɪŋ ˈmɛməri], 지금 당장 머릿속에 붙들고 있는 정보 저장소)</strong>에 한 번에 붙들 수 있는 항목의 개수는 대략 7개, 위아래로 2개쯤 오차가 있다는 것.</p>
 <p>밀러는 여러 심리 실험 결과를 모아 이 패턴을 발견했다고 전해진다. 순서대로 숫자를 불러주고 그대로 따라 외우게 하면, 대부분 5~9개 사이에서 한계가 온다. 신기한 건 숫자든 글자든 단어든 종류를 가리지 않고 비슷하게 나타난다는 점 — 마치 머릿속에 "칸이 정해진 서랍"이 있는 것처럼.</p>
 <p>당시 미국 전화번호가 국번+가입자번호를 7자리로 설계했다는 사실이 이 논문과 함께 자주 언급된다(설계자들이 이 연구를 실제로 참고했는지는 논쟁의 여지가 있지만, "7자리가 외우기 좋은 상한선"이라는 이야기로 널리 회자돼왔다). 밀러 자신은 이 숫자에 신비한 의미를 부여하려는 세간의 해석을 오히려 경계했다고 알려져 있다.</p>
-<p>밀러가 제시한 탈출구가 <span style="color:#ef6c00"><strong>청킹(chunking, 덩어리 짓기)</strong></span>이다. "1-9-4-5" 넉 자를 따로 외우면 4칸을 쓰지만, "1945년"으로 묶으면 1칸만 쓴다. 서랍 개수는 고정이지만, <strong>한 칸에 얼마나 큰 덩어리를 눌러 담을지는 조직하기 나름</strong>이라는 것.</p>
+<p>밀러가 제시한 탈출구가 <span style="color:#ef6c00"><strong>청킹(chunking [ˈtʃʌŋkɪŋ], 덩어리 짓기)</strong></span>이다. "1-9-4-5" 넉 자를 따로 외우면 4칸을 쓰지만, "1945년"으로 묶으면 1칸만 쓴다. 서랍 개수는 고정이지만, <strong>한 칸에 얼마나 큰 덩어리를 눌러 담을지는 조직하기 나름</strong>이라는 것.</p>
 <h2>③ 다리 놓기 — 사다리와 서랍, 그리고 에이폼의 한 단어</h2>
 <p>밀러의 서랍(작업기억)과 리스·트라우트의 사다리(카테고리 인식)는 사실 같은 병목을 다른 각도에서 본 것이다. 사람 머릿속엔 카테고리당 자리가 몇 칸 안 남아있는 이유가, 애초에 뭐든 한 번에 붙들 수 있는 슬롯 자체가 5~9개뿐이기 때문이다. 그러니 브랜드 입장에서 선택은 둘뿐이다. <strong>좁은 서랍 속 이미 있는 칸을 뺏거나(1등 부정 전략), 아예 새 서랍(새 카테고리)을 만들거나.</strong></p>
 <p>에이폼에 대입하면 이건 곧 쿠팡 검색결과에서 내 상품이 차지하려는 <strong>"한 단어"</strong>의 문제다. 여름 물놀이 상품을 생각해보자 — 고객 머릿속엔 이미 "물총"이라는 서랍이 있고, 그 안엔 몇 개 브랜드만 칸을 차지하고 있다. 여기서 싸우면 좁은 사다리의 3~4번째 칸을 두고 다투는 셈이다. 반면 상품을 "분수매트"나 "미니 워터파크"로 카테고리 자체를 다르게 명명하면, 그건 아직 칸이 안 채워진 새 서랍을 여는 일이다. 실제로 "분수매트 vs 물놀이터 vs 워터파크"라는 이름 선택 하나가 곧 <span style="color:#ef6c00"><strong>포지셔닝 전략 그 자체</strong></span>다 — 상세페이지 문구를 다듬기 전에, "이 상품은 어느 사다리에 오를 것인가"를 먼저 정해야 한다는 뜻.</p>
