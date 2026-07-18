@@ -156,9 +156,9 @@ button.act:hover{opacity:.9}
 <div class="qa-block"><div class="qa-question">2. 멱등성을 &quot;완벽하게&quot; 만들려는 시도가 오히려 시스템을 지나치게 복잡하게 만드는 지점은 어디일까(모든 걸 멱등하게 짜는 게 항상 이득은 아니다)? —</div><div class="field"><div class="field-label">답</div><textarea class="field-input" data-key="day03_s5_a2" rows="2"></textarea><span class="save-status" data-for="day03_s5_a2"></span></div></div>
 <div class="qa-block"><div class="qa-question">3. 오늘 내릴 작은 결정 하나: 내 자동화 중 두 번 돌면 진짜 사고가 나는 것 하나를 지목한다면? —</div><div class="field"><div class="field-label">결정</div><textarea class="field-input" data-key="day03_s5_decision" rows="2"></textarea><span class="save-status" data-for="day03_s5_decision"></span></div></div>
 
-<h2>⑥ 생각의 꼬리 — 차드 ↔ 시그마</h2>
+<h2>⑥ 생각의 꼬리 — 차드 ↔ 스미스</h2>
 <blockquote>
-<p>이 칸은 <strong>localStorage(기기 저장)가 아니라</strong> 옵시디언 원본에 남는 영구 기록이야. 여기 적힌 건 폰·PC 어디서든 똑같이 보이고, 웹페이지에도 그대로 미러링된다. 차드가 쓰고 → 시그마가 받고 → 다시 차드가 잇는 식으로 계속 쌓으면 돼.</p>
+<p>이 칸은 <strong>localStorage(기기 저장)가 아니라</strong> 옵시디언 원본에 남는 영구 기록이야. 여기 적힌 건 폰·PC 어디서든 똑같이 보이고, 웹페이지에도 그대로 미러링된다. 차드가 쓰고 → 스미스가 받고 → 다시 차드가 잇는 식으로 계속 쌓으면 돼.</p>
 </blockquote>
 <div class="dialogue"><div class="turn turn-chad"><div class="turn-who">차드 · 2026-07-08 — 오늘 내 답</div><p><strong>④ 안목 훈련 — "이 자동화는 한 번만 실행될 거야"의 숨은 전제 3개</strong></p>
 <ul>
@@ -171,7 +171,7 @@ button.act:hover{opacity:.9}
 <p><strong>⑤-2 · 멱등성을 '완벽히' 만들려다 과복잡해지는 지점?</strong></p>
 <p>모든 작동에 로그를 만드는 것,, 잘 모르겠네.</p>
 <p><strong>⑤-3 · 두 번 돌면 진짜 사고 나는 자동화 하나</strong></p>
-<p>AI가 분기의 목적을 잘못 설정해서 계속 일하면,,, 토큰이 많이 소모되겠지.</p></div><div class="turn turn-sigma"><div class="turn-who">시그마 — 생각꼬리</div><p><strong>④ · 넌 '가정'을 묻는 질문에 '해결책'으로 답했어 — 그게 오히려 결정적 단서야</strong></p>
+<p>AI가 분기의 목적을 잘못 설정해서 계속 일하면,,, 토큰이 많이 소모되겠지.</p></div><div class="turn turn-sigma"><div class="turn-who">스미스 — 생각꼬리</div><p><strong>④ · 넌 '가정'을 묻는 질문에 '해결책'으로 답했어 — 그게 오히려 결정적 단서야</strong></p>
 <p>먼저 재밌는 걸 짚자. 질문은 "'한 번만 실행된다'가 참이 되려면 밑에 어떤 가정이 숨어 있나"였는데, 넌 가정을 나열하는 대신 곧장 <strong>해결책</strong>을 설계했어 — "실행 로그가 있고(전제1), 실행 전에 그 로그를 확인한다(전제2)". Day01에선 발신자 의도로, Day02에선 곧장 구조로 뛰었지. 세 번째 확인이야: <strong>넌 문제를 보면 '어떻게 막지?'부터 튀어나오는 사람</strong> — 빌더의 본능이야. 엄청난 강점이지만, M3가 벼리려는 근육은 딱 하나야: <em>풀기 전에, 내가 지금 뭘 당연하게 깔고 있나를 먼저 꺼내는 것.</em></p>
 <p>그런데 놀라운 건, 네 '해결책'이 사실 진짜 숨은 전제를 정확히 드러냈다는 거야. "한 번만 실행된다"고 믿으려면 <strong>어딘가에 '이미 했음'을 기록하고 확인하는 장치가 있다</strong>를 이미 깔고 있어야 하거든. 즉 네 답을 뒤집으면 그대로 숨은 전제가 돼 — <em>"멱등 가드(로그+확인)가 존재한다."</em> 넌 가드를 설계하면서, 그 가드의 부재가 곧 위험이라는 걸 몸으로 안 거야.</p>
 <p>이제 질문이 원래 낚으려던 '나머지 절반'을 채워줄게 — 이건 <em>환경</em>에 대한 숨은 전제야(네 것은 <em>내부 장치</em>에 대한 전제였고):

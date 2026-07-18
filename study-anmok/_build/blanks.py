@@ -368,7 +368,7 @@ def transform_essay(text: str, day_num: int) -> str:
 # ---------------------------------------------------------------------------
 
 DIALOGUE_MARKER = re.compile(
-    r"^\*\*\s*(?P<label>(?P<who>차드|시그마)[^*\n]*)\*\*\s*$",
+    r"^\*\*\s*(?P<label>(?P<who>차드|시그마|스미스)[^*\n]*)\*\*\s*$",
     re.MULTILINE,
 )
 
@@ -390,7 +390,7 @@ def transform_dialogue(text: str, day_num: int) -> str:
         who = m.group("who")
         body_end = markers[i + 1].start() if i + 1 < len(markers) else len(text)
         body = text[m.end():body_end].strip()
-        role = "next" if "이어서" in label else ("sigma" if who == "시그마" else "chad")
+        role = "next" if "이어서" in label else ("sigma" if who in ("시그마", "스미스") else "chad")
         body_html = render(body) if body else ""
         # "이어서" 턴은 정적 안내문 아래에 실제 입력란(textarea)을 단다. 자동저장
         # (data-key)이 걸려 있어 하단 "답변 내보내기" 버튼에 자동 포함된다. 웹에서
