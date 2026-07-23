@@ -1,0 +1,340 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>혼자 몇 시간이고 일하는 Claude, 비결이 있었습니다 — Anthropic Lance Martin</title>
+<meta name="description" content="Claude가 몇 시간씩 혼자 일하려면 하네스와 실행 환경 분리, 검증 루프, 메모리, 조직 단위 하네스가 필요하다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>혼자 몇 시간이고 일하는 Claude, 비결이 있었습니다 — Anthropic Lance Martin</h1>
+<div class="meta">원작자 Lance Martin · Anthropic · 업로드 2026-07-23 · 24.9분 · <a href="https://youtu.be/V52isFZ0bjE" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>혼자 몇 시간이고 일하는 Claude, 비결이 있었습니다 — Anthropic Lance Martin</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Claude 같은 장시간 비동기 에이전트(Asynchronous Agent)는 단순히 모델이 좋아지는 것만으로는 부족하고, <strong>두뇌와 손의 분리</strong>, <strong>독립 검증 루프</strong>, <strong>자기 메모리</strong>, <strong>조직 단위 하네스</strong>가 함께 설계되어야 한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Lance Martin · Anthropic · 추정 출처 https://rlancemartin.github.io · 업로드 2026-07-23 · 24.9분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>비동기 에이전트(Asynchronous Agent)</td>
+<td>사람이 계속 붙어 있지 않아도 몇 시간 단위 작업을 맡기려면 필요하다</td>
+<td>모델의 작업 지속 시간이 길어지면서 제품 형태도 채팅에서 장시간 에이전트로 이동한다</td>
+</tr>
+<tr>
+<td>작업 지평(Task Horizon)</td>
+<td>모델이 혼자 얼마나 오래 의미 있는 일을 할 수 있는지 판단하는 기준이다</td>
+<td>10~20분 모델은 채팅, 1시간 모델은 동기 코딩, 12시간급 모델은 비동기 작업에 적합하다</td>
+</tr>
+<tr>
+<td>하네스(Harness)</td>
+<td>모델을 실제 제품/도구로 감싸는 실행 구조다</td>
+<td>프롬프트-응답 API만으로는 부족하고, 세션·도구·배포·복구가 필요하다</td>
+</tr>
+<tr>
+<td>두뇌와 손 분리</td>
+<td>장시간 작업 중 장애와 보안 문제를 줄인다</td>
+<td>하네스는 두뇌, 컨테이너 실행 환경은 손으로 나누고 세션은 append-only 로그에 저장한다</td>
+</tr>
+<tr>
+<td>검증자(Verifier)</td>
+<td>모델이 자기 일을 같은 문맥에서 채점하면 착각이 생긴다</td>
+<td>작업 컨텍스트와 검증 컨텍스트를 분리해 루프를 돌린다</td>
+</tr>
+<tr>
+<td>루프(Loop) 패턴</td>
+<td>목표가 충족될 때까지 에이전트가 반복 개선하게 만든다</td>
+<td>빌드 에이전트와 검증 에이전트가 결과를 주고받으며 완료 조건까지 반복한다</td>
+</tr>
+<tr>
+<td>인밴드 메모리(In-band Memory)</td>
+<td>작업 중 배운 내용을 에이전트가 직접 기록하게 한다</td>
+<td>고성능 모델일수록 나중에 쓸 추상화까지 메모리에 남긴다</td>
+</tr>
+<tr>
+<td>드리밍(Dreaming)</td>
+<td>작업 중 잘못 저장된 메모리를 오프라인에서 고친다</td>
+<td>과거 세션과 메모리를 다시 보고 장기 메모리를 정리·수정한다</td>
+</tr>
+<tr>
+<td>조직 단위 하네스(Org-level Harness)</td>
+<td>개인용 에이전트보다 회사 전체 생산성을 높일 수 있다</td>
+<td>Claude Tag처럼 조직의 컨텍스트와 권한을 가진 멀티플레이어 에이전트가 중요해진다</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li>관리형 에이전트(Managed Agents) — Anthropic이 하네스와 배포 인프라까지 함께 제공하는 에이전트 API/제품 표면.</li>
+<li>하네스(Harness) — 모델이 도구를 호출하고 세션을 유지하며 작업을 이어가게 만드는 외부 실행 구조.</li>
+<li>세션(Session) — 에이전트의 작업 기록이 저장되는 지속 객체. 발표에서는 <strong>append-only 이벤트 로그</strong>로 설명된다.</li>
+<li>append-only 이벤트 로그(Append-only Event Log) — 기존 기록을 덮어쓰지 않고 계속 추가만 하는 로그 구조. 장시간 작업 복구에 유리하다.</li>
+<li>볼트(Vault) — 비밀번호·토큰 같은 민감 정보(credentials)를 실행 컨테이너와 분리해 저장하는 안전한 저장소.</li>
+<li>검증 루프(Verifier Loop) — 작업자 에이전트와 별도 검증자 에이전트를 두고 결과가 기준을 만족할 때까지 반복하는 구조.</li>
+<li>파라미터 골프(Parameter Golf) — 제한된 GPU와 시간 안에서 모델 학습 성능을 최적화하는 ML 연구형 벤치마크.</li>
+<li>인밴드 메모리(In-band Memory) — 에이전트가 작업을 수행하는 도중 직접 메모리를 기록하는 방식.</li>
+<li>드리밍(Dreaming) — 작업 외 시간에 과거 세션과 메모리를 검토해 장기 메모리를 개선하는 오프라인 프로세스.</li>
+<li>멀티플레이어 하네스(Multiplayer Harness) — 한 명이 아니라 조직 내 여러 사용자가 동시에 조종하고 활용하는 에이전트 구조.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정값·명령어·뉘앙스. 원어 용어 괄호 병기, 맥락까지.</p>
+</blockquote>
+<ol>
+<li>Claude Opus 3 시기에는 자율 작업 시간이 약 <strong>10~20분</strong> 수준이었다고 설명한다. 이때는 자동완성(Autocomplete), 채팅(Chat)처럼 사람이 계속 개입하는 제품이 적합했다.</li>
+<li>최근 동기식 코딩 에이전트(Synchronous Coding Agent)는 약 <strong>1시간</strong> 정도 작업할 수 있어 Claude Code 같은 로컬 실행 방식이 잘 맞았다.</li>
+<li>진짜 비동기 에이전트 경험이 좋아지려면 모델이 <strong>12시간 이상</strong> 작업할 수 있는 장기 작업 지평(Long Task Horizon)이 필요하다고 본다.</li>
+<li>Managed Agents는 하네스(Harness)와 샌드박스(Sandbox)를 같은 컨테이너에 넣지 않고 분리한다. 컨테이너가 죽어도 세션을 잃지 않기 위해서다.</li>
+<li>세션은 <strong>append-only 이벤트 로그</strong>로 저장된다. 즉, 기존 컨텍스트를 지우지 않고 계속 추가하며 필요하면 과거 내용을 다시 가져올 수 있다.</li>
+<li>인증 정보(credentials)는 샌드박스 안에 넣지 않고 별도 볼트(Vault)에 둔다. Claude가 10시간 동안 민감 정보와 함께 돌아가는 상황을 피하기 위해서다.</li>
+<li>검증 루프에서는 작업 컨텍스트(Build Context)와 검증 컨텍스트(Verifier Context)를 분리한다. 같은 문맥에서 자기 평가를 하면 환각(confabulation)과 이상 행동이 생길 수 있다.</li>
+<li>파라미터 골프(Parameter Golf) 예시에서는 <strong>8개 H100 GPU</strong>, <strong>10분 이하</strong>, <strong>20회 반복(iterations)</strong> 같은 조건이 언급된다.</li>
+<li>포켓몬 실험에서는 잘못된 메모리 때문에 Claude가 함정문(trap door)에 빠졌고, 원시 메모리(raw memory store)에서는 <strong>5회 중 5회</strong> 같은 실수가 반복됐다고 한다.</li>
+<li>드리밍(Dreaming)을 적용하면 과거 세션과 메모리 저장소를 함께 검토해 잘못된 위치 기억을 수정하고 다음 단계로 진행할 수 있었다.</li>
+<li>Claude Tag의 핵심은 Slack 봇이 아니라 <strong>조직 단위 하네스(Org-level Harness)</strong> 다. 개인 계정이 아니라 자체 정체성(identity)과 조직 권한을 가진다.</li>
+<li>발표자는 장기 에이전트를 만들려면 모델 성능뿐 아니라 <strong>메모리, 보안, 프롬프트 인젝션 저항성, 에이전트 아키텍처, 인프라</strong>가 함께 필요하다고 강조한다.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>제품 표면의 변화</td>
+<td>모델의 작업 지속 시간이 늘어나면서 채팅에서 동기 코딩, 비동기 에이전트로 이동한다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>두뇌와 손 분리</td>
+<td>하네스와 실행 환경을 분리해야 장시간 작업의 안정성과 보안을 확보할 수 있다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>검증 루프</td>
+<td>같은 문맥의 자기 채점은 위험하므로 독립 검증자가 결과를 확인해야 한다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>자기 학습과 메모리</td>
+<td>모델은 작업 중 메모리를 쓰고, 고성능 모델일수록 더 좋은 추상화를 저장한다</td>
+</tr>
+<tr>
+<td>5</td>
+<td>드리밍</td>
+<td>오프라인 메모리 정리 과정이 잘못된 기억을 고치고 장기 성능을 높인다</td>
+</tr>
+<tr>
+<td>6</td>
+<td>조직 단위 하네스</td>
+<td>에이전트는 개인용 도구에서 회사 전체가 함께 쓰는 멀티플레이어 시스템으로 발전한다</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Q&amp;A</td>
+<td>장시간 에이전트 격차는 모델만이 아니라 메모리·보안·인프라의 차이에서 나온다</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 모델 성능이 바꾸는 제품 형태</h2>
+<p>Lance Martin은 모델과 제품의 관계를 “빛과 창문”에 비유한다. 모델이 빛이라면, 제품은 그 빛을 사용자가 볼 수 있게 해주는 창문이다. 모델의 능력이 바뀌면 그 능력을 잘 보여줄 수 있는 제품 형태도 바뀐다.</p>
+<p>초기 Claude Opus 3 시기에는 모델이 혼자 처리할 수 있는 작업 시간이 대략 <strong>10~20분</strong>이었다. 이때는 사람이 계속 조종하는 자동완성(Autocomplete), 채팅(Chat)이 적합했다.</p>
+<p>이후 Claude Code 같은 동기식 코딩 에이전트(Synchronous Coding Agent)가 등장했다. 모델이 약 <strong>1시간</strong> 정도 일을 할 수 있게 되면서, 사용자가 로컬 환경에서 실행시키고 중간중간 방향을 잡아주는 방식이 의미 있어졌다.</p>
+<p>하지만 진짜 비동기 에이전트(Asynchronous Agent)는 이보다 더 긴 작업 지평(Task Horizon)이 필요하다. 모델이 한 시간쯤 일하다가 오류를 만나고 돌아오면 비동기 경험은 오히려 답답하다. 사용자가 맡기고 떠나도 몇 시간 동안 진전이 있어야 비동기 제품이 성립한다.</p>
+<p><span style="color:#ef6c00">핵심은 모델의 자율 작업 시간이 길어질수록 제품 인터페이스도 채팅에서 에이전트형 실행 구조로 바뀐다는 점이다.</span></p>
+<h2>2. API 표면의 변화: Message API에서 Managed Agents까지</h2>
+<p>Anthropic의 API 표면도 모델 능력 변화에 맞춰 발전했다.</p>
+<p>처음에는 메시지 API(Message API)가 있었다. 이것은 기본적으로 프롬프트를 보내고 응답을 받는 단순 구조다. 개발자는 이 API 위에 직접 하네스(Harness)를 만들고, 그 하네스를 배포해서 에이전트를 구성해야 했다.</p>
+<p>이후 코딩 에이전트가 중요해지면서 Agent SDK가 나왔다. 이것은 Claude Code를 프로그래밍 방식으로 호출할 수 있게 해주는 구조다. 즉, Anthropic이 어느 정도 하네스를 제공해주는 형태다.</p>
+<p>최근에는 Managed Agents가 등장했다. 이것은 하네스뿐 아니라 배포 인프라까지 함께 패키징한다. 장시간 비동기 에이전트에서는 단순 호출보다 세션 유지, 장애 복구, 보안, 실행 환경 관리가 중요하기 때문이다.</p>
+<h2>3. 두뇌와 손을 분리하라</h2>
+<p>Managed Agents의 첫 번째 핵심 원칙은 <strong>두뇌와 손의 분리</strong>다.</p>
+<p>초기 설계에서는 하네스(Harness)와 샌드박스(Sandbox)를 같은 컨테이너(Container)에 넣었다. 하지만 이 구조는 장시간 작업에 취약했다. 컨테이너나 하네스가 죽으면 세션 전체를 잃을 수 있기 때문이다.</p>
+<p>또한 Claude가 매우 긴 시간 동안 실행되면서 같은 컨테이너 안의 인증 정보(credentials)에 접근할 수 있다면 보안상 위험하다. 모델이 강력해질수록 민감 정보와 실행 환경을 단순히 함께 두는 방식은 부담이 커진다.</p>
+<p>그래서 Anthropic은 다음처럼 나눈다.</p>
+<ul>
+<li>두뇌(Brain): 하네스(Harness)</li>
+<li>손(Hands): 실제 도구 실행이 일어나는 컨테이너/샌드박스</li>
+<li>세션(Session): append-only 이벤트 로그로 저장되는 지속 상태</li>
+<li>인증 정보(Credentials): 별도 볼트(Vault)에 저장</li>
+</ul>
+<p>이 구조에서는 하네스가 죽어도 세션 로그가 남아 있으므로 복구할 수 있다. 샌드박스가 죽어도 작업 기록은 보존된다. 또한 인증 정보는 샌드박스에 직접 들어가지 않으므로 보안성이 높아진다.</p>
+<p>흥미로운 점은 Claude가 여러 개의 손, 즉 여러 실행 컨테이너를 동시에 다룰 수 있게 되고 있다는 것이다. 하나의 하네스가 여러 컨테이너를 활용해 도구 실행을 분산할 수 있다.</p>
+<h2>4. 세션을 외부 컨텍스트 객체로 본다</h2>
+<p>이 구조에서는 세션(Session)이 단순한 로그가 아니라 모델이 질의할 수 있는 외부 컨텍스트 객체(Context Object)가 된다.</p>
+<p>일반적인 컨텍스트 압축(Compaction)은 일부 정보를 요약해 남기고 나머지는 버리는 방식이다. 하지만 append-only 세션 구조에서는 과거 기록을 파괴하지 않는다. 모델은 필요할 때 과거 컨텍스트를 다시 찾아볼 수 있다.</p>
+<p>이것은 장기 작업의 컨텍스트 엔지니어링(Context Engineering)에 유리하다. 핵심 컨텍스트 객체가 시간이 지나도 변경되지 않고 계속 추가만 되기 때문에, 모델은 작업의 긴 역사를 안정적으로 참조할 수 있다.</p>
+<h2>5. 자기 채점의 함정과 검증자 루프</h2>
+<p>두 번째 원칙은 <strong>검증자(Verifier)를 사용하라</strong>는 것이다.</p>
+<p>모델에게 일을 시킨 뒤 같은 문맥에서 “네 작업을 평가해봐”라고 하면 문제가 생길 수 있다. 작업 과정에서 생긴 가정, 실수, 착각이 같은 컨텍스트 안에 남아 있기 때문에 비판적 검증이 제대로 되지 않을 수 있다. 발표자는 이것을 환각(confabulation)이나 이상한 산출물로 설명한다.</p>
+<p>해결책은 작업 컨텍스트와 검증 컨텍스트를 분리하는 것이다.</p>
+<ul>
+<li>빌드 에이전트(Build Agent): 실제 작업을 수행한다.</li>
+<li>검증 에이전트(Verifier Agent): 별도 문맥에서 결과를 평가한다.</li>
+<li>목표/루브릭(Goal/Rubric): 무엇을 만족해야 하는지 정의한다.</li>
+<li>루프(Loop): 검증자가 통과시킬 때까지 반복한다.</li>
+</ul>
+<p>Claude Code에서는 목표(Goal), Managed Agents에서는 결과(Outcomes)라는 식으로 표현되지만 원리는 같다. 측정 가능한 최종 상태를 정하고, 독립적인 검증자가 그 상태에 도달했는지 확인할 때까지 반복한다.</p>
+<h2>6. 파라미터 골프 예시: 환경에 피드백을 심는다</h2>
+<p>발표자는 OpenAI가 제시한 파라미터 골프(Parameter Golf) 벤치마크를 예로 든다. 이 과제는 모델에게 작은 모델을 학습시키게 하고, <strong>8개 H100 GPU</strong>, <strong>10분 이하</strong> 같은 제한 안에서 손실(loss)을 낮추도록 요구한다. 사실상 ML 연구 능력을 시험하는 벤치마크다.</p>
+<p>그는 Managed Agents와 Outcomes를 이용해 Opus 4.7 및 더 강력한 프런티어 모델에 검증 루프를 적용했다. 모델은 기준을 만족할 때까지 반복했다. 예를 들어 정확히 <strong>20회 반복</strong>을 끝내고 벤치마크의 실험 조건을 충족해야 했다.</p>
+<p>중요한 점은 사람이 계속 “이렇게 해라”라고 조종하는 대신, 피드백 신호를 환경에 넣었다는 것이다. 검증자가 결과를 평가하고, 모델은 그 피드백을 받아 스스로 고친다.</p>
+<p><span style="color:#ef6c00">장시간 비동기 작업에서는 사람의 수동 조종보다 환경 속 검증 신호가 더 중요한 제어 장치가 된다.</span></p>
+<h2>7. 인밴드 메모리: 모델이 작업 중 직접 기억을 쓴다</h2>
+<p>세 번째 주제는 자기 학습(Self-learning)과 메모리(Memory)다.</p>
+<p>발표자는 인간 기억을 예로 든다. 낮 동안 해마(hippocampus)는 짧은 경험 기억을 빠르게 남긴다. 밤에는 꿈(dreaming)을 통해 중요한 정보를 장기 기억인 피질(cortex)에 저장한다.</p>
+<p>Claude에도 비슷한 두 가지 메모리 원리를 적용할 수 있다고 한다.</p>
+<p>첫 번째는 인밴드 메모리(In-band Memory)다. 모델이 작업을 진행하는 도중 메모리 디렉터리(memory directory), 즉 파일 시스템 같은 곳에 직접 기록하는 방식이다.</p>
+<p>포켓몬 실험에서 Claude Sonnet 3.5는 메모리 디렉터리에 기록할 수 있었지만, 기록 품질이 좋지 않았다. 전술적이고 단편적인 메모리가 많았고 게임 진행도 제한적이었다.</p>
+<p>반면 더 최근 모델에서는 메모리가 더 전략적이었고 게임 진행도 훨씬 나아졌다. 발표자는 고성능 모델이 단순 사실만 저장하는 것이 아니라, 미래 세션에 도움이 될 추상화(abstraction)를 더 잘 저장한다고 말한다.</p>
+<h2>8. 드리밍: 잘못된 기억을 오프라인에서 고친다</h2>
+<p>인밴드 메모리는 유용하지만 문제가 있다. 작업 중 급하게 쓴 메모리는 틀릴 수 있고, 현재 과제에는 도움이 되지만 미래 과제에는 좋지 않은 국소 최적(local optimum)일 수 있다.</p>
+<p>그래서 필요한 것이 드리밍(Dreaming)이다. 드리밍은 작업 중이 아닌 오프라인/아웃오브밴드(out-of-band) 과정에서 메모리 저장소와 과거 세션을 검토하고, 장기 메모리를 정리·수정하는 프로세스다.</p>
+<p>포켓몬 예시에서 Claude는 위치와 관련된 잘못된 메모리를 남겼고, 그 결과 자기 위치를 잘못 판단해 함정문(trap door)에 빠졌다. 원시 메모리 저장소(raw memory store)만 사용했을 때는 이 오류가 <strong>5회 중 5회</strong> 반복됐다.</p>
+<p>하지만 드리밍을 적용하면 잘못된 메모리가 수정되어 함정문을 피하고 다음 단계로 진행할 수 있었다.</p>
+<p>핵심은 인밴드 메모리에 생긴 오류는 그냥 두면 계속 남는다는 점이다. 드리밍은 과거 흔적과 메모리를 비교해 이런 오류를 고치는 역할을 한다.</p>
+<h2>9. Claude Tag와 조직 단위 하네스</h2>
+<p>네 번째 주제는 조직 단위 하네스(Org-level Harness)다.</p>
+<p>Claude Tag가 공개되었을 때 많은 사람은 “Slack 봇이네”라고 반응했다. 발표자는 자신도 많은 Slack 봇을 만들어봤고, Slack 봇 자체가 특별한 것은 아니라고 말한다.</p>
+<p>Claude Tag의 핵심은 Slack 접근성이 아니라 그 아래에 있는 조직 단위 하네스다.</p>
+<p>기존 에이전트는 대부분 싱글플레이어였다. 예를 들어 Claude Code는 개인 컴퓨터의 로컬 컨텍스트, 개인 설정, 개인 커넥터에 맞춰 작동한다.</p>
+<p>반면 Claude Tag는 조직 전체가 접근할 수 있는 멀티플레이어 하네스(Multiplayer Harness)다. 개인 사용자의 권한과 정체성에 묶이지 않고, 자체 정체성(identity)과 인증 정보(credentials)를 가지며, 조직 수준 컨텍스트에 접근한다.</p>
+<p>이 구조의 장점은 크다.</p>
+<ul>
+<li>다른 사람이 이미 한 일을 확인해 중복 실험을 줄일 수 있다.</li>
+<li>조직 내부 지식을 바탕으로 리서치를 수행할 수 있다.</li>
+<li>신입 직원도 첫날부터 잘 만들어진 하네스를 사용할 수 있다.</li>
+<li>개인이 커넥터와 설정을 맞추느라 몇 주, 몇 달을 쓰지 않아도 된다.</li>
+<li>조직 전체의 생산성 기준을 끌어올리는 평준화 효과가 있다.</li>
+</ul>
+<h2>10. 앞으로의 비동기 에이전트 UX</h2>
+<p>발표자는 앞으로 에이전트가 더 능동적(proactive)이 될 것이라고 본다.</p>
+<p>로컬 범위의 개인 에이전트는 대체로 반응형(reactive)이다. 사용자가 지시하면 응답한다. 하지만 조직 컨텍스트에 접근하는 비동기 에이전트는 사용자가 명령하지 않아도 “이건 알아야 할 것 같다”고 알려줄 수 있다.</p>
+<p>예를 들어 Claude Tag는 조직 수준 컨텍스트를 보다가 사용자가 알아야 할 정보를 알림으로 줄 수 있다. 이는 단순 챗봇과 다른 UX다.</p>
+<p>또한 하나의 하네스를 여러 사람이 동시에 조종하는 멀티플레이어 UX가 중요해질 것이다. 에이전트는 개인 비서가 아니라 조직의 공유 작업자로 변할 수 있다.</p>
+<h2>11. Q&amp;A: 프런티어 모델과 비프런티어 모델의 격차</h2>
+<p>질문자는 장시간 작업에서 프런티어 모델과 가벼운 모델/오픈소스 모델 사이의 격차가 왜 생기는지 물었다.</p>
+<p>Lance Martin은 METER 같은 장기 작업 벤치마크에서 Claude나 OpenAI의 강력한 모델들이 <strong>12시간 이상</strong> 작업 영역에 들어왔다고 설명한다. 다만 비프런티어 모델이 왜 그 수준에 못 미치는지는 단순히 모델 성능 하나로만 설명하기 어렵다고 한다.</p>
+<p>장시간 에이전트를 만들려면 다음이 함께 필요하다.</p>
+<ul>
+<li>모델 능력</li>
+<li>메모리 품질</li>
+<li>사용자의 생산성 선호를 기억하는 능력</li>
+<li>막혔을 때 사용자에게 연락하는 판단</li>
+<li>보안</li>
+<li>프롬프트 인젝션(prompt injection) 저항성</li>
+<li>하네스와 실행 환경 분리 같은 아키텍처</li>
+<li>안정적 배포 인프라</li>
+</ul>
+<p>즉, 장시간 에이전트의 격차는 모델 자체뿐 아니라 제품·인프라·보안·메모리 전체 시스템에서 나온다.</p>
+<h2>12. Q&amp;A: 메모리는 파일 시스템이어야 하는가</h2>
+<p>다른 질문자는 메모리 저장소로 파일 시스템을 쓰는 이유와 데이터베이스(Database)와의 차이를 물었다.</p>
+<p>발표자는 반드시 파일 시스템이어야 하는 것은 아니라고 답한다. 중요한 것은 모델이 단순한 원시 기능을 사용해 스스로 메모리를 쓰고 관리할 수 있어야 한다는 점이다.</p>
+<p>파일 시스템도 가능하고 데이터베이스도 가능하다. 다만 사람이 미리 “이런 종류의 메모리를 이런 스키마에 저장하라”고 너무 구체적으로 정해주면 성능이 떨어질 수 있다.</p>
+<p>그는 이것을 bitter lesson 관점으로 설명한다. 모델이 충분히 좋아지면 사람이 미리 설계한 메모리 타입보다 모델이 스스로 자기 기억 구조를 관리하는 편이 더 나을 수 있다.</p>
+<p>핵심은 다음이다.</p>
+<p><strong>모델에게 처방된 메모리 스키마를 강요하지 말고, 스스로 구조화하고 유지할 수 있는 일반적인 저장 기반을 제공하라.</strong></p>
+<h2>13. Q&amp;A: 드리밍이 고친 메모리가 맞는지 어떻게 아는가</h2>
+<p>마지막 질문은 드리밍이 메모리를 고친다고 할 때, 그 수정이 정말 맞는지 어떻게 확인하느냐는 것이었다.</p>
+<p>발표자는 평가(Evaluation)가 필요하다고 답한다. 포켓몬 예시는 직관적인 사례지만, 실제로는 여러 평가에서 드리밍이 성능을 높이는지 확인해야 한다.</p>
+<p>또한 오프라인 연산 비용이 들기 때문에 각자의 실제 환경에서 드리밍이 가치 있는지 평가해야 한다고 덧붙인다.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 우리 업무에서 모델에게 <strong>30분 이상 맡길 수 있는 반복 작업</strong>을 찾아본다.</li>
+<li>[ ] 단순 챗봇이 아니라 세션, 도구, 복구 구조를 가진 하네스(Harness)를 구상해본다.</li>
+<li>[ ] 작업 수행 컨텍스트와 검증 컨텍스트를 분리하는 검증 루프를 설계해본다.</li>
+<li>[ ] 결과물을 “좋다/나쁘다”가 아니라 측정 가능한 결과(Outcome)로 정의해본다.</li>
+<li>[ ] 에이전트가 작업 중 남길 메모리 파일/폴더 구조를 실험해본다.</li>
+<li>[ ] 메모리 스키마를 너무 강제하지 않고 모델이 스스로 정리하게 해본다.</li>
+<li>[ ] 작업 후 오프라인으로 메모리를 재검토하는 드리밍(Dreaming) 프로세스를 테스트해본다.</li>
+<li>[ ] 회사 전체가 공유할 수 있는 조직 단위 AI 하네스 아이디어를 적어본다.</li>
+<li>[ ] 인증 정보(credentials)를 실행 환경과 분리하는 보안 구조를 검토한다.</li>
+<li>[ ] 장시간 에이전트 도입 시 프롬프트 인젝션과 권한 문제를 별도로 점검한다.</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 혼자 몇 시간이고 일하는 Claude, 비결이 있었습니다 — Anthropic Lance Martin · https://youtu.be/V52isFZ0bjE · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>시작하겠습니다. 이 컨퍼런스에는 세 번째로 오는 것 같은데, 항상 즐겁습니다. 여러 흥미로운 발표가 있는 와중에 이 워크숍에 와주셔서 감사합니다.</p>
+<p>오늘은 Anthropic에서 우리가 비동기 에이전트(Asynchronous Agent)를 어떻게 보고 있는지, 그리고 최근 어떤 일을 해왔는지 이야기하겠습니다.</p>
+<p>저는 모델과 제품을 이렇게 생각합니다. 제품은 모델이라는 빛이 통과하는 창문입니다. 시간이 지나며 모델의 빛을 제대로 보여주기 위해 필요한 창문, 즉 제품 형태가 바뀝니다.</p>
+<p>Claude 모델들의 작업 지평(Task Horizon)을 보면 변화가 보입니다. Opus 3 시기, 즉 2024년쯤에는 모델이 혼자 할 수 있는 작업이 10~20분 정도였습니다. 이때는 자동완성(Autocomplete), 채팅(Chat)처럼 사람이 계속 개입하는 제품 표면이 적합했습니다.</p>
+<p>지난 1년 동안 Claude Code 같은 동기식 코딩 에이전트(Synchronous Coding Agent)가 떠올랐습니다. 모델이 약 1시간 정도 일할 수 있게 되었기 때문에, 로컬에서 실행하고 사용자가 쉽게 조종하는 방식이 맞았습니다.</p>
+<p>하지만 그 시기에는 비동기 에이전트 경험이 좋지 않았습니다. 모델이 한 시간쯤 작업하다 오류를 만나 금방 사용자에게 돌아오면, 비동기라는 경험이 별로입니다. 비동기를 제대로 열려면 더 긴 작업 지평이 필요했고, 이제 그 변화가 보이기 시작했습니다.</p>
+<p>능력과 시간 지평이 바뀌면서 API 표면도 바뀌었습니다. 메시지 API(Message API)는 약 2년 전에 나왔고, 기본적으로 프롬프트를 보내고 응답을 받는 구조입니다. 하네스를 직접 만들기 좋지만 아주 단순합니다. 배포 개념은 없고, 개발자가 직접 하네스를 만들고 배포해야 에이전트가 됩니다.</p>
+<p>이후 Agent SDK가 나왔습니다. 이는 Claude Code를 프로그래밍 방식으로 호출하는 방법이고, Anthropic이 하네스를 제공하는 형태입니다. 최근에는 더 긴 작업 지평이 가능해지면서 Managed Agents라는 새 API를 출시했습니다. 이것은 하네스와 관리형 배포 인프라를 함께 제공합니다.</p>
+<p>첫 번째 주제는 두뇌와 손을 분리하는 것입니다. 처음 Managed Agents를 만들 때는 하네스와 샌드박스를 같은 컨테이너에 넣었습니다. 그런데 하네스나 컨테이너가 죽으면 세션을 잃는 문제가 있었습니다. 장시간 에이전트에는 위험한 구조입니다.</p>
+<p>또 모델이 강력해질수록 인증 정보를 같은 컨테이너에 넣는 것도 문제가 됩니다. Claude에게 여러 비밀값(secrets)을 주고 10시간 동안 혼자 실행하게 두는 것은 보안상 불안합니다.</p>
+<p>그래서 우리는 두뇌(Brain), 즉 하네스(Harness)와 손(Hands), 즉 실행 환경(Execution Environment)을 분리했습니다. 하네스는 상태 없는 프로세스(stateless process)가 되고, 세션은 append-only 이벤트 로그로 저장됩니다. 손은 실제 작업이 일어나는 컨테이너입니다.</p>
+<p>하네스가 죽거나 샌드박스가 죽어도 괜찮습니다. 세션은 항상 append-only 로그에 백업되어 있고, 인증 정보는 샌드박스에 들어가지 않고 별도 볼트(Vault)에 저장됩니다. 이 분리는 장시간 작업에서 안정성과 보안을 크게 높입니다.</p>
+<p>또 Claude는 점점 여러 손, 즉 여러 컨테이너를 잘 관리할 수 있게 되고 있습니다. 하나의 하네스가 여러 실행 환경을 다루며 도구 실행을 수행할 수 있습니다.</p>
+<p>이 구조에서 세션은 모델이 질의할 수 있는 외부 컨텍스트 객체(Context Object)가 됩니다. 일반적인 컨텍스트 압축에서는 일부 내용을 유지하고 나머지는 버리지만, 이 구조에서는 핵심 컨텍스트 객체가 append-only로 남아 있습니다. 모델은 언제든 과거 컨텍스트를 다시 가져올 수 있습니다. 그래서 장기 컨텍스트 엔지니어링에 좋은 구조가 됩니다.</p>
+<p>두 번째 주제는 검증자(Verifier)를 사용하는 것입니다. 모델에게 많은 일을 시키고 같은 문맥에서 자기 작업을 채점하게 하면 이상한 결과, 환각(confabulation), 부정확한 자기 평가가 생길 수 있습니다. 같은 컨텍스트가 작업과 채점에 모두 쓰이면 비판적 검증에 적합하지 않습니다.</p>
+<p>그래서 검증을 별도 컨텍스트 창으로 분리하는 것이 효과적입니다. 검증자 컨텍스트는 비판과 검증에 맞게 조정할 수 있습니다. 실제로는 빌드 컨텍스트와 검증 컨텍스트를 루프로 구성합니다. 빌드 에이전트가 작업하고, 검증 에이전트가 목표나 루브릭에 따라 결과를 검증합니다. 검증이 완료될 때까지 이 루프가 계속됩니다.</p>
+<p>Claude Code에서는 목표(Goal)가 있고 Managed Agents에서는 결과(Outcomes)가 있습니다. 원리는 같습니다. 측정 가능한 최종 상태를 정의하고, 독립 컨텍스트가 반복 과정에서 채점합니다. 검증자가 원하는 결과가 나왔다고 확인할 때까지 루프를 종료하지 않습니다.</p>
+<p>이 패턴을 사용한 예로 파라미터 골프(Parameter Golf)가 있습니다. OpenAI가 만든 벤치마크로, 모델에게 작은 모델을 8개 H100 GPU로 10분 안에 학습시키게 합니다. y축은 손실(loss)처럼 보면 되고 낮을수록 좋습니다.</p>
+<p>저는 Managed Agents와 Outcomes를 사용해 Opus 4.7과 프런티어 모델을 이 과제에 적용했습니다. 모델은 제가 지정한 결과가 만족될 때까지 반복했습니다. 조건은 정확히 20회 반복을 완료하고 벤치마크의 실험 기준을 만족하는 것이었습니다.</p>
+<p>프런티어 모델은 루프와 검증 패턴에서 매우 강합니다. 사람이 계속 조종하는 대신 피드백 신호를 환경에 넣으면, 모델은 검증자 피드백을 받아 스스로 수정할 수 있습니다. 고성능 모델과 이 패러다임을 결합하면 장시간 비동기 작업에서 강한 결과가 나옵니다.</p>
+<p>세 번째 주제는 자기 학습(Self-learning)입니다. 인간 뇌에는 두 가지 기억 시스템이 있습니다. 낮에는 해마가 짧고 빠른 경험 기억을 씁니다. 밤에는 꿈이라는 오프라인 과정이 중요한 내용을 장기 기억으로 저장합니다.</p>
+<p>Claude의 메모리 시스템에도 이 두 원리를 적용할 수 있습니다. 먼저 인밴드 메모리(In-band Memory)입니다. Claude에게 메모리 도구, 즉 메모리 디렉터리에 쓸 수 있는 파일 시스템 접근을 주는 것입니다.</p>
+<p>Claude가 포켓몬을 플레이한 실험에서 Sonnet 3.5는 메모리를 쓸 수 있었지만 품질이 좋지 않았습니다. 전술적 메모리가 많고 전략적이지 않았으며 게임 진행도 제한적이었습니다. 하지만 더 최근 모델에서는 메모리가 훨씬 전략적이고 진행도도 더 좋았습니다.</p>
+<p>Continued Learning Bench라는 오픈소스 벤치마크에서도 같은 결과를 봤습니다. SQL 데이터베이스를 이용한 순차 질의응답 과제에서 모델은 각 단계 사이에 메모리를 쓸 수 있습니다. 모델 세대가 올라갈수록 성능이 좋아졌습니다.</p>
+<p>고성능 모델과 저성능 모델의 큰 차이는 증류(distillation) 단계에 있습니다. 고성능 모델은 나중에 유용할 추상화를 더 잘 저장합니다. 특정 사실만 쓰는 것이 아니라 미래 세션에 어떻게 일반화될지를 기록합니다.</p>
+<p>하지만 인밴드 메모리에는 함정이 있습니다. 작업 중 쓰는 메모리는 틀릴 수 있고, 현재 과제에는 좋지만 미래에는 좋지 않을 수도 있습니다. 그래서 드리밍(Dreaming)이 중요합니다. 드리밍은 오프라인 또는 아웃오브밴드(out-of-band) 과정으로, 메모리를 통합하고 개선합니다.</p>
+<p>포켓몬 예시에서 Claude는 위치에 관한 잘못된 메모리를 썼습니다. 그 결과 자기 위치를 잘못 판단하고 함정문에 빠졌습니다. 원시 메모리 저장소만 사용하면 5회 반복 모두에서 이 함정에 빠졌습니다. 드리밍을 적용하면 오류가 수정되어 위치를 제대로 파악하고 함정을 피했습니다.</p>
+<p>시각화에서 y축 위로 갈수록 다음 단계로 진행하는 것이고 아래로 갈수록 후퇴입니다. 메모리 없는 기준선은 거의 진행하지 못했습니다. 원시 메모리는 함정문에 빠져 되돌아갔습니다. 드리밍을 적용한 경우에는 메모리 오류를 고치고 다음 단계로 진행했습니다.</p>
+<p>네 번째 주제는 조직 단위 하네스(Org-level Harness)입니다. Claude Tag가 나왔을 때 많은 사람은 Slack 봇이라고 반응했습니다. 저도 Slack 봇을 많이 만들어봤고, 모든 Slack 봇이 흥미로운 것은 아닙니다. Claude Tag의 핵심은 Slack 접근성이 아니라 그 아래의 풍부한 시스템입니다.</p>
+<p>Claude Tag는 조직 단위 하네스입니다. 기존 에이전트는 대부분 싱글플레이어였습니다. 예를 들어 Claude Code는 개인 컴퓨터의 로컬 컨텍스트와 개인 설정에 맞춰져 있습니다. Claude Tag는 조직 전체가 접근하고 사용할 수 있는 멀티플레이어 하네스입니다.</p>
+<p>이 하네스는 자체 정체성과 인증 정보를 가지며, 특정 사용자에게 묶이지 않습니다. 개인 로컬 컨텍스트가 아니라 조직 수준 컨텍스트에 접근합니다. 그래서 다른 사람의 작업을 확인하고, 중복 발견을 줄이고, 내부 리서치를 수행하고, 신입도 첫날부터 잘 만들어진 하네스를 쓸 수 있습니다.</p>
+<p>앞으로는 여러 조직 사용자 사이에서 작동하는 하네스가 늘어날 것입니다. 더 긴 시간 동안 동작하는 비동기 에이전트도 많아질 것입니다. 또한 비동기 에이전트는 점점 더 능동적이 될 것입니다. 로컬 에이전트는 사용자가 조종할 때 반응하지만, 조직 컨텍스트를 가진 비동기 에이전트는 사용자에게 필요한 정보를 먼저 알려줄 수 있습니다.</p>
+<p>질문: 프런티어 모델은 장시간 작업을 잘하고, 프롬프트에 덜 의존하면서 필요한 추상화를 더 잘 합니다. 왜 그런 격차가 있고 앞으로 얼마나 유지될까요?</p>
+<p>답변: METER 같은 장기 작업 벤치마크에서 Claude나 OpenAI의 강한 모델들은 12시간 이상 영역에 들어와 있습니다. 비프런티어 모델이 왜 거기에 도달하지 못하는지는 단순하지 않습니다. 장시간 에이전트를 만들려면 모델 능력뿐 아니라 메모리, 보안, 프롬프트 인젝션 저항성, 에이전트 아키텍처, 인프라가 모두 필요합니다. 프런티어 연구소들은 이 모든 영역에 투자했기 때문에 차이가 나는 것 같습니다.</p>
+<p>질문: 메모리 저장소로 파일 시스템을 쓰는 이유는 무엇인가요? 데이터베이스와 비교하면 어떤가요?</p>
+<p>답변: 반드시 파일 시스템일 필요는 없습니다. 중요한 것은 모델이 단순하고 프로그래밍 가능한 기본 도구를 통해 자기 메모리를 쓰고 관리할 수 있어야 한다는 점입니다. 데이터베이스도 가능합니다. 다만 사람이 미리 아주 구체적인 메모리 스키마를 정해주는 것은 잘 작동하지 않는 경우가 많습니다. 모델이 자기 메모리 구조를 스스로 만들고 유지하게 하는 편이 낫습니다.</p>
+<p>질문: 드리밍이 메모리를 수정할 때 그 수정이 맞는지는 어떻게 압니까?</p>
+<p>답변: 평가(Evaluation)가 필요합니다. 포켓몬 예시는 직관적인 사례이고, 실제로 여러 평가에서 드리밍이 성능을 향상시키는 것을 확인했습니다. 다만 각자의 환경에서 오프라인 연산 비용을 들일 가치가 있는지는 평가로 확인해야 합니다. 감사합니다.</p>
+</details>
+</body></html>
