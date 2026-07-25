@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>차드 6주 세션 분석 — 판단·위임·주의·함정·성향·성장</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#16181d; --muted:#5b6270; --line:#e3e6ec;
+  --accent:#1b56c4; --accent-soft:#eef3fd; --warn:#b4341f; --warn-soft:#fdf0ed;
+  --good:#0f7a52; --good-soft:#ecf8f2; --card:#f7f8fa; --code:#f2f4f7;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101215; --fg:#e6e9ef; --muted:#9aa3b2; --line:#272c34;
+    --accent:#7aa8ff; --accent-soft:#182338; --warn:#ff8a72; --warn-soft:#33201c;
+    --good:#5fd3a4; --good-soft:#122a22; --card:#171a1f; --code:#1a1e24;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;
+  word-break:keep-all; overflow-wrap:break-word;
+  padding:0 max(16px,env(safe-area-inset-left)) 80px max(16px,env(safe-area-inset-right));
+}
+.wrap{max-width:820px;margin:0 auto}
+header{padding:44px 0 28px;border-bottom:2px solid var(--fg);margin-bottom:32px}
+h1{font-size:clamp(24px,5.5vw,34px);line-height:1.3;margin:0 0 14px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:14px;margin:0}
+.sub b{color:var(--fg)}
+h2{font-size:clamp(19px,4.2vw,24px);margin:52px 0 16px;padding-top:22px;border-top:1px solid var(--line);letter-spacing:-.01em}
+h2:first-of-type{border-top:0}
+h3{font-size:clamp(16px,3.6vw,19px);margin:34px 0 12px;color:var(--accent)}
+h4{font-size:15px;margin:22px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 16px;padding-left:22px}
+li{margin:6px 0}
+strong{font-weight:700}
+code{background:var(--code);padding:2px 6px;border-radius:5px;font-size:.88em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+pre{background:var(--code);padding:14px;border-radius:10px;overflow-x:auto;font-size:12.5px;line-height:1.6;border:1px solid var(--line);-webkit-overflow-scrolling:touch}
+pre code{background:none;padding:0}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 18px;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:min-content}
+th,td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--card);font-weight:700;white-space:nowrap;font-size:12.5px}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+blockquote{margin:0 0 16px;padding:12px 16px;background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:14.5px}
+blockquote p:last-child{margin-bottom:0}
+blockquote cite{display:block;margin-top:6px;color:var(--muted);font-style:normal;font-size:12.5px}
+.callout{padding:16px 18px;border-radius:12px;margin:0 0 20px;font-size:14.5px}
+.callout.warn{background:var(--warn-soft);border:1px solid var(--warn)}
+.callout.good{background:var(--good-soft);border:1px solid var(--good)}
+.callout .t{font-weight:700;margin-bottom:8px;display:block}
+.callout.warn .t{color:var(--warn)}
+.callout.good .t{color:var(--good)}
+.callout p:last-child,.callout ul:last-child{margin-bottom:0}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 24px}
+.kpi div{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px}
+.kpi .v{font-size:22px;font-weight:800;color:var(--accent);line-height:1.2;letter-spacing:-.02em}
+.kpi .l{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45}
+.bars{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.85;background:var(--code);padding:14px;border-radius:10px;overflow-x:auto;border:1px solid var(--line);white-space:pre;-webkit-overflow-scrolling:touch}
+.tag{display:inline-block;background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:1px 7px;font-size:11.5px;font-weight:700;vertical-align:1px}
+.tag.w{background:var(--warn-soft);color:var(--warn)}
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+hr{border:0;border-top:1px solid var(--line);margin:36px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>차드 6주 세션 분석</h1>
+  <p class="sub">판단 · 위임 · 주의배분 · 반복함정 · 인지성향 · 성장<br>
+  분석 구간 <b>2026-06-30 ~ 07-26</b> · 원자료 <b>217세션 / 2,387발화 / 1.1GB</b> · 계량(전량) + 정독(786건)</p>
+</header>
+
+<h2>0. 한 장 요약</h2>
+
+<div class="kpi">
+  <div><div class="v">792 → 160자</div><div class="l">첫 지시 vs 이후 발화 평균 길이 — 긴 브리핑 후 짧은 조타</div></div>
+  <div><div class="v">21.7%</div><div class="l">검증요구 발화 비율 — 5발화 중 1번은 "확인해/실측해"</div></div>
+  <div><div class="v">24.3%</div><div class="l">볼트 작업 정정률 — 타 프로젝트의 2배</div></div>
+  <div><div class="v">26.2%</div><div class="l">18시 정정률 — 전체 평균 13.0%의 2배</div></div>
+</div>
+
+<div class="scroll"><table>
+<tr><th>#</th><th>발견</th><th>수치 근거</th></tr>
+<tr><td class="n">1</td><td><b>"긴 브리핑 → 짧은 조타" 형으로 위임한다</b></td><td>첫 지시 792자, 이후 160자 (5배)</td></tr>
+<tr><td class="n">2</td><td><b>믿지 않고 확인하는 습관이 이미 시스템 수준이다</b></td><td>검증요구 518건 (21.7%)</td></tr>
+<tr><td class="n">3</td><td><b>자기 판단을 나중에 채점하려는 시도가 7월 최대 주제다</b></td><td>스냅샷·believability 요구가 7/2·7/9·7/23 반복</td></tr>
+<tr><td class="n">4</td><td><b>가장 헛도는 곳은 코드가 아니라 볼트다</b></td><td>obsidian 24.3% vs 나머지 평균 12%</td></tr>
+<tr><td class="n">5</td><td><b>18시와 토요일에 판단 품질이 떨어진다</b></td><td>18시 26.2% · 토 21.5% (일 6.1%)</td></tr>
+</table></div>
+
+<h2>1. 방법과 사거리</h2>
+
+<div class="scroll"><table>
+<tr><th>자료</th><th>커버</th><th>해상도</th><th>규모</th></tr>
+<tr><td><code>~/.claude/projects</code> 세션 로그</td><td><b>6/30 ~ 7/26</b></td><td>원문(발화·툴·결과)</td><td>217세션 / 2,387발화</td></tr>
+<tr><td>볼트 <code>03_워크로그/</code></td><td>6/16 ~ 7/23</td><td>요약(일별)</td><td>33일치</td></tr>
+<tr><td><code>bash-commands.log</code> 외</td><td>7/21 ~</td><td>명령 단위</td><td>6,821줄</td></tr>
+</table></div>
+
+<p>파이프라인: <code>P1 코퍼스</code> → <code>P2 계량(전량)</code> → <code>P3 정독(선별 786건)</code> → <code>P4 산출물</code>. 발화 1건 = 1행으로 정규화하고 각 행에 <b>결과 컨텍스트</b>(그 지시 뒤 쓰인 툴·에러·커밋·다음 발화까지 간격)를 붙였다.</p>
+
+<div class="callout warn">
+<span class="t">★ 결론 해석 시 반드시 적용할 경계</span>
+<p><b>① 관측 경계 — 이건 "차드의 전부"가 아니다.</b> 로그는 차드가 <b>AI에게 말한 것만</b> 담는다. 혼자 판단하고 넘어간 것, 오프라인 회의, 직접 처리한 업무는 안 잡힌다. "차드는 X를 안 했다"는 결론은 이 데이터로 낼 수 없다.</p>
+<p><b>② 해상도 경계.</b> Windows→Mac 이전(7/1) 때 세션 로그를 안 가져와 원문은 6/30이 바닥이다. 6/16~6/29는 요약만 남아 같은 무게로 읽으면 안 된다.</p>
+<p><b>③ 코퍼스 정화 이력.</b> 1차 추출 2,681발화에서 <b>시스템 자동 주입 294건을 걸러냈다</b>(컴팩트 요약 프롬프트·<code>&lt;scheduled-task&gt;</code> 자동 잡). 정화 전 "1턴 세션 51.3%"는 <b>정화 후 13.4%</b>로 바뀌었다 — 이 필터링이 없었으면 전체 결론이 뒤집혔다.</p>
+</div>
+
+<h2>2. 렌즈① 판단·의사결정</h2>
+
+<h3>2-1. 결정의 형태: 짧고 빠르다</h3>
+<p>결정 발화 <b>586건(24.6%)</b>. 대부분 한 줄이다 — "진행해" · "승인" · "A로 가자" · "머지해". 특징은 <b>번호 일괄 결정</b>이다. 선택지를 받으면 한 번에 전부 처리한다.</p>
+<blockquote><p>0.승인. 1.소비 먼저. / 1. 축소 2. 월, 수 주2회 3. 승인. 4. 무시해</p><cite>2026-07-01 · APOM-brain</cite></blockquote>
+<p>결정을 미루지 않는다는 뜻이지 대충 한다는 뜻이 아니다. 아래가 그 증거다.</p>
+
+<h3>2-2. 결정 전에 요구하는 3종 세트</h3>
+<p>거의 항상 같은 것을 요구한다 — <b>선택지 · 추천 · 적대적 의견</b>.</p>
+<blockquote><p>네 추천은 뭐고 근거를 설명해. <b>적대적설명도 같이.</b></p><cite>2026-07-04 · APOM-product-design</cite></blockquote>
+<blockquote><p>적대적의견도 같이 넣어야해. <b>그래야 내가 치우치지 않고</b> 균형잡힌 의견을 들을 수 있으니까.</p><cite>2026-07-02 · APOM-brain</cite></blockquote>
+<p>마지막 인용이 핵심이다. <b>자기가 치우칠 수 있다는 것을 전제로 절차를 설계</b>한다. 학습된 습관이 아니라 명시적 방어 장치다.</p>
+
+<h3>2-3. 판단을 채점 가능하게 남기려는 반복 시도 <span class="tag">7월 최대 주제</span></h3>
+<div class="scroll"><table>
+<tr><th>날짜</th><th>발화</th></tr>
+<tr><td>07-02</td><td>이 내용을 기록해놔. 스냅샷을 기록해둬야해. 나중에 이 판단에 대한 <b>신뢰성을 쌓을 수 있지. 빌리버빌리티.</b></td></tr>
+<tr><td>07-09</td><td>당시의 데이터 범위와 로하스·노출·판매량·기여를 같이 스냅샷 해둬. <b>검색어를 교체한 것이 잘한 선택인지 검토할 수 있도록</b> 해.</td></tr>
+<tr><td>07-22</td><td>사람도 판단 가능하게 레포트를 확인하고, <b>가설을 세우고, 실행하고, 나중에 다시 검토하는 워크플로우</b>를 만들어서. 차차 사용자도 학습하고, ai도 학습하는 시스탬</td></tr>
+<tr><td>07-23</td><td>가설을 적고 저장했어. <b>보여지는 모습을 통째로 저장해야해.</b> 그래야 스냅샷이 제대로 남고 차후 분석하기에 용이</td></tr>
+</table></div>
+<p><b>경영철학의 believability를 문서가 아니라 인프라로 만들려는 시도</b>가 7월 전체를 관통한다. 실험복기원장 장르(7/17)·광고 조종석 학습창(7/22~23)이 전부 같은 뿌리다.</p>
+
+<h3>2-4. 사람 판단과 AI 판단의 분리 요구 <span class="tag">가장 정교한 원칙</span></h3>
+<blockquote><p>내가 선택한 유지가 아니라. <b>네가 판단한 유지였는데?! 내 선택과 네 판단이 동일한 결과를 만들면 안되지.</b></p><cite>2026-07-06 · apom-data-center</cite></blockquote>
+<p>UI 취향이 아니라 <b>원장의 무결성 요구</b>다. AI 판단이 사람 판단 이력에 섞이면 나중에 "차드의 판단이 맞았나"를 채점할 수 없다. 그걸 구현 단계에서 잡아냈다.</p>
+
+<h3>2-5. 매몰비용을 버리는 결단</h3>
+<blockquote><p><b>무조건 스미스로 옮긴다.</b> 문제 되는 부분이 있다면 제거하고 다시 만들면 돼. <b>구축 비용발생하는 것에 대해 괜찮아.</b></p><cite>2026-07-03 · apom-data-center</cite></blockquote>
+<blockquote><p>광고로하스는 이렇게 학습하면 안돼. 프론트엔드, 백엔드 전부, 제거해. <b>롤백하자. 기획서단계로 돌아가자.</b></p><cite>2026-07-21 · obsidian</cite></blockquote>
+<p>두 번째가 특히 값지다. 이미 구현된 것을 통째로 버리고 기획으로 되돌린 결정이다. 7월 로그에서 완성물 폐기 결정은 이 1건이라 희소하지만, 방향이 틀렸다는 판단이 서면 되돌린다는 증거다.</p>
+
+<h3>2-6~7. 확신 눈금과 표본 편향 자각</h3>
+<blockquote><p><b>70%만 맞을거라고 생각해.</b> 상품마다 다를 수 있어. 광고데이터의 누적량에 따라 달라. 불안한 점은 그 수치에 대한 근거의 설명이 너무 약하다는 거야.</p><cite>2026-07-18 · obsidian</cite></blockquote>
+<blockquote><p><b>나처럼 후발주자는 일부러 가구매를 많이 하지. 그래서 내 경우를 일반화 시키면 안돼.</b></p><cite>2026-07-02 · apom-data-center</cite></blockquote>
+<p>확률로 확신을 표현하고 근거의 약점까지 스스로 지목한다. 자기 경험을 데이터로 주면서 <b>동시에 그 표본 편향을 경고</b>한다 — 6주 로그에서 이 수준의 자기 표본 경계는 드물다.</p>
+
+<h2>3. 렌즈② 위임 운용</h2>
+
+<h3>3-1. SSOT-first 원칙</h3>
+<blockquote><p>■ 0단계 — SSOT 먼저 읽기 (<b>기억/즉흥으로 짜지 말 것</b>)</p><cite>2026-07-01 · slack-agent</cite></blockquote>
+<p>이 문구는 7월 내내 거의 모든 긴 지시문에 등장한다. 즉 <b>"에이전트가 기억으로 지어내는 것"이 차드가 가장 경계하는 실패</b>다.</p>
+
+<h3>3-2. 세션 팩토리 패턴 <span class="tag">7/9~10 확립</span></h3>
+<p>7/9~10에 위임 방식이 한 단계 도약한다. <b>정찰 세션이 핸드오프를 만들고, 실행 세션이 받아 완주</b>하는 구조:</p>
+<blockquote><p>이 세션 = 전 워크스페이스 Fable 5 적합도 스캔(21프로젝트 랭킹) + <b>새 세션용 핸드오프 4종 제작 팩토리</b></p><cite>2026-07-10 · workspace</cite></blockquote>
+<p>같은 날 발주된 병렬 미션 6건이 전부 동일 포맷이다. 지원 인프라: <code>/compact</code> 45회 + <code>/cha-compact-mant</code> 26회 = 세션 간 인계를 도구로 시스템화.</p>
+
+<h3>3-3. 위임 재량 부여</h3>
+<blockquote><p><b>무조건 소넷을 사용하지마.</b> 코딩의 난이도에 따라 오퍼스와 소넷을 병렬로 사용하도록해. <b>오판이 너무 많이 나네.</b></p><cite>2026-07-04 · Monitoring-dashboard</cite></blockquote>
+<p>실측(오판 빈도)을 근거로 자기 지침을 수정하고, 동시에 판단 재량을 위임했다. 위임의 성숙 신호.</p>
+
+<h3>3-4. 불신·검증 습관</h3>
+<div class="scroll"><table>
+<tr><th>지표</th><th class="n">값</th></tr>
+<tr><td>검증요구 발화</td><td class="n"><b>518건 (21.7%)</b></td></tr>
+<tr><td>정정 발화</td><td class="n">311건 (13.0%)</td></tr>
+<tr><td>에러 동반 발화</td><td class="n">517건 (21.7%)</td></tr>
+<tr><td>커밋 유발 발화</td><td class="n">575건 (24.1%)</td></tr>
+<tr><td>서브에이전트 유발</td><td class="n">268건</td></tr>
+<tr><td>타 에이전트(차미·차돌) 위임</td><td class="n">351건</td></tr>
+</table></div>
+<blockquote><p>관제탑을 보면, 꺼져 있는것들이 많아. <b>이게 내가 보면 정상으로 보이겠어?! 왜 너는 다 되었다고 하는거지? 유저 입장에서 판단해봐.</b></p><cite>2026-07-04 · Monitoring-dashboard</cite></blockquote>
+<blockquote><p><b>차돌 대답하는데?! 넌 왜 안했다고 단정지은거지?</b></p><cite>2026-07-03 · 교차 확인으로 에이전트 오보고를 잡아낸 사례</cite></blockquote>
+
+<h3>3-5. 위임 안티패턴 — 차드 쪽 원인 4가지</h3>
+<div class="scroll"><table>
+<tr><th>#</th><th>패턴</th><th>사례</th><th>처방</th></tr>
+<tr><td>A</td><td><b>환경 지정 누락</b></td><td>"엣지 말고 크롬으로"(07-02) · 컴퓨터유즈 오용 14건/8일</td><td>첫 지시에 머신·브라우저·로컬vs배포 명시</td></tr>
+<tr><td>B</td><td><b>개념을 구두로만 전달</b></td><td>조합어/독립어를 최소 4회 재설명</td><td>개념은 MAP/AGENTS에 1회 박고 참조</td></tr>
+<tr><td>C</td><td><b>같은 지시 반복 전송</b></td><td>"슬랙 스킬 다시 확인해봐" <b>연속 4회</b></td><td>무응답 시 재전송 대신 상태 확인</td></tr>
+<tr><td>D</td><td><b>결과 확인 시점 미지정</b></td><td>"다시 확인해 멈춘거 같은데"</td><td>지시에 검증 방법·완료 신호 동봉</td></tr>
+</table></div>
+
+<h2>4. 렌즈③ 주의 배분</h2>
+
+<div class="scroll"><table>
+<tr><th>프로젝트</th><th class="n">발화</th><th class="n">정정률</th><th class="n">에러동반</th><th class="n">커밋유발</th></tr>
+<tr><td>apom-data-center</td><td class="n"><b>988 (41%)</b></td><td class="n">12.7%</td><td class="n">23.1%</td><td class="n">23.3%</td></tr>
+<tr><td>Monitoring-dashboard</td><td class="n">358</td><td class="n">10.3%</td><td class="n">20.4%</td><td class="n">25.7%</td></tr>
+<tr><td>slack-agent</td><td class="n">256</td><td class="n">13.3%</td><td class="n">12.9%</td><td class="n">19.5%</td></tr>
+<tr><td>APOM-brain</td><td class="n">233</td><td class="n">12.9%</td><td class="n">22.7%</td><td class="n"><b>31.8%</b></td></tr>
+<tr><td><b>obsidian-charde-n</b></td><td class="n">226</td><td class="n"><b>24.3%</b> ⚠</td><td class="n">23.9%</td><td class="n">31.9%</td></tr>
+<tr><td>apom-logistics</td><td class="n">106</td><td class="n">7.5%</td><td class="n"><b>27.4%</b></td><td class="n">17.0%</td></tr>
+<tr><td>APOM-product-design</td><td class="n">50</td><td class="n">12.0%</td><td class="n">28.0%</td><td class="n">20.0%</td></tr>
+</table></div>
+
+<ul>
+<li><b>apom-data-center가 41%</b> — 7월은 사실상 데이터센터의 달이었다.</li>
+<li><b>obsidian 정정률 24.3%는 이상치다.</b> 볼트는 코드보다 쉬워 보이는데 실제로 가장 많이 헛돈다.</li>
+<li><b>apom-logistics는 정정률 최저(7.5%)인데 에러동반 최고(27.4%)</b> — 에러는 많은데 정정을 안 한다. 위임 후 손을 떼는 영역이거나 에러가 자동 복구된다는 뜻. 확인 가치 있음.</li>
+</ul>
+
+<h3>시간대 (KST)</h3>
+<div class="bars"> 5시  ███████                 91   정정 12.1%
+ 6시  ████████████           155   정정 14.2%
+ 7시  ██████████████████     216   정정 13.0%
+ 8시  █████████████████████  260   정정 13.5%  ← 피크
+ 9시  █████████████████      212   정정 15.1%
+10시  ████████████████       202   정정 11.9%
+11시  ████████████           154   정정 13.6%
+12시  ██████████████         172   정정  7.6%  ← 최저
+13시  █████████              111   정정 10.8%
+14시  ██████████████         174   정정 17.2%
+15시  ███████████████        189   정정  8.5%
+16시  █████████████          156   정정 13.5%
+17시  █████████████          165   정정 10.9%
+18시  ███████                 84   정정 26.2%  ⚠ 최고
+19~21시                      14건 (사실상 공백)
+22시                         21건</div>
+
+<ul>
+<li><b>새벽·오전형.</b> 5~9시에 934발화(39%)가 몰린다.</li>
+<li><b>19~21시는 완전 공백</b> — 3시간에 14건뿐. 의도적 차단으로 보인다.</li>
+<li><b>18시 정정률 26.2%</b>는 전체 평균의 2배. 하루를 접기 직전의 판단 품질이 가장 낮다.</li>
+</ul>
+
+<h3>요일</h3>
+<div class="scroll"><table>
+<tr><th>요일</th><th class="n">월</th><th class="n">화</th><th class="n">수</th><th class="n">목</th><th class="n">금</th><th class="n">토</th><th class="n">일</th></tr>
+<tr><td>발화</td><td class="n">337</td><td class="n">357</td><td class="n">360</td><td class="n">460</td><td class="n"><b>624</b></td><td class="n">135</td><td class="n">114</td></tr>
+<tr><td>정정률</td><td class="n">10.4%</td><td class="n">14.3%</td><td class="n">10.6%</td><td class="n">14.8%</td><td class="n">13.3%</td><td class="n"><b>21.5%</b> ⚠</td><td class="n">6.1%</td></tr>
+</table></div>
+<p><b>토요일 정정률 21.5%는 일요일(6.1%)의 3.5배</b> — 같은 주말인데 정반대다. 토요일에 무리한 작업을 시도하는 패턴으로 보인다.</p>
+
+<h2>5. 렌즈⑥ 성장 곡선</h2>
+
+<div class="scroll"><table>
+<tr><th>주차</th><th>기간</th><th class="n">발화</th><th class="n">세션</th><th class="n">정정률</th><th class="n">검증요구</th><th class="n">커밋유발</th><th class="n">평균 길이</th></tr>
+<tr><td>W27</td><td>6/30~7/6</td><td class="n">503</td><td class="n">37</td><td class="n">11.9%</td><td class="n">21.5%</td><td class="n">22.7%</td><td class="n"><b>130자</b></td></tr>
+<tr><td>W28</td><td>7/7~7/13</td><td class="n">701</td><td class="n">80</td><td class="n">13.3%</td><td class="n">20.4%</td><td class="n"><b>27.5%</b></td><td class="n">178자</td></tr>
+<tr><td>W29</td><td>7/14~7/20</td><td class="n">450</td><td class="n">60</td><td class="n"><b>14.9%</b></td><td class="n">22.9%</td><td class="n">26.2%</td><td class="n"><b>324자</b></td></tr>
+<tr><td>W30</td><td>7/21~7/26</td><td class="n">733</td><td class="n">56</td><td class="n">12.4%</td><td class="n">22.4%</td><td class="n">20.5%</td><td class="n">249자</td></tr>
+</table></div>
+
+<ol>
+<li><b>지시가 길어졌다 (130 → 324자, 2.5배).</b> 장황해진 게 아니라 <b>SSOT 경로·게이트·금지사항을 첫 지시에 앞당겨 싣기 시작</b>했다는 뜻이다(세션 팩토리 확립 시점과 일치).</li>
+<li><b>정정률이 W29에 정점(14.9%) 후 하락(12.4%).</b> W29는 협업게이트 P0~P4·게이트 수리·보안 딥리서치가 겹친 최난도 구간이었다. 그 고비를 넘기고 W30에 내려갔다.</li>
+<li><b>검증요구율은 20~23%로 6주 내내 안정.</b> 새로 학습된 게 아니라 <b>이미 굳은 습관</b>이다.</li>
+<li><b>커밋유발율 27.5% → 20.5% 하락.</b> W30은 코드보다 분석·기획·학습 비중이 커진 구간이라 자연스럽다.</li>
+</ol>
+
+<div class="callout good">
+<span class="t">학습 트랙 — 안목 저널 (7/5 ~ 7/23, Day01~13)</span>
+<ul>
+<li><b>음성 녹음 → 전사 → 되짚기</b> 방식 — "녹음을 하면서 읽으면서 계속 내 생각을 이야기하는 식으로 학습"</li>
+<li>파인만 기법을 스스로 재발견 — "쉬운 말로 설명하지 못하면 아직 이해하지 못한 것"</li>
+<li><b>AI를 채점한다</b> — "넌 M십을 지난 열흘에 제대로 적용했어 <b>근데 심장엔 8번을 빼먹었어</b>"</li>
+<li>배운 개념을 즉시 적용 — Day07 캘리브레이션 → 다음 날 T-ROAS 판단에 "70%만 맞을거라 생각해"</li>
+</ul>
+</div>
+
+<h2>6. 렌즈④ 반복 함정 — 실패 계급표</h2>
+<p>같은 실수의 <b>재발 일수</b> 기준. 재발 일수가 많을수록 구조적 문제다.</p>
+
+<div class="scroll"><table>
+<tr><th>순위</th><th>실패 계급</th><th class="n">재발</th><th>처방 (즉시 코드화 가능)</th></tr>
+<tr><td class="n">1</td><td><b>컴퓨터유즈/브라우저 오용</b></td><td class="n"><b>14건 / 8일</b></td><td>전역 지침에 "수집·웹조회는 Chrome MCP 우선, computer-use는 네이티브 앱 한정" 명문화</td></tr>
+<tr><td class="n">2</td><td><b>크로스플랫폼 경로 잔재</b><br><span class="tag w">같은 버그가 2개 repo에서 독립 재발</span></td><td class="n"><b>9건 / 6일</b></td><td>이미 트랩체크 6종에 있음 → <b>CI 게이트로 승격</b>(리터럴 Windows 경로 grep 차단)</td></tr>
+<tr><td class="n">3</td><td><b>명칭 드리프트</b> (시그마·메이슨→스미스)</td><td class="n"><b>8건 / 7일</b></td><td>금칙어 게이트 (<code>메이슨</code>·<code>mason</code> 신규 추가 차단)</td></tr>
+<tr><td class="n">4</td><td>조기 완료 선언 불신</td><td class="n">4건 / 4일</td><td>DoD에 "사용자 시선 스크린샷 1장" 강제</td></tr>
+<tr><td class="n">5</td><td>로컬 vs 배포 혼동</td><td class="n">4건 / 3일</td><td>첫 지시 템플릿에 확인 대상 URL 고정 슬롯</td></tr>
+<tr><td class="n">6</td><td>영어 답변 이탈</td><td class="n">2건 / 2일</td><td>이미 지침 최우선 항목 — 재발 시 훅 검토</td></tr>
+<tr><td class="n">7</td><td>SSOT 재드리프트 (T-1/T-2)</td><td class="n">2건 / 1일</td><td>값 SSOT를 코드 상수로 승격</td></tr>
+</table></div>
+
+<div class="callout warn">
+<span class="t">★ obsidian 정정률 24.3%의 정체</span>
+<p>볼트가 유독 헛도는 이유는 정독으로 확인됐다 — <b>경로·인코딩·플랫폼 계열 함정이 볼트에 집중</b>돼 있다.</p>
+<ul>
+<li>PowerShell <code>Move-Item</code> 잔존으로 밤 10시 인박스 정리가 <b>사실상 무동작</b>(07-07 발견)</li>
+<li>한글 단어 중간 부분문자열 오링크: <code>실행</code> → <code>실[[Row-행|행]]행</code> (07-01)</li>
+<li>캔버스 링크 깨짐 반복 (07-09, 07-20) · 노트 정리가 날짜를 06월로 오배정 (07-21)</li>
+</ul>
+<p><b>볼트 자동화는 "쉬운 작업"이 아니라 한글·경로·플랫폼이 겹치는 최난도 영역</b>이다. 정정률이 그걸 정확히 말해준다.</p>
+</div>
+
+<h2>7. 렌즈⑤ 인지 스타일 카드</h2>
+
+<h3>강점</h3>
+<ul>
+<li><b>① 모르는 것을 즉시 묻는다 (부끄러움 0).</b> "콜렉터 G는 어떤 자료를 수집하는 수집기 이지?" · "verify_session gate 이게 뭘하는 거지?" — 모르는 상태를 방치하지 않는다.</li>
+<li><b>② 의도를 되묻게 만든다.</b> "다시 제로베이스 부터 검토한다. <b>내가 이 페이지를 만드려는 의도는 뭐지?!</b>"(07-23) — 작업이 꼬이면 기능이 아니라 목적으로 되돌아간다.</li>
+<li><b>③ 외부 최고 기준과 대조한다.</b> "상위 1% 개발자라면 어떻게 했을까?!" · "외부 상위 1% 개발자들의 시각도 교차검증해봐"</li>
+<li><b>④ 사람이 볼 수 있는 형태를 고집한다.</b> 이미지 첨부 133건. "사람도, ai도 같이 볼 수 있는 ui와 ux를 만들어야해"(07-22)</li>
+<li><b>⑤ 도구 비대화를 경계한다.</b> "따로 빼지 말고. 너무 스킬 많아져도 좋을 거 없어"(07-07)</li>
+</ul>
+
+<h3>마찰점</h3>
+<ul>
+<li><b>① 환경 컨텍스트를 생략한 채 지시한다</b> — 실패 계급 1·5위의 근본 원인. 머릿속엔 "지금 스미스에서 크롬으로"가 있지만 지시문엔 없다.</li>
+<li><b>② 같은 개념을 문서화 대신 구두 재설명한다</b> — 독립어/조합어를 최소 4회. 한 번 MAP에 박았으면 안 해도 될 일.</li>
+<li><b>③ 무응답을 재전송으로 대응한다</b> — 연속 4회. 상태 확인이 먼저다.</li>
+<li><b>④ 저품질 시간대(18시·토요일)에도 결정을 내린다</b> — 정정률 26.2%·21.5%.</li>
+</ul>
+
+<h2>8. 실행 제안 (효과 순)</h2>
+
+<div class="scroll"><table>
+<tr><th>#</th><th>제안</th><th>근거</th><th>예상 효과</th></tr>
+<tr><td class="n">1</td><td><b>첫 지시 템플릿에 "환경 4종" 고정 슬롯</b><br>(머신·브라우저·로컬vs배포·확인URL)</td><td>실패 계급 1·5위(18건/11일)가 전부 환경 미지정</td><td>정정률 13% → 10%대 초반</td></tr>
+<tr><td class="n">2</td><td><b>리터럴 Windows 경로·금칙 명칭을 CI 게이트로 승격</b></td><td>계급 2·3위(17건/13일), 트랩체크에 있으나 강제력 없음</td><td>재발 0</td></tr>
+<tr><td class="n">3</td><td><b>18시 이후·토요일은 "결정"이 아닌 "정리"에 배치</b></td><td>18시 26.2% · 토 21.5% vs 12시 7.6% · 일 6.1%</td><td>재작업 감소</td></tr>
+<tr><td class="n">4</td><td><b>판단 원장을 실제로 가동</b></td><td>7월 내내 반복 요구했으나 아직 산발적</td><td>8월부터 적중률 실측</td></tr>
+<tr><td class="n">5</td><td><b>볼트 자동화를 "고난도"로 재분류</b></td><td>obsidian 정정률 24.3%(2배)</td><td>볼트 작업에도 게이트 적용</td></tr>
+</table></div>
+
+<footer>
+분석 기준일 2026-07-26 · 원문 세션 로그 217세션 2,387발화 전량 계량 + 786건 선별 정독<br>
+별첨: 판단 원장(재사용형) — 8월 이후 누적 채점용
+</footer>
+
+</div>
+</body>
+</html>
