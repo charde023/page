@@ -10,40 +10,46 @@
 @media (prefers-color-scheme:dark){:root{--bg:#101215;--fg:#e6e9ef;--muted:#9aa3b2;--line:#272c34;
 --accent:#7aa8ff;--accent-soft:#182338;--warn:#ff8a72;--warn-soft:#33201c;--good:#5fd3a4;--good-soft:#122a22;--card:#171a1f;--code:#1a1e24;}}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;
-word-break:keep-all;overflow-wrap:break-word;padding:0 max(16px,env(safe-area-inset-left)) 80px max(16px,env(safe-area-inset-right));}
-.wrap{max-width:820px;margin:0 auto}
-header{padding:44px 0 28px;border-bottom:2px solid var(--fg);margin-bottom:32px}
-h1{font-size:clamp(24px,5.5vw,34px);line-height:1.3;margin:0 0 14px;letter-spacing:-.02em}
-.sub{color:var(--muted);font-size:14px;margin:0}
-h2{font-size:clamp(19px,4.2vw,24px);margin:52px 0 16px;padding-top:22px;border-top:1px solid var(--line);letter-spacing:-.01em}
+body{margin:0;background:var(--bg);color:var(--fg);
+font:18px/1.8 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;
+word-break:keep-all;overflow-wrap:break-word;padding:0 max(16px,env(safe-area-inset-left)) 90px max(16px,env(safe-area-inset-right));}
+.wrap{max-width:860px;margin:0 auto}
+header{padding:48px 0 30px;border-bottom:2px solid var(--fg);margin-bottom:34px}
+h1{font-size:clamp(28px,6.5vw,40px);line-height:1.28;margin:0 0 16px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:16px;margin:0;line-height:1.7}
+h2{font-size:clamp(22px,4.8vw,28px);margin:56px 0 18px;padding-top:24px;border-top:1px solid var(--line);letter-spacing:-.01em}
 h2:first-of-type{border-top:0}
-h3{font-size:clamp(16px,3.6vw,19px);margin:32px 0 12px;color:var(--accent)}
-p{margin:0 0 14px}ul,ol{margin:0 0 16px;padding-left:22px}li{margin:6px 0}
-code{background:var(--code);padding:2px 6px;border-radius:5px;font-size:.88em;font-family:ui-monospace,Menlo,monospace}
-.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 18px;border:1px solid var(--line);border-radius:10px}
-table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:min-content}
-th,td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:var(--card);font-weight:700;white-space:nowrap;font-size:12.5px}
+h3{font-size:clamp(18px,4vw,22px);margin:36px 0 14px;color:var(--accent)}
+p{margin:0 0 16px}ul,ol{margin:0 0 18px;padding-left:24px}li{margin:8px 0}
+code{background:var(--code);padding:2px 7px;border-radius:5px;font-size:.9em;font-family:ui-monospace,Menlo,monospace}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 20px;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:min-content}
+th,td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
+th{background:var(--card);font-weight:700;white-space:nowrap;font-size:14px}
 td.n,th.n{text-align:right;white-space:nowrap}tr:last-child td{border-bottom:0}
-blockquote{margin:0 0 16px;padding:14px 18px;background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:15px}
+blockquote{margin:0 0 18px;padding:16px 20px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;font-size:17px}
 blockquote p:last-child{margin-bottom:0}
-.callout{padding:16px 18px;border-radius:12px;margin:0 0 20px;font-size:14.5px}
+.callout{padding:18px 20px;border-radius:12px;margin:0 0 22px;font-size:16.5px}
 .callout.warn{background:var(--warn-soft);border:1px solid var(--warn)}
 .callout.good{background:var(--good-soft);border:1px solid var(--good)}
-.callout .t{font-weight:700;margin-bottom:8px;display:block}
+.callout .t{font-weight:700;margin-bottom:9px;display:block;font-size:17px}
 .callout.warn .t{color:var(--warn)}.callout.good .t{color:var(--good)}
 .callout p:last-child,.callout ul:last-child{margin-bottom:0}
-.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 24px}
-.kpi div{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px}
-.kpi .v{font-size:22px;font-weight:800;color:var(--accent);line-height:1.2;letter-spacing:-.02em}
-.kpi .l{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45}
-.lv{display:inline-block;border-radius:5px;padding:1px 7px;font-size:12px;font-weight:700}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:0 0 26px}
+.kpi div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.kpi .v{font-size:28px;font-weight:800;color:var(--accent);line-height:1.15;letter-spacing:-.02em}
+.kpi .l{font-size:13.5px;color:var(--muted);margin-top:6px;line-height:1.5}
+.chart{position:relative;width:100%;margin:0 0 10px}
+.cap{font-size:14px;color:var(--muted);margin:0 0 26px;line-height:1.6}
+.lv{display:inline-block;border-radius:5px;padding:2px 9px;font-size:13.5px;font-weight:700}
 .l5{background:var(--good-soft);color:var(--good)}.l4{background:var(--accent-soft);color:var(--accent)}
 .l3{background:#f6efe0;color:#854f0b}.l2{background:var(--warn-soft);color:var(--warn)}
 @media (prefers-color-scheme:dark){.l3{background:#33290f;color:#fac775}}
 .dn{color:var(--warn);font-weight:700}
-footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+.lg{display:flex;flex-wrap:wrap;gap:18px;margin:0 0 10px;font-size:14px;color:var(--muted)}
+.lg span{display:flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;line-height:1.7}
 </style>
 </head>
 <body><div class="wrap">
@@ -56,40 +62,23 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:v
 
 <div class="callout warn">
 <span class="t">★ 이 측정은 두 번 크게 틀렸고 두 번 다 스스로 잡았다</span>
-<p>내 초안 판정 <b>12축 중 10축이 하향</b>됐고, 인용한 외부 통계 <b>8건 중 3건이 반증</b>됐다. 그 정정 과정 자체가 결과의 일부라서 먼저 싣는다.</p>
+<p>초안 판정 <b>12축 중 10축이 하향</b>됐고, 인용한 외부 통계 <b>8건 중 3건이 반증</b>됐다. 그 정정 과정 자체가 결과의 일부라서 먼저 싣는다.</p>
 </div>
 
-<h2>정정 ① — "expert 상회"는 틀렸다</h2>
-<p>Anthropic 공식 통계와 비교할 때 <b>통계량이 달랐다</b>. 원문은 novice 5 / expert 12를 <b>기하평균</b>으로, 상위 2%를 <b>세션 평균</b> 기준으로 제시한다.</p>
-<div class="scroll"><table>
-<tr><th>비교</th><th class="n">차드</th><th class="n">Anthropic</th><th>판정</th></tr>
-<tr><td><b>프롬프트당 액션 (기하평균)</b></td><td class="n"><b>8.5</b></td><td class="n">novice 5 · <b>expert 12</b></td><td><span class="dn">expert 미만</span></td></tr>
-<tr><td>(산술평균 — 처음 인용한 값)</td><td class="n">14.0</td><td class="n">전형 10</td><td>최대 227 롱테일에 부풀려짐</td></tr>
-<tr><td>중앙값</td><td class="n"><b>6</b></td><td class="n">—</td><td>—</td></tr>
-<tr><td><b>세션 평균 100액션 초과</b></td><td class="n"><b>0.46%</b></td><td class="n">약 2%</td><td><span class="dn">오히려 낮음</span></td></tr>
-</table></div>
-
-<h2>정정 ② — 채점이 후했다</h2>
-<div class="scroll"><table>
-<tr><th>반증</th><th>내용</th></tr>
-<tr><td><b>귀속 오류</b></td><td>"Bash 17,226회"는 <b>차드가 친 명령이 아니라 클로드가 호출한 툴</b>이다. 게다가 Bash 51%는 Claude Code 아키텍처의 산물이라 <b>희소성 0</b></td></tr>
-<tr><td><b>같은 실수의 반복</b></td><td>정정①에서 "산술평균은 롱테일에 부풀려진다"며 기각해놓고, <b>바로 다음 절에서 동일한 롱테일 평균(첫지시 792자)을 근거로 썼다.</b> 첫발화 219건의 <b>중앙값은 138자</b>, 38.8%가 100자 미만</td></tr>
-<tr><td><b>"전 세션 적용"이 15.1%</b></td><td>SSOT 정형문이 든 세션 첫발화는 219건 중 <b>33건</b>뿐</td></tr>
-</table></div>
-
-<h2>정정 ③ — 외부 통계 3건 반증</h2>
-<div class="callout warn">
-<span class="t">셋 다 내 결론에 유리한 방향의 왜곡이었다</span>
+<h2>12축 역량 프로파일</h2>
+<div class="lg">
+  <span><i class="sw" style="background:#eb6834"></i>초안 (자기 채점)</span>
+  <span><i class="sw" style="background:#2a78d6"></i>확정 (적대적 검증 후)</span>
 </div>
-<div class="scroll"><table>
-<tr><th>수치</th><th>내가 쓴 것</th><th>실제</th></tr>
-<tr><td>ChatGPT 유료 전환율</td><td>"5.6%"</td><td>5,000만은 <b>개인 구독자만</b>, 비즈니스 900만+는 별도 → 합치면 약 <b>6.6%</b>. 원문에 "전환율"이란 말 자체가 없고 WAU와 구독자는 동일 코호트가 아니다</td></tr>
-<tr><td>LayerX 상위 5%</td><td>"프롬프트 18개 <b>이상</b>"</td><td>18은 <b>평균</b>이지 하한이 아니다. ★<b>브라우저 텔레메트리라 CLI·API 사용은 아예 집계에서 빠진다.</b> 원 보고서 취지도 "power user = <b>보안 리스크</b>"지 우수 활용자가 아니다</td></tr>
-<tr><td>멀티에이전트 16%</td><td>"복수 협조 16%"</td><td><b>분모가 섞였다.</b> 복수 에이전트는 16%가 아니라 <b>33%</b>(전문화 17 + 협조 16). 전체 대비 환산 시 협조형 약 9%</td></tr>
-</table></div>
+<div class="chart" style="height:460px">
+  <canvas id="radar" role="img" aria-label="12축 역량 레이더 차트. 초안 판정과 검증 후 확정 판정 비교. 관측·관제만 L5를 유지했고 나머지 10축이 하향됐다.">12축 중 관측·관제만 L5 유지, 10축 하향.</canvas>
+</div>
+<p class="cap">L2 일상 사용 · L3 워크플로 편입 · L4 시스템화 · L5 자체 인프라 구축·운영. 바깥으로 갈수록 높은 레벨.</p>
 
-<h2>12축 역량 프로파일 (확정)</h2>
-<p><span class="lv l2">L2</span> 일상 사용 · <span class="lv l3">L3</span> 워크플로 편입 · <span class="lv l4">L4</span> 시스템화 · <span class="lv l5">L5</span> 자체 인프라 구축·운영</p>
+<div class="chart" style="height:230px">
+  <canvas id="dist" role="img" aria-label="레벨 분포 막대 차트. L5 1개, L4 6개, L3 4개, L2 1개.">L5 1개, L4 6개, L3 4개, L2 1개.</canvas>
+</div>
+<p class="cap">확정 분포 — <b>L5는 관측·관제 하나뿐</b>이다.</p>
 
 <div class="scroll"><table>
 <tr><th>축</th><th>초안</th><th>확정</th><th>하향 근거 (실측)</th></tr>
@@ -98,29 +87,31 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:v
 <tr><td>프롬프트 자산화</td><td>L5</td><td><span class="lv l4">L4</span></td><td>스킬 40개 중 <b>16개(40%) 발동 0회</b> · 상위 3개가 65% · eval·텔레메트리 없음</td></tr>
 <tr><td>멀티에이전트</td><td>L5</td><td><span class="lv l4">L4</span></td><td>Agent·Workflow는 <b>하네스 빌트인의 모델 자율 호출</b> · 헤르메스는 서드파티 OSS · 프로필 1개</td></tr>
 <tr><td>상시 자동화 운영</td><td>L5</td><td><span class="lv l4">L4</span></td><td>launchd 32 중 <b>12개가 타 축 중복 또는 웹앱 호스팅</b> · <b>스케줄드 16 중 enabled 4개</b></td></tr>
-<tr><td>지식 인프라(RAG)</td><td>L5</td><td><span class="lv l4">L4</span></td><td>1,834p는 <b>재고 지표</b>. 6주 gbrain 호출 <b>전체의 0.21%</b> · <b>지식 인출 하루 1.4회</b></td></tr>
-<tr><td>검증·적대적 사고</td><td>L4</td><td><span class="lv l4">L4</span></td><td>유지. 단 21.7%는 '자주 쓰는 동사 출현율' — <b>강한 검증 어휘만 세면 8.7%</b></td></tr>
+<tr><td>지식 인프라(RAG)</td><td>L5</td><td><span class="lv l4">L4</span></td><td>1,834p는 <b>재고 지표</b>. 6주 gbrain 호출 <b>전체의 0.21%</b></td></tr>
+<tr><td>검증·적대적 사고</td><td>L4</td><td><span class="lv l4">L4</span></td><td>유지. 단 21.7%는 '자주 쓰는 동사 출현율' — <b>강한 검증 어휘만 8.7%</b></td></tr>
 <tr><td>대화형 활용</td><td>L4</td><td><span class="lv l3">L3</span></td><td>양적 근거뿐 · 792자는 롱테일 평균(<b>중앙값 138자</b>)</td></tr>
 <tr><td>터미널 CLI 에이전트</td><td>L4</td><td><span class="lv l3">L3</span></td><td><b>귀속 오류</b> · Bash 51%는 제품 아키텍처 산물</td></tr>
-<tr><td>품질 게이트</td><td>L4</td><td><span class="lv l3">L3</span></td><td>골든셋 <b>로컬 실행 불가</b> · main CI는 <b>사후 경보</b> · 활성 커밋 <b>56%가 무게이트</b></td></tr>
-<tr><td>모델 운영·비용최적화</td><td>L4</td><td><span class="lv l3">L3</span></td><td>운영 도구가 <b>전 필드 None 반환</b>(13분 무응답 후)</td></tr>
-<tr><td>학습 루프</td><td>L3</td><td><span class="lv l2">L2</span></td><td>72일 커리큘럼은 <b>11분 만에 배치 생성</b>된 AI 산출물 · 실제 이행 12일 · ★<b>루프 닫힘 0/1</b></td></tr>
+<tr><td>품질 게이트</td><td>L4</td><td><span class="lv l3">L3</span></td><td>골든셋 <b>로컬 실행 불가</b> · main CI는 <b>사후 경보</b> · 활성 커밋 <b>56% 무게이트</b></td></tr>
+<tr><td>모델 운영·비용최적화</td><td>L4</td><td><span class="lv l3">L3</span></td><td>운영 도구가 <b>전 필드 None 반환</b></td></tr>
+<tr><td>학습 루프</td><td>L3</td><td><span class="lv l2">L2</span></td><td>72일 커리큘럼은 <b>11분 만에 배치 생성</b>된 AI 산출물 · ★<b>루프 닫힘 0/1</b></td></tr>
 </table></div>
 
-<div class="kpi">
-  <div><div class="v">1</div><div class="l">L5 — 관측·관제만</div></div>
-  <div><div class="v">6</div><div class="l">L4 — 시스템화</div></div>
-  <div><div class="v">4</div><div class="l">L3 — 워크플로 편입</div></div>
-  <div><div class="v">1</div><div class="l">L2 — 일상 사용</div></div>
+<h2>★ 가장 중요한 발견 — 구축과 운영의 갭</h2>
+<p>서로 다른 심사관이 <b>독립적으로 같은 곳을 찔렀다.</b> 만든 것 대비 실제로 도는 것의 비율이다.</p>
+<div class="lg">
+  <span><i class="sw" style="background:#c3c2b7"></i>만든 것 (재고)</span>
+  <span><i class="sw" style="background:#2a78d6"></i>실제로 도는 것</span>
 </div>
+<div class="chart" style="height:330px">
+  <canvas id="gap" role="img" aria-label="구축 대비 운영 비율 막대 차트. 스킬 발동 60퍼센트, 스케줄 활성 25퍼센트, 학습 진도 17퍼센트, 루프 닫힘 0퍼센트.">스킬 발동 60%, 스케줄 활성 25%, 학습 진도 17%, 루프 닫힘 0%.</canvas>
+</div>
+<p class="cap">각 항목의 분모(만든 것)를 100%로 놓았을 때 실제 가동분의 비율.</p>
 
-<h2>★가장 중요한 발견 — 구축과 운영의 갭</h2>
-<p>서로 다른 심사관이 <b>독립적으로 같은 곳을 찔렀다.</b></p>
 <div class="scroll"><table>
 <tr><th>축</th><th>만든 것 (재고)</th><th>실제로 도는 것 (운영)</th></tr>
 <tr><td>스킬 자산화</td><td>40개 / 2,995줄</td><td><b>16개는 발동 0회</b> · 상위 3개가 65%</td></tr>
 <tr><td>지식 인프라</td><td>1,834페이지 / 16,162청크</td><td><b>지식 인출 하루 1.4회</b> · 246세션 중 14세션</td></tr>
-<tr><td>상시 자동화</td><td>plist 35개</td><td>3개 미로드 사체 · <b>스케줄드 16 중 4개만 활성</b></td></tr>
+<tr><td>상시 자동화</td><td>스케줄드 태스크 16개</td><td><b>enabled 4개</b> · plist 35 중 3개 미로드 사체</td></tr>
 <tr><td>컨텍스트 체계</td><td>핸드오프 표준 제정</td><td><b>7건</b>, 진입점 25일 stale</td></tr>
 <tr><td>모델 운영</td><td>전환·검증·롤백 4종</td><td><b>status가 전 필드 None</b></td></tr>
 <tr><td>학습 루프</td><td>72일 커리큘럼</td><td>12일 이행 · <b>루프 닫힘 0회</b></td></tr>
@@ -128,35 +119,70 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:v
 
 <blockquote><p><b>진짜 병목은 "AI를 더 잘 쓰는 법"이 아니라 "만든 것을 실제로 굴리는 것"이다.</b></p></blockquote>
 
-<h2>도달 지도 — 일반 인구 기준</h2>
-<div class="scroll"><table>
-<tr><th>단</th><th>계층</th><th>모집단 비율</th><th>차드</th></tr>
-<tr><td>L1</td><td>생성형 AI 사용</td><td>세계 <b>17.8%</b> · 한국 <b>37.1%</b>(16위) · 미국 31.3%</td><td>✅</td></tr>
-<tr><td>L2</td><td>정기(주간) 사용</td><td>한국 성인 <b>20.7%</b> · 미국 성인 49%(매일 24%)</td><td>✅</td></tr>
-<tr><td>L3</td><td>고빈도</td><td>미국 성인 4% = 챗봇 사용자의 약 8%</td><td>✅ 일 90발화</td></tr>
-<tr><td>L4</td><td>유료 구독</td><td>ChatGPT 개인 5,000만+ / WAU 9억+ ≈ <b>5%대</b></td><td>✅</td></tr>
-<tr><td>L5</td><td>사용강도 상위 5%</td><td>연 <b>144회 이상</b> 대화 (브라우저 한정 척도)</td><td>✅ 연환산 약 <b>21,000회</b></td></tr>
-</table></div>
-<p><b>상위 5% 구간에 명확히 들어가며 임계값을 크게 상회한다.</b> 단 ①상위 1%를 정의한 공개 통계가 없어 그 이상은 산출 불가 ②LayerX 척도는 브라우저 한정이라 CLI·API 사용을 애초에 못 잰다.</p>
-
-<h2>대조 좌표 — 직업 개발자 집단 (소속 아님)</h2>
-<div class="callout">
-<p>차드는 <b>비개발자 이커머스 사업가</b>다. L6 이후는 소속이 아니라 <b>좌표</b>다. 일반 인구 표본(확률표본)과 개발자 표본(자기선택)은 <b>같은 사다리가 아니므로</b> 관통 백분위는 산출하지 않는다.</p>
+<h2>정정 ① — "expert 상회"는 틀렸다</h2>
+<p>Anthropic 공식 통계와 비교할 때 <b>통계량이 달랐다</b>. 원문은 novice 5 / expert 12를 <b>기하평균</b>으로 제시한다.</p>
+<div class="chart" style="height:270px">
+  <canvas id="act" role="img" aria-label="프롬프트당 액션 기하평균 비교. novice 5, 차드 8.5, expert 12. 차드는 expert 미만이다.">novice 5, 차드 8.5, expert 12 — 차드는 expert 미만.</canvas>
 </div>
+<p class="cap">같은 통계량(기하평균)으로 비교한 값. 처음 인용했던 <b>산술평균 14.0</b>은 최대 227짜리 롱테일에 끌려 부풀려진 값이었다.</p>
+
+<div class="chart" style="height:280px">
+  <canvas id="pctl" role="img" aria-label="발화당 툴 호출 백분위 곡선. 중앙값 6, 75퍼센타일 16, 90퍼센타일 37, 95퍼센타일 58, 99퍼센타일 105.">중앙값 6, p75 16, p90 37, p95 58, p99 105.</canvas>
+</div>
+<p class="cap">발화당 툴 호출 분포 — <b>중앙값 6, 최대 227</b>. 극단적 롱테일이라 산술평균으로 요약하면 실제 사용 형태를 왜곡한다.</p>
+
+<div class="kpi">
+  <div><div class="v">8.5</div><div class="l">차드 기하평균 (expert 12 미만)</div></div>
+  <div><div class="v">6</div><div class="l">발화당 툴 호출 중앙값</div></div>
+  <div><div class="v">0.46%</div><div class="l">세션 평균 100액션 초과<br>(Anthropic 약 2%보다 낮음)</div></div>
+  <div><div class="v">15.6%</div><div class="l">툴 호출 0회 발화<br>(대화·확인·결정)</div></div>
+</div>
+
+<h2>정정 ② — 채점이 후했다</h2>
 <div class="scroll"><table>
-<tr><th>단</th><th>계층</th><th>개발자 중 비율</th><th>대조</th></tr>
-<tr><td>L6</td><td>AI 도구 매일 사용</td><td>50.6%</td><td>해당</td></tr>
-<tr><td>L7</td><td>AI 에이전트 사용</td><td>사용 59% · 매일 37%</td><td>해당</td></tr>
-<tr><td>L8</td><td>터미널 CLI 에이전트</td><td>Claude Code 9.7% → 18%</td><td>해당</td></tr>
-<tr><td>L9</td><td>복수 에이전트</td><td><b>33%</b> (전체 환산 시 협조형 약 9%)</td><td>해당</td></tr>
-<tr><td>L10</td><td>상시 자율 운영</td><td><b>63%가 "드물거나 안 함"</b></td><td><b>반대편</b></td></tr>
-<tr><td>L11</td><td>자체 인프라</td><td><b>측정 통계 없음</b></td><td>해당</td></tr>
+<tr><th>반증</th><th>내용</th></tr>
+<tr><td><b>귀속 오류</b></td><td>"Bash 17,226회"는 <b>차드가 친 명령이 아니라 클로드가 호출한 툴</b>이다. 게다가 Bash 51%는 Claude Code 아키텍처의 산물이라 <b>희소성 0</b></td></tr>
+<tr><td><b>같은 실수의 반복</b></td><td>정정①에서 "산술평균은 롱테일에 부풀려진다"며 기각해놓고, <b>바로 다음 절에서 동일한 롱테일 평균(첫지시 792자)을 근거로 썼다.</b> 첫발화 219건의 <b>중앙값은 138자</b></td></tr>
+<tr><td><b>"전 세션 적용"이 15.1%</b></td><td>SSOT 정형문이 든 세션 첫발화는 219건 중 <b>33건</b>뿐</td></tr>
 </table></div>
+
+<h2>정정 ③ — 외부 통계 3건 반증</h2>
+<div class="callout warn"><span class="t">셋 다 내 결론에 유리한 방향의 왜곡이었다</span></div>
+<div class="scroll"><table>
+<tr><th>수치</th><th>내가 쓴 것</th><th>실제</th></tr>
+<tr><td>ChatGPT 유료 전환율</td><td>"5.6%"</td><td>5,000만은 <b>개인 구독자만</b>, 비즈니스 900만+는 별도 → 약 <b>6.6%</b>. 원문에 "전환율"이란 말 자체가 없다</td></tr>
+<tr><td>LayerX 상위 5%</td><td>"프롬프트 18개 <b>이상</b>"</td><td>18은 <b>평균</b>이지 하한이 아니다. ★<b>브라우저 텔레메트리라 CLI·API 사용은 집계에서 빠진다.</b> 원 취지도 "power user = <b>보안 리스크</b>"</td></tr>
+<tr><td>멀티에이전트 16%</td><td>"복수 협조 16%"</td><td><b>분모가 섞였다.</b> 복수 에이전트는 <b>33%</b>(전문화 17 + 협조 16)</td></tr>
+</table></div>
+
+<h2>도달 지도 — 일반 인구 기준</h2>
+<div class="chart" style="height:330px">
+  <canvas id="funnel" role="img" aria-label="일반 인구 모집단 퍼널 막대 차트. 세계 생성형 AI 사용 17.8퍼센트, 한국 37.1퍼센트, 한국 주간사용 20.7퍼센트, 유료구독 5.6퍼센트, 사용강도 상위 5퍼센트.">세계 17.8%, 한국 37.1%, 한국 주간 20.7%, 유료 5.6%, 상위 5%.</canvas>
+</div>
+<p class="cap">차드는 이 다섯 단을 전부 통과한다. 최상단 임계(연 144회 대화)를 <b>연환산 약 21,000회로 크게 상회</b>.</p>
+
+<div class="callout good">
+<span class="t">다만 세 가지 단서</span>
+<ul>
+<li><b>상위 1%를 정의한 공개 통계가 세상에 없다</b> — 최세밀 구간이 상위 5%다</li>
+<li>LayerX 척도는 <b>브라우저 한정</b>이라 CLI·API 사용을 애초에 못 잰다</li>
+<li>그 보고서 취지는 "power user = 보안 리스크"이지 역량 우수성 척도가 아니다</li>
+</ul>
+</div>
+
+<h2>대조 좌표 — 직업 개발자 집단</h2>
+<div class="callout">
+<p>차드는 <b>비개발자 이커머스 사업가</b>다. 아래는 소속이 아니라 <b>좌표</b>다. 일반 인구 표본(확률표본)과 개발자 표본(자기선택)은 <b>같은 사다리가 아니므로</b> 관통 백분위는 산출하지 않는다.</p>
+</div>
+<div class="chart" style="height:330px">
+  <canvas id="devs" role="img" aria-label="개발자 집단 대조 막대 차트. AI 매일 사용 50.6퍼센트, 에이전트 사용 59퍼센트, 에이전트 매일 37퍼센트, 터미널 CLI 18퍼센트, 복수 에이전트 33퍼센트, 상시 자율운영 37퍼센트.">AI 매일 50.6%, 에이전트 59%, 매일 37%, CLI 18%, 복수 에이전트 33%, 자율운영 37%.</canvas>
+</div>
+<p class="cap">차드는 <b>전 항목에 해당</b>하며, 특히 <span class="dn">상시 자율 운영</span>에서는 다수(63%가 "드물거나 안 함")와 반대 방향이다. 자체 인프라 구축(L11)은 <b>측정 통계 자체가 없다</b>.</p>
 
 <h2>종합</h2>
 <ol>
 <li><b>일반 인구 기준 상위 5% 구간</b>에 명확히 들어간다. 그 이상은 통계 부재로 산출 불가.</li>
-<li><b>개발자 집단 대조</b>에서 에이전트 사용까지는 분포 안이고, <b>상시 자율 운영에서만 다수(63%)와 반대 방향</b>.</li>
+<li><b>개발자 집단 대조</b>에서 에이전트 사용까지는 분포 안이고, <b>상시 자율 운영에서만 다수와 반대 방향</b>.</li>
 <li><b>한 지시의 정교함은 expert 미만</b>(기하평균 8.5 vs 12). 강점은 지시의 깊이가 아니다.</li>
 <li>★<b>12축 중 L5는 관측·관제 하나뿐.</b> 나머지는 만들어놓은 것에 비해 굴러가는 것이 적다.</li>
 </ol>
@@ -190,4 +216,113 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:v
 내부 12축 중 10축 하향 · 외부 8건 중 3건 정정
 </footer>
 
-</div></body></html>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function(){
+var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+var ink = dark ? '#e6e9ef' : '#16181d';
+var mut = dark ? '#9aa3b2' : '#5b6270';
+var grid = dark ? '#2c2c2a' : '#e1e0d9';
+var BLUE = dark ? '#3987e5' : '#2a78d6';
+var ORNG = dark ? '#d95926' : '#eb6834';
+var GRAY = dark ? '#4a4a46' : '#c3c2b7';
+var AQUA = dark ? '#199e70' : '#1baf7a';
+var RED  = dark ? '#e66767' : '#e34948';
+
+Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif';
+Chart.defaults.font.size = 13;
+Chart.defaults.color = mut;
+
+function mk(id, cfg){ var el = document.getElementById(id); if(el) new Chart(el, cfg); }
+
+// ① 12축 레이더
+mk('radar', {
+  type:'radar',
+  data:{
+    labels:['관측·관제','컨텍스트\n엔지니어링','프롬프트\n자산화','멀티\n에이전트','상시\n자동화','지식\n인프라','적대적\n검증','대화형\n활용','터미널\nCLI','품질\n게이트','모델\n운영','학습\n루프'],
+    datasets:[
+      {label:'초안', data:[5,5,5,5,5,5,4,4,4,4,4,3], borderColor:ORNG, backgroundColor:'rgba(235,104,52,0.10)', borderWidth:2, borderDash:[5,4], pointRadius:3, pointBackgroundColor:ORNG},
+      {label:'확정', data:[5,4,4,4,4,4,4,3,3,3,3,2], borderColor:BLUE, backgroundColor:'rgba(42,120,214,0.16)', borderWidth:2.5, pointRadius:4, pointBackgroundColor:BLUE}
+    ]
+  },
+  options:{responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{r:{min:0,max:5,ticks:{stepSize:1,backdropColor:'transparent',color:mut,font:{size:11}},
+      grid:{color:grid}, angleLines:{color:grid},
+      pointLabels:{color:ink,font:{size:12.5}}}}}
+});
+
+// ② 레벨 분포
+mk('dist', {
+  type:'bar',
+  data:{labels:['L5 자체 인프라','L4 시스템화','L3 워크플로 편입','L2 일상 사용'],
+    datasets:[{data:[1,6,4,1], backgroundColor:[AQUA,BLUE,'#eda100',RED], borderRadius:5, barThickness:24}]},
+  options:{indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.x+'개 축'}}}},
+    scales:{x:{beginAtZero:true,max:7,ticks:{stepSize:1,color:mut},grid:{color:grid}},
+            y:{ticks:{color:ink,font:{size:13.5}},grid:{display:false}}}}
+});
+
+// ③ 구축 vs 운영 갭
+mk('gap', {
+  type:'bar',
+  data:{labels:['스킬 발동률','스케줄 활성률','학습 진도','루프 닫힘','핸드오프 커버','gbrain 세션 사용률'],
+    datasets:[
+      {label:'만든 것', data:[100,100,100,100,100,100], backgroundColor:GRAY, borderRadius:4, barThickness:18},
+      {label:'도는 것', data:[60,25,17,0,3.2,5.7], backgroundColor:BLUE, borderRadius:4, barThickness:18}
+    ]},
+  options:{indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.x+'%'}}}},
+    scales:{x:{beginAtZero:true,max:100,ticks:{color:mut,callback:function(v){return v+'%'}},grid:{color:grid}},
+            y:{ticks:{color:ink,font:{size:13}},grid:{display:false}}}}
+});
+
+// ④ 액션 기하평균 비교
+mk('act', {
+  type:'bar',
+  data:{labels:['novice','차드','expert'],
+    datasets:[{data:[5,8.5,12], backgroundColor:[GRAY,BLUE,AQUA], borderRadius:6, barThickness:56}]},
+  options:{responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y+' 액션 (기하평균)'}}}},
+    scales:{y:{beginAtZero:true,max:14,ticks:{color:mut},grid:{color:grid},title:{display:true,text:'프롬프트당 액션 (기하평균)',color:mut,font:{size:12.5}}},
+            x:{ticks:{color:ink,font:{size:14}},grid:{display:false}}}}
+});
+
+// ⑤ 백분위 곡선
+mk('pctl', {
+  type:'line',
+  data:{labels:['p50','p75','p90','p95','p98','p99','최대'],
+    datasets:[{data:[6,16,37,58,81,105,227], borderColor:BLUE, backgroundColor:'rgba(42,120,214,0.10)',
+      fill:true, tension:0.3, borderWidth:2.5, pointRadius:5, pointBackgroundColor:BLUE}]},
+  options:{responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y+'회'}}}},
+    scales:{y:{beginAtZero:true,ticks:{color:mut},grid:{color:grid},title:{display:true,text:'발화당 툴 호출',color:mut,font:{size:12.5}}},
+            x:{ticks:{color:ink,font:{size:13}},grid:{display:false}}}}
+});
+
+// ⑥ 도달 퍼널
+mk('funnel', {
+  type:'bar',
+  data:{labels:['세계 생성형 AI 사용','한국 생성형 AI 사용','한국 성인 주간 사용','ChatGPT 유료 구독','사용강도 상위 구간'],
+    datasets:[{data:[17.8,37.1,20.7,5.6,5.0], backgroundColor:[GRAY,GRAY,BLUE,BLUE,AQUA], borderRadius:5, barThickness:26}]},
+  options:{indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.x+'%'}}}},
+    scales:{x:{beginAtZero:true,max:40,ticks:{color:mut,callback:function(v){return v+'%'}},grid:{color:grid}},
+            y:{ticks:{color:ink,font:{size:13}},grid:{display:false}}}}
+});
+
+// ⑦ 개발자 대조
+mk('devs', {
+  type:'bar',
+  data:{labels:['AI 도구 매일 사용','AI 에이전트 사용','에이전트 매일 사용','터미널 CLI 에이전트','복수 에이전트','상시 자율 운영'],
+    datasets:[{data:[50.6,59,37,18,33,37], backgroundColor:[GRAY,GRAY,GRAY,BLUE,BLUE,RED], borderRadius:5, barThickness:24}]},
+  options:{indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.x+'% (개발자 중)'}}}},
+    scales:{x:{beginAtZero:true,max:65,ticks:{color:mut,callback:function(v){return v+'%'}},grid:{color:grid}},
+            y:{ticks:{color:ink,font:{size:13}},grid:{display:false}}}}
+});
+})();
+</script>
+</body></html>
