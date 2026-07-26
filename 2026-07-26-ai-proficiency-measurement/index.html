@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI 활용수준 측정 결과 — 12축 프로파일 + 도달지도</title>
+<style>
+:root{--bg:#fff;--fg:#16181d;--muted:#5b6270;--line:#e3e6ec;--accent:#1b56c4;--accent-soft:#eef3fd;
+--warn:#b4341f;--warn-soft:#fdf0ed;--good:#0f7a52;--good-soft:#ecf8f2;--card:#f7f8fa;--code:#f2f4f7;}
+@media (prefers-color-scheme:dark){:root{--bg:#101215;--fg:#e6e9ef;--muted:#9aa3b2;--line:#272c34;
+--accent:#7aa8ff;--accent-soft:#182338;--warn:#ff8a72;--warn-soft:#33201c;--good:#5fd3a4;--good-soft:#122a22;--card:#171a1f;--code:#1a1e24;}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;
+word-break:keep-all;overflow-wrap:break-word;padding:0 max(16px,env(safe-area-inset-left)) 80px max(16px,env(safe-area-inset-right));}
+.wrap{max-width:820px;margin:0 auto}
+header{padding:44px 0 28px;border-bottom:2px solid var(--fg);margin-bottom:32px}
+h1{font-size:clamp(24px,5.5vw,34px);line-height:1.3;margin:0 0 14px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:14px;margin:0}
+h2{font-size:clamp(19px,4.2vw,24px);margin:52px 0 16px;padding-top:22px;border-top:1px solid var(--line);letter-spacing:-.01em}
+h2:first-of-type{border-top:0}
+h3{font-size:clamp(16px,3.6vw,19px);margin:32px 0 12px;color:var(--accent)}
+p{margin:0 0 14px}ul,ol{margin:0 0 16px;padding-left:22px}li{margin:6px 0}
+code{background:var(--code);padding:2px 6px;border-radius:5px;font-size:.88em;font-family:ui-monospace,Menlo,monospace}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 18px;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:min-content}
+th,td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--card);font-weight:700;white-space:nowrap;font-size:12.5px}
+td.n,th.n{text-align:right;white-space:nowrap}tr:last-child td{border-bottom:0}
+blockquote{margin:0 0 16px;padding:14px 18px;background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:15px}
+blockquote p:last-child{margin-bottom:0}
+.callout{padding:16px 18px;border-radius:12px;margin:0 0 20px;font-size:14.5px}
+.callout.warn{background:var(--warn-soft);border:1px solid var(--warn)}
+.callout.good{background:var(--good-soft);border:1px solid var(--good)}
+.callout .t{font-weight:700;margin-bottom:8px;display:block}
+.callout.warn .t{color:var(--warn)}.callout.good .t{color:var(--good)}
+.callout p:last-child,.callout ul:last-child{margin-bottom:0}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 24px}
+.kpi div{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px}
+.kpi .v{font-size:22px;font-weight:800;color:var(--accent);line-height:1.2;letter-spacing:-.02em}
+.kpi .l{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45}
+.lv{display:inline-block;border-radius:5px;padding:1px 7px;font-size:12px;font-weight:700}
+.l5{background:var(--good-soft);color:var(--good)}.l4{background:var(--accent-soft);color:var(--accent)}
+.l3{background:#f6efe0;color:#854f0b}.l2{background:var(--warn-soft);color:var(--warn)}
+@media (prefers-color-scheme:dark){.l3{background:#33290f;color:#fac775}}
+.dn{color:var(--warn);font-weight:700}
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+</style>
+</head>
+<body><div class="wrap">
+
+<header>
+  <h1>AI 활용수준 측정 결과</h1>
+  <p class="sub">12축 역량 프로파일 · 모집단 도달지도 · 개발자 집단 대조좌표<br>
+  측정 2026-06-30 ~ 07-26 · 코퍼스 219세션 / 2,429발화 · <b>적대적 검증 완료본</b></p>
+</header>
+
+<div class="callout warn">
+<span class="t">★ 이 측정은 두 번 크게 틀렸고 두 번 다 스스로 잡았다</span>
+<p>내 초안 판정 <b>12축 중 10축이 하향</b>됐고, 인용한 외부 통계 <b>8건 중 3건이 반증</b>됐다. 그 정정 과정 자체가 결과의 일부라서 먼저 싣는다.</p>
+</div>
+
+<h2>정정 ① — "expert 상회"는 틀렸다</h2>
+<p>Anthropic 공식 통계와 비교할 때 <b>통계량이 달랐다</b>. 원문은 novice 5 / expert 12를 <b>기하평균</b>으로, 상위 2%를 <b>세션 평균</b> 기준으로 제시한다.</p>
+<div class="scroll"><table>
+<tr><th>비교</th><th class="n">차드</th><th class="n">Anthropic</th><th>판정</th></tr>
+<tr><td><b>프롬프트당 액션 (기하평균)</b></td><td class="n"><b>8.5</b></td><td class="n">novice 5 · <b>expert 12</b></td><td><span class="dn">expert 미만</span></td></tr>
+<tr><td>(산술평균 — 처음 인용한 값)</td><td class="n">14.0</td><td class="n">전형 10</td><td>최대 227 롱테일에 부풀려짐</td></tr>
+<tr><td>중앙값</td><td class="n"><b>6</b></td><td class="n">—</td><td>—</td></tr>
+<tr><td><b>세션 평균 100액션 초과</b></td><td class="n"><b>0.46%</b></td><td class="n">약 2%</td><td><span class="dn">오히려 낮음</span></td></tr>
+</table></div>
+
+<h2>정정 ② — 채점이 후했다</h2>
+<div class="scroll"><table>
+<tr><th>반증</th><th>내용</th></tr>
+<tr><td><b>귀속 오류</b></td><td>"Bash 17,226회"는 <b>차드가 친 명령이 아니라 클로드가 호출한 툴</b>이다. 게다가 Bash 51%는 Claude Code 아키텍처의 산물이라 <b>희소성 0</b></td></tr>
+<tr><td><b>같은 실수의 반복</b></td><td>정정①에서 "산술평균은 롱테일에 부풀려진다"며 기각해놓고, <b>바로 다음 절에서 동일한 롱테일 평균(첫지시 792자)을 근거로 썼다.</b> 첫발화 219건의 <b>중앙값은 138자</b>, 38.8%가 100자 미만</td></tr>
+<tr><td><b>"전 세션 적용"이 15.1%</b></td><td>SSOT 정형문이 든 세션 첫발화는 219건 중 <b>33건</b>뿐</td></tr>
+</table></div>
+
+<h2>정정 ③ — 외부 통계 3건 반증</h2>
+<div class="callout warn">
+<span class="t">셋 다 내 결론에 유리한 방향의 왜곡이었다</span>
+</div>
+<div class="scroll"><table>
+<tr><th>수치</th><th>내가 쓴 것</th><th>실제</th></tr>
+<tr><td>ChatGPT 유료 전환율</td><td>"5.6%"</td><td>5,000만은 <b>개인 구독자만</b>, 비즈니스 900만+는 별도 → 합치면 약 <b>6.6%</b>. 원문에 "전환율"이란 말 자체가 없고 WAU와 구독자는 동일 코호트가 아니다</td></tr>
+<tr><td>LayerX 상위 5%</td><td>"프롬프트 18개 <b>이상</b>"</td><td>18은 <b>평균</b>이지 하한이 아니다. ★<b>브라우저 텔레메트리라 CLI·API 사용은 아예 집계에서 빠진다.</b> 원 보고서 취지도 "power user = <b>보안 리스크</b>"지 우수 활용자가 아니다</td></tr>
+<tr><td>멀티에이전트 16%</td><td>"복수 협조 16%"</td><td><b>분모가 섞였다.</b> 복수 에이전트는 16%가 아니라 <b>33%</b>(전문화 17 + 협조 16). 전체 대비 환산 시 협조형 약 9%</td></tr>
+</table></div>
+
+<h2>12축 역량 프로파일 (확정)</h2>
+<p><span class="lv l2">L2</span> 일상 사용 · <span class="lv l3">L3</span> 워크플로 편입 · <span class="lv l4">L4</span> 시스템화 · <span class="lv l5">L5</span> 자체 인프라 구축·운영</p>
+
+<div class="scroll"><table>
+<tr><th>축</th><th>초안</th><th>확정</th><th>하향 근거 (실측)</th></tr>
+<tr><td><b>관측·관제(관제탑)</b></td><td>L5</td><td><span class="lv l5">L5</span></td><td>유지. 실제 근거 = 자체 repo <b>33,573줄·커밋 404건·테스트 79개</b></td></tr>
+<tr><td>컨텍스트 엔지니어링</td><td>L5</td><td><span class="lv l4">L4</span></td><td>"전 세션 적용"이 15.1% · 핸드오프 <b>7건</b>, 진입점 포인터 <b>25일 stale</b></td></tr>
+<tr><td>프롬프트 자산화</td><td>L5</td><td><span class="lv l4">L4</span></td><td>스킬 40개 중 <b>16개(40%) 발동 0회</b> · 상위 3개가 65% · eval·텔레메트리 없음</td></tr>
+<tr><td>멀티에이전트</td><td>L5</td><td><span class="lv l4">L4</span></td><td>Agent·Workflow는 <b>하네스 빌트인의 모델 자율 호출</b> · 헤르메스는 서드파티 OSS · 프로필 1개</td></tr>
+<tr><td>상시 자동화 운영</td><td>L5</td><td><span class="lv l4">L4</span></td><td>launchd 32 중 <b>12개가 타 축 중복 또는 웹앱 호스팅</b> · <b>스케줄드 16 중 enabled 4개</b></td></tr>
+<tr><td>지식 인프라(RAG)</td><td>L5</td><td><span class="lv l4">L4</span></td><td>1,834p는 <b>재고 지표</b>. 6주 gbrain 호출 <b>전체의 0.21%</b> · <b>지식 인출 하루 1.4회</b></td></tr>
+<tr><td>검증·적대적 사고</td><td>L4</td><td><span class="lv l4">L4</span></td><td>유지. 단 21.7%는 '자주 쓰는 동사 출현율' — <b>강한 검증 어휘만 세면 8.7%</b></td></tr>
+<tr><td>대화형 활용</td><td>L4</td><td><span class="lv l3">L3</span></td><td>양적 근거뿐 · 792자는 롱테일 평균(<b>중앙값 138자</b>)</td></tr>
+<tr><td>터미널 CLI 에이전트</td><td>L4</td><td><span class="lv l3">L3</span></td><td><b>귀속 오류</b> · Bash 51%는 제품 아키텍처 산물</td></tr>
+<tr><td>품질 게이트</td><td>L4</td><td><span class="lv l3">L3</span></td><td>골든셋 <b>로컬 실행 불가</b> · main CI는 <b>사후 경보</b> · 활성 커밋 <b>56%가 무게이트</b></td></tr>
+<tr><td>모델 운영·비용최적화</td><td>L4</td><td><span class="lv l3">L3</span></td><td>운영 도구가 <b>전 필드 None 반환</b>(13분 무응답 후)</td></tr>
+<tr><td>학습 루프</td><td>L3</td><td><span class="lv l2">L2</span></td><td>72일 커리큘럼은 <b>11분 만에 배치 생성</b>된 AI 산출물 · 실제 이행 12일 · ★<b>루프 닫힘 0/1</b></td></tr>
+</table></div>
+
+<div class="kpi">
+  <div><div class="v">1</div><div class="l">L5 — 관측·관제만</div></div>
+  <div><div class="v">6</div><div class="l">L4 — 시스템화</div></div>
+  <div><div class="v">4</div><div class="l">L3 — 워크플로 편입</div></div>
+  <div><div class="v">1</div><div class="l">L2 — 일상 사용</div></div>
+</div>
+
+<h2>★가장 중요한 발견 — 구축과 운영의 갭</h2>
+<p>서로 다른 심사관이 <b>독립적으로 같은 곳을 찔렀다.</b></p>
+<div class="scroll"><table>
+<tr><th>축</th><th>만든 것 (재고)</th><th>실제로 도는 것 (운영)</th></tr>
+<tr><td>스킬 자산화</td><td>40개 / 2,995줄</td><td><b>16개는 발동 0회</b> · 상위 3개가 65%</td></tr>
+<tr><td>지식 인프라</td><td>1,834페이지 / 16,162청크</td><td><b>지식 인출 하루 1.4회</b> · 246세션 중 14세션</td></tr>
+<tr><td>상시 자동화</td><td>plist 35개</td><td>3개 미로드 사체 · <b>스케줄드 16 중 4개만 활성</b></td></tr>
+<tr><td>컨텍스트 체계</td><td>핸드오프 표준 제정</td><td><b>7건</b>, 진입점 25일 stale</td></tr>
+<tr><td>모델 운영</td><td>전환·검증·롤백 4종</td><td><b>status가 전 필드 None</b></td></tr>
+<tr><td>학습 루프</td><td>72일 커리큘럼</td><td>12일 이행 · <b>루프 닫힘 0회</b></td></tr>
+</table></div>
+
+<blockquote><p><b>진짜 병목은 "AI를 더 잘 쓰는 법"이 아니라 "만든 것을 실제로 굴리는 것"이다.</b></p></blockquote>
+
+<h2>도달 지도 — 일반 인구 기준</h2>
+<div class="scroll"><table>
+<tr><th>단</th><th>계층</th><th>모집단 비율</th><th>차드</th></tr>
+<tr><td>L1</td><td>생성형 AI 사용</td><td>세계 <b>17.8%</b> · 한국 <b>37.1%</b>(16위) · 미국 31.3%</td><td>✅</td></tr>
+<tr><td>L2</td><td>정기(주간) 사용</td><td>한국 성인 <b>20.7%</b> · 미국 성인 49%(매일 24%)</td><td>✅</td></tr>
+<tr><td>L3</td><td>고빈도</td><td>미국 성인 4% = 챗봇 사용자의 약 8%</td><td>✅ 일 90발화</td></tr>
+<tr><td>L4</td><td>유료 구독</td><td>ChatGPT 개인 5,000만+ / WAU 9억+ ≈ <b>5%대</b></td><td>✅</td></tr>
+<tr><td>L5</td><td>사용강도 상위 5%</td><td>연 <b>144회 이상</b> 대화 (브라우저 한정 척도)</td><td>✅ 연환산 약 <b>21,000회</b></td></tr>
+</table></div>
+<p><b>상위 5% 구간에 명확히 들어가며 임계값을 크게 상회한다.</b> 단 ①상위 1%를 정의한 공개 통계가 없어 그 이상은 산출 불가 ②LayerX 척도는 브라우저 한정이라 CLI·API 사용을 애초에 못 잰다.</p>
+
+<h2>대조 좌표 — 직업 개발자 집단 (소속 아님)</h2>
+<div class="callout">
+<p>차드는 <b>비개발자 이커머스 사업가</b>다. L6 이후는 소속이 아니라 <b>좌표</b>다. 일반 인구 표본(확률표본)과 개발자 표본(자기선택)은 <b>같은 사다리가 아니므로</b> 관통 백분위는 산출하지 않는다.</p>
+</div>
+<div class="scroll"><table>
+<tr><th>단</th><th>계층</th><th>개발자 중 비율</th><th>대조</th></tr>
+<tr><td>L6</td><td>AI 도구 매일 사용</td><td>50.6%</td><td>해당</td></tr>
+<tr><td>L7</td><td>AI 에이전트 사용</td><td>사용 59% · 매일 37%</td><td>해당</td></tr>
+<tr><td>L8</td><td>터미널 CLI 에이전트</td><td>Claude Code 9.7% → 18%</td><td>해당</td></tr>
+<tr><td>L9</td><td>복수 에이전트</td><td><b>33%</b> (전체 환산 시 협조형 약 9%)</td><td>해당</td></tr>
+<tr><td>L10</td><td>상시 자율 운영</td><td><b>63%가 "드물거나 안 함"</b></td><td><b>반대편</b></td></tr>
+<tr><td>L11</td><td>자체 인프라</td><td><b>측정 통계 없음</b></td><td>해당</td></tr>
+</table></div>
+
+<h2>종합</h2>
+<ol>
+<li><b>일반 인구 기준 상위 5% 구간</b>에 명확히 들어간다. 그 이상은 통계 부재로 산출 불가.</li>
+<li><b>개발자 집단 대조</b>에서 에이전트 사용까지는 분포 안이고, <b>상시 자율 운영에서만 다수(63%)와 반대 방향</b>.</li>
+<li><b>한 지시의 정교함은 expert 미만</b>(기하평균 8.5 vs 12). 강점은 지시의 깊이가 아니다.</li>
+<li>★<b>12축 중 L5는 관측·관제 하나뿐.</b> 나머지는 만들어놓은 것에 비해 굴러가는 것이 적다.</li>
+</ol>
+
+<div class="callout good">
+<span class="t">가장 정직한 요약</span>
+<p><b>"AI가 상시로 도는 인프라를 혼자 만든 사람"이 맞다. 다만 그 인프라의 상당 부분이 아직 만들어진 채로 서 있다.</b></p>
+<p>구축 능력은 비교 통계가 없을 만큼 드문 구간이고, <b>운영·소비가 구축량을 따라가지 못한다.</b> 스킬 40개 중 16개 미발동, 브레인 1,834페이지에 하루 인출 1.4회, 점수판 루프 닫힘 0회가 같은 이야기를 한다.</p>
+</div>
+
+<h3>그래서 다음 한 수</h3>
+<p><b>새로 만드는 것이 아니라, 만든 것 중 안 도는 것을 끄거나 살리는 것.</b></p>
+<ul>
+<li>발동 0회 스킬 16개 — 폐기할지 살릴지 결정</li>
+<li>gbrain 1,834p — 지식 인출을 세션 루틴에 배선(현재 5.7% 세션)</li>
+<li>스케줄드 태스크 12개 비활성 — 정리</li>
+<li><b>안목 점수판 루프 닫기 0/1 → 첫 1건 완결</b></li>
+</ul>
+
+<h2>한계</h2>
+<ol>
+<li><b>관측 경계</b> — AI에게 위임한 영역만 담는다. 혼자 판단·처리한 업무는 안 잡힌다.</li>
+<li><b>'액션' 정의 불일치 가능성</b> — Anthropic 문서에 action의 정식 정의가 없다. 비교는 근사다.</li>
+<li><b>표면 차이</b> — Anthropic 표본은 Claude Code 인터랙티브 세션(써드파티 IDE·SDK·headless 제외).</li>
+<li><b>살아있는 코퍼스</b> — 재실행 시 수치 증가(2,387→2,443 관측). 본문은 2026-07-26 스냅샷.</li>
+<li><b>하향 심사도 완벽하지 않다</b> — 심사관은 "한 단계 낮은 게 맞다"를 기본값으로 지시받아 박하게 볼 유인이 있었다. 확정값은 <b>초안(후함)과 심사(박함) 사이</b>로 읽는 게 안전하다.</li>
+</ol>
+
+<footer>
+측정·검증 2026-07-26 · 코퍼스 219세션 2,429발화 · 외부 정찰 8레인 126 findings · 적대적 검증 20건(외부 8 · 내부 12축)<br>
+내부 12축 중 10축 하향 · 외부 8건 중 3건 정정
+</footer>
+
+</div></body></html>
