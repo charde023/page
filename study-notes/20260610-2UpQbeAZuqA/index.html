@@ -1,0 +1,343 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>NVIDIA Jensen Huang - 지능 시대의 다이나모를 만들다</title>
+<meta name="description" content="NVIDIA CEO 젠슨 황이 AI를 &quot;검색에서 생성으로의 전환&quot;으로 정의하고, AI 투자 5계층 케이크·직업 대체 오해·기술 격차 해소를 설명한 Sequoia 강연"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Sequoia Capital 학습노트</div><h1>NVIDIA Jensen Huang - 지능 시대의 다이나모를 만들다</h1>
+<div class="meta">원작자 Jensen Huang · NVIDIA · 업로드 2026-06-10 · 41.3분 · <a href="https://www.youtube.com/watch?v=2UpQbeAZuqA" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>NVIDIA Jensen Huang - 지능 시대의 다이나모를 만들다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>AI는 "데이터 검색"에서 "실시간 지능 생성"으로의 60년 만의 대전환이며, NVIDIA의 AI 팩토리는 전기 시대 다이나모처럼 세상을 지능으로 감싸는 인프라다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Jensen Huang · NVIDIA · <a href="https://www.youtube.com/watch?v=2UpQbeAZuqA">YouTube</a> · 업로드 2026-06-10 · 41분 · 전사 Whisper large-v3 (auto) · 진행 Konstantine Buhler (Sequoia Capital) · 녹화 2026년 5월</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>검색 기반 → 생성 기반 컴퓨팅 전환</td>
+<td>60년 컴퓨팅 패러다임이 완전히 뒤집히는 순간</td>
+<td>데이터센터는 이제 "저장소"가 아니라 "공장"</td>
+</tr>
+<tr>
+<td>AI 5계층 케이크 투자 모델</td>
+<td>어느 레이어에 투자할지 프레임이 생김</td>
+<td>에너지→칩→인프라→모델→애플리케이션 순서</td>
+</tr>
+<tr>
+<td>직업 대체 ≠ 직업 소멸 (태스크 vs 목적)</td>
+<td>방사선과/소프트웨어공학 사례로 오해 불식</td>
+<td>AI는 직업을 없애는 게 아니라 "격상"시킨다</td>
+</tr>
+<tr>
+<td>AI 팩토리 ROI 구조</td>
+<td>1기가와트 = $500억 투자 → $3,000~4,000억 가치 생산</td>
+<td>가장 ROI 높은 팩토리</td>
+</tr>
+<tr>
+<td>에이전틱 AI와 인터넷 규모 변화</td>
+<td>에이전트 수백억 개가 인터넷을 사용하는 미래</td>
+<td>사람 10억 → 에이전트 1,000억+</td>
+</tr>
+<tr>
+<td>토큰 = 모든 지식의 공통 표현</td>
+<td>단백질·유전자·물리·로봇 모두 토큰으로 수렴</td>
+<td>컴퓨터는 셀이든 단어든 "그냥 토큰"으로 다룸</td>
+</tr>
+<tr>
+<td>기술 격차 해소</td>
+<td>C++ 2% → 자연어 100%로 프로그래밍 접근성 혁명</td>
+<td>AI는 역대 최강의 민주화 도구</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>AI 팩토리 (AI Factory)</strong>: 전통 데이터센터(저장)와 달리, 입력을 받아 실시간으로 지능(토큰)을 생산하는 컴퓨팅 시설. NVIDIA GPU 랙이 핵심 장비.</li>
+<li><strong>다이나모 (Dynamo)</strong>: 300년 전 지멘스(Siemens)가 만든 발전기 — 운동(원자)을 전기(전자)로 변환. 젠슨이 NVIDIA GPU를 이것에 비유: "전자(electrons) → 토큰(numbers=intelligence)".</li>
+<li><strong>랙 (Rack)</strong>: NVIDIA의 기본 판매·설치 단위. 72개 칩 → 무게 2톤, 가격 $400만, 부품 150만 개.</li>
+<li><strong>Vera Rubin</strong>: 차세대 NVIDIA AI 시스템 이름 (H100 이후). 언급 수준, 세부 스펙은 별도 확인 필요.</li>
+<li><strong>컨텍스트 + 쿼리 구조</strong>: AI에 매번 새 정보(context)와 질문(query)을 주면, 추론 후 출력. 매 응답이 고유하게 생성됨.</li>
+<li><strong>5계층 케이크</strong>: 에너지 / 칩+컴퓨팅+네트워킹 / 인프라(토지·전력·설비) / 모델(OpenAI·Anthropic 등) / 애플리케이션</li>
+<li><strong>실리콘 포토닉스 (Silicon Photonics)</strong>: 칩 간 광학 연결 기술, 2계층(칩/네트워킹)에 포함.</li>
+<li><strong>추천 시스템 (Recommender System)</strong>: 검색 기반 컴퓨팅 시대의 "지능" — 저장된 데이터를 개인화해 검색.</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<ol>
+<li>현재 AI를 시간당 $20~30으로 지불하는 것이 "인류 역사상 가장 빠르게 성장하는 소프트웨어 비즈니스"라고 표현.</li>
+<li>NVIDIA 내부에 현재 "수십만 개(hundreds of thousands)"의 에이전트가 실제 업무 처리 중 — 전부 가드레일+샌드박스.</li>
+<li>에이전트 인터넷 예측: 현재 10억 명 사용자 → 미래에는 에이전트 1,000억 개(a hundred billion)가 인터넷 사용.</li>
+<li>1기가와트 AI 팩토리 = $500억(fifty billion) 투자 → $3,000~4,000억(300~400 billion) 지능 생산.</li>
+<li>올해(2026?) 전체 5계층 케이크에 $1조(one trillion) 투자 예상.</li>
+<li>장기 AI 산업 규모 전망: 연 $20조(twenty trillion) 이상 — 현재 $1조는 그 시작에 불과.</li>
+<li>작년 벤처캐피털 투자 $1,000억 — 인류 역사상 단일 연도 VC 최대치, 모두 5계층 최상위(애플리케이션)로.</li>
+<li>IBM System 360(1964)을 컴퓨팅 기원으로 언급 — 64년간 "검색 기반"이 지배.</li>
+<li>방사선과 사례: 컴퓨터 비전이 12년 전(2014)에 이미 초인적 수준 도달했음에도, 방사선과 의사 수는 오히려 증가.</li>
+<li>NVIDIA는 올해 약 800만 개 랙을 제조 예정(8 million [units] this year) — 각 랙에 72칩.</li>
+<li>AI 안전성 증거로 ChatGPT 2년 간 환각(hallucination) 감소를 직접 비교 가능한 지표로 제시.</li>
+<li>AI 도태론 발화자들을 직접 비판: "그건 완전한 헛소리(complete nonsense)" — 본인이 직접 쓴 표현.</li>
+<li>"AI에게 직업 빼앗기는 게 아니라, AI 쓰는 사람에게 직업 빼앗긴다" — 젠슨 본인도 동의.</li>
+<li>C++ 아는 사람 ≈ 2%, 인간 언어 아는 사람 ≈ 100% → AI로 프로그래밍 접근성이 100%로.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>챗봇에서 생성형 AI로</td>
+<td>이해→생성→추론→행동 진화 순서</td>
+</tr>
+<tr>
+<td>2</td>
+<td>AI가 "일"을 한다</td>
+<td>생성에서 에이전틱 행동으로 — 가치 창출 시작</td>
+</tr>
+<tr>
+<td>3</td>
+<td>다운스트림 산업 충격</td>
+<td>의료·금융·물류·엔터 등 전 산업 재편</td>
+</tr>
+<tr>
+<td>4</td>
+<td>검색→생성 전환</td>
+<td>60년 IBM 시대 종료, 모든 픽셀·사운드가 실시간 생성</td>
+</tr>
+<tr>
+<td>5</td>
+<td>지능이 지구를 감싼다</td>
+<td>전기 그리드·인터넷에 이은 세 번째 "코쿤(cocoon)"</td>
+</tr>
+<tr>
+<td>6</td>
+<td>AI 팩토리 내부</td>
+<td>랙 단위, 2톤/$400만/부품 150만, 연 800만 개 제조</td>
+</tr>
+<tr>
+<td>7</td>
+<td>5계층 케이크 투자</td>
+<td>에너지→칩→인프라→모델→앱, 올해 $1조 투입</td>
+</tr>
+<tr>
+<td>8</td>
+<td>언어 너머 — 생물학</td>
+<td>단백질·유전자도 구조가 있으면 AI가 학습 가능</td>
+</tr>
+<tr>
+<td>9</td>
+<td>토큰과 세계 모델</td>
+<td>셀·단어·이미지 모두 토큰, 컴퓨터는 구분 안 함</td>
+</tr>
+<tr>
+<td>10</td>
+<td>$20조 규모 미래</td>
+<td>애플리케이션 레이어만 $100B VC, 장기 $20T/년 예상</td>
+</tr>
+<tr>
+<td>11</td>
+<td>AI 종말론 반박</td>
+<td>"singularity" "20% 인류 종말" — 헛소리, 소프트웨어+컴퓨터일 뿐</td>
+</tr>
+<tr>
+<td>12</td>
+<td>태스크 vs 목적</td>
+<td>방사선과·소프트웨어 엔지니어 사례 — AI 후 수요 증가</td>
+</tr>
+<tr>
+<td>13</td>
+<td>기술 격차 해소</td>
+<td>C++ 2% → 자연어 100%, 가장 강력한 민주화</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 챗봇에서 생성형 AI로</h2>
+<p>젠슨은 AI를 "이해(perceive) → 생성(generate)"의 관점으로 풀었다. 2년 전 ChatGPT는 텍스트→텍스트, 텍스트→이미지, 이미지→텍스트 같은 "변환"이었다. 핵심은 <strong>생성이 곧 내부 사고(thinking)의 기반</strong>이라는 것 — 단어를 생성할 수 없으면 추론도 없다. 이 생성 능력이 발전해 (1) 내부 추론, (2) 외부 도구 제어로 이어졌다. 도구가 디지털이면 소프트웨어 에이전트, 기계적이면 로봇·자율주행.</p>
+<h2>2. AI가 비로소 "가치 있는" 이유</h2>
+<p>2년 전 AI는 "흥미롭고 귀여운" 수준. 지금은 <strong>일을 한다(do work)</strong>. 우리가 친구에게 돈을 안 주는 이유는 아는 게 많아서가 아니라 일하지 않기 때문. 일을 하는 AI는 시간당 $20~30에 고용 가능. 젠슨은 이를 "인류 역사상 가장 빠르게 성장하는 소프트웨어 비즈니스"로 규정.</p>
+<h2>3. 검색에서 생성으로 — 60년 패러다임 전환</h2>
+<p>IBM System 360(1964) 이래 64년간 컴퓨터는 <strong>저장(pre-record) → 검색(retrieve)</strong> 구조였다. 데이터센터라고 불리는 이유: 저장소이기 때문. 반면 AI 시대에는 매번 입력(context + query)을 받아 <strong>실시간으로 새 출력을 생성</strong>한다. 모든 사람에게 다른 결과가 나온다. 젠슨은 이것을 "나는 지금 바로 이걸 시연하고 있다"라고 했다 — 상황에 맞게 즉석에서 설명하는 자신의 행동 자체가 생성형 지능.</p>
+<h2>4. 지능이 지구를 감싼다 (Intelligence Cocoon)</h2>
+<p>역사적 선례 두 가지:
+- 300년 전 지멘스 다이나모 → 전기 그리드가 지구를 감쌌다
+- 35년 전 인터넷 → 통신망이 지구를 감쌌다</p>
+<p>이제 세 번째: <strong>지능(intelligence)</strong>이 지구를 감쌀 것. NVIDIA는 이 다이나모를 만든다. 전기 다이나모: 운동(원자) → 전기(전자). NVIDIA 다이나모: 전자 → 토큰(숫자) → 언어·수학·단백질·물리·3D 세계.</p>
+<h2>5. AI 팩토리 내부</h2>
+<p>한 <strong>랙(rack)</strong>: 72개 칩, 무게 2톤, 가격 $400만, 부품 150만 개. 올해 약 800만 개 랙 제조. 1기가와트 팩토리 = $500억 투자 → $3,000~4,000억 지능 생산. ROI가 극히 빠른 구조.</p>
+<h2>6. AI 투자 5계층 케이크</h2>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>올해 전체 5계층에 $1조 투입 예정. 장기 연간 규모 $20조 전망.</strong></span></p>
+<table>
+<thead>
+<tr>
+<th>레이어</th>
+<th>내용</th>
+<th>수혜 사례</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 에너지</td>
+<td>전력 생산 (원자력·태양광·수소 등)</td>
+<td>Siemens, Mitsubishi, GE</td>
+</tr>
+<tr>
+<td>2 칩+컴퓨팅</td>
+<td>GPU, 네트워킹, 실리콘 포토닉스</td>
+<td>NVIDIA</td>
+</tr>
+<tr>
+<td>3 인프라</td>
+<td>토지·전력·설비·데이터센터 운영</td>
+<td>클라우드 사업자</td>
+</tr>
+<tr>
+<td>4 모델</td>
+<td>LLM, 특수 AI 모델</td>
+<td>OpenAI, Anthropic</td>
+</tr>
+<tr>
+<td>5 애플리케이션</td>
+<td>금융·법률·물류·의료 등</td>
+<td>스타트업, 작년 $1,000억 VC</td>
+</tr>
+</tbody>
+</table>
+<h2>7. 언어 너머 — 구조가 있으면 뭐든 학습</h2>
+<p>AI가 언어만 배우는 게 아니다. <strong>구조(structure)가 있는 것은 모두</strong> 학습 가능. 구조의 기준: 예측 가능성. 사람은 눈이 있고, 의자에 앉으면 항상 앉힌다 → 예측 가능 → 학습 가능. </p>
+<p>학습한 언어들:
+- 단백질 언어 (AlphaFold 유사)
+- 유전자의 의미
+- 물리·기후·날씨
+- 3D 세계 (로봇·자율주행)</p>
+<p>컴퓨터 입장에서 셀이든 단어든 이미지든 <strong>그냥 토큰</strong>. 차이가 없다.</p>
+<h2>8. 에이전틱 AI와 인터넷의 미래</h2>
+<p>에이전트끼리 소통하며 일을 분배한다. NVIDIA 내부에서 이미 수십만 개 에이전트가 가드레일+샌드박스 안에서 운영 중. 미래 인터넷: 현재 10억 명 사용자 → <span style="font-size:1.1em"><strong>에이전트 약 1,000억 개</strong></span>가 24시간 인터넷 사용. 자율주행차·로봇·건물 시스템·기업 간 에이전트 모두 포함.</p>
+<h2>9. AI 종말론 반박</h2>
+<p>"Terminator", "Singularity", "20% 확률로 인류 종말" — 젠슨은 이를 <strong>"완전한 헛소리(complete nonsense)"</strong>로 단언. 근거: 매년 성능이 개선된다는 것 자체가 "어떻게 작동하는지 안다"는 증거. 모르면 개선도 못 한다. 안전성 증거: ChatGPT 2년간 환각이 거의 0에 가깝게 감소, 자기 검증(reflection) 기능 추가.</p>
+<p>"AI에게 직업 잃는 게 아니라, AI 쓰는 사람에게 직업 잃는다."</p>
+<h2>10. 태스크 vs 목적 — 직업 대체 오해</h2>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>핵심 프레임: 직업(job)과 태스크(task)는 같지 않다.</strong></span></p>
+<p><strong>방사선과 사례:</strong>
+- 12년 전 컴퓨터 비전이 이미 초인적 수준 → "방사선과 소멸 예언"
+- 실제: 컴퓨터 비전이 방사선과에 완전히 통합 → 생산성 상승 → 더 많은 환자 진단 → 방사선과 의사 수 <strong>증가</strong>
+- 해당 예언 때문에 지원자가 줄었지만 수요는 늘어, 오히려 인력 부족 발생</p>
+<p><strong>소프트웨어 엔지니어 사례:</strong>
+- "90% 코딩 불필요" → 실제로 엔지니어 더 많이 채용 중
+- 이유: 엔지니어의 목적은 "문제 해결과 새 문제 발굴(innovate)", 코딩은 수단</p>
+<p><strong>직업 격상 예시:</strong>
+- 배관공 → AI로 설계까지 → 홈 디자이너
+- 가구 판매원 → AI로 인테리어 디자이너
+- 목수 → 홈 아키텍트</p>
+<h2>11. 기술 격차 해소</h2>
+<p>40년 경력 동안 컴퓨터는 더 복잡해지고, 프로그래밍 가능한 사람 비율은 줄었다. C++ 아는 사람: 약 2%(청중 기준). 인간 언어 아는 사람: 100%. AI로 이제 100%가 컴퓨터에 명령할 수 있다 → <span style="font-size:1.1em"><strong>기술 격차(technology divide) 해소</strong></span>. 젠슨 曰: "AI는 내 40년 커리어에서 기술 격차를 없애는 가장 강력한 힘이다."</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 5계층 케이크 각 레이어별 대표 기업/기회를 직접 매핑해보기</li>
+<li>[ ] NVIDIA 랙 사양($400만, 2톤, 72칩) — 실제 H100 NVL 72 스펙과 비교</li>
+<li>[ ] Vera Rubin 아키텍처 스펙 별도 조사</li>
+<li>[ ] "태스크 vs 목적" 프레임을 내 업무/산업에 적용해보기</li>
+<li>[ ] 에이전틱 AI 사례 — NVIDIA 내부 사용 사례 더 찾아보기</li>
+<li>[ ] 단백질·유전자 AI 학습 관련 논문(AlphaFold 등) 탐색</li>
+<li>[ ] AI 안전성: 젠슨의 "hallucination 감소" 주장을 실제 벤치마크로 검증</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>Sequoia Capital · NVIDIA's Jensen Huang on Building the Dynamo of the Intelligence Age · https://www.youtube.com/watch?v=2UpQbeAZuqA · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p><strong>[진행자]</strong> 젠슨, 감사합니다. 지금 우리는 거대한 AI 혁명의 한가운데에 있습니다. 산업혁명보다 더 크고 빠를 가능성이 높죠. 당신은 지금 일어나고 있는 일을 "인류 역사상 최대 규모의 인프라 건설"이라고 표현했습니다. 그 핵심에 AI 팩토리가 있고, 이를 가능하게 하는 회사가 NVIDIA입니다. AI 팩토리가 무엇인지, 왜 향후 10년 기업 최고의 투자인지 말씀해 주시겠어요?</p>
+<p><strong>[젠슨 황]</strong> AI를 이해하는 방법은 여러 가지가 있습니다. 가장 익숙한 방식은 챗봇이죠 — 브라우저로 접속해서 프롬프트를 주면 뭔가 돌아오는 것. 몇 년 쓴 분들은 최근 2~3년 사이 엄청난 발전을 체감했을 겁니다. 2년 전 ChatGPT가 나왔을 때, 기본적으로 입력을 이해하고 다른 형태로 변환하는 소프트웨어였습니다. PDF를 주면 요약, PDF를 주면 이미지 생성, 이미지를 주면 설명 — 텍스트-이미지 간 변환이었습니다. 뭐든 다른 것으로 바꿀 수 있었죠.</p>
+<p>그런데 "생성형 AI"라는 단어 안에 훨씬 더 중요한 것이 있습니다. 생성보다 더 가치 있는 게 "사고(thinking)"인데, 단어를 생성하지 못하면 생각도 못 합니다. 그래서 생성형 AI의 기반이 내부 사고(추론, 단계적 문제 해결)를 가능하게 했습니다. 동시에 "다른 것을 제어하는 명령 생성" — 즉 도구 사용 — 도 가능해졌습니다. 브라우저, 스프레드시트, 포토샵, PowerPoint, AutoCAD 등. 지금은 디지털 도구지만, 언젠가 기계적 도구가 됩니다. 기계 시스템에 명령을 생성하면 로봇, 조향 장치에 명령을 생성하면 자율주행차입니다.</p>
+<p>2년 전 ChatGPT를 봤을 때 "재밌네, 이상하네, 환각이 심하네"라고 했지만, 그게 지금 모든 것의 기반 기술이었습니다. 2년이 지난 지금 에이전틱 시스템이 나왔습니다. AI가 이해만 하는 게 아니라 일을 할 수 있게 됐습니다.</p>
+<p>AI가 일을 할 수 있으니 이제 가치가 생겼습니다. 친구가 박식해도 돈을 안 줍니다. 일을 하는 사람에게 돈을 주죠. AI가 시간당 $20~30에 일을 해주고, 지금 우리는 AI에게 엄청난 돈을 지불하고 있습니다. 인류 역사상 가장 빠르게 성장하는 소프트웨어 비즈니스가 됐습니다.</p>
+<p>이제 두 번째 관점 — AI 산업의 구조. 하지만 먼저 첫 번째 원칙부터. AI는 소프트웨어이고, 컴퓨터가 만들어냅니다. 이 컴퓨터에서 무슨 일이 일어났을까요? 컴퓨터는 64년 전 IBM System 360으로 시작했습니다. 64년 전 IBM이 세계에서 가장 가치 있는 회사였고, 현대 컴퓨팅의 모든 개념을 1964년에 정의했습니다. 이 형태가 40년 이상 거의 그대로였습니다. 이 컴퓨팅은 "사전 기록(pre-recording)" 기반입니다 — 이야기를 쓰고 파일로 저장, 프로그램을 작성하고 파일로 저장, 사진을 찍고 파일로 저장, 음악을 녹음하고 파일로 저장. 나중에 필요하면 디스크에서 검색. 이게 검색 기반 시스템이고, 그래서 이 건물들을 "데이터 센터"라고 부릅니다. 컴퓨팅 센터가 아니라. 그냥 데이터를 저장하고 검색하는 곳이니까.</p>
+<p>이제 AI에서는 매번 새 정보(컨텍스트)와 질문(쿼리)을 주면, AI가 이해하고 추론해서 그 상황에 맞는 출력을 생성합니다. 매번 새롭게 생성됩니다. 제가 지금 여기서 설명하는 내용도 60개국 128개 가족 출신 여러분을 위해 실시간으로 생성되고 있습니다. 컴퓨터 배경 있는 분도 있고, 없는 분도 있고. 목표는 다음 투자를 위한 직관을 드리는 것입니다. 지금 $100B 시장이지만 그건 앞으로 올 것에 비하면 아무것도 아닙니다.</p>
+<p>60년간 검색 기반이었다가 갑자기 실시간 생성으로 완전히 전환됐습니다. 이게 지능입니다. 앞으로 여러분이 보는 모든 픽셀, 듣는 모든 소리, 모든 영상, 모든 광고, 모든 뉴스가 개인별로 다르게 생성될 것입니다. 같은 이야기도 저에게, 여러분에게, 모두 다르게 보일 겁니다. 이 때문에 생성기(generator)가 훨씬 더 많이 필요합니다. 그게 NVIDIA가 만드는 것입니다.</p>
+<p>얼마나 클 수 있을까요? 현재 약 10억 명이 AI를 씁니다. 이제 AI가 에이전틱해져서 혼자 일을 할 수 있으니, 에이전트가 다른 에이전트와 협력할 수 있습니다. NVIDIA 내부에도 지금 수십만 개의 에이전트가 가드레일과 샌드박스 안에서 서로 소통하며 문제를 해결하고 있습니다. 미래 인터넷은 10억 명 사용자가 아니라 1,000억 개 에이전트가 사용하게 될 겁니다 — 자율주행차, 로봇, 공장 시스템, 건물 시스템, 기업 간 에이전트 모두 포함해서. 생성된 명령, 생성된 사고, 모두 실시간으로.</p>
+<p>이게 말도 안 되게 들릴 수 있지만 이미 두 번 일어난 일입니다. 300년 전 독일 지멘스가 다이나모를 만들었습니다. 불을 붙이면 반대편에서 전기가 나왔습니다. 전 세계 발전기 — 전력 그리드가 지구를 감쌌습니다. 35년 전 인터넷 — 통신망이 지구를 감쌌습니다. 이제 에너지, 통신, 지능이 지구를 감쌀 것입니다.</p>
+<p>NVIDIA가 하는 일: 다이나모와 똑같습니다. 다이나모는 폭포·바람·증기 같은 운동(원자)을 전자로 변환합니다. NVIDIA 팩토리는 전자를 받아서 토큰(숫자)을 출력합니다. 이 숫자들이 조합에 따라 언어, 수학, 단백질 언어, 물리·기후·날씨 언어, 3D 세계 언어, 각종 지능이 됩니다. 원자 → 전자 → 토큰. 토큰이 지능입니다. 그게 전부입니다.</p>
+<p><strong>[진행자]</strong> H100과 Vera Rubin의 차이, 새 시스템은 뭐가 달라졌나요?</p>
+<p><strong>[젠슨 황]</strong> 이 팩토리들 — 각 유닛을 랙이라고 부르는데, 72개 칩이 들어갑니다. 올해 약 800만 개를 제조합니다. 랙 하나가 2톤, $400만, 부품 150만 개. 세상에서 가장 비싼 장비입니다. 그런데 우리는 이걸 스마트폰처럼 대량 생산합니다. 전 세계 데이터센터로 출하하죠. 볼륨 디스카운트는 없습니다.</p>
+<p><strong>[진행자]</strong> 이 혁명에 어떻게 참여할 수 있을까요?</p>
+<p><strong>[젠슨 황]</strong> 멘탈 모델을 하나 더 드리겠습니다. 5계층 케이크입니다.</p>
+<p>맨 아래 1계층: 에너지. 수백 년 만에 에너지 산업이 다시 대규모 투자를 받는 최고의 기회입니다. 지속 가능 에너지에 관심 있다면 — 원자력, 풍력, 태양광, 수소 — 뭐든 에너지를 생산하는 것이면 투자가 들어올 겁니다. 지멘스·미쓰비시·GE가 잘 나가는 이유.</p>
+<p>2계층: 칩, 컴퓨팅, 네트워킹, 스위치, 실리콘 포토닉스.</p>
+<p>3계층: 인프라 — 토지, 전력, 설비, 데이터센터 운영. 모두 희소 자원.</p>
+<p>4계층: 모델 레이어 — OpenAI, Anthropic 등.</p>
+<p>그리고 여기서 중요한 점: AI는 언어만 배운 게 아닙니다. 구조가 있는 건 뭐든 학습 가능합니다. 내가 방에 들어갔을 때 사람들이 천장에 매달려 공중에 떠 있고 몸 부위가 17군데에 흩어져 있다면 학습하기 어렵습니다. 예측 불가능하니까. 하지만 의자에 앉으면 100% 앉힌다 — 예측 가능, 학습 가능.</p>
+<p>우리는 단백질의 의미를 배웠습니다. 유전자의 의미를 배우고 있습니다. 시퀀싱이나 CRISPR 편집이 아니라, 그 유전자의 의미가 무엇인지. 세포가 왜 그런 행동을 하는지. 컴퓨터 입장에서 세포든, 단백질이든, 단어든, 이미지든, 자동차든 — 그냥 토큰입니다.</p>
+<p>4계층에서 우리가 주로 듣는 두 회사(OpenAI, Anthropic)가 있지만, AI는 훨씬 큰 산업입니다. 물리적 세계 전체가 $80T 규모입니다. 우리가 이야기 안 하는 부분이 사실 가장 중요한 프론티어입니다.</p>
+<p>5계층: 애플리케이션 — 금융, 법률, 회계, 물류, 교통 등. 작년 VC 투자 $1,000억 — 인류 역사상 단일 연도 최대 VC 투자액이 모두 이 레이어로.</p>
+<p>올해만 $1T가 이 5계층 케이크 전체로 들어갑니다. 장기적으로는 AI 산업이 연 $20T 규모가 될 것 같습니다. 지금 $1T는 그 시작일 뿐.</p>
+<p><strong>[진행자]</strong> 모든 국가가 AI에 같은 태도를 취하진 않는데요. 조언을 해주신다면?</p>
+<p><strong>[젠슨 황]</strong> 터미네이터 비유, 특이점(Singularity), "20% 확률로 인류 종말" 같은 이야기에 조심하세요. 이건 헛소리입니다. "어떻게 작동하는지 모른다"고 하는데, 매년 성능이 좋아진다는 건 어떻게 작동하는지 안다는 증거입니다. 모르면 개선도 못 하죠. 왜 그런 말을 하는지는 흥미로운 질문이지만, 두려워하지 마세요.</p>
+<p>AI에게 직업을 빼앗기는 게 아닙니다. AI를 쓰는 사람에게 직업을 빼앗길 겁니다. 확실합니다. 불확실한 것에 걱정하지 말고, 확실한 것에 집중하세요. 자녀에게 "피해라"고 할 건가요, 아니면 "초능력을 주는 이 기술을 반드시 써라"고 할 건가요?</p>
+<p>안전성에 대해서도: ChatGPT를 2년 전과 지금 비교해보세요. 환각이 거의 사라졌습니다. 맥락에 맞게 정확하고, 모르면 조사를 하고, 답을 내기 전에 스스로 검증합니다. 기술이 빠르게 더 안전해지고 있습니다. 100년 전 자동차보다 지금 자동차가 훨씬 안전한 것처럼.</p>
+<p>[취업·일자리 이야기로 넘어가며 분위기가 진지해짐]</p>
+<p>$1T를 이 생태계에 투입했더니 에너지 섹터, 칩 섹터, 인프라, 모델, 애플리케이션 — 모든 레이어에서 일자리가 사상 최대로 늘었습니다. 그런데 "전통 직업은요?"라는 질문이 나오죠.</p>
+<p>핵심: 직업(job)과 태스크(task)는 다릅니다. 제 직업은 CEO, 회사를 이끄는 것. 제가 하루 대부분 하는 태스크는 타이핑과 말하기입니다. AI가 둘 다 초인적으로 합니다. 그런데 저는 그 어느 때보다 바쁩니다.</p>
+<p>10여 년 전, 세계 최고의 컴퓨터 과학자 중 한 명이 경고했습니다. "AI가 가장 먼저 없앨 직업 — 방사선과. 아무도 이 분야로 가지 마라." 맞습니다, 컴퓨터 비전이 12년 전에 이미 방사선 판독에서 초인적 수준이었고, 모든 방사선 스택에 완전히 통합됐습니다. 그런데 어떻게 됐을까요? 방사선과 의사 수가 늘었습니다. 왜냐고요?</p>
+<p>방사선과 의사의 태스크는 스캔 판독이지만, 목적은 의사와 함께 질병을 진단하는 것입니다. 자동화로 생산성이 올랐습니다. 더 많은 환자를 받고, 더 많은 스캔을 했습니다. 방사선과가 더 수익성 있어졌고, 의사를 더 많이 고용했습니다. 수요가 있는데 공급이 기다리고 있었던 겁니다.</p>
+<p>그런데 그 예언 때문에 방사선과 지원자가 줄었는데, 실제로는 더 많이 필요했습니다. 책임감 없는 주장이 실제로 피해를 줬습니다.</p>
+<p>최근 "소프트웨어 코딩의 90%가 사라질 것"이라는 말이 있습니다. 그런데 우리는 소프트웨어 엔지니어를 그 어느 때보다 많이 뽑고 있습니다. 저는 소프트웨어 엔지니어를 뽑으면서 "초당 단어 몇 개 타이핑할 수 있어요?"라고 물은 적이 없습니다. 코딩이 직업이 아닙니다. 문제를 해결하는 것이 직업입니다.</p>
+<p>태스크 vs 목적. 배관공이 AI로 설계까지 하면 홈 디자이너가 됩니다. 가구 판매원이 AI로 인테리어 디자이너가 됩니다. 목수가 홈 아키텍트가 됩니다. AI는 직업을 없애는 게 아니라 격상(elevate)시킵니다.</p>
+<p>AI에 투자 안 하는 나라는 일자리 붐을 놓치고, 국민 능력 향상 기회를 놓칩니다.</p>
+<p>AI는 제 40년 커리어에서 기술 격차를 없애는 가장 강력한 힘입니다. 예전에는 컴퓨터가 갈수록 복잡해지고 프로그래밍 할 수 있는 인구 비율이 줄었습니다. 이 방에서 C++ 아는 분? (소수 손듦) 약 2%입니다. 인간 언어 아는 분? 100%. 이제 모두가 컴퓨터에 명령할 수 있습니다. 기술 격차가 닫혔습니다.</p>
+<p><strong>[진행자]</strong> 요약하자면 — 검색에서 생성으로의 전환, 지능이 지구를 감싸는 미래, 에너지·통신·지능 세 가지 혁명, AI가 배울 수 있는 각종 언어들, 5계층 투자 기회, 그리고 태스크에서 목적으로 — 목수에서 아키텍트로의 이동. 젠슨 황에게 큰 박수 부탁드립니다.</p>
+</details>
+</body></html>
