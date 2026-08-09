@@ -1,0 +1,353 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>로보틱스는 왜 아직 해결되지 않았나 — 곧 해결될 수 있는 이유</title>
+<meta name="description" content="로보틱스가 아직 대중화되지 못한 병목과 메모리, 추론, 시뮬레이션, 텔레오퍼레이션, 월드 액션 모델의 최신 해법을 정리."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Y Combinator 학습노트</div><h1>로보틱스는 왜 아직 해결되지 않았나 — 곧 해결될 수 있는 이유</h1>
+<div class="meta">원작자 Paper Club · Ycrootaccess · 업로드 2026-08-08 · 84.2분 · <a href="https://youtu.be/myDCd0hNqQU" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>로보틱스는 왜 아직 해결되지 않았나 — 곧 해결될 수 있는 이유</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>로보틱스는 알고리즘 하나로 풀리는 문제가 아니라 <strong>현실 물리, 촉각, 데이터, 장기 기억, 운영 배포</strong>가 함께 맞물려야 풀리는 산업 문제다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Paper Club · Ycrootaccess · 추정 출처 https://www.ycrootaccess.com/p/memory-simtoolreal-and-world-action · 업로드 2026-08-08 · 84.2분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>시뮬레이션-현실 격차(Sim-to-Real Gap)</td>
+<td>로봇은 화면 속 모델처럼 움직이지 않고, 마찰·충돌·변형·오차가 계속 생긴다</td>
+<td>시뮬레이션에서 잘해도 현실에서는 망가질 수 있다</td>
+</tr>
+<tr>
+<td>비전-언어-행동 모델(Vision-Language-Action Model, VLA)</td>
+<td>이미지·언어를 보고 로봇 행동을 출력하는 현재 로보틱스의 핵심 모델</td>
+<td>“보고 이해하고 움직이는” 모델이지만 아직 기억과 물리 감각이 부족하다</td>
+</tr>
+<tr>
+<td>체화 기억(Embodied Memory)</td>
+<td>긴 작업에서는 방금 뭘 했는지, 얼마나 오래 했는지 알아야 한다</td>
+<td>기억 없는 로봇은 설거지를 영원히 하거나 샌드위치를 태운다</td>
+</tr>
+<tr>
+<td>선택적 추론(Selective Reasoning)</td>
+<td>모든 순간에 모든 걸 생각하면 느리고 산만해진다</td>
+<td>로봇은 “필요한 것만” 추론해야 한다</td>
+</tr>
+<tr>
+<td>목표 조건 정책(Goal-Conditioned Policy)</td>
+<td>작업명을 외우는 대신 목표 자세를 따라가면 여러 도구에 일반화된다</td>
+<td>“망치질”을 배우는 대신 “물체를 이 자세로 보내기”를 배운다</td>
+</tr>
+<tr>
+<td>텔레오퍼레이션(Teleoperation)</td>
+<td>초기 로봇 사업은 완전 자율보다 원격 조작으로 먼저 돈을 벌 수 있다</td>
+<td>자율화는 사업 성립 후 효율 개선 수단이 될 수 있다</td>
+</tr>
+<tr>
+<td>월드 액션 모델(World Action Model, WAM)</td>
+<td>미래 장면과 행동을 함께 예측해 물리적 미래를 반영한다</td>
+<td>단순 행동 예측보다 무겁지만 더 물리적인 모델을 지향한다</td>
+</tr>
+<tr>
+<td>엣지 추론(Edge Inference)</td>
+<td>로봇마다 초고가 GPU를 붙일 수 없기 때문에 현장 실행 비용이 중요하다</td>
+<td>좋은 모델도 싸고 빠르게 돌아야 사업이 된다</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li>다중 스케일 체화 기억(Multi-Scale Embodied Memory, MEM/MAM) — 로봇 정책에 짧은 시각 기억과 긴 텍스트 기억을 나눠 넣는 방식.</li>
+<li>체화 추론(Embodied Reasoning) — 로봇이 행동 전 “무엇을 보고, 무엇을 해야 하는지” 추론하는 과정.</li>
+<li>행동 예측형 추론(Action-Predictive Reasoning) — 실제 행동 성능 향상에 도움이 되는 추론만 남기는 접근.</li>
+<li>변분 추론(Variational Inference) — 관측되지 않는 추론 과정을 잠재 변수로 보고 좋은 추론을 고르는 이론적 틀.</li>
+<li>SimToolReal — 시뮬레이션에서만 학습한 하나의 정책으로 실제 도구 조작을 수행하는 연구.</li>
+<li>FoundationPose, SAM — 영상에서 물체 자세와 마스크를 추출해 로봇 목표 궤적을 만드는 데 쓰인 모델.</li>
+<li>Rerun — 물리 AI(Physical AI) 데이터를 기록·시각화·질의·학습용으로 관리하는 데이터 인프라.</li>
+<li>GR00T — Nvidia의 로봇 파운데이션 모델 계열.</li>
+<li>DiT(Diffusion Transformer) — 확산 모델(Diffusion Model)에 트랜스포머를 결합한 구조.</li>
+<li>흐름 매칭(Flow Matching) — 노이즈에서 목표 상태로 가는 벡터장을 학습하는 생성 모델 방식.</li>
+<li>CFG(Classifier-Free Guidance) — 조건부·비조건부 예측을 함께 써 생성 품질을 높이는 기법.</li>
+<li>Jetson Orin — 로봇·엣지 AI 장치에 많이 쓰이는 Nvidia 임베디드 컴퓨팅 보드.</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정값·명령어·뉘앙스. 원어 용어 괄호 병기, 맥락까지.</p>
+</blockquote>
+<ol>
+<li>“내 경력에서 10년째 ‘내년이면 로보틱스가 해결된다’는 말을 듣고 있다” — AlphaGo, MuJoCo, Aloha, Diffusion Policy, VLA까지 매번 기대가 있었지만 대중화는 지연됨.</li>
+<li>2026년 중반 기준으로 Neo, 1X는 예약 가능하지만 Pi, Figure 같은 범용 가정 로봇은 아직 일반 구매가 어렵다고 지적.</li>
+<li>텔레오퍼레이션 데이터 수집은 “remarkably hard” — 특히 작은 그리퍼, 손목 카메라만으로 섬세한 조작을 시연하기 어렵다.</li>
+<li>인간 피부는 법선 힘(normal force), 접선 힘(tangent force), 습도, 온도, 진동, 마찰 계수까지 감지하지만 로봇은 손끝 힘-토크 센서(force-torque sensor) 정도가 한계.</li>
+<li>체화 드리프트(Embodiment Drift) — 액추에이터 먼지, 부식, 배터리 노화 때문에 같은 명령도 시간이 지나면 다른 힘으로 실행된다.</li>
+<li>Physical Intelligence의 작업 중 가장 긴 데모도 약 2분 수준 — 실제로는 침실 청소, 식사 준비처럼 수십 분짜리 작업이 필요.</li>
+<li>MEM은 <strong>짧은 시각 기억</strong>은 저수준 정책에, <strong>긴 텍스트 기억</strong>은 고수준 정책에 넣는다.</li>
+<li>장기 기억은 RAM에 들어갈 정도의 짧은 텍스트로 보관하고, 추론 시 VLA에 텍스트 토큰으로 넣는다.</li>
+<li>R&amp;B Encore는 1B부터 30B 파라미터 모델까지, 조작·보행·자율주행 등 여러 체화 형태에 적용했다고 설명.</li>
+<li>SimToolReal 정책은 60Hz로 동작하며, 22자유도 손과 7자유도 팔을 동시에 제어한다.</li>
+<li>SimToolReal은 12개 미학습 도구와 목표 행동에서 평가했고, 실패의 약 60%는 자세 추적(pose tracking) 실패 때문이라고 답변.</li>
+<li>시뮬레이션 강화학습은 수만 대 로봇을 GPU에서 병렬 실행해 현실보다 약 1,000배 빠르게 경험을 만든다고 설명.</li>
+<li>SimToolReal의 무작위 목표는 위치와 회전을 샘플링하고, 이후 목표는 최대 10cm·90도 차이의 델타 자세(delta pose)로 만든다.</li>
+<li>로봇 애플리케이션 회사는 고객 환경 복제본을 사무실에 두고 반복 평가해야 한다고 강조.</li>
+<li>로봇 데이터는 웹 데이터와 달리 멀티모달(multimodal), 다변량(multivariate), 에피소드형(episodic), 3D 의미 구조를 갖기 때문에 일반 테이블 DB에 넣기 어렵다.</li>
+<li>GR00T 같은 월드 액션 모델은 최적화 전에는 로봇 한 대당 GB200 2개가 필요할 수 있고, GB200 하나가 약 7만 달러라고 언급.</li>
+<li>General Intuition은 월드 액션 모델을 Jetson Orin에서 16개 행동 청크당 500ms로 실행한다고 주장.</li>
+<li>흐름 매칭 샘플링을 기존 50~100스텝에서 1~2스텝으로 줄이면 즉시 큰 속도 향상이 난다고 설명.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>왜 아직 로봇 시대가 오지 않았나</td>
+<td>현실 물리, 촉각, 행동 표현, 장비 노화, 데이터 수집이 병목</td>
+</tr>
+<tr>
+<td>2</td>
+<td>MEM: 로봇에게 기억 주기</td>
+<td>짧은 시각 기억과 긴 텍스트 기억으로 장기 작업과 실수 회복 개선</td>
+</tr>
+<tr>
+<td>3</td>
+<td>R&amp;B Encore: 무엇을 추론해야 하나</td>
+<td>모든 추론이 도움이 되는 것은 아니며 행동 예측에 유용한 추론만 선별</td>
+</tr>
+<tr>
+<td>4</td>
+<td>SimToolReal: 시뮬레이션에서 도구 조작 배우기</td>
+<td>하나의 목표 조건 정책으로 여러 실제 도구를 제로샷 조작</td>
+</tr>
+<tr>
+<td>5</td>
+<td>로봇 애플리케이션 회사</td>
+<td>완전 자율보다 텔레오퍼레이션과 고객 문제 해결로 먼저 사업화</td>
+</tr>
+<tr>
+<td>6</td>
+<td>월드 액션 모델 최적화</td>
+<td>미래 세계와 행동을 함께 예측하되 엣지에서 돌 수 있게 압축·증류 필요</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 왜 아직 로봇 시대가 오지 않았나</h2>
+<p>화자는 지난 10년간 계속 반복된 패턴을 먼저 짚는다. AlphaGo가 나오면 “이제 알고리즘은 해결됐고 스케일만 키우면 된다”고 했고, MuJoCo와 로봇 보행 시뮬레이션이 나오면 “내년이면 된다”고 했으며, Aloha와 Diffusion Policy, VLA가 나오면서도 같은 기대가 반복됐다.</p>
+<p>하지만 2026년 중반에도 범용 가정 로봇은 아직 데모 중심이다. 공장 워크셀(work cell) 같은 제한된 환경에서는 성공이 있지만, 집에서 알아서 일하는 로봇은 아직 오지 않았다.</p>
+<p>핵심 병목은 네 가지다.</p>
+<p>첫째, <strong>물리적 현실 모델링</strong>이다. 비디오 모델이나 월드 모델은 영상처럼 그럴듯한 미래를 만들 수 있지만, 실제 물리 법칙을 엄밀하게 지키지 못한다. 시뮬레이션에서는 차가 마트로 돌진해도 장면이 자연스럽게 도로처럼 바뀌는 식의 문제가 생긴다. 이것이 시뮬레이션-현실 격차(Sim-to-Real Gap)다.</p>
+<p>둘째, <strong>행동 표현(Action Representation)</strong>이다. 로봇이 어떤 행동 공간을 어떤 형태로 배워야 빠르게 일반화할 수 있는지는 아직 완전히 풀리지 않았다.</p>
+<p>셋째, <strong>감각-운동 문제(Sensorimotor Problem)</strong>다. 인간은 손끝과 피부 전체로 힘, 온도, 습도, 진동, 마찰을 느낀다. 가방 속 충전기를 눈 없이도 찾을 수 있는 이유다. 현재 로봇은 이런 “피부”가 없다. 손목 카메라와 손끝 센서만으로는 인간 수준의 접촉 이해가 어렵다.</p>
+<p>넷째, <strong>체화 드리프트(Embodiment Drift)</strong>다. 로봇의 모터, 배터리, 액추에이터는 시간이 지나면 성능이 변한다. 먼지, 부식, 배터리 노화 때문에 같은 명령이 같은 힘으로 실행되지 않는다. 그러면 기존 텔레오퍼레이션 데이터가 낡아지고, 모델을 다시 맞춰야 한다.</p>
+<hr>
+<h2>2. MEM: 로봇에게 기억을 넣어야 긴 작업을 한다</h2>
+<p>Marcel Torne는 Physical Intelligence에서 수행한 다중 스케일 체화 기억(Multi-Scale Embodied Memory, MEM/MAM)을 소개한다.</p>
+<p>현재 로봇 정책은 짧은 작업에는 인상적인 성과를 보인다. 블록 잠금 해제, 뒤집힌 옷 접기, 땅콩버터 샌드위치 만들기 같은 작업을 자율로 수행한다. 그러나 대부분 2분 안팎이다. 실제로 필요한 것은 침대 정리, 방 전체 청소, 요리와 주방 정리처럼 긴 작업이다.</p>
+<p>긴 작업에는 다음 능력이 필요하다.</p>
+<ul>
+<li>지금 작업이 어디까지 진행됐는지 기억</li>
+<li>얼마나 오래 기다렸는지 기억</li>
+<li>실수했을 때 같은 실수를 반복하지 않고 수정</li>
+<li>새로운 상황에서 문맥에 맞게 적응</li>
+</ul>
+<p>기억이 없는 정책은 매 순간 새 관찰만 보고 행동한다. 그래서 설거지를 끝없이 하거나, 그릴드 치즈를 너무 오래 익혀 태운다.</p>
+<p>MEM은 정책을 두 층으로 나눈다.</p>
+<ul>
+<li>고수준 정책(high-level policy): 다음 단계가 무엇인지 결정</li>
+<li>저수준 VLA(low-level VLA policy): 실제 로봇 행동 실행</li>
+</ul>
+<p>기억도 두 종류로 나눈다.</p>
+<ul>
+<li>짧은 시각 기억(short-term visual memory): 섬세한 조작에 필요한 최근 프레임들을 압축해 저수준 정책에 제공</li>
+<li>긴 텍스트 기억(long-term textual memory): 지난 몇 분간의 진행 상황을 압축된 언어 표현으로 저장해 고수준 정책에 제공</li>
+</ul>
+<p>짧은 기억은 ViT(Vision Transformer)에 시간 어텐션(temporal attention)을 추가해 구현한다. 여러 프레임을 보되 현재 이미지 토큰만 남겨 압축한다. 그래서 추론 속도를 유지하면서 최근 맥락을 반영한다.</p>
+<p>긴 기억은 반복 메모리 스크래치패드(recurrent memory scratchpad) 방식이다. 고수준 정책이 현재까지의 상황 요약을 텍스트로 만들고, 다음 추론 때 다시 그 텍스트를 입력으로 받는다. 텍스트는 이미지보다 토큰이 훨씬 적어 효율적이고, 사람이 디버깅하기 쉽다.</p>
+<p>중요한 효과는 <strong>문맥 내 적응(in-context adaptation)</strong>이다. 기억이 없는 로봇은 젓가락을 계속 같은 높이에서 집으려다 실패하거나, 냉장고 손잡이를 같은 방향으로 계속 당긴다. 기억이 있으면 “방금 실패했다”는 맥락을 보고 더 낮게 잡거나 반대쪽으로 시도한다.</p>
+<hr>
+<h2>3. R&amp;B Encore: 로봇은 무엇을 추론해야 하는가</h2>
+<p>Milan Ganai는 로봇에게 체화 추론(Embodied Reasoning)을 시키는 문제를 다룬다.</p>
+<p>VLA는 비전-언어 모델(Vision-Language Model, VLM)에 로봇 데이터, 텔레오퍼레이션 데이터, 자율주행 데이터를 추가 학습해 만든다. 입력은 이미지, 인식 특징, 언어 명령이고 출력은 조향, 엔드이펙터 위치 같은 행동이다.</p>
+<p>최근에는 LLM의 사고 사슬(Chain of Thought)처럼 로봇도 행동 전에 “생각”하게 하려는 흐름이 있다. 이유는 두 가지다.</p>
+<ol>
+<li>로봇 데이터는 부족하므로 텍스트 추론 주석이 추가 학습 신호가 된다.</li>
+<li>사람이 로봇 결정 이유를 읽고 디버깅할 수 있다.</li>
+</ol>
+<p>하지만 문제는 <strong>무엇을 추론해야 하는지 모른다</strong>는 점이다. 로봇에는 인터넷에 쌓인 “정답 추론 데이터”가 없다. 또 모든 순간에 모든 것을 추론하면 너무 느리고 장황해진다.</p>
+<p>예를 들어 다음 추론 중 무엇이 도움이 될까?</p>
+<ul>
+<li>보이는 물체 목록</li>
+<li>바운딩 박스</li>
+<li>그리퍼 위치</li>
+<li>다음 계획</li>
+<li>하위 작업</li>
+<li>반사실적 가능성</li>
+</ul>
+<p>R&amp;B Encore는 좋은 추론을 자동으로 고르는 사전학습 사이클이다. 핵심은 추론을 관측되지 않는 잠재 변수(latent variable)로 보고, 변분 추론(Variational Inference) 틀로 평가하는 것이다.</p>
+<p>구성은 두 가지다.</p>
+<ul>
+<li>추론 제안기(reasoning proposer): 여러 종류의 추론 후보를 생성</li>
+<li>추론 검증기(reasoning validator): 그 추론이 행동 예측에 도움이 되는지 점수화</li>
+</ul>
+<p>점수 기준은 세 가지다.</p>
+<ul>
+<li>간결성(concision): 너무 길지 않은가</li>
+<li>비자명성(nontriviality): 일반화에 도움이 되는가</li>
+<li>행동 예측성(action-predictiveness): 실제 행동 선택에 도움이 되는가</li>
+</ul>
+<p>결론은 <strong>선택적 추론이 중요하다</strong>는 것이다. 타당한 추론이라도 성능에 도움이 안 되면 제거해야 한다. 조작 작업에서는 이동과 그리퍼 위치 추론이 유용했고, 장면 물체를 모두 나열하는 지각 추론은 산만할 수 있었다. 보행 로봇은 지형 자체보다 구조적 가능성(structural affordance)과 움직임 추론이 더 중요했다. 자율주행에서는 환각성 주석을 제거해 경로 오차와 충돌률을 낮출 수 있었다.</p>
+<p>또 하나 중요한 점은 추론을 훈련 때만 쓰고 추론 시간에는 제거하는 행동 강제(action forcing) 방식이다. 이렇게 하면 텍스트 추론의 학습 이점은 얻으면서 실제 로봇 실행 지연은 줄일 수 있다.</p>
+<hr>
+<h2>4. SimToolReal: 실제 도구 조작을 시뮬레이션에서만 배운다</h2>
+<p>Tyler Lum은 SimToolReal을 발표한다. 목표는 하나의 정책으로 브러시, 망치, 드라이버 같은 다양한 도구를 제로샷(zero-shot)으로 조작하는 것이다.</p>
+<p>기존 텔레오퍼레이션 기반 모방학습은 손재주가 필요한 작업에서 한계가 크다. 인간이 다지 손 로봇 손을 원격 조작할 때, 체화 차이와 힘 피드백 부족 때문에 정교한 접촉 조절이 어렵다.</p>
+<p>SimToolReal은 텔레오퍼레이션 대신 <strong>시뮬레이션 강화학습(Sim-to-Real Reinforcement Learning)</strong>을 사용한다. GPU 시뮬레이션에서 수만 대 로봇을 병렬 실행해 현실보다 약 1,000배 빠르게 경험을 모은다. 며칠 만에 수십 년치 상호작용 데이터를 만들 수 있다.</p>
+<p>핵심 아이디어는 도구 조작을 <strong>목표 도달(goal reaching)</strong> 문제로 통합하는 것이다. 정책은 “쓸기”, “망치질”, “돌리기” 같은 작업명을 알 필요가 없다. 물체를 현재 자세에서 목표 자세로 옮기면 된다.</p>
+<p>훈련 때는 시뮬레이션에서 원통, 직육면체 같은 단순 물체를 절차적으로 만들고, 무작위 목표 자세를 샘플링한다. 추론 때는 인간 영상에서 FoundationPose와 SAM을 사용해 목표 자세 시퀀스를 추출한다. 이 영상은 로봇 행동을 제공하지 않고, 단지 “물체가 어떤 궤적을 따라가야 하는지”만 알려준다.</p>
+<p>정책 입력은 다음과 같다.</p>
+<ul>
+<li>로봇 고유감각(proprioception)</li>
+<li>현재 물체 자세</li>
+<li>잡을 수 있는 영역의 바운딩 박스</li>
+<li>현재 목표 자세</li>
+</ul>
+<p>출력은 손과 팔 전체의 관절 위치 목표다. 정책은 LSTM 기반이며 60Hz로 실행된다.</p>
+<p>SimToolReal의 장점은 새 작업이 새 학습이 아니라 새 목표 자세 시퀀스가 된다는 점이다. 즉, 새 도구와 새 작업을 몇 시간·며칠 재학습하지 않고 몇 분 안에 시도할 수 있다.</p>
+<p>실패 원인 중 가장 큰 것은 자세 추적 실패였다. 특히 작은 물체가 가려질 때 문제가 컸다. 하지만 정책 자체는 회복 행동이 강했다. 시뮬레이션에서 물체에 무작위 힘을 가해 떨어뜨리는 상황을 넣었기 때문에, 실제로 망치를 떨어뜨려도 다시 잡는 행동이 나왔다.</p>
+<p>후속 연구 Play to Perfect는 자유공간에서 물체를 가지고 노는 사전학습을 한 뒤, 정밀 조립 같은 접촉이 많은 작업에 미세조정하는 접근이다.</p>
+<hr>
+<h2>5. 로봇 애플리케이션 회사: 완전 자율보다 고객 문제부터</h2>
+<p>Niko West는 Rerun의 관점에서 “다음 큰 로봇 회사는 텔레오퍼레이션에서 시작할 것”이라고 주장한다.</p>
+<p>그가 말하는 로봇 애플리케이션 회사는 파운데이션 모델 회사가 아니다. 고객의 실제 비즈니스 문제를 끝까지 책임지는 회사다. 데이터센터, 건설, 창고, 제조, 식품 등에서 이미 이런 패턴이 보인다고 한다.</p>
+<p>시작 방식은 단순하다.</p>
+<ol>
+<li>돈을 낼 고객 문제 하나를 고른다.</li>
+<li>기성 하드웨어와 텔레오퍼레이션으로 먼저 해결한다.</li>
+<li>고객 현장에서 진짜 실패 조건을 배운다.</li>
+<li>필요한 데이터를 모으고 모델을 조금씩 학습한다.</li>
+<li>반복 평가·운영·배포·지원 능력을 키운다.</li>
+</ol>
+<p>핵심은 완전 자율을 기다리지 않는 것이다. 텔레오퍼레이션으로도 사업이 성립하면, 자율화는 인건비와 확장성을 개선하는 수단이 된다.</p>
+<p>그는 종이비행기 공장 자동화라는 예시를 든다. 고객은 하루 1,000개의 완벽한 비행기가 필요할 수 있고, 실패품을 걸러낼 수 있으면 실패 자체는 괜찮을 수 있다. 새 비행기 디자인을 빠르게 온보딩하는 것이 더 중요할 수도 있다. 종이 트레이 하나를 바꿔 실패를 50% 줄일 수도 있다. 이런 사실은 실험실이 아니라 고객 현장에서만 알 수 있다.</p>
+<p>또 그는 로봇 회사 사무실에는 고객 환경 복제본이 필요하다고 강조한다. 실제 배포 제품을 만드는 회사 중 고객 환경 복제본이 없는 곳을 거의 못 봤다고 한다. 반복 평가가 학습의 뼈대이기 때문이다.</p>
+<p>데이터도 중요하다. 좋은 데이터란 모델을 실제로 더 좋게 만드는 데이터다. 처음부터 대량 수집하고 나중에 학습하는 것은 큰 실수다. 초기에 학습해보고, 무엇을 더 수집해야 하는지 운영 방식을 바꿔야 한다.</p>
+<p>로봇 데이터는 웹 데이터와 다르다. 카메라, 깊이, 관절, 힘, 시간, 3D 구조가 섞여 있고 에피소드 단위다. 그래서 일반 데이터베이스나 LLM용 인프라만으로는 저장·질의·분석이 어렵다. Rerun은 이 물리 AI 데이터 계층을 도와주는 도구라고 소개한다.</p>
+<hr>
+<h2>6. 월드 액션 모델: 미래를 상상하되 싸고 빠르게 돌려야 한다</h2>
+<p>General Intuition의 Bill Jiao와 Guanming Wang은 월드 액션 모델(World Action Model, WAM)을 다룬다.</p>
+<p>VLA는 현재 관찰에서 행동을 바로 예측한다. 반면 WAM은 미래 장면과 미래 운동학을 함께 예측하려 한다. 예를 들어 로봇 카메라 영상에서 미래 프레임을 상상하고, 그와 동시에 미래 행동을 만든다. 이렇게 하면 모델이 물리적 미래를 더 명시적으로 학습할 수 있다.</p>
+<p>문제는 너무 무겁다는 것이다. GR00T 같은 모델은 확산 트랜스포머(Diffusion Transformer, DiT)로 미래 프레임을 생성하기 때문에 추론 비용이 크다. 발표자는 최적화 전에는 로봇 한 대당 GB200 2개가 필요하고, GB200 하나가 약 7만 달러라고 말했다. 로봇 산업에서 경제적으로 맞지 않는다.</p>
+<p>최적화 방향은 미래 프레임을 꼭 픽셀로 다 디코딩하지 않는 것이다.</p>
+<ul>
+<li>Image Run 계열: 전체 미래 비디오 대신 마지막 미래 상태만 예측</li>
+<li>Fast One 계열: 미래 영상을 디코딩하지 않고 DiT의 히든 스테이트를 행동 헤드에 사용</li>
+<li>잠재 월드 액션 모델(latent world action model): 세계 표현을 픽셀이 아니라 잠재 공간에 유지</li>
+</ul>
+<p>General Intuition은 인프라 관점에서 여러 최적화를 적용했다고 설명한다.</p>
+<ul>
+<li>VAE 인코더·디코더 증류(distillation)</li>
+<li>DiT 증류</li>
+<li>비디오 트랜스포머와 액션 트랜스포머 분리</li>
+<li>미래 프레임 디코딩 대신 크로스 어텐션(cross attention)으로 세계 표현 전달</li>
+<li>흐름 매칭 샘플링을 50~100스텝에서 1~2스텝으로 축소</li>
+<li>픽셀 대신 마스크(mask), 플로우(flow) 같은 더 적합한 표현 사용</li>
+</ul>
+<p>결과적으로 Jetson Orin에서 16개 행동 청크를 500ms에 실행한다고 주장한다. 핵심은 모델 성능만이 아니라 <strong>로봇 한 대에 올라갈 수 있는 비용과 지연 시간</strong>이다.</p>
+<hr>
+<h2>에이폼 적용 관점</h2>
+<p>① 이 얘기가 이커머스·물류 운영에 꽂히는 지점: 물류 로봇도 완전 자율보다 <strong>반복 작업, 예외 처리, 원격 조작, 데이터 축적</strong>이 먼저 돈이 된다.<br>
+② 지금 당장 시험해볼 것 하나: 포장·피킹·검수 중 하나를 골라 “사람이 원격 지시하면 로봇/카메라/소프트웨어가 어디까지 대신할 수 있는지” 작업 로그를 쌓아본다.<br>
+③ 우리 상황과 다른 전제 하나: 발표의 많은 연구는 고가 로봇 손·GPU·연구실 환경 기준이므로, 에이폼은 범용 로봇보다 <strong>저가 장비와 명확한 단일 공정 자동화</strong>부터 봐야 한다.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 우리 물류센터에서 반복 빈도 높고 예외가 적은 작업 3개를 뽑기</li>
+<li>[ ] 해당 작업이 텔레오퍼레이션으로 먼저 가능한지 검토</li>
+<li>[ ] 작업 성공 기준을 수치화하기: 속도, 파손률, 오분류율, 재작업률</li>
+<li>[ ] 카메라·스캐너·작업 로그를 에피소드 단위로 저장할 방법 정하기</li>
+<li>[ ] 고객 환경 복제본처럼 “테스트용 미니 작업대” 만들기</li>
+<li>[ ] 완전 자동화가 아니라 “사람 1명이 여러 작업대를 감독”하는 모델 상상해보기</li>
+<li>[ ] 실패 사례를 유형별로 태깅하기: 인식 실패, 집기 실패, 위치 오류, 포장재 문제 등</li>
+<li>[ ] 로봇 도입 전에도 데이터 수집·평가 체계부터 만들기</li>
+<li>[ ] 일반 DB로 충분한 데이터와 물리 AI 전용 데이터가 필요한 영역 구분하기</li>
+<li>[ ] 자동화 ROI 계산 시 하드웨어 비용뿐 아니라 유지보수·재학습·운영 인력 포함하기</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>Y Combinator Why Robotics Still Isn't Solved - But Could Be Soon | YC Paper Club · https://youtu.be/myDCd0hNqQU · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>YC Paper Club 진행자는 오늘 세션을 사실상 “YC Robotics Club”이라고 소개한다. 그는 지난 10년 동안 “내년이면 로보틱스가 해결된다”는 말을 계속 들어왔다고 말한다. AlphaGo 이후에는 알고리즘이 해결됐고 스케일만 키우면 된다고 했고, MuJoCo와 보행 시뮬레이션 이후에도 같은 기대가 있었다. Aloha, Diffusion Policy, VLA가 등장했을 때도 마찬가지였다. 하지만 2026년 중반에도 범용 로봇은 아직 데모 중심이며, 가정용 로봇은 대중적으로 구매하기 어렵다.</p>
+<p>그는 로보틱스가 막힌 이유를 네 가지로 정리한다. 첫째는 시뮬레이션-현실 격차(Sim-to-Real Gap)다. 비디오 기반 월드 모델은 그럴듯한 장면을 만들지만 실제 물리를 제대로 지키지 못한다. 둘째는 행동 표현(Action Representation) 문제다. 로봇의 행동 공간을 어떻게 표현해야 빠르게 배울 수 있는지는 아직 어렵다. 셋째는 감각-운동 문제(Sensorimotor Problem)다. 인간 피부는 힘, 습도, 온도, 진동, 마찰을 느끼지만 로봇은 그런 피부가 없다. 넷째는 체화 드리프트(Embodiment Drift)다. 액추에이터와 배터리는 시간이 지나며 변하고, 같은 명령이 같은 결과를 만들지 않는다.</p>
+<p>이어 Marcel Torne는 Physical Intelligence에서 진행한 다중 스케일 체화 기억(Multi-Scale Embodied Memory)을 소개한다. 현재 로봇은 블록 조작, 옷 접기, 샌드위치 만들기 같은 짧은 작업은 잘하지만, 침실 청소나 전체 요리처럼 긴 작업에는 기억이 필요하다. 기억이 없으면 설거지를 끝없이 하거나 그릴드 치즈를 태운다.</p>
+<p>그의 방식은 정책을 고수준 정책과 저수준 VLA로 나누고, 기억도 짧은 시각 기억과 긴 텍스트 기억으로 나눈다. 짧은 기억은 최근 프레임을 압축해 섬세한 조작에 쓰고, 긴 기억은 지난 몇 분간의 진행 상황을 텍스트로 저장한다. 텍스트 기억은 효율적이고 디버깅하기 쉽다. 이 기억 덕분에 로봇은 같은 실수를 반복하지 않고, 실패 후 다른 방식으로 시도할 수 있다.</p>
+<p>질의응답에서 그는 장기 기억에 어떤 정보를 넣을지는 현재 지도 미세조정(SFT)과 주석에 의존한다고 설명한다. 앞으로는 강화학습으로 어떤 기억이 중요한지 학습하는 방향이 필요하다고 말한다. 기억은 짧은 텍스트라 RAM에 보관하고 추론 때 VLA에 토큰으로 넣는다. 텍스트가 인간 기억의 전부는 아니지만, 현재는 감독·디버깅·편향 주입이 쉬워 실용적이라고 답한다.</p>
+<p>Milan Ganai는 로봇이 스스로 무엇을 추론해야 하는지 배우는 문제를 발표한다. VLA는 VLM을 로봇 데이터로 추가 학습해 이미지와 언어에서 행동을 만든다. 최근에는 사고 사슬(Chain of Thought)처럼 로봇도 행동 전 추론을 하게 하려는 흐름이 있다. 하지만 로봇에는 정답 추론 데이터가 없고, 모든 것을 매 순간 추론하면 느리고 산만해진다.</p>
+<p>그는 R&amp;B Encore를 소개한다. 이 방법은 추론을 관측되지 않는 잠재 변수로 보고, 여러 추론 후보를 만든 뒤 행동 예측에 도움이 되는 것만 고른다. 기준은 간결성, 비자명성, 행동 예측성이다. 결과적으로 유효한 추론이라도 항상 유용한 것은 아니며, 선택적 추론이 중요하다고 말한다.</p>
+<p>조작 작업에서는 이동과 그리퍼 위치 추론이 유용했고, 모든 물체를 나열하는 지각 추론은 산만할 수 있었다. 보행에서는 구조적 가능성과 움직임이 중요했고, 자율주행에서는 환각성 주석을 제거하는 것이 도움이 됐다. 그는 추론을 훈련 때 사용하고 실제 실행 때 제거하는 행동 강제(Action Forcing)로 지연 문제를 줄일 수 있다고 설명한다.</p>
+<p>Tyler Lum은 SimToolReal을 소개한다. 이 시스템은 하나의 정책으로 훈련 중 보지 못한 브러시, 망치, 드라이버 같은 도구를 실제에서 조작한다. 정책은 60Hz로 실행되고 22자유도 손과 7자유도 팔을 동시에 제어한다. 그는 텔레오퍼레이션으로 정교한 손 조작을 수집하는 것은 어렵기 때문에, 전부 시뮬레이션 강화학습으로 학습한다고 설명한다.</p>
+<p>SimToolReal의 핵심은 도구 사용을 목표 도달(Goal Reaching)로 보는 것이다. 로봇은 “쓸기”나 “망치질”이라는 작업명을 배우지 않고, 물체를 현재 자세에서 목표 자세로 이동시키는 법을 배운다. 훈련 때는 단순한 원통과 직육면체 물체, 무작위 목표 자세를 사용한다. 실제 실행 때는 인간 영상에서 목표 자세 시퀀스를 추출하고, 정책은 그 목표를 따라간다.</p>
+<p>인간 영상은 로봇 행동을 가르치는 데이터가 아니라 목표 궤적을 주는 프롬프트 역할을 한다. 새 작업은 새 학습이 아니라 새 목표 자세 시퀀스가 된다. 실패 원인의 약 60%는 자세 추적 실패였고, 작은 물체가 가려질 때 문제가 컸다. 하지만 시뮬레이션에서 물체가 밀리거나 떨어지는 경험을 넣었기 때문에 실제에서도 다시 잡는 회복 행동이 나타났다.</p>
+<p>Niko West는 Rerun을 소개하며, 다음 큰 로봇 회사는 텔레오퍼레이션에서 시작할 것이라고 말한다. 그는 로봇 애플리케이션 회사가 고객의 실제 비즈니스 문제를 끝까지 책임지는 회사라고 정의한다. 데이터센터, 창고, 제조, 식품 등에서 이 패턴이 나타나고 있다.</p>
+<p>그의 조언은 명확하다. 돈을 낼 고객 문제 하나를 고르고, 기성 하드웨어와 텔레오퍼레이션으로 먼저 해결하라. 고객 현장에서 실패 조건을 배우고, 그 데이터를 바탕으로 조금씩 모델을 학습하라. 완전 자율은 처음부터 필요한 것이 아니라, 사업이 성립한 뒤 확장성을 높이는 수단일 수 있다.</p>
+<p>그는 고객 환경 복제본을 사무실에 두고 반복 평가해야 한다고 강조한다. 좋은 데이터는 모델을 좋게 만드는 데이터이며, 처음부터 대량 수집 후 나중에 학습하는 방식은 위험하다. 로봇 데이터는 웹 데이터와 다르게 멀티모달, 다변량, 에피소드형, 3D 구조를 가지므로 전용 데이터 계층과 도구가 필요하다고 말한다.</p>
+<p>마지막으로 General Intuition의 Bill Jiao와 Guanming Wang은 월드 액션 모델(World Action Model)을 발표한다. VLA는 현재 관찰에서 행동을 예측하지만, 월드 액션 모델은 미래 장면과 미래 행동을 함께 예측한다. 이렇게 하면 모델이 미래 물리와 운동학을 더 명시적으로 배울 수 있다.</p>
+<p>문제는 비용과 속도다. GR00T 같은 모델은 확산 트랜스포머(Diffusion Transformer)로 미래 프레임을 생성하기 때문에 매우 무겁고, 로봇 한 대당 고가 GPU가 필요할 수 있다. 이들은 미래 프레임을 픽셀로 모두 디코딩하지 않고 잠재 표현을 활용하는 방식, 모델 증류, 비디오 트랜스포머와 액션 트랜스포머 분리, 흐름 매칭 샘플링 축소 등을 통해 속도를 높였다고 설명한다.</p>
+<p>발표자는 기존 50~100스텝 흐름 매칭을 1~2스텝으로 줄이고, Jetson Orin에서 16개 행동 청크를 500ms에 실행한다고 말한다. 결론은 월드 액션 모델이 유망하지만, 실제 로봇에 쓰이려면 엣지에서 빠르고 저렴하게 돌아가야 한다는 것이다.</p>
+</details>
+</body></html>
