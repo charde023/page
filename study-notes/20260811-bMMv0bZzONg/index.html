@@ -1,0 +1,326 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>How Companies Are Building Their Own Intelligence</title>
+<meta name="description" content="기업이 왜 자체 지능을 소유해야 하는지와 AI 스택 구축 로드맵을 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Sequoia Capital 학습노트</div><h1>How Companies Are Building Their Own Intelligence</h1>
+<div class="meta">원작자 Sonya Huang · Sequoia Capital · 업로드 2026-08-11 · 17.5분 · <a href="https://youtu.be/bMMv0bZzONg" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>How Companies Are Building Their Own Intelligence</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>기업의 핵심 AI 기능은 외부 API에만 의존하지 말고, 비용·속도·성능·전략적 독립성을 기준으로 자체 지능(sovereign AI)을 점진적으로 소유해야 한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Sonya Huang · Sequoia Capital · 추정 출처 https://youtu.be/bMMv0bZzONg · 업로드 2026-08-11 · 17.5분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>자체 지능(sovereign AI)</td>
+<td>AI가 제품의 핵심이 될수록 외부 API 의존은 비용·차별화·통제 리스크가 된다</td>
+<td>모델 가중치(weights)까지 통제하려는 흐름</td>
+</tr>
+<tr>
+<td>소유 vs 임대(own vs rent)</td>
+<td>모든 AI를 직접 만들 필요는 없고, 핵심 영역만 선택해야 한다</td>
+<td>비용, 지연시간, 성능, 독점 데이터 기준으로 결정</td>
+</tr>
+<tr>
+<td>오픈 가중치 모델(open-weight model)</td>
+<td>2026년 기준 폐쇄형 모델에 가까운 성능을 내며 커스터마이징 가능성이 높다</td>
+<td>Qwen 3, GLM-52 같은 모델이 전환점</td>
+</tr>
+<tr>
+<td>평가셋(evals)</td>
+<td>자체 AI를 개선하려면 성능을 재는 기준이 먼저 필요하다</td>
+<td>지루하지만 가장 먼저 해야 하는 작업</td>
+</tr>
+<tr>
+<td>후속 학습(post-training)</td>
+<td>범용 모델을 우리 도메인에 맞게 조정하는 핵심 수단</td>
+<td>자체 데이터가 많을수록 성능 우위 가능</td>
+</tr>
+<tr>
+<td>하네스(harness)</td>
+<td>모델 주변의 프롬프트, 도구, 문맥, 로직을 묶는 실행 구조</td>
+<td>모델 자체만큼 제품 성능에 영향</td>
+</tr>
+<tr>
+<td>가독성·외부 인식(legibility)</td>
+<td>고객은 어떤 AI 회사가 진짜 실력이 있는지 판단하려 한다</td>
+<td>연구 공개와 기술 마케팅도 경쟁력</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li>자체 지능(sovereign AI) — 기업이 외부 모델 API에만 의존하지 않고, 데이터·모델·가중치(weights)·학습 루프를 직접 통제하려는 전략.</li>
+<li>가중치(weights) — AI 모델이 학습한 패턴이 저장된 핵심 파라미터. “Not your weights, not your product”라는 표현의 중심 개념.</li>
+<li>AI 매출원가(AI COGS) — AI 제품을 운영할 때 추론 API, GPU, 데이터 처리 등에 들어가는 직접 비용.</li>
+<li>하네스 엔지니어링(harness engineering) — 모델을 실제 제품에서 잘 작동시키기 위해 프롬프트, 도구 호출, 컨텍스트, 라우팅, 로직을 설계하는 작업.</li>
+<li>모델 라우터(model router) — 요청의 성격에 따라 여러 모델 중 적절한 모델을 선택해 보내는 구조.</li>
+<li>후속 학습(post-training) — 이미 학습된 기본 모델을 특정 업무·도메인·데이터에 맞게 추가 조정하는 과정.</li>
+<li>중간 학습(mid-training)·사전 학습(pre-training) — 더 깊은 수준의 모델 학습 단계. 비용과 난이도가 높아 대부분 기업은 후속 학습부터 시작.</li>
+<li>온라인 학습(online learning) — 실제 고객 사용 데이터를 피드백 루프로 삼아 모델 성능을 계속 개선하는 방식.</li>
+<li>RL 환경(RL environment) — 강화학습(reinforcement learning)을 위해 모델이 행동하고 보상을 받는 시뮬레이션 또는 평가 환경.</li>
+<li>합성 데이터(synthetic data) — 사람이 직접 만든 데이터가 아니라 모델이나 시스템으로 생성한 학습 데이터.</li>
+<li>벡터 데이터베이스(vector database) — 문서·상품·지식 등을 임베딩(embedding)으로 저장해 유사도 기반 검색에 쓰는 데이터베이스.</li>
+<li>MCP(Model Context Protocol) — AI 모델이 외부 도구나 데이터 소스에 연결될 수 있도록 하는 프로토콜.</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정값·명령어·뉘앙스. 원어 용어 괄호 병기, 맥락까지.</p>
+</blockquote>
+<ol>
+<li>행사장에는 약 <strong>80개 포트폴리오 회사 창업자와 AI 리더</strong>가 참석했다 — 단순 강연이 아니라 Sequoia 투자사 대상의 실전 워크숍 성격.</li>
+<li>자체 지능은 “가중치(weights)까지” 소유하는 것을 뜻한다고 강조했다 — 단순히 프롬프트를 잘 쓰는 수준이 아니다.</li>
+<li>폐쇄형 API를 버리라는 말은 아니라고 선을 그었다 — 코딩 에이전트, 데스크톱 업무, 프런티어 API에는 Opus, GPT 같은 모델이 여전히 훌륭하다고 언급.</li>
+<li>자체 모델을 택하는 네 가지 이유는 <strong>비용, 속도, 성능, 운명 통제</strong>다 — 전략 판단의 핵심 프레임.</li>
+<li>“AI 제품이 성공할수록 AI COGS가 올라간다”고 말했다 — 사용량 증가가 곧 API 비용 폭증으로 이어질 수 있다는 뜻.</li>
+<li>코딩 자동완성(tab autocomplete)은 자체 지능이 많이 쓰이는 사례다 — 호출 빈도가 높고 속도가 중요해서 외부 API 비용·지연이 치명적.</li>
+<li>Harvey는 단 <strong>7명 규모의 팀</strong>으로 많은 연구를 공개했다고 언급했다 — 자체 연구팀이 꼭 대규모일 필요는 없다는 예시.</li>
+<li>자체 AI 스택은 폐쇄형 API보다 <strong>바닥은 낮지만 천장은 높다</strong>는 뉘앙스다 — 시작은 복잡하지만, 잘 만들면 도메인 성능 우위를 만들 수 있다.</li>
+<li>2026년에는 Qwen 3, GLM-52 같은 오픈 가중치 모델 덕분에 자체 스택이 성능 희생이 아니라 성능 우위가 될 수 있다고 주장한다.</li>
+<li>개발 스택에서는 평가(evals), 고품질 데이터, 후속 학습, 온라인 학습이 중요하다고 정리했다.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>자체 지능의 정의</td>
+<td>기업이 모델 가중치까지 통제하는 AI 전략</td>
+</tr>
+<tr>
+<td>2</td>
+<td>중앙집중형 vs 분산형 지능</td>
+<td>한 회사가 모든 AI를 장악하는 세계보다 각 회사가 자기 지능을 갖는 세계가 낫다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>자체 모델을 원하는 네 가지 이유</td>
+<td>비용, 속도, 성능, 운명 통제</td>
+</tr>
+<tr>
+<td>4</td>
+<td>제품 경쟁에서 지능 경쟁으로</td>
+<td>애플리케이션 레이어 경쟁이 지능 레이어 경쟁으로 이동</td>
+</tr>
+<tr>
+<td>5</td>
+<td>무엇을 소유하고 무엇을 빌릴지</td>
+<td>비용·지연시간·성능·독점 데이터로 판단</td>
+</tr>
+<tr>
+<td>6</td>
+<td>팀 구성</td>
+<td>기존 플랫폼팀에 억지로 맡기지 말고 작은 전담 랩을 만들라</td>
+</tr>
+<tr>
+<td>7</td>
+<td>가독성</td>
+<td>연구를 외부에 보이게 만들어야 고객과 시장이 실력을 알아본다</td>
+</tr>
+<tr>
+<td>8</td>
+<td>기술 로드맵</td>
+<td>평가셋, 라우터, 하네스, 후속 학습, 온라인 학습 순서로 발전</td>
+</tr>
+<tr>
+<td>9</td>
+<td>AI 스택 구조</td>
+<td>운영 스택과 개발 스택을 나눠 이해해야 한다</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. 자체 지능이란 무엇인가</h2>
+<p>Sonya Huang은 자체 지능(sovereign AI)을 <strong>기업이 외부 의존 없이 자기 지능을 소유하는 것</strong>으로 정의한다. 여기서 중요한 표현은 “가중치(weights)까지”다. 즉 단순히 ChatGPT나 Claude API 위에 프롬프트를 얹는 것이 아니라, 모델의 핵심 파라미터와 학습·운영 구조까지 직접 통제할 수 있는 상태를 말한다.</p>
+<p>다만 그녀는 모든 회사가 당장 OpenAI, Anthropic, Opus, GPT를 버리라는 뜻은 아니라고 분명히 말한다. 코딩 에이전트, 데스크톱 업무, 프런티어 수준의 일반 API에는 폐쇄형 모델 API가 여전히 강력하다.</p>
+<p>핵심은 <strong>제품의 일부 영역에서 AI가 너무 핵심 기능이 되었기 때문에</strong>, 그 지능을 계속 임대(rent)만 할 수는 없다는 것이다.</p>
+<hr>
+<h2>2. 중앙집중형 지능과 분산형 지능</h2>
+<p>화자는 두 가지 미래를 대비한다.</p>
+<p>첫 번째는 중앙집중형 지능(centralized intelligence)이다. 하나의 강력한 AI 회사가 전 세계 GDP의 점점 더 많은 부분을 블랙박스처럼 처리하고, 전 세계의 데이터 배출물(data exhaust)과 데이터 플라이휠(data flywheel)을 흡수하는 구조다.</p>
+<p>두 번째는 분산형 지능(decentralized intelligence)이다. 기초 모델이라는 단단한 기반 위에 각 개인과 기업이 자기 데이터, 산업, 업무 방식, 취향에 맞는 지능을 쌓는 구조다.</p>
+<p>Sonya는 두 번째 세계가 더 낙관적이라고 본다. 한 회사가 모든 것을 삼키는 대신, 여러 회사가 자기만의 지능을 만들고 생태계가 번성하기 때문이다.</p>
+<hr>
+<h2>3. 기업이 자체 모델을 원하는 네 가지 이유</h2>
+<p>첫째는 <strong>비용(cost)</strong>이다. 특히 마진이 낮거나 0이거나 마이너스인 회사에게 AI 비용은 생존 문제다. AI 제품이 성공해 사용량이 늘수록 AI 매출원가(AI COGS)가 증가한다. 그래서 오히려 AI를 가장 적극적으로 배포한 회사들이 가장 먼저 자체 모델을 고민하게 된다.</p>
+<p>둘째는 <strong>속도(speed)</strong>다. 코딩, 보안 같은 영역에서는 큰 범용 모델보다 작고 증류된 맞춤 모델(distilled custom model)이 더 나을 수 있다. 이유는 정확도뿐 아니라 지연시간(latency)이 제품 경험을 좌우하기 때문이다.</p>
+<p>셋째는 <strong>성능(performance)</strong>이다. 예전에는 성능을 포기해도 되는 경우에 오픈 모델을 선택했다. 하지만 이제는 특정 도메인에서는 자체 데이터로 조정한 오픈 모델이 폐쇄형 모델보다 더 잘할 수 있다.</p>
+<p>넷째는 <strong>운명 통제(controlling your own destiny)</strong>다. OpenAI와 Anthropic이 훌륭한 파트너라고 인정하면서도, 기업 입장에서는 자기 제품의 핵심 지능을 전적으로 외부 회사에 의존하기 어렵다.</p>
+<hr>
+<h2>4. “Not your weights, not your product”</h2>
+<p>화자는 암호화폐 시절의 밈인 “Not your keys, not your crypto”를 AI 버전으로 바꾼다.</p>
+<p><strong>Not your weights, not your product.</strong></p>
+<p>즉, 가중치(weights)를 통제하지 못한다면 그 제품은 완전히 자기 제품이라고 보기 어렵다는 주장이다.</p>
+<p>이 말은 다소 강한 표현이지만, AI가 제품의 부가 기능이 아니라 제품 그 자체가 되어가는 상황에서는 설득력이 있다. 특히 고객 경험, 추천, 자동화, 의사결정이 모델 성능에 의해 좌우되는 회사라면 더 그렇다.</p>
+<hr>
+<h2>5. 애플리케이션 레이어 경쟁에서 지능 레이어 경쟁으로</h2>
+<p>기존에는 AGI 연구소와 애플리케이션 회사가 사용자 접점(user-facing product)을 두고 경쟁한다고 봤다. 기초 모델 회사는 모델 쪽에서 사용자로 내려오고, 애플리케이션 회사는 고객과 업무 흐름 쪽에서 모델로 올라간다.</p>
+<p>Sonya는 이제 전장이 바뀌고 있다고 말한다. 단순히 UI, 제품 포장, 유통(go-to-market)을 누가 장악하느냐가 아니라, <strong>제품 안의 지능 자체를 누가 소유하고 개선하느냐</strong>의 경쟁이 되고 있다.</p>
+<p>그래서 Harvey, Factory, Glean, OpenEvidence, Semgrep 같은 애플리케이션 회사의 응용 연구(applied research)가 새로운 AI 랩처럼 중요해지고 있다고 본다.</p>
+<hr>
+<h2>6. 무엇을 소유하고 무엇을 빌릴 것인가</h2>
+<p>자체 지능은 0% 또는 100%의 문제가 아니다. 모든 기능을 직접 만들 필요도 없고, 모든 기능을 외부 API에 맡길 필요도 없다.</p>
+<p>판단 기준은 네 가지다.</p>
+<ol>
+<li><strong>비용</strong> — 이 AI 기능이 전체 매출원가(COGS)에 얼마나 큰 영향을 주는가.</li>
+<li><strong>속도와 지연시간(speed and latency)</strong> — 지연시간이 최우선순위(P0)인가.</li>
+<li><strong>성능</strong> — 자체 데이터로 조정했을 때 폐쇄형 모델보다 나아질 수 있는가.</li>
+<li><strong>독점 데이터(proprietary data)</strong> — 모델 개선에 들어가는 데이터가 우리 사업만의 핵심 자산인가.</li>
+</ol>
+<p>예를 들어 코딩 에이전트는 아직 외부 모델을 빌리는 경우가 많다. 즉시 강한 성능이 필요하고 지연시간이 최우선은 아니기 때문이다. 반면 탭 자동완성(tab autocomplete)은 호출이 매우 잦고 속도가 중요해서 자체 모델을 쓰는 경우가 많다.</p>
+<p>바이오 기업은 독점 데이터의 가치가 크기 때문에 자체 모델로 이동할 가능성이 높다. 보안 기업도 속도, 성능, 맞춤형 후속 학습 때문에 자체 모델을 선택할 수 있다.</p>
+<hr>
+<h2>7. 팀 구성: 기존 플랫폼팀에 억지로 맡기지 말 것</h2>
+<p>화자는 자체 AI를 만들 때 기존 AI 플랫폼팀에 그냥 추가 업무로 맡기는 방식을 경계한다.</p>
+<p>전통적인 AI 조직은 허브 앤 스포크(hub and spoke) 구조가 많았다. 중앙 플랫폼팀이 여러 제품팀을 지원하는 방식이다. 하지만 자체 지능 구축은 단순 플랫폼 서비스가 아니라 프런티어 수준의 연구와 제품화를 동시에 해야 하는 일이다.</p>
+<p>따라서 작은 전담팀을 새로 만드는 것이 좋다고 말한다. Harvey는 7명 규모의 팀으로도 많은 연구를 공개했다. 중요한 것은 인원수보다 <strong>공격적으로 연구하고 실험할 수 있는 독립성</strong>이다.</p>
+<hr>
+<h2>8. 가독성: 좋은 연구는 보여야 한다</h2>
+<p>Sonya가 특히 강조한 부분은 가독성(legibility)이다. 내부에서 훌륭한 연구를 하고 있어도 외부에서 보이지 않으면 고객과 시장은 그 실력을 알기 어렵다.</p>
+<p>AI 구매자는 지금 “어떤 회사를 AI 챔피언으로 선택할 것인가”를 판단하고 있다. 모든 벤더가 비슷한 AI 피치를 하기 때문에, 고객은 누가 진짜 기술적으로 깊은지 구분하려 한다.</p>
+<p>그래서 연구를 공개하고, 기술 마케팅을 잘하고, 별도 브랜드의 랩이나 리서치 그룹을 만들고, 높은 수준의 연구물을 발행하는 것이 중요하다고 말한다.</p>
+<hr>
+<h2>9. 기술 로드맵: 0에서 1, 그리고 100으로</h2>
+<p>화자가 제시한 대략적인 순서는 다음과 같다.</p>
+<ol>
+<li>전략 설정</li>
+<li>평가셋(evals) 정의</li>
+<li>모델 라우터(model router)와 하네스(harness) 실험</li>
+<li>기본 모델(out-of-the-box model) 활용</li>
+<li>후속 학습(post-training)</li>
+<li>필요 시 중간 학습(mid-training), 사전 학습(pre-training)</li>
+<li>실제 고객 데이터 기반 온라인 학습(online learning) 루프 구축</li>
+</ol>
+<p>특히 평가셋은 재미없고 화려하지 않지만 가장 중요하다고 강조한다. 초기에 평가 기준을 잘 만들수록 이후 모든 실험과 개선이 정확해진다.</p>
+<hr>
+<h2>10. 운영 스택과 개발 스택</h2>
+<p>화자는 AI 스택을 두 부분으로 나눈다.</p>
+<p>첫째는 운영 스택(production stack)이다. 사용자가 실제로 보는 모든 토큰을 만들어내는 구조다. 기본적으로 모델 위에 하네스가 올라간 형태로 본다. 하네스에는 프롬프트, 도구 호출, 문맥, 로직 등이 포함된다.</p>
+<p>둘째는 개발 스택(development stack)이다. 지능을 좋게 만들기 위한 도구와 프로세스다. 평가, 데이터 수집, 후속 학습, 합성 데이터, RL 환경, 온라인 학습 등이 여기에 들어간다.</p>
+<p>폐쇄형 API를 쓰면 스택은 단순하다. 좋은 모델과 기본 하네스를 바로 사용할 수 있다. 하지만 자기 데이터를 깊게 반영해 지능을 계속 개선하는 데에는 한계가 있다.</p>
+<p>반대로 자체 스택을 열면 판도라의 상자를 여는 것과 같다. 기본 모델 선택, 후속 학습, 하네스 구성, 컨텍스트 설계, 평가, 데이터 파이프라인, 온라인 학습까지 모두 직접 다뤄야 한다. 복잡하지만 잘하면 특정 도메인에서 프런티어보다 나은 성능을 만들 수 있다.</p>
+<hr>
+<h2>에이폼 적용 관점</h2>
+<p>① 이 얘기가 이커머스·물류 운영에 꽂히는 지점: 상품 문의, CS 자동화, 재고·출고 예측처럼 반복량이 많고 도메인 데이터가 쌓이는 업무는 외부 API만 쓰면 비용과 차별화 한계가 생긴다.<br>
+② 지금 당장 시험해볼 것 하나: “자주 들어오는 고객 문의 100개”를 기준 평가셋(evals)으로 만들고, GPT API 답변과 우리 데이터 기반 RAG 답변을 비교한다.<br>
+③ 우리 상황과 다른 전제 하나: Sequoia 포트폴리오 회사들은 AI 전담 인력과 연구 공개 역량이 있는 경우가 많지만, 우리는 먼저 운영비 절감과 정확도 개선 중심으로 작게 시작해야 한다.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 우리 회사 AI 기능을 “소유할 것”과 “빌릴 것”으로 나눠보기</li>
+<li>[ ] 비용, 속도, 성능, 독점 데이터 기준으로 우선순위 매기기</li>
+<li>[ ] 반복 문의·반품·배송·재고 관련 평가셋(evals) 50~100개 만들기</li>
+<li>[ ] 외부 API 사용량이 많은 기능의 월별 AI 비용 계산하기</li>
+<li>[ ] RAG, 벡터DB, 상품DB, 주문DB 연결 구조 점검하기</li>
+<li>[ ] 응답 속도가 중요한 기능과 정확도가 중요한 기능 분리하기</li>
+<li>[ ] 모델 성능을 운영 데이터로 계속 개선할 피드백 루프 설계하기</li>
+<li>[ ] 자체 모델까지 가지 않더라도 하네스와 평가 체계부터 구축하기</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>Sequoia Capital How Companies Are Building Their Own Intelligence | Sonya Huang, Sequoia Capital · https://youtu.be/bMMv0bZzONg · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요. 오늘 아침 와주셔서 감사합니다. 이 자리에는 약 80개의 포트폴리오 회사 창업자와 AI 리더들이 모였습니다. 오늘 주제는 매우 시의적절한 “자기 지능 소유(owning your intelligence)”, 또는 자체 지능(sovereign AI)입니다.</p>
+<p>오늘 행사는 절반은 행동을 촉구하는 자리이고, 절반은 기술적인 방법론을 배우는 자리입니다. 그래서 단순히 “우리만의 AI를 만들자”고 말하는 데 그치지 않고, 실제로 어떻게 거기에 도달할 수 있는지 배울 수 있도록 기술 강연과 데모를 많이 준비했습니다.</p>
+<p>먼저 기회부터 보겠습니다. 자체 지능(sovereign AI)이란 무엇일까요? 주권국가(sovereign)는 완전한 자기 통치권을 가진 독립 국가입니다. 따라서 자체 지능은 기업이 외부 의존 없이 자기 지능을 소유하는 것, 더 나아가 모델 가중치(weights)까지 소유하는 것을 뜻합니다.</p>
+<p>중요한 뉘앙스가 있습니다. 우리는 절대 회사들에게 Opus나 GPT를 쓰지 말라고 말하는 것이 아닙니다. 코딩 에이전트, 데스크톱 업무, 프런티어 수준 API에서는 폐쇄형 모델 API가 훌륭합니다. 다만 우리가 관찰한 것은, 점점 더 많은 회사가 제품의 일부 영역에서 자체 AI 역량을 구축하고, 더 많은 지능을 소유하는 방향으로 수직 통합하고 있다는 점입니다.</p>
+<p>최근 자체 지능에 대한 논의는 빠르게 커졌습니다. Alex Karp, Satya Nadella 같은 인물들도 기업이 자기 지능을 소유해야 한다는 쪽으로 발언했습니다. Jensen Huang도 미국에서 오픈 가중치 모델(open-weight model)이 계속 사용 가능해야 한다는 흐름을 이끌었습니다.</p>
+<p>메시지는 분명합니다. 기업들은 자기 지능을 소유하고 싶어 합니다. 가중치(weights)를 임대하는 것이 아니라 소유하고 싶어 합니다. 지능은 너무 핵심적이고 근본적인 자산이기 때문에 그냥 외주화하기 어렵기 때문입니다.</p>
+<p>한쪽에는 중앙집중형 지능(centralized intelligence)이 있습니다. 하나의 강력한 AI가 세계 GDP의 점점 더 많은 부분을 블랙박스로 처리하고, 다른 모든 곳에서 나오는 데이터 배출물과 데이터 플라이휠을 빨아들이는 구조입니다.</p>
+<p>다른 한쪽에는 분산형 지능(decentralized intelligence)이 있습니다. 전 세계가 단단한 핵심 모델 위에 구축하되, 개인과 회사가 자기 데이터, 산업, 개인화, 업무 방식, 취향에 맞춰 자기 지능을 만드는 구조입니다. 이 경우 생태계가 번성하고 개별성이 살아남습니다. 어떤 한 회사도 나머지를 삼키지 않습니다. 저는 이것이 훨씬 더 낙관적인 세계관이라고 생각합니다.</p>
+<p>자체 AI를 만들려는 회사들이 움직이는 가장 큰 이유는 네 가지입니다.</p>
+<p>첫째는 비용입니다. 특히 마진이 낮거나 0이거나 마이너스인 회사에게 자체 지능은 있으면 좋은 것이 아니라 반드시 필요한 것입니다. 아이러니하게도 AI 제품이 성공할수록 AI 매출원가(AI COGS)는 올라갑니다. 그래서 AI를 가장 앞서 배포한 회사들이 가장 먼저 자체 모델을 소유하려는 여정을 시작했습니다.</p>
+<p>둘째는 속도입니다. 코딩이나 보안 같은 영역에서는 작고 증류된 맞춤 모델(distilled custom model)이 큰 범용 모델보다 나을 수 있습니다. 속도가 매우 중요하기 때문입니다.</p>
+<p>셋째는 성능입니다. 이것은 비교적 새로운 이유입니다. 작년까지만 해도 대부분 회사는 더 나은 성능을 위해 자체 지능을 선택하지 않았습니다. 하지만 이제는 오픈 모델이 특정 도메인에서 폐쇄형 모델보다 더 나은 성능을 낼 수 있는 지점에 왔습니다.</p>
+<p>넷째는 운명 통제입니다. Anthropic과 OpenAI는 생태계에 훌륭한 파트너였다고 생각합니다. 하지만 회사들은 점점 더 자신만의 독립적인 기반도 갖고 싶어 합니다.</p>
+<p>암호화폐 시절을 기억하시나요? 그때 탈중앙 금융(DeFi) 쪽에서 “Not your keys, not your crypto”라는 밈이 있었습니다. 누군가가 당신의 암호화폐 키를 보관하고 있다면, 그것은 근본적으로 당신 것이 아니라는 뜻이었습니다.</p>
+<p>저는 이 밈의 AI 버전을 제시하고 싶습니다. “Not your weights, not your product.” 가중치가 당신 것이 아니라면, 제품도 당신 것이 아닙니다. 제품이 진정으로 당신의 것이 되려면, 자기 가중치를 통제하고 보관할 수 있어야 한다고 생각합니다.</p>
+<p>기존에는 애플리케이션 레이어(application layer)를 차지하기 위한 경쟁이 이야기되었습니다. AGI 연구소와 애플리케이션 회사가 서로 다른 방향에서 사용자 대면 제품(user-facing product)이 되려고 경쟁한다는 내용입니다. 기초 모델 연구소는 모델 쪽에서 내려오고, 애플리케이션 회사는 사용자 쪽에서 올라옵니다.</p>
+<p>그런데 이제 새로운 역학이 나타나고 있습니다. 전장은 단지 애플리케이션 레이어가 아니라 지능 레이어(intelligence layer)를 차지하기 위한 경쟁으로 바뀌고 있습니다. 이제 싸움은 누가 제품, UI, 유통, 포장을 통제하느냐만이 아닙니다. 누가 지능 자체를 소유하고, 제품 안에서 더 나은 지능을 만들 수 있느냐의 문제입니다.</p>
+<p>그래서 저는 지금 가장 뜨거운 새로운 연구소들이 Harvey, Factory, Glean, OpenEvidence, Semgrep 같은 회사 안에서 나오는 응용 연구(applied research)라고 봅니다. 이 연구는 평가와 벤치마크, 하네스 엔지니어링, 파인튜닝을 위한 새로운 알고리즘 기법 등으로 확장되고 있습니다.</p>
+<p>이제 자체 랩을 만들고 자체 모델을 만들고 싶다고 가정해보겠습니다. 0에서 1로, 그리고 100으로 어떻게 갈까요? 저는 하나의 의견이 강한 프레임워크와 기술 로드맵을 제시하겠습니다. 회사마다 다르고, 저는 기술자는 아니므로 큰 소금 한 줌만큼 걸러서 들어주시기 바랍니다. 그래도 자체 지능을 구축하는 출발점으로는 유용하길 바랍니다.</p>
+<p>첫 번째 단계는 전략입니다. AI의 어떤 부분을 소유하고, 어떤 부분을 빌릴지 결정해야 합니다. 두 번째는 팀입니다. 지능을 생산하기 위해 어떤 사람을 뽑고 어떻게 조직할지 정해야 합니다. 세 번째는 가독성(legibility)입니다. 이것은 자주 간과되지만 매우 중요합니다. 네 번째는 기술 로드맵입니다. 자체 지능을 만들기 위해 어떤 빌딩 블록을 조립해야 하는지 봐야 합니다.</p>
+<p>자체 지능은 이분법이 아닙니다. 0% 또는 100% 자체 지능인 것이 아닙니다. 전략의 중요한 부분은 어떤 지능을 소유하고 어떤 지능은 외부에 맡길지 선을 긋는 것입니다.</p>
+<p>판단 기준은 네 가지입니다. 첫째, 비용입니다. 이 비용 항목이 전체 매출원가(COGS)에 얼마나 중요한가. 둘째, 속도와 지연시간입니다. 이것이 최우선순위(P0)인가. 셋째, 성능입니다. 과거에는 성능이 중요하지 않을 때 오픈 가중치를 선택했습니다. 하지만 이제는 특정 도메인에서는 자기 데이터로 모델을 조정해 더 나은 성능을 얻을 수 있습니다. 넷째, 독점 데이터입니다. 모델 개선에 넣는 데이터가 우리 사업에 매우 독점적인가를 봐야 합니다.</p>
+<p>예를 들어 코딩에는 에이전트와 자동완성이 있습니다. 에이전트 쪽은 여전히 대부분 빌려 씁니다. 기본 성능이 강해야 하고 지연시간이 최우선은 아니기 때문입니다. 반면 탭 자동완성(tab autocomplete)은 속도가 매우 중요하고 API 호출이 너무 자주 일어나 비용이 크게 쌓입니다. 그래서 대부분의 탭 자동완성 모델은 이제 자체 지능으로 실행됩니다.</p>
+<p>보안 회사는 속도, 성능, 그리고 모델을 매우 맞춤형 방식으로 후속 학습(post-train)할 수 있다는 이유로 자체 모델을 소유합니다. 바이오 회사들은 해당 분야의 독점 데이터 가치 때문에 자체 모델로 이동하고 있습니다.</p>
+<p>두 번째 단계는 팀 구성입니다. 연구 출신 리더도 가능하고, 엔지니어링 출신 리더도 가능합니다. 회사에서 하려는 연구가 기초 연구에 가까운지, 응용 연구에 가까운지에 따라 적합한 랩 리더의 프로필이 달라집니다.</p>
+<p>조직 설계도 중요합니다. 전통적으로 AI 팀은 허브 앤 스포크(hub and spoke) 방식으로 구성되는 경우가 많았습니다. 중앙 플랫폼팀이 여러 제품팀을 지원하는 구조입니다. 그런데 많은 회사가 이 AI 플랫폼팀에 자체 AI 업무까지 억지로 끼워 넣고 있습니다. 저는 그렇게 하지 말라고 권하고 싶습니다.</p>
+<p>이것은 본질적으로 플랫폼 서비스 역량이 아닙니다. 프런티어에서 생각하고, 빠르게 판단하고, 프런티어 수준의 연구를 만들어낼 수 있는 사람들이 필요합니다. 단순히 팀을 지원하는 것이 아니라 공격적으로 움직여야 합니다. 작은 신설 전담팀이 여기서 매우 멀리 갈 수 있습니다. Harvey는 단 7명의 팀으로 많은 연구를 공개했습니다. 작게 시작하되, 처음부터 새롭게 시작하고, 독립적인 랩으로 만드는 것을 고려하십시오.</p>
+<p>세 번째는 가독성입니다. 저는 이것이 완전히 과소평가되고 있다고 생각합니다. 이 방 안의 많은 회사가 내부적으로 훌륭한 연구를 하고 있을 것입니다. 하지만 그것이 외부에서 잘 보이지 않을 수 있습니다.</p>
+<p>CEO의 책임은 두 가지입니다. 하나는 실질적 결과를 내는 것이고, 다른 하나는 내러티브와 가독성을 통제하는 것입니다. 자체 AI 스택을 소유하는 문제에서 가독성은 정말 중요합니다. 모든 구매자가 지금 자기 AI 챔피언을 고르고 있기 때문입니다. 그들은 같은 피치를 계속 듣고 있고, 어떤 벤더가 자신들을 약속의 땅으로 데려갈 만큼 세련된지 판단하려 합니다.</p>
+<p>점점 더 이것은 자기 연구를 공개하는 것을 의미합니다. 훌륭한 기술 마케팅을 하고, 별도의 브랜드를 가진 랩이나 리서치 그룹을 만들고, 높은 취향의 연구를 발행해야 합니다. 이 모든 것이 중요합니다.</p>
+<p>네 번째는 기술 로드맵입니다. 회사마다 여정은 다르지만 대략적인 흐름은 이렇습니다. 먼저 전략을 세웁니다. 다음으로 평가셋(evals)을 정의합니다. 이것은 정말 중요합니다. 화려하지 않고 재미없는 작업이지만, 초기에 많이 해둘수록 이후 모든 단계에서 유리해집니다.</p>
+<p>그다음 회사들은 모델 라우터(model router)와 하네스(harness)를 실험합니다. 어떤 회사는 기본 모델만으로도 좋은 성능을 얻습니다. 다른 회사는 후속 학습(post-training)에서 큰 성능 향상을 얻습니다. 더 드문 경우에는 중간 학습(mid-training), 사전 학습(pre-training)까지 들어갑니다. 마지막으로 실제 고객 데이터가 피드백 루프를 만들어, 고객 상호작용이 일어날 때마다 모델과 지능이 개선되는 구조를 만듭니다.</p>
+<p>자체 스택을 소유하는 아름다움은 이제 프런티어 수준의 성능을 낼 수 있다는 점입니다. 이것은 비교적 새로운 현상입니다. 특히 Qwen 3와 GLM-52 같은 최신 오픈 가중치 모델이 매우 좋아졌기 때문입니다. 가중치를 사용할 수 있으므로 폐쇄형 API보다 훨씬 더 유연하게 다룰 수 있습니다. 이미 프런티어에 가까운 기준선에서 시작하고, 강한 후속 학습, 프롬프트 하네스 엔지니어링, 온라인 학습을 더하면 자체 스택으로 프런티어보다 나은 성능에 도달할 수 있습니다.</p>
+<p>인프라 관점에서 스택을 보면, 왼쪽은 운영(production)입니다. 사용자가 실제로 마주하는 지능이며, 사용자가 보게 되는 모든 토큰을 만들어내는 스택입니다. 기본적으로 운영 스택은 모델 위에 하네스가 올라간 구조입니다.</p>
+<p>그 옆에는 개발 스택(development stack)이 있습니다. 이것은 지능을 좋게 만들기 위해 사용하는 도구와 벤더들입니다. 폐쇄형 모델 생태계에서는 이 전체 스택이 매우 단순합니다. Opus나 GPT 같은 기초 모델이 있고, 각각 기본 제공되는 하네스가 있습니다. 여기에 직접 하네스와 프롬프트를 만들고, 컨텍스트를 넣고, 평가를 하면서 꽤 멀리 갈 수 있습니다.</p>
+<p>하지만 이 구조에서는 많은 데이터를 수집하거나, 자기 모델을 학습하거나, 온라인 운영 데이터를 사용해 자기 지능을 개선하는 능력은 제한됩니다. 그래서 바닥은 높지만 천장은 낮습니다.</p>
+<p>자기 지능을 소유하기 시작하는 순간, 판도라의 상자를 여는 것과 같습니다. 깔끔한 API 호출 하나가 이제는 자기 모델을 학습해야 하는 문제로 바뀝니다. 단일 모델 API와 기본 성능 대신, 오픈소스 기반 모델을 선택하고, 그 위에 많은 후속 학습을 해야 합니다.</p>
+<p>하네스도 여러 오픈 하네스 중 선택해야 하고, 로직, 도구, 컨텍스트를 직접 구성해야 합니다. 그냥 바로 작동하는 에이전트를 쓰는 것과는 다릅니다.</p>
+<p>여기서 컨텍스트(context)는 성능을 끌어올리는 데 매우 중요합니다. 여러 종류의 컨텍스트가 있습니다. TurboPuffer 같은 벡터 데이터베이스(vector database), Glean 같은 엔터프라이즈 지식 그래프(enterprise knowledge graph), MCP를 통한 오픈소스 커넥터, 그리고 컨텍스트를 가중치 자체에 인코딩하는 새로운 방식도 있습니다.</p>
+<p>운영 스택 옆의 개발 스택은 자체 AI를 소유할수록 훨씬 중요해집니다. 평가를 면밀히 모니터링해 지능이 어느 정도 수준인지 알아야 하고, 운영 중 모델 성능이 어떻게 변하는지도 봐야 합니다. 도메인에 맞게 모델을 후속 학습하려면 많은 고품질 데이터가 필요합니다. 때로는 전문가 궤적(expert trajectories), 때로는 합성 데이터(synthetic data), 때로는 강화학습 환경(RL environments)이 필요합니다.</p>
+<p>마지막으로 시스템에 온라인 학습(online learning)을 어떻게 설정할지도 생각해야 합니다. 그래야 모든 사용자 상호작용을 통해 지능이 점점 더 좋아집니다.</p>
+<p>오늘 워크숍은 자체 AI를 만드는 데 필요한 대부분의 요소를 깊게 다루도록 구성했습니다. 다만 자기 모델을 처음부터 사전 학습(pre-training)하는 부분은 제외했습니다. Fireworks의 Lynn은 후속 학습(post-training)을, LangChain의 Harrison은 하네스와 평가를, Meror의 Brendan은 강화학습 환경, 합성 데이터 등을, Trajectory는 온라인 학습을 다룰 예정입니다.</p>
+<p>마지막으로 Harvey가 전체 AI 스택과 전략을 어떻게 구축하는지 공유할 것입니다. Harvey는 바로 어제 Harvey Research를 발표했습니다. 오늘 발표자 중에는 Harvey의 기술 파트너들도 많이 포함되어 있습니다. 오늘 가능한 최고의 발표진을 모으기 위해 정말 많은 노력을 기울였습니다.</p>
+</details>
+</body></html>
