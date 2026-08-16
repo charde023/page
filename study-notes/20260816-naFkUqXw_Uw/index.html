@@ -1,0 +1,431 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>꼭 봐야할 데미스 하사비스의 60분 AI 강연</title>
+<meta name="description" content="게임에서 시작한 AI가 AlphaGo, AlphaFold, 디지털 생물학, 월드 모델, AGI 안전성으로 확장되는 흐름."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>꼭 봐야할 데미스 하사비스의 60분 AI 강연</h1>
+<div class="meta">원작자 Demis Hassabis · Google DeepMind · 업로드 2026-08-16 · 60분 · <a href="https://youtu.be/naFkUqXw_Uw" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>꼭 봐야할 데미스 하사비스의 60분 AI 강연</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>데미스 하사비스는 <strong>게임을 AI의 훈련장으로 삼아 얻은 탐색·학습 원리</strong>가 AlphaFold, 신약 개발, 월드 모델, 로보틱스, AGI로 이어진다고 설명한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Demis Hassabis · Google DeepMind · 추정 출처 미상 · 업로드 2026-08-16 · 60분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>일반 인공지능(AGI)</td>
+<td>DeepMind의 원래 목표이자 모든 연구의 큰 방향</td>
+<td>“지능을 풀고, 그것으로 나머지를 푼다.”</td>
+</tr>
+<tr>
+<td>전문가 시스템(Expert System) vs 학습 시스템(Learning System)</td>
+<td>기존 AI와 현대 AI의 근본 차이</td>
+<td>규칙을 직접 넣는 방식은 예외에 약하고, 학습 시스템은 데이터에서 구조를 찾는다.</td>
+</tr>
+<tr>
+<td>자기 대국(Self-play)</td>
+<td>AlphaGo·AlphaZero의 핵심 학습 방식</td>
+<td>스스로 수많은 게임을 하며 더 강한 버전을 반복 생성한다.</td>
+</tr>
+<tr>
+<td>조합적 탐색 공간(Combinatorial Search Space)</td>
+<td>게임, 단백질, 신약 개발을 하나로 묶는 문제 구조</td>
+<td>경우의 수가 너무 많아 무차별 대입이 불가능할 때 AI가 탐색을 안내한다.</td>
+</tr>
+<tr>
+<td>목적 함수(Objective Function)</td>
+<td>AI가 무엇을 최적화할지 정하는 기준</td>
+<td>게임의 승리, 점수, 분자 결합력처럼 명확한 목표가 있어야 한다.</td>
+</tr>
+<tr>
+<td>AlphaFold</td>
+<td>AI가 과학적 발견을 가속한 대표 사례</td>
+<td>단백질 3D 구조 예측을 원자 수준 정확도에 가깝게 끌어올렸다.</td>
+</tr>
+<tr>
+<td>디지털 생물학(Digital Biology)</td>
+<td>AI가 생물학의 새로운 설명 언어가 될 수 있다는 주장</td>
+<td>생물학을 복잡한 정보처리 시스템으로 보고 AI로 모델링한다.</td>
+</tr>
+<tr>
+<td>월드 모델(World Model)</td>
+<td>AGI와 로보틱스의 핵심 기반</td>
+<td>영상·게임 생성 모델이 물리 세계의 구조를 학습하고 있음을 보여준다.</td>
+</tr>
+<tr>
+<td>AI 안전성(AI Safety)</td>
+<td>강력한 AI가 사회 전체에 영향을 주기 때문</td>
+<td>SynthID, 워터마킹, 국제 거버넌스, 책임 있는 배포가 필요하다.</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li>튜링 기계(Turing Machine) — 계산 가능한 것은 무엇이든 계산할 수 있다는 이론적 모델. AGI의 철학적 기반으로 언급됨.</li>
+<li>DQN(Deep Q-Network) — 화면 픽셀만 보고 Atari 게임을 학습한 DeepMind의 초기 강화학습 시스템.</li>
+<li>AlphaZero — 바둑뿐 아니라 체스·쇼기 등 2인 완전정보 게임을 처음부터 스스로 학습하는 시스템.</li>
+<li>CASP(Critical Assessment of Structure Prediction) — 단백질 구조 예측 대회. 하사비스는 “단백질 접힘의 올림픽”처럼 설명함.</li>
+<li>레빈탈의 역설(Levinthal Paradox) — 단백질 가능한 형태는 천문학적으로 많지만 실제 자연에서는 매우 빠르게 접힌다는 역설.</li>
+<li>AlphaFold 3 — 단백질 단독 구조를 넘어 단백질·DNA·RNA·리간드(Ligand) 상호작용까지 다루는 모델.</li>
+<li>AlphaProteo — 원하는 기능을 하는 새 단백질을 설계하는 방향의 연구.</li>
+<li>Isomorphic Labs — AlphaFold 기반 기술을 신약 개발에 적용하기 위해 만든 스핀아웃 회사.</li>
+<li>Veo 2 — Google DeepMind의 영상 생성 모델. 텍스트나 이미지에서 물리적으로 그럴듯한 영상을 생성.</li>
+<li>Genie 2 — 텍스트 지시만으로 플레이 가능한 게임 세계를 생성하는 월드 모델 연구.</li>
+<li>SynthID — AI 생성 이미지·오디오·비디오·텍스트에 보이지 않는 워터마크를 넣는 기술.</li>
+<li>Project Astra — 실세계에서 휴대폰·안경 등으로 사용할 수 있는 범용 AI 비서 프로젝트.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정값·명령어·뉘앙스. 원어 용어 괄호 병기, 맥락까지.</p>
+</blockquote>
+<ol>
+<li>하사비스는 <strong>4살부터 체스</strong>를 두었고, 잉글랜드 주니어 팀 수준으로 진지하게 활동했다 — AI에 관심을 갖게 된 출발점.</li>
+<li>DeepMind는 <strong>2010년 런던에서 창업</strong>했다 — 당시에는 AI를 연구하는 사람이 많지 않았다고 강조.</li>
+<li>DeepMind의 초기 미션은 <strong>1단계: 지능을 푼다, 2단계: 그것으로 나머지를 푼다</strong>였다.</li>
+<li>바둑의 가능한 국면 수는 약 <strong>10^170</strong> — 관측 가능한 우주의 원자 수보다 많아 무차별 대입이 불가능함.</li>
+<li>AlphaGo는 <strong>2016년 이세돌 9단과의 백만 달러 챌린지 매치</strong>에서 승리했고, 전 세계 <strong>2억 명</strong>이 시청했다.</li>
+<li>유명한 <strong>37수(Move 37)</strong>는 당시 세계 최고 기사들도 이해하기 어려웠지만, 약 100수 뒤 승리를 결정한 수로 설명됨.</li>
+<li>자기 대국에서는 예시로 <strong>10만 판</strong>을 두고, 새 버전이 이전 버전을 <strong>55% 이상 승률</strong>로 이기면 교체한다.</li>
+<li>AlphaZero는 대략 <strong>17~18회 반복, 24시간 이내</strong>에 무작위 수준에서 세계 챔피언급 이상으로 발전한다고 설명.</li>
+<li>CASP 대회는 <strong>1994년부터 2년마다</strong> 열렸고, 보통 약 <strong>100개 단백질</strong>을 대상으로 한다.</li>
+<li>AlphaFold 프로젝트는 <strong>2016년 서울 AlphaGo 대국 직후</strong> 시작했고, AlphaFold 1은 <strong>2018년 CASP13</strong>에 참가했다.</li>
+<li>생물학자들이 말한 기준은 대략 <strong>90점이면 원자 수준 정확도(Atomic Accuracy)</strong>에 가까워 실험 방식과 경쟁 가능하다는 것.</li>
+<li>단백질 하나의 구조를 실험으로 밝히는 데 박사과정 학생의 <strong>4~5년</strong>이 걸릴 수 있다고 설명.</li>
+<li>과학에 알려진 단백질은 약 <strong>2억 개</strong>, 인간 단백질체(Human Proteome)는 약 <strong>2만 개</strong>라고 언급.</li>
+<li>AlphaFold 2는 구조를 만들 때 내부적으로 <strong>192단계</strong>에 걸쳐 반복적으로 구조를 개선한다고 설명.</li>
+<li>DeepMind는 Google Cloud를 활용해 <strong>1년 동안 2억 개 단백질 구조</strong>를 예측해 공개했다.</li>
+<li>AlphaFold 데이터베이스는 전 세계 <strong>200만 명 이상 연구자</strong>가 사용하고, <strong>3만 회 이상 인용</strong>되었다고 언급.</li>
+<li>공개 전 <strong>30명 이상 생물보안·생명윤리 전문가</strong>와 상의했다 — 과학 개방성과 위험 관리의 균형을 강조.</li>
+<li>신약 개발은 평균 <strong>10년</strong>과 <strong>수십억 달러</strong>가 든다고 말하며, AI로 이를 몇 달·며칠·몇 주 단위로 줄이고 싶다고 함.</li>
+<li>Genie 2는 현재 게임 세계의 일관성이 <strong>몇 초</strong> 수준이지만, 목표는 <strong>몇 분</strong>까지 늘리는 것.</li>
+<li>로보틱스는 향후 <strong>2~3년</strong> 안에 큰 발전이 있을 영역으로 전망.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>체스와 AI의 시작</td>
+<td>하사비스는 체스를 통해 “생각에 대해 생각하기” 시작했고, 초기 체스 컴퓨터에서 AI에 매료되었다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>DeepMind의 창업 미션</td>
+<td>AGI를 만들고 그것으로 과학·의학·우주 이해를 가속하는 것이 목표였다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>전문가 시스템의 한계</td>
+<td>직접 규칙을 넣는 AI는 예외와 불확실성에 취약했다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>게임 AI와 AlphaGo</td>
+<td>게임은 AI 알고리즘을 검증하는 이상적인 실험장이고, AlphaGo는 새로운 지식을 발견할 수 있음을 보였다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>자기 대국과 탐색</td>
+<td>신경망이 거대한 탐색 공간에서 유망한 경로만 보도록 안내한다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>AlphaFold와 단백질 접힘</td>
+<td>게임에서 얻은 탐색 원리를 생물학 문제에 적용해 단백질 구조 예측을 혁신했다.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>디지털 생물학과 신약 개발</td>
+<td>AI가 생물학의 복잡성을 다루는 설명 언어가 될 수 있으며, 신약 개발 속도를 바꿀 수 있다.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>월드 모델과 AGI</td>
+<td>Veo 2, Genie 2는 AI가 물리 세계를 암묵적으로 학습하고 있음을 보여준다.</td>
+</tr>
+<tr>
+<td>9</td>
+<td>안전성과 사회적 책임</td>
+<td>강력한 AI에는 워터마킹, 거버넌스, 사회적 논의가 필요하다.</td>
+</tr>
+<tr>
+<td>10</td>
+<td>질의응답</td>
+<td>신경과학, 직업 변화, 뇌-기계 인터페이스, 게임 개발에서 AI의 역할을 논의했다.</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 체스에서 시작된 AI 여정</h2>
+<p>하사비스의 AI 여정은 <strong>게임</strong>, 특히 <strong>체스(Chess)</strong>에서 시작됐다. 그는 4살부터 체스를 두었고, 어린 나이에 경쟁적으로 체스를 하면서 단순히 게임 자체보다 “사람의 마음은 어떻게 계획을 세우고 문제를 푸는가”에 더 큰 흥미를 느꼈다.</p>
+<p>초기 체스 컴퓨터를 접했을 때도 그는 단순히 훈련 도구로 보지 않았다. 버튼을 눌러 말을 움직이는 플라스틱 기계가 체스를 잘 둔다는 사실 자체가 놀라웠고, “누군가가 이 무생물 덩어리에 체스를 두도록 프로그래밍했다”는 점에 매료되었다.</p>
+<p>이후 Amiga 500 같은 가정용 컴퓨터로 오셀로(Othello) 같은 게임 AI를 직접 만들어 보며, AI 연구에 평생을 바치겠다고 결심했다.</p>
+<h2>2. 케임브리지와 과학적 발견의 낭만</h2>
+<p>하사비스에게 케임브리지는 단순한 대학이 아니라 과학적 발견의 상징이었다. 그는 크릭(Crick), 왓슨(Watson), 튜링(Turing), 배비지(Babbage) 같은 인물들의 이야기에 영향을 받았다.</p>
+<p>특히 DNA 이중나선 발견을 다룬 영화 <strong>The Race for the Double Helix</strong>를 보고, 자신도 발견의 최전선에 서고 싶다고 느꼈다. 케임브리지의 거리와 건물, 이글 펍(Eagle Pub) 같은 장소는 과거 지적 거인들의 흔적을 느끼게 했고, 이것이 그의 과학적 야망을 자극했다.</p>
+<h2>3. DeepMind의 창업 목표: 지능을 풀고 나머지를 푼다</h2>
+<p>DeepMind는 2010년 런던에서 시작됐다. 하사비스는 이를 당시 기준으로 <strong>아폴로 프로그램(Apollo Program)</strong> 같은 거대한 도전으로 보았다고 말한다.</p>
+<p>초기 미션은 다음 두 단계였다.</p>
+<ol>
+<li><strong>지능을 푼다</strong></li>
+<li><strong>그 지능으로 나머지 모든 문제를 푼다</strong></li>
+</ol>
+<p>당시에는 이 목표가 매우 터무니없어 보였지만, 하사비스는 지금도 이 믿음을 유지한다. 그가 말하는 “나머지 문제”에는 과학적 발견, 의학, 우주에 대한 이해가 포함된다.</p>
+<h2>4. 전문가 시스템에서 학습 시스템으로</h2>
+<p>1990년대까지 AI의 대표 방식은 <strong>전문가 시스템(Expert System)</strong>이었다. 이는 사람이 규칙과 지식을 직접 넣어 문제를 풀게 하는 방식이다. 체스에서 가리 카스파로프를 이긴 IBM Deep Blue가 대표적 사례다.</p>
+<p>하지만 전문가 시스템은 다음 문제가 있었다.</p>
+<ul>
+<li>예상하지 못한 상황에 약하다.</li>
+<li>사람이 미리 넣지 않은 지식은 다룰 수 없다.</li>
+<li>논리 기반이라 경직되고 깨지기 쉽다.</li>
+</ul>
+<p>반대로 현대 AI는 <strong>학습 시스템(Learning System)</strong>이다. 데이터나 경험에서 스스로 구조를 배우며, 프로그래머가 이미 아는 해답을 넘어설 가능성이 있다. 하사비스는 바로 이 점이 과학적 발견에 매우 중요하다고 본다.</p>
+<h2>5. 게임은 AI의 완벽한 실험장</h2>
+<p>DeepMind는 초기에 게임을 AI 연구의 훈련장으로 삼았다. 게임은 다음 장점이 있다.</p>
+<ul>
+<li>규칙이 명확하다.</li>
+<li>성공 기준이 분명하다.</li>
+<li>시뮬레이션을 통해 많은 경험을 만들 수 있다.</li>
+<li>쉬운 게임에서 어려운 게임으로 단계적 확장이 가능하다.</li>
+</ul>
+<p>DQN(Deep Q-Network)은 Atari 게임을 화면 픽셀만 보고 학습했다. 게임 규칙이나 조작 대상에 대한 사전 설명 없이, 점수를 최대화하라는 목표만으로 여러 게임을 마스터했다.</p>
+<p>이후 DeepMind는 바둑이라는 훨씬 어려운 문제에 도전했다. 바둑은 가능한 국면이 약 10^170개라 무차별 대입이 불가능하다. 따라서 AI는 단순 계산이 아니라 <strong>탐색을 지능적으로 줄이는 법</strong>을 배워야 했다.</p>
+<h2>6. AlphaGo와 새로운 지식의 발견</h2>
+<p>2016년 AlphaGo는 이세돌 9단과의 대국에서 승리했다. 중요한 점은 단순히 이겼다는 사실이 아니라, <strong>인간이 보지 못했던 새로운 전략</strong>을 발견했다는 점이다.</p>
+<p>대표 사례가 2국의 37수다. 당시 해설하던 최고 수준 기사들도 이해하기 어려워했지만, 그 수는 약 100수 뒤 승리의 핵심이 되었다.</p>
+<p>하사비스는 이 장면을 보고 AI가 단순히 기존 지식을 모방하는 것이 아니라, <strong>새로운 지식을 발명하고 발견할 수 있다</strong>고 확신했다.</p>
+<h2>7. 자기 대국과 탐색 공간 축소</h2>
+<p>AlphaGo, AlphaGo Zero, AlphaZero의 핵심은 <strong>자기 대국(Self-play)</strong>이다.</p>
+<p>과정은 다음과 같다.</p>
+<ol>
+<li>규칙만 아는 초기 모델이 무작위로 게임을 둔다.</li>
+<li>자기 자신과 수많은 대국을 한다.</li>
+<li>대국 데이터에서 더 나은 모델을 학습한다.</li>
+<li>새 모델이 기존 모델을 충분히 이기면 교체한다.</li>
+<li>이 과정을 반복한다.</li>
+</ol>
+<p>이 방식은 거대한 탐색 공간 전체를 보는 대신, 신경망(Neural Network)이 유망한 후보 경로를 안내하게 만든다. 즉, AI는 모든 경우를 계산하는 것이 아니라 <strong>볼 가치가 높은 가능성만 집중 탐색</strong>한다.</p>
+<p>AlphaZero는 체스에서도 Stockfish를 이겼고, 물질적 이득보다 기동성(Mobility)을 중시하는 아름다운 스타일을 보여주었다. 카스파로프는 AlphaZero의 스타일이 프로그래머의 편견이 아니라 “진실을 반영한다”고 평가했다.</p>
+<h2>8. 현실 문제에 AI를 적용하는 세 가지 조건</h2>
+<p>하사비스는 게임 AI의 알고리즘을 현실 문제에 적용할 때 세 가지 조건을 본다고 말한다.</p>
+<table>
+<thead>
+<tr>
+<th>조건</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>거대한 조합적 탐색 공간</td>
+<td>경우의 수가 너무 많아 무차별 대입이 불가능해야 한다.</td>
+</tr>
+<tr>
+<td>명확한 목적 함수</td>
+<td>무엇을 최적화할지 측정 기준이 있어야 한다.</td>
+</tr>
+<tr>
+<td>충분한 데이터 또는 시뮬레이터</td>
+<td>실제 데이터 또는 합성 데이터를 만들 수 있는 환경이 필요하다.</td>
+</tr>
+</tbody>
+</table>
+<p>이 세 조건을 만족하는 문제 중 하나가 바로 <strong>단백질 접힘(Protein Folding)</strong>이었다.</p>
+<h2>9. AlphaFold와 단백질 접힘 문제</h2>
+<p>단백질은 생명의 기본 구성 요소다. 유전자 서열은 아미노산 서열을 만들고, 이 아미노산은 3차원 단백질 구조로 접힌다. 단백질의 기능은 이 3D 구조와 깊이 관련된다.</p>
+<p>단백질 접힘 문제는 다음 질문이다.</p>
+<p><strong>1차원 아미노산 서열만 보고 3차원 단백질 구조를 계산으로 예측할 수 있는가?</strong></p>
+<p>이 문제는 매우 어렵다. 레빈탈의 역설에 따르면 평균 단백질이 가질 수 있는 형태는 약 10^300개다. 그런데 자연에서는 단백질이 밀리초 단위로 접힌다. 하사비스는 여기서 희망을 본다. 자연이 빠르게 푼다면, 어떤 구조가 있고 계산적으로도 접근 가능할 수 있다는 것이다.</p>
+<p>AlphaFold 1은 2018년 CASP13 대회에서 기존 최고 시스템보다 약 50% 더 좋은 성과를 냈다. 하지만 원자 수준 정확도에는 부족했다. 이후 DeepMind는 구조를 처음부터 다시 설계해 AlphaFold 2를 만들었고, 2020년 CASP에서 단백질 구조 예측 문제가 사실상 해결되었다는 평가를 받았다.</p>
+<h2>10. 2억 개 단백질 구조 공개와 과학 가속</h2>
+<p>AlphaFold는 정확할 뿐 아니라 매우 빨랐다. 평균 단백질을 몇 초 만에 접을 수 있었다. DeepMind는 Google Cloud를 활용해 과학에 알려진 약 2억 개 단백질 구조를 1년에 걸쳐 예측했고, EMBL-EBI와 함께 무료 데이터베이스로 공개했다.</p>
+<p>하사비스는 이를 “박사과정 시간으로 환산하면 10억 년어치 일을 1년에 한 것”처럼 설명했다.</p>
+<p>활용 사례는 다양하다.</p>
+<ul>
+<li>플라스틱 분해 효소 설계</li>
+<li>항생제 내성 연구</li>
+<li>말라리아·리슈마니아증·지카 바이러스 등 소외질환 연구</li>
+<li>핵공 복합체(Nuclear Pore Complex) 구조 연구</li>
+<li>약물 전달용 분자 주사기 설계</li>
+<li>생식 메커니즘 연구</li>
+</ul>
+<p>AlphaFold는 이제 생물학 연구의 표준 도구가 되었고, 200만 명 이상 연구자가 사용하고 있다.</p>
+<h2>11. AlphaFold 3, AlphaProteo, 디지털 생물학</h2>
+<p>AlphaFold 2가 정적인 단백질 구조 사진에 가깝다면, AlphaFold 3는 생물학적 상호작용까지 다룬다.</p>
+<p>예를 들면 다음과 같다.</p>
+<ul>
+<li>단백질과 단백질</li>
+<li>단백질과 DNA</li>
+<li>단백질과 RNA</li>
+<li>단백질과 리간드(Ligand), 즉 약물 후보 분자</li>
+</ul>
+<p>또한 AlphaProteo는 반대 방향의 문제를 푼다. 원하는 구조나 기능이 있을 때, 그것을 만들 아미노산 서열을 설계하는 것이다.</p>
+<p>하사비스는 생물학을 정보처리 시스템으로 본다. 물리학에는 수학이 완벽한 설명 언어였듯, 생물학에는 AI가 적합한 설명 언어가 될 수 있다고 주장한다. 그는 이를 <strong>디지털 생물학(Digital Biology)</strong>의 시작으로 본다.</p>
+<h2>12. AI 기반 신약 개발과 가상 세포</h2>
+<p>하사비스는 Isomorphic Labs를 통해 AlphaFold 기술을 신약 개발에 적용하고 있다. 현재 신약 개발은 평균 10년이 걸리고 비용도 수십억 달러에 이른다.</p>
+<p>그는 단백질 구조 예측이 몇 년에서 몇 초로 줄어든 것처럼, 신약 개발도 몇 년에서 몇 달, 몇 주, 어쩌면 며칠로 줄일 수 있다고 본다.</p>
+<p>궁극적 꿈은 <strong>가상 세포(Virtual Cell)</strong> 또는 <strong>계산 세포(Computational Cell)</strong>다. 예를 들어 효모 세포 같은 단순한 생명 시스템을 컴퓨터 안에 구현하고, 실험실에서 하기 전에 컴퓨터에서 먼저 실험하는 방식이다. 그러면 습식 실험실(Wet Lab)은 탐색보다 검증에 집중할 수 있다.</p>
+<h2>13. 과학 전반으로 확장되는 AI</h2>
+<p>DeepMind는 생물학 외에도 여러 과학 분야에 AI를 적용하고 있다.</p>
+<ul>
+<li>망막 스캔을 통한 안질환 식별</li>
+<li>신소재 발견</li>
+<li>핵융합 플라즈마 제어</li>
+<li>더 빠른 알고리즘 발견</li>
+<li>날씨 예측</li>
+<li>양자컴퓨팅 오류 정정</li>
+</ul>
+<p>하사비스는 앞으로 5~10년 동안, 각 전문 분야의 중요한 질문에 AI를 제대로 결합하는 다학제 연구가 큰 성과를 낼 것이라고 본다.</p>
+<h2>14. Veo 2, Genie 2와 월드 모델</h2>
+<p>하사비스는 AGI로 가는 길에서 <strong>월드 모델(World Model)</strong>을 중요하게 본다. 월드 모델은 AI가 세계의 물리 법칙과 상호작용 구조를 이해하는 내부 모델이다.</p>
+<p>Veo 2는 텍스트나 정적 이미지에서 영상을 생성한다. 예를 들어 토마토를 자르는 장면은 영상 모델에게 어렵다. 잘못하면 토마토가 다시 붙거나, 칼이 손가락을 자르거나, 물체가 이상하게 움직일 수 있다. 그런데 모델이 그럴듯하게 생성한다면, 어느 정도 물리 세계의 구조를 배운 것일 수 있다.</p>
+<p>Genie 2는 한 단계 더 나아가 텍스트 지시만으로 플레이 가능한 게임 세계를 만든다. 예를 들어 “미래 도시의 로봇으로 플레이 가능한 세계를 만들어라”라고 하면 조작 가능한 환경을 생성한다. 현재는 일관성이 몇 초 수준이지만, DeepMind는 이를 몇 분으로 늘리려 한다.</p>
+<h2>15. AI 안전성, SynthID, 사회적 거버넌스</h2>
+<p>하사비스는 DeepMind가 2010년부터 “성공했을 때의 책임”을 고민했다고 말한다. 강력한 AI는 인류의 큰 문제를 해결할 수 있지만, 동시에 모두에게 영향을 미친다.</p>
+<p>DeepMind의 안전 관련 기술 중 하나는 SynthID다. SynthID는 AI가 만든 이미지·오디오·비디오·텍스트에 사람이 알아차리기 어려운 워터마크를 넣고, 탐지 시스템이 이를 식별할 수 있게 한다.</p>
+<p>그는 실리콘밸리의 “빠르게 움직이고 부숴라(Move fast and break things)” 방식이 AGI 같은 변혁적 기술에는 적절하지 않다고 본다. 대신 과학적 방법, 겸손, 신중함, 사회적 논의가 필요하다고 말한다.</p>
+<h2>16. Gemini, Project Astra, 로보틱스</h2>
+<p>DeepMind는 여러 모델의 장점을 통합한 멀티모달 모델(Multimodal Model)인 Gemini 시리즈를 만들고 있다. Gemini 2.0은 여러 벤치마크에서 최첨단 성능을 보인다고 소개된다.</p>
+<p>또한 Project Astra는 현실 세계에서 휴대폰이나 안경을 통해 사용할 수 있는 보편적 비서(Universal Assistant)를 목표로 한다.</p>
+<p>하사비스는 다음 단계가 AlphaGo식 탐색·계획 시스템을 Gemini 같은 일반 모델 위에 결합하는 것이라고 본다. 세계를 이해하는 모델이 계획하고 행동할 수 있다면, 로보틱스에서도 큰 발전이 가능하다. 그는 향후 2~3년간 로보틱스가 매우 큰 발전을 보일 분야라고 전망한다.</p>
+<h2>17. 튜링 기계, P=NP, 자연의 구조</h2>
+<p>강연 말미에서 하사비스는 고전 컴퓨터(Classical Computer), 즉 튜링 기계 기반 시스템이 우리가 생각한 것보다 훨씬 많은 일을 할 수 있을지 모른다고 추측한다.</p>
+<p>단백질은 원자 수준에서 양자계(Quantum System)이므로 원래는 양자 시뮬레이션이 필요할 것처럼 보일 수 있다. 하지만 AlphaFold는 고전적 신경망으로 단백질 구조를 근사했다.</p>
+<p>그의 가설은 다음과 같다.</p>
+<p><strong>자연에서 생성되거나 발견되는 패턴에는 물리적 구조가 있으며, 그런 구조는 고전적 학습 알고리즘으로 효율적으로 모델링될 수 있을지도 모른다.</strong></p>
+<p>이것이 사실이라면 AI는 생물학뿐 아니라 양자역학, 근본 물리학, 현실의 본질을 이해하는 도구가 될 수 있다.</p>
+<h2>18. 질의응답 핵심</h2>
+<h3>신경과학의 루트 노드 문제</h3>
+<p>하사비스는 박사과정에서 기억(Memory)과 상상(Imagination), 미래 사고(Future Thinking), 계획(Planning)을 연구했다고 답했다. 해마(Hippocampus)가 기억과 상상 모두에 관여하며, 이런 원리를 AI 알고리즘에 모방할 수 있다고 본다.</p>
+<p>또한 창의성, 꿈, 의식 같은 큰 질문도 AI와 인간 마음을 비교하면서 진전시킬 수 있다고 말했다.</p>
+<h3>DeepMind가 딥러닝 혁명 전 창업한 이유</h3>
+<p>DeepMind라는 이름의 “Deep”은 딥러닝(Deep Learning)을 반영한다. 당시에는 딥러닝이라는 이름이 널리 쓰이기 전이었지만, 제프리 힌턴의 볼츠만 머신(Boltzmann Machine)과 계층적 신경망 아이디어가 유망해 보였다고 한다.</p>
+<p>또 하나의 축은 강화학습(Reinforcement Learning)이었다. 하사비스는 환경을 모델링하는 딥러닝과 행동·계획을 만드는 강화학습의 결합에 베팅했다.</p>
+<p>또 GPU 등 하드웨어 변화도 중요했다. 게임 그래픽, 지능, 행렬 곱셈(Matrix Multiplication)이 만나는 시점이었다.</p>
+<h3>왜 이런 시스템이 수렴하는가</h3>
+<p>하사비스는 실제로 초기에 Atari Pong조차 점수를 내지 못해, 자신들이 너무 이른 시기에 도전한 것은 아닌지 걱정했다고 말한다. 하지만 결국 수렴이 일어났고, 이것이 더 어려운 문제에 도전할 자신감을 주었다.</p>
+<p>자연의 시스템은 생물학적·지질학적·물리적 시간 속에서 안정적으로 살아남은 구조이므로, 학습 가능한 패턴이 있을 가능성이 높다고 본다.</p>
+<h3>뇌-기계 인터페이스</h3>
+<p>그는 EEG 캡, Neuralink, 뇌 삽입 칩 같은 분야에 큰 관심이 있다고 말했다. 현재는 주로 신체 기능 회복, 예를 들어 척수 손상 환자가 다시 걷는 것 같은 의료 목적이 중요하다.</p>
+<p>장기적으로 안전하고 일상적인 수술이 된다면 인간이 AI 기술을 따라잡는 한 방법이 될 수 있다고 본다. 다만 몸에 붙은 기술과 항상 들고 다니는 스마트폰 사이의 경계는 철학적 질문이라고 덧붙였다.</p>
+<h3>AI 시대의 진로 선택</h3>
+<p>하사비스는 코딩과 수학을 여전히 배우라고 조언한다. AI 도구가 코딩을 더 쉽게 만들겠지만, 그 도구가 어떻게 만들어졌는지 이해하는 사람은 더 깊이 활용할 수 있기 때문이다.</p>
+<p>동시에 자연어로 프로그래밍할 수 있게 되면서 창작자, 게임 디자이너, 영화 제작자, 앱 제작자에게도 기회가 열릴 것이라고 본다.</p>
+<p>핵심 조언은 다음과 같다.</p>
+<ul>
+<li>새로운 도구를 적극적으로 써라.</li>
+<li>빠르게 배우는 능력을 길러라.</li>
+<li>변화는 혼란이지만 동시에 기회다.</li>
+</ul>
+<h3>기존 딥러닝으로 모델링할 수 없는 생물학 과정이 있는가</h3>
+<p>하사비스는 현재 모델링할 수 없는 과정은 많지만, 원리적으로 불가능하다고 보지는 않는다고 답했다. 물리적으로 구조가 있고 충분한 예시가 있다면, 고전적 AI 시스템도 예측 모델을 만들 수 있을 것이라고 본다.</p>
+<p>다만 암호학의 큰 수 소인수분해처럼 인간이 만든 문제는 자연 구조가 없을 수 있어 양자컴퓨터가 필요할 수도 있다고 구분했다.</p>
+<h3>게임 개발에서 AI의 역할</h3>
+<p>게임 개발에는 AI가 여러 방식으로 들어올 수 있다고 전망했다.</p>
+<ul>
+<li>3D 모델, 애니메이션 등 에셋 생성</li>
+<li>게임 밸런싱 자동 테스트</li>
+<li>오픈월드 게임 버그 테스트</li>
+<li>더 생생한 AI 캐릭터</li>
+<li>플레이어 행동에 따라 신념과 스토리를 갱신하는 NPC</li>
+</ul>
+<p>Genie 2 같은 월드 모델은 당장 게임 제작 도구라기보다, AI가 세계를 이해하는지 확인하는 일반지능 연구에 가깝다고 설명했다.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 내 사업 문제 중 <strong>조합이 너무 많아 사람이 다 못 보는 문제</strong>를 찾아보기.</li>
+<li>[ ] 목표를 숫자로 정의할 수 있는지 확인하기: 비용, 배송 시간, 재고 회전율, 반품률 등.</li>
+<li>[ ] 실제 데이터가 부족하면 시뮬레이션이나 합성 데이터로 보완 가능한지 생각하기.</li>
+<li>[ ] “전문가 규칙을 직접 넣는 방식”과 “데이터에서 학습하는 방식”을 구분하기.</li>
+<li>[ ] AlphaGo식 사고를 업무에 적용해 보기: 모든 경우를 보지 말고 유망한 후보를 좁히는 모델 만들기.</li>
+<li>[ ] AlphaFold 사례를 “AI가 발견 속도를 줄이는 방식”의 대표 모델로 기억하기.</li>
+<li>[ ] Gemini, Project Astra 같은 멀티모달 AI가 현장 운영 비서가 될 가능성 생각하기.</li>
+<li>[ ] AI 도구를 쓰되, 결과물의 출처·워터마크·검증 문제도 함께 고려하기.</li>
+<li>[ ] 코딩과 수학의 기초를 계속 학습해 AI 도구를 더 깊이 활용하기.</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 꼭 봐야할 데미스 하사비스의 60분 AI 강연 · https://youtu.be/naFkUqXw_Uw · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>제 AI 여정은 게임, 특히 체스에서 시작됐습니다. 저는 4살부터 체스를 두었고, 잉글랜드 주니어 팀에서 진지하게 경기했습니다. 체스는 저에게 “생각 자체”에 대해 생각하게 만들었습니다. 사람의 마음은 어떻게 계획을 세우고, 아이디어를 만들고, 문제를 해결하며, 더 나아질 수 있을까요?</p>
+<p>처음 컴퓨터와 AI를 만난 것도 체스 컴퓨터를 통해서였습니다. 당시에는 칸을 직접 눌러 말을 움직이는 물리 버튼이 있었습니다. 원래는 오프닝 이론을 훈련하는 도구였지만, 저는 누군가가 플라스틱 기계에 체스를 잘 두도록 프로그래밍했다는 사실에 매료됐습니다. 이후 Amiga 500으로 오셀로 같은 게임 AI를 만들면서 AI에 빠졌고, 평생 이 기술의 경계를 넓히겠다고 결심했습니다.</p>
+<p>케임브리지에서의 3년은 제게 매우 중요했습니다. 저는 런던 북부의 일반 학교를 다녔고, 주변에서 옥스브리지에 간 사람이 거의 없었습니다. 하지만 크릭, 왓슨, 튜링, 배비지 같은 인물들의 이야기를 읽으며 케임브리지에 오고 싶었습니다. DNA 이중나선 발견을 다룬 영화도 큰 영향을 주었습니다. 저는 발견의 최전선에 서는 감각을 느끼고 싶었습니다.</p>
+<p>2010년 우리는 런던에서 DeepMind를 시작했습니다. 당시 목표는 인공 일반 지능(AGI), 즉 인간이 할 수 있는 인지 능력을 폭넓게 수행할 수 있는 진정한 일반 AI를 만드는 것이었습니다. 이 아이디어는 튜링 기계(Turing Machine), 즉 계산 가능한 것은 무엇이든 계산할 수 있다는 개념과 연결됩니다.</p>
+<p>DeepMind의 미션은 “책임 있게 AI를 만들어 인류에 이롭게 한다”입니다. 초창기에는 더 간단히 말했습니다. 1단계는 지능을 푸는 것, 2단계는 그 지능으로 나머지 모든 문제를 푸는 것입니다. 2010년에는 매우 터무니없어 보였지만, 저는 지금도 이 생각을 믿습니다.</p>
+<p>과거 AI에는 전문가 시스템(Expert System)이 많았습니다. Deep Blue처럼 사람이 지식과 규칙을 넣어 강력하게 만든 시스템입니다. 그러나 이런 방식은 예외 상황에 약하고, 예상하지 못한 일을 처리하기 어렵습니다. 반면 현대 AI는 학습 시스템(Learning System)입니다. 데이터와 경험에서 스스로 배워, 사람이 이미 아는 해답을 넘어설 수 있습니다.</p>
+<p>우리는 게임을 AI의 실험장으로 삼았습니다. DQN은 Atari 게임을 원시 픽셀만 보고 학습했습니다. 규칙을 알려주지 않고 점수를 최대화하라는 목표만 주었는데도 여러 게임을 마스터했습니다. 이후 우리는 바둑에 도전했습니다. 바둑의 가능한 국면은 약 10^170개라 우주의 원자 수보다 많습니다. 무차별 대입으로는 절대 풀 수 없고, 더 똑똑한 탐색이 필요합니다.</p>
+<p>2016년 AlphaGo는 이세돌 9단과 대국해 승리했습니다. 전 세계 약 2억 명이 지켜봤습니다. 중요한 것은 AlphaGo가 이긴 것뿐 아니라 새로운 전략을 발견했다는 점입니다. 특히 2국의 37수는 당시 최고 기사들도 놀란 수였고, 훗날 승부를 결정했습니다. 이 사건은 AI가 새로운 지식을 발견할 수 있다는 가능성을 보여주었습니다.</p>
+<p>AlphaGo와 AlphaZero는 자기 대국(Self-play)으로 학습합니다. 처음에는 규칙만 알고 무작위로 둡니다. 자기 자신과 수많은 게임을 하고, 그 데이터로 더 나은 버전을 만듭니다. 새 버전이 이전 버전을 충분히 이기면 교체합니다. 이 과정을 반복하면 짧은 시간 안에 세계 챔피언 수준을 넘어설 수 있습니다.</p>
+<p>신경망은 거대한 탐색 공간 전체를 보지 않고, 유망한 경로를 안내합니다. 모든 가지를 다 보는 대신 중요한 가능성만 집중적으로 살펴보는 것입니다. AlphaZero는 체스에서도 Stockfish를 이겼고, 물질보다 기동성을 중시하는 아름다운 스타일을 보여주었습니다.</p>
+<p>우리는 현실 문제를 고를 때 세 가지를 봅니다. 첫째, 거대한 조합적 탐색 공간이 있는가. 둘째, 명확한 목적 함수(Objective Function)가 있는가. 셋째, 충분한 데이터나 시뮬레이터가 있는가. 단백질 접힘(Protein Folding)은 이 조건에 잘 맞았습니다.</p>
+<p>단백질은 생명의 기본 구성 요소입니다. 유전자 서열은 아미노산 서열을 만들고, 이 아미노산은 3차원 구조로 접힙니다. 단백질의 기능은 이 구조와 깊게 관련됩니다. 문제는 1차원 아미노산 서열에서 3차원 구조를 계산으로 예측할 수 있느냐입니다.</p>
+<p>레빈탈의 역설(Levinthal Paradox)에 따르면 평균 단백질이 가질 수 있는 형태는 약 10^300개입니다. 그런데 자연에서는 단백질이 밀리초 단위로 접힙니다. 자연이 이 문제를 빠르게 푼다면, 계산적으로도 접근 가능한 구조가 있을 것이라는 희망이 생깁니다.</p>
+<p>우리는 2016년 서울 AlphaGo 대국 직후 AlphaFold 프로젝트를 시작했습니다. AlphaFold 1은 2018년 CASP13 대회에서 기존 방식보다 크게 앞섰지만 원자 수준 정확도에는 부족했습니다. 그래서 완전히 다시 설계한 AlphaFold 2를 만들었고, 2020년 대회에서 단백질 구조 예측 문제가 사실상 해결됐다는 평가를 받았습니다.</p>
+<p>AlphaFold 2는 구조를 반복적으로 개선하며, 내부적으로 192단계를 거쳐 단백질 구조를 만들어갑니다. 정확할 뿐 아니라 매우 빠르기 때문에, 우리는 과학에 알려진 약 2억 개 단백질 구조를 예측해 무료 데이터베이스로 공개했습니다. 실험으로 단백질 하나의 구조를 밝히는 데 4~5년이 걸릴 수 있다는 점을 생각하면, 이는 과학 속도를 엄청나게 높인 일입니다.</p>
+<p>공개 전에는 30명 이상의 생물보안·생명윤리 전문가와 논의했습니다. 현재 AlphaFold는 200만 명 이상 연구자가 사용하고, 3만 회 이상 인용되었으며, 생물학 연구의 표준 도구가 되었습니다.</p>
+<p>AlphaFold는 플라스틱 오염 해결, 항생제 내성, 소외질환, 약물 전달, 생식 연구 등 다양한 분야에서 활용되고 있습니다. 이후 AlphaFold 3는 단백질뿐 아니라 DNA, RNA, 리간드 같은 분자와의 상호작용까지 다룹니다. AlphaProteo는 원하는 기능을 하는 새 단백질을 설계하는 방향의 연구입니다.</p>
+<p>저는 생물학을 정보처리 시스템으로 봅니다. 물리학에 수학이 강력한 설명 언어였듯, 생물학에는 AI가 적합한 설명 언어가 될 수 있습니다. 이것이 제가 말하는 디지털 생물학(Digital Biology)입니다. Isomorphic Labs는 이 아이디어를 신약 개발에 적용하려는 회사입니다.</p>
+<p>신약 개발은 평균 10년이 걸리고 비용도 수십억 달러가 듭니다. 단백질 구조 예측을 몇 년에서 몇 초로 줄였듯, 신약 개발도 몇 달, 몇 주, 어쩌면 며칠로 줄일 수 있기를 바랍니다. 언젠가는 가상 세포(Virtual Cell)를 만들어 컴퓨터 안에서 실험하고, 실제 실험실은 검증에 집중하게 만들고 싶습니다.</p>
+<p>AI는 생물학뿐 아니라 의학, 수학, 재료과학, 핵융합, 알고리즘 발견, 날씨 예측, 양자컴퓨팅 오류 정정에도 적용되고 있습니다. 앞으로 5~10년 동안 각 전문 분야의 중요한 질문에 AI를 결합하는 다학제 연구가 큰 발전을 만들 것입니다.</p>
+<p>AGI로 가는 길에서 우리는 월드 모델(World Model)을 연구하고 있습니다. Veo 2는 텍스트나 이미지에서 영상을 생성합니다. 토마토를 자르거나 물속에 블루베리가 떨어지는 장면처럼 물리적으로 까다로운 영상을 그럴듯하게 만들 수 있다는 것은 모델이 세계의 물리 구조를 어느 정도 배웠을 가능성을 보여줍니다.</p>
+<p>Genie 2는 텍스트 지시로 플레이 가능한 게임 세계를 생성합니다. 아직 일관성은 몇 초 수준이지만, 이를 몇 분으로 늘리려 합니다. 이것은 단순한 게임 생성이 아니라, 모델이 세계를 이해하는지 확인하는 연구입니다.</p>
+<p>AI 안전성도 매우 중요합니다. SynthID는 AI가 만든 이미지, 오디오, 비디오, 텍스트에 사람이 알아차리기 어려운 워터마크를 넣고 탐지할 수 있게 합니다. AI가 널리 쓰일수록 합성 콘텐츠와 실제 콘텐츠를 구분하는 능력이 중요해질 것입니다.</p>
+<p>저는 “빠르게 움직이고 부숴라”라는 실리콘밸리식 태도가 AGI 같은 기술에는 적절하지 않다고 봅니다. 과학적 방법, 겸손, 신중함, 사회적 논의가 필요합니다. 정부, 학계, 시민사회가 함께 가드레일을 논의해야 합니다.</p>
+<p>우리는 Gemini 시리즈 같은 큰 멀티모달 모델을 만들고 있습니다. Project Astra는 휴대폰이나 안경을 통해 현실 세계에서 함께하는 보편적 AI 비서를 목표로 합니다. 다음 단계는 AlphaGo식 탐색·계획 능력을 Gemini 같은 일반 모델 위에 결합하는 것입니다. 이것은 로보틱스 발전에도 핵심이 될 것입니다.</p>
+<p>마지막으로, 저는 고전 컴퓨터가 우리가 생각한 것보다 더 많은 일을 할 수 있다고 봅니다. AlphaFold는 양자적 성격을 가진 단백질 구조를 고전적 신경망으로 근사했습니다. 자연에 존재하는 패턴에 물리적 구조가 있다면, 고전적 학습 알고리즘이 그것을 효율적으로 발견할 수 있을지도 모릅니다. AGI는 결국 우주와 그 안에서 우리의 위치를 이해하기 위한 궁극의 범용 도구가 될 수 있습니다.</p>
+<p>질의응답에서는 신경과학, 의식, 딥러닝과 강화학습, 뇌-기계 인터페이스, AI 시대의 진로, 생물학 모델링의 한계, 게임 개발에서 AI의 역할이 논의되었습니다. 하사비스는 코딩과 수학을 여전히 배우라고 조언했고, 동시에 AI 도구를 빠르게 익히는 능력이 앞으로 매우 중요해질 것이라고 말했습니다.</p>
+</details>
+</body></html>
