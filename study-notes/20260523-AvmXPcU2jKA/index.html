@@ -36,11 +36,15 @@ border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface
 .filters input{position:absolute;opacity:0;pointer-events:none}
 .filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
 border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
 </style></head><body>
 <div class="header"><a class="back" href="../">← 학습노트 목록</a>
 <div class="eyebrow">TechBridge-KR 학습노트</div><h1>자기 학습 에이전트를 위한 메모리와 드리밍</h1>
 <div class="meta">원작자 Ravi · Anthropic (Platform · API Knowledge Team) · 업로드 2026-05-23 · 21.6분 · <a href="https://www.youtube.com/watch?v=AvmXPcU2jKA" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
-<h1>자기 학습 에이전트를 위한 메모리와 드리밍</h1>
 <div class="callout callout-summary"><div class="ct">한 줄 요약</div>
 <p>Claude Managed Agents의 Memory는 파일 시스템 형태로 에이전트 간 지식을 공유하고, Dreaming은 세션 외부에서 비동기로 메모리를 자동 정제·개선해 에이전트 전체의 성능 하한선을 끌어올린다.</p>
 </div>

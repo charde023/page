@@ -36,11 +36,15 @@ border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface
 .filters input{position:absolute;opacity:0;pointer-events:none}
 .filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
 border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
 </style></head><body>
 <div class="header"><a class="back" href="../">← 학습노트 목록</a>
 <div class="eyebrow">TechBridge-KR 학습노트</div><h1>Anthropic은 왜 잠든 사이 일하는 Claude 에이전트에 베팅했을까요 | Jess Yan</h1>
 <div class="meta">원작자 Jess Yan · Anthropic (Product Lead, Claude Managed Agents) · 업로드 2026-06-29 · 40.2분 · <a href="https://www.youtube.com/watch?v=lOha0Uu6pxs" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
-<h1>Anthropic은 왜 잠든 사이 일하는 Claude 에이전트에 베팅했을까요 | Jess Yan</h1>
 <div class="callout callout-summary"><div class="ct">한 줄 요약</div>
 <p>에이전트는 "질문-응답 프롬프트 루프"에서 "자율적으로 오류를 복구하며 밤새 스스로 일하는 장시간 실행 액터"로 진화했고, Anthropic은 이를 손쉽게 구축할 수 있는 사전 제작 하네스인 Claude Managed Agents로 이 흐름에 베팅했다.</p>
 </div>

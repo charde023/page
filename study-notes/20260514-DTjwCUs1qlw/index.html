@@ -36,11 +36,15 @@ border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface
 .filters input{position:absolute;opacity:0;pointer-events:none}
 .filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
 border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
 </style></head><body>
 <div class="header"><a class="back" href="../">← 학습노트 목록</a>
 <div class="eyebrow">TechBridge-KR 학습노트</div><h1>컨텍스트가 새로운 코드입니다</h1>
 <div class="meta">원작자 Patrick Debois · Tessl · 업로드 2026-05-14 · 27.2분 · <a href="https://www.youtube.com/watch?v=DTjwCUs1qlw" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
-<h1>컨텍스트가 새로운 코드입니다</h1>
 <div class="callout callout-summary"><div class="ct">한 줄 요약</div>
 <p>AI 코딩 에이전트의 성능은 LLM이 아니라 컨텍스트(프롬프트·규칙·스킬·문서)의 품질이 결정하므로, 컨텍스트를 코드처럼 생성·테스트·배포·관찰하는 엔지니어링 사이클을 갖춰야 한다.</p>
 </div>

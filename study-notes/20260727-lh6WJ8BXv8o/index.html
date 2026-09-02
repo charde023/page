@@ -36,11 +36,15 @@ border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface
 .filters input{position:absolute;opacity:0;pointer-events:none}
 .filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
 border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
 </style></head><body>
 <div class="header"><a class="back" href="../">← 학습노트 목록</a>
 <div class="eyebrow">TechBridge-KR 학습노트</div><h1>기본 원리로 다시 보는 루프 엔지니어링 — Kyle Mistele (HumanLayer)</h1>
 <div class="meta">원작자 Kyle Mistele · Blacklight · 업로드 2026-07-27 · 17.1분 · <a href="https://youtu.be/lh6WJ8BXv8o" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
-<h1>기본 원리로 다시 보는 루프 엔지니어링 — Kyle Mistele (HumanLayer)</h1>
 <div class="callout callout-summary"><div class="ct">한 줄 요약</div>
 <p>AI 코딩 에이전트에 프롬프트와 반복문만 던지면 거대한 PR이 쌓이므로, <strong>제어 이론(control theory)</strong> 기반으로 측정하고, 작게 바꾸고, 사람이 쉽게 방향을 수정할 수 있는 루프를 설계해야 한다.</p>
 </div>

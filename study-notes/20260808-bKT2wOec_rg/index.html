@@ -36,11 +36,15 @@ border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface
 .filters input{position:absolute;opacity:0;pointer-events:none}
 .filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
 border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
 </style></head><body>
 <div class="header"><a class="back" href="../">← 학습노트 목록</a>
 <div class="eyebrow">TechBridge-KR 학습노트</div><h1>슬롭에는 슬롭으로 맞섭니다 — Vaibhav Gupta, Boundary</h1>
 <div class="meta">원작자 Vaibhav Gupta · Boundary · 업로드 2026-08-08 · 21.0분 · <a href="https://youtu.be/bKT2wOec_rg" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
-<h1>슬롭에는 슬롭으로 맞섭니다 — Vaibhav Gupta, Boundary</h1>
 <div class="callout callout-summary"><div class="ct">한 줄 요약</div>
 <p>Boundary는 AI가 쏟아내는 부실한 코드인 <strong>슬롭(slop)</strong>을 없애려 하기보다, 작은 불변 규칙과 에이전트용 도구, 데이터 기반 검증, 더 엄격한 언어 설계로 통제해야 한다고 주장한다.</p>
 </div>

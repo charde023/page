@@ -36,11 +36,15 @@ border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface
 .filters input{position:absolute;opacity:0;pointer-events:none}
 .filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
 border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
 </style></head><body>
 <div class="header"><a class="back" href="../">← 학습노트 목록</a>
 <div class="eyebrow">TechBridge-KR 학습노트</div><h1>장시간 AI 에이전트가 기억을 잃지 않게 만드는 법 — Stefania Druga, Sakana.ai</h1>
 <div class="meta">원작자 Stefania Druga · Sakana.ai · 업로드 2026-08-14 · 11.9분 · <a href="https://youtu.be/yUjTWl7tOYc" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
-<h1>장시간 AI 에이전트가 기억을 잃지 않게 만드는 법 — Stefania Druga, Sakana.ai</h1>
 <div class="callout callout-summary"><div class="ct">한 줄 요약</div>
 <p>장시간 작업을 하는 AI 에이전트는 <strong>기억 저장소 자체</strong>보다 <span style="color:#ef6c00">어떤 기억을 언제, 어떤 순서로 불러올지 정하는 회상 정책(recall policy)</span>이 성능과 비용을 좌우한다.</p>
 </div>

@@ -36,11 +36,15 @@ border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface
 .filters input{position:absolute;opacity:0;pointer-events:none}
 .filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
 border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
 </style></head><body>
 <div class="header"><a class="back" href="../">← 학습노트 목록</a>
 <div class="eyebrow">TechBridge-KR 학습노트</div><h1>AI 에이전트 설명 — Google ADK로 첫 에이전트 만들기 (Smitha)</h1>
 <div class="meta">원작자 Smitha (Smitha Kolan) · Google Cloud Tech · 업로드 2026-06-16 · 8.5분 · <a href="https://www.youtube.com/watch?v=3FGrr_5WmrA" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
-<h1>AI 에이전트 설명 — Google ADK로 첫 에이전트 만들기 (Smitha)</h1>
 <div class="callout callout-summary"><div class="ct">한 줄 요약</div>
 <p>에이전트는 "답만 하는" 챗봇이 아니라 <strong>추론→행동→관찰→조정</strong> 루프로 스스로 결정하는 소프트웨어다. Google ADK의 planner·writer·checker를 <strong>loop agent</strong>로 감싸면 검증 실패 시 자동 재시도하는 신뢰성 있는 블로그 작성 에이전트를 만들 수 있다.</p>
 </div>
