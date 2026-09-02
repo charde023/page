@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Rich Sutton: synthetic data is &quot;just a big mistake&quot;</title>
+<meta name="description" content="리치 서튼은 합성 데이터보다 인간을 루프에서 제거한 경험 학습이 진짜 확장 방법이라고 본다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Sequoia Capital 학습노트</div><h1>Rich Sutton: synthetic data is &quot;just a big mistake&quot;</h1>
+<div class="meta">원작자 Rich Sutton · 업로드 2026-08-25 · 1.2분 · <a href="https://youtu.be/y3JQehe9q-o" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Rich Sutton: synthetic data is "just a big mistake"</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>리치 서튼은 합성 데이터 생성이 범용 확장 방법이 아니라, 인간이 무엇을 만들지 정하는 한계가 남는 방식이며, 진짜 방향은 <strong>세상에서 직접 경험하며 배우는 시스템</strong>이라고 말한다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Rich Sutton · 소속 미상 · 추정 출처 "https://youtu.be/y3JQehe9q-o" · 업로드 2026-08-25 · 1.2분 · 전사 caption en-orig</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>합성 데이터(Synthetic Data)</td>
+<td>현재 많은 기초 모델(Foundation Model) 연구소가 인터넷 데이터 고갈 문제를 해결하려는 핵심 수단으로 본다</td>
+<td>서튼은 이를 “큰 실수”라고 단정한다</td>
+</tr>
+<tr>
+<td>큰 세계 가설(Big World Hypothesis)</td>
+<td>세상에는 배울 것이 무한히 많기 때문에, 사람이 만든 데이터셋으로는 끝까지 따라갈 수 없다는 관점</td>
+<td>데이터 생성보다 경험 학습이 더 근본적이다</td>
+</tr>
+<tr>
+<td>인간 루프 제거(Humans out of the loop)</td>
+<td>사람이 무엇을 학습시킬지 정하는 순간 병목이 생긴다</td>
+<td>AI가 직접 경험에서 배우면 적용 범위가 훨씬 넓어진다</td>
+</tr>
+<tr>
+<td>경험 학습(Learning from experience)</td>
+<td>강화학습(Reinforcement Learning)의 핵심 사고와 연결된다</td>
+<td>시스템이 실제 세계와 상호작용하며 스스로 과제를 익히는 방향이다</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li>기초 모델 연구소(Foundation Model Labs) — 대규모 언어 모델(LLM)이나 멀티모달 모델 같은 범용 AI 모델을 만드는 연구 조직.</li>
+<li>기존 인간 인터넷을 “화석연료”로 보는 비유 — 웹에 쌓인 인간 생성 데이터가 유한한 자원이며, 언젠가 고갈된다는 뜻.</li>
+<li>큰 세계 관점(Big World Perspective) — 세계에는 무한히 많은 상황, 과제, 패턴이 있으므로 정적인 데이터셋만으로는 충분하지 않다는 관점.</li>
+<li>Khurram Javed — 큰 세계 가설(Big World Hypothesis)을 논문으로 정리한 연구자.</li>
+<li>인간 루프(Human in the loop) — 사람이 데이터 생성, 평가, 과제 설계, 피드백에 계속 관여하는 구조.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정값·명령어·뉘앙스. 원어 용어 괄호 병기, 맥락까지.</p>
+</blockquote>
+<ol>
+<li>“앨버타에서 5년 또는 10년 떠돌던 생각” — 이 주장은 즉흥적 의견이 아니라, 앨버타(Alberta) 연구 커뮤니티에서 오래 논의된 관점이라고 설명한다.</li>
+<li>“다음 큰 교훈일 수 있다” — 서튼의 유명한 관점인 ‘쓴 교훈(The Bitter Lesson)’처럼, AI 연구 방향에 대한 더 큰 원칙일 수 있다는 뉘앙스다.</li>
+<li>“세상은 무한히 크다” — 단순히 데이터가 많다는 뜻이 아니라, 배울 과제와 상황이 끝없이 생긴다는 의미다.</li>
+<li>“합성 데이터셋을 사람이 만들 수는 있다” — 합성 데이터 자체가 불가능하다는 말은 아니다. 다만 사람이 정한 범위 안에서만 생성된다는 점이 문제다.</li>
+<li>“사람을 루프에서 제거한다면” — 핵심은 자동화된 데이터 생성이 아니라, AI가 직접 경험을 통해 무엇을 배워야 하는지까지 확장하는 것이다.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>질문: 합성 데이터가 확장 방법인가</td>
+<td>인터뷰어는 기존 인터넷 데이터의 한계를 넘어서는 수단으로 합성 데이터를 묻는다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>서튼의 답: 큰 실수</td>
+<td>서튼은 합성 데이터가 범용적인 계산 확장 방법이라는 생각을 부정한다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>큰 세계 가설</td>
+<td>세계에는 무한히 많은 배울 것이 있으므로 사람이 만든 데이터셋은 항상 부족하다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>대안: 경험에서 배우기</td>
+<td>인간이 정한 데이터가 아니라 시스템이 직접 경험하며 학습해야 한다</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 질문: 합성 데이터는 인터넷 데이터 고갈의 해법인가</h2>
+<p>인터뷰어는 현재 많은 기초 모델 연구소(Foundation Model Labs)가 <strong>합성 데이터 생성(Synthetic Data Generation)</strong>에 집중하고 있다고 말한다. 이유는 기존 인터넷에 있는 인간 생성 데이터가 한계에 가까워지고 있기 때문이다.</p>
+<p>여기서 기존 인간 인터넷 데이터는 “화석연료”에 비유된다. 한때는 풍부하고 강력한 자원이지만, 무한하지 않고 언젠가 고갈되는 자원이라는 뜻이다.</p>
+<p>질문의 핵심은 이것이다.</p>
+<p>합성 데이터 생성이 대규모 언어 모델(LLM) 확장 패러다임의 일부인가?<br>
+그리고 계산 자원(Computation)을 더 많이 쓰면 계속 성능을 키울 수 있는 일반적인 방법인가?</p>
+<h2>2. 서튼의 답: “그건 큰 실수다”</h2>
+<p>리치 서튼은 망설이지 않고 “아니다”라고 답한다.<br>
+그는 합성 데이터가 계산을 활용하는 범용 확장 방법이라는 생각을 <strong>큰 실수</strong>라고 본다.</p>
+<p>중요한 점은, 서튼이 합성 데이터의 부분적 유용성을 전부 부정한다기보다, 그것을 AI 발전의 일반 해법처럼 보는 관점을 비판한다는 것이다.</p>
+<p>합성 데이터는 결국 누군가가 어떤 데이터를 만들지 정해야 한다.<br>
+즉, 사람의 판단이 계속 들어간다. 이 구조에서는 AI가 배워야 할 무한한 세계를 충분히 커버할 수 없다.</p>
+<h2>3. 큰 세계 가설: 세상에는 배울 것이 끝없이 많다</h2>
+<p>서튼은 이 관점을 <strong>큰 세계 관점(Big World Perspective)</strong> 또는 <strong>큰 세계 가설(Big World Hypothesis)</strong>이라고 부른다.</p>
+<p>이 생각은 앨버타(Alberta) 쪽에서 5년에서 10년 정도 논의되어 왔고, 나중에 Khurram Javed가 “The Big World Hypothesis”라는 짧은 논문으로 정리했다고 설명한다.</p>
+<p>큰 세계 가설의 핵심은 간단하다.</p>
+<p><strong>세계는 무한히 크다.</strong><br>
+배워야 할 것도 무한히 많다.</p>
+<p>사람이 합성 데이터셋을 계속 만들 수는 있다. 하지만 그렇게 해도 언제나 더 배워야 할 것이 남는다. 사람이 만든 데이터는 결국 사람이 상상하고 선택한 범위 안에 갇힌다.</p>
+<h2>4. 대안: 인간이 아니라 경험에서 배우게 해야 한다</h2>
+<p>서튼이 보는 더 근본적인 방향은 <strong>경험에서 배우기(Learning from experience)</strong>다.</p>
+<p>만약 시스템이 사람의 데이터 생성 과정을 기다리지 않고, 직접 세계와 상호작용하면서 배울 수 있다면 훨씬 강력해진다. 이것이 “인간을 루프에서 제거한다(Remove humans from the loop)”는 말의 의미다.</p>
+<p>사람이 어떤 데이터를 만들지, 어떤 과제를 줄지, 무엇이 중요한지 계속 정하는 구조에서는 병목이 생긴다. 반대로 AI가 자신의 경험을 통해 학습하면 다양한 과제에 적응할 가능성이 커진다.</p>
+<p>서튼의 결론은 다음과 같다.</p>
+<p>세상은 크고, 우리가 AI에게 시키고 싶은 일도 많다.<br>
+그래서 진짜 범용 시스템은 사람이 만든 데이터셋을 소비하는 데서 끝나지 않고, <strong>자기 경험을 통해 어떤 일이든 배워나갈 수 있어야 한다.</strong></p>
+<h2>에이폼 적용 관점</h2>
+<p>① 이 얘기가 이커머스·물류 운영에 꽂히는 지점: 과거 주문·CS 데이터만 학습시키는 것보다, 실제 운영 중 발생하는 예외 상황을 계속 경험 데이터로 쌓게 하는 구조가 중요하다.<br>
+② 지금 당장 시험해볼 것 하나: 배송 지연, 품절, 반품 사유 같은 예외 케이스를 사람이 만든 샘플이 아니라 실제 발생 로그 기반으로 매주 업데이트해 AI 응답을 테스트한다.<br>
+③ 우리 상황과 다른 전제 하나: 서튼은 장기적인 범용 AI 관점이고, 에이폼은 당장 정확도와 리스크 관리가 중요한 실무 자동화 환경이다.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 합성 데이터가 필요한 영역과 실제 운영 데이터가 더 중요한 영역을 구분한다.</li>
+<li>[ ] AI 학습·개선용으로 주문, CS, 재고, 배송 예외 로그를 체계적으로 모은다.</li>
+<li>[ ] 사람이 상상한 테스트 케이스만 쓰지 말고 실제 실패 사례를 평가 데이터로 만든다.</li>
+<li>[ ] “더 많은 데이터”보다 “현장에서 새로 생기는 경험을 반영하는 루프”를 설계한다.</li>
+<li>[ ] AI 자동화 도입 시 인간이 계속 판단해야 하는 병목 지점을 찾는다.</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>Sequoia Capital · "Rich Sutton: synthetic data is \"just a big mistake\"" · "https://youtu.be/y3JQehe9q-o" · 전사: caption en-orig</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>질문자는 이렇게 묻는다. 요즘 많은 기초 모델 연구소(Foundation Model Labs)가 합성 데이터 생성(Synthetic Data Generation)에 집중하는 것처럼 보인다. 기존 인간 인터넷 데이터는 일종의 화석연료처럼 유한한 자원인데, 합성 데이터가 그 한계를 넘어서는 방법인가? 이것이 대규모 언어 모델(LLM) 확장 패러다임의 일부인가? 계산 자원(Computation)을 활용하는 일반적인 방법인가?</p>
+<p>리치 서튼은 바로 대답한다. 아니다. 그것은 큰 실수다.</p>
+<p>이유를 묻자, 그는 이것이 어쩌면 다음의 큰 교훈일 수 있다고 말한다. 이 생각은 앨버타(Alberta)에서 5년에서 10년 정도 논의되어 왔다.</p>
+<p>그는 이 관점을 큰 세계 관점(Big World Perspective), 또는 큰 세계 가설(Big World Hypothesis)이라고 부른다고 설명한다. Khurram Javed가 나중에 이것을 논문으로 정리했고, “The Big World Hypothesis”라는 짧은 논문이 있다고 말한다.</p>
+<p>큰 세계라는 말은 세상이 무한히 크다는 뜻이다. 배워야 할 것이 무한히 많다는 뜻이다. 사람들이 합성 데이터셋(Synthetic Dataset)을 계속 만들 수는 있지만, 그래도 언제나 더 배워야 할 것이 남는다.</p>
+<p>그렇기 때문에, 만약 시스템이 경험에서 직접 배울 수 있다면, 그리고 인간을 루프에서 제거할 수 있다면, 그런 시스템은 모든 것을 할 수 있게 된다.</p>
+<p>세상은 크다. 우리가 시스템에게 시키고 싶은 과제도 많다. 그리고 시스템이 자기 자신의 경험에서 배울 수 있다면, 무엇이든 할 수 있게 될 것이다.</p>
+</details>
+</body></html>

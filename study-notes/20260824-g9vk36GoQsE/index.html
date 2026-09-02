@@ -1,0 +1,205 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Relearning to walk — what AI is missing | Khurram Javed, Oak Lab</title>
+<meta name="description" content="AI가 진짜 학습하려면 맥락(context)만이 아니라 가중치(weights) 자체를 업데이트할 수 있어야 한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Sequoia Capital 학습노트</div><h1>Relearning to walk — what AI is missing | Khurram Javed, Oak Lab</h1>
+<div class="meta">원작자 Khurram Javed · Oak Lab · 업로드 2026-08-24 · 1.2분 · <a href="https://youtu.be/g9vk36GoQsE" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>Relearning to walk — what AI is missing | Khurram Javed, Oak Lab</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>현재 AI는 기본 능력을 가중치(weights)에, 개인화를 맥락(context)에 두는 방식이지만, 인간처럼 환경 변화에 적응하려면 <strong>가중치 자체를 다시 학습하는 능력</strong>이 필요하다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Khurram Javed · Oak Lab · 추정 출처 "https://youtu.be/g9vk36GoQsE" · 업로드 2026-08-24 · 1.2분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>가중치(weights)</td>
+<td>AI 모델이 학습한 기본 능력과 지식이 저장되는 곳</td>
+<td>현재 AI의 “몸에 밴 능력”은 주로 가중치에 있다.</td>
+</tr>
+<tr>
+<td>맥락(context)</td>
+<td>대화·문서·프롬프트처럼 그때그때 주어지는 정보</td>
+<td>개인화는 보통 가중치를 바꾸지 않고 맥락으로 처리된다.</td>
+</tr>
+<tr>
+<td>상태(state)</td>
+<td>시스템이 현재 상황을 기억하거나 추적하는 내부 정보</td>
+<td>맥락은 프롬프트뿐 아니라 상태에도 존재할 수 있다.</td>
+</tr>
+<tr>
+<td>고유수용감각(proprioception)</td>
+<td>몸의 위치와 움직임을 내부적으로 느끼는 감각</td>
+<td>인간의 걷기 같은 기본 행동은 이 감각에 크게 의존한다.</td>
+</tr>
+<tr>
+<td>신경가소성(plasticity)</td>
+<td>뇌가 오래된 전제를 버리고 새 방식으로 다시 배우는 능력</td>
+<td>AI가 놓치고 있는 핵심 능력으로 제시된다.</td>
+</tr>
+<tr>
+<td>가중치 업데이트(weight update)</td>
+<td>모델의 내부 파라미터 자체를 바꾸는 학습</td>
+<td>진짜 적응형 AI가 되려면 맥락 추가를 넘어 가중치 수정이 필요하다.</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li>고유수용감각(proprioception) — 눈으로 보지 않아도 내 팔·다리가 어디 있는지 아는 내부 감각. 걷기, 균형, 자세 유지에 필수다.</li>
+<li>걷기 정책(walking policy) — 강화학습이나 로봇공학에서 말하는 정책(policy)처럼, 걷기 행동을 만들어내는 내부 규칙 또는 제어 방식.</li>
+<li>맥락(context) 대 가중치(weights) — 현재 LLM은 대화창에 넣는 정보로 개인화하는 경우가 많지만, 화자는 그것만으로는 부족하다고 본다.</li>
+<li>신경가소성(plasticity) — 뇌가 손상, 감각 상실, 환경 변화 이후에도 기능을 재구성하는 능력.</li>
+<li>시각 피드백(visual feedback) — 내부 감각을 잃은 사람이 발을 직접 보면서 걷기를 다시 배우는 방식.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정값·명령어·뉘앙스. 원어 용어 괄호 병기, 맥락까지.</p>
+</blockquote>
+<ol>
+<li><strong>현재 AI의 일반적 구조</strong> — 기본 능력은 가중치(weights)에 있고, 개인화는 맥락(context)으로 처리된다는 모델을 먼저 제시한다.</li>
+<li><strong>맥락은 상태(state)에도 있을 수 있음</strong> — 화자는 맥락이 반드시 프롬프트에만 있는 것은 아니며, 시스템 상태(state)에도 들어갈 수 있다고 말한다.</li>
+<li><strong>그래도 가중치 업데이트가 필요함</strong> — 맥락과 상태만으로는 부족하고, 시스템이 가중치(weights)를 바꿀 수 있어야 한다는 것이 핵심 주장이다.</li>
+<li><strong>인간 장애 사례를 학습 모델의 근거로 사용</strong> — 인간이 감각을 잃었을 때도 새 방식으로 적응하는 모습을 AI 설계의 힌트로 본다.</li>
+<li><strong>고유수용감각 상실 시 걷지 못함</strong> — 몸의 위치를 아는 내부 센서가 사라지면 걷기의 기반이 무너진다.</li>
+<li><strong>2~3년에 걸친 재학습</strong> — 감각을 잃은 사람도 발을 보며 시각 피드백(visual feedback)만으로 다시 걷는 법을 배울 수 있다.</li>
+<li><strong>20년 동안 참이던 것도 버릴 수 있음</strong> — 뇌는 오랫동안 유지된 전제를 바꾸고 제거할 수 있다. 화자는 이 능력을 AI에 필요하다고 본다.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>현재 AI 학습 방식</td>
+<td>기본 능력은 가중치, 개인화는 맥락에 두는 구조가 일반적이다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>맥락만으로 충분한가</td>
+<td>맥락은 상태에도 있을 수 있지만, 진짜 적응에는 가중치 업데이트가 필요하다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>인간의 장애 사례</td>
+<td>고유수용감각을 잃은 사람은 걷지 못하지만, 시각 피드백으로 다시 배울 수 있다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>AI가 놓친 능력</td>
+<td>오래된 전제를 버리고 내부 구조를 다시 쓰는 신경가소성 같은 능력이 부족하다.</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 현재 AI는 능력과 개인화를 분리해 다룬다</h2>
+<p>화자는 먼저 현재 AI 시스템을 이해하는 일반적인 사고방식을 짚는다.</p>
+<p>대체로 AI 모델의 <strong>기본 능력</strong>은 가중치(weights)에 저장되어 있다. 예를 들어 언어 이해, 추론 패턴, 코딩 능력, 일반 지식 같은 것은 모델이 학습 과정에서 내부 파라미터에 익힌 것이다.</p>
+<p>반면 <strong>개인화(personalization)</strong>는 보통 맥락(context)으로 처리된다. 사용자의 선호, 현재 업무, 대화 이력, 회사 정보 등을 프롬프트나 외부 메모리에 넣어 그때그때 모델이 참고하게 만드는 방식이다.</p>
+<p>즉 현재 구조는 대략 이렇게 볼 수 있다.</p>
+<ul>
+<li>공통 능력: 가중치(weights)</li>
+<li>개인 정보와 상황: 맥락(context)</li>
+<li>현재 진행 중인 상태: 상태(state)</li>
+</ul>
+<p>화자는 이 구분이 완전히 틀렸다고 말하지는 않는다. 다만 이것만으로는 충분하지 않다고 본다.</p>
+<h2>2. 맥락은 상태에도 있을 수 있지만, 가중치 업데이트가 필요하다</h2>
+<p>질문자는 “모든 맥락이 가중치 안에 들어가야 하느냐”고 묻는다. 이에 대해 화자는 맥락이 꼭 가중치 안에만 있어야 하는 것은 아니라고 답한다.</p>
+<p>맥락(context)은 상태(state) 안에도 있을 수 있다. 예를 들어 AI 에이전트가 지금 어떤 작업을 진행 중인지, 이전 단계에서 어떤 판단을 했는지, 사용자의 최근 요청이 무엇인지 같은 것은 상태로 관리할 수 있다.</p>
+<p>하지만 화자의 핵심은 다음이다.</p>
+<p><strong>맥락과 상태를 잘 관리하는 것만으로는 부족하고, 시스템이 자기 가중치(weights)를 업데이트할 수 있어야 한다.</strong></p>
+<p>이 말은 AI가 단순히 “추가 정보를 참고하는 수준”을 넘어, 자신이 배운 기본 전제나 행동 방식을 바꿀 수 있어야 한다는 뜻이다.</p>
+<p><span style="color:#ef6c00">즉, 진짜 학습은 메모를 더 붙이는 것이 아니라 몸에 밴 방식을 바꾸는 것이다.</span></p>
+<h2>3. 인간은 감각을 잃어도 다시 배운다</h2>
+<p>화자는 인간의 장애 사례를 든다. 인간은 몸이나 감각 체계에 큰 변화가 생겼을 때도 놀라울 정도로 적응한다.</p>
+<p>대표 예시는 <strong>고유수용감각(proprioception)</strong>이다. 이것은 눈으로 보지 않아도 내 몸이 어디에 있고, 다리가 어떻게 움직이고 있으며, 발이 어느 위치에 있는지 아는 내부 감각이다.</p>
+<p>우리는 걸을 때 이 감각을 계속 사용한다. 그래서 고유수용감각을 완전히 잃은 사람은 걷지 못하게 된다. 화자는 이것을 걷기 정책(walking policy)의 기반이라고 표현한다.</p>
+<p>하지만 중요한 점은 그다음이다.</p>
+<p>고유수용감각을 잃은 사람도 <strong>2~3년에 걸쳐</strong> 다시 걷는 법을 배울 수 있다. 이때 기존 내부 감각 대신 자신의 발을 눈으로 보며, 시각 피드백(visual feedback)을 사용한다.</p>
+<p>즉, 뇌가 기존의 “걷는 방식”을 그대로 유지하는 것이 아니라, 새로운 입력 체계에 맞춰 걷기를 다시 구성하는 것이다.</p>
+<h2>4. AI에 필요한 것은 신경가소성 같은 재학습 능력이다</h2>
+<p>화자는 인간의 뇌가 매우 가소적(plastic)이라고 말한다. 여기서 가소성이란, 새로운 상황에 맞춰 내부 구조나 행동 방식을 바꾸는 능력이다.</p>
+<p>특히 인상적인 부분은 이것이다.</p>
+<p>어떤 사실이나 감각이 <strong>20년 동안 계속 참이었더라도</strong>, 어느 날 더 이상 참이 아니게 되면 뇌는 그것을 업데이트하고 버릴 수 있다.</p>
+<p>AI 시스템도 이런 능력이 필요하다는 것이 화자의 주장이다.</p>
+<p>현재 AI는 새 정보를 맥락에 넣어 참고하는 데는 강하다. 하지만 자신이 오랫동안 학습한 기본 전제나 행동 방식을 실제로 바꾸는 능력은 제한적이다.</p>
+<p>화자가 말하는 “AI가 놓치고 있는 것”은 바로 이 부분이다.</p>
+<p><strong>환경이 바뀌었을 때, 기존 전제를 버리고 내부 학습 구조를 새로 쓰는 능력.</strong></p>
+<h2>에이폼 적용 관점</h2>
+<p>① 이 얘기가 이커머스·물류 운영에 꽂히는 지점: AI가 단순히 주문·CS 문서를 참고하는 수준을 넘어, 우리 회사의 예외 처리 방식과 운영 습관 자체를 계속 재학습해야 한다는 점이다.<br>
+② 지금 당장 시험해볼 것 하나: 반복되는 CS·출고 예외 케이스를 모아 “프롬프트 추가”와 “룰/워크플로 업데이트”를 구분해 기록해본다.<br>
+③ 우리 상황과 다른 전제 하나: 영상은 미래형 AI 모델의 내부 학습 능력을 말하지만, 현재 우리가 쓰는 SaaS·LLM은 대부분 실제 가중치 업데이트가 아니라 외부 메모리와 룰 관리에 가깝다.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 우리 업무에서 “맥락만 추가하는 문제”와 “운영 방식 자체를 바꿔야 하는 문제”를 구분한다.</li>
+<li>[ ] CS, 반품, 배송지연, 품절 대체 같은 반복 예외를 유형별로 모은다.</li>
+<li>[ ] AI에게 매번 설명해야 하는 내용을 시스템 지침이나 업무 룰로 승격할 수 있는지 본다.</li>
+<li>[ ] 한 번 정한 운영 룰이 오래됐다는 이유만으로 유지되고 있지는 않은지 점검한다.</li>
+<li>[ ] AI 자동화 도입 시, 단순 응답 품질보다 “새로운 예외를 반영하는 업데이트 루프”를 설계한다.</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>Sequoia Capital "Relearning to walk — what AI is missing | Khurram Javed, Oak Lab" · "https://youtu.be/g9vk36GoQsE" · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>현재 방식은 대략 이렇게 보입니다. 기본적인 능력은 가중치(weights) 안에서 학습되고, 모두에게 공통으로 적용됩니다. 그리고 개인화(personalization)는 맥락(context)의 형태로 일어납니다. 이것이 학습이 작동해야 하는 방식에 대한 올바른 사고 모델이 아닐까요? 모든 맥락이 가중치 자체 안에 있어야 할까요?</p>
+<p>맥락은 상태(state) 안에도 있을 수 있습니다. 둘 다 가능하죠. 하지만 여전히 가중치(weights)를 업데이트할 수 있어야 합니다.</p>
+<p>아주 좋은 사용 사례 중 하나는 인간의 장애 사례입니다. 사람이 마음이나 감각기관에 변화를 겪으면, 그들이 어떻게 적응하는지 볼 수 있습니다. 예를 들어 우리에게는 고유수용감각(proprioception)이 있습니다. 몸이 어떤 위치에 있는지 알려주는 내부 센서 같은 것이고, 우리는 이것을 걷는 데 사용합니다.</p>
+<p>어떤 사람들은 이 능력을 완전히 잃는 경우가 있습니다. 그러면 전혀 걸을 수 없게 됩니다. 왜냐하면 그것이 말 그대로 그들의 걷기 정책(walking policy)의 기반이기 때문입니다. 뇌에 깊이 새겨져 있는 것이죠.</p>
+<p>하지만 그 후 2년 또는 3년에 걸쳐, 그들은 자신의 발을 보면서 다시 걷는 법을 배울 수 있습니다. 시각 피드백(visual feedback)을 사용하는 것입니다.</p>
+<p>뇌는 엄청나게 가소적(plastic)입니다. 정말 많은 것을 배울 수 있다는 의미입니다. 20년 동안 참이었던 어떤 것이 더 이상 참이 아니게 되었을 때, 뇌는 그것을 업데이트하고 제거할 수 있습니다.</p>
+<p>저는 바로 이 능력이 극도로 유용하다고 생각하고, 우리가 우리 시스템에도 갖추고 싶어 하는 능력이라고 봅니다.</p>
+</details>
+</body></html>

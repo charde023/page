@@ -1,0 +1,389 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>제 모든 Claude 스킬을 삭제했더니... Claude가 더 똑똑해졌습니다</title>
+<meta name="description" content="Claude Code에서는 오래된 스킬과 세부 지시를 줄이고 목표, 가드레일, 검증 기준을 주는 방식이 더 효과적일 수 있다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>제 모든 Claude 스킬을 삭제했더니... Claude가 더 똑똑해졌습니다</h1>
+<div class="meta">원작자 Nate Herk · App · 업로드 2026-08-14 · 11.7분 · <a href="https://youtu.be/PFZWAAbQGv0" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>제 모든 Claude 스킬을 삭제했더니... Claude가 더 똑똑해졌습니다</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>최신 Claude는 예전보다 똑똑해졌기 때문에, 과거 모델을 보완하려고 만든 과도한 스킬, 훅, 시스템 프롬프트를 줄이고 <strong>목표·제약·완료 기준·검증 방법</strong> 중심으로 맡기는 편이 더 나은 결과를 만들 수 있다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Nate Herk · App · 추정 출처 https://youtu.be/qyPCVqFUyDo?si=4OVk-AqSS62wr7PC · 업로드 2026-08-14 · 11.7분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>시스템 프롬프트(System Prompt) 줄이기</td>
+<td>예전 모델의 약점을 보완하던 지시가 최신 모델에서는 오히려 방해가 될 수 있음</td>
+<td>오래된 지시는 주기적으로 지우고 다시 테스트해야 한다</td>
+</tr>
+<tr>
+<td>CLAUDE.md 재검토</td>
+<td>Claude Code가 프로젝트 맥락을 읽는 핵심 파일이지만, 너무 많은 행동 지시를 넣으면 모델의 판단을 막을 수 있음</td>
+<td>업무 맥락은 남기고 마이크로매니징은 줄인다</td>
+</tr>
+<tr>
+<td>스킬(Skills)과 훅(Hooks) 삭제 테스트</td>
+<td>자동화 규칙이 많을수록 결과가 좋아진다는 보장은 없음</td>
+<td>6개월마다 스킬과 훅을 비운 상태로 성능을 비교한다</td>
+</tr>
+<tr>
+<td>모델의 족쇄 풀기(Unhobbling)</td>
+<td>모델이 이미 할 수 있는 일을 사람이 세세히 제한하면 능력을 못 씀</td>
+<td>“어떻게 할지”보다 “무엇을 달성할지”를 준다</td>
+</tr>
+<tr>
+<td>가드레일(Guardrails)과 완료 기준(Exit Criteria)</td>
+<td>자유롭게 맡기되 실패하면 안 되는 기준은 명확해야 함</td>
+<td>목표, 금지선, 완료 조건을 함께 제시한다</td>
+</tr>
+<tr>
+<td>검증(Verification)</td>
+<td>AI 에이전트의 결과물을 사람이 매번 검수하면 자동화 가치가 줄어듦</td>
+<td>Claude가 스스로 테스트하고 반복 개선하게 만들어야 한다</td>
+</tr>
+<tr>
+<td>AI 에이전트 관리</td>
+<td>에이전트는 단순 도구가 아니라 일을 맡길 대상에 가까움</td>
+<td>좋은 관리자는 마이크로매니징보다 기준과 피드백을 준다</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>CLAUDE.md</strong> — Claude Code가 프로젝트에서 참고하는 지시·맥락 파일. 회사 소개, 파일 위치, 작업 규칙, 선호 스타일 등을 넣을 수 있다.</li>
+<li><strong>스킬(Skills)</strong> — Claude에게 특정 업무를 처리하는 방법, 형식, 절차를 알려주는 재사용 가능한 지시 묶음.</li>
+<li><strong>훅(Hooks)</strong> — 특정 이벤트나 단계에서 자동으로 실행되는 규칙 또는 스크립트성 장치.</li>
+<li><strong>하네스(Harness)</strong> — 모델을 실제 제품처럼 쓰기 위해 감싸는 실행 환경, 도구 연결, 프롬프트 구조, 워크플로우 전체.</li>
+<li><strong>모델의 족쇄 풀기(Unhobbling)</strong> — 모델이 스스로 잘할 수 있는데도 사람이 너무 많은 규칙을 걸어 성능을 낮추는 상황을 줄이는 것.</li>
+<li><strong>제품 오버행(Product Overhang)</strong> — 현재 모델이 이미 할 수 있지만, 제품이나 사용자가 아직 제대로 활용하지 못하는 잠재 능력.</li>
+<li><strong>완료 기준(Exit Criteria)</strong> — 작업이 “끝났다”고 판단할 수 있는 명확한 조건.</li>
+<li><strong>QA(Quality Assurance)</strong> — 결과물이 실제 배포·사용 가능한 수준인지 품질을 확인하는 절차.</li>
+<li><strong>악마의 대변인(Devil’s Advocate)</strong> — 다른 관점에서 반박하거나 약점을 찾아주는 역할. AI 에이전트 검증에 활용 가능.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정값·명령어·뉘앙스. 원어 용어 괄호 병기, 맥락까지.</p>
+</blockquote>
+<ol>
+<li>Anthropic은 Claude Code의 시스템 프롬프트(System Prompt)를 <strong>80% 이상 삭제</strong>했다고 언급한다 — 새 모델이 과거의 보정 지시 없이도 더 잘 처리하기 때문이다.</li>
+<li>Boris Cherny는 <strong>6개월마다 CLAUDE.md, 스킬(Skills), 훅(Hooks)을 삭제해 보고 모델이 어떻게 하는지 보라</strong>고 조언한다 — 모델 업데이트 주기마다 최적 지시 방식이 달라질 수 있다는 뜻이다.</li>
+<li>화자는 자신의 저장소(repo)를 복제한 뒤 CLAUDE.md와 스킬을 제거하고 테스트했다 — 원본 환경을 망치지 않고 비교 실험한 방식이다.</li>
+<li>YouTube 영상 URL 하나를 Claude에 주고 <strong>유튜브 리소스 가이드(Resource Guide)</strong> 생성을 요청했다 — 스킬이 있는 버전은 브랜드 형식이 좋았고, 스킬 없는 버전은 내용 구조가 더 좋았다고 평가했다.</li>
+<li>스킬 없는 결과물은 디자인은 부족했지만, 아이디어별 타임스탬프(timestamp)를 붙여 콘텐츠 이해도가 좋았다 — “형식”과 “사고 품질”을 분리해 봐야 한다.</li>
+<li>화자는 스킬을 완전히 없애기보다 “헤더 이미지 넣기, 유튜브 링크 넣기, AIS Plus 링크 넣기, 브랜드 컬러 쓰기” 같은 <strong>브랜드 가이드라인(Brand Guideline)</strong> 수준만 남기는 방향을 제안한다.</li>
+<li>Boris의 핵심 조언은 “작업(Task), 가드레일(Guardrails), 완료 기준(Exit Criteria)을 설명한 뒤 모델이 요리하게 둬라(let the model cook)”에 가깝다.</li>
+<li>화자는 슬래시 목표(slash goal) 끝에 “프로토타입이나 개념증명(Proof of Concept)이 아니라, 10번 테스트·반복했고 QA까지 끝나 내일 시장에 낼 수 있는 결과물을 원한다”는 식의 문장을 붙인다고 한다.</li>
+<li>“검증(Verification)이 사람들이 가장 못하는 부분”이라고 강조한다 — 프롬프트 기술보다 결과 검증 구조를 만드는 능력이 더 중요해지고 있다.</li>
+<li>마지막에는 “생각은 일부 외주화하되, 이해는 외주화하지 말라”고 정리한다 — AI에게 아이디어와 작업은 맡겨도 최종 판단과 비전은 사용자가 가져야 한다.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Claude가 나빠진 것처럼 느껴지는 이유</td>
+<td>모델 문제가 아니라 오래된 지시와 스킬이 최신 모델을 방해할 수 있다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Anthropic이 시스템 프롬프트를 줄인 이유</td>
+<td>새 모델은 과거 보정 지시 없이도 더 똑똑하게 처리한다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CLAUDE.md와 스킬 삭제 테스트</td>
+<td>무조건 삭제가 아니라 맥락과 마이크로매니징을 구분해야 한다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>스킬 없는 결과의 장단점</td>
+<td>형식은 약해졌지만 내용 구조와 사고는 더 좋아질 수 있다</td>
+</tr>
+<tr>
+<td>5</td>
+<td>조언을 무작정 적용하면 안 되는 이유</td>
+<td>코딩 제품 개발자와 지식 노동자의 사용 목적이 다르다</td>
+</tr>
+<tr>
+<td>6</td>
+<td>모델의 족쇄 풀기</td>
+<td>세부 절차 대신 목표, 제약, 완료 기준을 줘야 한다</td>
+</tr>
+<tr>
+<td>7</td>
+<td>검증 중심의 에이전트 운영</td>
+<td>AI가 스스로 테스트하고 반복 개선하게 만드는 것이 핵심이다</td>
+</tr>
+<tr>
+<td>8</td>
+<td>AI 에이전트 관리법</td>
+<td>사람을 관리하듯 기준을 주고 판단은 하되, 사고의 여지는 남겨야 한다</td>
+</tr>
+</tbody>
+</table>
+<h2>1. Claude가 더 나빠진 것처럼 보이는 진짜 이유</h2>
+<p>화자는 Claude Code 창작자의 인터뷰를 듣고 의외의 결론을 얻었다. Claude가 실제로 나빠진 것이 아니라, 사용자가 쌓아둔 <strong>스킬(Skills), 시스템 프롬프트(System Prompt), 훅(Hooks), 세부 지시</strong>가 최신 Claude의 성능을 막고 있을 수 있다는 것이다.</p>
+<p>우리는 보통 AI에게 지시를 많이 줄수록 결과가 좋아진다고 생각한다. 하지만 모델이 업데이트되어 더 똑똑해지면, 과거에 필요했던 보정 지시가 오히려 간섭이 된다.</p>
+<p>예전에는 “이렇게 생각해라, 이 순서대로 해라, 이 실수를 하지 마라”는 지시가 필요했을 수 있다. 그러나 최신 모델은 그런 부분을 이미 자체적으로 잘 처리할 수 있다. 이때 사용자가 예전 방식의 지시를 계속 강요하면, 모델은 자기 능력을 제대로 쓰지 못한다.</p>
+<h2>2. Anthropic이 Claude Code 시스템 프롬프트를 80% 이상 줄인 이유</h2>
+<p>영상에서는 Claude Code 쪽에서 시스템 프롬프트를 <strong>80% 이상 삭제</strong>했다는 이야기가 나온다.</p>
+<p>이유는 단순하다. Claude Code는 고정된 제품이 아니라 계속 바뀌는 <strong>하네스(Harness)</strong> 이다. 새 모델이 나올 때마다 도구 세트, 도구용 프롬프트, 시스템 프롬프트가 바뀐다.</p>
+<p>특히 Opus 5는 이전 모델보다 훨씬 지능적이기 때문에, 예전에는 시스템 프롬프트로 보정해야 했던 행동을 이제는 모델이 스스로 처리한다. 따라서 예전 모델용 지시를 그대로 유지하면, 최신 모델에게는 불필요한 제약이 된다.</p>
+<p>핵심은 이것이다.</p>
+<p><strong>모델이 바뀌면 프롬프트도 바뀌어야 한다.</strong></p>
+<p>3개월 전 모델에서 잘 먹히던 지시가 다음 모델에서는 전혀 맞지 않을 수 있다.</p>
+<h2>3. 6개월마다 CLAUDE.md, 스킬, 훅을 지워보라는 조언</h2>
+<p>Boris Cherny는 Claude Code 사용자를 향해 이렇게 조언한다.</p>
+<p><strong>6개월마다 CLAUDE.md, 스킬(Skills), 훅(Hooks)을 삭제해 보고 모델이 어떻게 작동하는지 확인하라.</strong></p>
+<p>이 말은 모든 설정을 영구 삭제하라는 뜻이 아니다. 주기적으로 “이 지시가 아직 필요한가?”를 검증하라는 의미다.</p>
+<p>화자는 이 조언이 처음에는 직관에 반한다고 말한다. 우리는 같은 모델을 쓰면 모두 비슷한 결과를 얻는다고 생각하기 쉽다. 그래서 차이를 만들려면 더 많은 스킬과 프롬프트가 필요하다고 느낀다.</p>
+<p>하지만 Boris의 관점은 다르다. 최신 모델에게는 오히려 사용자의 과한 설정을 걷어내야 진짜 능력이 드러날 수 있다.</p>
+<h2>4. 10살, 대학생, 10년 경력자에게 같은 지시를 주면 생기는 문제</h2>
+<p>화자는 이를 슬라이드 자료 제작에 비유한다.</p>
+<p>10살 아이에게 중요한 발표 자료를 만들게 한다면 매우 구체적으로 알려줘야 한다.</p>
+<ul>
+<li>슬라이드는 10장으로 만들어라</li>
+<li>제목은 이렇게 써라</li>
+<li>색상은 이것을 써라</li>
+<li>텍스트는 이렇게 배치해라</li>
+<li>어떤 내용을 찾아야 하는지 그대로 따라라</li>
+</ul>
+<p>하지만 10년 경력의 전문가에게 똑같은 지시를 주면 어떻게 될까? 오히려 방해가 된다. 전문가는 자기 경험과 판단으로 더 좋은 구성을 만들 수 있는데, 너무 촘촘한 지시가 그 능력을 막는다.</p>
+<p>Claude도 마찬가지다. 최신 모델은 과거 모델보다 경험 많은 전문가에 가까워지고 있다. 따라서 예전처럼 모든 절차를 지정하면 모델의 사고력을 제한할 수 있다.</p>
+<p>이것이 영상에서 말하는 <strong>모델의 족쇄 풀기(Unhobbling)</strong> 이다.</p>
+<h2>5. 실제 테스트: 스킬이 있는 결과와 없는 결과</h2>
+<p>화자는 자신의 저장소(repo)를 복제해서 실험했다. 원본 프로젝트를 망치지 않기 위해 복제본에서 CLAUDE.md와 스킬을 제거하고 Claude Code를 사용해 봤다.</p>
+<p>테스트 내용은 YouTube 인터뷰 URL을 Claude에게 주고, 평소 자신이 만드는 것 같은 <strong>유튜브 리소스 가이드(Resource Guide)</strong> 를 만들게 하는 것이었다.</p>
+<p>스킬과 맥락이 있는 버전은 결과물이 보기 좋았다.</p>
+<ul>
+<li>9페이지 리소스 가이드 생성</li>
+<li>색상과 블록 구성 적용</li>
+<li>헤더 이미지 포함</li>
+<li>유튜브 채널 링크 포함</li>
+<li>AIS Plus 링크 포함</li>
+<li>기존 브랜드 스타일 반영</li>
+</ul>
+<p>반면 스킬과 CLAUDE.md가 없는 새 세션은 디자인이 부족했다.</p>
+<ul>
+<li>형식이 덜 깔끔함</li>
+<li>헤더 없음</li>
+<li>브랜드 요소 없음</li>
+<li>보기에는 다소 지저분함</li>
+</ul>
+<p>그런데 화자는 내용 면에서는 스킬 없는 결과가 더 좋았다고 평가한다. 스킬 없는 Claude는 인터뷰 내용을 아이디어별로 나누고, 각 아이디어에 타임스탬프(timestamp)를 붙였다. 예를 들어 “프롬프트는 일회용이다”, “관찰에서 다시 구축하라” 같은 핵심 아이디어를 뽑아냈다.</p>
+<p>즉, <strong>형식은 스킬 있는 버전이 좋고, 사고와 내용 구조는 스킬 없는 버전이 더 좋을 수 있다</strong>는 것이다.</p>
+<h2>6. 정답은 삭제가 아니라 재설계일 수 있다</h2>
+<p>화자는 “모든 스킬을 무조건 삭제하라”는 결론을 내리지 않는다.</p>
+<p>대신 스킬을 더 느슨하게 바꾸는 방향을 제안한다.</p>
+<p>예를 들어 리소스 가이드를 만들 때 Claude에게 다음처럼 말하는 것이다.</p>
+<ul>
+<li>리소스 가이드의 구성은 네가 판단해서 만들어라</li>
+<li>다만 헤더에는 이 이미지를 넣어라</li>
+<li>상단에는 내 유튜브 채널 링크를 넣어라</li>
+<li>하단에는 AIS Plus 링크를 넣어라</li>
+<li>브랜드 컬러는 이 기준을 따라라</li>
+</ul>
+<p>이 방식은 모델의 사고 과정은 열어두고, 비즈니스에 꼭 필요한 브랜드 맥락만 제공한다.</p>
+<p>차드 입장에서 보면 이 부분이 중요하다. 이커머스와 물류 업무에서도 AI에게 모든 절차를 강요하기보다, 다음을 구분해야 한다.</p>
+<ul>
+<li>반드시 지켜야 하는 회사 정책</li>
+<li>브랜드 톤</li>
+<li>고객 응대 기준</li>
+<li>배송·반품 규칙</li>
+<li>파일 위치와 데이터 위치</li>
+<li>결과물 품질 기준</li>
+</ul>
+<p>반대로 AI가 스스로 판단해도 되는 부분은 열어두는 것이 좋다.</p>
+<h2>7. 유명인의 조언도 내 업무에 맞게 걸러야 한다</h2>
+<p>화자는 Boris Cherny, Andrej Karpathy, 유튜버, 커뮤니티의 조언을 그대로 복사해 적용하면 안 된다고 말한다.</p>
+<p>그들이 말하는 조언은 대부분 대규모 코드베이스(codebase), 모델 훈련, 제품용 하네스 설계, 소프트웨어 개발 현장에서 나온다. 하지만 화자 본인은 주로 다음 업무에 AI를 쓴다.</p>
+<ul>
+<li>리서치</li>
+<li>지식 노동</li>
+<li>문서 작성</li>
+<li>결과물 제작</li>
+<li>비즈니스 자료 생성</li>
+</ul>
+<p>즉, 매일 소프트웨어 제품을 만드는 사람과는 사용 목적이 다르다.</p>
+<p>그래서 화자는 모든 것을 삭제하지 않고, 자신의 사용 방식에 맞게 재작업하는 것이 더 가치 있다고 판단했다.</p>
+<p>코딩 제품을 만드는 사람이라면 오래된 스킬을 완전히 삭제하는 것이 맞을 수 있다. 그러나 브랜드 문서, 가이드, 리서치, 마케팅 자료를 만드는 사람에게는 회사 맥락과 스타일 가이드가 여전히 중요하다.</p>
+<h2>8. 최신 모델에는 더 어려운 일을 맡겨야 한다</h2>
+<p>Boris는 사람들이 최신 Claude를 쓸 때 흔히 하는 실수가 “너무 쉬운 일”이나 “너무 세세한 지시”만 준다는 점이라고 말한다.</p>
+<p>현대 모델에는 다음 방식이 더 적합하다.</p>
+<ol>
+<li>작업(Task)을 설명한다.</li>
+<li>가드레일(Guardrails)을 설명한다.</li>
+<li>완료 기준(Exit Criteria)을 설명한다.</li>
+<li>모델이 스스로 방법을 찾게 둔다.</li>
+<li>중간에 점검하고 피드백한다.</li>
+</ol>
+<p>예전에는 “1번 하고, 2번 하고, 3번 하고, 4번 해”라고 순서를 지정해야 했을 수 있다. 하지만 최신 모델에서는 오히려 높은 수준의 목표를 주는 것이 좋다.</p>
+<p>예를 들어 “신상품 상세페이지를 만들어줘”라고만 하면 부족하다. 그렇다고 모든 문장을 하나하나 지정하는 것도 좋지 않다.</p>
+<p>더 좋은 방식은 다음에 가깝다.</p>
+<p><strong>목표:</strong> 이 상품의 구매 전환율을 높이는 상세페이지 초안을 만들어라.<br>
+<strong>가드레일:</strong> 과장 광고는 하지 말고, 배송·반품 정책은 기존 기준을 지켜라.<br>
+<strong>완료 기준:</strong> 고객의 핵심 질문 10개에 답하고, 모바일에서 읽기 쉬운 구조이며, 최종적으로 스스로 누락 사항을 점검하라.</p>
+<h2>9. 좋은 결과를 원하면 “좋음”의 기준을 알려줘야 한다</h2>
+<p>많은 사용자는 Claude가 평범한 결과를 내면 모델을 탓한다. 하지만 화자는 사용자가 “좋은 결과가 무엇인지” 알려주지 않았을 가능성도 있다고 말한다.</p>
+<p>AI에게는 다음이 필요하다.</p>
+<ul>
+<li>좋은 결과물의 기준</li>
+<li>나쁜 결과물의 예</li>
+<li>반드시 포함할 요소</li>
+<li>피해야 할 요소</li>
+<li>검증 방법</li>
+<li>완료 조건</li>
+</ul>
+<p>화자는 슬래시 목표(slash goal) 끝에 다음과 같은 식의 문장을 붙인다고 한다.</p>
+<p><strong>“나는 프로토타입이나 개념증명(Proof of Concept)을 원하는 것이 아니다. 10번 테스트하고 반복 개선했으며, QA까지 끝나서 내일 바로 시장에 낼 수 있는 수준의 결과물을 원한다.”</strong></p>
+<p>이 문장은 감정적으로도 강한 기준을 준다. 화자는 감정이 들어간 프롬프트가 때때로 더 좋은 결과를 만든다고 느낀다.</p>
+<h2>10. 프롬프트 엔지니어링보다 검증이 중요해진다</h2>
+<p>Boris는 요즘 중요한 능력이 예전식 <strong>프롬프트 엔지니어링(Prompt Engineering)</strong> 보다, Claude에게 조금 어려운 일을 맡기고 그 과정에서 스스로 검증하게 만드는 능력이라고 말한다.</p>
+<p>특히 <strong>검증(Verification)</strong> 이 가장 중요하지만 사람들이 가장 잘 못하는 부분이라고 한다.</p>
+<p>AI에게 “해줘”라고만 하면 사람은 결과를 다시 다 확인해야 한다. 하지만 AI에게 다음을 시키면 자동화 수준이 올라간다.</p>
+<ul>
+<li>스스로 테스트하라</li>
+<li>기준과 비교하라</li>
+<li>누락을 찾아라</li>
+<li>반례를 찾아라</li>
+<li>다른 에이전트에게 반박하게 하라</li>
+<li>개선안을 반영하라</li>
+<li>최종 체크리스트를 작성하라</li>
+</ul>
+<p>즉, AI를 쓰는 핵심은 단순히 답을 받는 것이 아니라 <strong>AI가 자기 결과물을 검증하는 구조</strong>를 만드는 것이다.</p>
+<h2>11. AI 에이전트는 사람을 관리하듯 관리해야 한다</h2>
+<p>화자는 Claude Code, Hermes, Agent Codex 등 어떤 도구를 쓰든 진짜 중요한 능력은 <strong>AI 에이전트 관리</strong>라고 말한다.</p>
+<p>좋은 관리자는 사람에게 모든 행동을 지시하지 않는다. 대신 목표와 기준을 주고, 중간 점검을 하며, 결과를 리뷰한다. 그리고 그 사람이 자기 머리를 쓸 수 있게 둔다.</p>
+<p>AI 에이전트도 비슷하다.</p>
+<ul>
+<li>생각할 여지를 줘야 한다.</li>
+<li>대안을 만들게 해야 한다.</li>
+<li>악마의 대변인(Devil’s Advocate)을 붙여야 한다.</li>
+<li>자기 검증을 시켜야 한다.</li>
+<li>최종 판단은 사람이 해야 한다.</li>
+</ul>
+<p>화자의 마지막 정리는 실무적으로 중요하다.</p>
+<p><strong>생각의 일부는 AI에게 외주화하되, 이해는 외주화하지 말라.</strong></p>
+<p>AI가 리서치, 초안, 분석, 비교, 개선안을 도와줄 수는 있다. 하지만 비전, 방향, 최종 책임은 사용자에게 있다.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 내 Claude Code의 CLAUDE.md에 오래된 지시가 너무 많지 않은지 확인한다.</li>
+<li>[ ] 스킬(Skills)과 훅(Hooks)을 복제 환경에서 꺼 보고 결과를 비교한다.</li>
+<li>[ ] 업무 맥락과 마이크로매니징 지시를 분리한다.</li>
+<li>[ ] 브랜드, 파일 위치, 회사 정책처럼 꼭 필요한 맥락은 남긴다.</li>
+<li>[ ] 작업 절차를 하나하나 지시하기보다 목표, 가드레일, 완료 기준을 준다.</li>
+<li>[ ] 결과물마다 “좋은 결과의 기준”을 명확히 적는다.</li>
+<li>[ ] Claude가 스스로 검증할 체크리스트를 프롬프트에 포함한다.</li>
+<li>[ ] “초안”이 필요한지 “바로 배포 가능한 결과물”이 필요한지 명확히 말한다.</li>
+<li>[ ] AI에게 반박자 역할 또는 검토자 역할을 부여해 결과를 점검한다.</li>
+<li>[ ] AI가 만든 결과를 이해하지 못한 채 그대로 쓰지 않는다.</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 제 모든 Claude 스킬을 삭제했더니... Claude가 더 똑똑해졌습니다 · https://youtu.be/PFZWAAbQGv0 · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>Claude Code의 창작자가 Claude가 왜 더 나빠진 것처럼 느껴지는지, 그리고 실제로 어떻게 고칠 수 있는지 설명한 인터뷰를 들었다. 거기서 이상하게 들리는 사실을 배웠다. <strong>스킬(Skills)과 시스템 프롬프트(System Prompt)가 많을수록 오히려 시스템을 망가뜨릴 수 있다</strong>는 것이다.</p>
+<p>그래서 더 깊이 파고들고 직접 테스트도 해봤다. 지금 모두가 해봐야 할 중요한 세 가지가 있다는 결론을 얻었다. 구현은 매우 쉽고, 기술 경험이 없어도 할 수 있다.</p>
+<p>먼저 Anthropic 내부에서 실제로 무슨 일이 일어나고 있는지 간단히 보자. 새 릴리스에 관한 이야기다.</p>
+<p>Claude Code에서 시스템 프롬프트를 80% 넘게 삭제했다고 한다. Claude Code는 제품이자 하네스(Harness)로서 계속 변한다. 계속 무언가를 추가하고 삭제한다. 새 모델이 나올 때마다 시스템 프롬프트의 많은 부분을 삭제하고 바꾼다. 도구 세트도 계속 바꾸고, 도구용 프롬프트도 계속 바꾼다.</p>
+<p>이유는 모델마다 매우 다르기 때문이다. 3개월 전 한 모델에 맞춰 했던 일이 다음 모델에는 전혀 맞지 않을 수 있다.</p>
+<p>Opus 5는 매우 지능적이다. 시스템 프롬프트에 있던 많은 내용은 원래 모델이 알아야 했지만 알지 못했던 행동을 보정하기 위한 것이었다. 그런데 이제 Opus 5는 그런 일을 그냥 해낸다.</p>
+<p>나는 그동안 “내 지시를 조금 없애고 모델의 길을 비켜주면, 지금 모델은 더 똑똑하니까 스스로 처리할 수 있지 않을까?”라고 생각해본 적이 없었다.</p>
+<p>Claude Code를 직접 제품으로 만드는 사람이 아니고 사용하는 사람이라면, 6개월마다 CLAUDE.md, 스킬(Skills), 훅(Hooks)을 삭제해 보고 모델이 무엇을 하는지 확인해 보라는 조언이 나온다. 놀랄 수도 있다.</p>
+<p>Opus 5에서는 실제로 이런 시도를 권장한다고 한다. 과거 모델에 필요했던 지시를 최신 모델은 정말로 필요로 하지 않을 수 있기 때문이다.</p>
+<p>이 말을 잠깐 생각해 보면 직관에 반한다. 우리는 보통 모두가 같은 모델에 접근할 수 있다면 모두 같은 결과를 얻는 것 아니냐고 생각한다. 어느 정도는 맞다. 하지만 Boris가 “스킬과 자체 시스템 프롬프트를 제거하고 무엇이 가능한지 보라”고 말한다면, 이는 완전히 다른 사고방식이다.</p>
+<p>예를 들어 10살 아이, 대학생, 직장 경력 10년인 사람에게 슬라이드 덱(Slide Deck)을 만드는 법을 가르친다고 해보자. 10살 아이에게는 가장 구체적인 지시를 줄 것이다. 무엇을 찾아야 하는지, 10장 슬라이드를 어떻게 만들지, 제목은 어떻게 쓸지, 색은 무엇을 쓸지, 텍스트 형식은 어떻게 할지 아주 자세히 알려줄 것이다. 중요한 일이라면 아이에게 실험할 자유를 거의 주지 않을 것이다.</p>
+<p>하지만 지능과 경험이 올라갈수록 상황은 달라진다. 수백 개의 슬라이드 덱을 만들어 본 10년 경력자에게 같은 지시를 준다면 오히려 방해가 된다. 그 사람은 자신의 전문성과 지능을 활용해 더 좋은 방식으로 만들 수 있는데, 너무 세세한 지시가 그것을 막는다.</p>
+<p>항상 그렇다는 말은 아니지만, 모델에 대한 지시와 제약을 일부 제거해야 하는 요소가 있다. 이를 <strong>모델의 족쇄 풀기(Unhobbling)</strong> 라고 부른다.</p>
+<p>인터뷰를 본 뒤 나는 내 저장소(repo)를 복제하고 CLAUDE.md와 모든 스킬을 제거한 뒤 사용해 봤다. 결과는 괜찮았다. 하지만 내 직감으로는, AI 운영체제처럼 CLAUDE.md가 여러 맥락을 라우팅하는 경우에는 여전히 중요하다고 느꼈다. 예를 들어 “Nate의 비즈니스 맥락은 이것이고, 파일은 여기 있고, 위키는 여기에 있다” 같은 내용은 필요하다. Claude Code가 어디에서 무엇을 찾아야 하는지는 알려줘야 한다.</p>
+<p>다만 실제 작업을 수행할 때는 조금 비켜주는 편이 좋을 수 있다. 이 지점에서는 기존 스킬이 덜 중요하거나, 스킬의 형태가 바뀌어야 한다.</p>
+<p>나는 우리가 보고 있는 인터뷰 YouTube URL을 Claude에게 주고, 평소 내가 만드는 것 같은 YouTube 리소스 가이드(Resource Guide)를 만들어 달라고 했다. Claude는 내용을 나누고 9페이지짜리 리소스 가이드를 만들었다. 형식도 좋고, 색상과 작은 블록도 있었으며, 내 헤더도 들어갔다. 헤더 이미지, 하단의 유튜브 채널 링크, AIS Plus 링크도 있었다.</p>
+<p>이것들은 내 선호와 스타일이라는 매우 구체적인 요소들이다.</p>
+<p>반대로 새 세션에서 거의 같은 프롬프트를 줬지만 스킬이나 맥락은 전혀 주지 않은 버전도 만들었다. 이 결과물은 확실히 덜 좋아 보였다. 형식이 조금 지저분하고, 예쁜 포맷도 없고, 헤더도 없었다.</p>
+<p>하지만 나는 이 버전의 내용이 더 좋다고 생각했다. 나는 “리소스 가이드는 이렇게 만들고, 이렇게 나누라”고 구체적으로 말하지 않았다. 그런데 Claude는 아이디어별로 잘 나누었다. 각 아이디어에는 타임스탬프(timestamp)가 있었다. “프롬프트는 일회용이다”, “관찰에서 다시 구축하라” 같은 주요 아이디어들이 시간과 함께 정리되었다.</p>
+<p>논쟁의 여지는 있지만, 스킬과 CLAUDE.md가 없었음에도 이 버전의 콘텐츠가 더 마음에 들었다. 내가 할 일은 이것을 스킬에 반영하는 것이다. “리소스 가이드는 네가 적절하다고 생각하는 방식으로 만들어라. 다만 이 이미지를 헤더에 넣고, 상단에는 내 유튜브 채널을 링크하고, 하단에는 AIS Plus를 링크하라”는 식이다.</p>
+<p>그래서 중요한 것은 모든 스킬을 삭제하는 것이 아니라, 스킬을 다시 생각하고 덜 구체적인 버전으로 만드는 것이다.</p>
+<p>영상을 편집하면서 한 가지 더 강조하고 싶다. Boris Cherny, 다른 유튜버, 나, 커뮤니티의 누군가가 한 조언을 그대로 자기 업무에 일괄 적용하면 안 된다. 그렇게는 작동하지 않는다.</p>
+<p>Boris가 주는 조언이나 Andrej Karpathy가 트위터에 올리는 조언은 대규모 코드베이스(codebase)에서 하네스(Harness)를 설계하고, 매일 모델을 훈련하고, 제품을 만드는 사람의 관점에서 나온다.</p>
+<p>나는 그런 일을 하지 않는다. 여러분도 아닐 수 있다. 그러니 자신이 AI 시스템을 쓰고 싶은 방식과 비슷하게 쓰는 사람의 조언을 들어야 한다. 나의 경우에는 주로 리서치, 지식 노동, 문서 작성, 결과물 제작이다. 소프트웨어를 많이 만드는 일은 아니다.</p>
+<p>그래서 나는 실제로 모든 것을 삭제하지 않았다. 내 테스트 결과에 따르면, 나에게는 삭제보다 재작업이 더 가치 있었다.</p>
+<p>제품과 소프트웨어를 만드는 사람은 구축과 오케스트레이션(orchestration)을 위한 스킬이 많을 수 있다. 그런 스킬은 최신 모델과 하네스가 더 잘 처리하므로 완전히 삭제하는 것이 맞을 수도 있다.</p>
+<p>하지만 데모에서 본 것처럼, 나는 여전히 “이 이미지를 가져와 여기에 넣고, 이 색상 체계를 써라. 이것이 우리 브랜드 가이드라인이다”라고 알려주는 스킬이 필요하다. 그런 것은 내 시스템과 지식 노동에 중요한 맥락이다.</p>
+<p>Boris도 이 점에는 동의하는 듯하다.</p>
+<p><strong>족쇄 채우기(Hobbling)</strong> 는 연구에서 모델이 무언가를 하고 있는데 사람이 방해하는 상황을 말한다. 제품을 만들 때 유용한 개념으로 <strong>제품 오버행(Product Overhang)</strong> 이 있다. 이는 미래 모델이 아니라 현재 우리가 가진 모델이 이미 할 수 있는 많은 일이 있는데, 제품이나 사용자가 아직 그것을 실현하지 못했다는 뜻이다.</p>
+<p>모델에는 사람들이 모르는 능력이 많다. 그래서 모델이 할 수 있다고 생각하는 것보다 약간 더 어려운 작업을 줘야 한다.</p>
+<p>사람들이 Claude Code나 Claude를 사용할 때 흔히 하는 실수는 지나치게 구체적인 지시를 주는 것이다. “이 일을 해라. 그런데 반드시 이 방식, 이 방식, 이 방식으로 해라. 1번, 2번, 3번, 4번 순서로 해야 한다”는 식이다.</p>
+<p>현대 모델에는 이것이 좋은 방식이 아니다. 조금 더 높은 수준에서 접근해야 한다. 작업을 설명하고, 가드레일(Guardrails)을 설명하고, 완료 기준(Exit Criteria)을 설명한 다음, 모델이 스스로 처리하게 두고 나중에 돌아와 점검해야 한다.</p>
+<p>6개월 전에는 이런 방식이 통하지 않았을 수 있지만, 오늘날에는 통한다.</p>
+<p>여기에는 균형이 필요하다. CLAUDE.md를 모델에 족쇄가 되지 않게 쓰는 균형이 있고, 스킬에도 같은 원칙이 적용된다. 동시에 내가 원하는 출력물을 얻기 위한 균형도 필요하다.</p>
+<p>우리는 Claude에게 무언가를 요청했는데 평범한 결과가 오면 좌절한다. 하지만 그것은 사용자 책임일 수도 있다. “좋은 결과가 무엇인지” 알려주는 것이 사용자의 일이었을 수 있다. Claude가 무엇이 좋은지 모른다면 어떻게 좋은 결과를 만들 수 있겠는가?</p>
+<p>Boris가 말했듯이 높은 수준의 목표를 주고, 기준을 세우고, 그 기준에 도달할 때까지 멈추지 말라고 해야 한다.</p>
+<p>AI 에이전트에서 슬래시 목표(slash goal)를 설정한다는 것은 단지 “좋은 결과는 이런 것이다”라고 말하는 것이 아니다. “이 기준이 충족되었음을 증명하기 위해 X, Y, Z를 수행하라”고 말하는 것이다.</p>
+<p>실제로 증명될 때까지 반복하게 해야 한다. 사용자가 검증하지 않아도 되도록, 에이전트가 스스로 검증하게 만드는 것이다.</p>
+<p>예를 들어 나는 슬래시 목표 끝에 기준과 검증 방법을 모두 적은 뒤 이런 문장을 추가한다. “나는 프로토타입이나 개념증명(Proof of Concept)을 원하는 것이 아니다. 10번 테스트하고 반복 개선했으며, 완전히 QA(Quality Assurance)를 거쳤고, 내일 시장에 바로 낼 수 있는 결과물을 원한다.”</p>
+<p>이런 식으로 조금 더 감정적인 표현을 넣는다. 때때로 감정을 담아 프롬프트를 쓰면 결과가 더 좋아지는 것처럼 보인다.</p>
+<p>Boris는 검증에 대해 이렇게 말한다. 요즘의 기술은 프롬프트 엔지니어링(Prompt Engineering)이라기보다, Claude에게 조금 어려워 보이는 작업을 주고 Claude가 작업 중간에 자기 일을 검증할 수 있게 만드는 방법을 찾는 것이다. 검증(Verification)은 사람들이 가장 제대로 하지 못하는 단일한 핵심 요소일 가능성이 높다.</p>
+<p>Claude Code 창작자가 이것을 어떻게 생각하는지 보는 것은 매우 흥미롭다. 이 분야에 더 들어가고, 이 분야에 막 들어오는 사람들과 이야기할수록, 여기서 전이되는 능력은 특정 도구에 묶이지 않는다는 것을 깨닫는다.</p>
+<p>Claude Code, Hermes, Agent Codex 등 어떤 도구를 쓰든 정말 중요한 기술은 AI 에이전트를 관리하는 능력이다. 여기서 관리란 사람을 관리하는 것과 비슷한 의미다.</p>
+<p>좋은 관리자는 마이크로매니징하지 않는다. “이걸 해라, 이렇게 해라, 가서 해라”라고만 하지 않는다. 사람의 길을 비켜주고, 체크인하고, 리뷰하고, 판단력과 취향을 발휘하지만, 동시에 그 사람이 자기 머리를 쓰게 한다. 그들은 이유가 있어서 고용된 것이다.</p>
+<p>여러 에이전트와 세션을 띄울 때도 똑같이 생각해야 한다. 우리는 이유가 있어서 그들을 사용한다. 사고 일부를 그들에게 외주화하라. 그들이 생각하고 아이디어를 내게 하라. 다만 다른 에이전트가 악마의 대변인(Devil’s Advocate)을 하게 하고, 자기 작업을 확인하고 검증할 수 있게 하라.</p>
+<p>생각의 일부는 외주화하되, 이해는 절대 외주화하지 말라. 결국 여러분은 이 에이전트들의 창업자이고, 비전을 이끄는 사람이다. 하지만 에이전트들은 엄청나게 많이 도와줄 수 있다.</p>
+<p>이 주제는 하루 종일 이야기할 수 있을 만큼 흥미롭다. 인터뷰 전체를 보고 싶다면 Y Combinator YouTube 채널의 35분짜리 인터뷰를 확인하면 된다. 설명란에 링크를 남겨두었다. 여기서는 핵심 하이라이트만 뽑아 정리했다.</p>
+</details>
+</body></html>

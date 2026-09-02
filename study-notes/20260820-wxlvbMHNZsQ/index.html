@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>누구나 쓰는 에이전틱 영상 편집기는 어떻게 만들까? (Reelful 창업자 Ekaterina Deyneka)</title>
+<meta name="description" content="Reelful이 실제 촬영본을 에이전트로 이해·선별·편집·검증해 공유 가능한 영상으로 만드는 구조"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>누구나 쓰는 에이전틱 영상 편집기는 어떻게 만들까? (Reelful 창업자 Ekaterina Deyneka)</h1>
+<div class="meta">원작자 Ekaterina Deyneka · Reelful · 업로드 2026-08-20 · 12.2분 · <a href="https://youtu.be/wxlvbMHNZsQ" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>누구나 쓰는 에이전틱 영상 편집기는 어떻게 만들까? (Reelful 창업자 Ekaterina Deyneka)</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Reelful은 사용자가 사진·영상을 넣기만 하면 에이전트가 장면 이해, 좋은 순간 선별, 자막·음악·B-roll 생성, 코드 기반 렌더링 검증까지 수행해 완성 영상을 만드는 <strong>에이전틱 영상 편집기(Agentic Video Editor)</strong>다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 Ekaterina Deyneka · Reelful · 추정 출처 https://www.katedeyneka.com · 업로드 2026-08-20 · 12.2분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>에이전틱 영상 편집(Agentic Video Editing)</td>
+<td>단순 생성이 아니라 실제 촬영본을 이해하고 편집 결정을 자동화하는 흐름</td>
+<td>미디어를 넣으면 에이전트가 선별·조합·자막·음악·렌더링까지 처리한다.</td>
+</tr>
+<tr>
+<td>생성(Generative)과 편집(Editing)의 차이</td>
+<td>빈 화면에서 만드는 것보다 지저분한 실제 촬영본에서 좋은 부분을 고르는 일이 더 어렵다</td>
+<td>편집은 무엇을 버리고 무엇을 살릴지 판단해야 한다.</td>
+</tr>
+<tr>
+<td>샌드박스(Sandbox) 기반 실행 환경</td>
+<td>에이전트가 안전하게 도구와 기술을 실행하는 원격 작업 공간</td>
+<td>백엔드에서 원격 머신을 띄워 편집 작업을 수행한다.</td>
+</tr>
+<tr>
+<td>스킬(Skills)</td>
+<td>에이전트의 취향과 편집 노하우를 구조화한 부분</td>
+<td>컷 규칙, 폰트 조합, B-roll 생성 방식 등이 스킬에 들어간다.</td>
+</tr>
+<tr>
+<td>Remotion</td>
+<td>React 코드로 영상을 구성하고 렌더링할 수 있는 오픈소스 프레임워크</td>
+<td>에이전트가 잘하는 코드 작성 능력을 영상 제작에 활용한다.</td>
+</tr>
+<tr>
+<td>검증 레이어(Verification Layer)</td>
+<td>에이전트 오류를 줄이고 렌더링 가능한 결과물을 보장한다</td>
+<td>문제가 있으면 에이전트가 다시 구성물을 수정한다.</td>
+</tr>
+<tr>
+<td>모바일 우선(Mobile-first) UX</td>
+<td>일반 사용자는 복잡한 프롬프트보다 간단한 선택과 업로드를 원한다</td>
+<td>템플릿 선택, 미디어 업로드, 필요 시 내장 편집기로 미세 수정한다.</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li>에이전틱 앱 빌더(Agentic App Builder) — 프롬프트를 받아 에이전트가 코드베이스를 만들고 앱 미리보기를 제공하는 도구. Reelful은 이 구조를 영상 편집에 적용한다.</li>
+<li>Remotion — React 코드로 영상의 장면, 자산, 트랙, 애니메이션 순서를 정의해 렌더링하는 프레임워크.</li>
+<li>B-roll — 메인 영상 위에 보조로 들어가는 장면. 인터뷰나 말하는 영상에서 설명을 보강하고 지루함을 줄인다.</li>
+<li>디렉셔널 템플릿(Directional Template) — “말하는 영상 만들기”, “B-roll 추가”, “보이스오버 추가”처럼 사용자의 편집 방향을 미리 정해둔 템플릿.</li>
+<li>검증 레이어(Verification Layer) — 에이전트가 만든 영상 구성물이 깨지지 않고 렌더링되는지 확인하고, 오류가 있으면 반복 수정시키는 단계.</li>
+<li>컷 규칙(Cut Rules) — 어떤 장면을 선택하고, 어떤 장면을 버리며, 어디에서 자를지 결정하는 편집 기준.</li>
+<li>샌드박스(Sandbox) — 에이전트가 독립적으로 작업을 실행하는 원격 환경. 앱 빌더의 코드 실행 환경과 비슷하다.</li>
+</ul>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정값·명령어·뉘앙스. 원어 용어 괄호 병기, 맥락까지.</p>
+</blockquote>
+<ol>
+<li>Reelful은 <strong>실제 개인 촬영본(real-life personal content)</strong> 편집에 집중한다 — 빈 화면에서 영상을 생성하는 것이 아니라 사용자가 이미 찍어둔 사진·영상을 다룬다.</li>
+<li>에이전트는 자막(captions), 음악(music), 보이스오버(voiceover), B-roll까지 생성할 수 있다 — 단순 컷 편집 이상의 제작 파이프라인을 목표로 한다.</li>
+<li>편집 전 먼저 <strong>크리에이티브 플랜(Creative Plan)</strong>을 사용자에게 보여준다 — 사용자가 승인, 변경, 재생성을 선택한 뒤 본격 편집에 들어간다.</li>
+<li>샌드박스는 원격 머신(remote machine)으로 설명된다 — 에이전트가 도구와 스킬을 가지고 작업하는 실행 공간이다.</li>
+<li>스킬에는 컷 규칙, 폰트 페어(font pairs), B-roll 생성법이 포함된다 — 화자는 이를 “취향과 장인정신이 들어가는 곳”이라고 설명한다.</li>
+<li>Remotion은 “모든 자산과 트랙의 순서, 서로 이어지는 방식을 담은 파일”로 설명된다 — 즉 영상 타임라인을 코드로 표현한다.</li>
+<li>검증 레이어는 구성물이 깨끗하고 명확하며 렌더링 가능한지 확인한다 — 문제가 있으면 에이전트가 반복(iterate)한다.</li>
+<li>대중용 UX는 <strong>모바일 우선(mobile-first)</strong>이다 — 사용자가 걷거나 운동하는 중에도 편집할 수 있는 경험을 의도한다.</li>
+<li>프롬프트 없이도 작동하도록 디렉셔널 템플릿을 제공한다 — 일반 사용자는 복잡한 명령어 작성에 익숙하지 않기 때문이다.</li>
+<li>생성 후 내장 편집기(built-in editor)에서 “1초 제거”나 “자막 단어 수정” 같은 작은 변경을 할 수 있다 — 완전 자동화와 익숙한 수동 편집 사이를 연결한다.</li>
+<li>Reelful은 a16z speedrun에서 투자를 받았다고 언급한다 — 초기 스타트업이지만 외부 지원을 확보한 상태다.</li>
+</ol>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>문제 제기</td>
+<td>사람들은 영상을 많이 찍지만 편집이 번거로워 거의 올리지 않는다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>에이전틱 영상 편집 정의</td>
+<td>사용자가 미디어와 간단한 맥락을 넣으면 에이전트가 완성 영상을 만든다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>앱 빌더와의 유사성</td>
+<td>프롬프트, UI, 샌드박스, 에이전트, 결과 미리보기 구조가 비슷하다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>생성보다 편집이 어려운 이유</td>
+<td>실제 촬영본은 지저분하고 불완전해서 좋은 순간을 선별해야 한다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Reelful 파이프라인</td>
+<td>미디어 이해, 크리에이티브 플랜, 샌드박스 실행, 스킬, Remotion, 검증 순서로 작동한다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>대중용 UX 전략</td>
+<td>모바일 우선, 디렉셔널 템플릿, 내장 편집기로 복잡함을 숨긴다.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>데모와 현재 상태</td>
+<td>실제로 에이전트만으로 만든 영상을 SNS에 올리고 있으며 베타 피드백을 받고 있다.</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 문제: 찍은 영상은 많은데 올리지 못한다</h2>
+<p>화자는 컨퍼런스 참가자들에게 “사진이나 영상을 찍은 사람”과 “그 영상을 실제 온라인에 올린 사람”을 각각 손들어 보라고 묻는다. 대부분은 촬영은 했지만 게시하지 않았다.</p>
+<p>이 문제의 핵심은 <strong>영상 편집이 어렵고 귀찮다</strong>는 점이다. 영상 편집은 여전히 수작업이 많고, 시간이 걸리며, 기술이라기보다 예술처럼 느껴진다. 그래서 많은 사람들이 행사, 여행, 모임에서 콘텐츠를 많이 찍어도 결과물을 만들지 못한다.</p>
+<p>Reelful은 이 문제를 <strong>에이전틱 관점(agentic standpoint)</strong>에서 풀려고 한다. 즉 사용자가 일일이 편집하는 대신, 에이전트가 스스로 편집 판단과 실행을 하게 만드는 것이다.</p>
+<h2>2. 에이전틱 영상 편집이란 무엇인가</h2>
+<p>에이전틱 영상 편집(Agentic Video Editing)은 사용자가 사진과 영상을 넣고 약간의 맥락이나 요청을 제공하면, 에이전트가 나머지 작업을 처리하는 방식이다.</p>
+<p>예를 들어 사용자는 다음 정도만 요청할 수 있다.</p>
+<ul>
+<li>자막을 넣어달라</li>
+<li>음악을 넣어달라</li>
+<li>보이스오버를 추가해달라</li>
+<li>특정 분위기로 편집해달라</li>
+<li>말하는 영상에서 멈춤과 실패 장면을 제거해달라</li>
+</ul>
+<p>그러면 에이전트는 미디어를 이해하고, 좋은 순간을 찾고, 장면을 조합하고, 자막·음악·보이스오버·B-roll을 생성해 공유 가능한 클립을 만든다.</p>
+<p>중요한 점은 사용자가 “어느 장면을 몇 초에 자르고 어떤 전환 효과를 넣을지”를 지시하지 않아도 된다는 것이다. <strong>편집 판단 자체를 에이전트가 수행</strong>한다.</p>
+<h2>3. 에이전틱 앱 빌더와 영상 편집기의 구조적 공통점</h2>
+<p>화자는 에이전틱 영상 편집기(Agentic Video Editor)가 인프라 관점에서 에이전틱 앱 빌더(Agentic App Builder)와 매우 비슷하다고 설명한다.</p>
+<p>공통 구조는 다음과 같다.</p>
+<ol>
+<li>사용자가 프롬프트(prompt)를 입력한다.</li>
+<li>영상 편집기의 경우 프롬프트뿐 아니라 미디어(media)도 함께 넣는다.</li>
+<li>백엔드에서 샌드박스(sandbox)라는 원격 머신이 실행된다.</li>
+<li>그 안에서 에이전트가 도구(tools)와 스킬(skills)을 사용한다.</li>
+<li>앱 빌더는 코드베이스(codebase)를 만들고 앱 미리보기를 제공한다.</li>
+<li>영상 편집기는 영상 구성(video composition)을 만들고 렌더링된 영상을 제공한다.</li>
+</ol>
+<p>즉 Reelful은 “프롬프트로 앱을 만드는 구조”를 “프롬프트와 미디어로 영상을 만드는 구조”로 바꾼 셈이다.</p>
+<h2>4. 생성보다 실제 영상 편집이 더 어려운 이유</h2>
+<p>Reelful은 완전히 새로운 영상을 생성하는 것보다 <strong>실제 촬영본을 편집하는 문제</strong>에 집중한다.</p>
+<p>화자는 이 문제가 더 어렵다고 말한다. 생성형 영상은 빈 캔버스(blank canvas)에서 시작하므로 에이전트가 원하는 대로 만들 수 있다. 반면 편집은 이미 존재하는 영상 안에서 다음을 판단해야 한다.</p>
+<ul>
+<li>어떤 순간이 가장 좋은가</li>
+<li>어떤 장면을 버려야 하는가</li>
+<li>어떤 장면을 사용해야 하는가</li>
+<li>어떤 순서로 배치해야 자연스러운가</li>
+<li>불완전하거나 지저분한 촬영본을 어떻게 완성도 있게 만들 것인가</li>
+</ul>
+<p>최종 목표는 시청자가 “AI가 편집했는지 사람이 편집했는지 구분하지 못할 정도”의 결과물을 만드는 것이다.</p>
+<h2>5. Reelful의 편집 파이프라인</h2>
+<p>Reelful의 흐름은 크게 여섯 단계로 볼 수 있다.</p>
+<p>첫째, <strong>미디어 이해(media understanding)</strong> 단계다. 에이전트는 클립과 사진 속에서 무슨 일이 일어나는지 이해해야 한다. 말하는 영상의 경우 음성을 전사(transcribe)해 내용도 파악한다.</p>
+<p>둘째, <strong>크리에이티브 플랜(creative plan)</strong>을 만든다. 실제 편집을 시작하기 전에 사용자에게 어떤 방향으로 편집할지 계획을 보여준다. 사용자는 이를 승인하거나, 바꾸거나, 다시 생성할 수 있다.</p>
+<p>셋째, 사용자가 승인하면 <strong>샌드박스(sandbox)</strong>를 띄운다. 이 원격 환경 안에서 에이전트가 편집 작업을 수행한다.</p>
+<p>넷째, 에이전트는 여러 스킬(skills)을 사용한다. 여기에는 좋은 순간을 고르는 컷 규칙(cut rules), 상황에 맞는 폰트 조합(font pairs), B-roll 생성 방식 등이 포함된다. 화자는 이 부분을 편집의 취향과 완성도를 담는 핵심이라고 본다.</p>
+<p>다섯째, 필요하면 하위 프로세스(subprocesses)를 실행한다. 예를 들어 영상 구성에 맞는 음악을 생성하거나, 보이스오버를 만들거나, 효과음을 넣거나, 사진을 애니메이션화해 더 역동적으로 만들 수 있다.</p>
+<p>여섯째, <strong>Remotion 컴포지션(Remotion composition)</strong>으로 영상을 코드화한다. Remotion은 React 코드로 영상을 만드는 오픈소스 프레임워크다. 에이전트는 코드 작성에 강하므로, 영상 타임라인과 자산 배치를 코드로 만들게 하는 방식이 잘 맞는다.</p>
+<p>마지막으로 <strong>검증 레이어(verification layer)</strong>가 있다. 에이전트는 실수할 수 있기 때문에, 구성물이 깨끗하고 명확한지, 렌더링이 가능한지 확인한다. 문제가 있으면 에이전트가 다시 수정하면서 반복한다.</p>
+<h2>6. 일반 사용자를 위한 모바일 UX 전략</h2>
+<p>화자는 이 파이프라인이 매우 복잡하다고 인정한다. 하지만 이상적으로는 사용자가 이 복잡함을 전혀 몰라야 한다.</p>
+<p>Reelful은 이를 위해 세 가지 전략을 사용한다.</p>
+<p>첫째, <strong>모바일 우선(mobile-first)</strong>이다. 사용자가 이동 중이거나 운동 중이어도 영상을 편집할 수 있게 하려는 방향이다.</p>
+<p>둘째, <strong>디렉셔널 템플릿(directional templates)</strong>이다. 영상 프롬프트를 잘 쓰는 것은 일반 사용자에게 어렵다. 그래서 “말하는 영상 만들기”, “B-roll 추가”, “보이스오버 추가” 같은 방향성 템플릿을 제공한다. 사용자는 템플릿을 고르고 미디어를 넣기만 해도 된다.</p>
+<p>셋째, <strong>내장 편집기(built-in editor)</strong>다. 완성본을 에이전트가 만들더라도 사용자가 약간 수정하고 싶을 수 있다. 예를 들어 1초를 삭제하거나 자막의 단어 하나를 고치는 작업이다. 이런 미세 조정은 기존 영상 편집기처럼 익숙한 방식으로 할 수 있게 한다.</p>
+<h2>7. 데모, 베타, 현재 상태</h2>
+<p>화자는 Reelful로 최근 만든 영상 예시를 보여준다. Cursor 크리에이터 디너에 초대받은 경험을 담은 영상으로, 장소 분위기, 음식, 대화, 선물 등을 설명하는 콘텐츠다.</p>
+<p>중요한 점은 이 영상들이 <strong>일반 영상 편집기를 쓰지 않고 에이전트만으로 조립</strong>되었다는 것이다. 화자는 이미 이런 결과물을 소셜미디어에 올리고 있으며, 사용하는 과정이 재미있다고 말한다.</p>
+<p>또한 해당 컨퍼런스 참가자에게 Reelful 베타, 특히 새로운 두 번째 버전 접근 권한을 제공한다고 말한다. 아직 초기 단계라 피드백을 적극적으로 받고 있으며, 사용자가 어떻게 활용하는지도 궁금하다고 한다.</p>
+<p>마지막으로 Reelful이 <strong>a16z speedrun</strong>에서 투자를 받았다고 밝히며 발표를 마무리한다.</p>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 내가 찍어두고 방치한 행사·여행·제품 영상이 있는지 찾아보기</li>
+<li>[ ] “생성형 영상”과 “실제 촬영본 편집 자동화”를 구분해서 이해하기</li>
+<li>[ ] 영상 편집 자동화에 필요한 단계: 미디어 이해 → 장면 선별 → 구성 → 렌더링 → 검증으로 정리하기</li>
+<li>[ ] Remotion이 React 코드로 영상을 만드는 도구라는 점 기억하기</li>
+<li>[ ] 이커머스 상품 영상에 적용한다면 B-roll, 자막, 음악, 제품 강조 컷을 어떤 규칙으로 만들지 생각해보기</li>
+<li>[ ] 프롬프트 없이 템플릿 기반으로 작동하는 UX가 일반 고객에게 더 적합한지 검토하기</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>TechBridge-KR [한글자막] 누구나 쓰는 에이전틱 영상 편집기는 어떻게 만들까? (Reelful 창업자 Ekaterina Deyneka) · https://youtu.be/wxlvbMHNZsQ · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요. 시작해도 될 것 같습니다. 시작하기 전에 몇 가지 질문을 드리고 싶습니다.</p>
+<p>먼저, 이번 컨퍼런스에서 사진이나 영상을 찍으신 분은 손을 들어주세요. 좋습니다. 그중에서 실제로 그 영상 콘텐츠를 온라인에 올리신 분은 얼마나 되나요? 많지는 않네요.</p>
+<p>솔직히 저도 그랬습니다. 저는 컨퍼런스, 행사, 여행, 모임에서 많은 콘텐츠를 촬영했지만 온라인에 올리지 않았습니다. 왜냐하면 영상 편집은 어렵기 때문입니다. 말만 들어도 일이 많아 보이고, 실제로도 그렇습니다. 지루하고, 아직도 대부분 수작업입니다. 또 자동화할 수 있는 작업이라기보다 예술처럼 느껴지기도 합니다.</p>
+<p>그래서 저희는 Reelful을 만들고 있습니다. 저희는 생성형 영상 편집 문제를 에이전틱 관점(agentic standpoint)에서 해결하려고 합니다. 저는 Reelful의 창업자이자 CEO인 Kate입니다.</p>
+<p>먼저 에이전틱 영상 편집(Agentic Video Editing)이 무엇인지 이야기해보겠습니다. 사용자는 사진과 영상 같은 미디어를 넣고, 약간의 맥락을 제공합니다. 그 맥락은 미디어 안에서 무슨 일이 있었는지에 대한 설명일 수도 있고, 원하는 편집 방향일 수도 있습니다. 예를 들어 자막(captions), 음악(music), 보이스오버(voiceover) 등을 추가해달라고 요청할 수 있습니다.</p>
+<p>그러면 에이전트는 미디어를 이해하고, 적절한 순간을 찾고, 모든 것을 조합하고, 자막·음악·보이스오버·B-roll을 생성한 뒤 바로 공유할 수 있는 클립을 제공합니다. 기본적으로 에이전틱 영상 편집이란 에이전트가 모든 작업을 스스로 수행하는 것입니다.</p>
+<p>또 다른 예로, 여러분이 카메라를 보고 말하는 영상(speak-to-camera video)을 찍었는데 멈춤이 많고 실패한 장면이 많다고 해보겠습니다. 이때 에이전트가 그것을 파악해서 실패한 장면과 멈춤을 제거하고, 바로 공유할 수 있는 클립을 만들어주기를 기대할 수 있습니다.</p>
+<p>흥미로운 점은 이 파이프라인 안의 많은 작업을 자동화할 수 있다는 것입니다. 이것이 바로 Reelful에서 저희가 하고 있는 일입니다.</p>
+<p>이것은 저희가 편집한 영상의 예시입니다.</p>
+<p>여기가 AI 엔지니어링 컨퍼런스이기 때문에, 인프라에 대해서도 조금 이야기하고 싶습니다. 인프라 관점에서 에이전틱 영상 편집기(Agentic Video Editor)는 에이전틱 앱 빌더(Agentic App Builder)와 매우 비슷합니다. 슬라이드에 오타가 있는데, 두 번째 열은 에이전틱 영상 편집기입니다.</p>
+<p>둘 다 프롬프트(prompt)와 프롬프트를 위한 UI가 있습니다. 영상 편집기의 경우에는 미디어와 프롬프트가 함께 들어갑니다. 보통 백엔드에서는 샌드박스(sandbox)라고 부르는 원격 머신(remote machine)이 실행됩니다. 이 머신 안에서 에이전트가 도구(tools)와 스킬(skills)을 가지고 사용자가 요청한 작업을 수행합니다.</p>
+<p>에이전틱 앱 빌더의 경우 결과물은 코드베이스(codebase)입니다. 에이전틱 영상 편집기의 경우 결과물은 영상 구성(video composition)입니다. 그 결과 앱 빌더에서는 사용자가 앱 미리보기를 보고, 영상 편집기에서는 렌더링된 영상을 받습니다.</p>
+<p>인프라 관점에서는 꽤 비슷하지만, 몇 가지 차이가 있습니다. 저에게 가장 흥미로운 부분은 바로 생성(generating)과 편집(editing)의 차이입니다.</p>
+<p>Reelful에서 저희는 실제 촬영본(real footage)의 편집에 집중합니다. 콘텐츠를 많이 생성하지는 않습니다. 사용자가 자신의 실제 생활과 개인적인 콘텐츠를 제공하면, 저희가 그것을 편집해주는 방식입니다.</p>
+<p>이것은 사실 더 복잡한 문제입니다. 에이전트에게 빈 캔버스(blank canvas)가 주어지면 원하는 대로 만들 수 있습니다. 하지만 편집의 경우, 에이전트는 어떤 순간이 가장 좋은지, 무엇을 빼야 하는지, 무엇을 써야 하는지, 모든 것을 어떻게 구성해야 하는지 판단해야 합니다.</p>
+<p>때로는 촬영본이 지저분하거나 불완전할 수도 있습니다. 그래도 에이전트는 매우 세련되고 전문적으로 만들어진 결과물을 제공해야 합니다. 이상적으로는 시청자가 이 콘텐츠를 AI가 편집했는지 사람이 편집했는지 구분하지 못해야 합니다.</p>
+<p>이제 Reelful에서 저희가 어떻게 하는지 살펴보겠습니다.</p>
+<p>앞서 말씀드렸듯이 저희는 사용자의 미디어와 프롬프트, 즉 어떤 방식으로 편집하고 싶은지에 대한 방향에서 시작합니다. 그리고 세련된 클립을 만들어야 합니다. 단계별로 보겠습니다.</p>
+<p>먼저 미디어 이해(media understanding)를 합니다. 클립과 사진 안에서 실제로 무슨 일이 일어나고 있는지 이해해야 합니다. 또한 말하는 영상의 경우에는 음성을 전사(transcribe)해야 합니다.</p>
+<p>그런 다음 사용자에게 크리에이티브 플랜(creative plan)을 제공합니다. 사용자는 이를 승인하거나, 마음에 드는지 판단하거나, 바꾸고 싶은 것을 선택하거나, 다시 생성할 수 있습니다. 실제 편집 과정을 시작하기 전에 이 계획을 만듭니다.</p>
+<p>사용자가 계획을 승인하면, 앞에서 이야기한 원격 머신인 샌드박스(sandbox)를 실행합니다. 이것은 에이전트가 모든 작업을 실행하는 환경입니다.</p>
+<p>에이전트에는 스킬(skills)이 포함되어 있습니다. 저희 영상 편집의 경우, 스킬에는 컷 규칙(cut rules)이 포함됩니다. 예를 들어 가장 좋은 순간을 선택하는 방법입니다. 또 폰트 페어(font pairs), 즉 특정 사용 사례에 어떤 폰트가 더 적합하고 어떤 폰트가 적합하지 않은지에 대한 지식도 포함됩니다. 그리고 B-roll을 생성하는 방법도 포함됩니다. 이곳에 취향과 장인정신이 들어갑니다.</p>
+<p>에이전트는 다른 하위 프로세스(subprocesses)를 시작할 수도 있습니다. 예를 들어 정확한 영상 구성에 맞는 음악을 생성하거나, 보이스오버를 생성하거나, 소리를 추가하거나, 이미지를 애니메이션화할 수 있습니다. 사용자가 사진을 제공하면, 사진을 더 역동적이고 몰입감 있게 만들기 위해 애니메이션을 넣을 수 있습니다.</p>
+<p>다음은 Remotion 컴포지션(Remotion composition)입니다.</p>
+<p>Remotion에 대해 간단히 설명하겠습니다. Remotion은 영상을 코드, 특히 React 코드로 만들기 위한 오픈소스 프레임워크입니다. 기본적으로 모든 자산과 트랙의 순서, 그리고 그것들이 서로 어떻게 이어지는지를 담은 파일입니다.</p>
+<p>이것이 중요한 이유는 에이전트가 코드 작성에 매우 능숙하기 때문입니다. 따라서 Remotion 프레임워크를 사용해 에이전트가 영상을 만들도록 할 수 있습니다.</p>
+<p>마지막은 검증 레이어(verification layer)입니다. 물론 에이전트는 실수할 수 있습니다. 그래서 저희는 이 검증 레이어를 개발했습니다. 이 레이어는 컴포지션이 깔끔하고 명확하게 정의되어 있는지, 모든 것이 렌더링될 수 있는지 확인합니다. 문제가 있으면 에이전트가 컴포지션을 반복적으로 수정합니다.</p>
+<p>이것이 저희가 세련된 클립을 만드는 방식입니다.</p>
+<p>꽤 많죠? 매우 복잡한 워크플로입니다. 이상적으로는 사용자가 이 과정을 전혀 몰랐으면 합니다. 더 큰 문제는 이 복잡한 에이전틱 워크플로를 일반 대중에게 어떻게 전달하느냐입니다.</p>
+<p>Reelful에서 저희는 다음과 같이 접근하고 있습니다.</p>
+<p>저희는 모바일 우선(mobile-first)으로 가기로 했습니다. 사용자가 운전하거나, 걷거나, 운동하면서도 영상을 편집할 수 있도록 하기 위해서입니다.</p>
+<p>또한 영상 프롬프트를 작성하는 것이 때로는 어렵다는 것도 알고 있습니다. 그래서 저희는 디렉셔널 템플릿(directional templates)을 만듭니다. 예를 들어 말하는 영상을 만들고 싶거나, B-roll을 추가하고 싶거나, 보이스오버를 추가하고 싶을 수 있습니다. 사용자는 이런 디렉셔널 템플릿 중 하나를 선택하고 미디어를 넣기만 하면 됩니다. 프롬프트가 없어도 작동합니다.</p>
+<p>세 번째는 내장 편집기(built-in editor)입니다. 이유는 이 경험을 사용자에게 편리하고 익숙하게 만들고 싶기 때문입니다. 많은 사람이 이미 일반 영상 편집기를 사용하고 있기 때문에, 저희도 그런 경험을 함께 제공하고 싶습니다.</p>
+<p>작동 방식은 이렇습니다. 사용자는 먼저 에이전틱 방식으로 영상을 생성합니다. 이후 약간 수정하고 싶다면, 예를 들어 1초를 제거하거나 자막의 단어 하나를 고치고 싶다면, 내장 편집기를 열어 작은 편집을 할 수 있습니다.</p>
+<p>여기 제가 최근 Reelful로 만든 예시가 몇 개 있습니다. 하나를 재생해보겠습니다.</p>
+<p>아, 죄송합니다. 지난주 저는 Cursor 크리에이터 디너에 초대받았습니다. 들리시나요? 조금 들리나요? 좋습니다. 그냥 영상을 즐겨주세요.</p>
+<p>지난주 저는 Cursor 크리에이터 디너에 초대받았고, 솔직히 제가 경험한 행사 중 가장 좋았던 경험 중 하나였습니다.</p>
+<p>먼저 장소가 정말 멋졌습니다. 맞춤형 이벤트 공간이 열대의 석양 같은 만찬 장소로 바뀌어 있었습니다. 전체 분위기가 매우 따뜻하고 영화 같았습니다.</p>
+<p>둘째, 음식은 제 기대를 훨씬 뛰어넘었습니다. LA에서 프라이빗 셰프들이 왔고, 록스(lox), 바게트, 게 요리, 그리고 아직도 생각나는 놀라운 딸기 아이스크림이 있었습니다.</p>
+<p>하지만 가장 중요한 것은 대화가 정말 즐거웠다는 점입니다. 분위기가 좋았고, 사람들과 쉽게 연결되고, 각자 무엇을 만들고 있는지 이야기하고, 커뮤니티를 즐길 수 있었습니다.</p>
+<p>마지막으로 선물도 받았습니다. 그것도 하이라이트 중 하나였습니다.</p>
+<p>기본적으로 이 모든 영상은 일반 영상 편집기 없이 에이전트만 사용해서 조립된 것입니다. 저는 이미 이 영상들을 소셜미디어에 올리고 있고, 매우 재미있게 사용하고 있습니다.</p>
+<p>이번 컨퍼런스 한정으로 저희 베타에 접근할 수 있게 해드리고 있습니다. 이것은 새로운 두 번째 버전입니다. 한번 사용해보시고 피드백이 있으면 알려주세요. 제 이메일이 여기 있으니 편하게 연락해주시기 바랍니다.</p>
+<p>저희는 아직 초기 단계이고, 적극적으로 작업하고 있습니다. 어떤 피드백이든 기쁘게 듣겠습니다. 또 여러분이 이것을 어떻게 사용하는지도 궁금합니다.</p>
+<p>그리고 흥미로운 소식도 있습니다. 저희는 최근 a16z speedrun에서 투자를 받았습니다. 그래서 계속 작업할 수 있게 되어 매우 기쁩니다.</p>
+<p>여기까지입니다. 정말 감사합니다. 이 발표가 콘텐츠와 영상 편집에 관한 발표이기 때문에, 여러분과 함께 영상을 하나 찍어야겠습니다.</p>
+<p>좋습니다.</p>
+</details>
+</body></html>

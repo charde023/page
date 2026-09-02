@@ -1,0 +1,306 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>EP 100. Claude Mythos, Fable 5, 그리고 다음 국면은?</title>
+<meta name="description" content="AI 프론티어 100회를 맞아 Claude Mythos/Fable 5, 포스트 트레이닝, 루프 엔지니어링, RSI, 주권 AI, 한국의 독자 파운데이션 모델 기회를 짚는다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">AI Frontier Korea 학습노트</div><h1>EP 100. Claude Mythos, Fable 5, 그리고 다음 국면은?</h1>
+<div class="meta">원작자 노정석, 최승준 · Aifrontier · 업로드 2026-06-16 · 54.3분 · <a href="https://youtu.be/kh03_wOGvJ0" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>EP 100. Claude Mythos, Fable 5, 그리고 다음 국면은?</h1>
+<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
+<p>Claude Mythos/Fable 5의 등장은 단순한 모델 성능 경쟁을 넘어 <strong>안전장치, 포스트 트레이닝(Post-training), 데이터셋 엔지니어링(Dataset Engineering), 테스트 타임 컴퓨트(Test-time Compute), 주권 AI(Sovereign AI)</strong> 경쟁으로 AI 산업의 국면이 바뀌고 있음을 보여준다.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 노정석, 최승준 · Aifrontier · 추정 출처 https://aifrontier.kr/ko/episodes/ep100 · 업로드 2026-06-16 · 54.3분 · 전사 Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>왜 중요한가</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Mythos / Fable 5</td>
+<td>Anthropic의 차세대급 모델과 안전 배포 전략을 보여주는 사례</td>
+<td>Mythos는 더 강한 내부 모델, Fable은 안전장치를 붙인 공개 버전으로 해석된다.</td>
+</tr>
+<tr>
+<td>포스트 트레이닝(Post-training)</td>
+<td>프론티어 모델 경쟁의 핵심 차별화 지점</td>
+<td>이제는 모델 구조보다 학습 후 정렬·강화·평가 루프와 데이터셋이 중요하다.</td>
+</tr>
+<tr>
+<td>데이터셋 엔지니어링(Dataset Engineering)</td>
+<td>도메인별 전문 업무를 모델이 잘하게 만드는 기반</td>
+<td>금융, 바이오, 보안 등 실제 직무를 잘게 쪼개 학습 데이터로 만든다.</td>
+</tr>
+<tr>
+<td>루프 엔지니어링(Loop Engineering)</td>
+<td>에이전트 시대의 작업 설계 방식</td>
+<td>사람이 한 번 지시하고, 모델이 반복 실행·평가·수정하는 루프를 설계한다.</td>
+</tr>
+<tr>
+<td>테스트 타임 컴퓨트(Test-time Compute)</td>
+<td>추론 중 더 많은 계산을 써서 성능을 끌어올리는 방식</td>
+<td>비싸지만 더 어려운 문제를 풀 수 있어 상업적 계산이 중요해진다.</td>
+</tr>
+<tr>
+<td>RSI(Recursive Self-Improvement)</td>
+<td>AI가 AI 연구와 개선에 참여하는 국면</td>
+<td>자기개선 루프가 시작되면 AI 발전 속도가 더 가팔라질 수 있다.</td>
+</tr>
+<tr>
+<td>주권 AI(Sovereign AI)</td>
+<td>국가 단위 전략 자산으로서 AI 모델</td>
+<td>미국의 접근 제한은 AI가 핵심 안보 자산이 되었음을 보여준다.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>내가 모를 만한 것 / 처음 보는 것</h2>
+<ul>
+<li><strong>Mythos</strong> — Anthropic이 잠시 노출한 것으로 보이는 강력한 내부 모델명. 공개 배포판 Fable보다 더 제한된 모델로 해석된다.</li>
+<li><strong>Fable 5</strong> — Mythos급 능력을 안전장치와 함께 공개한 Claude 계열 모델로 언급된다.</li>
+<li><strong>Opus 4.8</strong> — Fable 이전의 고성능 Claude 모델로 비교 기준이 된다.</li>
+<li><strong>RSI(Recursive Self-Improvement)</strong> — AI가 스스로 AI 연구·개선 과정에 참여해 성능 향상을 반복하는 개념.</li>
+<li><strong>루프 엔지니어링(Loop Engineering)</strong> — 단발성 프롬프트가 아니라, 목표 설정 → 실행 → 평가 → 수정 → 재실행의 반복 구조를 설계하는 방식.</li>
+<li><strong>하네스 엔지니어링(Harness Engineering)</strong> — 모델을 실제 작업에 묶어 쓰기 위한 도구·환경·평가 체계 설계.</li>
+<li><strong>프리필(Prefill) / 디코딩(Decoding)</strong> — 입력 토큰 처리는 병렬화가 쉬운 반면, 출력 토큰 생성은 순차적이라 더 비싸다.</li>
+<li><strong>Chinchilla Optimal</strong> — 모델 크기와 학습 토큰 수 사이의 효율적 균형에 관한 스케일링 법칙.</li>
+<li><strong>Overtraining</strong> — Chinchilla 최적점보다 훨씬 많은 토큰으로 학습해 추가 성능을 얻는 전략.</li>
+<li><strong>FDE(Forward Deployed Engineer)</strong> — Palantir식 현장 파견 엔지니어. 고객 문제를 현장에서 직접 제품화하는 역할.</li>
+<li><strong>“The purpose of a system is what it does”</strong> — 시스템의 목적은 의도가 아니라 실제로 무엇을 하느냐로 드러난다는 사이버네틱스(Cybernetics) 관점.</li>
+</ul>
+<hr>
+<h2>화자의 디테일 (놓치기 쉬운 포인트)</h2>
+<blockquote>
+<p>화자가 흘리듯 말한 구체 수치·설정값·명령어·뉘앙스. 원어 용어 괄호 병기, 맥락까지.</p>
+</blockquote>
+<ol>
+<li>녹화일은 <strong>2026년 6월 14일 일요일 한국 기준</strong>, 노정석은 샌프란시스코 현지 토요일 오후 4시에 참여했다.</li>
+<li>AI 프론티어는 약 <strong>3년 동안 100회</strong>를 진행했다.</li>
+<li>시작 당시에는 ChatGPT 직후, GPT-4와 “Sparks of AGI”가 화제였고, 지금은 AGI가 일상적으로 언급되는 단계가 되었다.</li>
+<li>Anthropic은 4월에 Mythos를 잠깐 드러냈고, 약 두 달 뒤 Fable이라는 이름으로 공개한 것으로 설명된다.</li>
+<li>Fable 공개 후 <strong>3일 만에 미국 정부 규제로 미국 시민이 아닌 사람은 접근할 수 없게 되었다</strong>고 언급한다.</li>
+<li>Fable은 보안(Security)·생물학(Biology) 관련 질문을 앞단에서 강하게 차단하고, 경우에 따라 Opus 4.8로 전환되는 모습을 보였다고 한다.</li>
+<li>Fable 5 가격은 대략 <strong>입력 100만 토큰 10달러, 출력 100만 토큰 50달러</strong>로 언급된다.</li>
+<li>Opus 4.8은 대략 <strong>입력 100만 토큰 5달러, 출력 100만 토큰 25달러</strong>로 비교된다.</li>
+<li>Dynamic Workflows류의 루프 작업은 에이전트 수가 커지면 비용이 수백 달러에서 천 달러 이상으로 커질 수 있다고 본다.</li>
+<li>노정석은 프론티어 모델에서 알고리즘 자체보다 <strong>데이터셋의 양, 형태(shape), 포스트 트레이닝 인프라, 컴퓨팅 스케일</strong>이 더 중요해졌다고 본다.</li>
+<li>10T급 모델이 실제라면, 그것만으로도 통제 대상이 되는 전략 자산이 될 수 있다고 해석한다.</li>
+<li>한국에서는 Upstage의 <strong>100B 모델</strong>, SK텔레콤의 <strong>500B 모델</strong>이 독자 파운데이션 모델 흐름에서 언급된다.</li>
+<li>노정석은 한국 창업자와 미국 시장을 직접 연결하는 채널이 더 많아져야 한다고 강조한다.</li>
+<li>다음 100회 이후에는 Palantir FDE 출신을 초대해 Palantir와 FDE 역할을 깊게 다루고 싶다고 말한다.</li>
+</ol>
+<hr>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>100회와 3년의 변화</td>
+<td>GPT-4 초기 논의에서 Mythos/Fable과 AGI 일상화 단계까지 왔다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>프론티어 경쟁의 핵심</td>
+<td>스케일, 포스트 트레이닝, 데이터셋, 인프라가 핵심이다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>바이오·소재로 확장</td>
+<td>LLM에서 검증된 방식이 생물학·신약 개발에도 적용되고 있다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>실리콘밸리 스타트업 분위기</td>
+<td>젊은 창업자, 거대한 비전, 큰 밸류에이션, 빠른 자본 반응이 공존한다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Mythos와 Fable</td>
+<td>강력한 내부 모델과 안전 공개 모델의 관계로 해석된다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>가격과 루프 엔지니어링</td>
+<td>더 강한 모델은 더 비싸고, 루프 설계는 비용 구조를 바꾼다.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>RSI와 자기개선</td>
+<td>AI가 AI를 개선하는 재귀적 루프가 현실적 논의가 되었다.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>주권 AI</td>
+<td>AI는 국가 전략 자산이 되었고, 미국·중국·한국 모두 영향을 받는다.</td>
+</tr>
+<tr>
+<td>9</td>
+<td>개인적 사용 경험</td>
+<td>Fable은 글쓰기·성찰·탐구 방식에서 새 가능성과 한계를 동시에 보였다.</td>
+</tr>
+<tr>
+<td>10</td>
+<td>AI 프론티어의 다음 단계</td>
+<td>단순 뉴스 정리를 넘어 커뮤니티와 시스템화를 고민한다.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1. AI 프론티어 100회와 3년의 변화</h2>
+<p>AI 프론티어는 원래 “같이 공부하면서 대화하자”는 취지로 시작했고, 약 3년 만에 100회에 도달했다. 처음 시작할 때는 ChatGPT가 막 나온 직후였고, GPT-4와 Microsoft의 Sébastien Bubeck이 쓴 “Sparks of AGI”가 큰 화제였다.</p>
+<p>당시에는 GPT-4가 유니콘을 그리는 예시가 놀라움의 대상이었지만, 지금은 훨씬 복잡한 멀티모달 작업과 추론, 코딩, 에이전트 작업이 당연하게 논의된다. 화자들은 지난 3년 동안 “불가능하다”고 여겨졌던 경계가 계속 무너졌고, 특히 최근 1년 사이 그래프의 기울기가 바뀐 느낌이라고 말한다.</p>
+<hr>
+<h2>2. 프론티어 모델 경쟁의 중심은 포스트 트레이닝이다</h2>
+<p>노정석은 프론티어 경쟁의 핵심을 두 가지로 본다.</p>
+<p>첫째는 <strong>스케일 증가</strong>다. 더 큰 모델, 더 많은 컴퓨팅, 더 큰 인프라가 다음 성능 단계로 이어진다는 믿음이 여전히 강하다.</p>
+<p>둘째는 <strong>포스트 트레이닝(Post-training)</strong>이다. 사전학습(Pretraining) 데이터 품질도 중요하지만, 프론티어 랩들이 실제로 치열하게 경쟁하는 영역은 학습 이후의 강화, 정렬, 평가, 반복 루프라고 설명한다.</p>
+<p>포스트 트레이닝에서는 단순히 데이터를 넣고 학습시키는 것이 아니라, 모델이 추론을 수행하고, 결과를 평가하고, 실패한 작업과 성공한 작업을 다시 모아 학습 루프를 구성해야 한다. 즉, 추론(Inference)과 학습(Training)이 얽힌 거대한 엔지니어링 문제가 된다.</p>
+<hr>
+<h2>3. 데이터셋 엔지니어링: 도메인과 직무를 잘게 쪼갠다</h2>
+<p>프론티어 모델의 성능은 이제 “일반 데이터가 많다”만으로 올라가지 않는다. 실제 세계의 도메인과 직무를 잘게 나누고, 각각에 맞는 데이터셋을 만들어야 한다.</p>
+<p>예를 들어 금융(Finance)이라고 해도 투자은행, 세무 처리, 개인 재무 관리, 리스크 분석은 모두 다른 작업이다. 이런 세부 작업을 각각 데이터셋으로 만들고, 모델이 그 상황에 맞게 행동하도록 훈련한다.</p>
+<p>이 흐름은 이커머스나 물류에도 그대로 적용할 수 있다. “고객 응대”라는 큰 범주보다, 반품 사유 분류, 송장 오류 탐지, 배송 지연 안내, 악성 클레임 판별, 재고 보충 의사결정처럼 작게 쪼갠 데이터셋이 더 실용적이다.</p>
+<hr>
+<h2>4. AI가 생물학과 신약 개발로 확장되는 방식</h2>
+<p>노정석은 이번 샌프란시스코 방문에서 바이오·소재·신약 개발 영역의 AI 스타트업들을 많이 만났다고 한다. 기존 제약·바이오 산업 사람들은 여전히 “그건 어렵다”, “그건 안 된다”고 말하지만, AI 쪽에서 들어온 사람들은 지금을 <strong>GPT-2 모멘트</strong>처럼 본다.</p>
+<p>과거 머신러닝은 문제마다 데이터 형식, 모델 구조, 훈련 방식이 달랐다. 하지만 LLM, 멀티모달(Multimodal), 강화학습(RL) 환경에서는 여러 문제를 하나의 큰 일반화 문제로 다룰 수 있다는 사고가 생겼다.</p>
+<p>바이오에서도 DNA, 단백질, 세포, 장기 등을 각각 다른 모달리티(Modality)로 보고 한꺼번에 학습시키려는 접근이 등장한다. 소리, 이미지, 영상이 모두 모델 입력이 되듯, 생물학적 계층도 통합 학습 대상으로 본다는 것이다.</p>
+<hr>
+<h2>5. 실리콘밸리 스타트업과 자본의 속도</h2>
+<p>노정석은 실리콘밸리에서 만난 창업자들이 매우 젊고, 비전이 크며, 자본도 빠르게 반응한다고 말한다. 어떤 창업자는 현재 트랜스포머(Transformer)의 한계를 말하고 새로운 월드 모델(World Model)이 필요하다고 주장한다. 이런 이야기에 자본이 곧바로 반응하는 분위기가 있다는 것이다.</p>
+<p>반면 회의적인 시각도 있다. 2년 전에도 비슷한 주장을 한 팀들이 많았지만 실제 문제를 풀지 못하고 사라졌다는 비판이다. 그럼에도 전체 분위기는 여전히 희망 쪽에 가깝다.</p>
+<p>특히 5~6명 규모의 팀이 일정한 성과만 있어도 수천억 원 단위 밸류에이션을 요구하는 경우가 흔하다고 한다. 노정석은 한국 창업자들이 미국 시장과 직접 연결되는 채널이 더 많아져야 한다고 강조한다.</p>
+<hr>
+<h2>6. Mythos와 Fable 5가 던진 질문</h2>
+<p>Anthropic은 4월에 Mythos라는 모델을 잠깐 드러낸 것으로 보이고, 이후 Fable이라는 이름으로 공개했다. 최승준은 이름의 의미를 흥미롭게 해석한다.</p>
+<ul>
+<li><strong>Mythos</strong>는 신화, 구전되는 근원적 이야기의 느낌이다.</li>
+<li><strong>Fable</strong>은 이솝우화처럼 대중에게 전달되는 교훈적 이야기다.</li>
+</ul>
+<p>따라서 Mythos는 제한된 원형 모델, Fable은 안전장치를 붙여 인간 세계에 내려온 배포판처럼 해석할 수 있다.</p>
+<p>Fable은 공개 직후 보안과 생물학 관련 위험 능력을 이유로 강하게 제한되었고, 결국 미국 정부 규제에 따라 비미국 시민의 접근이 막혔다고 설명한다. 이는 AI 모델이 단순한 제품이 아니라 국가가 통제할 수 있는 전략 자산으로 바뀌었다는 신호로 읽힌다.</p>
+<hr>
+<h2>7. 가격, 테스트 타임 컴퓨트, 루프 엔지니어링</h2>
+<p>Fable 5는 Opus 4.8보다 약 2배 비싼 가격으로 언급된다. 입력 100만 토큰당 10달러, 출력 100만 토큰당 50달러 수준이다.</p>
+<p>출력 토큰이 더 비싼 이유는 <strong>디코딩(Decoding)</strong> 때문이다. 입력은 프리필(Prefill) 단계에서 병렬 처리하기 쉽지만, 출력은 토큰을 하나씩 순차 생성해야 한다.</p>
+<p>여기서 중요한 개념이 <strong>루프 엔지니어링(Loop Engineering)</strong>이다. 예전에는 사람이 프롬프트를 주고 답을 받는 방식이었다면, 이제는 목표를 주고 모델이 밤새 실행·검토·수정·재실행하는 루프를 돌린다. 이 방식은 성능을 끌어올릴 수 있지만 비용이 크게 증가한다.</p>
+<p>상업적으로는 결국 가격 대비 성능의 문제다. 비싼 모델이 짧은 토큰으로 더 정확히 끝내면 이득일 수 있고, 작은 모델을 여러 번 돌리는 편이 나은 업무도 있을 수 있다.</p>
+<hr>
+<h2>8. RSI와 자기개선의 문턱</h2>
+<p>RSI(Recursive Self-Improvement)는 AI가 스스로 AI 연구와 개선에 참여하는 개념이다. 최승준은 Anthropic의 최근 흐름, Dario Amodei의 글, IPO 준비, Mythos/Fable 공개가 모두 이 자기개선 궤도와 연결되어 보인다고 말한다.</p>
+<p>Claude가 Claude를 만들고, 그 결과가 다시 Claude를 개선하는 이미지가 등장하는데, 이는 생명체의 세포 분열이나 프랙털 구조처럼 자기 자신을 반복적으로 확장하는 모습으로 해석된다.</p>
+<p>화자들은 아직 완전한 RSI에 도달했다고 단정하지는 않지만, 그 방향으로 가고 있다는 신호는 분명하다고 본다.</p>
+<hr>
+<h2>9. 컴퓨팅 스케일과 주권 AI 경쟁</h2>
+<p>노정석은 이제 알고리즘의 작은 개선보다 데이터셋과 컴퓨팅 스케일이 더 중요하다고 본다. 프론티어 랩은 좋은 알고리즘이 나오면 내부 시스템에 흡수하면 되지만, 데이터셋의 양과 형태, 포스트 트레이닝 인프라, 컴퓨팅 자원은 외부에서 쉽게 따라갈 수 없다.</p>
+<p>10T급 모델이 실제로 통제 대상이 될 만큼 강력하다면, AI는 이미 핵무기와 비슷한 전략 자산의 성격을 갖기 시작한 것이다. 미국이 통제하면 중국도 대응할 수 있고, 미국과 중국이 모두 통제하면 다른 나라에는 오히려 독자 모델을 만들 기회가 생길 수도 있다.</p>
+<p>이 맥락에서 한국의 <strong>독자 파운데이션 모델(Foundation Model)</strong> 전략도 다시 중요해진다. Upstage의 100B 모델, SK텔레콤의 500B 모델 등이 언급되며, 지금은 당장의 돈보다 미래 준비 역량(Future Readiness)이 더 중요한 시기라고 말한다.</p>
+<hr>
+<h2>10. Fable 5 사용 경험과 인간적 성찰</h2>
+<p>최승준은 Fable 5를 짧게 사용해 본 경험을 공유한다. 어떤 글쓰기 프롬프트에서는 기대보다 밋밋했지만, 성찰과 대화, 자기 대화 분석에서는 인상적이었다고 한다.</p>
+<p>특히 모델이 사용자를 치켜세우는 듯한 부분을 다른 세션에서 다시 점검하게 했더니, 아첨과 성찰의 구조를 잘 짚어냈다고 한다. Claude 계열이 원래 이런 메타인지적 성찰에 강했는데, Fable에서도 그 장점이 보였다는 것이다.</p>
+<p>또 “시스템의 목적은 그것이 실제로 하는 일이다(The purpose of a system is what it does)”라는 개념을 소개한다. 사용자가 모델로 무엇을 하려고 의도했는지보다, 실제로 모델과 어떤 대화를 반복하는지가 그 사람의 관심과 사용 방식을 드러낸다는 말이다.</p>
+<hr>
+<h2>11. Claude Code 이후 엔지니어링의 변화</h2>
+<p>화자들은 Claude Code 이후 코딩과 엔지니어링의 개념이 바뀌었다고 말한다. 사람이 더 이상 모든 줄을 직접 코딩하지는 않지만, 그렇다고 엔지니어링이 사라진 것은 아니다.</p>
+<p>이제 사람은 한 층 위에서 아키텍처를 설계하고, 에이전트가 만든 코드를 검토하고, 중복을 리팩토링하고, 시스템 구조를 관리한다. 몇천 줄에서는 잘 돌아가던 코드도 몇만 줄이 되면 중복과 구조 문제가 생기기 때문에, 여전히 엔지니어링 역량이 필요하다.</p>
+<p>엔지니어링을 잘하기 위한 도구를 AI로 다시 만드는 부트스트래핑(Bootstrapping)도 일어나고 있다고 본다.</p>
+<hr>
+<h2>12. AI 프론티어의 다음 단계</h2>
+<p>100회를 맞아 두 화자는 AI 프론티어 자체도 다음 단계로 가야 한다고 말한다. 일주일 단위로 뉴스를 요약하는 것만으로는 변화 속도를 따라가기 어렵고, 커뮤니티의 정보와 사람들을 더 잘 연결할 시스템이 필요하다고 본다.</p>
+<p>노정석은 실리콘밸리와 서울 사이의 연결을 강화하고, 한국에서 일어나는 일을 해외에 더 많이 알릴 필요가 있다고 말한다. 또한 Palantir FDE 출신 엔지니어를 초대해 Palantir가 어떤 회사인지, FDE가 실제로 무슨 일을 하는지 다루는 세션을 구상하고 있다.</p>
+<hr>
+<h2>종합 체크리스트</h2>
+<ul>
+<li>[ ] 내 업무에서 포스트 트레이닝용 데이터셋으로 만들 수 있는 반복 업무를 5개 적어보기</li>
+<li>[ ] 고객 응대, 물류, 재고, 정산 업무를 세부 태스크 단위로 쪼개보기</li>
+<li>[ ] Claude나 다른 모델로 “목표 → 실행 → 평가 → 수정” 루프를 작게 실험해보기</li>
+<li>[ ] API 비용을 입력 토큰과 출력 토큰으로 나누어 계산해보기</li>
+<li>[ ] 비싼 모델 1회 사용과 저렴한 모델 반복 사용 중 어떤 쪽이 유리한지 비교해보기</li>
+<li>[ ] 주권 AI가 이커머스·물류 데이터 보안에 어떤 의미가 있는지 생각해보기</li>
+<li>[ ] 내가 모델과 실제로 나누는 대화 로그를 보고, 내 AI 사용 목적이 무엇인지 점검해보기</li>
+</ul>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>AI Frontier Korea EP 100. Claude Mythos, Fable 5, 그리고 다음 국면은? · https://youtu.be/kh03_wOGvJ0 · 전사: Whisper large-v3 (auto)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>노정석은 2026년 6월 14일 일요일 한국 기준으로 녹화하고 있으며, 본인은 샌프란시스코에 있어 현지 토요일 오후 4시라고 말한다. AI 프론티어가 드디어 100회에 도달했고, 처음에는 최승준과 함께 공부하며 대화해보자는 취지였는데 어느덧 3년이 지났다고 회고한다.</p>
+<p>최승준은 3년이 매우 빠르게 지나갔고, 돌아보면 세상이 완전히 바뀐 느낌이라고 말한다. 노정석은 3년 전에는 ChatGPT가 막 나왔고 GPT-4와 “Sparks of AGI”가 화제였다고 설명한다. 그때는 유니콘을 그리는 사례가 놀라웠지만, 지금은 훨씬 복잡한 능력들이 등장했고, 사람들이 불가능하다고 했던 것들이 계속 깨졌다고 한다.</p>
+<p>노정석은 작년 가을 이후 그래프의 기울기가 바뀐 느낌을 받았고, 올해 봄부터는 AGI라는 말을 사람들이 자연스럽게 하기 시작했다고 말한다. 4월에는 Anthropic이 Mythos라는 모델을 잠깐 드러냈고, 약 두 달 뒤 Fable이라는 이름으로 공개했다고 설명한다. 커뮤니티는 며칠 동안 바이브 체크(Vibe Check)를 했고, 이후 미국 정부 규제로 미국 시민이 아닌 사람은 Fable에 접근할 수 없게 되었다고 말한다.</p>
+<p>그는 Fable에 생물학 관련 질문을 던졌을 때 바로 답변을 거부하고 Opus 4.8로 전환되는 모습을 보고 이상하다고 느꼈다고 한다. 샌프란시스코에서는 데이터셋 회사, 에이전트 회사, 월드 모델 스타트업, 20대 초반 창업자들을 만났고, xAI, Thinking Machines, Meta, Frontier Labs 관계자들에게서 프론티어의 방향과 주요 이슈에 대한 이야기를 들었다고 한다.</p>
+<p>노정석은 핵심 이슈가 스케일 증가와 포스트 트레이닝이라고 정리한다. 모델이 커질수록 인프라와 데이터셋이 더 필요하며, 사전학습 데이터의 품질 개선도 중요하지만 프론티어의 진짜 경쟁은 포스트 트레이닝에서 벌어진다고 본다. 포스트 트레이닝은 추론을 실행하고 결과를 평가하며, 서로 다른 속도로 끝나는 작업을 다시 배치로 모아 손실을 계산하는 복잡한 인프라 문제라고 설명한다.</p>
+<p>그는 금융 데이터만 해도 투자은행, 세무, 개인 재무 등으로 세분화해야 하며, 실제 세계의 모든 도메인과 직무를 사례별 데이터셋으로 만들어 학습시키는 흐름이 강해지고 있다고 말한다. Meta도 Anthropic과 OpenAI를 따라잡기 위해 추가 노력을 하고 있다고 덧붙인다.</p>
+<p>이어 노정석은 LLM 외의 영역, 특히 생물학과 소재 과학에서 AI의 적용 방식이 중요해지고 있다고 말한다. 기존 제약·바이오 업계 사람들은 여전히 어렵다고 말하지만, AI 쪽에서 접근하는 사람들은 지금이 GPT-2 모멘트에 가깝다고 본다. DNA, 단백질, 세포, 장기 같은 생물학적 계층을 각각 모달리티(Modality)처럼 보고 함께 학습시키려는 시도가 있다는 것이다.</p>
+<p>실리콘밸리 스타트업 분위기에 대해서는 젊은 창업자들이 거대한 비전을 말하고, 자본이 빠르게 반응한다고 설명한다. 어떤 팀은 현재 트랜스포머의 한계를 지적하며 새로운 월드 모델이 필요하다고 주장한다. 동시에 2년 전 비슷한 주장을 했지만 실패한 팀들도 있었다는 회의론도 공존한다. 그럼에도 희망이 더 강하며, 작은 팀도 수천억 원대 밸류에이션을 이야기하는 경우가 흔하다고 한다.</p>
+<p>최승준은 Mythos와 Fable 이야기를 본격적으로 꺼낸다. Opus 4.8이 나온 지 약 12일 만에 Fable 5가 공개되었고, 안전장치를 붙였다는 설명이 있었다고 한다. Fable은 보안과 생물학 관련 내용을 프론트엔드에서 폭넓게 막는 것으로 보이며, Mythos를 안전하게 포장해 배포한 것이 Fable이라고 해석한다. 그러나 공개 3일 뒤 긴급하게 수출 통제성 조치가 내려졌다고 말한다.</p>
+<p>그는 이름의 의미도 짚는다. Mythos는 신화, Fable은 교훈적 우화다. 기존 Claude 모델명인 Haiku, Sonnet, Opus가 문학·음악적 형식을 따라갔다면, Mythos와 Fable은 제한된 신화적 원형과 대중에게 전달되는 안전한 이야기의 관계처럼 보인다고 해석한다.</p>
+<p>최승준은 Dario Amodei의 글들을 GPT-5.5와 함께 검토했다고 말한다. “Machines of Loving Grace”, 기술의 청소년기, DeepSeek과 수출 통제, “Policy on the AI Exponential” 같은 글들이 이어졌고, Opus 4.8 공개, Anthropic의 높은 밸류에이션, RSI(Recursive Self-Improvement), SEC S-1 제출 흐름이 연결되어 보인다고 설명한다.</p>
+<p>그는 Fable 접근 제한이 IPO에는 단기적으로 전체 시장(TAM)에 불리할 수 있지만, 동시에 국가가 개입할 정도의 능력을 보여준 사건이라 장기적으로는 오히려 전략 자산성을 입증할 수도 있다고 본다. 노정석은 벤치마크가 거의 의미 없어지는 시대라며, 보안이나 생물학의 최상위 연구자들은 실제로 이전에 못 하던 것을 할 수 있게 되었다고 말한다.</p>
+<p>두 사람은 루프 엔지니어링(Loop Engineering)을 논의한다. 최승준은 Boris Cherny와 Peter Steinberger가 루프를 언급했고, Dynamic Workflows, Ultracode 같은 개념과 연결된다고 설명한다. 이제는 단발 프롬프트가 아니라 반복 실행 구조를 설계하고 모델에게 위임하는 방식이 중요해졌다는 것이다.</p>
+<p>Fable 5 가격에 대해서는 입력 100만 토큰당 10달러, 출력 100만 토큰당 50달러로, Opus 4.8의 2배 수준이라고 말한다. 출력이 비싼 이유는 디코딩(Decoding)이 순차적으로 진행되기 때문이고, 입력은 프리필(Prefill)로 병렬 처리하기 쉽다고 설명한다. Dwarkesh의 해석처럼 API 가격이 모델 원가나 규모를 추정하는 단서가 될 수 있지만, 정확한 파라미터 수는 알 수 없다고 선을 긋는다.</p>
+<p>노정석은 Anthropic이 Google TPU, Amazon Trainium, NVIDIA GPU를 모두 쓰는 것으로 보인다며, 다양한 인프라를 쓰는 것이 장점만은 아니라고 말한다. 포스트 트레이닝에서는 플랫폼 통일성이 강점이 될 수 있고, OpenAI가 컴퓨팅 선투자에서 여전히 우위가 있다는 소문도 있다고 전한다.</p>
+<p>최승준은 숫자를 체화하면 거대한 모델을 막연히 두려워하지 않게 된다고 말한다. 루프 엔지니어링을 API로 돌리면 비용이 상당히 커질 수 있으며, Fable에 목표를 주고 밤새 돌리는 식의 사용은 비싸다고 설명한다. Mitchell Hashimoto는 사람이 더 적은 비용으로 직접 노력하면 더 빠르고 정확할 수도 있는데, 비싼 모델을 오래 돌리는 방향을 비판했다고 소개한다.</p>
+<p>노정석은 정형원 박사를 만났을 때 테스트 타임 컴퓨트(Test-time Compute)에서 아직 꺼낼 성능 향상이 많이 남아 있다는 이야기를 들었다고 한다. 결국 가격과 성능의 트레이드오프이며, 어떤 업무는 비싼 모델이 더 유리하고 어떤 업무는 작은 모델을 많이 돌리는 편이 유리할 수 있다고 정리한다.</p>
+<p>이후 RSI 이야기가 이어진다. Claude가 Claude를 만들고, 그 과정이 재귀적으로 반복되는 이미지는 자기개선의 방향을 상징한다고 본다. 노정석은 이것이 생명체의 세포 분열이나 프랙털 구조와 닮았다고 말한다. 두 사람은 아직 완전한 RSI라고 단정하지는 않지만, 그 궤도로 가고 있다는 점은 분명하다고 본다.</p>
+<p>노정석은 이제 프론티어에서 알고리즘 개선보다 데이터셋 스케일, 데이터셋의 형태, 컴퓨팅 스케일이 더 중요해졌다고 말한다. 10T급 모델이 실제라면, 이를 학습시키는 데 필요한 토큰과 컴퓨팅은 매우 거대하며, 이미 통제해야 할 전략 자산 수준이 되었을 수 있다고 한다. 미국이 통제하면 중국도 대응할 것이고, 양국이 모두 통제하면 한국 같은 나라에도 독자 모델 기회가 생길 수 있다고 말한다.</p>
+<p>한국의 독자 파운데이션 모델에 대해서는 Upstage의 100B 모델, SK텔레콤의 500B 모델이 언급된다. 노정석은 지금은 돈보다 미래 준비 역량(Future Readiness)이 더 중요한 시기라고 말한다.</p>
+<p>최승준은 Norbert Wiener의 “인간의 인간적 활용”을 떠올렸다고 말하며, 자동화 사회에서 인간의 역할을 다시 생각하게 된다고 한다. 그는 Fable 5를 며칠 써본 경험을 공유한다. 글쓰기 프롬프트에서는 밋밋한 부분도 있었지만, 대화와 성찰, 아첨을 점검하는 능력에서는 인상적이었다고 한다.</p>
+<p>그는 “시스템의 목적은 그것이 실제로 하는 일이다(The purpose of a system is what it does)”라는 사이버네틱스 개념을 소개한다. 모델과의 대화를 돌아보면, 사용자가 무엇을 의도했는지보다 실제로 모델과 무엇을 반복해왔는지가 그 사람의 관심과 목적을 드러낸다고 말한다.</p>
+<p>노정석은 출장 중이라 Fable 5를 제대로 써보지 못했고, 이제 접근이 막혀 아쉽다고 말한다. 최승준은 이번 제한이 일시적 해프닝일 수 있다고 본다. 또한 타임라인에서는 3D와 게임 관련 결과물이 많이 나왔다고 덧붙인다.</p>
+<p>두 사람은 Claude Code 이후 1년 사이의 변화를 돌아본다. 작년 이맘때는 Claude Code를 어떻게 쓰는지 커뮤니티가 막 알아가던 시기였고, 지금은 엔지니어링 방식 자체가 바뀌었다. 사람이 줄 단위로 코딩하지 않더라도, 에이전트와 함께 한 단계 위에서 아키텍처를 설계하고 리팩토링하며 시스템을 만드는 능력은 여전히 필요하다고 한다.</p>
+<p>최승준은 몇천 줄에서는 문제가 없던 코드가 몇만 줄로 커지면 중복과 구조 문제가 생긴다고 말한다. 이를 해결하기 위한 도구도 AI로 빠르게 만들어지고 있으며, 엔지니어링을 위한 도구를 다시 엔지니어링하는 부트스트래핑이 일어나고 있다고 본다.</p>
+<p>마지막으로 노정석은 AI 프론티어가 다음 단계로 가야 한다고 말한다. 변화 속도가 너무 빨라 단순히 주간 뉴스를 요약하는 방식만으로는 부족하고, 커뮤니티와 정보를 더 잘 연결하는 시스템이 필요하다고 한다. 실리콘밸리와 서울을 더 강하게 연결하고, 한국의 성과를 해외에 알리는 일도 중요하다고 말한다.</p>
+<p>그는 Palantir FDE 출신 엔지니어들을 초대해 Palantir가 어떤 회사인지, FDE가 실제로 무엇을 하는지 다루는 세션을 해보고 싶다고 한다. 최승준은 100회를 소소하게 자축하자고 말하고, 노정석은 한국에 돌아가면 AI 프론티어 시스템을 바꾸고 스케일을 늘리는 방안을 고민하겠다고 하며 대화를 마무리한다.</p>
+</details>
+</body></html>
