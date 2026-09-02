@@ -36,19 +36,23 @@ border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface
 .filters input{position:absolute;opacity:0;pointer-events:none}
 .filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
 border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
 </style></head><body>
 <div class="header"><a class="back" href="../">← 학습노트 목록</a>
 <div class="eyebrow">Y Combinator 학습노트</div><h1>The World’s Largest Electric Aircraft Just Flew</h1>
 <div class="meta">원작자 Anders Forslund · Heart Aerospace · 업로드 2026-09-01 · 14.8분 · <a href="https://youtu.be/nM86DBOqgPM" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
-<h1>The World’s Largest Electric Aircraft Just Flew</h1>
-<h2>오늘의 질문</h2>
+<h2>오늘 대답할 질문</h2>
 <p><span style="color:#ef6c00; font-size:1.1em"><strong>말만 있는 큰 꿈은 어떻게 다음 사람이 믿고 돈과 기회를 건네도록 하는 증거가 될까?</strong></span></p>
 <h2>읽기 전 내 답</h2>
 <div class="callout callout-question"><div class="ct">설명을 읽기 전에 먼저 답하기</div>
 <p>“위험을 줄인 증거”라는 말을 보지 않고 1~2문장으로 설명해보자.<br>
 이 공개 노트에는 개인 답을 적지 말고, 로컬의 개인 학습 기록에만 답과 확신도를 남긴다.</p>
 </div>
-<h2>30초 설명</h2>
+<h2>30초 파인만 설명</h2>
 <p>작은 비행기를 짧은 거리에 자주 띄우는 일은 지금의 제트엔진으로는 비싸다. Heart Aerospace는 모터로 날면 더 단순하고 조용하며 싸질 수 있다고 보고, <strong>작은 모형 → 항공사의 구매 의향 → 실물 모터 → 선주문 → 실제 비행</strong>으로 한 단계씩 가능성을 보였다. 다만 배터리는 써도 가벼워지지 않아 비상용 거리를 확보하기 어렵기 때문에 연료 엔진을 보조로 두었다. 이 글의 핵심은 전기 비행기 자체보다, <span style="color:#ef6c00; font-size:1.1em"><strong>큰 꿈을 다음 사람이 판단할 수 있는 작은 증거로 바꾸어 가는 방식</strong></span>이다.</p>
 <h2>한 장면으로 이해하기</h2>
 <p>YC 데모데이 때는 손에 들리는 3D 프린트 모형밖에 없었다. 그 뒤 항공사의 구매의향서를 얻고, 400kW(킬로와트) 모터를 만들고, 선주문과 실제 비행으로 나아갔다. 설명을 잘해서가 아니라, <strong>어제까지 불확실했던 것 하나를 오늘 실물로 확인할 수 있게 했기 때문에</strong> 다음 신뢰가 생겼다.</p>
@@ -63,7 +67,7 @@ border:1px solid var(--border);background:var(--surface);color:var(--text-soft);
 <p>“잘 팔릴 것”이라는 기획서보다 <code>고객 반응 → 샘플 → 소량 선주문 → 실제 재구매</code>가 판단하기 좋은 증거다. 한 단계를 통과할 때마다 다음 비용을 쓰는 방식으로 위험을 줄일 수 있다.</p>
 </div>
 <p><strong>비유가 깨지는 지점:</strong> 항공기는 상품 샘플보다 안전·인증·자본 부담이 훨씬 크고 검증 기간도 길다. 또 구매의향서는 확정 주문이 아니며, 모터가 돌아간다는 증거가 항공기 전체의 안전성까지 증명하지는 않는다.</p>
-<h2>정확히 배우기</h2>
+<h2>정확한 이름 붙이기</h2>
 <table>
 <thead>
 <tr>
@@ -95,8 +99,8 @@ border:1px solid var(--border);background:var(--surface);color:var(--text-soft);
 </tr>
 <tr>
 <td>같은 무게에 전기를 얼마나 많이 담는지</td>
-<td><strong>배터리 에너지 밀도(energy density)</strong>. 영상은 Wh/kg(와트시/킬로그램)으로 표현한다.</td>
-<td>밀도가 높으면 안전성·수명·비용³C4 자동으로 좋아진다.</td>
+<td><strong>배터리 에너지 밀도(energy density)</strong>. 영상은 Wh/kg(watt-hours per kilogram, 킬로그램당 와트시)으로 표현한다.</td>
+<td>밀도가 높으면 안전성·수명·비용도 자동으로 좋아진다.</td>
 </tr>
 </tbody>
 </table>
@@ -203,6 +207,8 @@ border:1px solid var(--border);background:var(--surface);color:var(--text-soft);
 <li><strong>중단 기준 1:</strong> 7일 안에 다음 단계의 실물 증거가 나오지 않으면 확장과 추가 투자를 중단하고, 증거 단계부터 다시 정의한다.</li>
 </ul>
 <h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>기존 상세 정리 펼치기</strong> — 개념·수치·화자 디테일·13개 섹션</summary>
 <hr>
 <h3>핵심 학습 포인트 (내가 배워야 할 것)</h3>
 <table>
@@ -396,6 +402,7 @@ border:1px solid var(--border);background:var(--surface);color:var(--text-soft);
 <p>장기적으로는 조종석의 인력 구조도 바뀔 수 있다. Waymo의 원격 운영자처럼, 한 명의 원격 파일럿이 여러 항공기를 지원하는 형태가 가능할 수 있다. 다만 이런 자율화는 승객 항공기보다 화물(cargo)에서 먼저 시작될 가능성이 크다고 본다.</p>
 <p>최종적으로는 더 조용하고, 진동이 적고, 티켓이 싸고, 동네 공항에서 더 자주 탈 수 있는 항공 이동을 만들려는 비전이다.</p>
 <hr>
+</details>
 <h2>출처</h2>
 <div class="callout callout-cite"><div class="ct">출처</div>
 <p>Y Combinator The World’s Largest Electric Aircraft Just Flew · https://youtu.be/nM86DBOqgPM · 전사: Whisper large-v3 (auto)</p>
