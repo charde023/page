@@ -1,0 +1,444 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>EP 112. AI 반도체 안에서 일어나는 일들: KV Cache부터 Roofline까지 (v2)</title>
+<meta name="description" content="Q. 왜 추론은 메모리 싸움이 되는가? · 토큰 수요가 폭증하므로 병목은 칩보다 운영 설계로 이동한다"><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">AI Frontier Korea 학습노트</div><h1>EP 112. AI 반도체 안에서 일어나는 일들: KV Cache부터 Roofline까지 (v2)</h1>
+<div class="meta">원작자 이진원 · HyperAccel CTO · 업로드 2026-09-01 · 104.2분 · <a href="https://youtu.be/9Qf_QLt7IWY" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h1>EP 112. AI 반도체 안에서 일어나는 일들: KV Cache부터 Roofline까지 (v2)</h1>
+<div class="callout callout-summary"><div class="ct">카드</div>
+<p><strong>질문</strong> 왜 거대 언어 모델 추론은 점점 계산 문제가 아니라 메모리와 운영 문제가 되는가?
+<strong>답</strong> 입력을 한 번에 읽는 단계와 한 글자씩 내는 단계의 성격이 달라서, 실제 서비스에서는 저장해 둔 문맥을 얼마나 싸고 빠르게 읽느냐가 핵심이 된다.
+<strong>통찰</strong> 토큰 수요와 문맥 길이가 동시에 커지므로 추론 사업의 승부는 더 빠른 칩 하나가 아니라 메모리 계층과 배치 운영을 묶는 시스템 설계다.
+<strong>비유</strong> 손님 한 명씩 바로 만드는 가게와 여러 주문을 모아 한 번에 처리하는 햄버거 가게의 차이.</p>
+</div>
+<div class="callout callout-info"><div class="ct">영상 정보</div>
+<p>원작자 이진원 · HyperAccel CTO · 추정 출처 https://youtu.be/9Qf_QLt7IWY · 업로드 2026-09-01 · 104.2분 · 전사 caption</p>
+</div>
+<hr>
+<h2>1. 쉬운 말로</h2>
+<p>사람이 말로 질문하면 기계는 먼저 질문 전체를 한꺼번에 읽는다.<br>
+그다음부터는 대답을 한 낱말씩 차례로 만든다.<br>
+처음 읽을 때는 책상 위에 종이를 쫙 펴 놓고 한 번에 보는 것과 비슷해서 빠르게 일할 수 있다.<br>
+하지만 대답을 만들 때는 앞에서 만든 낱말을 보고 다음 낱말을 정해야 해서 줄 서서 걷는 것처럼 느리다.<br>
+기계는 앞에서 읽은 내용을 매번 다시 읽지 않으려고 메모지처럼 저장해 둔다.<br>
+문제가 되는 것은 이 메모지가 생각보다 너무 커진다는 점이다.<br>
+질문이 길고, 쓰는 사람이 많고, 일을 오래 맡기는 사람이 늘어나면 메모지가 산처럼 쌓인다.<br>
+그래서 요즘 중요한 일은 더 세게 계산하는 것만이 아니라, 이 메모지를 언제 버리고 어디에 두고 언제 다시 꺼낼지 정하는 것이다.<br>
+가게로 치면 빈 버스를 줄이고 손님을 잘 태워 보내야 돈이 남는다.<br>
+결국 똑똑한 기계 서비스는 머리 좋은 기계만으로 되는 것이 아니라, 기다림과 저장 공간을 잘 다루는 장사다.</p>
+<h2>2. 이제 정확한 말로</h2>
+<table>
+<thead>
+<tr>
+<th>쉬운 말(위에서 쓴 표현)</th>
+<th>정확한 용어 (English) [IPA]</th>
+<th>어원·직관</th>
+<th>한 줄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>질문 전체를 한꺼번에 읽기</td>
+<td>프리필 (Prefill)</td>
+<td>pre=앞서, fill=채우다</td>
+<td>입력 프롬프트 전체를 병렬로 처리해 첫 출력 토큰을 만들기 전까지의 단계다.</td>
+</tr>
+<tr>
+<td>대답을 한 낱말씩 만들기</td>
+<td>디코드 (Decode) [diːˈkoʊd]</td>
+<td>code를 풀어낸다는 뜻</td>
+<td>이전 출력 토큰을 다시 입력으로 넣어 다음 토큰을 순차 생성하는 단계다.</td>
+</tr>
+<tr>
+<td>메모지</td>
+<td>키-값 캐시 (KV cache) [kæʃ]</td>
+<td>cache=숨겨 둔 저장소, 프랑스어 cacher</td>
+<td>이전 토큰의 Key와 Value를 저장해 다음 디코드에서 재계산하지 않게 하는 메모리다.</td>
+</tr>
+<tr>
+<td>저장해 둔 문맥</td>
+<td>문맥 캐시 (Context cache) [ˈkɑːntekst]</td>
+<td>con=함께, texere=짜다</td>
+<td>긴 대화나 시스템 프롬프트에서 반복 사용되는 계산 결과를 재사용하는 구조다.</td>
+</tr>
+<tr>
+<td>한 번 읽고 몇 번 써먹는가</td>
+<td>산술 강도 (Arithmetic intensity)</td>
+<td>arithmetic=수 계산, intensity=강도</td>
+<td>메모리에서 1바이트를 읽은 뒤 수행하는 연산량을 뜻한다.</td>
+</tr>
+<tr>
+<td>계산 쪽이 막힘</td>
+<td>계산 병목 (Compute-bound)</td>
+<td>bound=묶여 제한됨</td>
+<td>메모리보다 연산 장치가 부족해 성능이 제한되는 상태다.</td>
+</tr>
+<tr>
+<td>저장소 읽기가 막힘</td>
+<td>메모리 병목 (Memory-bound)</td>
+<td>memory=기억 장치</td>
+<td>연산 장치는 남지만 데이터를 읽어 오는 속도가 느려 성능이 제한되는 상태다.</td>
+</tr>
+<tr>
+<td>지붕선 그림</td>
+<td>루프라인 분석 (Roofline analysis)</td>
+<td>지붕 모양 선으로 성능 상한을 표현</td>
+<td>하드웨어의 연산 성능과 메모리 대역폭으로 작업의 성능 한계를 보는 그래프다.</td>
+</tr>
+<tr>
+<td>손님을 모아 태우기</td>
+<td>배칭 (Batching)</td>
+<td>batch=묶음</td>
+<td>여러 요청의 토큰을 묶어 한 번에 처리해 장치 활용률을 높이는 방법이다.</td>
+</tr>
+<tr>
+<td>빈칸 줄이기</td>
+<td>연속 배칭 (Continuous batching)</td>
+<td>continuous=끊기지 않는</td>
+<td>토큰 생성 단계마다 새 요청을 끼워 넣어 빈 연산 슬롯을 줄이는 스케줄링이다.</td>
+</tr>
+<tr>
+<td>쪽 단위 메모지</td>
+<td>페이지드어텐션 (PagedAttention)</td>
+<td>운영체제의 page table 은유</td>
+<td>KV 캐시를 고정 큰 덩어리가 아니라 작은 페이지 단위로 동적 할당하는 기법이다.</td>
+</tr>
+<tr>
+<td>작은 조수가 먼저 써 보기</td>
+<td>추측 디코딩 (Speculative decoding)</td>
+<td>speculate=미리 추측하다</td>
+<td>작은 모델이나 일부 층이 여러 토큰을 먼저 만들고 큰 모델이 한꺼번에 검증하는 방법이다.</td>
+</tr>
+<tr>
+<td>읽기 담당과 쓰기 담당 나누기</td>
+<td>프리필-디코드 분리 (Prefill-decode disaggregation)</td>
+<td>disaggregate=쪼개다</td>
+<td>프리필 서버 풀과 디코드 서버 풀을 나눠 서비스 품질을 맞추는 구조다.</td>
+</tr>
+</tbody>
+</table>
+<h2>3. 숫자와 디테일 — 그리고 왜 중요한가</h2>
+<table>
+<thead>
+<tr>
+<th>숫자·설정·명령</th>
+<th>화자 맥락</th>
+<th>이 숫자가 바꾸는 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12개월 50배, 14개월 100배, 2024년 대비 330배</td>
+<td>Google 토큰 사용량 증가 사례</td>
+<td>추론 수요가 일시 유행이 아니라 인프라 투자 압력임을 보여 준다.</td>
+</tr>
+<tr>
+<td>2030년 6.7조 달러</td>
+<td>전 세계 데이터센터 투자 추정</td>
+<td>전력·칩·메모리 공급망이 AI 사업의 핵심 원가가 된다.</td>
+</tr>
+<tr>
+<td>2035년 18.4GW</td>
+<td>한국 4대 메가프로젝트 데이터센터 계획</td>
+<td>국내에서도 전력 허가와 입지가 AI 인프라 병목이 된다.</td>
+</tr>
+<tr>
+<td>평균 5년</td>
+<td>미국 데이터센터 전력 연결 소요</td>
+<td>칩을 사도 전기가 늦으면 서비스 공급이 늦어진다.</td>
+</tr>
+<tr>
+<td>매출 10배, 연산 3배</td>
+<td>Anthropic 성장과 컴퓨트 증가 비교</td>
+<td>토큰 단가·마진·임대료가 오를 수밖에 없는 압력을 설명한다.</td>
+</tr>
+<tr>
+<td>추론 마진 70~80%, 상한 90%</td>
+<td>프론티어 랩 추론 수익성 추정</td>
+<td>마진 개선 여지가 작아져 운영 효율과 단가 상승이 더 중요해진다.</td>
+</tr>
+<tr>
+<td>Bertha 목표가 약 5천 달러</td>
+<td>HyperAccel 칩 가격 목표</td>
+<td>고가 GPU 대신 저가 추론 전용 칩 시장의 가능성을 만든다.</td>
+</tr>
+<tr>
+<td>546GB/s, H100 약 3TB/s, 활용률 90% 이상</td>
+<td>LPDDR 기반 Bertha와 H100 비교</td>
+<td>이론 대역폭보다 실제 활용률이 구매 판단에 중요해진다.</td>
+</tr>
+<tr>
+<td>칩당 192GB</td>
+<td>Bertha 메모리 용량</td>
+<td>큰 모델을 적은 칩 수로 올릴 수 있어 시스템 비용을 낮춘다.</td>
+</tr>
+<tr>
+<td>토큰당 약 320KB</td>
+<td>Llama 3.1 70B의 KV 캐시 계산</td>
+<td>긴 문맥에서 모델 가중치보다 캐시가 더 큰 병목이 될 수 있다.</td>
+</tr>
+<tr>
+<td>128K 문맥 약 40GB</td>
+<td>한 사용자 KV 캐시 용량</td>
+<td>H100 80GB의 절반을 한 사용자 문맥이 차지할 수 있다.</td>
+</tr>
+<tr>
+<td>Llama 3.1 405B, 배치 32, H100 27개 이상</td>
+<td>KV 용량 기준 계산</td>
+<td>실제로는 8장 단위 구성 때문에 약 32개가 필요해진다.</td>
+</tr>
+<tr>
+<td>H100 BF16 약 1PFLOP/s, 3.35TB/s</td>
+<td>루프라인 설명</td>
+<td>ridge point 약 300이라는 하드웨어 기준이 나온다.</td>
+</tr>
+<tr>
+<td>프리필 산술 강도 100만, 디코드 1</td>
+<td>배치 1, 긴 입력 예시</td>
+<td>프리필은 계산 병목, 디코드는 메모리 병목이 되는 이유를 만든다.</td>
+</tr>
+<tr>
+<td>512 배치에서 KV 약 22TB</td>
+<td>128K 문맥 기준</td>
+<td>대규모 동시 서비스가 단순히 GPU 메모리로는 불가능함을 보여 준다.</td>
+</tr>
+<tr>
+<td>fast mode 2.5배 속도, 6배 가격</td>
+<td>빠른 응답 모드 가격 사례</td>
+<td>빠른 사용자 경험은 서버 전체 처리량 희생분을 가격으로 회수해야 한다.</td>
+</tr>
+<tr>
+<td>8,192 토큰</td>
+<td>chunked prefill 예시</td>
+<td>긴 입력을 한 번에 넣으면 디코드 지연이 커져 잘라 넣어야 한다.</td>
+</tr>
+<tr>
+<td>평균 세션 62.6분, 9.2 요청, 요청당 약 9단계</td>
+<td>에이전트 작업 분석</td>
+<td>에이전트 서비스는 짧은 채팅과 전혀 다른 장시간 워크로드다.</td>
+</tr>
+<tr>
+<td>사람 시간 92%, 도구 4.8%, 모델 3.3%</td>
+<td>에이전트 세션 시간 분해</td>
+<td>비싼 메모리를 사람이 쉬는 동안 붙잡아 두는 비용 문제가 생긴다.</td>
+</tr>
+<tr>
+<td>요청 사이 중앙값 25분, KV 약 40GB</td>
+<td>에이전트 대기 구간</td>
+<td>캐시를 계속 HBM에 둘지 내보낼지 결정하는 기준이 된다.</td>
+</tr>
+<tr>
+<td>골든타임 5~10분</td>
+<td>캐시 유지 판단</td>
+<td>짧은 복귀는 캐시 유지, 긴 이탈은 퇴거가 유리하다는 운영 정책을 만든다.</td>
+</tr>
+<tr>
+<td>Groq SRAM 약 500MB, ridge point 8</td>
+<td>이기종 컴퓨팅 설명</td>
+<td>FFN 같은 낮은 산술 강도 구간에 특화 칩을 붙일 근거가 된다.</td>
+</tr>
+</tbody>
+</table>
+<h2>4. 막히는 곳 · 반론</h2>
+<ul>
+<li><strong>내가 막힐 지점</strong>: 프리필은 빠르고 디코드는 느리다는 말이 직관과 다를 수 있다 → 접기 전사 “프리필과 디코드” 및 “루프라인” 대목으로 돌아가면 풀린다.</li>
+<li><strong>내가 막힐 지점</strong>: KV 캐시가 왜 사용자 수와 문맥 길이에 따라 폭증하는지 계산이 어렵다 → 접기 전사 “토큰당 320KB와 128K 문맥 40GB” 대목으로 돌아가면 된다.</li>
+<li><strong>내가 막힐 지점</strong>: throughput과 interactivity가 왜 서로 충돌하는지 헷갈린다 → 접기 전사 “맥모닝 비유와 InferenceX 그래프” 대목이 핵심이다.</li>
+<li><strong>화자가 인정한 한계</strong>: 캐시 퇴거 예측이 사용자별인지 내용 기반인지는 확실히 모른다고 했다. 또한 새 구조를 기존 제작 칩이 모두 지원할 수 있는지는 경우에 따라 다르다고 했다.</li>
+<li><strong>작성자의 의심</strong>: Bertha의 90% 이상 대역폭 활용률은 실제 다양한 모델·서빙 소프트웨어·장문 에이전트 부하에서 재현되는지 별도 벤치마크가 필요하다.</li>
+</ul>
+<h2>5. 4렌즈 통찰</h2>
+<table>
+<thead>
+<tr>
+<th>렌즈</th>
+<th>고정 질문</th>
+<th>통찰 (≤2문장, 영상 고유의 이름·숫자를 담을 것)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>교육자</td>
+<td>이걸 가르치면 학생은 어디서 막히고, 어떤 비유가 먹히나?</td>
+<td>“프리필은 단체 사진, 디코드는 한 줄 입장”으로 설명하면 TTFT와 TBT가 갈라진다. KV 캐시 128K에 40GB라는 숫자를 보여 주면 메모리 병목이 바로 보인다.</td>
+</tr>
+<tr>
+<td>사업가</td>
+<td>돈이 어디서 생기고 어디로 새나? 우리(에이폼: 이커머스·물류) 원가·마진·결정에 대입하면?</td>
+<td>에이폼의 자동 상담·상품등록 에이전트도 긴 문맥을 붙잡으면 25분 대기 동안 비용이 샌다. 캐시 재사용과 작업 묶음 처리 정책을 만들면 토큰 원가를 낮출 수 있다.</td>
+</tr>
+<tr>
+<td>마케터</td>
+<td>화자는 무엇으로 설득했나(프레이밍·숫자·이야기)? 우리 카피·상세페이지에 훔칠 것은?</td>
+<td>화자는 “fast mode 2.5배 속도에 6배 가격”처럼 속도와 비용의 교환을 숫자로 설득했다. 상세페이지에서도 “빠른 배송은 왜 더 비싼가”를 처리량과 우선순위로 설명할 수 있다.</td>
+</tr>
+<tr>
+<td>AI엔지니어</td>
+<td>내 시스템(클로드코드·코덱스·야간 파이프라인·에이전트 운영)에 바로 적용·검증할 것은?</td>
+<td>클로드코드 야간 작업은 평균 62.6분 세션형 부하에 가깝기 때문에 캐시 유지보다 체크포인트·요약·재시작 설계가 중요하다. 5~10분 안에 후속 지시가 없으면 긴 원문 대신 압축 문맥으로 넘기는 규칙을 실험한다.</td>
+</tr>
+</tbody>
+</table>
+<h2>6. 파인만 과제</h2>
+<ul>
+<li>[ ] __에게 이 개념을 3문장으로 설명해 본다</li>
+<li>[ ] 이번 주 30분 동안 에이폼 자동화 작업 중 긴 문맥을 계속 붙잡는 흐름 1개를 찾아 “요약 후 재시작” 방식으로 바꿔 본다.</li>
+</ul>
+<details><summary>섹션별 상세 (Z2)</summary>
+<h2>한눈에 보기</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>가치가 인프라로 이동</td>
+<td>모델 경쟁이 추론 인프라·전력·칩·메모리 경쟁으로 내려왔다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>compute 부족</td>
+<td>토큰 사용량은 12개월 50배, 2024년 대비 330배까지 늘었다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Bertha 칩</td>
+<td>HyperAccel은 HBM 대신 LPDDR을 써 저전력·저가 추론 칩을 목표로 한다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>프리필과 디코드</td>
+<td>입력 전체 처리와 한 토큰씩 생성은 전혀 다른 작업이다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Transformer 내부</td>
+<td>attention은 토큰 간 관계, FFN은 토큰 내부 차원 연산에 가깝다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>KV 캐시</td>
+<td>이전 Key와 Value를 저장해 재계산을 피하지만 용량이 폭증한다.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>루프라인</td>
+<td>프리필은 계산 병목, 디코드는 메모리 병목이 되기 쉽다.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>배칭과 파레토</td>
+<td>빠른 개인 응답과 서버 전체 처리량은 교환 관계다.</td>
+</tr>
+<tr>
+<td>9</td>
+<td>서빙 최적화</td>
+<td>continuous batching, PagedAttention, chunked prefill, speculative decoding이 쓰인다.</td>
+</tr>
+<tr>
+<td>10</td>
+<td>PD 분리</td>
+<td>프리필 풀과 디코드 풀을 나누면 goodput을 높일 수 있다.</td>
+</tr>
+<tr>
+<td>11</td>
+<td>에이전트 부하</td>
+<td>사람 대기 시간이 길어 KV 캐시 관리가 새 병목이 된다.</td>
+</tr>
+<tr>
+<td>12</td>
+<td>이기종 컴퓨팅</td>
+<td>GPU, LPU, 메모리 계층이 역할별로 결합되는 방향으로 간다.</td>
+</tr>
+</tbody>
+</table>
+<h2>1. 가치가 인프라로 이동</h2>
+<p>노정석은 AI 가치 포착이 모델 자체에서 아래의 데이터센터·칩·추론 인프라와 위의 애플리케이션으로 이동한다고 짚는다. 이 강의는 그중 아래쪽, 즉 학습된 모델이 실제 고객 요청을 처리할 때 칩 안에서 무슨 일이 벌어지는지를 설명하는 수업이다.</p>
+<h2>2. 영원한 compute 부족</h2>
+<p>이진원은 Sam Altman의 “compute crunch” 발언을 가져와 앞으로도 연산 자원 부족이 계속될 것이라고 말한다. Google 사례에서는 토큰 사용량이 12개월 50배, 14개월 100배, 2024년 대비 330배로 증가했다. 데이터센터 투자와 전력 심사 병목 때문에 추론 공급은 쉽게 늘지 않는다.</p>
+<h2>3. HyperAccel Bertha</h2>
+<p>HyperAccel의 Bertha는 HBM 대신 LPDDR을 사용한 데이터센터형 AI 반도체다. 목표 가격은 약 5천 달러이고, 칩당 192GB 메모리를 제공한다. 이론 대역폭은 H100보다 낮지만 내부 구조로 90% 이상 활용률을 목표로 한다.</p>
+<h2>4. LLM 추론의 두 단계</h2>
+<p>사용자가 “토마토는 과일인가?” 같은 질문을 넣으면 모델은 입력 토큰 전체를 한 번에 처리해 첫 토큰을 만든다. 이것이 prefill이다. 이후에는 이전 토큰을 입력으로 삼아 다음 토큰을 하나씩 만드는 decode가 반복된다. TTFT는 입력부터 첫 토큰까지의 시간이고, TBT 또는 TPOT는 출력 토큰 사이의 시간이다.</p>
+<h2>5. Transformer 내부</h2>
+<p>Transformer의 핵심은 attention과 FFN이다. attention은 Query, Key, Value를 만들고 토큰들 사이의 관계를 계산한다. FFN은 각 토큰 벡터 내부 차원들 사이의 변환을 담당하며, dense model 기준 파라미터의 대략 80%가 FFN 쪽에 있다.</p>
+<h2>6. KV 캐시 문제</h2>
+<p>디코드에서는 이전 토큰들의 Key와 Value가 계속 필요하다. 매번 다시 계산할 수도 있지만, 보통은 KV cache로 저장했다가 읽어 온다. Llama 3.1 70B 기준 토큰당 약 320KB가 필요하고, 128K 문맥 하나는 약 40GB를 차지한다. 그래서 긴 문맥과 많은 사용자는 모델 자체보다 더 큰 메모리 문제를 만든다.</p>
+<h2>7. 산술 강도와 루프라인</h2>
+<p>산술 강도는 메모리에서 데이터를 한 번 읽고 몇 번 연산하느냐다. H100은 BF16 기준 약 1PFLOP/s와 3.35TB/s 대역폭을 가지며 ridge point가 약 300이다. 프리필은 긴 입력을 한 번에 처리해 산술 강도가 높고, 디코드는 한 토큰씩 처리해 산술 강도가 낮아 메모리 병목이 된다.</p>
+<h2>8. 처리량과 반응성</h2>
+<p>interactivity는 사용자 한 명이 초당 받는 토큰 수이고, throughput은 서버가 전체 사용자에게 초당 만들어 내는 토큰 수다. 맥도날드가 여러 햄버거를 한꺼번에 만들면 가게 전체 처리량은 좋아지지만 첫 손님의 체감 속도는 나빠질 수 있다. SemiAnalysis InferenceX의 Pareto curve는 이 교환 관계를 그래프로 보여 준다.</p>
+<h2>9. 실제 서빙 최적화</h2>
+<p>static batching은 가장 긴 요청 때문에 빈 공간이 생긴다. continuous batching은 토큰 생성 단위마다 새 요청을 끼워 넣어 빈 슬롯을 줄인다. PagedAttention은 KV 캐시를 페이지 단위로 동적 할당해 메모리 낭비를 줄인다. chunked prefill은 긴 입력을 잘라 디코드 지연을 줄이고, speculative decoding은 작은 모델이 후보 토큰을 먼저 만든 뒤 큰 모델이 검증한다.</p>
+<h2>10. Prefill-decode disaggregation</h2>
+<p>프리필과 디코드는 성격이 달라 같은 풀에서 섞이면 서로 방해한다. 그래서 prefill pool과 decode pool을 분리해 SLO를 만족하는 goodput을 높인다. 다만 prefill에서 만든 KV를 decode 쪽으로 보내야 하므로 네트워크 대역폭과 규모가 중요하다.</p>
+<h2>11. Agentic AI의 새 병목</h2>
+<p>에이전트 작업은 평균 세션 62.6분, 요청 9.2개, 요청당 약 9단계로 분석된다. 전체 시간 중 사람 대기 시간이 92%이고, 모델 호출은 3.3%에 불과하다. 요청 사이 중앙값 25분 동안 약 40GB KV 캐시를 비싼 메모리에 붙잡아 두는 것은 낭비이므로, 5~10분 골든타임 뒤에는 다른 저장소로 내보내는 방식이 중요해진다.</p>
+<h2>12. 이기종 컴퓨팅의 미래</h2>
+<p>Groq은 SRAM 기반으로 KV 저장에는 약하지만 낮은 산술 강도 구간, 특히 FFN 일부에 적합할 수 있다. NVIDIA의 Vera Rubin 계열과 Groq LPX 결합처럼 앞으로는 하나의 GPU가 모든 일을 하기보다 각 장치가 잘하는 구간을 맡는 이기종 컴퓨팅이 늘어날 것이다. HyperAccel도 가격·전력 병목을 겨냥한 다음 제품을 준비 중이라고 말한다.</p>
+</details>
+<div class="callout callout-cite"><div class="ct">출처</div>
+<p>AI Frontier Korea "EP 112. AI 반도체 안에서 일어나는 일들: KV Cache부터 Roofline까지" · https://youtu.be/9Qf_QLt7IWY · 전사: caption</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>노정석은 오늘 강의의 주제를 AI 가치가 모델 위쪽 애플리케이션과 아래쪽 인프라로 이동하는 현상이라고 소개한다. 이진원 HyperAccel CTO는 추론 공학을 설명하기 위해, 먼저 Sam Altman이 말한 지속적인 compute 부족과 Google 토큰 사용량 폭증 사례를 든다. 토큰 수요는 12개월 50배, 14개월 100배, 2024년 대비 약 330배로 커졌고, 데이터센터 투자와 전력 확보가 핵심 병목이 되었다.</p>
+<p>이진원은 HyperAccel의 Bertha를 소개한다. 이 칩은 HBM 대신 LPDDR을 쓰며, 낮은 전력과 낮은 가격을 목표로 한다. 목표 가격은 약 5천 달러, 메모리는 칩당 192GB다. 대역폭은 546GB/s로 H100의 약 3TB/s보다 낮지만, 실제 활용률을 90% 이상으로 끌어올리는 구조를 강조한다.</p>
+<p>이어서 LLM inference는 prefill과 decode로 나뉜다고 설명한다. prefill은 사용자의 입력 토큰 전체를 한 번에 처리해 첫 출력 토큰을 만드는 단계다. decode는 이전 출력 토큰을 다시 입력으로 넣어 다음 토큰을 하나씩 만드는 반복 단계다. 입력부터 첫 토큰까지 걸리는 시간이 TTFT이고, 출력 토큰 사이 시간은 TBT 또는 TPOT라고 부른다.</p>
+<p>Transformer 내부에는 attention과 FFN이 있다. attention은 Query, Key, Value를 만들고 토큰 사이 관계를 계산한다. FFN은 토큰 벡터 내부 차원들을 변환한다. dense model 기준으로 파라미터는 attention보다 FFN 쪽에 훨씬 많고, MoE 모델에서는 그 비중이 더 커진다.</p>
+<p>디코드 단계에서는 과거 토큰들의 Key와 Value가 계속 필요하다. 이를 매번 다시 계산하지 않고 메모리에 저장해 두는 것이 KV cache다. Llama 3.1 70B 기준으로 토큰 하나의 KV cache는 약 320KB이고, 128K 문맥은 약 40GB가 된다. H100 80GB 메모리의 절반을 사용자 한 명의 긴 문맥이 차지할 수 있으므로, KV cache는 추론의 핵심 병목이 된다.</p>
+<p>KV cache를 줄이는 방법으로는 작은 모델 사용, 8비트·4비트 양자화, GQA, MQA, MLA, sliding-window attention, CPU 메모리나 SSD로의 퇴거가 있다. 특히 agentic AI에서는 긴 작업과 많은 중간 호출 때문에 모든 KV를 비싼 HBM에 계속 둘 수 없다.</p>
+<p>성능 병목을 이해하기 위해 산술 강도(arithmetic intensity)를 설명한다. 이는 메모리에서 1바이트를 읽은 뒤 얼마나 많은 연산을 하느냐를 뜻한다. H100은 BF16에서 약 1PFLOP/s와 3.35TB/s 대역폭을 가지므로 균형점인 ridge point가 약 300이다. 프리필은 긴 입력을 한꺼번에 계산해 산술 강도가 높아 compute-bound가 되기 쉽고, 디코드는 한 토큰씩 처리해 memory-bound가 되기 쉽다.</p>
+<p>Roofline analysis는 하드웨어의 연산 성능과 메모리 대역폭이 만드는 성능 상한을 보여 준다. 그래프에서 오른쪽은 compute-bound, 왼쪽은 memory-bound에 가깝다. 디코드를 오른쪽으로 옮기기 위해 batch size를 키우지만, attention에서는 사용자마다 KV가 달라 공유가 어렵다. 그래서 GQA, MQA, MLA, prefix caching, KV quantization 같은 방법이 쓰인다.</p>
+<p>벤치마크에서는 한 숫자만 보면 안 된다. 사용자 한 명이 초당 받는 토큰 수는 interactivity이고, 서버 전체가 초당 만드는 토큰 수는 throughput이다. 여러 주문을 한꺼번에 처리하면 가게 전체 처리량은 늘지만 앞 손님의 대기 시간은 길어질 수 있다. SemiAnalysis InferenceX의 Pareto curve는 이 둘의 교환 관계를 보여 준다.</p>
+<p>실제 서빙에서는 vLLM, SGLang 같은 프레임워크가 중요하다. static batching은 한 묶음의 모든 요청이 끝날 때까지 다음 요청을 못 받아 빈 공간이 생긴다. continuous batching은 토큰 생성 iteration마다 새 요청을 넣어 빈 공간을 줄인다. PagedAttention은 KV cache를 작은 page 단위로 동적 할당해 메모리 낭비를 줄인다.</p>
+<p>chunked prefill은 긴 입력을 한 번에 넣지 않고 잘라 넣는다. 보통 decode에 우선권을 주어 답변 중간에 멈추는 현상을 줄이고, 대신 첫 토큰까지의 시간은 조금 희생한다. speculative decoding은 작은 draft model이나 모델 일부가 여러 토큰을 먼저 만들고, 큰 모델이 이를 한꺼번에 검증해 디코드 비용을 줄이는 방법이다.</p>
+<p>prefill과 decode의 성격이 너무 다르기 때문에 둘을 아예 분리하는 PD disaggregation도 쓰인다. prefill pool과 decode pool을 따로 만들면 SLO를 만족하는 goodput을 높일 수 있다. 다만 prefill에서 생성된 KV를 decode pool로 보내야 하므로 빠른 네트워크와 충분한 규모가 필요하다.</p>
+<p>agentic AI에서는 세션, 요청, 단계라는 구조가 중요하다. 한 분석에서 평균 세션은 62.6분, 세션당 요청은 9.2개, 요청당 단계는 약 9개였다. 전체 시간의 92%는 사람이 결과를 읽고 다음 지시를 고민하는 시간이고, LLM 호출은 3.3%에 불과했다. 요청 사이 대기 중앙값은 25분이며, 그동안 약 40GB의 KV cache가 메모리를 차지할 수 있다.</p>
+<p>그래서 시스템은 5~10분 정도의 골든타임 동안 캐시를 유지하고, 사용자가 곧 돌아오지 않을 것 같으면 CPU DRAM, SSD, 고대역폭 플래시 같은 계층으로 내보낸다. 삭제 후 재계산하는 것보다 멀리 옮겼다가 다시 읽는 편이 대체로 싸고 빠르다. 앞으로는 KV cache를 어느 계층에 언제 두고 언제 가져올지가 agentic AI 인프라의 핵심 문제가 된다.</p>
+<p>마지막으로 이진원은 미래가 heterogeneous computing으로 갈 것이라고 말한다. Groq 같은 LPU는 SRAM이 작아 KV 저장에는 불리하지만, 낮은 산술 강도 구간이나 FFN 일부에는 강점이 있을 수 있다. NVIDIA Vera Rubin과 Groq LPX 결합 사례처럼, 앞으로는 GPU 하나가 모든 일을 하기보다 각 장치가 잘하는 일을 맡아 하나의 추론 파이프라인을 구성하게 된다.</p>
+<p>반도체 설계도 AI의 영향을 받는다. 검증, RTL 작성, CUDA 커널 작성처럼 소프트웨어적으로 확인 가능한 영역은 AI가 빠르게 도울 수 있다. 다만 실제 칩은 배치, 배선, 트랜지스터 수준 구현까지 이어져야 하므로 시간이 더 필요하다. 참석자들은 추론 인프라가 이제 산업화 단계로 들어갔고, 앞으로 칩·메모리·서빙 소프트웨어의 경쟁이 더 빨라질 것이라고 정리하며 마무리한다.</p>
+</details>
+</body></html>
