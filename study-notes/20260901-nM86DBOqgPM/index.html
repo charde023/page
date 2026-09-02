@@ -41,12 +41,168 @@ border:1px solid var(--border);background:var(--surface);color:var(--text-soft);
 <div class="eyebrow">Y Combinator 학습노트</div><h1>The World’s Largest Electric Aircraft Just Flew</h1>
 <div class="meta">원작자 Anders Forslund · Heart Aerospace · 업로드 2026-09-01 · 14.8분 · <a href="https://youtu.be/nM86DBOqgPM" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
 <h1>The World’s Largest Electric Aircraft Just Flew</h1>
-<div class="callout callout-summary"><div class="ct">한 줄 요약</div>
-<p>Heart Aerospace는 <strong>작은 3D 프린트 모형</strong>에서 출발해, 짧은 지역 항공 노선을 더 싸고 조용하게 만들 수 있는 <strong>하이브리드 전기 항공기(hybrid-electric aircraft)</strong>를 실제 비행 단계까지 끌고 갔다.</p>
+<h2>오늘의 질문</h2>
+<p><span style="color:#ef6c00; font-size:1.1em"><strong>말만 있는 큰 꿈은 어떻게 다음 사람이 믿고 돈과 기회를 건네도록 하는 증거가 될까?</strong></span></p>
+<h2>읽기 전 내 답</h2>
+<div class="callout callout-question"><div class="ct">설명을 읽기 전에 먼저 답하기</div>
+<p>“위험을 줄인 증거”라는 말을 보지 않고 1~2문장으로 설명해보자.<br>
+이 공개 노트에는 개인 답을 적지 말고, 로컬의 개인 학습 기록에만 답과 확신도를 남긴다.</p>
 </div>
-<div class="callout callout-info"><div class="ct">영상 정보</div>
-<p>원작자 Anders Forslund · Heart Aerospace · 추정 출처 https://www.heartaerospace.com · 업로드 2026-09-01 · 14.8분 · 전사 Whisper large-v3 (auto)</p>
+<h2>30초 설명</h2>
+<p>작은 비행기를 짧은 거리에 자주 띄우는 일은 지금의 제트엔진으로는 비싸다. Heart Aerospace는 모터로 날면 더 단순하고 조용하며 싸질 수 있다고 보고, <strong>작은 모형 → 항공사의 구매 의향 → 실물 모터 → 선주문 → 실제 비행</strong>으로 한 단계씩 가능성을 보였다. 다만 배터리는 써도 가벼워지지 않아 비상용 거리를 확보하기 어렵기 때문에 연료 엔진을 보조로 두었다. 이 글의 핵심은 전기 비행기 자체보다, <span style="color:#ef6c00; font-size:1.1em"><strong>큰 꿈을 다음 사람이 판단할 수 있는 작은 증거로 바꾸어 가는 방식</strong></span>이다.</p>
+<h2>한 장면으로 이해하기</h2>
+<p>YC 데모데이 때는 손에 들리는 3D 프린트 모형밖에 없었다. 그 뒤 항공사의 구매의향서를 얻고, 400kW(킬로와트) 모터를 만들고, 선주문과 실제 비행으로 나아갔다. 설명을 잘해서가 아니라, <strong>어제까지 불확실했던 것 하나를 오늘 실물로 확인할 수 있게 했기 때문에</strong> 다음 신뢰가 생겼다.</p>
+<h3>인과 3단계</h3>
+<ol>
+<li>항공기 같은 큰 일은 모르는 것이 많아 말만으로는 믿기 어렵다.</li>
+<li>각 단계의 증거가 “이 부분은 정말 된다”고 보여주면 불확실성이 하나씩 줄어든다.</li>
+<li>줄어든 불확실성만큼 고객은 주문을, 투자자는 자본을, 팀은 다음 기회를 건넬 수 있다.</li>
+</ol>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">새 상품을 출시하는 일과 비슷하다</div>
+<p>“잘 팔릴 것”이라는 기획서보다 <code>고객 반응 → 샘플 → 소량 선주문 → 실제 재구매</code>가 판단하기 좋은 증거다. 한 단계를 통과할 때마다 다음 비용을 쓰는 방식으로 위험을 줄일 수 있다.</p>
 </div>
+<p><strong>비유가 깨지는 지점:</strong> 항공기는 상품 샘플보다 안전·인증·자본 부담이 훨씬 크고 검증 기간도 길다. 또 구매의향서는 확정 주문이 아니며, 모터가 돌아간다는 증거가 항공기 전체의 안전성까지 증명하지는 않는다.</p>
+<h2>정확히 배우기</h2>
+<table>
+<thead>
+<tr>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>큰 불확실성을 작은 확인으로 하나씩 줄이기</td>
+<td><strong>단계별 위험 제거(staged de-risking)</strong>. 이 표현은 영상의 진행 과정을 정리한 이 노트의 해석이다.</td>
+<td>증거 하나가 사업 전체의 성공을 보장한다.</td>
+</tr>
+<tr>
+<td>“살 뜻이 있다”는 편지</td>
+<td><strong>LOI (Letter of Intent, 구매의향서)</strong>. 정식 계약 전에 관심과 의향을 표현하는 문서다.</td>
+<td>LOI를 받으면 매출이 확정된다.</td>
+</tr>
+<tr>
+<td>평소에는 전기로 날고 필요할 때 연료 엔진의 도움을 받기</td>
+<td><strong>하이브리드 전기 항공기(hybrid-electric aircraft)</strong>. 전기 추진과 연료 기반 보조 시스템을 함께 쓴다.</td>
+<td>하이브리드는 항상 엔진과 모터를 같은 비율로 쓴다.</td>
+</tr>
+<tr>
+<td>착륙하지 못했을 때를 위해 남겨두는 여분의 거리</td>
+<td><strong>비상 예비 항속거리(reserve range)</strong>. 체공하거나 다른 공항으로 가야 할 때 필요하다.</td>
+<td>평소 노선만 갈 수 있으면 상용 항공기의 거리 문제는 해결된다.</td>
+</tr>
+<tr>
+<td>같은 무게에 전기를 얼마나 많이 담는지</td>
+<td><strong>배터리 에너지 밀도(energy density)</strong>. 영상은 Wh/kg(와트시/킬로그램)으로 표현한다.</td>
+<td>밀도가 높으면 안전성·수명·비용³C4 자동으로 좋아진다.</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해보기</h2>
+<ol>
+<li><strong>원인:</strong> 작은 3D 모형에서 시작한 회사가 왜 바로 완성 항공기를 만들지 않고, 구매의향서·모터·선주문 순서로 나아갔을까?</li>
+<li><strong>대조:</strong> 순수 배터리 항공기와 하이브리드 전기 항공기는 “비상 상황”을 견디는 방식이 어떻게 다른가?</li>
+<li><strong>적용:</strong> 지금 내가 하는 일 중 “설명은 많지만 다음 투자를 판단할 증거가 없는 일”은 무엇인가? 그 일의 다음 증거는 무엇이어야 하는가?</li>
+</ol>
+<details><summary>모범 답 보기</summary>
+<ol>
+<li>완성 항공기를 한번에 만들면 돈과 시간을 크게 쓴 뒤에야 핵심 가정이 틀렸음을 알 수 있다. 구매 의향으로 수요를, 모터로 기술을, 선주문으로 고객의 더 강한 의지를 먼저 확인하면 틀렸을 때의 손실을 줄일 수 있다.</li>
+<li>순수 배터리 기체는 비상용 에너지까지 모두 배터리로 싣고 다녀야 하며, 쓴 배터리도 가벼워지지 않는다. 하이브리드는 평소에 전기를 쓰되, 회항·체공 같은 예외 상황에서 연료 엔진으로 거리를 보완한다.</li>
+<li>모범 답은 내 일을 대신 정해주지 않는다. <code>내 현재 가설 → 가장 큰 불확실성 하나 → 7일 안에 만들 실물 증거 하나</code>로 쓰면 된다.</li>
+</ol>
+</details>
+<h2>이번 글의 통찰</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>[원문]</strong></td>
+<td>Heart는 항공사의 LOI, 400kW 모터, 선주문, 실제 비행으로 진척했다. 영상은 이런 물리적 진척이 고객과 자본을 이끌었다고 설명한다.</td>
+</tr>
+<tr>
+<td><strong>[해석]</strong></td>
+<td><span style="color:#ef6c00; font-size:1.1em"><strong>자본과 신뢰는 큰 비전을 말하는 사람보다, 다음 위험을 제거한 증거를 내는 사람을 따라간다.</strong></span> 이는 화자의 문장을 그대로 옮긴 것이 아니라, 영상의 사례를 차드의 일에 전이한 편집 해석이다.</td>
+</tr>
+<tr>
+<td><strong>[경계]</strong></td>
+<td>LOI는 확정 계약이 아니고, 선주문도 인증·인도·수익성을 보장하지 않는다. 이 노트는 영상의 주장을 독립적으로 검증하지 않았으므로, 수치·비용·성능은 현재 인증된 사실이 아니라 <strong>영상 내 주장</strong>으로 읽어야 한다.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-warning"><div class="ct">열린 질문 — 125마일인가, 225마일인가?</div>
+<p>이 노트의 영상 앞부분 정리에는 ES-30의 순수 전기 항속거리가 <strong>125마일</strong>로, 뒤쪽 교정 전사에는 <strong>225마일</strong>로 나온다. 두 수치의 조건이 다른지, 전사·편집 오류인지를 이 자료만으로는 판단할 수 없다. <strong>원본 영상의 해당 구간과 Heart Aerospace의 공식 제원을 대조하기 전까지 어느 쪽도 확정하지 않는다.</strong></p>
+</div>
+<h2>차드의 4렌즈</h2>
+<table>
+<thead>
+<tr>
+<th>렌즈</th>
+<th style="text-align: right;">관련도</th>
+<th>차드에게 남는 통찰</th>
+<th>질문·행동</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>교육자</strong></td>
+<td style="text-align: right;">높음</td>
+<td>학습자도 <code>정의를 읽음 → 자기 말로 설명 → 새 사례에 적용</code>처럼 증거를 남겨야 “알고 있다”를 판단할 수 있다.</td>
+<td>이 노트를 닫고 중학생에게 60초 안에 설명할 수 있는가?</td>
+</tr>
+<tr>
+<td><strong>사업가</strong></td>
+<td style="text-align: right;">매우 높음</td>
+<td>큰 계획을 한번에 승인받기보다, 가장 위험한 가정을 한 단계씩 제거하며 다음 자원을 받는 편이 싸고 빠르다.</td>
+<td>지금 내 사업의 다음 투자를 막는 가장 큰 불확실성 하나는 무엇인가?</td>
+</tr>
+<tr>
+<td><strong>마케터</strong></td>
+<td style="text-align: right;">높음</td>
+<td>“혁신적이다”라는 문구보다 실물, 수치, 고객의 행동처럼 진짜로 믿을 수 있는 증거가 설득력이 크다.</td>
+<td>현재 상품페이지의 핵심 주장 중 말로만 있고 보여주지 못한 것은 무엇인가?</td>
+</tr>
+<tr>
+<td><strong>AI·소프트웨어 학습자</strong></td>
+<td style="text-align: right;">중간</td>
+<td>작동하는 데모는 유용하지만, 안전·예외·실사용을 검증한 시스템과는 다르다. 결함 주입 테스트(fault injection test)처럼 실패를 의도적으로 넣어 경계를 확인해야 한다.</td>
+<td>내 AI 자동화에 정상 입력만이 아니라 장애·오입력을 넣어본 증거가 있는가?</td>
+</tr>
+</tbody>
+</table>
+<h2>가치 지도</h2>
+<table>
+<thead>
+<tr>
+<th>원문의 사례</th>
+<th>작동 원리</th>
+<th>차드의 일에 옮기기</th>
+<th>만들려는 가치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LOI → 모터 → 선주문 → 비행</code></td>
+<td>각 증거가 서로 다른 불확실성을 줄인다.</td>
+<td><code>가설 → 작동 시작품 → 측정 결과 → 실제 사용</code> 순서로 AI·상품·물류 계획을 판단한다.</td>
+<td>잘못된 큰 투자를 줄이고, 판단 시간을 짧게 하며, 고객·팀·투자자가 다음 자원을 건네도록 한다.</td>
+</tr>
+</tbody>
+</table>
+<p>이 전이는 <strong>구조적 비유</strong>다. 항공산업의 인증 절차나 성공 확률이 차드의 사업과 같다는 뜻은 아니다.</p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1:</strong> 지금 진행 중인 일 하나를 골라 <code>가설 → 작동 시작품 → 측정 결과 → 실제 사용</code>의 4단계 증거 사다리를 쓰고, 7일 안에 <strong>바로 다음 한 단계의 증거만</strong> 만든다.</li>
+<li><strong>지표 1:</strong> 추가 설명 없이도 그 증거만 본 다른 사람이 “다음 자원을 쓸지”를 <code>진행/중단</code>으로 판단할 수 있는가.</li>
+<li><strong>중단 기준 1:</strong> 7일 안에 다음 단계의 실물 증거가 나오지 않으면 확장과 추가 투자를 중단하고, 증거 단계부터 다시 정의한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
 <hr>
 <h2>핵심 학습 포인트 (내가 배워야 할 것)</h2>
 <table>
