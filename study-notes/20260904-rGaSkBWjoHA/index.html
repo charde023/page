@@ -1,0 +1,345 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Claude Code 팀이 새로 공개한 INTENT.MD의 정체와 AI-Native 개발 방식 — Codex 버전</title>
+<meta name="description" content="의도·명세·계획을 문서 사슬로 넘기고 테스트와 승인 규칙을 붙여 AI 에이전트를 개발 전 과정에 활용하는 방식을 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Claude Code 팀이 새로 공개한 INTENT.MD의 정체와 AI-Native 개발 방식 — Codex 버전</h1>
+<div class="meta">업로드 2026-09-04 · 15.2분 · <a href="https://youtu.be/rGaSkBWjoHA" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 2분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상은 AI가 코드를 대신 쓰는 데서 끝나지 않고, 기획부터 유지보수까지 소프트웨어 개발 수명 주기(SDLC) 전체에 참여하게 하는 방식을 설명한다. 영상의 전제는 에이전트가 구현 시간을 줄이면서 병목이 코딩에서 요구사항 정리·인수인계·검토로 옮겨갔다는 것이다.</p>
+<p>해법은 대화의 기억을 믿는 대신 다음 작업자가 읽을 문서를 이어 만드는 것이다(문서 사슬, artifact chain). 제안자는 에이전트 인터뷰로 목적과 맥락을 <code>intent.md</code>에 적고 직접 고친다. 승인된 의도는 요구사항·설계 명세인 <code>spec.md</code>와 실행 순서·위험·완료 조건을 적은 <code>plan.md</code>로 구체화된다. 독립 에이전트들은 이 문서를 받아 구현하고, 규칙 검사(린팅), 테스트, 반복 성능 확인(평가·eval), 권한 제한과 사람의 승인으로 결과를 확인한다.</p>
+<p>따라서 핵심은 사람 없는 자동 개발이 아니라, 각 단계의 입력·성공 기준·중단 권한을 문서와 검사로 전달하는 것이다. 장애를 발견한 에이전트가 스스로 새 의도를 만들고 유지보수하는 단계는 화자도 아직 포부에 가까운 영역으로 설명한다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>코드 작성이 빨라지면 요구 정리·인수인계·검토가 새 병목이 될 수 있다.</li>
+<li><code>intent.md → spec.md → plan.md</code>는 서로 다른 에이전트에게 맥락과 완료 기준을 넘기는 문서 사슬이다.</li>
+<li>자율성은 테스트·권한 제한·배포 승인 같은 검증 장치와 함께 높여야 한다.</li>
+<li>자동 유지보수는 영상에서도 이미 검증된 결과가 아니라 미래 지향적 제안이다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>AI 에이전트를 소프트웨어 개발 전 과정에 쓰려면 왜 문서 사슬과 검증 게이트가 필요한가?</strong></p>
+</blockquote>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>누군가 “다크 모드를 추가하고 싶다”고 말한다. 에이전트가 반복해서 질문해 목적과 조건을 <code>intent.md</code>에 담고, 사람이 내용을 바로잡는다. 이후 별도의 에이전트가 명세와 계획을 만들고, 구현 에이전트는 그 계획만 읽어 작업한다. 테스트와 승인 기준을 통과해야 변경이 합쳐진다.</p>
+<p><code>"대화가 바뀔 때 목적과 조건이 빠진다"</code> <strong>문제</strong><br>
+→ <code>"의도·명세·계획을 문서로 넘기고 검사한다"</code> <strong>작동 방식</strong><br>
+→ <code>"독립 에이전트도 같은 기준으로 구현하고 검토할 수 있다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">릴레이의 바통</div>
+<p>각 주자가 앞선 주자의 머릿속을 읽을 수 없듯, 새 에이전트도 이전 대화를 자동으로 알지 못한다. <code>intent.md</code>, <code>spec.md</code>, <code>plan.md</code>가 목적과 조건을 다음 주자에게 넘기는 바통 역할을 한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 바통은 그대로 전달되지만 문서는 생성·요약 과정에서 틀리거나 빠질 수 있다. 그래서 사람이 고치고 테스트와 정책으로 확인해야 한다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AI-Native SDLC</strong></td>
+<td>개발 전 과정에 AI를 배치하는 방식</td>
+<td>기획·설계·구현·시험·배포·유지보수에 에이전트를 포함하는 개발 수명 주기</td>
+<td>코딩만 자동화하면 완성된다고 보는 것</td>
+</tr>
+<tr>
+<td><strong><code>intent.md</code></strong></td>
+<td>왜 만들고 무엇을 원하는지 적은 문서</td>
+<td>제안자의 목적·맥락·문제·조건을 사람이 읽고 기계가 활용할 수 있게 기록한 산출물</td>
+<td>에이전트가 처음 쓴 내용을 검토 없이 확정하는 것</td>
+</tr>
+<tr>
+<td><strong>Artifact chain</strong></td>
+<td>다음 단계로 이어지는 문서 사슬</td>
+<td>의도에서 명세와 계획 등 후속 산출물을 생성·승인하며 연결하는 구조</td>
+<td>한 에이전트의 긴 대화 기록과 같은 것으로 보는 것</td>
+</tr>
+<tr>
+<td><strong>Governance gate</strong></td>
+<td>위험한 작업을 막는 통과 조건</td>
+<td>권한·정책·훅·검사·사람의 승인으로 작업이나 배포를 제한하는 장치</td>
+<td>자동화를 느리게 만드는 불필요한 절차로만 보는 것</td>
+</tr>
+<tr>
+<td><strong>Continuous evals</strong></td>
+<td>변경 전후 성능을 반복 확인하는 시험</td>
+<td>모델·스킬·작업 방식 변경 시 기대 결과를 기준으로 회귀를 확인하는 지속 평가</td>
+<td>테스트 한 번이면 모든 품질을 증명한다고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>코드 생성이 빨라졌는데도 전체 개발 속도가 같은 비율로 빨라지지 않을 수 있는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>구현 이외에도 요구 수집, 설계, 인수인계, 검토, 테스트, 배포 승인과 유지보수가 남기 때문이다. 화자의 주장은 구현 시간이 줄어들수록 이 단계들이 상대적으로 더 큰 병목이 된다는 것이다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong><code>intent.md</code>와 <code>spec.md</code>·<code>plan.md</code>는 무엇이 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p><code>intent.md</code>는 문제의 목적과 맥락, 즉 “왜·무엇을”에 가깝다. <code>spec.md</code>는 요구사항과 설계를 구체화하고, <code>plan.md</code>는 변경 파일·순서·위험·완료 증거처럼 “어떻게 실행하고 확인할지”를 적는다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 작업을 에이전트에게 맡길 때 어느 수준까지 자동화해도 되는지 무엇으로 판단해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>작업의 중요도와 실패 영향, 에이전트의 접근 권한, 자동으로 확인할 수 있는 성공 기준, 사람이 승인해야 할 지점을 본다. 낮은 중요도의 제한된 작업부터 시험하고, 요구 누락이나 검증 실패가 나오면 범위를 넓히지 않는다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 의도는 대화가 아니라 검토 가능한 산출물이어야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 제안자가 에이전트의 반복 질문에 답하고, 생성된 <code>intent.md</code>를 다시 읽어 잘못된 부분을 고쳐야 한다고 설명한다.</li>
+<li><strong>[해석]</strong> 좋은 자동화의 출발점은 긴 프롬프트보다 목적·맥락·조건을 다음 작업자가 검토할 수 있는 형태로 남기는 것이다.</li>
+<li><strong>[경계]</strong> 문서가 만들어졌다는 사실만으로 요구가 완전하거나 정확하다고 증명되지는 않는다.</li>
+</ul>
+<h3>2. 자율성은 권한과 평가를 함께 설계할 때만 의미가 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 작업 폴더·패키지·웹 접근을 제한하고, 훅·린팅·테스트·평가·사람의 승인으로 진행과 배포를 통제하자고 제안한다.</li>
+<li><strong>[해석]</strong> 더 많은 권한을 주는 것보다 실패가 퍼질 범위를 제한하고 통과 기준을 먼저 정하는 것이 중요하다.</li>
+<li><strong>[경계]</strong> 화자가 언급한 “2배 빠름”에는 측정 대상·기간·비교 기준이 없다. 특정 조직에서도 같은 효과가 난다고 볼 근거는 제시되지 않았다.</li>
+</ul>
+<h3>3. 출처와 표기의 불확실성을 분리해야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 전사 속 화자는 Boris Cherny를 Claude Code의 creator라고 부르고, 문서를 Anthropic의 플레이북으로 설명한다.</li>
+<li><strong>[해석]</strong> 영상의 화자·플레이북 작성자·제품 제작자를 같은 사람이나 조직으로 합치지 않고 구분해야 한다.</li>
+<li><strong>[경계]</strong> META의 <code>creator</code>는 비어 있지만 <code>affiliation</code>은 <code>Claude</code>이며, provenance.note는 원본 영상 링크를 확인하지 못하고 화자 이름과 SNS로 출처를 추정했다고 밝힌다. 또한 제목은 <code>INTENT.MD</code>, 전사는 주로 <code>intent.md</code>를 쓰며 <code>AGENTS.md</code>와 <code>agents.md</code>도 함께 등장한다. 대소문자를 구분하는 환경에서는 같은 파일명으로 단정하면 안 된다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 에이전트가 반복 질문으로 맥락을 모으고, 사람이 결과를 다시 검토한다는 구조가 이해 확인과 직접 연결된다.</li>
+<li><strong>통찰:</strong> 학습자의 “알겠습니다”보다 목적·조건·실패 사례를 문서로 다시 설명하게 해야 빠진 이해를 볼 수 있다.</li>
+<li><strong>질문/행동:</strong> 설명을 다른 사람이 읽고 별도 질문 없이 실행할 수 있는지 확인한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 불완전한 요구와 잦은 인수인계는 시간·재작업·위험을 만든다는 구조가 운영 업무와 닮았다.</li>
+<li><strong>통찰:</strong> APOM에 적용한다면 실제 상태가 아니라 검증 전 가설로, 낮은 중요도의 요청 한 건을 의도·명세·실행 기준으로 나눠 볼 수 있다.</li>
+<li><strong>질문/행동:</strong> 문서 한 장이 줄이는 재질문보다 문서 작성·검토 비용이 더 작은 업무는 무엇인가?</li>
+</ul>
+<h3>마케터 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 에이전트가 원천 자료에서 고충을 종합하고, 산출물마다 성공 기준을 남겨야 한다고 말한다.</li>
+<li><strong>통찰:</strong> 카피의 주장도 고객 맥락과 근거, 통과 기준을 잇는 문서 사슬로 다루면 과장을 찾기 쉬워진다.</li>
+<li><strong>질문/행동:</strong> 각 핵심 주장 옆에 원천 자료와 관찰 가능한 증거를 붙일 수 있는지 확인한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 독립 에이전트, 서브에이전트, worktree, 테스트, 평가와 배포 게이트가 영상의 중심 작업 방식이다.</li>
+<li><strong>통찰:</strong> 긴 단일 대화보다 새 세션도 실행할 수 있는 산출물과 자동 검증 기준을 설계하는 능력이 중요하다.</li>
+<li><strong>질문/행동:</strong> 낮은 중요도의 작업에서 새 에이전트가 <code>plan.md</code>만으로 작업 범위와 완료 조건을 복원하는지 시험한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"요구와 검증 기준이 에이전트 사이에서 빠진다"</code> <strong>문제</strong><br>
+→ <code>"재질문과 재작업이 줄어든다"</code> <strong>수혜자: 제안자·개발자·검토자</strong><br>
+→ <code>"맥락·검토 시간·정책을 제공한다"</code> <strong>지불자 또는 자원 제공자: 작업을 요청하고 승인하는 팀</strong><br>
+→ <code>"인간 검토에서 발견된 필수 요구사항 누락 건수"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 검증 전 가상 적용으로 낮은 중요도의 작업 1건을 <code>intent.md → spec.md → plan.md</code> 순서로 만들고, 새 에이전트에게 계획만 전달한다.</li>
+<li><strong>측정 1개:</strong> 인간 검토에서 발견된 필수 요구사항 누락 건수</li>
+<li><strong>중단 기준 1개:</strong> 필수 요구사항 누락 건수가 1건 이상이면 자동화 범위를 확대하지 않는다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>병목의 이동</td>
+<td>구현이 빨라진 뒤 나머지 개발 단계가 병목이 된다는 주장</td>
+</tr>
+<tr>
+<td>2</td>
+<td>발견과 의도</td>
+<td>반복 인터뷰로 맥락을 모아 <code>intent.md</code>로 남기고 사람이 교정</td>
+</tr>
+<tr>
+<td>3</td>
+<td>명세와 계획</td>
+<td>의도를 <code>spec.md</code>와 독립 실행 가능한 <code>plan.md</code>로 구체화</td>
+</tr>
+<tr>
+<td>4</td>
+<td>구현과 거버넌스</td>
+<td>서브에이전트·worktree를 사용하되 권한·훅·정책으로 범위 제한</td>
+</tr>
+<tr>
+<td>5</td>
+<td>시험과 배포</td>
+<td>테스트·린팅·지속 평가·PR 검토·배포 승인을 연결</td>
+</tr>
+<tr>
+<td>6</td>
+<td>유지보수</td>
+<td>경보나 티켓이 새 의도를 만드는 자율 흐름은 미래 지향적 제안</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 코드에서 과정으로 이동한 병목</h3>
+<p>화자는 일반적인 SDLC를 기획, 설계, 구현, 시험, 배포, 유지보수의 순환으로 설명한다. 에이전트 이전에는 구현 단계가 오래 걸리고 비쌌지만, 에이전트가 이 구간을 줄였다고 주장한다. “2배 빠르다”는 표현이 나오지만 측정 기준과 자료는 제시되지 않는다.</p>
+<p>중심 제안은 구현에만 에이전트를 쓰지 말고 요구 수집부터 유지보수까지 각 단계의 인간 시간을 줄여 보자는 것이다. 다만 중요 검토 단계에는 사람을 남기며, 중요도가 낮을 때만 에이전트 단독 수행 범위를 넓힐 수 있다고 말한다.</p>
+<h3>2. 반복 인터뷰와 <code>intent.md</code></h3>
+<p>기존 기획에서는 요구사항 수집, PRD, 워크숍, 이해관계자 대화와 인수인계가 이어졌다. 제안된 방식에서는 에이전트가 기능·버그·제품에 대해 반복해서 질문하고, 제안자가 경험·도메인 지식·맥락을 제공한다. 그 결과를 사람이 읽을 수 있고 기계도 활용할 수 있는 <code>intent.md</code>로 저장한다.</p>
+<p>화자는 자신의 Switch Dimension Discovery, Matt Pocock의 Grill Me, Cursor의 Requirements Discovery를 예로 든다. 생성된 의도는 제안자가 다시 검토하고 고쳐야 한다. 제안자는 고객, 제품 관리자, 개발자 등일 수 있으며, 제품 책임자는 Notion·Linear·Markdown 등에 모인 의도를 우선순위와 유형에 따라 정리할 수 있다고 설명한다.</p>
+<h3>3. <code>spec.md</code>와 <code>plan.md</code></h3>
+<p>의도가 승인되면 훅이나 정해진 절차로 요구사항·설계 명세인 <code>spec.md</code>를 생성한다. 조직의 브랜드 지침, 정책, 스타일과 모범 사례는 <code>AGENTS.md</code>, 스킬 또는 별도 규칙으로 적용할 수 있다. 화자는 Cursor, Claude Code, Codex의 기본 계획 모드나 조직별 스킬을 선택할 수 있으며 하나의 정답은 없다고 강조한다.</p>
+<p>구현 전에는 의도와 명세로 <code>plan.md</code>를 만든다. 계획에는 변경 파일, 작업 순서, 위험과 제약, 성공 기준과 증거가 포함되어야 한다. 화자가 제시한 이상은 엔지니어가 의도나 명세를 다시 열지 않아도 계획만으로 구현할 수 있는 상태다.</p>
+<h3>4. 독립 에이전트와 통제 범위</h3>
+<p>한 에이전트가 모든 단계를 맡는 대신 독립 에이전트와 서브에이전트가 문서를 전달받아 새 맥락에서 작업한다. 독립 가능한 작업은 Git worktree로 분리해 병렬 실행할 수 있다고 설명한다.</p>
+<p>빠른 자동 실행을 위해서는 먼저 접근 가능한 도구·웹 출처·패키지와 허용 권한을 정해야 한다. 훅은 특정 폴더 변경이나 승인되지 않은 npm 패키지 업그레이드를 막고, 구현 후 계획을 갱신하는 데도 쓰일 수 있다. 화자는 에이전트가 영향을 줄 수 있는 범위를 좁게 유지해야 한다고 말하지만, 구체적인 안전 정책 설계는 영상의 범위 밖이라고 밝힌다.</p>
+<p>계획·의도·명세의 버전과 변경자를 기록하는 거버넌스도 제안된다. 화자는 이를 DORA 지표나 AI 도입 효과 추적에 활용할 수 있다고 말하지만 실제 측정 결과는 제공하지 않는다.</p>
+<h3>5. 시험·평가·배포</h3>
+<p>구현 뒤에는 에이전트가 사람이 보기 전에 가능한 많은 시험을 수행한다. 테스트 작성, 린팅, 빌드, 브라우저 기반 종단 간 시험이 언급된다. Playwright, TestSprite, Cursor Browser와 화면 기록을 제공하는 Cursor Cloud Agents가 예시로 나온다.</p>
+<p>모델·스킬·작업 방식이 바뀔 때는 지속적 통합 과정에서 평가를 반복하자는 제안도 나온다. 화자는 해결했던 문제 “20개 정도”와 기대 결과를 모아 두고 변경 후 회귀 여부를 확인하는 예를 든다. 이는 정확한 권장 개수가 아니라 근사 예시다.</p>
+<p>배포 단계에서는 에이전트가 pull request를 만들고, 별도의 Claude Code 인스턴스가 정책과 보안 기준에 따라 비동기로 검토하는 흐름을 설명한다. 훅은 특정 사람의 승인이나 릴리스 게이트가 없으면 배포를 차단할 수 있다. Cursor BugBot과 Claude Security Review도 추가 검사 도구의 예로 언급된다.</p>
+<h3>6. 유지보수와 검증 경계</h3>
+<p>화자는 유지보수 단계를 “포부에 가깝다”고 평가한다. 보안 침해, 새 티켓, Slack 메시지, 일정, 서버 장애나 API 사용량 증가가 에이전트를 호출하고, 에이전트가 로그를 진단해 새 <code>intent.md</code>와 제안을 만드는 흐름은 가능한 미래 예시로 제시된다. 이미 일반적으로 운영되거나 검증된 결과로 설명되지 않는다.</p>
+<p>출처 식별에도 경계가 있다. 전사는 Boris Cherny를 Claude Code의 creator라고 부르지만, 그를 영상 화자나 영상 원작자로 확인하지 않는다. META의 <code>creator</code>는 비어 있고 <code>affiliation</code>은 <code>Claude</code>로 적혀 있으며, provenance.note는 원본 영상 링크를 확인하지 못한 채 화자 이름과 SNS를 기준으로 출처를 추정했다고 밝힌다. 전사는 플레이북을 Anthropic의 문서로 설명하므로 <code>Claude</code>와 <code>Anthropic</code>을 검증 없이 같은 소속 표기로 합치지 않았다.</p>
+<p>파일명 표기도 일치하지 않는다. 제목은 <code>INTENT.MD</code>, 전사는 주로 <code>intent.md</code>를 사용한다. 전사 안에서도 <code>AGENTS.md</code>와 <code>agents.md</code>가 모두 나온다. 대소문자를 구분하는 파일 시스템에서는 서로 다른 이름일 수 있으므로 실제 적용 전에 공식 규칙을 확인해야 한다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · Claude Code 팀이 새로 공개한 INTENT.MD의 정체와 AI-Native 개발 방식 · https://www.youtube.com/watch?v=rGaSkBWjoHA · 전사: 제공된 SOURCE_TRANSCRIPT(추출 방식 미상)</p>
+<p>원작자 정보: META의 <code>creator</code>는 비어 있다. <code>affiliation</code>은 <code>Claude</code>로 보존했지만, provenance.note는 원본 영상 링크 미확인 및 화자 이름·SNS 기준 추정이라고 밝힌다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>이분은 우리 친구 Claude Code의 창시자인 Boris Cherny입니다. 이 팀이 방금 AI 네이티브 SDLC 플레이북을 공개했습니다. 이 개념이 처음이라면, SDLC는 소프트웨어 개발 수명 주기(Software Development Lifecycle)를 뜻합니다.</p>
+<p>일반적으로 인간 중심의 워크플로에서는 대략 다음과 같이 진행됩니다. 계획하고, 설계하고, 빌드하고, 테스트하고, 배포한 다음, 앱의 유형에 따라 프로덕션에 반영합니다. 그다음에는 유지보수를 살펴보고, 다음 기능이나 버그 수정, 릴리스를 위해 다시 처음으로 돌아갑니다.</p>
+<p>Anthropic의 이 새로운 문서는 Boris를 포함한 팀이 새로운 AI 네이티브 소프트웨어 개발 수명 주기라는 관점에서 어떻게 일하는지를 다룹니다. 빠르게 살펴보겠습니다.</p>
+<p>여기서 핵심 아이디어는 더 이상 코드가 병목이 아니라 프로세스가 병목이라는 것입니다. 에이전트가 등장하기 전에는 SDLC가 대체로 이렇게 보였습니다. 계획, 설계, 빌드, 테스트, 배포, 유지보수 단계가 있었죠. 가장 오래 걸리고 일반적으로 가장 비용이 많이 들었던 부분은 빌드 단계였습니다.</p>
+<p>하지만 에이전트와 함께 모든 것이 바뀌었습니다. 이 부분이 이렇게 줄어든 겁니다. 우리가 되찾은 시간을 보세요. 본질적으로 Anthropic이 말하는 것은 이렇습니다. 이 부분을 크게 줄이는 데 성공했고, 두 배 빨라졌습니다. 그렇다면 에이전트를 활용해 다른 단계들도 어떻게 개선할 수 있을까요?</p>
+<p>전통적으로 계획 단계에서는 함께 앉아 요구사항을 수집하고, PRD를 작성하고, 워크숍을 열고, 이해관계자들과 이야기한 다음, 모든 내용을 하나로 취합했습니다. 새로운 세상에서는 우리가 만들고 있는 기능이나 제품, 또는 해결하려는 버그에 대해 에이전트가 우리를 인터뷰하게 하면서 시작하고, 이를 통해 맥락을 구축합니다.</p>
+<p>저는 Switch Dimension Discovery라는 제 자체 디스커버리 스킬을 사용합니다. Matt Pocock의 Grill Me나 Cursor의 Requirements Discovery 같은 것을 사용해도 됩니다. 중요한 것은 만들려는 기능이나 해결하려는 버그를 에이전트가 완전히 이해할 때까지 반복해서 질문하도록 하는 것입니다.</p>
+<p>자신의 경험, 도메인 지식, 맥락을 최대한 많이 이 대화에 쏟아 넣는 겁니다. 에이전트는 원천에서 직접 문제점을 종합한 다음, 이를 사람이 읽을 수 있고 기계가 실행할 수 있는 <code>intent.md</code> 파일에 기록합니다.</p>
+<p>Anthropic은 <code>intent.md</code> 파일을 중심으로 이 아이디어를 공식화하고 있습니다. 전통적인 SDLC에서는 아이디어가 사용자 항목, 사용자 스토리, 스토리 포인트, 담당자 변경, 인계 과정이 있는 백로그로 넘어갑니다. AI 네이티브 세계에서 말하는 방식은 이렇습니다. 이슈나 기능, 제품 또는 어떤 것이든 그 발의자가 Claude와 함께 브레인스토밍하고, 그 결과를 <code>intent.md</code>로 작성하는 것입니다.</p>
+<p>각 단계를 진행하면서 우리는 아티팩트 체인(artifact chain)이라고 부르는 것을 만들어가게 됩니다. 먼저 <code>intent.md</code> 파일로 시작하고, 그다음에는 스펙을 만들고, 단계가 진행될수록 계속해서 아티팩트를 추가합니다. 이것이 아티팩트 체인을 구축하는 과정입니다.</p>
+<p>프로젝트에서 Cursor, Claude Code, Codex 등 원하는 도구를 사용해 <code>intent</code>라는 폴더를 만들면 됩니다. 그 안에 <code>intent.md</code> 파일을 저장합니다.</p>
+<p>제 계획 단계에서는 다크 모드 기능을 추가하는 것에 대해 에이전트와 대화할 수 있습니다. 제가 원하는 것과 작동 방식을 이야기한 다음, 그 내용을 바탕으로 <code>intent.md</code> 파일을 만듭니다. 그리고 Anthropic이 제안한 방식대로 에이전트에게 <code>intent</code> 폴더 안에 <code>intent.md</code> 파일로 저장하게 합니다.</p>
+<p>물론 이런 아티팩트의 워크플로는 팀이 원하는 대로 정할 수 있습니다. 중요한 것은 이를 표준화하기 시작하고, 너무 자주 바꾸지 않는 것이라고 생각합니다. 그래야 팀과 에이전트, 스킬이 모두 같은 워크플로에서 작동하고, 거기서부터 확장해 나갈 수 있습니다.</p>
+<p><code>intent.md</code> 파일이 만들어졌다고 해서 끝나는 것은 아닙니다. 발의자가 에이전트가 작성한 내용을 다시 검토해 잘못된 부분을 수정하고, 양쪽 모두 결과에 만족하도록 하는 것이 좋다고 제안합니다.</p>
+<p>이 <code>intent.md</code> 파일을 만드는 사람을 발의자(originator)라고 부르며, 반드시 팀의 전문 인력일 필요는 없습니다. 의도를 만들고 싶은 사람이라면 누구나 될 수 있습니다. 버그 요청을 제출하는 고객일 수도 있고, 기능 아이디어를 가진 제품 관리자일 수도 있으며, 프로세스 개선을 기록하고 싶은 개발자일 수도 있습니다.</p>
+<p>여러분에게도 이와 유사한 결과물을 만드는 자체 의도 캡처 스킬이 있을 수 있습니다. 시간이 지나 다양한 형태의 의도를 모으게 되면, <code>intent.md</code> 파일 이름 앞에 의도의 이름을 접두사로 붙일 수도 있습니다. 제가 직접 하고 있고 제 강의에서 가르치는 방식이기도 합니다. 저는 이를 인텐트가 아니라 디스커버리라고 부릅니다. 하지만 다시 말해 같은 아이디어입니다.</p>
+<p>의도는 정말 누구나 기록할 수 있습니다. 개발자일 수도 있고, 버그를 제출하는 고객일 수도 있습니다. 그저 자신의 생각을 <code>intent.md</code> 파일에 적어 넣는 것입니다.</p>
+<p>하지만 이를 백로그 형태로 검토해야 하는 사람은 제품 책임자입니다. 단순히 Markdown 파일 안에 순서대로 정렬된 파일들일 수도 있습니다. 이런 아이디어를 모두 Notion이나 Linear에 기록한 뒤 제품 책임자가 정리할 수도 있고, 경우에 따라서는 제가 에이전트를 사용해 이슈 백로그를 분류하기도 합니다.</p>
+<p>프런트엔드인지, 작은 작업인지 큰 작업인지, 기능인지, 심지어 우선순위 수준까지 태그를 지정할 수 있다는 것을 볼 수 있습니다.</p>
+<p>그다음에는 인텐트 아티팩트에서 스펙 아티팩트로 넘어갑니다. Anthropic은 인텐트가 커밋되거나 어떤 형태로든 승인되면, 스펙이 자동으로 생성되도록 훅이나 프로세스를 만들 것을 제안합니다.</p>
+<p>Anthropic은 인텐트를 스펙으로 바꾸기 위해 사용할 수 있는 샘플 프롬프트를 제공합니다. 여기서 구체적인 스킬을 제시하지는 않지만, 이를 위한 스킬을 직접 만들 수는 있습니다.</p>
+<p>본질적으로는 다음과 같습니다. 첨부된 <code>intent.md</code>를 읽고 요구사항 및 설계 스펙을 작성하세요. 사용 가능한 스킬을 적용해 계획을 세우고 브랜드 가이드라인을 준수한 다음, 스펙을 <code>spec.md</code>에 완전히 문서화하세요.</p>
+<p>워크플로와 조직에 따라 Cursor, Claude Code, Codex의 기본 플랜 모드(plan mode)를 그대로 사용할 수도 있습니다. 또는 팀의 작업 방식에 맞춘 맞춤형 스펙을 생성하는 스킬을 만들 수도 있습니다. 여기에는 모든 경우에 적용되는 하나의 정답이 없습니다.</p>
+<p>스펙이 만들어질 때 기본 에이전트를 통해 생성할 수도 있고, 스타일 가이드가 적용되고 조직의 모범 사례에 따라 스펙이 생성되도록 지침, 정책 또는 스킬을 마련해 둘 수도 있습니다.</p>
+<p>이는 <code>AGENTS.md</code> 파일에 담을 수도 있습니다. 일련의 스킬로 인코딩할 수도 있습니다. 스펙이 생성될 때 거버넌스 측면에서 해당 스킬과 정책이 준수되도록 해야 합니다. 이는 이 체인에 포함된 모든 아티팩트에 적용됩니다.</p>
+<p>다음은 빌드 모드로 넘어가는 단계입니다. 기본적으로 프로세스에 참여하는 엔지니어가 인텐트와 스펙을 가져와 Claude Code에 입력하면서 시작합니다. Cursor의 플랜 모드 같은 곳에서 진행할 수도 있습니다. 즉, 인텐트와 스펙을 입력하는 것입니다.</p>
+<p>그러면 <code>plan.md</code> 파일을 얻게 됩니다. Anthropic이 제안하는 방식은 무엇이 변경될 경우 문제가 발생할 수 있는지 질문하면서 계획을 검증하는 것입니다. 본질적으로 <code>plan.md</code> 파일만 엔지니어에게 전달해도 인텐트나 스펙 문서를 참조하지 않고 변경 사항을 구현할 수 있는 수준에 도달해야 합니다.</p>
+<p>이는 실제로 중요한 점입니다. 소프트웨어 개발 수명 주기의 모든 단계를 하나의 에이전트가 수행하게 하지는 않을 것이기 때문입니다. 여러 컨텍스트 윈도와 대화 스레드를 사용하게 될 것이고, 독립적인 에이전트와 서브에이전트가 이 프로세스를 담당하게 됩니다.</p>
+<p>이런 환경에서는, 제 워크플로 중 하나를 예로 들면, 여러 에이전트가 문제를 함께 작업하게 됩니다. 각 에이전트가 이전 대화를 이해하지 않아도 처음부터 시작할 수 있도록 계획과 인텐트를 문서로 전달해야 합니다.</p>
+<p>엔지니어가 만족하면 계획에 따라 진행합니다. 계획을 작성하는 방법은 50가지도 넘게 봤겠지만, 본질적으로 Anthropic이 말하는 것은 변경해야 하는 파일, 작업 순서 또는 일종의 할 일 목록, 위험과 제약 조건, 그리고 검증 증거로 나누라는 것입니다.</p>
+<p>작업이 올바르게 완료되었는지 확인할 수 있도록 일종의 성공 기준과 검사를 마련해야 합니다. 린팅과 테스트처럼 결정론적인 형태일 수도 있습니다.</p>
+<p>기업에서 이 프로세스의 큰 부분을 차지할 요소는 거버넌스입니다. Anthropic은 계획, 인텐트, <code>spec.md</code>의 버전을 저장하고, 누가 이를 수정했는지와 어떻게 발전했는지를 함께 기록하라고 제안합니다.</p>
+<p>제가 함께 일한 기업들은 이 부분을 특히 어려워했지만, 프로젝트의 선행 지표와 후행 지표를 추적하거나, DORA 지표를 입증하거나, AI가 실제로 워크플로에서 얼마나 효과적으로 활용되고 있는지 확인하려면 매우 중요합니다.</p>
+<p>빌드 모드를 빠르게 만드는 방법으로 Anthropic은 자동 모드(auto mode)를 사용하라고 제안합니다. 다만 이는 실제로 각 조직의 상황에 따라 달라집니다.</p>
+<p>제가 제안하는 방법은 작업하는 환경이 엄격하게 통제되어 있다면, 미리 세밀하게 설정한 권한 집합을 갖춘 저장소에서 작업을 시작하고 진행하면서 해당 권한을 승인하는 것입니다.</p>
+<p>무엇이 정당한 사용인지, 에이전트가 어떤 도구에 접근할 수 있는지, 어떤 웹 소스를 사용할 수 있는지, 어떤 패키지를 가져올 수 있는지에 대한 정책을 마련하고, 이를 Cursor나 Claude의 권한 설정에서 제한해 두면, 여러분이 개입하지 않아도 에이전트가 훨씬 빠르게 움직일 수 있습니다.</p>
+<p>자동 모드가 원활하게 실행되고 에이전트의 영향 범위를 좁게 유지되도록 하려면 여러 요소를 고려해야 합니다. 이 영상의 초점은 아니지만, 앞으로 다시 자세히 다뤄보겠습니다.</p>
+<p>팀은 워크트리(worktree)도 제안합니다. 이를 사용하면 여러 에이전트가 여러 작업을 동시에 진행할 수 있습니다. 이 내용이 완전히 낯설다면, 에이전트와 함께 작업할 때 Git과 Git 워크트리를 익히는 사람들을 위해 제 채널에 Git과 Git 워크트리를 다룬 전체 영상이 있습니다.</p>
+<p>이 프로세스를 자율적으로 유지하고, 최신 상태로 업데이트하며, 계획대로 진행하는 데 있어 큰 부분을 차지하는 것이 바로 훅(hooks)의 사용입니다. 예를 들어 빌드 단계에서는 구현이 완료되면 계획을 업데이트할 수 있습니다. 특정 폴더에서 에이전트가 작업하지 못하도록 막거나, 아직 승인을 받지 않은 npm 패키지를 업그레이드하지 못하게 할 수도 있습니다.</p>
+<p>린팅(linting)은 오랫동안 사용되어 왔습니다. 본질적으로 이는 코드나 문서를 결정론적이고 코드화된 방식으로 훑으면서 특정 기준이 존재하는지, 존재하지 않는지, 또는 특정 문법을 따르고 있는지를 확인하는 방법입니다. 파일을 훑고 테스트는 통과하거나 실패합니다. 이진적인 예 또는 아니오입니다.</p>
+<p>좋은 에이전트 하네스(agent harness)에서 얻을 수 있는 기능 중 하나는 서브에이전트를 실행하는 능력입니다. 계획이 마련되면, 이는 실제로 Cursor, Claude Code, Codex에 내장되어 있습니다. 계획을 독립적으로 수행할 수 있는 여러 작업으로 나누고, 일부 작업을 병렬로 실행할 수 있다면 워크트리(worktree)를 사용할 수 있습니다.</p>
+<p>따라서 빌드 단계에서 여러 에이전트와 서브에이전트가 작업하게 됩니다.</p>
+<p>빌드를 완료하면 테스트 단계로 넘어갑니다. 전통적인 소프트웨어 개발 수명 주기에서는 이 단계가 작업을 정말 지연시키는 경우가 있습니다. 작업 일부를 끝내 개발 환경에 푸시했는데, 테스터나 QA 엔지니어가 올 때까지 며칠을 기다려야 할 수 있습니다. 그다음에는 변경 사항과 피드백 등이 발생합니다. 전체 주기에 상당히 많은 시간이 걸립니다.</p>
+<p>AI 소프트웨어 개발 수명 주기에서는 인간 엔지니어나 QA 엔지니어가 관여하기 전에 에이전트가 가능한 한 많은 테스트를 수행하도록 하고 싶습니다.</p>
+<p>이 다이어그램은 Anthropic이 설명하는 내용과 약간 다르지만, 제가 Switch Dimension의 강의에서 가르치고 있는 워크플로이며 매우 유사합니다.</p>
+<p>본질적으로 여기서 빌드 단계를 완료하면 테스트, 린팅, 엔드투엔드 검토로 넘어갑니다. 에이전트는 개발 중 아무것도 망가뜨리지 않았는지 확인하고 테스트가 통과하도록 테스트를 작성합니다.</p>
+<p>에이전트는 오류가 없는지 확인하기 위해 프로젝트를 린트하고 빌드합니다. 충분히 고급 수준이고 Playwright, TestSprite 또는 Cursor Browser 같은 것을 사용한다면, 에이전트가 소프트웨어를 테스트하고 스크린샷을 찍도록 할 수도 있습니다.</p>
+<p>이는 Cursor Cloud Agents가 정말 잘하는 일입니다. 서버를 실행하고, 소프트웨어를 대신 테스트한 다음, 화면 녹화를 제공합니다. 이론적으로 테스트가 완료되고 상당히 엄격하게 수행되면, 인간 검토 단계에서 많은 시간을 절약할 수 있습니다.</p>
+<p>Anthropic은 또한 어떤 스킬 변경이나 모델 업그레이드에도 평가(evals)를 적용하라고 제안합니다. 이는 본질적으로 최적화이지만, 핵심 아이디어는 지속적 통합(continuous integration) 과정에 지속적인 평가를 포함하는 것입니다.</p>
+<p>기본적으로 코드베이스에서 해결했을 법한 이슈나 문제를 20개 정도 수집할 수 있습니다. 그리고 그에 대한 예상 결과를 정해 둡니다. 새로운 모델, 새로운 스킬, 또는 작업 방식에 대한 근본적인 변경이 있을 때마다 이를 실행해 소프트웨어 개발 수명 주기가 퇴행했는지 확인할 수 있습니다.</p>
+<p>이제 배포 단계에 이르렀습니다. 기본적으로 인간 검토를 완료했고, 에이전트가 변경한 내용을 바탕으로 병합하도록 하거나 메인 저장소에 풀 리퀘스트(pull request)를 생성하도록 할 것입니다.</p>
+<p>즉, 개발 브랜치나 프로덕션 브랜치가 있고, 에이전트는 워크트리의 자체 브랜치에서 몇 가지 변경을 수행했습니다. 그리고 풀 리퀘스트라는 것을 만들어 다음과 같이 말합니다. “변경 사항을 만들었습니다. 검토해 주시고, 괜찮다면 메인 코드베이스에 추가해 주세요.”</p>
+<p>따라서 Anthropic은 지속적 통합의 일부로, 또는 풀 리퀘스트가 생성될 때마다 Claude가 개입해 정책과 보안 프로토콜에 따라 이를 검토하도록 하라고 제안합니다. 이 모든 작업은 비동기적으로 수행됩니다.</p>
+<p>에이전트는 이 PR에 대해 자체 의견을 남길 수도 있습니다. 승인하지 않거나, 일부 변경을 원한다고 말할 수 있습니다. Anthropic의 SDLC에서는 별도의 Claude Code 인스턴스가 이러한 댓글을 검토합니다.</p>
+<p>물론 agents.md, skills.md, 훅, 린팅이 어떻게 설정되어 있는지에 따라 서로 다른 정책이 적용될 수 있습니다. 거버넌스 측면에서는 특정 권한이 부여되거나, 특정 인물이 승인하거나, 릴리스 게이트(release gate)를 충족하지 않으면 배포를 차단하는 훅을 둘 수도 있습니다.</p>
+<p>다음은 이 단계에서 사용할 수 있는 권한 설정의 예시입니다.</p>
+<p>풀 리퀘스트가 완료되면 보안 및 CI 프리뷰를 실행하는 또 다른 에이전트가 있습니다. 이는 어떤 형태의 린팅과 게이트 확인을 포함한 결정론적 방식으로 수행할 수도 있고, Cursor BugBot이나 Claude Security Review 같은 에이전트가 들어와 오류가 있는지 확인하게 할 수도 있습니다.</p>
+<p>이렇게 해서 마침내 유지 관리 단계에 도달합니다. 제 생각에 이 부분이 워크플로에서 가장 이상적인 성격을 띠는 부분입니다.</p>
+<p>전체 워크플로를 보면 계획, 설계, 빌드, 테스트, 배포를 거쳐 이제 유지 관리 단계에 도달했습니다.</p>
+<p>이 시점에는 이슈가 해결되었거나 기능이 빌드되어 코드베이스에 들어가 있습니다. 전통적인 소프트웨어 개발 수명 주기에서 유지 관리는 반응적인 단계일 수 있습니다. 점심을 먹으러 나갔거나, 당직 중이거나, 어쩌면 새벽 3시에 서버가 다운되었다는 알림을 받을 수도 있습니다.</p>
+<p>백로그에는 티켓이 쌓여 있지만, 백로그가 너무 많아서 완전히 무시됩니다.</p>
+<p>AI SDLC에서는 보안 침해, 새로운 티켓, Slack의 채널 메시지, 또는 어떤 종류의 일정이든 사람의 개입 없이 Claude를 호출해 유지 관리 작업을 수행하게 합니다. Claude는 비동기적으로 진단하고 조치를 취합니다.</p>
+<p>이 경우 Claude는 발견한 로그나 전달받은 티켓 또는 메시지를 바탕으로 자체 intent.md 파일을 생성합니다.</p>
+<p>실제로는 유지하고 싶은 특정 지표를 정해 둘 수 있습니다. 예를 들어 테스트 중에 페이지가 다운되거나 API 요청 한도가 급격히 증가할 수 있습니다. 그러면 에이전트가 문제를 진단하고 intent.md 파일을 생성하며, 여러분이 컴퓨터에 도착하기도 전에 일련의 제안을 제시하도록 할 수 있습니다.</p>
+<p>이 문서의 전체 전제는 에이전트가 단순히 빌드 단계에만 관여하는 것을 넘어 소프트웨어 개발 수명 주기 전체에서 활용되도록 하자는 것입니다. 중요한 검토 단계에서는 인간을 계속 참여시키면서, 각 단계에 필요한 인간의 시간을 어떻게 줄일 수 있을까요?</p>
+<p>이는 여러분의 워크플로, 요구 사항, 팀에 따라 달라지지만, 각 단계에 원하는 만큼 많은 인간을 참여시킬 수도 있고, 에이전트를 참여시킬 수도 있으며, 중요도가 낮다면 에이전트만으로 운영할 수도 있습니다.</p>
+<p>저는 많은 회사에서, 그리고 많은 회사와 함께 AI SDLC를 작업해 왔습니다. 중요한 점은 모든 경우에 통하는 단 하나의 해결책은 정말 없다는 것입니다.</p>
+<p>Superpowers나 BMAD 같은 것을 사용하고 있거나, 이를 자체적으로 개발한 버전을 갖고 있다면, Anthropic이 여기서 하는 방식을 도입하기 위해 기존 것을 완전히 버리지는 않을 것입니다.</p>
+<p>루프부터 그래프 엔지니어링, 완전 자동화된 루프, 대규모 오케스트레이션 시스템, 그리고 문명 엔지니어링(civilization engineering)에 이르기까지 이 문제에 접근하는 방법은 매우 다양합니다.</p>
+<p>여러분이 소프트웨어 개발 수명 주기를 어떻게 운영하고 있는지 듣고 싶습니다. Plan Mode처럼 단순한 방식이든, 완전한 바이브 코딩 YOLO(vibe-code YOLO) 방식이든 말입니다.</p>
+</details>
+</body></html>

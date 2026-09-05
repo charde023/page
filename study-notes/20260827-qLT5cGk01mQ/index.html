@@ -1,0 +1,329 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>앤트로픽이 공개한 Claude 메모리 2.0, 무엇이 달라졌을까요? — Codex 버전</title>
+<meta name="description" content="Claude 채팅과 Co-work가 공유하는 편집 가능한 메모리의 작동 방식, 클라우드 실행 조건, 미지원 범위를 구분한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>앤트로픽이 공개한 Claude 메모리 2.0, 무엇이 달라졌을까요? — Codex 버전</h1>
+<div class="meta">업로드 2026-08-27 · 10.1분 · <a href="https://youtu.be/qLT5cGk01mQ" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 2분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상은 Claude 채팅과 Co-work가 같은 ‘공용 메모장’을 쓰게 됐다는 소개다. 화자에 따르면 새 시스템은 대화가 끝난 뒤 전체 내용을 요약하는 대신, 대화 도중 기억할 내용을 주제별로 추가한다. 사용자는 저장된 항목을 파일처럼 확인하고 고치거나 지울 수 있으며, 민감한 주제는 기본적으로 저장하지 않되 설정으로 허용할 수 있다고 한다. 덕분에 한쪽에서 알려 준 선호나 업무 맥락을 다른 쪽에서 다시 설명하지 않고 이어 쓸 수 있다. 다만 공유 메모리는 Co-work를 클라우드에서 실행할 때만 작동하며, 로컬 실행과 Claude Code는 포함되지 않는다. 영상의 왕복 시연은 작동 사례를 보여주지만 모든 계정과 상황에서의 정확성을 검증한 결과는 아니다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>채팅과 Co-work가 하나의 메모리를 공유하면 같은 맥락을 반복해서 설명하는 일을 줄일 수 있다.</li>
+<li>저장된 기억은 주제별로 확인·수정·삭제할 수 있다고 화자는 설명한다.</li>
+<li>공유 범위는 클라우드에서 실행하는 Co-work와 채팅이며, 로컬 Co-work와 Claude Code는 제외된다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>Claude의 새 공유 메모리는 반복 설명을 어떻게 줄이며, 어디까지 작동하는가?</strong></p>
+</blockquote>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>채팅에서 옷 선호를 저장한 뒤, 클라우드에서 실행한 Co-work가 그 내용을 불러온다. 다시 Co-work에서 바지 선호를 추가하자 채팅도 그 내용을 찾아 답한다.</p>
+<p><code>"채팅과 Co-work에 같은 맥락을 반복 입력해야 한다"</code> <strong>문제</strong><br>
+→ <code>"두 환경이 사용자가 확인·편집할 수 있는 주제별 메모리를 공유한다"</code> <strong>작동 방식</strong><br>
+→ <code>"한쪽에서 저장한 맥락을 다른 쪽에서 이어 쓸 수 있다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">두 작업실 사이의 공용 메모장</div>
+<p>채팅과 Co-work를 서로 다른 작업실이라고 보면, 공유 메모리는 두 방에서 함께 보는 공용 메모장과 비슷하다. 한쪽에서 항목을 추가하거나 고치면 다른 쪽에서도 같은 내용을 참고할 수 있다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 종이 메모장은 사람이 직접 기록할 내용을 정하지만, 이 시스템은 화자의 설명상 대화 중 무엇을 저장할지 자동으로 판단한다. 또한 실제 공유는 Co-work의 클라우드 실행이라는 기술 조건에 묶여 있다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>공유 메모리</strong></td>
+<td>두 환경이 함께 보는 기억</td>
+<td>Claude 채팅과 Co-work가 함께 사용하는 메모리</td>
+<td>Claude Code와 로컬 Co-work까지 모두 공유한다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>주제별 메모리</strong></td>
+<td>내용을 종류별로 나눈 기록</td>
+<td>대화 중 추출한 내용을 주제 단위로 저장하는 방식</td>
+<td>대화 전체가 그대로 저장된다고 단정하는 것</td>
+</tr>
+<tr>
+<td><strong>편집 가능한 메모리</strong></td>
+<td>사용자가 보고 고치는 기억</td>
+<td>저장 항목을 확인·수정·삭제하는 사용자 제어 기능</td>
+<td>자동으로 저장된 내용이 항상 정확하다고 믿는 것</td>
+</tr>
+<tr>
+<td><strong>민감 주제 설정</strong></td>
+<td>사적인 내용을 기억할지 고르는 설정</td>
+<td>건강·신념처럼 민감하다고 여겨지는 주제의 저장 선택</td>
+<td>모든 민감 정보가 기본으로 저장된다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>클라우드 실행 조건</strong></td>
+<td>외부 서버에서 작업해야 공유되는 조건</td>
+<td>Co-work가 클라우드에서 실행될 때 공유 메모리를 사용하는 제약</td>
+<td>컴퓨터에서 로컬로 실행해도 같은 메모리가 연결된다고 생각하는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>공유 메모리가 반복 설명을 줄일 수 있는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>채팅과 Co-work가 같은 주제별 메모리를 참고하기 때문이다. 한쪽에서 저장된 선호나 프로젝트 맥락을 다른 쪽이 불러올 수 있으므로, 사용자가 같은 내용을 처음부터 다시 입력할 필요가 줄어든다. 단, Co-work에서는 클라우드 실행 조건이 붙는다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>공유 메모리와 대화 기록 전체는 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>영상에서 설명한 메모리는 대화 전체를 그대로 보여주는 기록이 아니라, 필요한 내용을 주제별 항목으로 정리해 재사용하는 구조다. 사용자가 항목을 고치거나 삭제할 수 있지만, 무엇을 자동으로 선택하고 얼마나 정확히 정리하는지는 별도 검증이 필요하다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>업무용 AI에 이 기능을 적용하기 전에 무엇을 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 사용하는 환경이 채팅과 클라우드 Co-work인지 확인한다. 그다음 비민감한 시험 항목을 양쪽에서 저장·수정·조회해 왕복 동기화와 정확성을 측정한다. 민감 정보는 저장 필요성, 삭제 가능성, 접근 범위를 따로 검토해야 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 메모리의 가치는 저장량보다 재사용 범위에서 나온다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 채팅과 Co-work가 하나의 메모리를 공유해 이전 맥락을 이어 쓸 수 있다고 설명하고, 양방향 조회를 시연한다.</li>
+<li><strong>[해석]</strong> 기억을 많이 쌓는 것보다 필요한 환경에서 정확히 다시 꺼낼 수 있는지가 반복 설명 감소를 결정한다.</li>
+<li><strong>[경계]</strong> 영상의 의류 선호 왕복 시연은 한 사례다. 장기 정확성, 누락률, 잘못 저장된 기억의 빈도는 제시되지 않았다.</li>
+</ul>
+<h3>2. 사용자 편집은 통제 수단이지만 자동 정확성을 보장하지 않는다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 저장된 메모리를 주제별로 보고 수정하거나 삭제할 수 있으며, 민감 주제 저장 여부도 설정할 수 있다고 말한다.</li>
+<li><strong>[해석]</strong> AI 기억은 숨겨진 내부 상태보다 사용자가 검사하고 교정할 수 있는 기록일 때 관리하기 쉽다.</li>
+<li><strong>[경계]</strong> 화자는 민감 주제를 개인적으로 켰지만 이는 개인 선택이다. 개인정보 보호·보안 수준에 대한 독립적인 근거나 검증 결과는 제시되지 않았다.</li>
+</ul>
+<h3>3. 제품 소개 문구와 실제 적용 조건을 분리해야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 Free·Pro·Max 요금제의 웹·데스크톱·모바일에서 기본 제공된다고 말하면서도, Co-work의 공유 메모리는 클라우드 실행에서만 작동하며 Claude Code와는 연동되지 않는다고 설명한다.</li>
+<li><strong>[해석]</strong> ‘어디서나 작동한다’는 큰 문구보다 제품 조합, 실행 위치, 설정 상태를 확인해야 실제 사용 범위를 알 수 있다.</li>
+<li><strong>[경계]</strong> 전사는 메모리 화면의 핵심 주제를 먼저 <strong>“a couple”</strong>이라고 표현한 뒤 <strong>profile, preferences, meal planning, client pitching, half-marathon training의 5개 이름</strong>을 제시한다. 표현상 개수와 실제 열거가 일치하지 않는다. 또한 기본 제공 주장과 설정 저장 화면의 관계, 기존 채팅 메모리의 전환 방식은 명확히 설명되지 않았다. Claude Code 연동이 향후 몇 주나 몇 달 안에 나올 것이라는 말은 화자도 추측이라고 밝혔다. META의 <code>original_affiliation</code> 후보인 Bit 역시 화자 이름과 SNS를 근거로 한 추정이며, 원본 영상 링크와 원작자 이름은 확인되지 않았다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 주제별 기억을 확인하고 고치는 구조는 학습자가 가진 이해를 밖으로 드러내 교정하는 과정과 닮았다.</li>
+<li><strong>통찰:</strong> “기억한다”는 말보다 요약을 덮고 설명하게 한 뒤 잘못 저장된 개념을 수정할 수 있어야 이해를 관찰할 수 있다.</li>
+<li><strong>질문/행동:</strong> 학습자가 이전 설명을 새 사례에서 정확히 재사용하는지 확인한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 반복 설명 감소는 시간 절약과 인수인계 품질이라는 자원 가치에 연결될 수 있다.</li>
+<li><strong>통찰:</strong> APOM의 현재 시스템 상태는 출처에 없으므로 직접 적용 사실로 볼 수 없다. 업무 맥락을 공유 메모리로 넘기는 방식은 검증 전 가상 적용으로만 시험할 수 있다.</li>
+<li><strong>질문/행동:</strong> 비민감한 가상 업무 정보 하나가 채팅과 클라우드 Co-work 사이에서 정확히 왕복하는지 먼저 확인한다.</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 ‘어디서나 작동’이라는 큰 주장 뒤에 클라우드 전용, Claude Code 미지원이라는 조건을 제시한다.</li>
+<li><strong>통찰:</strong> 기능 카피는 편의만 강조하지 말고 지원 환경과 제외 범위를 함께 보여줘야 과장을 줄일 수 있다.</li>
+<li><strong>질문/행동:</strong> 기능을 소개할 때 주장 옆에 지원 제품, 실행 위치, 실제 시연 결과를 붙인다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 이 사례는 에이전트의 기억 저장, 동기화, 실행 환경, 예외 조건을 함께 점검하게 한다.</li>
+<li><strong>통찰:</strong> 기술 이름보다 저장·수정·조회가 어느 실행 환경에서 성공하는지를 왕복 테스트해야 한다.</li>
+<li><strong>질문/행동:</strong> 채팅→Co-work와 Co-work→채팅을 각각 시험하고 로컬 실행을 별도 실패 조건으로 확인한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"AI 환경을 바꿀 때마다 같은 맥락을 다시 설명해야 한다"</code> <strong>문제</strong><br>
+→ <code>"반복 입력을 줄이고 작업을 이어 간다"</code> <strong>수혜자: Claude 채팅과 Co-work를 함께 쓰는 사용자</strong><br>
+→ <code>"선호·업무 맥락·교정 시간과 신뢰를 제공한다"</code> <strong>지불자 또는 자원 제공자: 사용자</strong><br>
+→ <code>"같은 정보를 다시 설명한 횟수의 감소"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 기능이 보이는 계정에서 비민감한 시험 선호 하나를 채팅에 저장해 클라우드 Co-work에서 조회하고, Co-work에서 수정한 뒤 채팅에서 다시 조회한다.</li>
+<li><strong>측정 1개:</strong> 두 번의 조회 중 저장·수정 내용과 정확히 일치한 횟수(0~2회)</li>
+<li><strong>중단 기준 1개:</strong> 정확히 일치한 횟수가 2회 미만이면 업무 정보로 확대하지 않고 중단한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>공유 메모리 발표</td>
+<td>채팅과 Co-work가 같은 메모리를 사용한다는 소개</td>
+</tr>
+<tr>
+<td>2</td>
+<td>저장과 사용자 제어</td>
+<td>대화 중 주제별 저장, 확인·수정·삭제, 민감 주제 설정</td>
+</tr>
+<tr>
+<td>3</td>
+<td>지원 범위</td>
+<td>Free·Pro·Max와 웹·데스크톱·모바일 지원 주장, Claude Code 제외</td>
+</tr>
+<tr>
+<td>4</td>
+<td>설정과 편집 시연</td>
+<td>설정 경로, 기존 항목, 다른 AI 제공자 메모리 가져오기와 의류 선호 수정</td>
+</tr>
+<tr>
+<td>5</td>
+<td>클라우드 조건과 왕복 시험</td>
+<td>로컬 실행 제외, 채팅과 Co-work 사이의 양방향 조회 시연</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 공유 메모리 발표</h3>
+<p>화자는 기존 Co-work의 약점으로 지속적인 기억 부족을 들었다. 새 시스템에서는 채팅에서 사용하는 메모리와 Co-work의 메모리가 같아져, 이전 대화에서 쌓인 사용자 정보나 프로젝트 맥락을 Co-work 작업에서도 이어 쓸 수 있다고 설명했다.</p>
+<p>기사의 핵심 문구로 “Claude의 메모리는 어디서나 작동하며, 무엇을 넣을지는 사용자가 결정한다”는 취지의 문장을 소개했다. 다만 뒤에서 Co-work의 로컬 실행은 제외된다고 밝혀 ‘어디서나’에는 실행 조건이 붙는다.</p>
+<h3>2. 저장 방식과 사용자 제어</h3>
+<p>화자에 따르면 새 방식은 대화가 끝난 뒤 전체 내용을 요약하는 대신 대화 중 필요한 내용을 주제별 메모리에 추가한다. 사용자가 매번 “기억해 줘”라고 말하지 않아도 자동으로 저장할 수 있다고 설명했지만, 선택 기준과 정확성 수치는 제시하지 않았다.</p>
+<p>저장된 메모리는 파일처럼 확인하고 수정하거나 삭제할 수 있다고 소개했다. 건강이나 신념처럼 민감하다고 여겨지는 주제는 기본적으로 저장하지 않으며, 사용자가 설정에서 허용할 수 있다고 설명했다.</p>
+<p>화자는 예시 화면을 설명하면서 먼저 핵심 주제가 “a couple”이라고 말했지만, 이어서 profile, preferences, meal planning, client pitching, half-marathon training의 5개 이름을 제시했다. 따라서 표현된 개수와 열거된 이름 수가 일치하지 않는다.</p>
+<h3>3. 지원 범위와 제외 대상</h3>
+<p>화자는 이 기능이 Free·Pro·Max 요금제의 웹·데스크톱·모바일에서 기본 제공된다고 주장했다. 그러나 영상에는 선호를 저장하거나 나중으로 미루는 화면도 등장하므로, 기본 활성화되는 범위와 사용자가 선택해야 하는 민감 주제 설정은 구분해서 볼 필요가 있다.</p>
+<p>현재 공유 대상은 Co-work와 채팅이라고 설명했다. Claude Code와 공유하는 방법은 없으며, 향후 몇 주나 몇 달 안에 제공될 수 있다는 전망은 화자 자신의 추측이라고 명시했다.</p>
+<h3>4. 설정과 메모리 편집 시연</h3>
+<p>화자는 Claude 계정의 프로필에서 Settings로 들어가 플러그인 아래의 Memory 메뉴를 선택하는 경로를 보여줬다. 기존 메모리는 당시 채팅에서 만들어진 것이라고 설명했다.</p>
+<p>화면에는 ChatGPT나 Gemini 같은 다른 AI 제공자의 메모리를 가져오는 메뉴가 있었다고 소개했다. 메모리는 preferences, profile과 여러 주제로 나뉘었으며, 화자의 사업 파트너 Aiden도 자주 언급한 사람으로 저장돼 있었다고 말했다.</p>
+<p>의류 항목에는 박시하지 않은 남성용 후드, 늘어난 손목과 허리 시보리를 피하려는 선호가 저장돼 있었다. 화자가 셔츠의 팔 부분은 더 넉넉하게, 길이는 너무 길지 않게, 면 소재를 더 선호한다고 입력하자 해당 내용이 메모리에 추가되는 장면을 보여줬다.</p>
+<h3>5. 클라우드 조건과 왕복 시험</h3>
+<p>Co-work 작업은 클라우드 또는 사용자 컴퓨터에서 실행할 수 있다고 설명했다. 클라우드 실행은 앱이나 컴퓨터를 닫아도 계속되지만, 로컬 실행은 컴퓨터가 켜져 있을 때만 작동한다고 화자는 말했다.</p>
+<p>공유 메모리는 클라우드 Co-work에서만 작동한다고 강조했다. 클라우드 작업에서도 로컬 컴퓨터의 폴더를 선택할 수 있다고 시연했지만, 폴더 접근과 메모리 실행 위치는 같은 개념이 아니다.</p>
+<p>화자는 채팅에서 저장한 셔츠 선호를 클라우드 Co-work가 불러오는 장면을 보여줬다. 이어 Co-work에서 바지를 약간 넉넉하게 입는다는 선호를 저장한 뒤 채팅에 질문해 같은 내용을 가져오는 양방향 시연을 했다. 휴대전화에서도 저장된 메모리를 볼 수 있을 것이라고 말했지만, 전사에는 휴대전화 화면에서 직접 확인한 결과가 포함되지 않았다.</p>
+<h3>충돌·미확인 목록</h3>
+<ul>
+<li>“a couple”이라는 수량 표현 뒤에 profile, preferences, meal planning, client pitching, half-marathon training이라는 5개 이름이 열거돼 개수가 일치하지 않는다.</li>
+<li>기능이 기본 제공된다는 주장과 사용자가 설정을 저장하거나 미루는 화면의 관계는 명확히 구분되지 않았다. 민감 주제 선택 화면일 가능성은 있으나 전사만으로 전체 기본 상태를 확정할 수 없다.</li>
+<li>공유 시작을 발표하면서도 당시 저장 목록은 채팅 메모리뿐이라고 설명했다. 기존 메모리의 이전·병합 절차는 제시되지 않았다.</li>
+<li>지원 요금제로 Free·Pro·Max만 언급됐다. 그 밖의 요금제나 조직용 계정 적용 여부는 전사에서 확인되지 않는다.</li>
+<li>원작자 이름은 META에 없으며, Bit라는 소속도 화자 이름과 SNS를 기준으로 추정했다는 주석만 있다. 원본 영상 링크는 확인되지 않았다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · [한영자막] 앤트로픽이 공개한 Claude 메모리 2.0, 무엇이 달라졌을까요? · https://www.youtube.com/watch?v=qLT5cGk01mQ · 전사: 제공 자료에 방식 미기재<br>
+업로더: Tech Bridge · 원작자: 미기재 · 소속 후보: Bit — META에는 화자 이름과 SNS를 기준으로 추정했으며 원본 영상 링크를 확인하지 못했다는 주석이 있음</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>Anthropic이 방금 Claude Co-work와 Claude Chat의 메모리를 사실상 하나로 통합하는 새로운 Claude 메모리 시스템을 공개했습니다.</p>
+<p>Claude Co-work를 사용해 본 적이 있다면, 단점 중 하나가 메모리 기능이 매우 나빴다는 점이었을 겁니다. 이제 이 문제가 해결됩니다.</p>
+<p>이 영상에서는 무엇이 새로워졌는지, 계정에서 이 기능을 켜는 방법, 그리고 이 기능이 어떻게 작동하는지 완전히 이해하기 위해 꼭 이야기해야 할 중요한 주의사항 하나를 정확히 설명하겠습니다. 시작해 보죠.</p>
+<p>좋습니다. 우선 Anthropic이 방금 공개한 Claude Co-work와 Claude 채팅 모드 간의 새로운 공유 메모리에 관한 이 글을 살펴보겠습니다. 여기에는 실제로 꽤 흥미로운 핵심 내용이 몇 가지 있습니다. 이 기능에 관해 이야기할 뿐만 아니라, Claude Co-work로 들어가서 이 기능이 정확히 어떻게 작동하는지도 보여드리겠습니다.</p>
+<p>우선 이 글의 제목은 “Claude의 메모리는 어디서나 작동하며, 무엇을 메모리에 넣을지는 여러분이 결정합니다”입니다. 여기서 핵심은 Claude가 실제로 무엇을 기억할지 우리가 결정할 수 있다는 점입니다. 영상 뒤에서 이 기능을 정확히 사용하는 방법을 보여드릴 테니 끝까지 시청해 주세요.</p>
+<p>오늘부터 채팅에서 사용하는 메모리는 Claude Co-work의 메모리와 동일합니다. Claude와 어떤 방식으로 작업하든, Claude는 이미 여러분에 대해 알고 있는 내용에서 작업을 시작합니다.</p>
+<p>과거에 Claude Co-work를 사용해 본 적이 있다면, 특정 프로젝트에서 작업하는 경우가 아니라면 이전 대화에서 여러분이나 여러분의 사업에 관한 모든 내용을 보통 기억하지 못했을 겁니다. 이전 대화에 지속적인 메모리(persistent memory)가 없었기 때문에 많은 사람이 Co-work 대신 Claude 채팅 모드만 사용했던 이유 중 하나이기도 합니다.</p>
+<p>이제 Claude가 기억하고 있는 모든 내용을 주제별로 확인하고, 그중 어떤 내용이든 수정하거나 삭제할 수 있다고 합니다. 우리가 직접 접근할 수 있는 Claude 내부의 두 번째 뇌처럼 작동한다고 볼 수 있습니다. 다시 말해, Claude가 우리에 대해 기억하는 내용을 변경할 수 있으므로 Claude가 가진 기억을 더 풍부하게 만들 수도 있습니다.</p>
+<p>이 부분은 개인정보 보호와 관련해 흥미로운 지점입니다. Claude는 기본적으로 건강이나 신념처럼 민감하다고 간주되는 주제를 메모리에 저장하지 않습니다. 하지만 계속해서 다시 설명하는 데 지쳤다면, 메모리 설정에서 해당 주제를 켤 수 있습니다.</p>
+<p>Claude가 우리에 대해 기억하는 개인적인 내용을 맞춤 설정해 더 많은 맥락을 제공할 수 있다는 점은 좋습니다. 저는 개인적으로 그렇게 해도 전혀 문제가 없습니다.</p>
+<p>Claude Co-work와 채팅에서 공유되는 하나의 메모리.</p>
+<p>이제 Co-work에도 메모리가 생겼고, 채팅에서 사용하는 메모리와 동일합니다. 따라서 설명을 덜 반복해도 되고, 이전에 하던 작업을 이어서 진행할 수 있습니다.</p>
+<p>Co-work가 클라우드에서 작업을 실행할 때 채팅에서 Claude가 기억한 내용이 그대로 활용되며, 그 반대도 마찬가지입니다. 예를 들어 수개월간의 대화를 통해 쌓은 맥락, 즉 3분기 우선순위와 프로젝트 진행 상황 등이 Co-work에 작업을 맡기는 순간부터 존재합니다. Co-work에서 생성된 내용은 다시 채팅으로 전달됩니다.</p>
+<p>따라서 양방향으로 작동합니다. Claude Co-work와 상호작용하면서 그날 작업 중인 특정 내용을 말하면, Claude 채팅 모드로 돌아갔을 때도 동일한 지속적 메모리를 활용할 수 있습니다.</p>
+<p>이제 꽤 흥미로운 부분입니다. 메모리를 생성하는 방식이 과거와 달라졌기 때문에, 이 부분을 설명해 보겠습니다.</p>
+<p>이제 Claude는 대화가 끝날 때 대화를 요약하는 대신, 대화하는 동안 메모리에 주제를 추가합니다. 대화 중에 Claude가 기억해야 할 특정 내용을 말하면, 전체 대화가 끝날 때까지 기다린 다음 저장할 TL;DR 요점을 정하는 것이 아니라, 해당 내용을 메모리로 저장해야 한다는 것을 Claude가 인식합니다.</p>
+<p>훨씬 효율적인 방식인 것 같고, “이거 기억해”와 같은 말을 직접 하지 않아도 됩니다. Claude가 이런 여러 메모리를 시스템에 자동으로 추가합니다.</p>
+<p>이번 공개에서 가장 흥미로운 부분일 것입니다. 여기에서 보이듯이 저장된 메모리를 확인하고 수정할 수 있습니다.</p>
+<p>이 예시에는 몇 가지 서로 다른 핵심 주제가 나옵니다. 프로필과 선호 사항뿐만 아니라 식사 계획, 고객 제안, 하프 마라톤 훈련 같은 구체적인 주제도 표시됩니다.</p>
+<p>이 파일을 클릭해 내용을 직접 수정하고 특정 사항을 변경할 수도 있습니다. 또는 Claude가 우리에 대해 알아서는 안 되는 민감한 정보라면 삭제할 수도 있습니다.</p>
+<p>메모리를 클릭하면 이런 모습이 나타납니다. 이 간단한 채팅 사용자 인터페이스(chat user interface)에서 Claude와 대화하며 정확히 무엇을 바꾸고 싶은지 말할 수 있습니다. 또는 Markdown 파일처럼 이 안을 직접 클릭해 내용을 수정할 수도 있을 것 같습니다.</p>
+<p>이 기능은 웹, 데스크톱, 모바일의 Free, Pro, Max 요금제에서 기본적으로 켜져 있으므로 모두에게 좋은 소식입니다. 어떤 요금제를 사용하든 기본적으로 누구나 이용할 수 있습니다.</p>
+<p>트위터에서 이 답변을 보고 이 부분을 다뤄야겠다고 생각했습니다. 누군가 “Claude Co-work와 Claude Code는 어떻습니까? 그 반대의 경우도 가능한가요?”라고 물었습니다.</p>
+<p>현재로서는 Co-work와 채팅 모드 사이에서만 동기화됩니다. Co-work와 Claude Code 간에 공유 메모리를 사용하는 방법은 없습니다. 하지만 추측하자면, 앞으로 몇 주 또는 몇 달 안에 출시하기 위해 현재 작업 중인 기능일 가능성이 큽니다. 물론 이는 제 추측일 뿐입니다.</p>
+<p>이제 Claude 계정 안에서 이 기능을 정확히 어디에서 찾을 수 있는지 보여드리겠습니다.</p>
+<p>우선 브라우저에서 Claude.ai로 이동하면, 계정을 열었을 때 이런 화면이 나타납니다. Claude가 Co-work 작업도 기억한다는 내용이 표시됩니다. 저장된 모든 메모리를 파일 형태로 볼 수 있고, 특정 민감한 주제에 대해 더 많은 통제권을 갖게 된다는 내용도 나옵니다.</p>
+<p>이 기능을 활성화하고 싶지 않다면 “Not now”를 클릭하면 되지만, 저는 “Save preferences”를 클릭하겠습니다. 개인적으로는 민감한 주제도 메모리에 포함되도록 이 기능을 켜겠습니다. 물론 신중하게 판단한 뒤, 꺼림칙하다면 해당 기능을 꺼 두세요.</p>
+<p>“Save preferences”를 선택하겠습니다. Claude 안에서는 이런 인터페이스가 표시됩니다. 여기에는 채팅 모드와 Co-work가 있고, 이제 두 제품에서 공유 메모리를 사용합니다.</p>
+<p>지금 보시는 Claude 데스크톱 앱에서도 정확히 동일한 화면이 나타납니다. 여기에서도 작성해야 하는 동일한 프롬프트가 표시되고, 저는 선호 사항을 저장하겠습니다.</p>
+<p>이제 Claude가 이미 저장한 메모리를 찾는 방법을 보여드리겠습니다.</p>
+<p>맨 아래에 있는 프로필로 내려가 계정을 클릭한 다음 Settings를 클릭하겠습니다. 맨 아래까지 스크롤하면 플러그인 바로 아래에 Memory 버튼이 나타납니다. Memory를 클릭하겠습니다.</p>
+<p>여기에는 지난 몇 달 동안 Claude가 저를 위해 저장한 메모리 중 일부가 나옵니다. 현재로서는 이것들이 제 채팅 메모리일 뿐입니다.</p>
+<p>우선 여기에서 “Import memory from other AI providers”를 클릭할 수 있습니다. 예를 들어 ChatGPT나 Gemini에서 메모리를 가져오고 싶다면 바로 여기에서 진행할 수 있습니다.</p>
+<p>그다음 메모리를 카테고리별로 분류해 보여주는데, 꽤 좋은 기능이라고 생각합니다. 예를 들어 하나의 특정 파일로 제 선호 사항을 보여주고, 제 프로필도 보여줍니다. 그리고 여기에 다양한 주제가 나옵니다.</p>
+<p>제 의류 핏 선호, 학교 커뮤니티 관련 주제, 재정, 피트니스, 사진, 팟캐스팅, 독서, 도구에 관한 내용이 있습니다. 이 모든 내용이 주제별로 분류되어 있습니다. Co-work와 채팅 모드 양쪽에서 Claude와 점점 더 많이 상호작용할수록 이 주제들도 확장될 것입니다.</p>
+<p>제가 함께 일하거나 자주 언급하는 사람들도 포함되어 있습니다. 여기 보이는 Aiden은 제 사업 파트너인데, Claude가 그를 기억하고 있습니다.</p>
+<p>이 중 하나를 클릭해서 어떤 모습인지 보여드리겠습니다. Clothing을 클릭하면 매우 단순한 메모리가 나옵니다. 제가 좋아하는 특정 후드티 핏이 표시되고, 저에 관한 세부 사항과 제가 좋아하는 남성용 후드티 유형까지 나옵니다.</p>
+<p>예를 들어 제가 박시하지 않은 남성용 후드티만 원한다는 내용이 표시되는 것이 꽤 재미있습니다. 비싼 후드티를 샀는데 손목 시보리와 허리 시보리가 늘어나 있었다고 제가 불평했던 내용까지 기억하고 있으며, 그런 일이 다시 일어나지 않기를 원한다는 점도 기억합니다.</p>
+<p>이 메모리를 바꾸고 싶다고 해 보죠. 여기에서 “셔츠에 관해서도 언급하고 싶은데, 요즘은 소매 부분이 조금 더 오버사이즈인 스타일을 정말 좋아합니다. 하지만 너무 길지는 않았으면 좋겠습니다. 그리고 면 소재를 더 선호합니다”라고 말할 수 있습니다.</p>
+<p>그냥 생각나는 내용을 쭉 입력한 다음 Send를 클릭하겠습니다. 그러면 Claude가 이 정보를 해당 메모리 파일에 맞게 정리합니다. 이렇게 하자 메모리 가장 아래에 제가 셔츠를 어떤 스타일로 좋아하는지에 관한 내용이 추가되었습니다.</p>
+<p>여기서 꼭 이야기해야 할 정말 중요한 내용이 하나 있습니다. 바로 이 모든 메모리가 이곳을 제외한 모든 곳에 저장된다는 점입니다.</p>
+<p>이 새로운 메모리 시스템을 켜면 Claude Co-work와 채팅 모드에서 작동하지만, 클라우드에서 실행할 때만 작동합니다. Claude Co-work를 컴퓨터에서 로컬로 실행한다면 동일한 공유 메모리 시스템을 사용할 수 없습니다.</p>
+<p>컴퓨터에서 로컬로 작동하는 것과 클라우드에서 작동하는 것의 차이를 완전히 이해하지 못했을 수도 있으니, 좀 더 설명하겠습니다.</p>
+<p>여기 Claude Co-work로 돌아오면 오른쪽 맨 위에 작은 데스크톱 아이콘이 보입니다. 이것을 클릭하겠습니다.</p>
+<p>이 작업을 실행하는 방법은 두 가지입니다. 클라우드에서 실행할 수도 있습니다. 이 기능은 베타 버전이며, 컴퓨터에서 앱을 닫거나 컴퓨터를 종료해도 모든 작업이 계속 진행됩니다. 또는 컴퓨터에서 직접 실행할 수도 있습니다.</p>
+<p>컴퓨터에서 실행하면 컴퓨터가 켜져 있을 때만 작동합니다. 따라서 Claude Co-work와 채팅 모드 사이에서 공유 메모리를 사용하려면 클라우드에서 실행해야 합니다. 그렇지 않으면 작동하지 않습니다.</p>
+<p>그렇다고 큰 문제는 아닙니다. 지금 보시는 것처럼 저는 이 작업을 클라우드에서 실행하고 있지만, 여전히 컴퓨터에 있는 여러 폴더를 선택할 수 있습니다.</p>
+<p>예를 들어, 로컬 데스크톱에 있는 YouTube 동영상 프로젝트와 폴더를 선택해 보겠습니다. 여기 와서 “저는 어떤 셔츠를 선호하나요?”라고 물어볼 수 있습니다. YouTube 동영상과는 전혀 상관없는 내용인 건 알지만, 일단 전송해 보겠습니다.</p>
+<p>그러면 앞서 Claude 채팅 모드(Claude chat mode)에서 저장한 메모리가 연동되어 Co-work 안에서도 액세스할 수 있다는 것을 보여줄 겁니다.</p>
+<p>이렇게 메모리를 검색하고 있습니다. 의류 관련 메모리를 불러오고 있네요. 그리고 정확히 이런 내용을 찾았습니다. 소매 부분은 조금 더 오버사이즈이고, 길이는 너무 길지 않으며, 원단은 면 함량이 더 높은 것을 선호한다는 내용입니다. 앞서 제가 저장한 메모리와 정확히 일치합니다.</p>
+<p>이번에는 Co-work 쪽에서 테스트해 보겠습니다. 메모리를 하나 생성하게 한 다음, 이 내용이 채팅 모드로도 연동되는지 확인해 보죠.</p>
+<p>제 바지는 요즘 약간 오버사이즈인 스타일이 마음에 듭니다. 이것도 메모리에 저장해 줄 수 있나요?</p>
+<p>자, 여기 보시면 메모리에 추가했다고 나옵니다. 메모리를 클릭하면 제가 바지를 어떻게 입는 것을 좋아하는지에 관한 세부 내용도 추가된 것을 확인할 수 있습니다.</p>
+<p>다시 채팅 모드로 돌아와서 “제가 바지를 어떻게 스타일링하는 것을 좋아하는지 알고 있나요?”라고 물어보겠습니다.</p>
+<p>자, 메모리 파일에서 바로 가져왔습니다. 이 내용은 Claude Co-work와 채팅 모드 사이에서 동기화되고 있습니다. 다시 말씀드리지만, 이 기능은 클라우드에서 실행되고 있어야 합니다.</p>
+<p>지금 보시는 것처럼 이 메모리를 데스크톱 앱 안에 저장할 뿐만 아니라, 휴대폰을 꺼내 보면 휴대폰에도 이 메모리가 저장되어 있을 겁니다.</p>
+<p>아무튼 여러분, 이상입니다.</p>
+</details>
+</body></html>
