@@ -1,0 +1,231 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>&quot;Is it Bitter Lesson-pilled?&quot; | Rich Sutton, Oak Lab — Codex 버전</title>
+<meta name="description" content="정교한 알고리즘을 거부하는 대신, 계산 자원이 늘 때 함께 이득을 얻는 탐색·학습 방법을 선택하라는 주장을 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Sequoia Capital 학습노트</div><h1>&quot;Is it Bitter Lesson-pilled?&quot; | Rich Sutton, Oak Lab — Codex 버전</h1>
+<div class="meta">원작자 pilled?" | Rich Sutton · Oak Lab · 업로드 2026-08-27 · 1.1분 · <a href="https://youtu.be/yCkV6Bm1hVk" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 1분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상은 ‘Bitter Lesson’을 사람의 지식을 모두 버리라는 구호로 이해하면 핵심을 놓친다고 말한다. 화자가 제시한 기준은 계산 자원이 늘어날수록 더 잘 활용할 수 있는 학습 방법에 집중하라는 것이다. 사람 지식에 맞춘 설계에 주의를 빼앗기기보다 탐색과 학습처럼 더 많은 계산을 성능 향상에 연결할 수 있는 방법을 택하라는 뜻이다. 정교한 알고리즘을 반대하는 말도 아니다. 정교하더라도 계산량과 함께 확장될 수 있어야 한다는 선택 기준이다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>핵심은 정교한 알고리즘을 버리는 것이 아니라 계산 증가를 활용할 수 있는 알고리즘을 고르는 것이다.</li>
+<li>화자는 탐색과 학습을 그런 방법의 예로 든다.</li>
+<li>이 영상은 원리를 짧게 주장하지만, 실제 성능을 비교한 실험 결과는 제시하지 않는다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>화자가 설명한 Bitter Lesson의 핵심은 무엇이며, 무엇으로 오해하면 안 되는가?</strong></p>
+</blockquote>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>두 개의 정교한 AI 알고리즘 가운데 하나를 골라야 한다. 이때 화자가 제시한 질문은 단순히 “어느 쪽이 더 복잡한가?”가 아니다. “계산 자원을 더 투입했을 때 어느 방법이 그 증가분을 활용할 수 있는가?”를 묻는다.</p>
+<p><code>"사람 지식이나 알고리즘의 정교함만 보고 선택한다"</code> <strong>문제</strong><br>
+→ <code>"계산량이 늘 때 함께 확장되는 탐색·학습 방법인지 본다"</code> <strong>작동 방식</strong><br>
+→ <code>"더 많은 계산을 활용할 수 있는 알고리즘에 집중한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">물의 양과 수도관</div>
+<p>계산 자원을 물, 알고리즘을 수도관이라고 생각할 수 있다. 물을 더 공급해도 관이 그 양을 받아들이지 못하면 추가 자원을 활용하기 어렵다. 화자의 기준은 장식이 화려한 관보다 더 많은 물을 받아들일 수 있는 관인지 확인하자는 데 가깝다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 계산은 물처럼 단순히 흘러가는 물질이 아니며, 계산량을 늘린다고 성능 향상이 보장되는 것도 아니다. 영상에는 어떤 조건에서 얼마나 향상되는지 보여 주는 실험이 없다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bitter Lesson</strong></td>
+<td>사람 지식에만 매달리지 말고 더 많은 계산을 활용할 방법에 집중하자는 교훈</td>
+<td>화자가 압축한 표현으로는 계산과 함께 확장되는 학습 방법에 초점을 맞추라는 원리</td>
+<td>정교한 알고리즘이나 모든 사람 지식을 무조건 버리라는 주장</td>
+</tr>
+<tr>
+<td><strong>계산과 함께 확장</strong></td>
+<td>계산을 더 넣었을 때 그 자원을 활용할 수 있음</td>
+<td>알고리즘이 증가한 계산 자원을 성능 개선에 연결할 수 있다는 선택 기준</td>
+<td>계산량만 늘리면 언제나 자동으로 좋아진다는 보장</td>
+</tr>
+<tr>
+<td><strong>탐색과 학습</strong></td>
+<td>후보를 찾아보고 경험에서 개선하는 방법</td>
+<td>화자가 계산과 함께 확장되는 방법의 예로 든 search와 learning</td>
+<td>영상에서 모든 탐색·학습 방법의 우수성이 검증됐다는 해석</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>Bitter Lesson이 “정교한 알고리즘은 필요 없다”는 뜻으로 오해되기 쉬운 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>화자가 사람 지식에 주의를 빼앗기지 말라고 강조하기 때문에 단순함만 지지하는 말처럼 들릴 수 있다. 그러나 화자는 정교한 알고리즘도 필요하며, 핵심 조건은 그 알고리즘이 계산 증가와 함께 확장되는지라고 명시한다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>‘정교한 알고리즘’과 ‘계산과 함께 확장되는 알고리즘’은 서로 반대되는 개념인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>화자의 설명에서는 반대가 아니다. 알고리즘은 정교하면서도 계산 증가를 활용할 수 있다. 정교함의 유무가 아니라, 추가 계산을 성능 개선에 연결할 수 있는지가 구별 기준이다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 AI 방법을 검토한다면, 이름이나 복잡성 외에 무엇을 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>같은 과제와 평가 기준에서 계산 자원을 늘렸을 때 결과가 실제로 개선되는지 확인한다. 다만 이 영상만으로 개선 폭이나 필요한 계산량을 정할 수는 없으므로 별도 시험이 필요하다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 알고리즘의 복잡성보다 확장 방식을 묻는다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 사람 지식에 주의를 빼앗기기보다 계산과 함께 확장되는 학습 방법에 집중하라고 말하며, 탐색과 학습을 예로 든다. 정교한 알고리즘이 필요 없다는 뜻은 아니라고 덧붙인다.</li>
+<li><strong>[해석]</strong> 방법을 평가할 때 “얼마나 영리하게 설계됐는가?”만 묻지 말고 “계산 자원이 늘어날 때 그 자원을 계속 활용하는가?”를 함께 물어야 한다.</li>
+<li><strong>[경계]</strong> 전사는 화자의 주장만 보여 주며 비교 실험이나 적용 조건은 제공하지 않는다. META의 원작자 후보 <code>pilled?" | Rich Sutton</code>은 추출이 깨진 형태이고, provenance.note도 추정이라고 밝힌다. 소속 후보 <code>Oak Lab</code> 역시 독립 검증되지 않았다. 63초와 1.1분은 반올림으로 양립하지만, “26 words”는 단어 계산 규칙이 별도로 설명되지 않았다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 널리 쓰이는 표현이 원래 뜻과 다르게 사용될 수 있다고 지적한다.</li>
+<li><strong>통찰:</strong> 용어를 외웠는지보다 “무엇을 반대하는 말이 아닌가”까지 대조해 설명하게 해야 이해를 관찰할 수 있다.</li>
+<li><strong>질문/행동:</strong> 학습자에게 정교함과 계산 확장성이 왜 양립할 수 있는지 예 없이 먼저 설명하게 한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 제한된 자원을 어떤 방식에 배분할지 판단한다는 구조가 닮았다.</li>
+<li><strong>통찰:</strong> APOM에 적용한다면 현재 사실이 아니라, 자원을 더 넣을 때 처리량이나 품질이 함께 개선되는 운영 방식인지 묻는 가설로만 사용할 수 있다.</li>
+<li><strong>질문/행동:</strong> 추가 자원을 넣어도 병목 때문에 가치 지표가 개선되지 않는 단계가 있는지 확인할 수 있는가?</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 유행하는 문구와 화자가 의도한 정확한 주장 사이의 차이를 다룬다.</li>
+<li><strong>통찰:</strong> 강한 구호를 사용할수록 무엇을 뜻하지 않는지 함께 밝혀야 과장을 줄일 수 있다.</li>
+<li><strong>질문/행동:</strong> 카피의 핵심 문장을 독자가 “사람 지식과 정교한 설계가 모두 불필요하다”로 오해할 여지는 없는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 계산 자원과 함께 확장되는 알고리즘을 선택하라는 기준이 직접 제시된다.</li>
+<li><strong>통찰:</strong> 기술 이름이나 복잡성보다 동일 작업에서 계산량 증가가 평가 결과에 미치는 변화를 시험해야 한다.</li>
+<li><strong>질문/행동:</strong> 검증 전 가상 후보 하나를 정해 낮은 계산량과 높은 계산량에서 같은 품질 지표를 비교한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"유행하는 구호나 정교함만으로 AI 방법을 선택한다"</code> <strong>문제</strong><br>
+→ <code>"계산 증가를 실제 개선으로 연결할 방법을 고른다"</code> <strong>수혜자: AI 방법을 평가하는 팀</strong><br>
+→ <code>"평가 시간과 계산 자원을 제공한다"</code> <strong>지불자 또는 자원 제공자: 평가 담당자 또는 팀</strong><br>
+→ <code>"계산량을 높였을 때 동일 품질 점수가 개선되는지"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 검증 전 가상 알고리즘 후보 하나를 같은 작업에서 낮은 계산량과 높은 계산량으로 각각 실행한다.</li>
+<li><strong>측정 1개:</strong> 높은 계산량에서의 품질 점수와 낮은 계산량에서의 품질 점수 차이.</li>
+<li><strong>중단 기준 1개:</strong> 품질 점수 차이가 0 이하이면 확장 가능성이 확인되지 않은 것으로 보고 확대를 멈춘다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>유행어가 된 Bitter Lesson</td>
+<td>질문자는 이 표현이 자주 쓰이고 오용될 가능성을 묻는다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>26단어 압축</td>
+<td>응답자는 X에 올린 압축문을 떠올리며 계산과 함께 확장되는 학습 방법을 강조한다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>정교함과 확장성</td>
+<td>정교한 알고리즘 자체를 반대하는 주장이 아니라고 선을 긋는다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 유행어와 오해</h3>
+<p>질문자는 회의에서 “Bitter Lesson-pilled인가?”라는 표현을 자주 듣는다고 말한다. 표현의 인기가 커진 만큼 원래 의도와 다르게 사용됐을 가능성을 제기하며, 핵심과 흔한 오해를 묻는다.</p>
+<h3>2. 화자의 26단어 압축</h3>
+<p>응답자는 최근 X에 Bitter Lesson을 26단어로 줄인 게시물을 만들었다고 말한다. 그 요지는 사람 지식에 주의를 빼앗긴 전통적 경향에서 벗어나, 계산량 증가와 함께 확장되는 학습 방법에 집중하자는 것이다. 탐색과 학습이 예로 제시된다.</p>
+<h3>3. 정교한 알고리즘에 대한 입장</h3>
+<p>응답자는 이것이 알고리즘이나 개선을 포기하자는 주장이 아니라고 설명한다. 정교한 알고리즘도 필요하지만, 추가 계산을 활용할 수 있는 정교한 알고리즘이어야 한다는 것이 핵심이다.</p>
+<h3>수치·고유명사 대조</h3>
+<ul>
+<li><strong>길이:</strong> META의 63초와 1.1분은 환산 후 반올림하면 양립하므로 수치 충돌이 아니다.</li>
+<li><strong>수량 표현:</strong> 응답자는 자신의 압축문을 26단어라고 부른다. 제공된 영문을 일반적인 공백 기준으로 나누면 26개지만, 영상은 계산 규칙을 설명하지 않는다.</li>
+<li><strong>화자 이름:</strong> 제목에는 <code>Rich Sutton</code>이 나오지만 provenance.creator에는 <code>pilled?" | Rich Sutton</code>이라는 깨진 후보가 들어 있다. 후보 원문은 frontmatter에 그대로 보존했으며 실제 원작자 여부는 독립 검증되지 않았다.</li>
+<li><strong>소속:</strong> 제목과 provenance.affiliation에는 <code>Oak Lab</code>이 있으나, provenance.note는 출처를 추정이라고 밝힌다.</li>
+<li><strong>채널:</strong> META의 channel과 uploader 값은 동일하지만 수집·분류용 라벨이므로 원작자나 원본 제작 주체의 증거로 해석하지 않는다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>META 채널: Sequoia Capital · META 업로더: Sequoia Capital · 원제: <code>"Is it Bitter Lesson-pilled?" | Rich Sutton, Oak Lab</code> · https://www.youtube.com/watch?v=yCkV6Bm1hVk · 전사: 제공된 영어 SOURCE_TRANSCRIPT(생성 방식 미기재)<br>
+원작자 후보: <code>pilled?" | Rich Sutton</code> · 소속 후보: <code>Oak Lab</code> · META provenance.note에 따르면 화자 이름과 SNS를 기준으로 추정했으며 원본 영상 링크는 확인되지 않았다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>요즘 제가 회의에서 가장 자주 듣는 표현일지도 모릅니다.</p>
+<p>“이건 Bitter Lesson-pilled인가? Bitter Lesson-pilled가 아닌가?”</p>
+<p>이 표현이 인기를 끌고 있는 걸 보면, 당신이 원래 의도했던 것과는 다르게 여러 방식으로 왜곡되고 오용됐을 것 같습니다. 그 핵심은 무엇이며, 사람들이 이를 이해하려고 할 때 어디에서 잘못한다고 생각하시나요?</p>
+<p>이제 X에 대해 생각하게 하시네요. 최근에 Bitter Lesson을 26단어로 요약해 보려는 글을 올렸습니다. 대략 이런 내용입니다. “인간의 지식에 현혹되지 마라. AI는 전통적으로 여러 번 주의를 빼앗겨 왔다. 대신 탐색(search)과 학습(learning)처럼 계산량(computation)에 따라 확장되는 학습 방법에 집중하라.”</p>
+<p>그러니 정말 중요한 것은 알고리즘과 그 개선에 집중하는 것입니다. 정교한 알고리즘이 필요 없다는 뜻은 아닙니다. 정교한 알고리즘이 필요하지만, 계산량에 따라 확장될 수 있는 정교한 알고리즘을 원한다는 뜻입니다.</p>
+</details>
+</body></html>
