@@ -46,13 +46,164 @@ table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
 <div class="eyebrow">TechBridge-KR 학습노트</div><h1>왜 AI 디자인은 원샷으로 안 될까요? — Codex 버전</h1>
 <div class="meta">업로드 2026-09-11 · 15.5분 · <a href="https://youtu.be/PAXtfqAGWpQ" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
 <h2>먼저 읽는 쉬운 요약</h2>
-<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
-<p><strong>영상 미시청 기준 · 약 2분 · 선수지식: 없음</strong>
-이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+<blockquote>
+<p><strong>영상 미시청 기준 · 약 8~10분 · 선수지식: 없음</strong><br>
+15.5분 발표를 <strong>전체 지도 → 작동 원리 → 화면 예시 → 다시 전체 지도</strong> 순서로 읽는 설명이다. 도식은 전사 기반 재구성이며, 화면 예시는 별도로 표시한 편집자의 개념도다. 제품 성능과 취향에 관한 주장은 발표자의 관점이지 독립 검증된 보편 법칙이 아니다.</p>
+</blockquote>
+<style>
+.oneshot-map{margin:24px 0;padding:18px;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--text);overflow-wrap:anywhere;box-sizing:border-box}
+.oneshot-map *{box-sizing:border-box;min-width:0}
+.oneshot-map .root{padding:14px;border:2px solid #bd6528;border-radius:8px;text-align:center;font-weight:700;line-height:1.65}
+.oneshot-map .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px;margin-top:14px}
+.oneshot-map .node{border:1px solid var(--border);border-top:3px solid #bd6528;border-radius:8px;padding:14px;line-height:1.7}
+.oneshot-map .node strong{display:block;margin-bottom:7px}
+.oneshot-map .note{border-left:3px solid #bd6528;padding:10px 12px;margin-top:14px;line-height:1.7}
+.oneshot-map .step{padding:12px;border:1px solid var(--border);border-radius:8px;line-height:1.6}
+.oneshot-map .arrow{text-align:center;margin:7px 0;color:#a5531b;font-weight:700}
+.oneshot-map a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.oneshot-map .wire{padding:18px;border:1px dashed #bd6528;margin-top:10px;min-height:230px;line-height:1.7}
+.oneshot-map .wire .eyebrow{font-size:.82em;letter-spacing:.08em}
+.oneshot-map .wire .headline{font-size:1.8em;line-height:1.25;font-weight:800;margin:14px 0}
+.oneshot-map .wire .cta{display:inline-block;border:2px solid currentColor;padding:6px 12px;margin-top:14px;font-weight:700}
+@media(max-width:600px){.oneshot-map{padding:12px}.oneshot-map .grid{grid-template-columns:1fr}}
+</style>
+
+<h3>숲 1 · 이 영상은 ‘어떤 AI가 잘 그리나’보다 ‘누가 결정하나’를 묻는다</h3>
+<div class="oneshot-map" role="group" aria-label="발표 전체 논리 지도">
+<div class="root">왜 한 번에 맡긴 디자인은 그럴듯해도 내 의도와 다를까?</div>
+<div class="grid">
+<div class="node"><strong><a href="#os-context">1 · 빈칸을 발견하기</a></strong>누구를 위한 것인가?<br>어떤 느낌이어야 하나?<br>무엇은 피해야 하나?<br>↓<br>이 판단이 빠지면 모델의 익숙한 선택이 들어온다.</div>
+<div class="node"><strong><a href="#os-control">2 · 맡길 높이 정하기</a></strong>픽셀 하나씩 직접 수정<br>↕<br>의도와 제약으로 조향<br>↕<br>완전히 자율적으로 위임</div>
+<div class="node"><strong><a href="#os-language">3 · 판단을 말로 전달하기</a></strong>“더 과감하게”<br>↓ 뜻과 제약 정의<br>위계·크기·글꼴 변경<br>↓<br>보고 판단하고 다시 수정</div>
 </div>
-<p>이 발표의 핵심은 AI에게 “멋지게 디자인해 줘”라고 한 번 말해서는 좋은 디자인이 나오기 어렵다는 주장이다. 좋은 디자인에는 대상 고객, 전달할 감정, 피해야 할 인상, 참고 사례처럼 프로젝트마다 다른 판단이 필요하다. 이 맥락이 없으면 AI는 학습 과정에서 익힌 흔한 색상·글꼴·구성을 채워 넣기 쉬워서, 결과가 능숙해 보여도 다른 AI 결과물과 비슷해진다.</p>
-<p>그렇다고 사람이 여백과 간격을 모두 직접 고치거나, 반대로 전부 AI에게 맡기는 것만이 답은 아니다. 화자는 그 중간에서 “더 과감하게”, “더 조용하게”, “핵심만 남겨라” 같은 말로 방향을 반복해서 조정하자고 제안한다. 단, 형용사만 던지는 것이 아니라 “과감함은 색을 추가하는 것이 아니라 위계·크기·글꼴의 결단력을 높이되 기존 디자인 체계는 깨지 않는 것”처럼 뜻과 제약을 함께 정해야 한다.</p>
-<p>이 방식에서 AI는 취향을 대신 만드는 자동 디자이너가 아니다. 사람의 판단을 더 빨리 구현하고 시험하게 돕는 도구다. 사람은 결과를 보고 다시 방향을 정하며, AI는 그 피드백을 다음 수정에 반영한다. 따라서 중요한 능력은 완벽한 첫 프롬프트가 아니라 맥락을 설명하고 결과를 평가하며 여러 번 조향하는 능력이다.</p>
+<div class="note">전체 결론: <strong>사람은 방향과 기준을 정하고, AI는 구체적 변경을 실행한다.</strong> 모든 작업을 같은 높이에서 통제하자는 뜻은 아니다.</div>
+</div>
+
+<p>발표자는 자신이 만든 <strong>Impeccable</strong>을 소개하지만, 중심 주제는 설치법이 아니다. 코딩 AI가 디자인을 수행할 때 사람이 어떻게 의도를 전달할 것인지에 관한 도구 설계 철학이다. 여기서 디자인 스킬은 AI가 참고할 디자인 지식과 작업 지시를 묶은 체계로 이해하면 된다. ‘하네스’는 그런 AI가 작업하는 실행 환경을 가리키는 말이다.</p>
+<p>발표자는 디자이너가 코드로, 엔지니어가 디자인으로 이동하면서 서로의 역할이 섞인다고 본다. 기획을 끝내고 디자인을 넘긴 다음 개발자가 구현하는 일방향 인계만으로는 실제 작업을 설명하기 어렵다는 것이다. 그래서 전문 디자이너만 이해하는 말도, 코드와 픽셀만 가리키는 말도 아닌 <strong>함께 결과를 조정할 공통 언어</strong>를 찾는다.</p>
+<h3>나무 1 · 도입 시연에서 보여준 것과, 아직 증명하지 않은 것</h3>
+<p>영상은 일부러 밋밋하게 만든 웹사이트의 워크플로 섹션에서 시작한다. 지시는 “더 대담하게 만들어”다. Impeccable을 적용한 결과를 보여준 뒤, 같은 프로젝트에 같은 문장을 넣되 Impeccable을 사용하지 않은 결과를 비교한다. 화자는 차이가 보인다고 말하면서도 판단은 관객에게 맡긴다.</p>
+<div class="oneshot-map" role="group" aria-label="실제 시연 비교와 증거의 한계">
+<div class="root">같은 프로젝트 · 같은 요청 “더 대담하게”</div>
+<div class="grid">
+<div class="node"><strong>Impeccable 사용</strong>디자인 단어의 의미를 보강<br>→ 더 대담해졌다는 화자의 평가<br>단, 전형적인 섹션 번호 같은 흔적은 남음<br><br>사용 모델·설정은 전사에 명시되지 않음</div>
+<div class="node"><strong>Impeccable 미사용</strong>같은 프롬프트로 비교 결과 생성<br>→ 관객에게 차이를 판단하도록 제시<br><br>GPT-5.5 · Extra High라고 명시</div>
+</div>
+<div class="note">이 시연은 <strong>의미를 보강하는 접근의 사례</strong>다. 양쪽 모델·설정까지 통제한 성능 실험으로 볼 수는 없고, 전사만으로 화면의 정확한 차이를 재현할 수도 없다.</div>
+</div>
+
+<p>이 구분이 중요하다. 영상을 “특정 스킬을 깔면 디자인이 좋아진다”로 읽으면 화자가 이후에 설명하는 사람의 역할을 놓친다. 화자 자신도 결과가 완벽하지 않다고 말한다. 도구의 존재보다 <strong>그 도구에 어떤 판단과 의미가 들어 있는지</strong>가 뒤에 이어질 설명의 핵심이다.</p>
+<h3>나무 2 · 원샷의 실패는 화면이 아니라, 비어 있는 판단에서 시작한다</h3>
+<div id="os-context" class="oneshot-map" role="group" aria-label="맥락 없는 지시가 획일화로 이어지는 인과">
+<div class="step"><strong>입력</strong> · “우리 브랜드 페이지를 멋지게 만들어 줘.”</div>
+<div class="arrow">↓ 아직 정하지 않은 것</div>
+<div class="grid">
+<div class="node"><strong>목적·사용자</strong>누구에게 무엇을 전달하려는가?</div>
+<div class="node"><strong>감정·금지 인상</strong>어떤 느낌이고, 절대 어떤 느낌이면 안 되는가?</div>
+<div class="node"><strong>참고 맥락</strong>어떤 사례를 참고하고 무엇을 달리해야 하는가?</div>
+</div>
+<div class="arrow">↓ 빈칸을 모델의 익숙한 참고 기준으로 채우면</div>
+<div class="step"><strong>결과</strong> · 화면은 능숙해 보이지만, 프로젝트만의 선택 이유가 약해진다.</div>
+<div class="note">원샷의 문제를 <strong>“AI가 그릴 줄 모른다”</strong>보다 <strong>“누구도 필요한 결정을 하지 않았다”</strong>로 보는 것이 발표자의 관점이다.</div>
+</div>
+
+<p>화자는 사람 디자인 스튜디오에 가도 “브랜드를 디자인해 달라”는 말만으로는 일을 시작할 수 없다고 설명한다. 누구를 위한 브랜드인지, 무엇을 얻으려는지부터 파악해야 한다. AI에 맡겼다는 이유만으로 그 질문들이 없어지지는 않는다. 혼자 일하는 창업자도 실제 결과를 보고 생각을 바꾸며, 여러 사람이 참여하면 사용자와 이해관계자의 의견까지 반영해야 한다.</p>
+<p>영상에서 <strong>AI 슬롭</strong>은 단지 못생긴 화면을 뜻하지 않는다. 보라색 그라데이션이 사라져도 베이지색, 특정 세리프 글꼴, 이탤릭체가 반복되면 또 다른 획일화라는 것이다. 화자는 이를 ‘Claude beige’, ‘algorithmic Uniqlo’라고 부른다. 특정 색이나 글꼴이 나쁘다는 규칙이 아니라, <strong>다른 프로젝트인데 선택이 계속 같아지는 현상</strong>을 지적한다.</p>
+<p>따라서 “보라색을 금지하자”는 처방만으로는 충분하지 않다. 빈 맥락을 둔 채 유행하는 겉모양만 바꾸면 같은 문제가 다른 옷을 입고 나타난다. ‘원샷 디자인은 안 된다’는 제목도 모든 미래 기술의 불가능성을 증명한 명제가 아니다. 현재 좋은 디자인에는 맥락과 반복이 필요하다는 화자의 주장이고, 장래 가능성에 대해서는 본인도 의견과 유보를 함께 말한다.</p>
+<h3>숲 2 · 사람의 선택을 남기되, 모든 픽셀을 사람이 만질 필요는 없다</h3>
+<div id="os-control" class="oneshot-map" role="group" aria-label="직접 조작과 조향과 자율 위임의 통제 수준 비교">
+<div class="root">통제 높이: AI보다 사람이 낫다는 순위가 아니라, 개입 단위를 고르는 지도</div>
+<div class="grid">
+<div class="node"><strong>낮은 높이 · 직접 조작</strong>여백·패딩·간격을 하나씩 고친다.<br><br>사람이 구체적 변경까지 지정한다.<br>영상에서는 많은 작업에 너무 미세한 단위일 수 있다고 본다.</div>
+<div class="node"><strong>중간 높이 · 방향 조향</strong>“핵심을 더 강조하되 디자인 체계는 유지해.”<br><br>사람: 의도·제약·판단<br>AI: 구체적인 변경 실행<br>이 발표가 집중하는 지대다.</div>
+<div class="node"><strong>높은 높이 · 자율 위임</strong>“이걸 대신 디자인해 줘.”<br><br>AI에 많은 선택을 넘긴다.<br>맥락을 전달하지 않으면 중요한 결정도 기본값에 맡겨진다.</div>
+</div>
+<div class="note">고도는 고정하지 않는다. <strong>초기 탐색, 반복 수정, 마지막 다듬기</strong>에서 필요한 개입은 다를 수 있다. 중간 조향도 모든 문제를 해결하는 방식은 아니다.</div>
+</div>
+
+<p>‘통제 높이’라는 말이 어렵다면 <strong>한 번 말할 때 얼마나 큰 결정을 묶어 맡기느냐</strong>라고 이해하자. 여백 하나를 지정하는 것과 “정보의 중요도가 더 잘 드러나게”라고 방향을 주는 것은 서로 다른 단위다. 후자는 수많은 세부 변경을 AI가 실행하게 하면서도 중요한 의도를 사람이 붙잡는 방식이다.</p>
+<p>화자는 마지막 완성도를 높이는 데 아직 인간이 필요하다고 보지만, 마지막 5%, 10%, 어쩌면 20%라고 수치를 오가며 말한다. 이는 측정된 분업 비율이 아니다. 이 영상에서 가져갈 것은 ‘사람은 정확히 몇 퍼센트만 일하라’가 아니라, <strong>결과를 보고 필요한 순간에 통제 수준을 바꾸라</strong>는 생각이다.</p>
+<h3>나무 3 · ‘더 과감하게’를 화면에서 확인할 수 있는 말로 번역하기</h3>
+<div id="os-language" class="oneshot-map" role="group" aria-label="형용사를 실행 기준과 제약으로 번역하는 구조">
+<div class="root">짧은 단어는 끝이 아니라, 미리 정의한 기준을 불러오는 이름이다</div>
+<div class="grid">
+<div class="node"><strong>정의 없는 bolder</strong>“더 과감하게.”<br>↓<br>모델이 자체 참고 기준으로 해석<br>↓<br>새 색상·그라데이션 등을 임의로 선택할 수 있음</div>
+<div class="node"><strong>의미를 담은 bolder</strong>시각적 위계 + 크기 + 단호한 글꼴 표현<br>↓<br>사용자의 주의를 더 분명하게 이끎<br>↓<br>기존 디자인 시스템은 깨지 않음</div>
+</div>
+<div class="note">영상의 정의에서 과감함은 <strong>그라데이션·유리 효과·네온 추가</strong>와 같지 않다. 중요한 것과 덜 중요한 것의 차이를 어떻게 보이게 할지가 중심이다.</div>
+</div>
+
+<p><strong>시각적 위계</strong>는 무엇을 먼저 보고 무엇을 나중에 볼지 화면이 안내하는 질서다. 크기와 글꼴 표현을 조정하면 이 질서를 바꿀 수 있다. 그러나 단순히 모든 글자를 크게 만들면 중요도의 차이가 사라진다. 아래는 이 의미를 이해시키기 위한 <strong>편집자의 설명용 와이어프레임</strong>이다. 실제 영상 화면이나 도구 실행 결과가 아니며, 제목 크기와 대비를 달리해 위계가 어떻게 보일지 표현했다.</p>
+<div class="oneshot-map" role="group" aria-label="실제 시연이 아닌 동일 내용의 위계 변화 개념도">
+<div class="root">설명용 화면 비교 · 같은 내용, 다른 중요도</div>
+<div class="grid">
+<div class="node"><strong>A · 비슷한 무게로 나열</strong><div class="wire">작업 방식<br><br>핵심을 먼저 결정하세요<br><br>의도를 정하고 결과를 검토합니다.<br><br>작업 시작</div></div>
+<div class="node"><strong>B · 핵심과 행동을 강조</strong><div class="wire"><div class="eyebrow">작업 방식</div><div class="headline">핵심을 먼저<br>결정하세요</div>의도를 정하고 결과를 검토합니다.<br><span class="cta">작업 시작</span></div></div>
+</div>
+<div class="note">관찰할 것: <strong>무엇이 먼저 눈에 들어오는가?</strong> 색을 추가하지 않아도 크기·두께·배치의 차이로 강조를 만들 수 있다. B가 모든 목적에 더 좋다는 뜻은 아니다.</div>
+</div>
+
+<p>화자는 이렇게 특정 분야의 뜻을 담아 쓰는 단어를 <strong>Leitwort</strong>라고 부른다. 한국어로는 ‘의미를 채워 넣은 핵심 단어’ 정도로 받아들이면 된다. 마법의 단어를 찾는 것이 아니라, 사람들이 같은 말을 했을 때 비슷한 변경을 떠올리도록 의미를 정하는 것이다. Impeccable은 그 언어를 스킬과 시스템으로 압축하려는 시도다.</p>
+<table>
+<thead>
+<tr>
+<th>영상의 말</th>
+<th>이 영상에서 읽을 뜻</th>
+<th>놓치지 말아야 할 경계</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bolder · 더 대담하게</td>
+<td>위계·크기·글꼴 표현을 강화</td>
+<td>기존 디자인 체계 유지</td>
+</tr>
+<tr>
+<td>distill · 정제하기</td>
+<td>핵심이 남도록 단순화</td>
+<td>무엇이 핵심인지는 맥락이 필요</td>
+</tr>
+<tr>
+<td>harden · 견고하게</td>
+<td>기기별 성능·반응형 동작 등 조건 점검</td>
+<td>겉모습의 화려함과 다른 작업</td>
+</tr>
+<tr>
+<td>quieter · polish · denser</td>
+<td>더 조용하게·다듬기·더 조밀하게라는 조향 어휘</td>
+<td>이 발표만으로 각각의 전체 실행 규칙까지 알 수는 없음</td>
+</tr>
+</tbody>
+</table>
+<p><strong>전사 주의점:</strong> ‘더 대담하게 만들었다는 말을 상대가 믿으면 실패’라는 문장은 주변 설명과 연결이 불명확하다. 여기서는 임의로 반대 의미로 고쳐 실행 규칙으로 만들지 않았다. 원문 확인 전까지 이 한 문장보다, 명확히 설명된 위계·크기·글꼴·디자인 체계 유지 기준에 기대어 이해하자.</p>
+<h3>나무 4 · 한 번의 명령이 아니라, 실제 작업의 반복 고리를 지원한다</h3>
+<div class="oneshot-map" role="group" aria-label="디자인 작업의 반복과 시스템 환류">
+<div class="root">화자가 설명한 작업 지도 · 읽는 순서는 있어도 실제 작업은 직선이 아니다</div>
+<div class="step"><strong>① 초기 맥락 구체화</strong> — 무엇을 누구에게 어떤 느낌으로 전달할지 정한다.</div>
+<div class="arrow">↓</div>
+<div class="step"><strong>② 만들기 ↔ 결과 보기 ↔ 말로 조향하기</strong><br>형용사·동사로 방향을 전달하고 결과에 따라 다시 수정한다.</div>
+<div class="arrow">↓ 필요하면 앞 단계로 돌아간다</div>
+<div class="step"><strong>③ 굳히고 다듬기</strong> — 여러 조건에서 작동하는지 살피고 완성도를 높인다.</div>
+<div class="arrow">↓</div>
+<div class="step"><strong>④ 디자인 시스템에 반영</strong> — 작업 중 남은 기술·디자인 부채를 정리한다.</div>
+<div class="note">다양한 사람의 의견이 오갈 수 있다. 중요한 것은 단계별 자동 실행보다 <strong>어느 지점에서 사람이 무엇을 판단할지</strong>다.</div>
+</div>
+
+<p>화자는 도구를 20년 넘게 만들어 왔고, 먼저 대상 사용자의 실제 작업 흐름을 그린다고 설명한다. 그 지도에서 도구가 도움을 줄 지점을 찾는다는 것이다. 즉 ‘강력한 AI가 있으니 모든 단계를 없애자’가 아니라 ‘사람이 실제로 일하는 과정 중 어디를 도울까’라는 출발점이다.</p>
+<p>영상 후반에는 <strong>Overdrive</strong>도 나온다. 표현을 일부러 과장하는 명령이며, 화자는 반쯤 농담 같아 확신하지 못했지만 커뮤니티 반응이 좋았다고 말한다. Radiant Shaders를 위한 사건의 지평선 셰이더를 더 과하게 만든 사례를 보여주면서, 그 결과가 원샷은 아니라고 분명히 한다. 여기서 배울 것은 ‘과장하면 좋은 디자인’이 아니라, 사람의 의도에 따라 서로 다른 방향을 탐색할 수 있는 도구라는 점이다.</p>
+<h3>다시 숲 · 왜 자동 모드를 만들지 않겠다고 할까?</h3>
+<p>발표자는 어떤 명령을 쓸지도 도구가 결정하는 자동 모드를 요청받지만, 그것이 도구의 목적과 다르다고 말한다. 사용자가 최종 결과를 조절하도록 만드는 것이 목적이기 때문이다. 촬영 당시 자동 모드는 없고 앞으로도 만들지 않겠다는 의사였으며, 관련 풀 리퀘스트는 닫을 예정이라고 했을 뿐 이미 닫힌 것으로 확인되지는 않는다.</p>
+<div class="oneshot-map" role="group" aria-label="사람 판단과 AI 실행이 만나는 최종 순환 지도">
+<div class="root">출발 질문으로 복귀 · 좋은 디자인의 판단은 누가 하는가?</div>
+<div class="grid">
+<div class="node"><strong>사람이 붙잡을 것</strong>대상·목적·원하는 감정<br>↓<br>어떤 방향으로 바꿀지 선택<br>↓<br>결과가 의도에 맞는지 판단</div>
+<div class="node"><strong>AI가 도울 것</strong>정의된 말과 제약을 해석<br>↓<br>구체적인 변경 실행<br>↓<br>사람이 다시 볼 결과 제시</div>
+</div>
+<div class="note"><strong>사람의 판단 → AI의 실행 → 결과 관찰 → 사람의 다음 판단</strong><br>도구가 증폭하는 것은 이 고리다. 판단을 없애는 것이 아니다.</div>
+</div>
+
+<p><strong>[원문]</strong> 화자는 취향을 맥락적·문화적이고 희소한 것으로 보며, 도구는 이를 배양하기보다 증폭해야 한다고 주장한다. <strong>[해석]</strong> 이 발표를 읽고 남길 것은 ‘최고의 첫 프롬프트’보다 <strong>내가 쓴 형용사를 어떤 변화와 제약으로 번역할 수 있는가</strong>라는 질문이다. <strong>[경계]</strong> 취향을 자동화할 수 없다는 견해는 화자의 철학이며, 모든 디자인 작업과 미래 모델에 대한 검증된 한계는 아니다.</p>
+<p>차드의 페이지 작업에 직접 옮겨 생각하면 “고급스럽게” 같은 표현 다음에 <strong>먼저 보여야 하는 것, 달라져야 하는 것, 유지해야 하는 것</strong>을 붙이는 방식으로 사용할 수 있다. 이는 편집자의 적용 제안이지 영상에서 차드의 업무를 시험한 결과는 아니다. 아래 기존 질문과 모범 답안은 이 원리를 자기 말로 설명하고 적용해 보는 단계다.</p>
 <h3>여기까지만 이해하면 충분</h3>
 <ul>
 <li>디자인에는 고객·감정·목적처럼 한 번의 일반 프롬프트에 담기 어려운 맥락이 필요하다.</li>
