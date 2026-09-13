@@ -46,12 +46,141 @@ table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
 <div class="eyebrow">TechBridge-KR 학습노트</div><h1>개발용 AI 도구가 왜 실제 환경에선 실패할까요? 빌드타임과 런타임의 결정적 차이 | Google 엔지니어 — Codex 버전</h1>
 <div class="meta">업로드 2026-09-10 · 19.9분 · <a href="https://youtu.be/vZ-Empnyug0" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
 <h2>먼저 읽는 쉬운 요약</h2>
-<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
-<p><strong>영상 미시청 기준 · 약 2분 · 선수지식: 없음</strong>
-이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+<div class="callout callout-abstract"><div class="ct">영상을 대신 읽는 설명 지도</div>
+<p><strong>영상 미시청 기준 · 약 9–11분 · 선수지식: 없음</strong>
+먼저 개발 도구와 운영 도구의 차이를 보고, 위험한 요청의 이동 경로를 따라간 뒤, 어떤 결정권을 AI 밖으로 옮겨야 하는지 살펴본다. 아래 도식은 전사를 바탕으로 재구성한 설명 자료이지 발표 슬라이드의 복제나 실제 시스템 검증 결과가 아니다.</p>
 </div>
-<p>개발 중에는 사람이 옆에서 결과를 확인하므로 AI 에이전트에 자유로운 검색이나 SQL 작성 권한을 줘도 실수를 막을 기회가 있다. 그러나 실제 사용자가 쓰는 운영 환경에서는 악의적인 지시나 잘못된 판단 하나가 데이터 조회·변경·유출로 곧바로 이어질 수 있다. 특히 에이전트가 비공개 데이터, 믿을 수 없는 입력, 외부로 결과를 내보내는 기능을 함께 가지면 위험이 커진다.</p>
-<p>해법은 에이전트가 똑똑할 것이라고 믿는 대신, 에이전트가 통제할 수 있는 범위를 줄이는 것이다. 사용자·애플리케이션·에이전트의 신원을 분리하고, 접속 정보와 사용자 ID는 애플리케이션이나 검증된 토큰에서 넣는다. 에이전트에는 미리 정한 작업과 단순한 입력만 주며, 고정된 SQL과 자료형 검사, 읽기 전용 제한, 접근 가능한 데이터 범위와 결과 크기 제한을 함께 적용한다. 즉, 개발용 도구의 자유로움을 그대로 운영 환경에 옮기지 않는 것이 핵심이다.</p>
+<style>
+.rt-viz{margin:22px 0;padding:22px;border:1px solid #ccd6de;border-radius:16px;background:#f4f7fa;color:#223444;line-height:1.65}.rt-viz *{box-sizing:border-box}.rt-viz .rt-tag{font-size:12px;font-weight:750;letter-spacing:.06em;color:#526777}.rt-viz h4{margin:7px 0 15px;font-size:21px;color:#183248}.rt-viz p{margin:9px 0}.rt-viz .rt-note{font-size:13px;color:#536575}.rt-viz .rt-split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.rt-viz .rt-room{padding:18px;background:white;border:2px solid #b5c8d8;border-radius:10px}.rt-viz .rt-room.safe{border-color:#388b78;background:#f1faf6}.rt-viz .rt-room.risk{border-color:#bd755e;background:#fff6ef}.rt-viz .rt-label{display:block;font-size:18px;font-weight:750;margin-bottom:8px}.rt-viz .rt-triad{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:8px;align-items:center}.rt-viz .rt-triad b{padding:14px;background:#fff;border:1px solid #dcb2a1;border-radius:9px;text-align:center}.rt-viz .rt-triad span{color:#aa523a;font-size:22px}.rt-viz .rt-step{display:grid;grid-template-columns:105px 1fr;gap:14px;padding:13px 0;border-bottom:1px solid #d3dce3}.rt-viz .rt-step:last-child{border-bottom:0}.rt-viz .rt-step strong{color:#186c62}.rt-viz .rt-path{margin:10px 0;padding:12px 15px;border-left:4px solid #a75842;background:#fff}.rt-viz .rt-scroll{overflow-x:auto}.rt-viz .rt-grid{min-width:580px;display:grid;grid-template-columns:110px 1fr 1fr;border-top:1px solid #bdcbd6;border-left:1px solid #bdcbd6}.rt-viz .rt-grid>div{padding:12px;border-bottom:1px solid #bdcbd6;border-right:1px solid #bdcbd6;background:white}.rt-viz .rt-grid .rt-head{background:#e2eaf0;font-weight:750}.rt-viz .rt-grid .rt-fixed{background:#eaf6f0}.rt-viz .rt-grid .rt-choice{background:#fff1dd}.rt-viz .rt-sequence{min-width:590px}.rt-viz .rt-lanes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;font-weight:750}.rt-viz .rt-lanes>div{padding:10px 4px;background:#dfe8ef;border-radius:8px}.rt-viz .rt-msg{display:grid;grid-template-columns:repeat(4,1fr);margin:15px 0;gap:8px}.rt-viz .rt-arrow{border-bottom:2px solid #57768f;padding:7px 10px;background:#fff;position:relative}.rt-viz .rt-arrow:after{content:'▶';position:absolute;right:-2px;bottom:-12px;color:#57768f}.rt-viz .rt-return:after{content:'◀';left:-2px;right:auto}.rt-viz .rt-lock{background:#e9f5ee;border-left:4px solid #258268;padding:10px;grid-column:3/4}.rt-viz .rt-close{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.rt-viz .rt-close b{background:white;border:1px solid #acc6ba;padding:10px 14px;border-radius:7px}@media(max-width:600px){.rt-viz{padding:15px}.rt-viz .rt-split{grid-template-columns:1fr}.rt-viz .rt-triad{grid-template-columns:1fr}.rt-viz .rt-triad span{text-align:center}.rt-viz .rt-step{grid-template-columns:1fr;gap:3px}.rt-viz h4{font-size:19px}}
+</style>
+
+<h3>숲 1 · 똑같이 똑똑한 AI여도, 쥐여 주는 열쇠는 달라야 한다</h3>
+<p>이 영상은 모델의 지능을 더 높이는 방법보다 <strong>모델에게 무엇을 결정하게 할 것인가</strong>를 다룬다. AI 에이전트는 질문에 글로 답하는 데서 끝나지 않고 도구를 호출해 데이터를 찾거나 작업을 실행한다. MCP는 여기서 AI와 외부 도구를 연결하는 통로로 생각하면 된다. 통로를 만들었다고 그 안에서 허용할 일까지 저절로 정해지지는 않는다.</p>
+<p>Google의 Averi Kitsch와 Prerna는 데이터베이스 도구를 사례로 설명한다. 데이터베이스는 데이터를 보관하는 곳이고, SQL은 그곳에 “이 조건의 정보를 찾아줘” 또는 “이 내용을 바꿔줘”라고 요청하는 언어다. AI가 SQL을 자유롭게 쓰면 예상하지 못한 질문을 조사하기 좋다. 반면 고객 서비스가 매번 예측 가능한 행동을 해야 할 때에는 그 자유가 위험 요인이 될 수 있다.</p>
+<div class="rt-viz" role="img" aria-label="개발 중에는 사람이 탐색을 감독하고, 운영 중에는 시스템이 허용 업무와 권한을 제한해야 한다는 두 환경 비교">
+<div class="rt-tag">전체 지도 · 같은 모델, 다른 업무 계약</div>
+<h4>개발 중의 탐색 ≠ 고객에게 제공하는 실행</h4>
+<div class="rt-split">
+<div class="rt-room"><span class="rt-label">빌드타임 · 만드는 중</span>개발자 → AI → 유연한 도구<br><br>“어떤 데이터가 있지?”<br>“이 조건을 조합하면?”<br><br><b>중심 가치: 탐색과 개발 지원</b><br>사람의 검토와 승인 기회가 중요하다.</div>
+<div class="rt-room safe"><span class="rt-label">런타임 · 사용자가 쓰는 중</span>사용자 → AI → 제한된 업무 도구<br><br>“내 항공편을 찾아줘.”<br>“허용된 주문을 취소해줘.”<br><br><b>중심 가치: 정해진 범위의 실행</b><br>권한은 시스템이 강제해야 한다.</div>
+</div>
+<p class="rt-note">개발 중이면 위험한 권한도 안전하다는 뜻이 아니다. 감독할 수 있는 환경과 불특정 입력이 들어오는 운영 환경의 설계 요구가 다르다는 비교다.</p>
+</div>
+
+<h3>나무 1 · 도구는 모두 같은 종류가 아니다</h3>
+<p>발표는 도구를 크게 구분한다. 첫째는 데이터베이스나 인스턴스를 만들고 관리하는 <strong>관리 도구</strong>다. 시스템 자체를 바꾸므로 발표자는 사람의 승인을 강조한다. 둘째는 질문마다 새로운 SQL을 만드는 <strong>탐색 도구</strong>다. 영상의 예시는 “7월에 겨울 코트를 구매하고 14일 이내에 반품한 캘리포니아의 모든 고객을 찾고, 이들을 처음 유치한 마케팅 캠페인별로 그룹화하기”처럼 조건을 유연하게 조합하는 분석이다. 셋째는 이미 정한 SQL에 필요한 값만 넣는 <strong>업무 도구</strong>다. “항공편 조회”처럼 반복되는 운영 작업에 맞는다.</p>
+<table>
+<thead>
+<tr>
+<th>도구의 성격</th>
+<th>AI가 정하는 범위</th>
+<th>영상이 강조하는 쓰임과 주의</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>관리</td>
+<td>시스템 생성·관리 작업의 호출</td>
+<td>영향이 큰 작업은 사람의 승인 필요</td>
+</tr>
+<tr>
+<td>자유 SQL</td>
+<td>그때그때 새로운 질의문</td>
+<td>개발·분석에는 유연하지만 범위가 넓음</td>
+</tr>
+<tr>
+<td>구조화된 SQL</td>
+<td>미리 정한 질의에 넣을 허용된 값</td>
+<td>운영 업무를 좁고 예측 가능하게 만들기</td>
+</tr>
+</tbody>
+</table>
+<p>MCP Toolbox는 이런 데이터베이스 도구를 제공하는 기반으로 등장한다. 발표 시점에 40개가 넘는 데이터베이스를 지원한다고 소개하고, 자체 운영하는 오픈소스 Toolbox와 관리형 MCP를 함께 언급한다. 이용 규모와 개발 참여 숫자는 발표자의 소개이지 이 노트가 현재 상태를 확인한 수치는 아니다. 이 영상의 핵심은 제품 규모가 아니라 <strong>연결 다음에 권한을 어떻게 설계하느냐</strong>에 있다.</p>
+<h3>나무 2 · 공격자가 열쇠가 없어도, 열쇠 가진 AI를 움직일 수 있다</h3>
+<p>발표의 위협 사례는 티켓을 읽고 문제를 처리하는 에이전트다. 공격자는 티켓 내용에 급여 데이터를 조회해 답글에 올리라는 지시를 끼워 넣는다. 공격자에게 급여 조회 권한이 없어도, 에이전트가 그 지시를 업무 명령으로 받아들이고 자기 권한을 쓰면 문제가 생긴다. 이를 <strong>혼동된 대리인(confused deputy)</strong>이라고 설명한다. 일을 대신하는 주체가 “누구를 위해 어느 권한을 쓰는지”를 혼동한 것이다.</p>
+<div class="rt-viz" role="img" aria-label="공격자가 티켓에 지시를 넣고, 넓은 권한의 에이전트가 급여 DB를 조회해 티켓에 반환하는 위험 경로">
+<div class="rt-tag">위험 경로 · 발표의 티켓 사례 재구성</div>
+<h4>읽어야 할 내용이, 따라야 할 명령으로 바뀌는 순간</h4>
+<div class="rt-path">① 공격자 → <b>티켓 본문</b>에 외부 지시 삽입</div>
+<div class="rt-path">② 에이전트 → 본문을 읽고 <b>자신의 데이터 접근 권한</b>으로 조회</div>
+<div class="rt-path">③ 비공개 급여 데이터 → <b>티켓 답글</b>로 나감</div>
+<p><b>넘어간 경계:</b> 읽기 대상인 외부 콘텐츠가 권한을 행사하는 근거가 되었다.</p>
+<div class="rt-triad"><b>비공개 데이터</b><span>＋</span><b>믿을 수 없는 입력</b><span>＋</span><b>외부 출력 능력</b></div>
+<p class="rt-note">발표가 Simon Willison의 “치명적 3요소”로 소개하는 조합이다. 세 요소가 있으면 항상 유출된다는 확률 공식도, 하나만 빼면 모든 보안 문제가 끝난다는 보증도 아니다.</p>
+</div>
+
+<p>여기서 “읽기 전용이면 괜찮지 않을까?”라는 생각이 들 수 있다. 그러나 급여 데이터를 바꾸지 않고 읽어서 내보내기만 해도 유출이다. 쓰기 금지와 읽을 수 있는 데이터 범위 제한은 서로 다른 문제를 해결한다. 영상은 개발용 에이전트가 다시 시작하려고 테이블을 지웠다는 사례도 언급한다. 이것 역시 발표자의 설명이며, 이 노트가 그 사건을 독립 확인했다는 뜻은 아니다.</p>
+<h3>숲 2 · 사용자, 앱, 에이전트는 같은 사람이 아니다</h3>
+<p>서비스는 수많은 고객을 처리하려고 넓은 데이터 접근권을 가질 수 있다. 그렇다고 특정 사용자의 부탁을 받은 AI가 그 권한을 모두 물려받아야 하는 것은 아니다. <strong>사용자는 요청자, 앱은 인증과 업무 규칙을 집행하는 시스템, 에이전트는 허용된 도구를 고르는 실행 주체</strong>로 나누어 봐야 한다.</p>
+<p>다음 구역도는 발표의 항공편 조회 예시를 읽기 쉽게 편집한 것이다. 예컨대 로그인은 Prerna인데 대화에서 “나는 Averi야”라고 적었다고 해서 조회 대상의 신원이 Averi로 바뀌면 안 된다. 이 장면의 데모는 영상에서 로딩되지 않았으므로, 실제 화면에서 차단 성공을 보여줬다고 읽으면 안 된다. 발표자가 설명한 의도된 동작이다.</p>
+<div class="rt-viz" role="img" aria-label="AI는 항공편 조회의 날짜를 선택할 수 있지만 사용자 신원, 접속 정보, SQL 정의는 신뢰된 앱과 도구 설정이 정한다">
+<div class="rt-tag">책임 구역도 · 누가 무엇을 확정하는가</div>
+<h4>AI는 “언제”를 제안하고, 시스템은 “누구”를 확정한다</h4>
+<div class="rt-split">
+<div class="rt-room risk"><span class="rt-label">AI가 제안할 수 있는 구역</span>사용자가 찾고 싶은 날짜<br>호출할 허용된 업무 도구<br><br><b>자연어에서 뽑은 값은 검증 대상</b><br>신원이나 권한의 증거가 아니다.</div>
+<div class="rt-room safe"><span class="rt-label">신뢰된 시스템의 구역</span>인증된 사용자 ID<br>접속할 데이터 원천과 자격 정보<br>실행할 SQL과 허용 데이터 범위<br><br><b>대화로 덮어쓸 수 없게 결합</b></div>
+</div>
+<p class="rt-note">녹색은 “자동으로 완벽하게 안전”이라는 등급이 아니다. 모델의 결정권 밖에서 검증·설정해야 하는 책임 구역을 뜻한다.</p>
+</div>
+
+<h3>나무 3 · 요청 한 번이 어떻게 흘러가야 하는가</h3>
+<p>항공편 조회 도구의 이름과 SQL을 고정해도, 사용자 ID를 AI가 자유롭게 넣게 두면 여전히 다른 사람의 ID를 전달할 수 있다. 따라서 날짜를 추출하는 일과 신원을 정하는 일을 분리한다. 발표에서 <strong>bounded parameter</strong>는 앱이 인증한 사용자 값을 묶어 넣는 방식으로, <strong>authenticated parameter</strong>는 서명된 OpenID 신원 토큰을 검증하고 그 안의 신원 정보를 꺼내 묶는 방식으로 설명된다. 핵심은 “AI가 주장한 ID를 믿지 않는다”는 공통점이다.</p>
+<div class="rt-viz">
+<div class="rt-tag">시간 순서도 · 항공편 조회의 의도된 설계</div>
+<h4>요청은 AI를 지나가도, 신원은 AI에게서 받지 않는다</h4>
+<div class="rt-scroll" tabindex="0" aria-label="항공편 조회 순서도. 좁은 화면에서는 가로로 이동해 볼 수 있다">
+<div class="rt-sequence">
+<div class="rt-lanes"><div>사용자</div><div>AI 에이전트</div><div>앱·도구 서버</div><div>데이터베이스</div></div>
+<div class="rt-msg"><div class="rt-arrow" style="grid-column:1/3">① “이 날짜의 내 항공편을 찾아줘”</div></div>
+<div class="rt-msg"><div class="rt-arrow" style="grid-column:2/4">② 허용된 조회 도구 + 날짜</div></div>
+<div class="rt-msg"><div class="rt-lock">③ 인증된 ID 결합<br>대화 속 이름은 대체 불가</div></div>
+<div class="rt-msg"><div class="rt-arrow" style="grid-column:3/5">④ 정해진 SQL + ID + 날짜</div></div>
+<div class="rt-msg"><div class="rt-arrow rt-return" style="grid-column:3/5">⑤ 허용된 조회 결과 반환</div></div>
+<div class="rt-msg"><div class="rt-arrow rt-return" style="grid-column:1/4">⑥ 앱·에이전트를 통해 결과 전달</div></div>
+</div>
+</div>
+<p class="rt-note">편집자가 설명을 위해 나눈 요청의 6개 장면이다. 영상이 공식적인 “6단계 보안 진화”를 열거했다는 뜻은 아니다. 세부 검증 위치는 구현에 따라 달라질 수 있다.</p>
+</div>
+
+<h3>나무 4 · “자유를 줄인다”를 네 가지 결정권으로 펼치기</h3>
+<p>발표는 강력한 접속 정보와 임의 SQL을 에이전트가 다루는 상태에서 시작해 제한을 더해 간다. 아래는 그 설명을 <strong>네 가지 질문으로 재분류한 편집자 표</strong>다. 도입 순서를 보장하는 제품 설치 가이드나 공식 단계 수가 아니다. 가로로 읽으면 어떤 결정권이 AI 밖으로 이동하는지 보인다.</p>
+<div class="rt-viz">
+<div class="rt-tag">결정권 이동표 · 자유로운 입력 → 통제된 계약</div>
+<h4>“조심해”라는 지시를, 바꿀 수 없는 경계로</h4>
+<div class="rt-scroll" tabindex="0" aria-label="결정권 이동 비교표. 좁은 화면에서는 가로로 이동해 볼 수 있다">
+<div class="rt-grid" role="table" aria-label="접속, 실행, 신원, 결과의 결정권 비교">
+<div class="rt-head">질문</div><div class="rt-head">넓게 열어둔 상태</div><div class="rt-head">발표가 좁히는 방향</div>
+<div>어디에 접속?</div><div class="rt-choice">AI가 호스트·접속 정보 선택</div><div class="rt-fixed">서버 측 데이터 원천 설정</div>
+<div>무슨 작업?</div><div class="rt-choice">AI가 임의 SQL 작성</div><div class="rt-fixed">정해진 SQL + 자료형 있는 입력</div>
+<div>누구의 정보?</div><div class="rt-choice">AI가 사용자 ID 전달</div><div class="rt-fixed">인증된 신원을 외부에서 결합</div>
+<div>얼마나 허용?</div><div class="rt-choice">넓은 읽기·쓰기·결과 범위</div><div class="rt-fixed">읽기 전용·허용 데이터·결과 크기 제한</div>
+</div>
+</div>
+<p class="rt-note">결과 개수를 줄이는 것은 노출량·부하를 줄이는 장치이지 권한 검사의 대체재가 아니다. 연결을 고정해도 임의 SQL을 허용하면 그 연결 안에서 할 수 있는 일이 넓게 남는다.</p>
+</div>
+
+<p>자료형이 있는 매개변수란 “아무 문자열이나 받아 알아서 실행”하는 대신 날짜는 날짜, 숫자는 숫자처럼 입력 계약을 정하는 것이다. 발표자는 미리 정의한 SQL과 준비된 문장에 값을 전달하는 도구를 권한다. 읽기 전용도 도구 목록에서 쓰기 기능을 숨기는 데 그치지 않고 데이터베이스 드라이버 수준에서 강제하는 방식을 설명한다. 모두 모델의 선의와 정확성에만 의존하지 않기 위한 장치다.</p>
+<h3>나무 5 · 도구 이름과 실패 메시지도 운영 설계다</h3>
+<p>발표는 보안 경계만 말하고 끝나지 않는다. AI가 사용할 도구 자체가 업무의 의도를 잘 드러내야 한다고 설명한다. 아주 작은 API 호출을 수없이 조합하게 하기보다 “항공편 조회”처럼 결과 중심의 도구를 만들고, 이름·설명·단순한 입력 구조를 제공하는 것이다. 읽기와 쓰기를 분리하면 조회 중에 변경이 섞이지 않게 판단하기 쉬워진다. 쓰기는 사람 승인과 연결할 수 있다.</p>
+<div class="rt-viz" role="img" aria-label="운영 도구의 사용성을 업무 이름, 단순 입력, 읽기와 쓰기 분리, 복구 가능한 오류와 평가라는 네 질문으로 점검">
+<div class="rt-tag">도구 설계 점검 · 경계 안에서 일을 잘하게 하기</div>
+<h4>권한을 줄인 뒤에는, 허용된 일을 명료하게 만든다</h4>
+<div class="rt-step"><strong>무슨 일을 하나?</strong><div>작은 기술 호출의 나열보다 결과 중심의 이름·설명</div></div>
+<div class="rt-step"><strong>무엇을 넣나?</strong><div>단순하고 명확한 입력, 정해진 자료형</div></div>
+<div class="rt-step"><strong>바꾸는 일인가?</strong><div>읽기와 쓰기 구분, 필요한 쓰기에는 사람 승인</div></div>
+<div class="rt-step"><strong>실패하면?</strong><div>단순한 “404”보다 다음 행동을 알 수 있는 오류, 도구 평가</div></div>
+</div>
+
+<p>영상 마지막에는 EvalBench 등 도구 평가의 중요성도 언급된다. “잘 설명한 도구니까 AI가 알아서 안전하게 쓸 것”이라는 기대가 아니라, 정한 제약과 도구 동작을 시험해야 한다는 흐름이다. 이 노트의 도식은 그 설계 논리를 설명할 뿐, 특정 설정이 공격을 차단한다고 실험으로 입증한 결과는 아니다.</p>
+<h3>다시 숲 · 운영 준비란, AI가 정하면 안 되는 것을 정하는 일</h3>
+<div class="rt-viz" role="img" aria-label="탐색의 자유를 운영 환경에 그대로 복사하지 않고, 허용된 업무와 신뢰된 신원과 강제된 범위를 결합하는 최종 구조">
+<div class="rt-tag">마지막 한 장 · 무엇을 가져갈까</div>
+<h4>지능은 일을 고르게 하고, 권한은 시스템이 지킨다</h4>
+<div class="rt-close"><b>허용된 업무</b><span>＋</span><b>검증된 신원</b><span>＋</span><b>강제된 범위</b><span>→</span><b>제한된 실행</b></div>
+<p>내 서비스에 AI를 붙일 때 첫 질문은 “얼마나 똑똑하지?”만이 아니다.<br><b>“다른 사람의 지시를 읽어도, 절대 바꿀 수 없는 결정은 무엇이지?”</b></p>
+<p class="rt-note">[해석] 이 질문은 발표의 권한 분리 논리를 실무 점검 문장으로 바꾼 것이다. AI의 모든 오류·보안 위험이 사라진다는 결론은 아니다.</p>
+</div>
+
 <h3>여기까지만 이해하면 충분</h3>
 <ul>
 <li>개발용 도구는 탐색의 자유가 중요하지만, 운영용 도구는 예측 가능성과 제한된 권한이 중요하다.</li>
