@@ -48,7 +48,7 @@ table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
 <h2>먼저 읽는 쉬운 요약</h2>
 <blockquote>
 <p><strong>읽기 안내 — 영상 미시청 기준 약 12~18분, 선수지식 없음.</strong><br>
-94.6분 대담을 처음 읽는 사람도 이해하도록, 제공된 전사를 주제와 인과관계 중심으로 재구성했다. <strong>화자가 소개한 발표·제품 성능·연구 성과는 촬영 당시의 주장이지, 현재 사실을 독립적으로 검증한 결과가 아니다.</strong> 특히 수학 난제의 공식 해결 여부, 연구 데이터 이용 의혹, 생물학적 예측의 치료 효과는 구분해서 읽어야 한다. 아래 세 도식은 영상 화면을 재현한 것이 아니라 <strong>전사 기반 설명도</strong>다.</p>
+94.6분 대담을 처음 읽는 사람도 이해하도록, 제공된 전사를 주제와 인과관계 중심으로 재구성했다. <strong>화자가 소개한 발표·제품 성능·연구 성과는 촬영 당시의 주장이지, 현재 사실을 독립적으로 검증한 결과가 아니다.</strong> 특히 수학 난제의 공식 해결 여부, 연구 데이터 이용 의혹, 생물학적 예측의 치료 효과는 구분해서 읽어야 한다. 아래 시각 자료는 영상 화면을 재현한 것이 아니라 <strong>전사 기반 설명도</strong>다. <strong>전체 지도 → 각 주제의 작은 지도 → 상세 설명 → 전체로 복귀</strong> 순서로 읽자. 먼저 지도만 훑어도 되고, 이해가 막힌 가지의 글만 이어 읽어도 된다.</p>
 </blockquote>
 <style>
 .ep114-flow {
@@ -82,6 +82,34 @@ table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
   overflow-wrap: anywhere;
 }
 </style>
+
+<style>
+.ep114-map{margin:22px 0;padding:20px;border:1px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);overflow-wrap:anywhere;box-sizing:border-box}
+.ep114-map *{box-sizing:border-box;min-width:0}
+.ep114-map .root{padding:14px;border:2px solid #c66b29;border-radius:9px;text-align:center;font-weight:700;background:var(--surface)}
+.ep114-map .branches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px;margin-top:16px}
+.ep114-map .branch{padding:14px;border:1px solid var(--border);border-top:4px solid #c66b29;border-radius:8px;line-height:1.65}
+.ep114-map .branch strong{display:block;margin-bottom:8px}
+.ep114-map .branch small{display:block;font-size:.92em;margin-top:8px}
+.ep114-map .return{margin-top:14px;padding:12px;border-left:4px solid #c66b29;line-height:1.7}
+.ep114-map .sequence{display:grid;gap:8px;margin-top:12px}
+.ep114-map .step{padding:12px;border:1px solid var(--border);border-radius:8px;line-height:1.6}
+.ep114-map .arrow{text-align:center;font-weight:700;color:#a8551b}
+.ep114-map a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.ep114-map code{white-space:normal;word-break:break-word}
+@media(max-width:600px){.ep114-map{padding:12px}.ep114-flow{flex-direction:column}.ep114-flow>span{flex:auto;width:100%}.ep114-flow{font-size:.95em}}
+</style>
+
+<h3>숲부터 보기: 세 분야, 하나의 공통 질문</h3>
+<div class="ep114-map" role="group" aria-label="전체 주제 마인드맵">
+<div class="root">EP114의 큰 질문<br>AI가 시도를 늘려주면, 사람은 무엇을 확인해야 할까?</div>
+<div class="branches">
+<div class="branch"><strong><a href="#ep114-math">01 · 수학 연구로 가기</a></strong>여러 풀이를 동시에 탐색<br>↓<br>막힌 이유·작은 발견 교환<br>↓<br>조건과 증명 확인<small>핵심 구분: 계산해 본 것 ≠ 증명한 것</small></div>
+<div class="branch"><strong><a href="#ep114-image">02 · 이미지·도구로 가기</a></strong>후보를 만들고 선택<br>↓<br>결과를 보고 도구로 수정<br>↓<br>정밀 검수·사람 승인<small>핵심 구분: 보기 좋은 것 ≠ 완성된 것</small></div>
+<div class="branch"><strong><a href="#ep114-bio">03 · 유전체로 가기</a></strong>DNA의 차이를 찾기<br>↓<br>그 차이의 영향을 예측<br>↓<br>실제 실험으로 확인<small>핵심 구분: 예측한 것 ≠ 실험한 것</small></div>
+</div>
+<div class="return">세 가지를 감싸는 바깥 질문: <strong>계산 비용은 감당할 수 있나? 연구 공로는 누구에게 있나? 개발 속도와 안전은 어떻게 다루나?</strong><br>이 지도의 공통축은 편집자의 종합이다. 세 분야의 검증 방식까지 같다는 뜻은 아니다.</div>
+</div>
 
 <h3>영상의 초점: 좋은 답 하나보다, 시도하고 고치는 체계</h3>
 <p>이 영상은 수학 난제, 이미지 생성, 유전체 예측이라는 서로 다른 소식을 다룬다. 이를 연결하는 중심축은 <strong>“AI가 후보를 만들고, 도구로 확인하고, 확인 결과를 다음 시도에 반영하는 체계가 어디까지 커졌는가”</strong>다. 이것은 화자들이 합의한 공식 결론이 아니라 <strong>편집자의 종합</strong>이다.</p>
@@ -120,6 +148,15 @@ table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
 </tbody>
 </table>
 <h3>수학: 유체를 계산하는 일과 난제를 증명하는 일은 다르다</h3>
+<div id="ep114-math" class="ep114-map" role="group" aria-label="수학 파트의 큰 틀과 서로 다른 두 질문">
+<div class="root">숲 01 · 물과 공기를 다루는 수학 → AI가 연구하는 방식</div>
+<div class="branches">
+<div class="branch"><strong>나무 A · 근사 계산</strong>“이 조건에서 물이 어떻게 움직일까?”<br>컴퓨터로 움직임을 계산하고 시뮬레이션한다.</div>
+<div class="branch"><strong>나무 B · 수학적 증명</strong>“방정식의 해가 어떤 성질을 갖는가?”<br>가정과 논리로 주장을 확인한다.</div>
+</div>
+<div class="return">A가 잘된다고 B가 해결되는 것은 아니다.<br>영상의 연구 흐름: <strong>해의 형태 가정 → 조건에 맞춰 탐색 → 막힌 점 공유 → 수정·검토</strong><br>촬영 당시 공식 해결 인정은 유보됐다.</div>
+</div>
+
 <p>Navier–Stokes 방정식은 물이나 공기 같은 유체의 움직임을 다루는 방정식으로 소개된다. 대담에서는 점성이 없는 경우를 다루는 Euler 방정식과 대비한다. 여기서 첫 번째 구분은 <strong>컴퓨터로 유체의 움직임을 근사 계산하는 것</strong>과 <strong>방정식의 해가 어떤 수학적 성질을 갖는지 증명하는 것</strong>이다.</p>
 <p>화면에 물결이나 소용돌이가 움직이는 시뮬레이션이 있다고 해서 밀레니엄 문제가 해결된 것은 아니다. 반대로 관련 수학적 성과가 나왔다고 해서 태풍 예측이나 항공기 설계가 즉시 완전히 바뀌는 것도 아니다. 최승준은 특이점, 즉 해의 상태가 극단적으로 커지는 ‘블로업’과 관련된 형식적 문제가 실제 강물이나 바람의 계산에 주는 영향은 별도로 따져야 한다고 설명한다.</p>
 <p>이때 영상의 도입부는 “풀었다”는 표현을 쓰지만, 뒤에서는 <strong>촬영 당시 Clay 측의 공식 해결 발표는 없었고, 수학자들의 검토와 통찰 추출에도 시간이 필요하다</strong>고 유보한다. 따라서 이 글에서는 ‘Navier–Stokes 관련 성과로 소개된 사건’으로 읽는다. 대담에 나온 외력이 있는 접근과 없는 접근의 차이도 중요하므로, 전사만으로 원래 밀레니엄 문제의 모든 조건이 충족됐다고 판정하지 않는다.</p>
@@ -141,11 +178,31 @@ table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
 <p>이 구조가 작동하려면 모델이 그럴듯한 문장을 많이 만드는 것만으로는 부족하다. 어떤 가설이 유망한지, 다른 발견이 자기 문제에 쓸모 있는지, 바꾼 후보가 조건을 충족하는지 판단할 능력이 필요하다. 화자들은 모델 자체의 능력 향상과 대규모 협업이 맞물렸다고 해석한다. 다만 협업 능력이 강화학습에서 어떻게 생겼는지에 관한 설명에는 추측도 포함돼 있다.</p>
 <p>검증 가능한 결과에 보상을 주는 강화학습을 뜻하는 <strong>RLVR</strong>도 이 맥락에서 등장한다. 그러나 ‘수학은 검증 가능하다’는 말을 ‘모든 증명을 즉시, 싸게 검토할 수 있다’로 읽으면 안 된다. 영상 자체가 Lean을 이용한 형식화의 방대한 분량과 인간 검토의 부담을 함께 말한다. 논리적 조건의 확인과 사람이 이해할 수 있는 설명을 얻는 일도 같지 않다.</p>
 <h3>계산을 더 쓰면 좋아진다—하지만 얼마를 써야 하는가</h3>
+<div class="ep114-map" role="group" aria-label="계산 규모와 비용을 구분하는 설명도">
+<div class="root">잠깐 숲으로 · 많은 시도는 가능해졌다. 효율도 좋아졌을까?</div>
+<div class="branches">
+<div class="branch"><strong>투입: 얼마나 썼나</strong>대담 소개 수치<br>동시 에이전트 1만 개<br>88시간 · 1,300억 토큰</div>
+<div class="branch"><strong>성과: 무엇을 얻었나</strong>계산량 증가에 따른 성과 향상을 소개<br>단, 그래프의 가로축은 로그 척도</div>
+<div class="branch"><strong>비용: 얼마였나</strong>전부 출력 토큰이라는 가정<br>100만 토큰당 50달러 → 650만 달러<br>75달러 → 975만 달러</div>
+</div>
+<div class="return">척도 읽기 예시: 계산량 <strong>1 → 10 → 100</strong>은 10배씩 늘어난다. 성과도 10배라는 뜻은 아니다.<br>위 달러 값은 <strong>조건부 요율 계산</strong>이지 실제 청구액이 아니다.</div>
+</div>
+
 <p>대담은 문제를 푸는 순간에 투입하는 계산량, 즉 <strong>추론 시 계산량(test-time compute)</strong>을 늘릴수록 성과가 높아지는 그래프를 소개한다. 여기서 가로축은 로그 척도다. 한 칸 이동할 때 계산량이 10배씩 늘어난다는 설명이므로, 화면에서 성과가 매끄럽게 올라가더라도 비용까지 같은 비율로 효율적이라는 뜻은 아니다.</p>
 <p>소개된 수치는 동시 활동 에이전트 1만 개, 88시간, Navier–Stokes 작업에 사용한 1,300억 토큰이다. 이는 대담이 전달한 수치이며 전체 연구 프로그램의 총사용량으로 제시된 것도 아니다. 다른 문제에 대한 시도나 이전 시행착오까지 얼마나 포함됐는지는 알 수 없다.</p>
 <p>비용 계산에는 특히 조건이 있다. <strong>1,300억 토큰을 전부 출력 토큰이라고 가정</strong>하고, 대담에서 언급한 100만 토큰당 50달러를 적용하면 650만 달러다. 75달러를 적용하면 975만 달러다. 이것은 공개 요율을 대입한 가상 계산이지 내부 모델의 실제 청구액이나 원가가 아니다. 입력·출력 구성과 실제 적용 요율도 확인되지 않았다.</p>
 <p>따라서 여기서 남길 결론은 “돈만 무한히 넣으면 모든 문제가 풀린다”가 아니다. 더 정확한 해석은 <strong>검증할 수 있고, 모델이 유망한 탐색을 이어갈 능력이 있는 영역에서는 큰 계산 예산이 성과를 밀어 올릴 수 있다</strong>는 것이다. 그 성과의 가치가 계산비용과 검토비용을 넘는지도 별도 질문이다.</p>
 <h3>연구 크레디트: 누가 시작했고, 무엇을 제공했는가</h3>
+<div class="ep114-map" role="group" aria-label="공로와 안전 논쟁을 읽는 질문 지도">
+<div class="root">연구 성과 바깥의 지도 · 결과가 나와도 논쟁은 남는다</div>
+<div class="branches">
+<div class="branch"><strong>공로</strong>누가 먼저 연구했나?<br>어떤 힌트가 전달됐나?<br>후속 접근은 얼마나 독립적인가?</div>
+<div class="branch"><strong>데이터 이용 의혹</strong>연구 대화가 학습에 쓰였나?<br>가능성에 관한 상반된 설명<br><small>유입·유출을 확정하지 않음</small></div>
+<div class="branch"><strong>개발 속도와 안전</strong>빠르게 발전하면 멈출 수 있나?<br>경쟁 속에서 속도 조절이 가능한가?<small>개인의 위험 판단 ≠ 측정된 발생률</small></div>
+</div>
+<div class="return">아래 논쟁은 <strong>확인된 경위 / 당사자 주장 / 미결 의혹 / 미래 전망</strong>을 나눠서 읽자.</div>
+</div>
+
 <p>연구 경쟁 이야기는 성과의 출발점이 누구에게 있었는지로 이어진다. 대담에 따르면 Tristan Buckmaster와 Levent Alpöge는 약 1년 동안 협업했고, AI를 사용하며 Euler 문제에서 진전을 얻었다. Alpöge가 Anthropic 소속이라는 사실과 이 연구가 Anthropic의 공식 프로젝트였다는 주장은 구분된다. 영상은 개인적 연구 협업이라는 점을 강조한다.</p>
 <p>이어 OpenAI와의 연락, 대규모 에이전트 투입, 발표 시 크레디트 조율 과정이 소개된다. 여기에는 이메일과 메신저, 통화에 관한 당사자들의 설명이 섞여 있다. <strong>앞서 연구한 사람이 누구인지, 직접 전달된 힌트가 무엇인지, 나중 성과가 얼마나 독립적인지</strong>는 서로 다른 문제다. 시간순으로 앞섰다는 사실만으로 공로의 몫이 자동 결정되지는 않는다.</p>
 <p>가장 민감한 것은 연구자가 모델에 입력한 대화가 후속 모델 학습에 들어가 힌트가 됐을 가능성이다. 대담은 OpenAI 측 설명이 익명화된 데이터의 유입 가능성을 완전히 배제하지 않았다고 전한다. 반면 Sholto Douglas는 그런 경로에 부정적인 반응을 보였다고 소개한다. <strong>의혹은 제기됐지만 결론은 나지 않았다.</strong> 이를 연구 내용이 유출됐다는 확정 사실로 바꾸면 안 된다.</p>
@@ -156,6 +213,15 @@ table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
 <p>Hubinger가 10년 안에 AI로 인한 인류 파국 가능성을 10% 넘게 본다는 이야기도 나온다. 이는 <strong>대담에서 전달한 개인의 위험 판단</strong>이지 측정된 발생률이나 합의된 예측이 아니다. 자기 능력을 다시 높이는 재귀적 자기개선(RSI)에 대한 우려 역시, 이번 수학 사례에서 이미 그런 체계가 완성됐다는 증거와 구분해야 한다.</p>
 <p>한편 경쟁과 추격 가능성에 주목하는 시각도 소개된다. 중국어권 반응에 관한 최승준의 조사에서는 “따라갈 수 있다”는 분위기가 있었다고 한다. 다만 이는 그가 모델을 이용해 살펴본 반응이지 중국 전체의 입장을 대표하는 자료는 아니다. 영상은 위험에 대한 불안, 기술 진전에 대한 흥분, 경쟁 때문에 멈추기 어렵다는 판단을 함께 남긴다.</p>
 <h3>이미지 생성: 예쁜 한 장보다 ‘고쳐도 같은 것’이 어렵다</h3>
+<div id="ep114-image" class="ep114-map" role="group" aria-label="이미지 파트의 전체 구조와 두 가지 품질 기준">
+<div class="root">숲 02 · AI가 만들기 → 보기 → 고치기까지 맡는다</div>
+<div class="branches">
+<div class="branch"><strong>미적 선택</strong>후보 중 무엇이 마음에 드나?<br>색감·분위기·전체 인상<br><small>영상: 로고 4개 중 A 선택</small></div>
+<div class="branch"><strong>일관성 검사</strong>다른 물건에도 같은 로고인가?<br>형태·비율·간격·번짐<br><small>영상: 굿즈로 옮기며 오류 잔존</small></div>
+</div>
+<div class="return">수학에서 조건을 확인했듯, 여기서는 <strong>“무엇이 바뀌면 안 되는가”</strong>를 확인한다.<br>다만 시각적 검수는 수학적 증명과 같은 검증이 아니다.</div>
+</div>
+
 <p>이미지 파트에서 박종현이 주목한 것은 단순한 화질보다 <strong>일관성(consistency)</strong>이다. 옷을 바꾸거나 표정을 수정해도 인물과 배경이 유지되는지, 로고를 다른 물건에 넣어도 같은 로고로 남는지가 중요하다. 한 장이 아름다운 것과 여러 장이 동일한 브랜드 자산을 보존하는 것은 다른 능력이다.</p>
 <p>GPT Image 2.5의 편집 개선, 생성 중간 과정의 스트리밍, 스톱모션과 GIF 사례가 소개된다. 움직이는 부분 외에는 고정돼야 하는 스톱모션은 일관성을 보여주는 좋은 예다. 다만 중간 생성 화면을 보고 자기회귀 방식과 확산 방식의 결합을 추론한 부분은 화자들의 해석이며, 내부 구조를 확인한 사실로 다루지 않는다.</p>
 <p>가격도 사용 경험으로 제시된다. 박종현은 API 이미지 한 장이 체감상 약 100원이고, 뒤의 브랜드 작업 전체는 API였다면 약 2달러였을 것이라고 추정한다. 실제 작업은 구독으로 했으므로 별도 청구액 2달러를 지불한 사례가 아니다. 해상도·품질·반복 횟수까지 고정된 보편적 단가로 읽을 수도 없다.</p>
@@ -175,15 +241,47 @@ table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
 <p>노정석은 여러 번 검토시키는 작업 구조, 즉 하네스를 걸면 좋아질 것이라고 말한다. 여기서 놓치면 안 되는 것은 <strong>박종현의 실험에서도 이미 스스로 보고 고치는 반복이 있었다</strong>는 점이다. 따라서 이 사례의 결론은 “세 번 반복하면 해결된다”가 아니다. 반복 편집이 가능해졌지만, 모델의 눈이 모든 세부 오류를 잡지는 못했다.</p>
 <p>브랜드 작업에서 ‘느낌이 비슷하다’는 승인 기준과 ‘마크의 형태·비율·간격이 정확하다’는 기준은 다르다. 영상은 취향을 가진 선택과 정밀한 품질검사가 별개임을 보여준다. 보기 좋은 시안으로서 유용하다는 평가와 실제 제작용으로 완성됐다는 판단을 분리해야 한다.</p>
 <h3>여행 예약과 렌더러: 도구 사용은 넓어졌지만 사람은 사라지지 않았다</h3>
+<div class="ep114-map" role="group" aria-label="여행과 렌더러에서 AI와 사람 및 도구의 역할">
+<div class="root">작은 지도 · 모델이 모든 일을 직접 하는 것은 아니다</div>
+<div class="branches">
+<div class="branch"><strong>여행 예약</strong>에이전트: 탐색·비교·예약 진행<br>↕ 의사결정 요청과 응답<br>사람: 판단·결제 입력·일부 과정<br><small>실제 여행 만족도는 아직 별도 확인</small></div>
+<div class="branch"><strong>렌더러 실험</strong>목표 이미지와 결과 비교<br>↓<br>Python·Mitsuba로 수정·렌더링<br>↓<br>다시 비교하고 다음 수정<br><small>반복했지만 완벽한 재현은 아님</small></div>
+</div>
+<div class="return">숲으로 복귀: <strong>도구 사용 확대 ≠ 완전 무인 실행 ≠ 결과 품질 보장</strong></div>
+</div>
+
 <p>노정석은 출장 준비를 Astra에게 맡겨 숙소·교통편·식당을 찾고 예약하며, 가이드에게 연락하게 했다고 말한다. 이탈리아어 페이지를 읽고, 호텔 가격을 비교하고, 동선을 고려하는 작업까지 브라우저로 진행했다. 사람이 사이트를 일일이 방문하는 대신 에이전트가 여러 사이트를 오가는 사례다.</p>
 <p>그러나 <strong>8시간 완전 무인 실행은 아니었다.</strong> 하루 동안 옆에서 작업을 돌리며 의사결정을 기다리는 요청에 답했고, 결제 번호 입력과 일부 과정은 직접 했다. 에이전트가 거부한 작업도 있었다. 선택한 숙소와 교통편이 실제로 만족스러운지는 직접 가봐야 안다고 했다. 예약 업무가 진행됐다는 것과 여행 품질이 검증됐다는 것은 다르다.</p>
 <p>최승준의 렌더러 실험에서는 이미지 생성 모델 대신 Python과 Mitsuba를 이용했다. 렌더러는 장면을 계산해 이미지로 만드는 도구다. Astra가 목표 이미지와 렌더링 결과를 비교하고 수정하도록 반복시켰으며, 샘플링을 늘리고 실시간 애니메이션도 시도했다. 화자는 이를 조금씩 더 나은 방향으로 움직이는 ‘언덕 오르기’식 최적화로 설명한다.</p>
 <p>핵심은 모델이 모든 그림을 직접 그리는 것이 아니라 <strong>목표와 결과의 차이를 보고 다른 도구를 조종한다</strong>는 점이다. 다만 완벽한 재현은 아니었다. 저장 공간, CPU 수, GPU 미제공에 관한 설명도 당시 화자가 사용한 환경의 소개이지 현재 모든 사용자에게 적용되는 제품 사양으로 받아들이지 않는다.</p>
 <h3>AlphaGenome 기초: DNA를 읽는 것과 뜻을 아는 것은 다르다</h3>
+<div id="ep114-bio" class="ep114-map" role="group" aria-label="유전체 파트의 전체 이해 순서">
+<div class="root">숲 03 · 글자를 읽는 것에서, 바뀐 글자의 영향을 묻는 것으로</div>
+<div class="sequence">
+<div class="step"><strong>1 · 읽기</strong> — DNA의 어느 위치에 A·G·T·C가 있는지 알아낸다.</div>
+<div class="arrow">↓ 비교할 기준에 맞춰 차이를 찾기</div>
+<div class="step"><strong>2 · 차이 찾기</strong> — 같은 위치의 글자가 G인지 A인지 비교한다.</div>
+<div class="arrow">↓ 차이는 보이지만, 영향은 아직 모른다</div>
+<div class="step"><strong>3 · 영향 예측</strong> — AlphaGenome으로 세포별 실험 결과가 어떻게 달라질지 예측한다.</div>
+<div class="arrow">↓ 예측을 근거로 먼저 확인할 후보 고르기</div>
+<div class="step"><strong>4 · 실험 확인</strong> — 실제로 맞는지 확인한다. 치료 효과와 안전성은 또 다른 확인이다.</div>
+</div>
+<div class="return">아래 설명에서 길을 잃으면 여기로 돌아오자. <strong>글자 → 차이 → 영향 예측 → 실험</strong>의 네 층이다.</div>
+</div>
+
 <p>생물학 파트는 “유전체를 읽었는데, 달라진 글자 하나가 무슨 일을 하는지 모른다면?”이라는 문제에서 시작하면 쉽다. DNA 서열은 A·G·T·C라는 네 종류의 글자로 표시한다. <strong>서열을 읽는다</strong>는 것은 어느 위치에 어떤 글자가 있는지 알아내는 일이다. <strong>기능을 이해한다</strong>는 것은 그 차이가 특정 세포의 활동을 어떻게 바꾸는지 알아내는 일이다.</p>
 <p>대담은 참조 서열에 개인의 DNA 조각을 정렬해 차이를 찾는 과정을 설명한다. 참조 게놈은 비교할 좌표와 기준으로 이해하면 된다. 이를 ‘모든 위치가 정상이며 건강을 보장하는 정답 서열’로 받아들이지는 말자. 숏리드와 롱리드의 설명도 짧은 조각과 긴 조각을 읽을 때 위치를 맞추는 어려움이 달라진다는 요지가 중심이다. HLA 영역은 짧은 조각만으로 구별하기 어려운 사례로 등장한다.</p>
 <p><strong>SNP</strong>는 단일염기 다형성으로 소개된다. 영상에서는 같은 위치에 한 사람은 G, 다른 사람은 A를 가진 예를 든다. 그러나 사람 간 차이 전체가 이런 한 글자 차이만으로 설명된다거나, 차이가 있다는 사실만으로 질병이 있다는 뜻은 아니다. AlphaGenome이 필요한 이유는 바로 <strong>차이를 발견한 뒤에도 그 영향이 미지수인 경우가 많기 때문</strong>이다.</p>
 <h3>수량을 먼저 정리하기: 30억·60억·90억은 무엇의 개수인가</h3>
+<div class="ep114-map" role="group" aria-label="Atlas의 90억 단일 치환 계산 설명">
+<div class="root">나무 확대 · 90억은 사람 수가 아니라, 바꿔 계산할 경우의 수</div>
+<div class="branches">
+<div class="branch"><strong>위치 하나만 확대</strong>기준 글자 A<br>├ G로 바꾸기<br>├ C로 바꾸기<br>└ T로 바꾸기<br><small>바꿀 수 있는 다른 글자 3개</small></div>
+<div class="branch"><strong>전체 위치로 확대</strong>약 30억 위치 × 3가지 치환<br>↓<br>약 90억 단일 변이 예측<br><small>여러 위치를 동시에 바꾸는 모든 조합은 아님</small></div>
+</div>
+<div class="return">대담의 30억 단순화 기준이다. <strong>계산한 경우 수 ≠ 실험 횟수</strong></div>
+</div>
+
 <table>
 <thead>
 <tr>
@@ -218,6 +316,15 @@ table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
 <p>전사는 31억이라는 표현과 설명 편의를 위한 30억을 오간다. 뒤의 60억·120억·90억은 30억을 기준으로 한 설명이다. 서로 다른 정밀도의 수를 모두 정확한 수치처럼 이어 붙이지 않는 것이 좋다. 대담 도중 나온 ‘60억의 4제곱’도 유전체 길이를 이해하는 데 사용할 설명이 아니다.</p>
 <p>Atlas의 90억은 간단하다. 어떤 위치의 기준 글자가 A라면 G·C·T로 바꾼 경우가 각각 하나씩 있다. 이런 <strong>한 위치의 단일 치환 세 가지</strong>를 약 30억 위치에 적용한 것이다. 여러 위치가 동시에 바뀌는 모든 경우를 계산했다는 이야기가 아니다.</p>
 <h3>AlphaFold와 AlphaGenome은 무엇을 다르게 예측하나</h3>
+<div class="ep114-map" role="group" aria-label="AlphaFold와 AlphaGenome의 입력과 출력 비교">
+<div class="root">이름이 비슷해도 질문은 다르다</div>
+<div class="branches">
+<div class="branch"><strong>AlphaFold</strong>입력: 아미노산 서열<br>↓<br>질문: 단백질은 어떤 모양일까?<br>↓<br>출력: 단백질 3차원 구조 예측</div>
+<div class="branch"><strong>AlphaGenome</strong>입력: DNA 서열<br>↓<br>질문: 조절 관련 실험 결과는 어떨까?<br>↓<br>출력: 세포·위치별 실험 결과 예측</div>
+</div>
+<div class="return">영상에서 대비한 핵심: <strong>단백질의 구조</strong>를 묻는 일과 <strong>유전자 조절에 관련된 결과</strong>를 묻는 일을 구분하자.</div>
+</div>
+
 <p>AlphaFold는 아미노산 서열을 바탕으로 <strong>단백질의 3차원 구조</strong>를 예측하는 도구로 소개된다. AlphaGenome은 DNA 서열을 바탕으로 <strong>유전자 조절과 관련된 실험 결과</strong>를 예측한다. 둘 다 생물학 모델이지만 입력도 출력도 해결하려는 질문도 다르다.</p>
 <p>왜 조절이 중요할까? 대담은 간세포·뇌세포·근육세포가 서로 다른 단백질을 필요로 한다는 예를 든다. 유전체가 있다고 해서 모든 부분을 언제나 똑같이 사용하는 것은 아니다. 어떤 부분을 얼마나 읽어 RNA로 전사하는지, 어떤 영역이 열려 있는지 같은 차이가 중요하다. 프로모터와 인핸서는 이런 조절을 설명하며 등장하는 이름이다.</p>
 <p>영상의 ‘단백질을 만드는 부분’과 ‘프로그래밍 영역’이라는 대비는 입문용 비유다. <strong>나머지 98% 전체가 하나의 조절 프로그램이라는 뜻으로 굳히면 안 된다.</strong> 단백질 코딩 영역과 엑손을 완전히 같은 말로 쓰는 것도 피해야 한다. ‘우성 유전자만 켜지고 다른 쪽은 꺼진다’는 발언 역시 유전자 발현의 일반 규칙으로 배우지 않는다. 유전자 발현 조절 전체를 후성유전학 하나와 동일시하지도 않는다.</p>
@@ -236,8 +343,27 @@ table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
 </div>
 
 <p><strong>AlphaGenome Atlas는 이런 계산을 미리 대량 수행해 저장한 데이터베이스</strong>로 설명된다. 매번 모델을 실행하지 않고, 저장된 변이 효과를 찾아볼 수 있게 한 것이다. 모델이 계산하는 능력과 그 계산 결과를 쉽게 조회하는 서비스는 다른 층이다.</p>
+<div class="ep114-map" role="group" aria-label="AlphaGenome 모델과 Atlas 데이터베이스의 관계">
+<div class="root">나무 확대 · 계산하는 모델과, 계산을 저장한 결과집</div>
+<div class="sequence">
+<div class="step"><strong>AlphaGenome · 예측 모델</strong><br>서열 입력을 받아 실험 결과를 예측한다.</div>
+<div class="arrow">↓ 변이별 예측을 미리 계산하고 저장</div>
+<div class="step"><strong>AlphaGenome Atlas · 결과 데이터베이스</strong><br>저장된 변이 효과를 찾아본다. 조회할 때마다 처음부터 모델을 실행하는 것과 다르다.</div>
+</div>
+<div class="return">책으로 비유하면 계산 결과를 모은 찾아보기다. <strong>실험 관측을 모은 정답집은 아니다.</strong></div>
+</div>
+
 <p>대담은 이를 AlphaFold와 구조 예측 데이터베이스의 관계에 비유한다. 약 20만 개의 실험 구조와 약 2억 개의 예측 구조를 대비하지만, 두 숫자는 각각 관측과 예측을 가리킨다. 예측 결과가 많이 쌓였다는 사실은 그만큼 실제 실험을 했다는 뜻이 아니다. Atlas도 같은 이유로 ‘90억 변이를 실험으로 확인했다’고 읽으면 안 된다.</p>
 <h3>Evo 2와 비교하면 학습 방식의 차이가 보인다</h3>
+<div class="ep114-map" role="group" aria-label="두 모델이 배우는 자료와 질문의 대비">
+<div class="root">나무 확대 · 무엇으로 배웠는지가 답의 종류를 바꾼다</div>
+<div class="branches">
+<div class="branch"><strong>AlphaGenome</strong>서열 + 실험 결과의 짝<br>↓<br>“어떤 세포의 실험 결과가 달라질까?”</div>
+<div class="branch"><strong>Evo 2</strong>많은 생물의 서열 패턴<br>↓<br>“이 서열을 모델이 얼마나 자연스럽게 볼까?”</div>
+</div>
+<div class="return">대담의 학습 방식 대비다. 어느 쪽의 점수도 <strong>그 자체로 질병 진단이나 치료 결정은 아니다.</strong></div>
+</div>
+
 <p>대담은 AlphaGenome을 <strong>서열과 실험 결과를 짝지어 배우는 방식</strong>으로, Evo 2를 <strong>많은 생물의 서열 자체에서 이어질 패턴을 배우는 방식</strong>으로 대비한다. 앞쪽은 지도학습의 설명이고, 뒤쪽은 언어모델이 다음 토큰을 예상하는 방식에 빗댄 설명이다.</p>
 <p>AlphaGenome에서는 특정 세포의 어떤 실험 결과가 달라질지 살펴본다. Evo 계열의 설명에서는 기준 서열과 변이 서열을 모델이 얼마나 자연스럽게 보는지 비교해 이상 가능성을 추정한다. 다만 덜 자연스러운 서열이라는 판단이 곧 특정 질병의 진단은 아니며, 어떤 문제가 생기는지까지 자동으로 알려주지도 않는다.</p>
 <p>전사에 나온 로그 확률 차이의 양수·음수 설명은 그대로 임상 판단 규칙으로 사용하지 않는다. 비교 방향과 점수 정의를 확인하지 않은 채 부호만으로 위험을 판정할 수는 없다. 생성된 서열에서 새로운 생물이 나온다는 설명도 합성생물학의 가능성을 이야기한 것이지, 서열 생성만으로 기능과 안전성이 보장된다는 뜻은 아니다.</p>
@@ -247,6 +373,16 @@ table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
 <p>개인 유전체 분석 경험과 맞춤형 치료 사례도 <strong>화자가 보고한 경험과 가능성</strong>으로 남겨야 한다. 이 대담은 독자가 자기 변이를 조회해 약물의 안전성이나 치료 방법을 결정할 근거를 제공하지 않는다. 질병의 원인 후보를 더 잘 찾는 것, 효과 있는 치료제를 만드는 것, 사람에게 안전하게 적용하는 것은 각각 다른 확인이 필요하다.</p>
 <p>마지막으로 화자들은 예측과 실험이 새 데이터를 만들고 다시 모델을 개선하는 선순환을 기대한다. 그러나 생물학이 LLM과 같은 속도로 폭발적으로 확장될 것이라는 전망은 아직 전망이다. 바이오보안 우려도 함께 제기되며, 연구 가속이 이익만 만드는 것은 아니라는 경계를 남긴다.</p>
 <h3>세 사례의 공통점과 서로 다른 검증 방법</h3>
+<div class="ep114-map" role="group" aria-label="전체 주제 회수와 분야별 검증 관문">
+<div class="root">다시 숲으로 · AI가 넓힌 것은 시도의 범위, 남는 것은 확인의 책임</div>
+<div class="branches">
+<div class="branch"><strong>수학의 문</strong>풀이 후보<br>↓<br>가정·논리·문제 조건 검토<br><small>발표 ≠ 공식 해결 인정</small></div>
+<div class="branch"><strong>이미지·도구의 문</strong>만든 결과·진행한 업무<br>↓<br>요구조건 검사·사람 승인<br><small>반복 수정 ≠ 오류 없음</small></div>
+<div class="branch"><strong>생물학의 문</strong>변이 영향 예측<br>↓<br>실제 실험·추가 검증<br><small>예측 ≠ 치료 효과·안전성</small></div>
+</div>
+<div class="return">차드가 가져갈 질문: <strong>“더 많이 만들 수 있나?” 다음에는 “무슨 증거가 있어야 다음 단계로 넘기나?”</strong><br>이는 세 사례에서 뽑은 편집자의 통찰이며, 모든 업무에서 효과가 검증됐다는 뜻은 아니다.</div>
+</div>
+
 <p>세 사례는 <strong>후보 생성 → 평가 → 다음 시도 수정</strong>이라는 구조를 공유한다. 그러나 ‘평가기가 있다’는 이유만으로 같은 속도와 신뢰도로 자동화할 수 있는 것은 아니다.</p>
 <table>
 <thead>
