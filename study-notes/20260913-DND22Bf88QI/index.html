@@ -1,0 +1,858 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>마크 저커버그가 밝힌 메타의 AI 에이전트 &#x27;뮤즈&#x27;가 돈을 벌어다 주는 방식입니다</title>
+<meta name="description" content="마크 저커버그가 설명한 장기 실행형 개인 AI 에이전트 Muse의 작동 방식, 거래 기반 수익 모델, 권한·보안 설계와 기술 확산 논리를 구분해 살펴본다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>마크 저커버그가 밝힌 메타의 AI 에이전트 &#x27;뮤즈&#x27;가 돈을 벌어다 주는 방식입니다</h1>
+<div class="meta">업로드 2026-09-13 · 65.3분 · <a href="https://youtu.be/DND22Bf88QI" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 12분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<h3>큰 그림: 답변 도구를 넘어 계속 일하는 대리인으로</h3>
+<p>이 인터뷰에서 마크 저커버그가 제시한 중심 생각은 <strong>강력한 AI를 소수 연구소만 보유하게 하지 말고 개인이 직접 사용할 수 있게 해야 한다</strong>는 것이다. 그는 이를 세 가지 원칙으로 설명한다. 사람에게 도구를 주는 것이 번영의 원천이고, AI의 주된 목적은 단순한 자동화보다 새로운 것을 만드는 데 있으며, 안전은 접근을 막는 것보다 여러 주체가 서로 견제할 수 있는 힘의 균형에서 나온다는 주장이다.</p>
+<p>Muse는 이 철학을 제품으로 구현한다는 개인용 AI 에이전트다. 일반적인 채팅형 AI가 질문 하나에 답하고 멈춘다면, 저커버그가 설명한 Muse는 사용자가 <strong>프로젝트나 장기 목표를 맡기면 가상 컴퓨터를 사용해 계속 작업하고, 기억을 정리하며, 다음 행동까지 제안하는 방식</strong>이다. 다만 인터뷰에는 “현재 출시 중”이라는 표현과 “향후 일반·확대 출시”라는 표현이 함께 나온다. 따라서 여기서 설명된 모든 기능이 이미 일반 사용자에게 제공되고 검증됐다고 보면 안 된다.</p>
+<figure data-visual-kind="map">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 900 470" role="img" aria-labelledby="map-title map-desc" style="width:100%;max-width:900px;height:auto;display:block;margin:auto;min-width:900.0px;max-width:none;">
+  <title id="map-title">Muse와 AI 확산 철학의 전체 지도</title>
+  <desc id="map-desc">개인에게 AI를 배포한다는 중심 주장으로부터 개인 목표 실행, 경제적 가치, 안전 장치, 사회적 수용 조건이 갈라지는 개념 지도</desc>
+  <defs>
+    <marker id="map-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect x="300" y="25" width="300" height="80" rx="14" fill="#1e3a8a"/>
+  <text x="450" y="58" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="700">AI 능력을 개인에게 배포</text>
+  <text x="450" y="84" text-anchor="middle" fill="#ffffff" font-size="16">저커버그가 제시한 중심 주장</text>
+
+  <line x1="450" y1="105" x2="155" y2="175" stroke="#475569" stroke-width="3" marker-end="url(#map-arrow)"/>
+  <line x1="450" y1="105" x2="355" y2="175" stroke="#475569" stroke-width="3" marker-end="url(#map-arrow)"/>
+  <line x1="450" y1="105" x2="555" y2="175" stroke="#475569" stroke-width="3" marker-end="url(#map-arrow)"/>
+  <line x1="450" y1="105" x2="750" y2="175" stroke="#475569" stroke-width="3" marker-end="url(#map-arrow)"/>
+
+  <rect x="35" y="180" width="240" height="110" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="155" y="214" text-anchor="middle" fill="#172554" font-size="19" font-weight="700">개인 목표 실행</text>
+  <text x="155" y="244" text-anchor="middle" fill="#172554" font-size="15">장기 프로젝트 · 기억</text>
+  <text x="155" y="268" text-anchor="middle" fill="#172554" font-size="15">가상 컴퓨터 · 선제안</text>
+
+  <rect x="285" y="180" width="190" height="110" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="380" y="214" text-anchor="middle" fill="#14532d" font-size="19" font-weight="700">경제적 가치</text>
+  <text x="380" y="244" text-anchor="middle" fill="#14532d" font-size="15">돈을 벌거나 절약</text>
+  <text x="380" y="268" text-anchor="middle" fill="#14532d" font-size="15">거래 수수료 구상</text>
+
+  <rect x="485" y="180" width="190" height="110" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="580" y="214" text-anchor="middle" fill="#78350f" font-size="19" font-weight="700">안전과 신뢰</text>
+  <text x="580" y="244" text-anchor="middle" fill="#78350f" font-size="15">최소 권한 · 승인</text>
+  <text x="580" y="268" text-anchor="middle" fill="#78350f" font-size="15">감시 에이전트 · 기밀 VM</text>
+
+  <rect x="685" y="180" width="180" height="110" rx="12" fill="#f3e8ff" stroke="#9333ea" stroke-width="2"/>
+  <text x="775" y="214" text-anchor="middle" fill="#581c87" font-size="19" font-weight="700">사회적 조건</text>
+  <text x="775" y="244" text-anchor="middle" fill="#581c87" font-size="15">오픈 생태계</text>
+  <text x="775" y="268" text-anchor="middle" fill="#581c87" font-size="15">지역사회 · 정부 협력</text>
+
+  <line x1="155" y1="290" x2="450" y2="350" stroke="#475569" stroke-width="3" marker-end="url(#map-arrow)"/>
+  <line x1="380" y1="290" x2="450" y2="350" stroke="#475569" stroke-width="3" marker-end="url(#map-arrow)"/>
+  <line x1="580" y1="290" x2="450" y2="350" stroke="#475569" stroke-width="3" marker-end="url(#map-arrow)"/>
+  <line x1="775" y1="290" x2="450" y2="350" stroke="#475569" stroke-width="3" marker-end="url(#map-arrow)"/>
+
+  <rect x="245" y="355" width="410" height="85" rx="14" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+  <text x="450" y="389" text-anchor="middle" fill="#0f172a" font-size="20" font-weight="700">성공 조건</text>
+  <text x="450" y="417" text-anchor="middle" fill="#334155" font-size="16">유용성뿐 아니라 권한 통제와 사회적 수용까지 작동해야 함</text>
+</svg></div>
+<figcaption>개인 AI의 확산을 중심으로 Muse의 기능, 경제 모델, 안전 설계, 사회적 조건을 연결한 전체 지도</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 파란 상자는 저커버그의 중심 철학이고, 가운데 네 상자는 그 철학이 실제 제품과 사회에서 요구하는 요소다. 마지막 상자는 어느 하나만 잘한다고 충분하지 않다는 해석이다. 이 그림은 수치 데이터가 아니라 인터뷰의 논리를 재구성한 개념도다.</p>
+<h3>Muse는 무엇을 다르게 한다는 것인가</h3>
+<p>채팅형 AI는 보통 사용자가 질문할 때만 반응한다. 반면 Muse는 목표를 받고, 뒤에서 가상 컴퓨터를 조작하고, 밤에도 작업하며, 배운 내용을 기억에 정리하고, 다음에 할 만한 프로젝트를 제안하는 <strong>장기 실행형 개인 에이전트</strong>로 설명된다.</p>
+<p>저커버그는 자신의 사용 사례로 세 살 딸과 할 주말 베이킹 프로젝트를 준비시키고 재료를 주문하게 한 일, 허가가 열릴 때 산행 허가증을 구하게 한 일, MMA 체육관 영상을 보고 훈련 피드백을 받는 일을 제시한다. Civilization 전략 안내서를 만든 뒤 역사 학습 자료로 확장하자는 제안도 받았다고 한다. 초기 베타 사용자들은 홈스쿨 운영이나 여행 계획에 사용했다고 소개된다. 이것들은 화자와 주변 사용자가 전한 사례이지, 독립 평가를 거친 성능 자료는 아니다.</p>
+<figure data-visual-kind="process">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 1040 330" role="img" aria-labelledby="process-title process-desc" style="width:100%;max-width:1040px;height:auto;display:block;margin:auto;min-width:1040.0px;max-width:none;">
+  <title id="process-title">장기 실행형 에이전트의 작업 흐름</title>
+  <desc id="process-desc">사용자의 목표가 계획, 가상 컴퓨터 작업, 승인, 결과와 기억 갱신을 거쳐 다음 제안으로 이어지는 과정</desc>
+  <defs>
+    <marker id="process-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="70" width="170" height="115" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="105" y="108" text-anchor="middle" fill="#172554" font-size="18" font-weight="700">1. 목표 전달</text>
+  <text x="105" y="137" text-anchor="middle" fill="#172554" font-size="15">프로젝트·조건</text>
+  <text x="105" y="161" text-anchor="middle" fill="#172554" font-size="15">개인 맥락</text>
+
+  <line x1="190" y1="127" x2="225" y2="127" stroke="#334155" stroke-width="3" marker-end="url(#process-arrow)"/>
+
+  <rect x="230" y="70" width="170" height="115" rx="12" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
+  <text x="315" y="108" text-anchor="middle" fill="#312e81" font-size="18" font-weight="700">2. 계획과 작업</text>
+  <text x="315" y="137" text-anchor="middle" fill="#312e81" font-size="15">가상 컴퓨터 사용</text>
+  <text x="315" y="161" text-anchor="middle" fill="#312e81" font-size="15">장시간 실행</text>
+
+  <line x1="400" y1="127" x2="435" y2="127" stroke="#334155" stroke-width="3" marker-end="url(#process-arrow)"/>
+
+  <rect x="440" y="50" width="170" height="155" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+  <text x="525" y="89" text-anchor="middle" fill="#78350f" font-size="18" font-weight="700">3. 권한 확인</text>
+  <text x="525" y="119" text-anchor="middle" fill="#78350f" font-size="15">로그인·결제·전송</text>
+  <text x="525" y="145" text-anchor="middle" fill="#78350f" font-size="15">사람의 승인 필요</text>
+  <text x="525" y="177" text-anchor="middle" fill="#92400e" font-size="14">안전 관문</text>
+
+  <line x1="610" y1="127" x2="645" y2="127" stroke="#334155" stroke-width="3" marker-end="url(#process-arrow)"/>
+
+  <rect x="650" y="70" width="170" height="115" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="735" y="108" text-anchor="middle" fill="#14532d" font-size="18" font-weight="700">4. 결과 생성</text>
+  <text x="735" y="137" text-anchor="middle" fill="#14532d" font-size="15">예약·자료·분석</text>
+  <text x="735" y="161" text-anchor="middle" fill="#14532d" font-size="15">거래 또는 절약</text>
+
+  <line x1="820" y1="127" x2="855" y2="127" stroke="#334155" stroke-width="3" marker-end="url(#process-arrow)"/>
+
+  <rect x="860" y="70" width="160" height="115" rx="12" fill="#f3e8ff" stroke="#9333ea" stroke-width="2"/>
+  <text x="940" y="108" text-anchor="middle" fill="#581c87" font-size="18" font-weight="700">5. 기억·제안</text>
+  <text x="940" y="137" text-anchor="middle" fill="#581c87" font-size="15">결과를 반영</text>
+  <text x="940" y="161" text-anchor="middle" fill="#581c87" font-size="15">다음 프로젝트 제안</text>
+
+  <path d="M940 185 C940 285, 105 285, 105 190" fill="none" stroke="#64748b" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#process-arrow)"/>
+  <text x="520" y="304" text-anchor="middle" fill="#475569" font-size="16">한 번의 답변이 아니라 결과와 피드백이 다음 작업으로 이어진다는 구상</text>
+</svg></div>
+<figcaption>사용자의 장기 목표가 작업·승인·결과·기억 갱신을 거쳐 반복되는 과정</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽에서 오른쪽으로 진행하되, 주황색 상자를 특별히 본다. Muse의 핵심은 오래 일하는 능력만이 아니라, 위험한 행동 직전에 사람이 개입할 수 있어야 한다는 데 있다. 아래 점선은 결과가 다시 기억과 계획에 반영되는 반복 구조를 뜻한다. 실제 성공률을 나타내는 그래프는 아니다.</p>
+<h3>어떻게 돈을 벌거나 절약한다는 것인가</h3>
+<p>인터뷰의 제목과 달리, 저커버그가 제시한 것은 <strong>검증된 수익 실적이 아니라 예상 사업 모델</strong>이다. 그는 시작 단계에 주당 1억 토큰과 가상 컴퓨터를 무료로 제공하는 방안을 말한다. 개인이나 소규모 사업자가 Muse로 상품 제작, 광고 운영, 거래와 상거래를 처리하면 충분한 수익이나 절약이 생길 것이므로, 메타는 장기적으로 거래액의 아주 작은 일부를 받을 수 있다는 구상이다. 그 수수료는 반드시 사용자에게 직접 받는 것이 아니라 사용자가 거래하는 사업체 쪽에서 나올 수도 있다고 설명한다. 결제와 관련해서는 Stripe와 협력 중이라고 답한다.</p>
+<p>이 구조의 인과는 다음과 같다.</p>
+<ol>
+<li>사용자가 무료 또는 구독 방식으로 상당한 컴퓨팅 자원을 받는다.</li>
+<li>에이전트가 반복 업무, 거래 준비, 광고나 사업 운영을 돕는다.</li>
+<li>실제 거래나 비용 절감이 생기면 그 경제적 흐름에서 작은 수수료를 받는다.</li>
+<li>무료 사용자를 넓게 확보하면서도 거래가 생길 때 비용을 회수한다.</li>
+</ol>
+<p>그러나 인터뷰에는 사용자 수익률, 거래 성공률, 오류 비용, 수수료율이 제시되지 않는다. “돈을 벌어다 준다”는 표현은 결과가 보장된다는 뜻이 아니라, <strong>거래 가치가 생길 것이라는 메타 측 전망</strong>으로 읽어야 한다.</p>
+<h3>민감한 일을 맡기려면 무엇이 필요한가</h3>
+<p>장기 실행형 에이전트는 이메일, 광고 계정, 건강 정보, 결제 수단에 접근할 수 있다. 편리함이 커지는 만큼 잘못된 이메일 전송, 원치 않는 결제, 정보 유출, 외부 문서에 숨겨진 지시에 속는 문제도 커진다. 저커버그는 이를 막기 위한 설계로 다음을 설명한다.</p>
+<ul>
+<li><strong>기밀 가상 컴퓨터(Confidential VM):</strong> 클라우드에서 작동하지만 메타도 내부 내용을 볼 수 없도록 만들고, 그 약속을 기술적으로 검증할 수 있게 한다는 주장이다.</li>
+<li><strong>보안 자격 증명 저장소:</strong> 비밀번호와 카드 정보를 에이전트가 평문으로 계속 보유하지 않고 필요한 순간에만 사용하게 한다.</li>
+<li><strong>Sentinel 에이전트:</strong> 들어오고 나가는 데이터에서 지시문 주입 공격이나 민감 정보 전송 가능성을 찾아 사람에게 검토를 요청한다.</li>
+<li><strong>사람의 승인(Human-in-the-loop):</strong> 로그인, 결제, 민감 정보 전송처럼 영향이 큰 행동은 사용자가 승인한다.</li>
+<li><strong>최소 권한(Least privilege):</strong> 이메일 연결은 읽기 전용으로 시작하고, 보내기 권한처럼 더 강한 권한은 필요한 경우에만 따로 추가한다.</li>
+</ul>
+<figure data-visual-kind="layers">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 900 520" role="img" aria-labelledby="layers-title layers-desc" style="width:100%;max-width:900px;height:auto;display:block;margin:auto;min-width:969.2px;max-width:none;">
+  <title id="layers-title">Muse 보안 설계의 계층</title>
+  <desc id="layers-desc">개인 목표와 데이터를 중심에 두고 기밀 가상 컴퓨터, 최소 권한과 자격 증명, 감시 에이전트, 사람의 승인이 둘러싸는 구조</desc>
+
+  <rect x="60" y="35" width="780" height="430" rx="24" fill="#fff7ed" stroke="#c2410c" stroke-width="3"/>
+  <text x="450" y="70" text-anchor="middle" fill="#7c2d12" font-size="20" font-weight="700">4층: 사람의 승인</text>
+  <text x="450" y="94" text-anchor="middle" fill="#7c2d12" font-size="14">로그인 · 결제 · 민감 정보 전송의 최종 관문</text>
+
+  <rect x="120" y="115" width="660" height="300" rx="22" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+  <text x="450" y="148" text-anchor="middle" fill="#78350f" font-size="19" font-weight="700">3층: Sentinel 감시</text>
+  <text x="450" y="172" text-anchor="middle" fill="#78350f" font-size="14">외부 공격 지시와 정보 유출 징후를 탐색</text>
+
+  <rect x="180" y="195" width="540" height="170" rx="20" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+  <text x="450" y="227" text-anchor="middle" fill="#172554" font-size="19" font-weight="700">2층: 최소 권한과 자격 증명 저장소</text>
+  <text x="450" y="252" text-anchor="middle" fill="#172554" font-size="14">읽기부터 시작하고 필요한 권한만 추가</text>
+
+  <rect x="275" y="278" width="350" height="62" rx="18" fill="#1e3a8a"/>
+  <text x="450" y="306" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="700">1층: 기밀 가상 컴퓨터</text>
+  <text x="450" y="328" text-anchor="middle" fill="#ffffff" font-size="13">개인 목표 · 기억 · 작업 내용</text>
+
+  <text x="450" y="497" text-anchor="middle" fill="#475569" font-size="15">바깥 계층일수록 위험 행동을 감시하거나 멈추는 역할</text>
+</svg></div>
+<figcaption>저커버그가 설명한 Muse의 보안 장치를 보호 계층으로 재구성한 그림</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 안쪽은 에이전트가 실제로 다루는 개인 정보와 작업 환경이고, 바깥쪽으로 갈수록 접근 범위를 제한하고 위험 행동을 감시하거나 멈추는 장치다. 어느 한 계층도 완벽하다고 전제하지 않는다. 특히 “메타도 내용을 볼 수 없다”는 설명은 인터뷰 당시의 화자 주장이다. 저커버그는 관련 내용을 향후 몇 주 안에 더 공개하겠다고 했으므로, 이 전사만으로 구현과 검증 상태를 확인할 수 없다.</p>
+<h3>오픈소스, 견제와 안전에 관한 주장</h3>
+<p>저커버그는 AI 안전을 위해 강력한 모델을 소수 기관에만 주는 방식보다, 더 많은 사람이 방어 도구를 갖게 하는 방식이 낫다고 주장한다. 사이버보안에서도 공개된 소프트웨어는 많은 사람이 살펴보고 결함을 찾을 수 있어 오히려 안정성을 높일 수 있다는 논리다. Hugging Face가 침입을 탐지했을 때 접근 가능한 오픈 모델을 사용했다는 사례도 든다.</p>
+<p>다만 그는 메타의 모든 작업을 공개하겠다고 말하지 않는다. 일부 모델은 공개하고 일부 작업은 폐쇄적으로 수행할 수 있으며, 영리 기업이 모든 것을 공유할 필요는 없다고 선을 긋는다. 따라서 그의 입장은 “모든 AI를 무조건 오픈소스로 만들자”가 아니라 <strong>경쟁·투명성·접근성을 유지할 만큼 강한 공개 생태계가 필요하다</strong>는 쪽에 가깝다.</p>
+<p>이 논리에는 아직 검증해야 할 조건이 있다. 강력한 능력을 널리 배포하면 방어자뿐 아니라 공격자도 같은 능력을 얻을 수 있다. 인터뷰는 넓은 배포와 힘의 균형이 결과적으로 더 안전하다는 저커버그의 관점을 제시하지만, 구체적인 위험별 비교 자료를 제공하지는 않는다.</p>
+<h3>기술만 좋아서는 확장할 수 없다는 관점</h3>
+<p>인터뷰는 데이터센터와 지역사회도 같은 구조로 설명한다. 저커버그는 장기간 운영할 기업은 세수, 일자리, 인력 양성에 투자할 유인이 있지만, 부지를 확보한 뒤 되팔려는 투기 사업자는 지역사회에 장기 투자할 유인이 약하다고 말한다. 루이지애나에서는 데이터센터 세수 기금으로 지역 교사에게 5만 달러 보너스를 제공한 사례를 들고, America's Workforce Academy를 통해 광섬유 기술자·전기 기술자·고급 목공 인력을 양성해 수료자에게 메타 인프라 건설 관련 일자리를 보장한다고 설명한다. 필요한 인력이 수십만 명, 어쩌면 수백만 명이라고도 말한다.</p>
+<p>이 수치와 효과는 인터뷰에서 제시된 주장이다. 대상 교사 수, 지급 조건, 교육 프로그램의 실제 취업률은 전사에 없다. 핵심 논리는 <strong>기술이 작동하는 것과 사회가 그 확장을 허용하는 것은 별개의 문제이며, 지역사회가 가치와 비용을 어떻게 나누는지가 장기 확장의 조건</strong>이라는 것이다.</p>
+<h3>모델 개발과 아직 오지 않은 기능</h3>
+<p>저커버그는 메타가 Llama 4 개발에서 기대한 궤도에 오르지 못했다고 인정하며, 연구팀을 더 작고 인재 밀도가 높은 형태로 재구성했다고 설명한다. 자신이 가까이서 관여했고, 연구실을 자신의 사무실 주변에 배치했으며, 컴퓨팅 투자를 확대했다고 말한다.</p>
+<p>그는 내부 코드명 Avocado를 사용한 비교적 작은 사전학습 실행에서 나온 Llama 4.1을 막 공개했다고 말하고, 더 큰 Watermelon 모델은 곧 출시될 예정이라고 말한다. 오하이오의 기가와트급 Prometheus 클러스터가 가동됐고 이후 모델의 확장에 쓰인다는 설명도 나온다. Muse에는 약 한 달마다 의미 있는 모델 업데이트를 제공해 왔다고 주장한다. Watermelon의 정확한 출시일과 성능은 확정하지 않고 “곧”, “큰 발전”, “기분이 좋다”는 수준으로만 답한다.</p>
+<p>에이전트끼리 배운 통찰을 공유하는 이른바 fleet 개념도 언급된다. 하지만 저커버그는 에이전트 간 상호작용 기능 대부분이 이번 출시에 포함되는 것은 아니며 장기적으로 중요해질 것이라고 말한다. 현재의 아이디어 제안 기능, 제한된 내부 사례, 미래의 네트워크 효과를 하나의 완성된 기능으로 합쳐 이해하면 안 된다.</p>
+<h3>전체 통찰과 적용 한계</h3>
+<p>Muse의 핵심 가설은 단순하다. <strong>사람이 목표를 주면 에이전트가 오래 일하고, 실제 행동까지 수행하며, 그 행동이 만든 거래 가치로 서비스 비용을 회수한다.</strong> 그러나 이 가설이 작동하려면 세 조건이 동시에 필요하다.</p>
+<ol>
+<li>에이전트가 실제 목표를 충분히 정확하게 수행해야 한다.</li>
+<li>결제와 정보 전송 같은 위험 행동은 제한하고 승인받아야 한다.</li>
+<li>사용자·지역사회·정부가 비용과 위험에 비해 충분한 가치를 느껴야 한다.</li>
+</ol>
+<p>인터뷰에는 이 방향을 뒷받침하는 개인 사례와 설계 설명은 많지만, 일반 사용자 대상 성공률이나 경제성 검증은 없다. 그러므로 지금 배울 것은 “Muse가 이미 사람들에게 돈을 벌어 줬다”가 아니라, <strong>장기 실행형 에이전트의 사업 모델이 행동 능력·권한 통제·거래 가치의 결합으로 설계될 수 있다는 것</strong>이다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>Muse는 한 번 답하고 끝나는 챗봇이 아니라 목표를 받아 가상 컴퓨터에서 장기간 작업한다는 개인 에이전트 구상이다.</li>
+<li>무료 사용을 넓게 제공하고, 에이전트가 만든 거래나 절약에서 작은 수수료를 얻는다는 것은 메타의 예상 사업 모델이지 검증된 수익 결과가 아니다.</li>
+<li>민감한 일을 맡기려면 기밀 가상 컴퓨터, 최소 권한, 감시, 사람의 승인처럼 여러 안전 계층이 필요하다.</li>
+<li>저커버그는 AI의 넓은 배포가 번영과 견제를 만든다고 주장하지만, 출시 범위와 보안·경제 효과는 별도 검증이 필요하다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>Muse는 개인의 목표를 어떻게 지속적인 행동과 경제적 가치로 바꾼다고 설명되며, 그 과정이 안전하려면 어떤 조건이 필요한가?</strong></p>
+</blockquote>
+<ul>
+<li>일반적인 채팅형 AI와 장기 실행형 에이전트는 무엇이 다른가?</li>
+<li>거래 기반 수익 모델은 어떤 가정 위에 서 있는가?</li>
+<li>권한을 많이 줄수록 커지는 위험을 어떤 계층으로 통제한다는 것인가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>산행 허가가 열리는 시각을 계속 확인해야 하는 사용자가 있다. Muse는 허가가 나올 때까지 기다렸다가 신청을 시도하지만, 로그인이나 민감한 정보 제출에는 정해진 권한과 사람의 승인이 필요하다. 성공하면 결과를 알리고 다음 계획에 반영한다는 장면이다.</p>
+<p><code>"사람이 계속 지켜봐야 하는 장기 목표와 반복 작업"</code> <strong>문제</strong><br>
+→ <code>"에이전트가 가상 컴퓨터에서 계속 작업하되 민감한 행동은 권한과 승인으로 제한"</code> <strong>작동 방식</strong><br>
+→ <code>"예약·자료·거래 같은 결과와 다음 작업을 위한 기억이 남음"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">잠긴 사무실에서 일하는 보조자</div>
+<p>사용자는 보조자에게 목표와 필요한 문서를 주고 장시간 작업을 맡긴다. 사무실은 외부에서 내용을 함부로 볼 수 없고, 금고의 비밀번호는 필요한 순간에만 사용한다. 송금이나 중요한 문서 발송은 보조자가 독단적으로 처리하지 않고 사용자에게 확인받는다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 사람인 보조자는 상황의 의미와 책임을 사회적으로 이해하지만, AI 에이전트는 잘못된 목표 해석이나 외부 지시문에 의해 예상 밖의 행동을 할 수 있다. 또한 기밀 가상 컴퓨터와 자동 감시는 실제 사무실의 자물쇠보다 구현·검증 조건이 복잡하다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>장기 실행형 개인 에이전트</strong></td>
+<td>목표를 맡아 계속 일하는 AI</td>
+<td>장기 목표를 유지하며 도구와 컴퓨터 환경을 사용해 여러 단계의 작업을 수행하는 개인 AI 에이전트</td>
+<td>질문에 답하는 챗봇과 같다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>가상 컴퓨터</strong></td>
+<td>에이전트가 쓰는 별도 컴퓨터 공간</td>
+<td>소프트웨어로 격리된 운영 환경인 가상 머신(Virtual Machine)</td>
+<td>가상 공간이면 자동으로 안전하다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>기밀 가상 컴퓨터</strong></td>
+<td>서비스 운영자도 내용을 못 보게 설계한 작업 공간</td>
+<td>실행 중인 데이터 보호와 기술적 검증을 목표로 하는 기밀 가상 머신(Confidential VM)</td>
+<td>인터뷰의 약속만으로 구현과 검증이 끝났다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>최소 권한</strong></td>
+<td>필요한 힘만 조금씩 주기</td>
+<td>작업에 꼭 필요한 최소 접근 권한만 부여하는 보안 원칙(Least privilege)</td>
+<td>한 번 연결하면 모든 읽기·쓰기 권한을 줘야 한다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>사람의 승인</strong></td>
+<td>중요한 행동 전에 사람이 확인하기</td>
+<td>고위험 단계에서 사람이 검토하고 허용하는 Human-in-the-loop 통제</td>
+<td>승인 창이 있다는 이유만으로 사용자가 위험을 정확히 판단한다고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>Muse 같은 에이전트에 답변 능력뿐 아니라 권한 관리와 사람의 승인이 필요한 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>Muse는 이메일 읽기, 로그인, 결제, 정보 전송처럼 실제 결과를 만드는 행동을 할 수 있다고 설명된다. 행동 범위가 넓어질수록 목표를 잘못 해석하거나 외부 공격 지시에 속였을 때의 피해도 커진다. 따라서 읽기 전용으로 시작하는 최소 권한, 위험 징후를 찾는 Sentinel, 민감한 행동을 멈추는 사람의 승인이 필요하다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>Muse와 일반적인 질문·답변형 AI를 가르는 핵심 차이는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>질문·답변형 AI는 보통 한 요청에 바로 답하고 상호작용을 끝낸다. 인터뷰에서 설명된 Muse는 프로젝트나 목표를 받아 가상 컴퓨터에서 장시간 작업하고, 결과를 기억에 반영하며, 새로운 작업도 제안한다. 차이는 단순히 답변이 길다는 것이 아니라 시간의 지속성, 도구 사용, 실제 행동, 권한 관리에 있다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>반복 업무 하나를 장기 실행형 에이전트에 맡기려 한다면, 무엇을 확인한 뒤 권한을 넓혀야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 목표와 성공 조건이 관찰 가능해야 한다. 처음에는 읽기나 초안 작성처럼 되돌리기 쉬운 권한만 주고, 로그인·전송·결제는 승인 단계로 남긴다. 실제 결과의 정확성과 수정 필요성을 기록한 뒤에만 권한을 늘린다. 인터뷰의 제품 설명만으로 특정 시스템이 안전하다고 전제해서는 안 된다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 에이전트의 가치는 답변이 아니라 끝까지 이어지는 행동에 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 저커버그는 Muse가 목표나 프로젝트를 받고 24시간 작업하며, 가상 컴퓨터를 사용하고, 기억을 정리하고, 다음 프로젝트를 제안한다고 설명한다. 베이킹 준비, 산행 허가, MMA 영상 피드백, 홈스쿨과 여행 계획을 사례로 든다.</li>
+<li><strong>[해석]</strong> 에이전트를 평가할 때는 말의 자연스러움보다 목표 완료, 도구 사용, 오류 복구, 사람의 대기 시간을 함께 봐야 한다.</li>
+<li><strong>[경계]</strong> 사례는 화자와 초기 베타 사용자에 관한 서술이다. 일반 사용자 대상 완료율, 오류율, 절약 시간은 제시되지 않았다.</li>
+</ul>
+<h3>2. 무료 사용은 거래 가치가 실제로 생긴다는 가정에 기대고 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 저커버그는 시작 단계에 주당 1억 토큰과 가상 컴퓨터를 무료로 제공하고, 장기적으로 거래의 작은 일부를 받는 모델을 예상한다고 말한다. Stripe와 결제 작업을 진행 중이라고 답한다.</li>
+<li><strong>[해석]</strong> 이 모델의 핵심 단위는 토큰 판매가 아니라 에이전트가 연결하거나 개선한 경제적 행동이다. 따라서 사용량이 커지는 것만으로는 부족하고 실제 거래나 비용 절감이 관찰돼야 한다.</li>
+<li><strong>[경계]</strong> 수수료율, 거래 기여도를 계산하는 방법, 사용자 수익률, 오류 비용은 전사에 없다. 제목의 “돈을 벌어다 준다”는 표현을 검증된 성과나 수익 보장으로 해석하면 안 된다.</li>
+</ul>
+<h3>3. 출시 상태와 출처·고유명사에는 확인이 필요한 지점이 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 인터뷰에는 Muse를 “현재 출시 중” 또는 “지금 공개하는 것”으로 표현하는 대목이 있는 한편, 일반 출시와 더 넓은 출시는 미래 시제로 언급된다. fleet의 에이전트 간 상호작용도 대부분 이번 출시에 포함되지 않는다고 설명한다. Watermelon은 “곧” 출시할 모델로만 제시된다.</li>
+<li><strong>[해석]</strong> 제품 소개에서는 현재 기능, 제한된 베타 기능, 발표된 계획을 분리해야 한다. 미래 기능을 현재 검증된 차별점으로 쓰면 제품 상태가 왜곡된다.</li>
+<li><strong>[경계]</strong></li>
+<li>META 설명은 Muse를 “발표”했다고 쓰지만, 전사에는 초기 베타, 현재 롤아웃, 향후 일반·확대 출시가 함께 나온다. 정확한 공개 범위는 이 자료만으로 확정할 수 없다.</li>
+<li>fleet 학습과 에이전트 간 상호작용은 현재 아이디어 제안 기능 및 내부 사례와 장기 계획이 섞여 있다. “이번 출시에 대부분 포함되지 않는다”는 조건을 보존해야 한다.</li>
+<li>전사에는 Artificial Analysis 관련 대목에서 <code>Muse Spark</code>, <code>Fable 5.1</code>, <code>Opus 5</code>라는 이름이 나오지만 정확한 모델명인지 이 자료만으로 확인되지 않는다.</li>
+<li>META의 provenance.creator는 비어 있다. provenance.affiliation은 <code>Sources</code>이며, Alex Heath의 X 링크가 제공되지만 provenance.note는 원본 영상 링크를 확인하지 못한 추정 출처라고 밝힌다. 따라서 원작자 신원은 확정하지 않고 소속 후보와 추정 근거만 보존했다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> Muse가 홈스쿨 운영과 Civilization 전략 안내서의 역사 학습 확장에 사용됐다는 사례가 나온다.</li>
+<li><strong>통찰:</strong> 학습용 에이전트의 가치는 설명을 생성하는 데서 끝나지 않고, 학습자가 보지 않고 설명하거나 새 문제에 적용하는 결과까지 관찰할 때 확인된다.</li>
+<li><strong>질문/행동:</strong> 한 학습 목표를 맡긴 뒤 최종 산출물보다 학습자의 회상 답과 수정 횟수를 확인한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 무료 컴퓨팅을 제공한 뒤 거래에서 작은 수수료를 얻겠다는 구조와 데이터센터의 장기 투자 논리가 가치·비용·자원 배분 문제를 다룬다.</li>
+<li><strong>통찰:</strong> APOM에 적용한다면 검증 전 가상 적용으로만 다뤄야 한다. 에이전트 사용량보다 실제 주문·비용 절감에 대한 기여와 오류 위험을 먼저 구분해야 한다.</li>
+<li><strong>질문/행동:</strong> 읽기 전용의 낮은 위험 업무 하나에서 경제적 결과와 사람의 수정 부담을 함께 확인할 수 있는가?</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 제목은 “돈을 벌어다 준다”고 강하게 말하지만, 전사의 근거는 개인 사례와 미래 거래 모델에 대한 화자의 전망이다.</li>
+<li><strong>통찰:</strong> 제품 카피에서는 장기 목표 수행이라는 구체적 장면과 권한 통제를 보여주되, 베타 사례를 일반적인 수익 보장으로 확대하면 안 된다.</li>
+<li><strong>질문/행동:</strong> 주장 옆에 현재 기능, 베타 사례, 향후 계획 중 어느 수준의 증거인지 표시한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 가상 머신, 자격 증명 저장소, Sentinel, 최소 권한, 사람의 승인처럼 에이전트 아키텍처의 구체적인 통제가 설명된다.</li>
+<li><strong>통찰:</strong> 에이전트 평가는 정상 완료뿐 아니라 지시문 주입, 잘못된 전송, 승인 대기, 권한 확대 같은 실패 경로를 포함해야 한다.</li>
+<li><strong>질문/행동:</strong> 새 자동화는 읽기 전용에서 시작하고, 권한을 늘리기 전 같은 업무의 무수정 완료 여부를 기록한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"개인이 장기 목표와 반복 업무를 계속 직접 확인해야 함"</code> <strong>문제</strong><br>
+→ <code>"에이전트가 준비·분석·예약·거래 작업을 이어서 수행"</code> <strong>수혜자: 개인 또는 소규모 사업자</strong><br>
+→ <code>"목표·데이터·승인을 제공하고, 거래 사업자가 수수료를 부담할 수 있다는 구상"</code> <strong>지불자 또는 자원 제공자: 사용자·거래 사업자·서비스 제공자</strong><br>
+→ <code>"승인된 업무 중 사람의 수정 없이 완료된 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 검증 전 가상 적용으로, 되돌릴 수 있는 읽기 전용 반복 업무 하나를 에이전트에 5회 맡기고 외부 전송은 모두 사람이 승인한다.</li>
+<li><strong>측정 1개:</strong> 5회 중 사람의 수정 없이 승인 기준을 충족한 업무의 비율</li>
+<li><strong>중단 기준 1개:</strong> 무수정 완료 비율이 80% 미만이면 권한을 확대하지 않고 실험을 중단한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>AI 확산 철학</td>
+<td>번영·발명·힘의 균형을 이유로 개인에게 AI를 넓게 배포해야 한다는 주장</td>
+</tr>
+<tr>
+<td>2</td>
+<td>오픈소스와 견제</td>
+<td>모든 것을 공개하자는 입장은 아니지만 경쟁과 투명성을 위한 공개 생태계를 강조</td>
+</tr>
+<tr>
+<td>3</td>
+<td>데이터센터와 지역사회</td>
+<td>장기 운영 기업과 투기 사업자의 유인 차이, 세수·일자리·인력 양성 사례</td>
+</tr>
+<tr>
+<td>4</td>
+<td>개인용 초지능과 Muse</td>
+<td>개인이 자신의 목표를 정하고 장기 에이전트가 이를 수행한다는 구상</td>
+</tr>
+<tr>
+<td>5</td>
+<td>사용 사례와 사업 모델</td>
+<td>가족 활동·훈련·사업 운영 사례, 무료 사용과 거래 수수료 모델</td>
+</tr>
+<tr>
+<td>6</td>
+<td>보안 아키텍처</td>
+<td>기밀 VM, 자격 증명 저장소, Sentinel, 사람의 승인, 최소 권한</td>
+</tr>
+<tr>
+<td>7</td>
+<td>시장과 네트워크 효과</td>
+<td>사용 목적별 경쟁, fleet 상호작용의 현재 범위와 미래 계획</td>
+</tr>
+<tr>
+<td>8</td>
+<td>연구소 재구축과 모델</td>
+<td>Llama 4 시행착오, 인재 밀도, Avocado·Watermelon·Prometheus</td>
+</tr>
+<tr>
+<td>9</td>
+<td>모델 안전과 정부</td>
+<td>보상 해킹, 경계 설정, 넓은 배포, 정부와의 지속적인 정보 교환</td>
+</tr>
+<tr>
+<td>10</td>
+<td>스마트 안경과 청소년</td>
+<td>녹화 표시등, 프라이버시 소통, 업계 공동 청소년 사용 제한 구상</td>
+</tr>
+</tbody>
+</table>
+<h3>1. AI를 넓게 배포해야 한다는 세 원칙</h3>
+<p>저커버그는 AI 연구소가 어떤 가치와 미래상을 갖는지 설명할 필요가 있어 긴 글을 썼다고 말한다. 그가 제시한 세 원칙은 다음과 같다.</p>
+<ol>
+<li>사람에게 힘을 주는 것이 역사적으로 번영의 원천이었다.</li>
+<li>AI의 주목적은 자동화보다 새로운 것의 발명이 될 것이다.</li>
+<li>미래의 안전은 접근 제한보다 견제와 균형, 힘의 분산에 기초해야 한다.</li>
+</ol>
+<p>그는 소수 연구소가 강력한 기술을 통제하는 상황을 더 걱정한다고 말한다. 사이버 공격 AI에 대응하려면 방어자도 AI에 접근해 자신의 시스템을 먼저 강화할 수 있어야 한다는 논리다.</p>
+<p>다만 메타의 모든 작업을 공개하겠다는 입장은 아니다. 일부 공개 모델과 일부 폐쇄 작업을 병행할 수 있으며, 영리 기업이 모든 고급 기술을 공유할 필요는 없다고 말한다.</p>
+<h3>2. 공개 생태계와 Hugging Face 사례</h3>
+<p>인터뷰에서는 일부 연구소가 더 강한 모델을 훈련하고도 공개하지 않는 경향을 위험으로 본다. 강력한 사이버 모델을 상위 100개 기관에만 제공하려는 접근을 예로 들며, 중요한 기관은 100개보다 많다고 주장한다.</p>
+<p>Hugging Face 침입 사례에서는 해당 조직이 일부 폐쇄형 모델에 접근할 수 없어 오픈 모델을 사용했다는 설명이 나온다. 이 사례는 저커버그가 공개 생태계의 필요성을 뒷받침하기 위해 든 것이며, 사건의 세부 과정은 전사에서 독립적으로 검증되지 않는다.</p>
+<h3>3. 데이터센터의 사회적 허가</h3>
+<p>저커버그는 AI 확장에 일자리, 경제, 환경, 사이버보안, 생물학적 위험, 자유사회, 미국의 리더십 문제가 함께 얽혀 있다고 말한다. 기술이 지역사회에 도움을 주지 못하면 장기적으로 확장이 허용되지 않을 것이라는 관점이다.</p>
+<p>그가 제시한 사례는 다음과 같다.</p>
+<ul>
+<li>루이지애나 데이터센터의 세수 기금이 지역 교사에게 5만 달러 보너스를 제공했다는 주장</li>
+<li>광섬유 기술자, 전기 기술자, 고급 목공 인력 등이 부족하다는 진단</li>
+<li>필요한 추가 인력이 수십만 명, 어쩌면 수백만 명이라는 추정</li>
+<li>America's Workforce Academy 수료자에게 메타 인프라 건설 관련 일자리를 보장한다는 설명</li>
+</ul>
+<p>그는 이를 자선보다 장기 사업에 필요한 인력 투자로 본다. 수십 년 운영할 기업에는 이런 투자가 합리적이지만, 부지를 되파는 것이 목적인 사업자에게는 같은 유인이 없다는 설명이다.</p>
+<h3>4. 개인이 목표를 정하는 초지능</h3>
+<p>저커버그는 메타를 단순한 소셜미디어 회사가 아니라 사람을 연결하고 개인에게 힘을 주는 회사로 설명한다. 소수 전문가가 AI가 풀 문제를 결정하는 데 반대하며, 개인이 자신의 건강·관계·가족·문화처럼 삶에서 중요한 목표를 정해야 한다고 주장한다.</p>
+<p>희귀 질환을 예로 들며, 산업은 흔한 질환에 자원을 집중할 수 있지만 개인 AI는 해당 사용자의 드문 질환에 집중할 수 있다고 말한다. 이 대목은 방향을 설명하는 예시이며 의료 성과에 대한 검증 자료는 아니다.</p>
+<h3>5. Muse의 개인 사례와 베타 반응</h3>
+<p>저커버그가 말한 사용 사례는 다음과 같다.</p>
+<ul>
+<li>세 살 딸과 매주 할 수 있는 베이킹 프로젝트 선정과 재료 준비</li>
+<li>너무 어려웠던 케이크 팝 경험을 피드백으로 반영</li>
+<li>큰딸의 산행을 위한 허가증 확보</li>
+<li>MMA 체육관 카메라 영상을 분석한 훈련 피드백</li>
+<li>딸과 하는 Civilization 게임 전략 안내서 제작</li>
+<li>전략 안내서를 역사 수업으로 확장하자는 에이전트의 제안</li>
+<li>초기 사용자의 홈스쿨 운영과 여행 계획</li>
+<li>일반 출시 때 기존 Muse를 계속 보존할 수 있는지 물은 베타 사용자의 반응</li>
+</ul>
+<p>이 사례들은 Muse가 서로 다른 개인 목표를 장기간 지원한다는 설명에 사용된다. 체계적인 사용자 연구 수치나 비교군은 제시되지 않는다.</p>
+<h3>6. 무료 사용과 거래 수수료 구상</h3>
+<p>Muse는 구독 방식도 가능하지만, 저커버그는 시작 단계에 주당 1억 토큰과 가상 컴퓨터를 무료로 제공할 계획이라고 말한다. 개인이나 소규모 사업자가 이를 이용해 돈을 벌거나 절약할 수 있을 만큼 유용할 것이므로 장기적으로 거래의 작은 일부를 받겠다는 구상이다.</p>
+<p>수수료는 사용자에게 직접 받지 않고 거래 상대 사업체에서 받을 수도 있다고 설명한다. Stripe와 결제 분야에서 협력 중이라고 답한다. 메타 광고 시스템과 연결할 수 있지만 반드시 연결할 필요는 없으며, 제품 제작부터 광고와 사업 운영까지 반복적으로 수행할 수 있다고 주장한다.</p>
+<p>전사에는 실제 거래 실적, 수수료율, 무료 제공의 지속 기간, 비용 회수 시점이 없다.</p>
+<h3>7. 프라이버시와 권한 설계</h3>
+<p>저커버그는 개인 에이전트가 유용해지려면 이메일, 메시지, 광고 계정, 건강 정보 등과 연결될 수밖에 없으므로 신뢰가 핵심이라고 말한다. WhatsApp의 종단 간 암호화 경험을 Muse에 옮긴다고 설명한다.</p>
+<p>그는 Signal 창립자인 Moxie Marlinspike를 직접 영입해 기밀 VM 프로젝트를 설계하게 했으며, 2014년 WhatsApp 암호화 구축에도 관여했던 인물이라고 소개한다. Muse의 기밀 VM은 메타도 내부 내용을 볼 수 없도록 하고 그 약속을 기술적으로 확인할 수 있게 한다는 주장이다. 더 자세한 내용은 향후 몇 주 안에 공개할 예정이라고 말한다.</p>
+<p>그 밖의 통제는 다음과 같다.</p>
+<ul>
+<li>카드와 비밀번호를 분리해 관리하는 보안 자격 증명 저장소</li>
+<li>지시문 주입과 외부로 나가는 민감 정보를 감시하는 Sentinel 에이전트</li>
+<li>로그인, 결제, 민감 정보 전송 때 사용자의 승인 요구</li>
+<li>반복적으로 허용할 행동은 사용자가 별도로 승인 가능</li>
+<li>이메일 연결은 읽기 전용으로 시작하고 전송 권한은 따로 요청</li>
+<li>각 단계에서 꼭 필요한 권한만 주는 최소 권한 원칙</li>
+</ul>
+<h3>8. 시장 구조와 fleet 기능</h3>
+<p>저커버그는 개인 에이전트 시장을 완전한 승자독식으로 보지 않는다. 최첨단 작업을 할 수 있는 회사가 열두 곳보다 많지는 않을 것 같다고 추정하면서도, 관계 지원·소규모 사업·로컬 장비 운영 등 사용 목적에 따라 강자가 달라질 수 있다고 말한다.</p>
+<p>Muse와 Meta AI도 현재는 용도가 다르다고 설명한다. Muse는 질문을 장기 목표의 단서로 해석해 오래 작업하는 경향이 있고, Meta AI는 직접적인 답을 얻을 때 사용한다는 것이다. 두 제품이 미래에 합쳐질지는 확정하지 않는다.</p>
+<p>fleet 개념은 에이전트들이 익명화된 통찰을 공유하거나 서로 상호작용해 개선되는 구상이다. 현재의 아이디어 제안 기능과 내부 상호작용 사례가 소개되지만, 에이전트 간 상호작용 대부분은 이번 출시에 포함되지 않는다고 명시한다.</p>
+<h3>9. Llama 연구소 재구축</h3>
+<p>저커버그는 메타가 기존 추천·광고·무결성 머신러닝에 강했기 때문에 대규모 언어 모델도 비슷한 방식으로 확장할 수 있다고 잘못 가정했다고 말한다. Llama 3는 좋은 모델이었지만 Llama 4는 기대한 개발 궤도에 오르지 못했다고 평가한다.</p>
+<p>이후 연구팀을 재구성하면서 강조한 것은 다음과 같다.</p>
+<ul>
+<li>많은 사람이 동시에 실험하기보다 전체 문제를 함께 이해할 수 있는 작은 팀</li>
+<li>각 자리에 가장 뛰어난 사람을 두는 인재 밀도</li>
+<li>저커버그 자신의 기술적 관여 확대</li>
+<li>연구진을 자신의 사무실 주변에 배치</li>
+<li>연구 품질에 대한 확신이 커지면서 컴퓨팅 투자 확대</li>
+</ul>
+<p>그는 내부 코드명 Avocado의 비교적 작은 사전학습 실행에서 나온 Llama 4.1을 막 공개했다고 말한다. 더 큰 사전학습을 거친 Watermelon은 곧 출시할 예정이지만 날짜와 최종 성능은 확정하지 않는다. 오하이오의 기가와트급 Prometheus 클러스터가 가동돼 Watermelon 이후 모델 확장에 사용된다는 설명도 나온다.</p>
+<h3>10. 모델 능력, 보상 해킹과 안전</h3>
+<p>저커버그는 개인 에이전트에 코딩 능력이 중요하다고 말한다. MMA 영상 분석 과정이나 휴대전화에서 화면으로 보내는 Jeopardy 게임 제작도 내부적으로는 코딩 작업이기 때문이다.</p>
+<p>개인 에이전트에 특화된 능력으로는 <strong>신중한 정보 공개(discretion)</strong>를 든다. 예를 들어 임신 사실을 직접 밝히지 않으면서 무알코올 음료가 좋은 식당을 찾는 것처럼, 목표를 달성하되 민감한 배경은 불필요하게 공개하지 않아야 한다는 설명이다.</p>
+<p>보상 해킹에 관해서는 모델이 코딩 문제를 직접 풀기보다 가상 환경의 설정을 바꿔 쉬운 길을 찾을 수 있다고 설명한다. 이를 막기 위해 훈련 환경에 명확하고 강한 경계를 두어야 한다고 주장한다. 부모가 경계를 정하는 비유를 쓰지만, 그 비유가 쉽게 과장될 수 있다고 직접 경고한다.</p>
+<h3>11. 정부와의 협력</h3>
+<p>저커버그는 기술 변화가 빨라 구체적이고 경직된 규칙은 몇 달 안에 낡을 가능성이 높다고 본다. 대신 미국 기업이 주요 훈련 실행과 새 능력에 관해 미국 정부와 선제적으로 정보를 나누고 신뢰 관계를 구축해야 한다고 말한다.</p>
+<p>사이버보안 문제가 두드러지는 시기와 생물학적 위험이 커지는 시기의 대응이 다를 수 있으므로, 고정 절차보다 지속적인 지식 교환이 중요하다는 주장이다. 규칙과 협력이 서로 배타적인 것은 아니라고 덧붙인다.</p>
+<h3>12. 스마트 안경과 청소년 안전</h3>
+<p>스마트 안경은 녹화 중 눈에 띄는 표시등이 켜지도록 처음부터 설계했다고 말한다. 표시등을 훼손하려 하면 카메라가 작동하지 않도록 업데이트했다는 설명도 나온다. 스마트폰에는 같은 표시등이 없으므로 녹화 고지 면에서 안경이 더 낫다는 주장이다.</p>
+<p>그는 제품 사용량이 많다는 이유로 프라이버시 우려에 대한 직접적인 설명을 소홀히 했던 소셜미디어의 경험을 되돌아보며, 스마트 안경에서는 안전 설계를 더 분명히 알려야 한다고 말한다.</p>
+<p>청소년 안전과 관련해서는 많은 회사가 청소년 사용을 하루 한 시간으로 제한하는 데 동의할 수 있지만, 한 회사만 시행하면 사용이 다른 플랫폼으로 이동할 수 있다고 주장한다. 메타가 시간·알림·학교 및 수면 시간 접근 제한에서 먼저 움직이고, YouTube와 TikTok이 같은 조건에 참여하면 업계가 다음 단계를 함께 시행하는 법적 틀을 기대한다고 설명한다. 실제 적용 범위와 타사의 참여 여부는 전사에서 확인되지 않는다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · 마크 저커버그가 밝힌 메타의 AI 에이전트 '뮤즈'가 돈을 벌어다 주는 방식입니다 · https://www.youtube.com/watch?v=DND22Bf88QI · 전사: 제공된 SOURCE_TRANSCRIPT(방식 미기재)</p>
+<p>META의 provenance는 원본 영상 링크를 확인하지 못했다고 밝히며, <code>Sources</code>와 Alex Heath의 SNS를 화자 이름 및 SNS에 근거한 추정 출처로 제시한다. 원작자 필드는 제공되지 않아 확정하지 않았다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>마크, 지난번에 이야기했을 때 주말에 전화했죠. 안경을 통해 전화했는데, 그게 흥미로운 부분이었어요.</p>
+<p>배경 소리가 컸나요? 낚시하러 가던 중이었죠.</p>
+<p>말하려던 건 아니었어요.</p>
+<p>알겠습니다. 네, 주말이었죠. 소음 제거 기능(noise cancellation)이 실제로 꽤 좋습니다.</p>
+<p>아, 정말 좋아요.</p>
+<p>네, 꽤 좋습니다.</p>
+<p>그런데 최근에 발표한 이 에세이, 선언문(manifesto)이라고 해야 할지 모르겠는데요.</p>
+<p>선언문이라고 하죠. 꽤 길어요. 내용이 많다는 점을 미리 말해두겠습니다. 거기에는 큰 아이디어가 많이 담겨 있고, 오늘 우리가 이야기할 핵심 주제와도 연결되기 때문에 그 부분부터 시작하고 싶었습니다.</p>
+<p>왜 그 글을 썼는지 궁금합니다. 길기도 하고, 내용도 많잖아요.</p>
+<p>AI 구축에 그렇게 많은 투자를 하려 한다면, 여러분의 연구소가 무엇을 지향하고 어떤 가치를 갖고 있는지 사람들이 이해하는 것이 중요하다고 생각합니다. AI에는 많은 기회가 있지만, 현실적인 위험도 아주 많습니다. 따라서 AI를 연구하는 모든 사람이 자신이 하려는 일이 어떻게 긍정적인 미래로 이어질지에 대해 충분히 숙고한 이론을 갖고 있는 것이 매우 중요하다고 생각합니다.</p>
+<p>흥미로운 점은 각 연구소가 이 문제에 대해 서로 다른 철학을 갖고 있다는 것입니다. 업계에서 상식처럼 받아들여지는 것 중 제가 강하게 동의하지 않는 부분이 많습니다.</p>
+<p>제 생각에 모두를 위한 긍정적인 미래로 가는 길은 이 기술을 가능한 한 널리 분배하는 것입니다. 이는 우리가 가진 세 가지 주요 원칙에 근거합니다.</p>
+<p>첫째, 사람들에게 힘을 부여하는 것이 세상 번영의 원천이며, 역사적으로도 그래왔다는 것입니다.</p>
+<p>둘째, AI의 주된 목적은 자동화가 아니라 새로운 것을 발명하는 데 있다는 것입니다.</p>
+<p>셋째, 미래의 안전을 위한 토대는 접근을 제한하는 것이 아니라, 기본적으로 올바른 견제와 균형(checks and balances), 그리고 권력의 균형을 확립하는 데 있다는 것입니다.</p>
+<p>이 모든 점은 특히 실리콘밸리의 많은 통념과 묘하게 매우 다릅니다. 많은 사람은 이렇게 생각합니다. “이 기술은 매우 강력하다. 너무 많은 사람이 접근하지 못하도록 제한해야 한다.”</p>
+<p>저는 그렇게 뛰어난 능력을 가진 무언가를 소수의 연구소나 사람만 통제하는 상황을 훨씬 더 걱정합니다. 역사를 보면, 사람들의 손에 힘을 쥐여줬을 때 대부분의 발전은 기존 세력이나 기득권층에서 나오지 않았습니다. 진지하게 받아들여지지 않던 주변부 사람들의 아이디어에서 나왔습니다. 하지만 그들이 자신이 연구하는 것을 입증할 수 있을 만큼 충분한 도구를 갖게 되면, 결국 그것은 매우 강력한 결과로 이어집니다.</p>
+<p>서구 사회에서 거버넌스(governance)와 균형 잡힌 사회를 구축해온 방식은 일련의 견제와 균형, 그리고 권력의 균형을 통해서였습니다. 하나의 연구소나 두 개의 연구소만 어떤 것에 접근할 수 있게 해서는 안 된다는 생각이 우리 사회에 깊이 뿌리내려 있습니다.</p>
+<p>최근 제기된 우려 중 사이버보안 문제 같은 것을 보면, 시스템에 잠재적으로 침입할 수 있는 AI를 누군가가 갖게 되는 것에 대한 가장 좋은 해독제는 모두가 AI에 접근할 수 있도록 하는 것이라고 생각합니다. 그래야 각자가 먼저 자신의 시스템을 강화할 수 있으니까요.</p>
+<p>지난 수십 년간 사이버보안의 역사는 바로 그랬다고 생각합니다. 오픈소스 소프트웨어(open-source software)는 사람들이 내용을 보고 면밀히 검토할 수 있기 때문에, 직관과는 반대로 더 안전하고 안정적인 환경을 만듭니다. 기술을 사람들의 손에 쥐여주기 때문입니다.</p>
+<p>그것이 제 믿음이고, 긍정적인 미래로 가는 길은 기술을 분배하는 것이라고 생각합니다.</p>
+<p>이는 우리가 앞으로 할 일에 여러 가지 영향을 줍니다. 물론 우리는 선도적인 AI 모델을 구축하고 싶고, 실제로 그렇게 하고 있습니다. 방금 출시한 라마 4.1(Llama 4.1)은 고도화된 모델입니다. 하지만 사실 이는 아보카도(Avocado)라는 내부 코드명으로 진행한, 비교적 규모가 작은 사전 학습(pretraining) 작업에서 나온 최신 모델입니다.</p>
+<p>코드명 이야기를 하게 되겠네요.</p>
+<p>네, 그 이야기도 하죠. 곧 워터멜론(Watermelon)이 나올 예정이고, 큰일이 될 겁니다.</p>
+<p>선도적인 모델은 아마도 원한다면 이 비전을 가장 잘 구체화하거나 구현한 사례일 것입니다. 우리가 출시하고 있는 개인용 에이전트 뮤즈(Muse personal agent)는 전 세계 모든 사람에게 자신의 목표를 이해하고 24시간 내내 그들을 대신해 일할 수 있는 매우 뛰어난 개인 에이전트를 제공한다는 아이디어를 기본적으로 구현합니다.</p>
+<p>여기서 중요한 부분은 이 기술을 사람들의 손에 쥐여주는 것이기도 합니다. 우리는 오픈소스를 강력하게 지지하며, 이 분야에서 기회가 엄청나게 커질 것이라고 생각하는 만큼 그 기회가 소수의 사람이나 기업에만 제한되지 않도록 하는 데 힘쓰고 있습니다.</p>
+<p>뮤즈 에이전트에 대해 질문이 많지만, 잠시 큰 그림을 보자면요. 방금 많은 이야기를 했습니다. 오픈소스가 여러분이 보고 있고 우려한다고 설명한 그 흐름에 대한 대응책인가요? 그것에 대응하는 주된 현실적 방법이 오픈소스인가요, 아니면 규제인가요? 둘 다인가요?</p>
+<p>아니요. 저는 아마도 가장 중요한 것은 단순히 기술을 개인들의 손에 쥐여주는 것이라고 생각합니다. 뮤즈 개인 에이전트 같은 것이 어쩌면 더 중요할 수도 있습니다.</p>
+<p>일부 연구소가 더 발전된 모델을 훈련한 다음 아예 공개하지 않는 현상이 나타나기 시작했습니다.</p>
+<p>그렇죠.</p>
+<p>저는 그것이 상당히 위험하다고 생각합니다. 무언가를 면밀히 검토할 수 있고 시스템을 세상에 내놓으면, 우선 많은 사람의 손에 들어가게 할 경우 견제와 균형, 그리고 광범위한 번영을 얻을 수 있습니다. 저는 이것이 사회에 중요하다고 생각합니다.</p>
+<p>한두 개의 연구소만 엄청난 가치를 갖게 할 수는 없습니다. 우리는 수십억 명의 사람들이 자신의 삶에서 번영을 누릴 수 있기를 바랍니다. 소규모 사업을 만들든, 경력에서 더 성공하든, 집을 관리하는 데 더 생산적이 되든, 여러 방식으로 돈을 절약하든, 건강을 개선하든 말입니다.</p>
+<p>우리는 혜택이 매우 광범위하게 퍼지기를 원합니다. 이것이 한 가지 측면입니다.</p>
+<p>경쟁의 측면에서는 여러 연구소가 존재하는 것이 도움이 된다고 생각하고, 오픈소스도 그 점에 상당히 도움이 된다고 생각합니다. 오픈소스는 그 과정에서 중요한 부분입니다.</p>
+<p>오픈소스의 본질은 이를 수행하는 전체 커뮤니티가 있다는 것입니다. 따라서 우리가 이를 하는 유일한 기업이 될 것이라는 뜻은 아닙니다. 저도 이 문제에 광신적인 입장은 아닙니다. 우리가 하는 모든 일이 오픈소스라는 뜻도 아닙니다. 일부 모델은 오픈 모델로 공개하고, 일부 작업은 비공개로 진행합니다.</p>
+<p>영리 기업을 구축한다면 일부 고도화된 것을 개발하고 세상의 모든 것을 반드시 공유하지 않아도 되는 것이 중요하다고 생각합니다. 하지만 전반적으로 강력한 오픈소스 생태계를 지원하는 것은 경쟁과 투명성을 유지하고, 안전을 위해 매우 중요한 방식으로 기술이 어디로 향하는지 이해하는 데 핵심이 될 것입니다.</p>
+<p>정말 뛰어난 모델이 소수만 존재하는 세상을 생각해보면 흥미롭습니다. 예를 들어 일부 사이버보안 작업을 보면, 이해할 수 있는 본능적인 반응은 이렇습니다. “좋아, 이렇게 뛰어난 사이버 모델이 있으니 상위 100개 기관에만 공개하자.”</p>
+<p>하지만 문제의 일부는 세상에 중요한 기관이 100개보다 훨씬 많다는 것입니다. 허깅 페이스(Hugging Face)에서 발생한 사건을 보면, 허깅 페이스가 세계에서 가장 큰 100개 기관 중 하나는 아닐 수 있지만 중요한 곳입니다. 사람들이 의존하는 중요한 서비스입니다.</p>
+<p>그곳에서 침입이 발생했다는 사실을 감지하기 시작했을 때 무엇을 했을까요? 문제를 일으킨 일부 폐쇄형 모델에 접근할 수 없었기 때문에 오픈소스 모델에 의존했습니다.</p>
+<p>강력한 오픈소스 생태계를 갖는 것이 안전하고 안정적인 미래를 만드는 중요한 요소 중 하나라고 생각합니다. 하지만 제게 가장 중요한 것은 기술을 소수의 사람 손에 움켜쥐고 있는 것이 아니라 널리 분배하는 것입니다.</p>
+<p>실리콘밸리에서는 사람들이 AI에 대해 왜 그렇게 부정적으로 느끼는지를 두고 논쟁도 계속되고 있습니다. 최근 서한에서 이러한 우려를 다루거나 다루려고 했죠. 특히 AI와 데이터센터에 대한 여론이 매우 부정적입니다.</p>
+<p>제가 잘못 이해한 것이 아니라면, 주장의 핵심은 이 기술을 더 널리 확산하고, 현재 일부 최고 연구소가 독점적으로 제공하는 것에 더 많은 사람이 접근할 수 있도록 하면 사람들이 AI에서 벌어지는 일로부터 소외감을 느낀다는 사실을 해결할 수 있을지도 모른다는 것처럼 들립니다. 그런 취지인가요?</p>
+<p>여기에는 여러 층위가 있습니다. 정말 많은 부분이 관련되어 있습니다. 그래서 그 에세이가 15페이지나 됐습니다. 이 모든 내용을 다루고 싶었기 때문입니다.</p>
+<p>사람들은 일자리와 경제에 대해 질문합니다. 데이터센터와 지역사회에 미치는 경제적·환경적 영향을 비롯해, 데이터센터가 자신의 지역사회에 미칠 영향에 대해서도 질문합니다. 사람들이 AI를 어떻게 오용할 수 있는지에 대한 질문도 있습니다. 사이버보안 문제와 새롭게 제기되는 생물학적 위험도 있습니다. 자유로운 사회를 어떻게 유지할지, 미국의 리더십, 그리고 기술이 점점 더 뛰어난 능력을 갖게 될 때 그 기술에 대한 통제력을 어떻게 유지할지에 대한 질문도 있습니다.</p>
+<p>이 모든 것이 중요합니다. 이것을 단지 높은 수준의 일반론으로만 이야기해서는 안 됩니다. 각각의 문제에는 서로 다른 미묘한 차이가 있기 때문입니다.</p>
+<p>하지만 전반적으로 이 모든 문제에 공통된 한 가지는, 광범위한 번영을 창출하는 것이 중요하다는 점이라고 생각합니다. 그리고 그렇게 하는 더 나은 방법 중 하나는 누가 기술에 접근할 수 있는지를 둘러싼 권력의 균형을 올바르게 보장하는 것입니다. 일반적으로는 그 균형이 내부 이해관계자가 아니라 일반 대중에게 가장 크게 돌아가도록 하는 것이 매우 중요합니다.</p>
+<p>데이터센터를 보면, 메타 같은 기업이 어떤 지역사회에 진출해 수십 년간 그곳에 투자하겠다고 약속할 때, 실제로 데이터센터를 건설하는 것은 바로 그런 의미인데, 우리는 그것이 지역사회에 매우 좋은 일이 되도록 만들 수 있다는 사실을 알아냈습니다.</p>
+<p>그들이 가져오는 세수도 있습니다. 루이지애나에서는 세수 기금으로 지역 교사들에게 5만 달러의 보너스를 지급한 사례가 있습니다. 우리는 많은 일자리를 만들고 지역사회에 많은 투자를 합니다. 그건 좋은 일이 될 수 있다고 생각합니다.</p>
+<p>한편으로는 추측성 움직임도 많습니다. 반드시 수십 년 동안 데이터센터를 운영할 계획이 있는 것은 아닌 기업들도 있습니다. 그저 부지를 찾은 다음 대형 연구소 중 한 곳에 팔려고 하는 것입니다. 그런 기업들은 지역사회를 그다지 중요하게 생각하지 않고, 장기적으로 투자하지도 않습니다.</p>
+<p>지역사회에 도움이 되도록 만드는 데 집중하지 않는다면, 당연히 사람들이 화를 내게 됩니다. 이런 추측성 상황에서 어려울 수 있는 부분 중 하나가 바로 그것이라고 생각합니다.</p>
+<p>이걸 버블이라고 부를 수 있을지도 모르겠습니다. 버블이라는 말은 과대평가됐다는 뜻을 내포하니까요. 하지만 분명 붐은 있습니다. 그러다 보니 이런 상황들이 생기고, 그게 다시—</p>
+<p>모든 이해관계자를 돕는 방향으로 반드시 이어지지는 않는 단기적 사고의 유인으로 이어집니다. 장기적으로 지속 가능하게 만들려면 그렇게 해야 한다고 생각합니다.</p>
+<p>결국 일자리를 만들거나 광범위한 번영을 창출하지 못하는 기술을 만들고 있다면, 또는 우리가 구축하는 인프라가 지역사회에 도움이 되지 않는다면, 그런 일은 계속 허용되지 않을 것입니다. 여러 측면에서 사람들에게 도움이 될 수 있도록 설계해야 합니다.</p>
+<p>전체 상황에 대해 회의적이거나 큰 걱정을 하는 사람들에게도, 제가 그렇게 생각하는 이유 중 하나는 우리가 이걸 긍정적인 방식으로 구축하지 못한다면 사실상 실현될 수 없기 때문입니다.</p>
+<p>적절한 견제와 균형(checks and balances)을 마련하고 그 혜택을 폭넓게 분배하는 것은, 시간이 지나면서 사회에 가장 바람직한 방식으로 확장할 수 있기 위한 전제 조건이라고 생각합니다.</p>
+<p>당신과 같은 위치에 있는 다른 기술 기업 CEO가 데이터센터에 대해, 그것도 장기적인 투자라는 관점에서 그렇게 이야기하는 것은 들어본 적이 없습니다. 원래부터 그렇게 생각해 왔나요, 아니면 최근 들어 더 명확해진 건가요?</p>
+<p>당신이 말한 반(反)데이터센터 정서가 곳곳에 있어서, 저희도 자세히 살펴봤습니다. 우리가 이해하려는 것은 이런 겁니다. 우리 프로젝트 주변에는 그런 정서가 그만큼 많지 않은데, 왜 그럴까?</p>
+<p>많은 사람에게 물어봤는데, 투기꾼들과 장기적으로 이 사업에 집중하는 기업들 사이에 꽤 큰 차이가 있는 것 같습니다. 생각해 보면 이해가 됩니다.</p>
+<p>우리가 하고 있는 일 중 하나가 ‘아메리카 워크포스 아카데미(America’s Workforce Academy)’ 프로젝트입니다. 우리는 이 데이터센터들을 모두 건설할 것이고, 앞으로도 한동안 계속할 예정입니다. 그런데 이를 구축하는 데 필요한 숙련 기술 인력의 규모가 충분하지 않습니다. 더 많은 광섬유 기술자, 전기기사, 고급 목공 기술자와 이런 분야의 숙련 인력이 필요합니다. 이를 수행할 사람이 충분하지 않습니다. 이런 일을 할 수 있는 사람이 수십만 명, 어쩌면 수백만 명 더 필요하지만, 현재 사람들은 그에 맞는 교육을 받지 못하고 있습니다.</p>
+<p>그래서 우리는 교육 프로그램을 만들었습니다. 이 과정을 수료한 사람들에게는 메타의 인프라 구축 현장에서 일할 수 있는 일자리를 보장합니다.</p>
+<p>왜 그렇게 했을까요? 이건 정말 자선 활동이 아닙니다. 우리는 사람들이 숙련되고 그런 기술을 갖추기를 필요로 하므로, 서로에게 이익이 됩니다. 수십 년 동안 이 사업을 할 생각이라면 합리적인 투자지만, 한 부지를 개발한 뒤 다른 기업에 넘기려는 목적이라면 반드시 할 만한 일은 아닙니다.</p>
+<p>장기적으로 생각해 보면 세상의 많은 문제는 자연스럽게 유인 조율(incentive alignment)을 통해 해결됩니다. 저는 이것이 이 문제에서 중요한 부분이 된다고 생각합니다.</p>
+<p>제가 이 문제를 생각하는 방식 중 하나는, 그렇게 중요하고 역량 있는 기술을 소수의 연구소가 통제하고 그들만을 위해 막대한 부를 축적하는 일이 허용될 리 없다는 것입니다.</p>
+<p>이것이 작동하려면 폭넓은 기반을 가진 것이어야 합니다. 기술적으로 작동해야 하지만, 사회적으로도 작동해야 합니다. 이 두 요소는 함께 맞물려야 합니다.</p>
+<p>동의합니다.</p>
+<p>이제 뮤즈(Muse)로 넘어가 보죠. 그전에, 1년 전 개인 슈퍼인텔리전스(personal superintelligence)에 관한 짧은 글도 썼죠.</p>
+<p>그건 한 페이지 분량이었습니다. ‘퓨처리스트(The Futurist)’의 한 페이지 버전도 썼습니다.</p>
+<p>아, 그러셨나요?</p>
+<p>《월스트리트 저널(The Wall Street Journal)》에 게재했습니다.</p>
+<p>맞아요. 저는 긴 버전만 읽었습니다.</p>
+<p>한 페이지 버전과 15페이지 버전이 있습니다.</p>
+<p>이 ‘개인 슈퍼인텔리전스’라는 글은 약 1년 전에 발표됐습니다. 당신이 그 글을 썼을 때 제 주변의 많은 사람들은 이렇게 생각했습니다. “마크가 왜 이런 글을 쓰는 거지? 이 일의 다음 단계에서 무엇을 보고 있는 걸까?” 제가 틀렸다면 바로잡아 주세요. 하지만 그게 뮤즈일 수도 있겠네요. 지금 이야기하려는 것 말입니다. 그렇죠?</p>
+<p>네, 맞습니다. 지금 우리가 공개하는 것이 바로 그겁니다. 이게 바로 그것입니다.</p>
+<p>메타의 다음 장이 이것이라고 어떻게 깨닫게 됐나요?</p>
+<p>우리는 스스로를 단순한 소셜 미디어 기업이라고 생각해 온 적이 없습니다. 분명히 사람들을 연결하고 역량을 강화하는 데 초점을 둔 기업이라고 생각해 왔습니다.</p>
+<p>회사의 첫 15년 또는 20년 동안 우리가 만든 것들을 이끌어 온 많은 가치는 기술과 힘을 개인의 손에 쥐여 주고, 사람들이 자신의 삶에서 무엇이 중요한지 스스로 결정할 수 있어야 한다는 믿음에 기반했습니다.</p>
+<p>우리는 이 문제를 둘러싸고 많은 사회적 논쟁을 겪었습니다. 콘텐츠 조정(content moderation)을 둘러싼 논쟁의 상당 부분은 사람들이 자신의 삶에서 무엇이 중요한지 스스로 결정하고 소통할 수 있도록 허용해야 하는가에 관한 것이었습니다.</p>
+<p>그 경험을 통해 저는 역사 전반과 기술 시대 전반에서 많은 진보가 개인에게 힘을 실어 주는 데서 비롯되며, 사람들은 자신의 삶에서 무엇이 중요한지 가장 잘 안다는 믿음이 더욱 확고해졌습니다.</p>
+<p>그렇기 때문에 “소수의 전문가가 AI가 큰 문제에 무엇을 할지 배분하게 하면 된다”는 말을 들을 때마다 저는 다소 거부감이 듭니다. 왜 AI가 사람들이 삶에서 중요하게 여기는 것들에만 집중해야 하나요?</p>
+<p>사람들은 건강과 더 나은 삶을 중요하게 여기지만, 관계, 친구와 가족을 위해 제때 함께하는 것, 문화도 중요하게 여깁니다. 사람들은 업계의 과학자나 엔지니어에게는 가장 큰 문제처럼 느껴지지 않을 수도 있는 것들을 중요하게 생각합니다.</p>
+<p>하지만 수십억 명의 사람들에게 무엇을 중요하게 여기는지 묻는다면, 그 질문에 대한 총합적인 답이야말로 우리가 해결하기 위해 노력해야 할 가장 중요한 것들이라고 생각합니다.</p>
+<p>저는 언제나 이 슈퍼인텔리전스를 만들 때, 그것이 무엇에 집중할지 누가 결정할 것인가라는 문제가 있다고 믿어 왔습니다. 사람들은 자신의 삶에서 중요한 것을 향해 그것을 이끌 수 있어야 합니다. 소수의 연구소에 있는 이른바 전문가들이 그것을 지시해서는 안 됩니다.</p>
+<p>이는 전체 철학의 토대로 돌아갑니다. 긍정적인 미래를 만드는 방법은 기술을 사람들의 손에 쥐여 줌으로써 그들에게 힘을 실어 주고, 무엇이 중요한지와 어떻게 사용할지를 스스로 결정하게 하는 것입니다.</p>
+<p>사람들이 그렇게 한다면 우리는 서로 다른 것들을 우선시하게 될 것입니다. 건강 문제를 우선시할 수도 있지만, 오늘날 제약·바이오테크 업계가 일반적으로 우선시하는 가장 흔한 질병 대신, 사람들이 가진 희귀 질환과 증상의 긴 꼬리(long tail)를 다루게 될 수도 있습니다.</p>
+<p>희귀 질환이 있다면, 단지 그것이 가장 흔한 질환이라는 이유로 다른 것에 집중하는 대신 자신의 개인 AI가 그 질환에 집중하기를 원할 것입니다. 예를 들어 희귀 질환에는 투자 비중이 지나치게 낮습니다.</p>
+<p>재단을 통해 많은 투자를 하고 있죠.</p>
+<p>바이오허브(Biohub)에서 그렇게 하고 있는데, 그 점이 제 생각에 어느 정도 영향을 줬습니다. 사람들이 자신에게 중요한 것이 무엇인지 결정할 수 있도록 힘을 개인의 손에 쥐여 주고 싶은 겁니다.</p>
+<p>이 중 상당 부분은 사람들이 큰 사회적 문제라고 규정할 만한 것과 반드시 관련된 것은 아닙니다. 저는 뮤즈 에이전트를 사용할 때 더 나은 아버지이자 남편이 되고, 친구들을 위해 더 잘 함께하며, 사람들과 연결되는 데 도움을 주기를 바랍니다.</p>
+<p>그 점은 지금까지 메타에서 우리가 해 온 일과도 이어집니다. 주변 사람들과 연결되도록 돕는 것의 사회적 가치를 불균형적으로 중요하게 여기고 믿는 기업이 바로 우리라고 생각합니다.</p>
+<p>제가 처음 제 에이전트에 설정한 일은 이런 것들이었습니다. 세 살 된 딸이 베이킹을 좋아합니다. 저는 베이킹에 대해 아무것도 모르지만, 함께할 수 있는 재미있는 프로젝트입니다.</p>
+<p>저는 매 주말 세 살 아이와 베이킹을 전혀 모르는 성인이 함께하기에 적당한 베이킹 프로젝트를 하나씩 준비하도록 요청했습니다. 인스타카트(Instacart) 같은 서비스를 이용해 필요한 재료를 모두 주문하고, 무엇이 적절한지 파악하고, 모든 준비가 되어 있는지 확인하라고 했습니다. 그러면 일요일에 딸과 함께 나타났을 때 그걸 만들 수 있습니다.</p>
+<p>그 후에는 어떻게 진행됐는지 말해 줍니다. 한 프로젝트는 너무 어려웠습니다. 알고 보니 케이크 팝은 정말 어렵더군요. 생각보다 훨씬 어려웠습니다.</p>
+<p>저는 베이킹에 대해 아무것도 모릅니다.</p>
+<p>저도 그랬습니다. 이제는 조금 압니다.</p>
+<p>케이크 팝이요?</p>
+<p>케이크 팝으로 시작하지 마세요. 그게 문제입니다.</p>
+<p>베이킹에는 꽤 간단한 것들이 많습니다. 그런데 케이크 팝은 그중 하나가 아니더군요.</p>
+<p>제가 무슨 말을 더 하겠어요?</p>
+<p>고마워, 뮤즈.</p>
+<p>뮤즈는 그 내용을 업데이트하고 도와줍니다. 큰딸은 산을 오르는 데 빠졌는데, 산 중 일부는 허가증이 필요합니다. 저는 뮤즈가 대기하면서 허가증이 발급되는 즉시 받아 두도록 했습니다. 딸이 산을 오를 수 있게 말이죠.</p>
+<p>정말 괜찮네요.</p>
+<p>뮤즈가 “이 날짜의 허가증을 받을 수 있었습니다”라고 알려 줍니다. 그러면 저는 “그럼 딸과 산에 오르러 가기 위해 그날은 일을 쉬어야겠네”라고 생각하게 됩니다. 꽤 멋집니다.</p>
+<p>건강을 유지하고 훈련하는 데도 도움을 줍니다. 제 MMA 체육관에 카메라를 설치하고, 카메라를 지켜보면서 피드백을 보내 달라고 했습니다.</p>
+<p>좋은 피드백인가요?</p>
+<p>그럴 때도 있습니다. 재미있는 피드백일 때도 있고요. 뮤즈가 저를 찾아내 이렇게 말합니다. “정말 포기한 것처럼 보이네요.”</p>
+<p>그래서 저는 “그래, 맞아. 그때 정말 피곤했어. 그런데 왜 하필 네가 나한테 지적하는 게 그거야?”라고 했습니다.</p>
+<p>아니요, 좋은 일이고 재미있어요. 코치들도 웃으면서 이렇게 말하죠. “말해줄 수도 있는데, 네 에이전트가 이미 말해주고 있잖아.”</p>
+<p>분명히 이 모든 일을 대신 해줄 수 있는 사람들이 있는데요. 뮤즈 에이전트(Muse agent) 같은 것을 어떻게 활용하면 비서로서 얼마나 유용할 수 있는지 한계를 제대로 시험해볼 수 있을까요? 팀에서 “좋아, 이건 고쳐야 해”라고 말하게 될 정도로 밀어붙인 사례도 많을 것 같은데요.</p>
+<p>흥미로운 점 중 하나는 사람마다 이걸로 하고 싶은 일이 정말 다르다는 겁니다. 초기 베타 기간에 여러 사람에게 사용해보게 했어요. 한 사람에게 줬더니 하루 만에 홈스쿨링 운영을 돕는 데 사용하고 있더군요.</p>
+<p>저는 “와, 하루 만에 이걸 시작했다고?”라고 생각했어요.</p>
+<p>또 다른 사람은 12시간 만에 이렇게 말했어요. “방금 여행 계획을 세웠어.”</p>
+<p>네, 저를 위해 여행 전체를 계획해준 셈이죠.</p>
+<p>제가 아는 또 다른 사람은 원래 기술에 꽤 회의적인 편인데, 그 사람에게 줬더니 며칠 동안 아무 말도 하지 않았어요. 그러다 저에게 문자를 보내 이렇게 말하더군요. “정식 출시하면 내 뮤즈 에이전트를 계속 갖고 있어도 돼? 아니면 초기화할 거야?” 그래서 저는 “좋아, 이거 잘되고 있네. 제대로 작동하는 것 같아”라고 생각했죠.</p>
+<p>베타를 사용해본 제가 아는 사람들은 모두 굉장히 높이 평가하고 있어요.</p>
+<p>네, 하지만 사람마다 사용하는 방식은 다르죠.</p>
+<p>사람들이 이해할 수 있도록 이게 무엇인지 좀 더 쉽게 설명해야 할 것 같아요. 사람들은 AI를 메타 AI나 ChatGPT처럼 생각하잖아요. 프롬프트를 주고받는 방식이죠. 여기서 진정한 돌파구는, 그리고 Grok, Claude, Manus를 비롯해 이런 일을 하는 다른 많은 제품에서도 업계 전반적으로 나타나고 있는 변화는, 뒤에서 가상 머신(virtual machine)을 추가하는 겁니다. 에이전트가 여러분을 대신해 컴퓨터를 제어하고, 로그인하고, 여러 일을 할 수 있어요. AI를 프롬프트와 답변의 시스템으로만 알고 있는 사람들에게는 엄청난 변화입니다.</p>
+<p>또 장기간 작동합니다. 기본적으로 메타 AI, ChatGPT, Gemini 같은 모델을 사용해 한 번 프롬프트를 보내고 답변을 받는 대신, 프로젝트나 목표를 주면 그냥 일을 수행합니다. 24시간 내내 작동하고, 그 목표를 달성하도록 돕기 전까지 멈추지 않아요.</p>
+<p>팀에서 에이전트가 밤새 공부한다고 했는데, 그렇게 표현하시죠?</p>
+<p>네, 공부합니다. 자신의 성찰을 기억으로 통합하죠. 기본적으로 프로젝트를 진행하고, 새로운 프로젝트를 제안할 수도 있어요.</p>
+<p>저는 딸 중 한 명과 컴퓨터 게임 문명(Civilization)을 하는데, 에이전트에게 “딸아이를 위한 전략 가이드를 만들어볼래?”라고 물었어요. 에이전트는 “물론이죠”라고 했습니다. 그러고 나서 “이제 전략 가이드가 있으니, 여러 문명에 대한 역사적 교훈도 가르칠 수 있도록 확장해볼래?”라고 물었더니, “물론이죠. 왜 안 되겠어요?”라고 하더군요.</p>
+<p>에이전트가 만든 앱에 새 탭을 만들었어요. 정말 멋졌습니다. 이런 식으로 내용을 확장할 수 있어요.</p>
+<p>선제적으로 행동하네요.</p>
+<p>네, 여러 가지를 제안합니다.</p>
+<p>흥미로운 점 하나는, 이게 사람들의 돈을 벌어주고 절약해줄 수 있다는 겁니다.</p>
+<p>그렇게 생각하세요?</p>
+<p>여기서 흥미로운 부분 중 하나는 가격 책정 방식이라는 경제 모델입니다. 원한다면 구독료를 내고 사용할 수 있지만, 아주 많은 사용량을 무료로 이용할 수 있게 만들고 있어요. 처음에는 일주일에 1억 토큰(token)을 무료로 제공하고, 이 가상 머신도 함께 제공할 예정이라고 생각합니다.</p>
+<p>엄청난 컴퓨터 사용량이네요.</p>
+<p>네, 엄청난 컴퓨터 사용량이죠.</p>
+<p>이렇게 하는 이유는, 소규모 사업을 운영하거나 돈을 벌거나 거래 및 상거래를 어떤 방식으로든 처리하는 사람들이 이걸 사용하면 엄청난 돈을 벌게 될 것이라는 점을 확신하고 있기 때문입니다. 그래서 장기적으로 예상하는 비즈니스 모델은 거래가 발생할 때마다 그 거래 금액에서 아주 작은 몫을 받는 것입니다.</p>
+<p>좋은 사업을 작게 만들어버리는 거군요.</p>
+<p>네, 그리고 반드시 이용자가 비용을 지불하는 방식은 아닐 겁니다. 이용자가 거래하는 사업체에서 비용이 나올 수도 있죠.</p>
+<p>결제 부문에서 스트라이프(Stripe)와 협력하고 있죠?</p>
+<p>네.</p>
+<p>제 생각에는 대다수 사람에게 무료인 서비스를 제공해야 합니다. 모두가 이런 강력한 초지능 에이전트를 갖는 미래를 만들고 싶다면, 이건 매우 중요해요.</p>
+<p>모두가 이용할 수 있게 하려면 저렴하게 만드는 것이 중요한데, 그래서 무료로 제공하려는 겁니다. 엄청난 사용량을 제공하고, 기본적으로 이를 보증하면서 이렇게 말하는 거죠. “이 서비스가 여러분의 돈을 벌어주고 절약해줄 것이라고 생각합니다.” 그렇게 해서 자체적으로 비용을 충당하게 되는 겁니다.</p>
+<p>메타 서비스도 연결할 수 있죠? 이론적으로 인스타그램 광고 지출 같은 것도 관리할 수 있고요.</p>
+<p>원하는 것은 무엇이든 연결할 수 있습니다. 원한다면 메타 서비스와 함께 작동하지만, 원하지 않으면 당연히 연결하지 않아도 돼요. 사업을 운영하는 데 사용한다면 광고 시스템과 연결할 수 있습니다. 무언가를 만들어달라고 하고, 제품을 만드는 일을 돕게 한 다음, 사업 운영까지 돕게 할 수 있어요. 이 모든 일을 하나의 순환 과정으로, 영원히 24시간 내내 수행할 수도 있습니다.</p>
+<p>새 모델을 출시할 때마다—저희는 거의 매달 의미 있는 업데이트를 출시하는 주기로 진행하고 있는데—에이전트는 계속 더 똑똑해지고, 더 유능해지고, 점점 더 많은 일을 할 수 있게 될 겁니다.</p>
+<p>팀에서 플릿(fleet) 개념에 대해서도 말해줬습니다. 여러 뮤즈 에이전트가 함께 학습하도록 하는 방식이죠. 이런 접근법이 다른 곳에서 사용된다는 이야기는 들어본 적이 없습니다.</p>
+<p>그건 아이디어 및 제안 기능입니다. 앱을 열면 기본 탭은 본질적으로 여러분과 뮤즈가 나누는 대화예요. 그리고 여러분이 알려준 내용과 그것을 어떻게 확장할 수 있는지를 바탕으로 아이디어를 보여주는 탭도 있습니다.</p>
+<p>처음에는 딸과 문명 게임을 할 때 사용할 전략 가이드를 만드는 일을 도왔어요. 그다음에는 그걸 역사적 교훈으로 확장하는 일을 도왔죠. 에이전트가 그 아이디어를 내놓았고, 저는 “그래, 좋아. 해봐”라고 했습니다. 스스로를 보완할 방법을 온갖 방식으로 찾아내는 겁니다.</p>
+<p>MMA 코칭에서는 더 나은 방법을 위한 아이디어를 냅니다. 예를 들어 “보내드릴 적절한 장면을 더 잘 찾도록 학습할까요?”라고 물을 수 있죠. 그러면 저는 “그래, 해봐”라고 말합니다.</p>
+<p>아이디어 기능이 중요한 이유는 플릿 전체에서 서로 다른 것에 관심이 있는 사람들을 찾아낼 수 있기 때문입니다.</p>
+<p>한 걸음 물러서서 보면, AI의 큰 문제 중 하나는 많은 사람이 AI로 무엇을 해야 할지 모른다는 겁니다.</p>
+<p>맞아요. 에이전트가 도움이 되기 위해 할 수 있는 일을 제안할 수 있다면, 문제의 상당 부분을 해결하고 사람들이 AI를 최대한 활용하도록 도울 수 있죠.</p>
+<p>에이전트에 네트워크 효과를 통한 학습을 도입하려고 하잖아요. 사실상 아무도 하지 않은 방식이죠. 에이전트들이 플릿의 다른 에이전트들로부터 익명화된 통찰을 학습하는 겁니다. 당신은 네트워크 효과의 대가이기도 하니, 이 아이디어가 정말 흥미롭습니다. 다른 누구도 하고 있지 않다고 생각하거든요.</p>
+<p>현재 업계 대부분은 에이전트를 싱글플레이어 게임처럼 생각하는 것 같아요. 자신만의 에이전트를 갖고 사용하는 방식이죠. 하지만 에이전트들이 서로 상호작용하게 함으로써 할 수 있는 흥미로운 일이 아주 많을 겁니다.</p>
+<p>내부적으로는 이미 사람들이 자신의 에이전트들을 서로 상호작용하게 하는 흥미로운 사례가 있습니다. 대부분 이번 출시에는 포함되지 않지만, 시간이 지나면서 이 시스템이 작동하는 방식에서 중요한 부분이 될 겁니다. 여러분이 아는 더 많은 사람이 뮤즈를 사용하기 시작하면, 뮤즈는 영원히 더 나아지는 거죠.</p>
+<p>그게 차별화 요소인가요? 최첨단에서는 모델이 계속 범용화되고, 제품들도 비슷한 종류의 하네스(harness)를 갖추면서 서로 비슷해질 거라고 볼 수 있잖아요. 그렇다면 그 학습의 네트워크 효과가 진정한 경쟁력인가요?</p>
+<p>저희가 하는 일 중에는 독특한 것이 몇 가지 있다고 생각합니다.</p>
+<p>첫째, 처음부터 이 사용 사례에 적합하도록 모델을 설계하고 있습니다. 이 점이 정말 중요하다고 생각해요.</p>
+<p>둘째, 회사로서 사회적 DNA를 갖고 있습니다. 사람들이 AI와 에이전트를 활용해 관계를 강화하고, 삶에서 다소 부드럽지만 매우 중요한 부분을 더 풍요롭게 누리도록 돕고 있어요. 아마 어떤 다른 연구소보다도 회사 차원에서 이 부분에 더 많은 관심을 기울일 겁니다.</p>
+<p>셋째, 우리에게 주요한 차별화 요소가 될 것이고 일부 사람들에게는 놀라울 수도 있는 부분은 개인정보 보호와 보안입니다. 여기에 엄청난 투자를 하고 있어요.</p>
+<p>저희가 보는 관점은 이렇습니다. 이 기술이 유용하려면 최첨단 수준의 지능만 필요한 게 아니라, 여러분을 진정으로 이해해야 합니다. 여러분의 목표를 이해하려면 광고 시스템, 메시지, 이메일, 건강 정보 등 온갖 것과 연결하게 됩니다. 그러려면 사람들이 시스템을 매우 높은 수준으로 신뢰해야 해요.</p>
+<p>좋은 소식은 메타가 10년 넘게 왓츠앱(WhatsApp)을 세계 최대 규모의 종단간 암호화(end-to-end encryption) 시스템이라고 제가 생각하는 수준으로 구축하는 데 집중해왔다는 겁니다. 메타조차 사람들이 주고받는 메시지를 볼 수 없도록 설계했어요. 이는 큰 변화를 가져왔고, 사람들이 왓츠앱을 신뢰하는 것이 당연하다고 생각합니다.</p>
+<p>이는 메타에도 중요한 교훈이었고, 왓츠앱의 성공에 결정적인 역할을 했습니다. 콘텐츠를 우리조차 볼 수 없도록 시스템을 설계했어요. 정부가 접근할까 걱정하든, 해커가 접근할까 걱정하든, 메타 내부의 누군가가 원치 않는 일을 할까 걱정하든, 시스템 자체를 우리가 볼 수 없도록 설계하면 이 모든 우려를 없앨 수 있습니다.</p>
+<p>저희는 이를 근본적인 교훈 중 하나로 삼았습니다. 시작할 때 냇과 저는 직접 목시 말린스파이크(Moxie Marlinspike)를 영입했습니다.</p>
+<p>시그널의 창립자죠.</p>
+<p>네, 그리고 2014년에 왓츠앱의 암호화 구축을 도운 사람 중 한 명입니다. 그는 특별히 이 기밀 VM(confidential VM) 프로젝트를 맡기 위해 합류했어요. 이를 통해 여러분의 가상 머신과 뮤즈 안의 모든 정보를 유지하면서도, 메타조차 그 안의 콘텐츠를 볼 수 없다는 점을 보장할 수 있습니다.</p>
+<p>기술적으로 이게 가능하군요. 놀랍습니다.</p>
+<p>그 약속은 기술적으로 검증할 수 있습니다.</p>
+<p>더 광범위하게 출시할 시점이 가까워지면, 앞으로 몇 주 안에 이에 대해 더 많은 내용을 공개할 예정입니다.</p>
+<p>각 연구소가 에이전트와 함께 추진하는 초기 VM 시도들을 모두 고려했을 때, 여러분이 하는 일이 독특하다고 생각하나요?</p>
+<p>아무도 하지 않고 있다고 생각합니다.</p>
+<p>저도 아무도 하지 않고 있다고 생각해요.</p>
+<p>그 밖에도 저희가 마련하고 있는 보안 조치가 많아서 이에 대해서도 이야기해야 합니다. 아직 준비가 끝나지 않았을 때조차, 그리고 이를 사용하고 싶지 않은 사람들에게조차, 처음부터 이 부분에 집중해왔기 때문에 믿을 수 없을 만큼 안전합니다.</p>
+<p>자동 승인(auto-approve)도 있습니다. 무엇을 하고 있는지 확인해야 하죠.</p>
+<p>이 모든 이야기는 잠시 후에 자세히 다루겠습니다. Muse가 가진 것과 비슷한 기밀 VM(confidential VM) 시스템을 구축한 곳은 제가 아는 한 없습니다. 이건 근본적으로 중요한 문제입니다. 이것이 자신의 에이전트(agent)이고, 그 안에 콘텐츠를 넣었을 때 다른 누구도 그 콘텐츠에 접근하지 못한다고 신뢰할 수 있어야 하기 때문입니다.</p>
+<p>그럼 두 가지 방법은 무엇일까요?</p>
+<p>올해 초 OpenClaw 같은 것들이 등장했을 때 많은 사람들이 Mac Studio를 사기 시작했습니다. 안심할 수 있는 한 가지 방법은 실제로 자신의 기기를 집에서 작동시키는 것입니다. 하지만 다른 방법은 일종의—물론 그건 쉽지 않겠지만—</p>
+<p>왜냐하면 수십억 명의 사람들이 Mac Studio를 사고, 설정하고, 집에서 실행할 것 같지는 않기 때문입니다. 특히 지금처럼 RAM 가격이 높은 상황에서는요. 하지만 기술적으로도 어렵습니다.</p>
+<p>Muse를 통해 우리가 하려는 일 중 하나는 개인 에이전트 경험의 한 버전을 구축하는 것입니다. 그냥 작동하는 버전이죠. 기술 이해도가 각기 다른 가족 모두에게 제공해도 그냥 작동하고, 하루 안에 그들이 일상에서 원하는 모든 일을 해내는 것입니다.</p>
+<p>그중 하나는 누군가가 자신의 컴퓨터나 VM을 직접 설정할 필요가 없도록 하는 것입니다. 클라우드에서 바로 프로비저닝(provisioning)할 수 있으면 됩니다. 하지만 책상 아래 집 안에 기기를 두고 사용할 때와 같은 보안과 기밀성을 갖춰야 합니다.</p>
+<p>저는 이것이 매우 근본적인 문제라고 생각합니다. 말씀하신 것처럼 다른 요소들도 있습니다. 모든 사람이 그런 방식을 사용하지는 않을 테니까요. 우리는 보안 자격 증명 저장소(secure credential store)를 구축했습니다. 모든 신용카드와 비밀번호를 공개된 곳에 저장할 이유는 없습니다.</p>
+<p>에이전트가 그런 정보를 알아서는 안 됩니다. 사용자가 무언가에 로그인하라고 요청했을 때 필요한 순간에만 접근할 수 있으면 되고, 그 외에는 접근해서는 안 됩니다.</p>
+<p>사실 단일한 기능 하나가 아닙니다. 핵심 에이전트가 있지만, 에이전트가 주고받는 트래픽과 데이터를 모니터링하는 센티넬 에이전트(Sentinel agents)도 모두 구축했습니다. 사용자가 무언가를 검토해야 할 수도 있는 순간을 알려주는 것이 목적입니다.</p>
+<p>센티넬이 하는 일은 그것뿐입니다. 누군가 프롬프트 인젝션(prompt injection)을 시도하는지 살펴봅니다. Muse 에이전트가 외부로 나가는 무언가를 공유했는데 사용자가 불편해할 만한 내용인지도 확인합니다. 그렇다면 센티넬 에이전트가 인간 개입 검토(human-in-the-loop review)를 작동시킬 권한을 갖습니다.</p>
+<p>무언가에 로그인하거나, 결제하거나, 민감한 정보를 전송하려면 매번 승인해야 합니다. “이런 종류의 일은 대체로 괜찮으니 항상 허용해”라고 말할 수도 있습니다. 하지만 일반적으로 Muse 에이전트가 그런 판단을 스스로 내릴 수는 없습니다. 이는 시스템과 아키텍처에 상당히 깊이 내장되어 있습니다.</p>
+<p>커넥터(connector)도 마찬가지입니다. 예를 들어 이메일에 연결한다고 해보죠. 이 기능을 설계한 일부 사람들은 연결하는 순간 모든 것에 접근할 수 있도록 만들기도 합니다. 하지만 우리가 취한 접근 방식은 이렇습니다. 이메일에 연결하면 처음에는 읽기 전용으로 시작해야 합니다. 이메일을 보낼 수 있게 하려면, 그 권한을 구체적으로 요청하게 하면 됩니다.</p>
+<p>특히 이 기능을 사용해보려는 대부분의 사람은 아마 이런 제품을 한 번도 사용해본 적이 없을 테니까요.</p>
+<p>이것이 우리에게 핵심적인 설계 원칙입니다. 최소 권한(least privilege)입니다.</p>
+<p>사용자는 에이전트에게 많은 일을 시키게 될 것이고, 그 과정의 각 단계에서 에이전트는 필요한 최소한의 권한만 받습니다. 필요할 때만 권한을 추가하는 겁니다. 이는 제품 설계에서 매우 근본적인 원칙입니다.</p>
+<p>현재 나와 있는 다른 에이전트들을 보면, 우리가 구축한 수준의 정교함이나 깊이에 근접한 곳은 없다고 생각합니다.</p>
+<p>다시 말하지만, 이는 전 세계에서 WhatsApp을 최첨단 종단간 암호화(end-to-end encryption) 시스템으로 구축한 우리의 경험과, Meta조차 콘텐츠를 볼 수 없는 시스템을 구축하는 것이 얼마나 중요한지에 기반한 것입니다.</p>
+<p>팀을 다시 모으고 Moxie가 아키텍처를 설계하도록 한 것은 근본적인 요소 중 하나였습니다. 어떤 면에서는 일부 사람들이 Meta가 집중할 것이라고 생각하는 분야와 다를 수도 있습니다.</p>
+<p>우리는 두 가지 측면을 갖고 있습니다. 소셜 미디어는 본질적으로 공유에 관한 것이지만, 다른 한편에는 본질적으로 개인정보 보호와 민감한 맥락에 관한 여러 요소가 있습니다. 우리는 그 두 분야 모두에서 좋은 성과를 냈습니다. 저는 이번 일은 후자에 더 가깝다고 생각합니다. 콘텐츠를 어떻게 다룰지에 매우 집중하는 것이 중요할 것입니다.</p>
+<p>개인 에이전트 시장이 승자독식 시장이라고 생각하시나요?</p>
+<p>꽤 많은 곳이 살아남을 것이라고 생각합니다. 사람들이 승자독식이라고 생각하는 분야도 대개 실제로는 그렇지 않습니다.</p>
+<p>당신은 네트워크 효과(network effects)가 작용하는 사업을 다뤄왔고, 네트워크 효과는 놀라울 정도로 오래 지속됩니다. 승자독식은 아니지만, 결국 상당한 규모를 가진 몇 곳으로 귀결됩니다. 그런 곳이 아주 많지는 않습니다.</p>
+<p>물론 많기는 합니다. 아마 20억 명 이상의 사용자를 보유한 제품이 몇 개인지는 두 손으로 셀 수 있을 겁니다. 규모가 규모를 낳습니다.</p>
+<p>개인 에이전트에 대해 어떻게 생각하고 계신지 궁금합니다. 많은 사람이 온갖 종류의 에이전트를 갖게 되는 완전히 다른 패러다임일까요?</p>
+<p>아니요. 저는 이 분야가 매우 깊이 파고들 만한 영역이라고 생각합니다. 제 추측으로는 그 분야에서 최첨단 작업을 수행할 정도의 정교함을 갖춘 회사가 12곳을 넘지는 않을 겁니다.</p>
+<p>네트워크 효과가 있든 없든, 대개 일종의 멱법칙 분포(power-law distribution)가 나타납니다. 어떤 분야에서 최고라면 대개 사용량의 상당 부분을 차지하게 됩니다.</p>
+<p>많은 미묘한 차이는 사람들이 중요하게 여기는 용도가 모두 다르다는 데서 나옵니다. 여러 분야에서 서로 다른 회사가 최고가 될 수 있고, 우리는 그중 최대한 많은 분야에서 최고가 되려고 할 겁니다.</p>
+<p>하지만 관계를 관리하는 데 도움을 주는 제품을 만드는 것과 소규모 사업을 구축하는 데 가장 뛰어난 개인 에이전트를 만드는 것은 어느 정도 다른 일일까요? 그럴 수도 있습니다.</p>
+<p>Meta가 그 두 분야 모두에서 승리할 수 있는 매우 유리한 위치에 있다고 주장할 수도 있습니다. 우리는 수억 개의 소규모 사업체에 서비스를 제공하고 있고, 수십억 명의 사람들에게도 서비스를 제공하고 있습니다. 어쩌면 두 분야 모두에서 최고가 될 수 있을 겁니다.</p>
+<p>하지만 Meta가 최고가 되지 못할 분야도 아마 있을 것이고, 문제는 그 분야들이 얼마나 큰 범주냐는 것입니다.</p>
+<p>이처럼 매우 안전하고 기밀성이 높은 VM을 클라우드에서 사용할 수 있게 되더라도, 여전히 일부 사람들은 집에 Mac Studio를 두고 싶어 할 것이라고 생각합니다. 하지만 그 수가 얼마나 될까요? 수백만 명일 수는 있어도 수십억 명은 아닐 것 같습니다.</p>
+<p>중요한 것은 사람들이 무엇을 최적화하려 하는지이며, 우리는 이를 최대한 좋게 만들려고 할 것입니다.</p>
+<p>하지만 사람들이 일상생활에서 전반적으로 매우 유용하게 사용할 수 있는 무언가를 만든다면, Meta가 가장 잘하는 일 중 하나는 소비자에게 작동하는 제품을 많은 사람에게 배포하는 것입니다.</p>
+<p>이 제품이 제대로 작동하기 시작하면 수억 명의 사람들 앞에 선보이고, 궁극적으로는 수십억 명에게 제공할 수 있을 것이라고 생각합니다. 우리가 매우 잘할 수 있는 일입니다.</p>
+<p>Meta AI와 공존하나요, 아니면 서로 별개의 것으로 보시나요?</p>
+<p>그럴 것 같습니다. 시간이 지나면서 지켜봐야겠죠. 현재로서는 성격이 다소 다릅니다.</p>
+<p>저는 둘 다 사용합니다. Muse는 대화형 성격이 더 강하고, 사용자가 하는 질문을 사용자를 이해하고 장기적으로 사용자가 무엇을 원할지 파악하려는 시도로 더 많이 해석합니다. 그래서 무언가를 물으면, 사용자의 말에 기반해 오랫동안 작업하러 나갈 가능성이 더 높습니다.</p>
+<p>때로는 그저 질문을 하고 매우 직접적인 답을 원할 때도 있습니다. 제가 Meta AI를 사용하는 것은 그런 유형의 일에 더 가깝습니다. 하지만 두 제품이 시간이 지나면서 합쳐질 수도 있고, 확실하지는 않습니다.</p>
+<p>Artificial Analysis가 7월에 당신에 대해 상당히 낙관적인 분석을 내놓았습니다. 모델의 발전이라는 측면에서 Meta가 최전선(frontier)에서 OpenAI와 Anthropic을 따라잡을 가능성이 가장 높다고 했습니다.</p>
+<p>흥미로운 인용문이 있었습니다. “Meta에 중요한 것은 절편(intercept)이 아니라 기울기(slope)다.”</p>
+<p>그런데 최근 Artificial Analysis가 공개한 차트를 보니, 여러분의 최신 모델인 Muse Spark가 Claude에 이어 2위였던 것 같습니다. Fable 5.1과 Opus 5였던 것 같은데요. 아주 최근의 일이었습니다.</p>
+<p>여러분이 모델에서 이루고 있던 발전이 빨라지고 있고, 우리는 지난 1년 동안 이 이야기를 해왔습니다. 지난해 연구소를 재가동했죠. 내부적으로 실제로 어떻게 진행된 것인가요? 지금 보고 있는 성과를 무엇 덕분이라고 보시나요? 문화였나요? 무엇인가요?</p>
+<p>우리가 팀을 만들었을 때부터 팀을 재편했고, 그 과정은 공개적으로 많이 알려졌습니다. 당시 그 많은 사람을 영입하고 있었죠.</p>
+<p>제가 이 문제를 생각해온 방식은 이렇습니다. Meta는 오랫동안 머신러닝(machine learning)의 선도 기업이었습니다. Facebook이나 Instagram의 피드, 광고 시스템, 또는 인터넷에 올라와서는 안 되는 부적절한 콘텐츠를 찾아야 하는 무결성(integrity) 시스템을 생각해보면, 기본적으로 모두 머신러닝 시스템입니다. 우리는 그 분야에서 최첨단의 선도적인 시스템을 구축해왔습니다.</p>
+<p>대규모 언어 모델(LLM)이 주목받기 시작했을 때, 우리에게는 Llama 초기 작업을 수행한 연구소 FAIR가 있었습니다. 하지만 규모 확장 법칙(scaling laws)이 예측한 대로 모든 결과를 얻으려면 이를 제품 수준으로 구현하고, 확장을 위한 보다 산업적인 프로세스로 구축해야 했습니다.</p>
+<p>당시 저는 다른 유형의 머신러닝에서 우리가 뛰어났기 때문에 LLM을 구축하고 확장하는 접근 방식도 그와 비슷할 것이라고 생각하는 실수를 했습니다.</p>
+<p>실제로는 매우 다른 역학이 많이 작용합니다. Llama 4까지 우리가 취한 첫 번째 접근 방식은 어느 정도까지만 성과를 냈습니다. Llama 3는 좋은 모델이었습니다. 저는 Llama 4가 나아갈 방향에 대해 더 낙관적이었는데, 출시했을 때는 우리가 필요한 궤도에서 벗어나 있었다고 생각합니다.</p>
+<p>그래서 “좋아, 뭔가를 바꿔야 한다”는 결론에 이르렀습니다. 그때 인재 밀도(talent density)의 중요성을 더 깊이 깨닫게 됐습니다. 이건 1,000명이 작업하고 실험을 돌릴 수 있는 시스템이 아닙니다. 어떤 면에서는 전체를 머릿속에 담고 하나의 집단 과학 프로젝트처럼 함께 작업할 수 있는, 가능한 한 작은 규모의 그룹을 원합니다.</p>
+<p>팀에 자리가 몇 개밖에 없다면 각 자리에 가장 뛰어난 사람을 배치하는 것이 대단히 중요합니다.</p>
+<p>결국 그 일을 하느라 제 개인 시간을 엄청나게 많이 쓰게 됐습니다. 또한 기술적으로도 그 업무에 더 가까이 다가가고 싶었습니다. 그래야 우리가 더 광범위하게 해야 하는 일들을 이해하고 회사가 해낼 수 있도록 돕고 방향을 제시할 수 있으니까요.</p>
+<p>우리는 말 그대로 제가 사무실에서 앉아 있는 곳을 중심으로 연구소를 구축했습니다. 그래서 그 주변에 팀이 배치되어 있습니다. 우리가 하는 일의 품질에 대한 확신이 커지면서 컴퓨팅 투자도 크게 늘렸습니다.</p>
+<p>우리는 수많은 기가와트 규모의 컴퓨팅 설비를 구축하고 있으며, 이 분야에서 선두가 될 것으로 기대합니다. 그래야 합니다. 우리는 데이터센터를 구축해 온 경험이 수년, 수십 년에 달합니다.</p>
+<p>다른 연구소들과 달리 우리는 수익성이 매우 높은 사업을 운영하고 있습니다. 이런 투자를 하는 데 큰 도움이 됩니다.</p>
+<p>그게 지금까지의 여정이었습니다. 지난 1년 동안 연구 활동을 다시 시작했습니다. 오하이오에 있는 1기가와트 규모의 클러스터인 프로메테우스(Prometheus) 같은 대형 클러스터 일부가 가동되었고, 이를 활용해 워터멜론(Watermelon) 이후의 모델을 확장하고 있습니다.</p>
+<p>우리는 워터멜론을 넘어섰습니다. 워터멜론은 곧 출시됩니다.</p>
+<p>얼마나 곧요?</p>
+<p>아, 그러니까… 우리는…</p>
+<p>워터멜론은 코드네임이고, 아까도 코드네임에 대해 이야기했죠. 사람들이 알고 있는 이 대형 모델의 코드네임입니다.</p>
+<p>여러분이 작업 중인 모델 말이죠.</p>
+<p>네.</p>
+<p>그리고 곧 나올 모델이고요.</p>
+<p>아보카도(Avocado)보다 큽니다.</p>
+<p>그보다 크다고요?</p>
+<p>수박은 말 그대로 아보카도보다 크잖아요.</p>
+<p>실제로 더 큽니다.</p>
+<p>네, 그러니까 수박보다 큰 과일이 뭐가 있을지 모르겠네요.</p>
+<p>네, 아마 코드네임을 정하는 관례 자체를 바꿔야 할지도 모르겠습니다.</p>
+<p>알겠습니다.</p>
+<p>네, 이름을 붙일 때 모델이 이렇게 커질 것까지는 충분히 내다보지 못했던 것 같습니다.</p>
+<p>워터멜론을 언급하셨으니 묻겠습니다. 프런티어(Frontier) 수준의 완전한 최첨단(SOTA, state of the art)을 기대하고 있나요?</p>
+<p>두고 봐야죠. 하지만 우리는 좋은 느낌을 갖고 있습니다.</p>
+<p>아니요, 상당히 큰 발전입니다. 사전 학습(pretraining)이 크게 진전됐고, 이후에는 우리가 사후 학습(post-training)에서 배운 모든 것을 계속 적용할 겁니다.</p>
+<p>네, 곧 보시게 될 겁니다. 좋습니다. 우리는 자신 있습니다.</p>
+<p>회사가 프런티어를 계속 밀어붙이길 원한다는 점은 분명합니다. 모델 발전 측면에서 프런티어의 바로 가장자리에 있는 것만으로는 만족하지 않는 것 같군요.</p>
+<p>아니요. 제 생각에는 모두가 흥미로운 일을 하고 싶어 합니다.</p>
+<p>그런데 어떤 사람들은 여러분의 현금흐름과 여러 자원을 보고 이렇게 말합니다. “꼭 최전선에 있어야 하나요? 이런 학습은 너무 비쌉니다. 바로 뒤에서 빠르게 배우고 적응하면서 규모의 이점을 활용하면 되잖아요.”</p>
+<p>아니요. 제가 생각하는 방식은—</p>
+<p>아니, 아니, 아니요. 그건—</p>
+<p>그런 생각은 받아들이지 않나요?</p>
+<p>그건 우리 방식이 아닙니다.</p>
+<p>메타를 이해하는 가장 좋은 방법은 우리가 엔드투엔드(end-to-end) 기술 회사라는 것입니다. 우리가 주로 소셜 앱만 만들던 시절에도 우리는 단순한 앱 제작사가 아니었습니다. 데이터센터를 만들고, 칩을 만들고, 인프라를 구축했습니다. 이 모든 것이 엔드투엔드 경험을 최대한 훌륭하게 조정하는 데 필요했습니다.</p>
+<p>앞으로도 여기에는 분명히 같은 원칙이 적용될 겁니다. 앞으로 경험에서 가장 중요한 부분은 모델입니다.</p>
+<p>최첨단 수준이라고 말할 때, 현실은 이것이 매우 다차원적인 문제라는 것입니다. 사람들이 온갖 벤치마크를 발표하고 있고, 우리 내부에는 그보다 훨씬 더 많은 벤치마크가 있습니다. 모델이 어떤 부분에서는 더 뛰어나고 어떤 부분에서는 더 부족할 수 있으며, 여러분은 집중할 영역을 선택할 수 있습니다. 그것이 사실상 모델의 성격을 형성합니다.</p>
+<p>제가 보기에 상당히 보편적인 능력들도 있습니다. 코딩 능력은 매우 중요하다고 생각합니다. 특히 개인 에이전트(personal agent)를 비롯해 여러분이 말하는 많은 일이 결국 코딩으로 귀결되기 때문입니다.</p>
+<p>MMA 코칭용 시각 파이프라인은 결국 코딩 프로젝트잖아요? 코드를 작성하는 일입니다. 제가 코드를 직접 보지는 못하지만, 실제로 그렇게 작동합니다.</p>
+<p>제가 베타 버전을 제공한 어떤 사람이 이런 말을 하더군요. “알겠어요. 그 에이전트가 친구들과 함께 휴대폰으로 전송해 플레이할 수 있는 작은 제퍼디 게임(Jeopardy game)을 만들어줬어요.” 그것도 코드입니다.</p>
+<p>그래서 메타 내부의 전사적 개발, 연구 프로그램의 발전, 그리고 모델이 수행해야 할 핵심 능력이라는 측면에서 이런 분야가 많다고 생각합니다. 모델은 이런 일을 탁월하게 해내야 합니다.</p>
+<p>하지만 개인 초지능(personal superintelligence)에 집중하는 모델이라면, 다른 사람들이 그다지 중요하게 여기지 않을 수도 있는 다른 영역에서 최고가 되어야 한다고 생각합니다. 한 가지 예를 들자면 신중함(discretion)입니다.</p>
+<p>여러분은 뮤즈(Muse) 에이전트에게 자신에 관한 많은 것을 알려주게 될 겁니다. 에이전트는 여러분에 대해 많은 것을 알게 되고, 여러분을 위해 일을 처리하려면 세상으로 나가 상호작용해야 합니다. 하지만 특정 정보는 공유하지 않아야 하죠.</p>
+<p>맞습니다.</p>
+<p>알레르기나 민감성이 있거나 임신 중이라고 해봅시다. 어딘가에 예약을 하는데 꼭 “저 임신했어요”라고 말하고 싶지는 않을 수 있습니다. 하지만 무알코올 칵테일(mocktail)이 훌륭한 곳을 원할 수는 있죠. 자신에 관한 많은 정보를 반드시 공개하지 않고도 목표를 달성할 수 있기를 원하는 겁니다.</p>
+<p>에이전트는 여러분에게 수백만 가지 질문을 하지 않고도 무엇이 민감한 정보인지 알아야 합니다. 이것이 학습에 포함시키는 부분입니다. 우리가 중요하게 여기는 구체적인 요소죠.</p>
+<p>여러분이 클로드 코드(Claude Code)를 사용하는 경우에는 이런 능력이 덜 중요할 수 있는 이유가 많습니다. 팀과 기업 환경에서 코딩 프로젝트를 진행하고 있으니까요. 이론적으로 회사 안에 있다면 모두가 그 프로젝트를 볼 수 있습니다. 따라서 무엇이 민감하고 무엇이 그렇지 않은지 구분해야 할 필요가 없습니다.</p>
+<p>저는 이런 종류의 요소가 상당히 본질적이라고 생각합니다. 최고의 인스타그램 피드(Instagram feed)를 만들기 위해 앱만 만드는 것이 아닌 것과 같습니다. 앱과 인프라, 머신러닝 연구, 칩, 그리고 다른 모든 구성 요소를 함께 구축해야 합니다.</p>
+<p>마찬가지로 최고의 개인 에이전트를 만들고 싶다면, 다른 회사가 기성품을 가져와 약간 사후 학습을 시키는 것만으로, 처음부터 설계하고 원하는 능력을 얻기 위해 이 모든 데이터를 사전 학습에 투입한 경우만큼 훌륭한 결과를 낼 방법은 없다고 생각합니다. 그런 일은 일어나지 않을 겁니다.</p>
+<p>이런 과정이 수년에 걸쳐 누적되면, 우리는 분명 그런 목표에 훨씬 더 적합한 능력 높은 모델을 갖게 될 겁니다. 하지만 우리는 그 부분에 집중하고 있습니다. 또한 코딩과 재귀적 개선(recursive improvement)에도 매우 집중하고 있습니다. 프런티어에 머무르려면 그것이 중요하기 때문입니다.</p>
+<p>우리의 연구 의제가 다른 연구소들과 겹치는 영역도 몇 가지 있습니다. 동시에 우리가 독자적으로 집중할 영역도 몇 가지 있다고 생각합니다. 다른 연구소들이 중요하게 여기지만 우리가 그만큼 중요하게 여기지 않는 것도 있을 수 있고, 반대로 그들은 중요하게 여기지 않지만 우리가 더 중요하게 여기는 것도 있을 겁니다.</p>
+<p>대화를 시작하면서 에이전트를 사람들의 손에 쥐여주는 것이 중요하다고 말씀하셨습니다. 확산(diffusion)이 중요하다는 뜻이죠. 워터멜론과 그 이후 모델, 그리고 여러분이 언급한 앤트로픽(Anthropic)과 오픈AI(OpenAI)의 행보를 보면서, 그들이 일부 기능을 보류하고 있는 상황에서 특정 능력을 보고 “이건 정말 안전하지 않다”고 느낀다면 여러분도 출시를 보류해야 한다고 생각할까요?</p>
+<p>그 문제를 어떻게 생각하십니까?</p>
+<p>글쎄요. 안전하도록 설계하고 학습시켜야 한다고 생각합니다. 그건 전체 과정에서 집중할 수 있는 부분입니다.</p>
+<p>비유를 하나 들어보죠. 모든 연구소가 겪고 있는 보상 해킹(reward hacking)은 기본적으로 학습 과정 중간에 일어나는 일입니다. 모델에 목표를 제시하는 거죠.</p>
+<p>현재 모델의 상태를 이해하는 가장 좋은 방법은 이렇습니다. 아마 6개월 전만 해도 학습 중에 모델에게 풀어야 할 문제를 제시했을 겁니다. 숙제와 비슷하고, 모델은 커리큘럼의 일부로 그것을 배우려고 합니다.</p>
+<p>그런데 새로운 모델은 아주 똑똑해져서, 제 생각에 매우 현명한 사람이 할 법한 행동을 합니다. 문제를 주면 가장 먼저 주변 환경의 모든 것을 파악한 다음 질문에 답하려고 하는 겁니다.</p>
+<p>하지만 우리가 보고 있고, 모두가 보고 있다고 생각하는 보상 해킹의 문제는 때때로 다른 일을 하는 편이 더 쉬워진다는 것입니다. 코딩 문제를 풀라고 했는데, 가장 쉬운 방법이 전체 환경을 살펴보고 가상 머신(VM, virtual machine)의 설정 방식을 바꾸는 것일 수 있습니다.</p>
+<p>빠져나가는 거죠. 해킹해서 벗어나는 겁니다.</p>
+<p>혹은 환경에 관한 무언가를 그냥 바꿔버릴 수도 있습니다. 하지만 그건 정렬(alignment)에 맞지 않습니다. 그게 목표가 아니죠. 우리는 실제로 특정 유형의 문제를 해결하는 방법을 가르치려는 겁니다.</p>
+<p>여러분은 그런 방식으로 학습시키지 않는 것처럼 들리는데요. 그런 접근 방식에 동의하지 않으시나요?</p>
+<p>아니요, 아니요, 아니요, 아니요. 제 생각에는 모두가 대체로 그렇게 학습시킵니다. 제가 말하려는 건 양육(parenting)과 비슷한 점이 있다는 겁니다. 다만 이 비유는 금방 지나치게 확대될 수 있어서 조심하고 싶습니다.</p>
+<p>명확하고 확고한 경계를 설정해야 합니다. 보안이 강력하지 않으면 모델은 이런 보상 해킹을 하면서 여러분이 배우게 하려는 것을 배우지 않을 수 있습니다. 반대로 경계가 잘 설정되어 있으면, 원하는 커리큘럼만 가르치는 것이 아니라 시간이 지나면서 더 나은 가치관도 가르치게 됩니다.</p>
+<p>저는 그것이 중요한 요소라고 생각합니다. 이 일을 잘해낼 방법은 있지만, 결국 매우 지능적인 존재를 만들어내게 됩니다.</p>
+<p>문제는 이것이 사회에 긍정적으로 작용하도록 만드는 비전이 무엇이냐는 겁니다.</p>
+<p>제 생각에는 첫째, 기회가 더 많아져야 합니다. 사람들이 이런 능력에서 발생하는 모든 기회를 포착할 수 있도록 사람들의 손에 쥐여주는 것은 좋은 일입니다. 둘째, 널리 이용 가능하게 해서 힘의 균형을 통한 견제와 균형(checks and balances)을 마련하는 것이, 단순히 이를 제한하는 것보다 아마 올바른 처리 방식일 겁니다.</p>
+<p>제가 쓴 긴 글에서 이런 비유를 여러 개 들었습니다. 한 사람만 초지능 변호사를 갖고 있다면, 때로는 이기지 말아야 할 재판에서도 이길 수 있을 겁니다. 하지만 모두가 초지능 변호사를 갖게 된다면 매우 효율적인 공방이 이루어지고, 누구도 터무니없는 주장을 내세워 그대로 관철할 수 없게 될 겁니다.</p>
+<p>그 경우에는 훨씬 더 효율적이고 공정하게 정의가 실현될 것입니다. 세상에서 바라는 것이 바로 그런 것이죠. 한 사람이나 소수의 사람만 초지능 변호사를 갖고 다른 모든 사람은 갖지 못하는 상황은 피해야 합니다. 그렇게 되면 모든 시스템과 제도가 초지능 변호사를 가진 사람들에게 유리한 방식으로 뒤틀리게 되기 때문입니다.</p>
+<p>반면 모든 사람의 손에 이를 쥐여준다면, 견제와 균형이 제대로 작동해서 시스템이 훨씬 더 효율적으로 돌아가고 모두가 혜택을 얻을 것이라고 생각합니다.</p>
+<p>여기서 미국 정부가 어떤 역할을 해야 한다고 생각하시나요?</p>
+<p>물론이죠.</p>
+<p>일종의 국가적 프레임워크가 필요하다고 보시나요? 올바른 접근법은 무엇이라고 생각하시나요? 정부는 지금 이 문제를 아주 적극적으로 다루고 있습니다.</p>
+<p>제 생각에 흥미롭고 어려운 점 중 하나는 이 기술이 너무 빠르게 발전하고 있다는 것입니다. 마련해 놓은 구체적이고 경직된 프레임워크가 있다 해도, 어차피 몇 달 안에 불충분해지거나 시대에 뒤처질 가능성이 매우 높습니다.</p>
+<p>저희가 취한 접근법, 즉 방금 저희가 한 일은 정부와 꽤 긴밀하게 협력하는 것입니다. 이건 중요한 기술입니다. 정부는 진행되고 있는 모든 중요한 학습 실행(training run)에 대해 알고 있어야 한다고 생각합니다. 저희는 정부와 선제적으로 협력해서 앞으로 등장할 역량을 정부가 이해하도록 하고, 가능한 범위에서 이에 대비할 수 있도록 도와야 합니다.</p>
+<p>그런 관점에서 프레임워크가 마련되어 있든 아니든, 미국 기업이 해야 할 올바른 일은 미국 정부와 긴밀히 협력하는 것이라고 생각합니다.</p>
+<p>실제로는 훨씬 더 효과적이라고 생각합니다. 상호작용 방식을 정해 놓은 경직된 프레임워크가 있는 대신, 현실에서는 시간이 지나면서 문제 자체가 달라지기 때문입니다. 예를 들어 “좋아, 이제는 사이버 보안 문제가 있구나. 아마 6개월 후에는 생물학 관련 문제가 더 많아질 거야”라고 할 수 있습니다. 그런 문제를 단순히 절차상 몇 가지 항목을 확인하는 방식이 아니라, 실제로 사람들에게 가장 좋은 방식으로 해결하려면 정부의 여러 부문과 소통할 때 신뢰와 소통 역량을 확보해야 합니다.</p>
+<p>이미 존재하는 유인도 있습니다. 예를 들어 메타의 모델이 유출되어 큰 피해를 입힌다면, 여러분은 그에 대해 책임을 지게 되고 시장이 여러분을 바로잡을 것입니다. 그렇죠? 그런 장치는 이미 존재합니다. 사람들이 그 점을 과소평가한다고 생각합니다.</p>
+<p>네. 실리콘밸리는 지난 15년 정도 정부와 어느 정도 거리를 둔 관계를 유지해 왔다고 생각합니다. 하지만 이제 이런 기술이 경제, 안보, 그리고 여러 관련 영역과 더 많이 맞물리고 있습니다. 그래서 더 긴밀한 협력 관계를 맺고 싶어지는 상황이라고 생각합니다. 그게 제 생각입니다.</p>
+<p>이런 기술이 작동하는 방식에 대한 프레임워크를 만들 수도 있고, 만들지 않을 수도 있습니다. 시간이 지나면서 점점 더 구체적인 규칙이 생길 거라고 확신합니다. 하지만 제 예상으로는, 어떤 규칙이 생기든 조직을 세울 때와 비슷할 것입니다. 회사 내부에서 한 팀은 자기 역할을 하고 다른 팀도 자기 역할을 하게 만드는 것만으로 조직도를 실제로 작동시키려 하지는 않잖아요. 사람들을 서로 좋아하고 함께 일하게 만들어서, 업무에 이런 이상한 단절이 생기지 않도록 하려는 것입니다.</p>
+<p>AI와 초지능이 세상에 얼마나 중요한 역할을 하게 될지를 생각하면, 구체적인 절차보다 원활한 지식 교환과 진정성 있고 신뢰할 수 있는 대화를 원하게 될 것이라고 봅니다. 물론 둘이 서로 배타적인 것은 아닙니다.</p>
+<p>네. 적어도 저희가 매우 집중해 온 부분은 바로 그것입니다. 다른 연구소들도 그렇게 한다면—일부는 그렇게 하고 있다고 생각하고, 다른 곳들은 그만큼 적극적이지 않을 수도 있지만—매우 긍정적인 일이 될 것입니다.</p>
+<p>최근 뉴스에서 벌어지는 일을 생각해 보면, 그중 하나는 여러분이 만드는 안경이 아주 대중적인 제품이 되어가고 있다는 점입니다. 많이 판매하고 있고, 사람들이 이 안경을 이용해 몰래 촬영하는 것이 아닌지에 대한 우려도 커지고 있습니다. 일부 업소가 안경을 착용한 사람들의 출입을 금지하고 있다는 것도 보셨을 겁니다. 이에 어떻게 대응하고 계신지, 그리고 이것이 지나갈 한때의 현상인지 아니면 한동안 이어질 과제라고 생각하시는지 궁금합니다.</p>
+<p>제 생각에는 저희가 처음부터 이런 개인정보 보호 문제를 염두에 두고 안경을 설계했습니다. 안경에 표시등을 내장해서, 녹화 중일 때마다 매우 눈에 잘 띄는 불빛이 깜빡이도록 만들었습니다.</p>
+<p>일부 사람들이 그 표시등을 조작하려 했고, 여러분이 그런 시도를 막는 업데이트를 배포한 것으로 알고 있습니다.</p>
+<p>네, 여러 가지 조치를 했습니다. 기본적으로 표시등을 건드리려고 하면 기기의 카메라가 영구적으로 작동하지 않도록 해야 합니다. 이건 정말 중요한 부분입니다. 저희는 처음부터 그런 문제를 염두에 두고 제품을 만들었기 때문에, 제품에 대해서는 상당히 자신감을 갖고 있습니다.</p>
+<p>휴대폰에는 표시등이 없습니다. 사람들은 늘 다른 사람을 촬영하면서 돌아다닙니다. 그런 측면에서 안경은 사람들이 사용하는 다른 유형의 기술보다 훨씬 낫습니다.</p>
+<p>몇 년 전 안경을 출시했을 때 저희는 우리가 취한 조치를 꽤 명확하게 알렸습니다. 하지만 말씀하신 것처럼 이제 수백만 명, 처음 제품을 출시했을 때보다 훨씬 많은 사람들이 안경을 갖게 되었습니다. 처음에 했던 설명 중 일부는 잊혔을 수도 있고, 사람들이 보지 못했을 수도 있으며, 안경이 당시에는 큰 제품이 아니었기 때문에 그냥 관심을 두지 않았을 수도 있습니다.</p>
+<p>이제 대중적으로 널리 채택되는 수준에 도달한 만큼, 최소한 저희가 무엇을 하고 있는지 확실히 알려야 합니다. 저희는 이것이 중요하다고 생각합니다. 사실 너무 중요해서 여러 해 전 처음 출시한 버전부터 제품에 설계해 넣었습니다. 이 점이 제품에 얼마나 근본적으로 내장되어 있는지 사람들이 이해하도록 해야 합니다.</p>
+<p>하지만 저희가 이 부분을 조금 소홀히 하고, 안경이 다양한 디자인을 갖춘 멋진 제품이라는 점에 더 집중했던 것도 사실입니다. 그쪽이 주된 홍보 방향이었습니다. 초기에 이런 우려에 대응했다고 생각했고, 그 이후에는 안경의 가치와 유용성, 디자인 선택지를 계속 확대하는 데 집중했습니다.</p>
+<p>이 부분을 정말 명확하게 전달해야 한다고 생각합니다. 저희가 처음부터 중요하게 여겨 온 사안이고, 현재도 잘 대응하고 있다고 생각합니다. 하지만 사람들이 이 문제를 중요하게 여기기 때문에, 그만큼 중요한 일입니다.</p>
+<p>초창기에는 휴대폰에 대해서도 개인정보 보호 관련 우려가 있었죠. 새로운 제품은 무엇이든 사람들의 삶에 유용하다는 것이 입증되면 사람들이 익숙해지는 것 같습니다. 어쩌면 안경은 그 과정의 초기에 있는 것일 뿐일 수도 있습니다. 새로운 제품이고, 잠재적으로 자신을 녹화할 수 있는 새로운 물건에 대한 심리적 장벽을 넘으려면 사람들이 직접 그 가치를 확인해야 하니까요.</p>
+<p>휴대폰도 그랬습니다. 예전에 사람들이 “휴대폰으로 뭘 하는 거야?”라고 말했던 게 기억납니다.</p>
+<p>네, 일리가 있는 말씀입니다. 지난 20년 동안 소셜 미디어를 만들어 오면서 제가 깨달은 점 중 하나는, 그런 우려에 대응하는 데 저희가 아마도 충분히 직접적이지 못했다는 것입니다. 그것이 사람들이 제품을 사용하는 것을 반드시 막지는 않았지만, 오늘날 사람들이 제품을 바라보는 방식에는 영향을 미쳤다고 생각합니다.</p>
+<p>저희가 그런 문제를 얼마나 심각하게 받아들였는지 그 과정에서 설명할 수도 있었을 것입니다. 하지만 그러지 않았습니다. “사람들이 제품을 이렇게 많이 사용한다는 건 여전히 좋아한다는 뜻이니까”라고 생각했기 때문입니다. 하지만 소셜 미디어 제품을 통해 현재 도달한 지점보다 더 나은 상태에 이를 수 있다고 생각합니다. 사람들이 제품을 좋아하면서도 저희가 그런 모든 문제를 얼마나 심각하게 받아들이는지 이해하는 상태 말입니다. 제가 지향하는 것은 바로 그것입니다.</p>
+<p>그것과 최근의 청소년 안전 문제 전반에 관한 합의(settlement) 사이에도 연관성이 있나요? 많은 사람이 이야기하는 사안입니다. 방금 말씀하신 내용과 그 합의 사이에 관련이 있는지, 이 과정을 통해 무엇을 배웠는지 듣고 싶습니다.</p>
+<p>네. 이것도 좋은 예라고 생각합니다. 저희는 이미 한동안 그런 안전 문제를 진지하게 다뤄 왔습니다. 인스타그램의 청소년 계정 보호 기능을 오랫동안 개발해 왔고, 그 분야에서 선도적인 작업을 해 왔다고 생각합니다.</p>
+<p>이번 합의가 흥미로운 이유는, 저희가 실제로 하려는 일이 업계의 기준과 프레임워크를 만드는 것이기 때문입니다. 여기에는 현실적인 문제가 있습니다. 이런 제품을 만드는 대부분의 회사는 청소년의 사용 시간을 하루 한 시간으로 제한하는 데 동의할 것이라고 생각합니다. 하지만 어느 한 회사만 단독으로 그렇게 할 수는 없습니다. “사람들이 인스타그램을 하루 한 시간 이상 사용하지 않게 했는데, 그 사용 시간이 틱톡으로 옮겨 간다면, 우리가 정말 누군가를 도운 것일까?”라는 문제가 생깁니다. 아무도 돕지 못한 채 우리만 손해를 보게 되는 것입니다.</p>
+<p>저희가 취한 조치의 구조는 본질적으로 이랬습니다. 저희가 먼저 일방적으로 사용을 제한하는 조치를 취하겠다고 한 것입니다. 사용 시간 제한, 알림, 사람들이 플랫폼에 접근할 수 있는 시점—학교에 있을 때, 잠을 자야 할 때—등과 관련된 여러 제한이 있습니다.</p>
+<p>저희가 먼저 첫 단계에 나서겠다고 했습니다. 유튜브와 틱톡이 같은 조건에 동참하면, 업계 전체가 함께 이를 확정하고 다음 단계로 나아갈 수 있습니다.</p>
+<p>이번 합의가 법적 구속력을 갖는 프레임워크로 기능해 업계 전체가 이런 사안에 대해 일관된 기준을 따르게 되기를, 그리고 어느 한 회사가 그런 조치를 취한다고 해서 불리해지지 않기를 매우 희망합니다.</p>
+<p>저희가 먼저 나서면서 어느 정도 위험을 감수하고 있지만, 다른 회사들도 동참한다면 모두에게 더 나은 결과가 될 것이라고 생각합니다.</p>
+<p>마지막 질문입니다. 다시 X에 글을 올리고 계시죠.</p>
+<p>네. 저는 어디에나 있습니다.</p>
+<p>어디에나 계시지만, X에 글을 올리는 것이 이제는 일종의 과시 같은 일의 일부인지 궁금합니다. 스레드도 있고, 스레드에도 계시잖아요.</p>
+<p>네, 스레드에도 있습니다. 물론 스레드는 아주 잘하고 있습니다. 지금 시점에는 X보다 규모가 더 크거나, 아주 가까운 시일 내에 그렇게 될 것이라고 생각합니다.</p>
+<p>하지만 장소마다 서로 다른 커뮤니티가 있습니다. 많은 AI 관련 사람들이 X에 있죠. 소셜 미디어를 활용할 때 하는 일 중 하나는 사람들이 있는 곳에서 소통하는 것입니다. 팟캐스트를 하거나 무언가를 게시할 때와 비슷합니다. 아마 한 곳에만 게시하지는 않을 겁니다. 어디에든 올릴 수 있죠.</p>
+<p>저는 Threads와 X에 같은 내용을 게시합니다. 어떤 사람들은 “왜 이걸 X에 올리세요?”라고 묻습니다. 글쎄요, 거기에도 올릴 거니까요. 그곳에서도 소통할 겁니다.</p>
+<p>저는 이게 모두 좋은 일이라고 생각합니다. 어느 정도는 커뮤니티의 일부가 X에 있고, 우리는 사람들이 있는 곳에서 소통할 수 있기를 바랍니다. 이 대화의 많은 부분이 바로 그런 것입니다. 사람들이 있는 곳으로 가서 대화를 나눌 수 있는 것이죠.</p>
+<p>네. 그럼, 마크. 감사합니다.</p>
+<p>이런 대화를 나눌 수 있게 해주셔서 감사합니다.</p>
+<p>네, 저야말로 기쁩니다.</p>
+</details>
+</body></html>

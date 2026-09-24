@@ -1,0 +1,530 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Pstack은 과한 오버스펙일까요? 그래도 써봐야 하는 이유</title>
+<meta name="description" content="Pstack이 라우팅·병렬 탐색·검증을 결합해 코딩 에이전트의 결과를 단단하게 만드는 방식과, 추가 시간·토큰 비용을 감수할 조건을 살펴본다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Pstack은 과한 오버스펙일까요? 그래도 써봐야 하는 이유</h1>
+<div class="meta">업로드 2026-09-13 · 11.6분 · <a href="https://youtu.be/lf75rqTaO8s" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 코딩 에이전트가 지시에 따라 코드를 작성하거나 검사하는 도구라는 정도</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<h3>큰 그림: 코드를 빨리 만드는 도구보다 일을 엄격하게 진행하는 절차</h3>
+<p>Pstack은 하나의 코드를 생성하는 모델이 아니다. 영상의 설명에 따르면, <strong>코딩 에이전트가 어떤 절차로 조사하고, 여러 대안을 비교하고, 구현 결과를 검증할지 정리한 원칙·플레이북·개별 스킬의 묶음</strong>이다. 플레이북은 상황별 작업 절차이고, 스킬은 조사·검토·검증처럼 구체적인 행동을 수행하는 명령에 가깝다.</p>
+<p>그 중심에는 <strong>Potato Mode</strong>라는 라우터가 있다. 라우터는 요청을 직접 해결하기보다, 현재 작업에 어떤 플레이북이나 스킬을 먼저 적용할지 고른다. 영상은 Pstack에 20개가 넘는 스킬과 22개의 플레이북이 있다고 설명한다. 다만 이 두 숫자는 서로 다른 대상을 세는 수치다.</p>
+<p>Pstack의 목표는 결과를 한 번에 빨리 내는 것이 아니라, 그 결과가 실제로 작동하는지 여러 방법으로 의심하고 확인하는 데 있다. 이를 위해 여러 에이전트에게 같은 문제를 풀게 하거나, 서로 다른 조각을 맡기거나, 구현 뒤 별도의 검증 스크립트를 만들게 한다.</p>
+<figure data-visual-kind="map" style="margin:1.5rem 0; overflow-x:auto;">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 860 430" role="img" aria-labelledby="pstack-map-title pstack-map-desc" style="width:100%; min-width:680px; height:auto; font-family:system-ui,sans-serif;;min-width:860.0px;max-width:none;">
+  <title id="pstack-map-title">Pstack의 전체 구조</title>
+  <desc id="pstack-map-desc">원칙이 플레이북과 개별 스킬의 기준이 되고, Potato Mode가 작업에 맞는 절차를 선택하며, 구현 결과가 검증과 감사로 이어지는 구조다.</desc>
+  <rect x="20" y="25" width="820" height="380" rx="18" fill="#f8fafc" stroke="#475569" stroke-width="2"/>
+  <rect x="55" y="70" width="170" height="85" rx="12" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="140" y="105" text-anchor="middle" font-size="20" font-weight="700" fill="#172554">원칙</text>
+  <text x="140" y="133" text-anchor="middle" font-size="15" fill="#172554">작게 변경하고 검증하기</text>
+  <rect x="275" y="70" width="230" height="85" rx="12" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="390" y="105" text-anchor="middle" font-size="20" font-weight="700" fill="#78350f">Potato Mode</text>
+  <text x="390" y="133" text-anchor="middle" font-size="15" fill="#78350f">알맞은 절차를 고르는 라우터</text>
+  <rect x="555" y="70" width="245" height="85" rx="12" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="677" y="105" text-anchor="middle" font-size="20" font-weight="700" fill="#14532d">플레이북과 스킬</text>
+  <text x="677" y="133" text-anchor="middle" font-size="15" fill="#14532d">조사·병렬 작업·검토·검증</text>
+  <line x1="225" y1="112" x2="275" y2="112" stroke="#334155" stroke-width="3"/>
+  <polygon points="275,112 263,105 263,119" fill="#334155"/>
+  <line x1="505" y1="112" x2="555" y2="112" stroke="#334155" stroke-width="3"/>
+  <polygon points="555,112 543,105 543,119" fill="#334155"/>
+  <rect x="95" y="235" width="190" height="90" rx="12" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+  <text x="190" y="269" text-anchor="middle" font-size="19" font-weight="700" fill="#4c1d95">구현과 탐색</text>
+  <text x="190" y="297" text-anchor="middle" font-size="15" fill="#4c1d95">Arena · Swarm · TDD</text>
+  <rect x="335" y="235" width="190" height="90" rx="12" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+  <text x="430" y="269" text-anchor="middle" font-size="19" font-weight="700" fill="#7f1d1d">교차 검토</text>
+  <text x="430" y="297" text-anchor="middle" font-size="15" fill="#7f1d1d">Interrogate</text>
+  <rect x="575" y="235" width="190" height="90" rx="12" fill="#cffafe" stroke="#0e7490" stroke-width="2"/>
+  <text x="670" y="269" text-anchor="middle" font-size="19" font-weight="700" fill="#164e63">행동 검증</text>
+  <text x="670" y="297" text-anchor="middle" font-size="15" fill="#164e63">검증 스크립트와 감사</text>
+  <line x1="677" y1="155" x2="190" y2="235" stroke="#475569" stroke-width="2"/>
+  <line x1="677" y1="155" x2="430" y2="235" stroke="#475569" stroke-width="2"/>
+  <line x1="677" y1="155" x2="670" y2="235" stroke="#475569" stroke-width="2"/>
+  <line x1="285" y1="280" x2="335" y2="280" stroke="#334155" stroke-width="3"/>
+  <polygon points="335,280 323,273 323,287" fill="#334155"/>
+  <line x1="525" y1="280" x2="575" y2="280" stroke="#334155" stroke-width="3"/>
+  <polygon points="575,280 563,273 563,287" fill="#334155"/>
+  <text x="430" y="375" text-anchor="middle" font-size="17" font-weight="700" fill="#0f172a">목표: 그럴듯한 코드가 아니라 확인된 결과</text>
+</svg></div>
+<figcaption><strong>Pstack의 전체 지도.</strong> 원칙과 라우팅이 작업 방법을 고르고, 구현·교차 검토·행동 검증이 이어지는 개념 구조를 보여준다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위쪽은 무엇을 선택하고 통제하는지, 아래쪽은 실제 작업이 어떻게 단단해지는지를 보여준다. 화살표는 권장 흐름이지 모든 작업에 반드시 모든 스킬을 사용한다는 뜻은 아니다.</p>
+<h3>왜 이런 장치가 필요한가</h3>
+<p>코딩 에이전트가 만든 프로그램은 컴파일되고 단위 테스트가 통과해도 실제 사용 상황에서는 틀린 데이터를 보여주거나 중요한 기능이 깨질 수 있다. 영상 속 앱 사례도 여러 프로젝트와 설정을 계속 확인해야 해서, 겉보기에는 정상인데 근본적으로 잘못된 결과를 낼 가능성이 큰 작업으로 설명된다.</p>
+<p>Pstack은 이 문제를 여러 층에서 다룬다.</p>
+<ul>
+<li><strong>Why</strong>는 코드 변경 기록만 보는 대신, 연결된 도구가 있다면 Slack 대화, PostHog의 제품 정보, Sentry 로그, 의사결정 기록 등을 조사해 “왜 이렇게 만들었는가”를 찾는다.</li>
+<li><strong>Recall</strong>은 한동안 떠나 있던 프로젝트의 전사와 연결된 정보원을 살펴 현재 위치와 다음 작업을 복원한다.</li>
+<li><strong>Interrogate</strong>는 두세 개 모델이 같은 코드를 각자 검토하게 한다.</li>
+<li><strong>Create Verification</strong>은 앱의 실제 행동을 입증할 검증 스크립트와 교차 확인 절차를 만든다.</li>
+<li><strong>Maintain Verification</strong>은 제품이 바뀌면서 검증 도구가 낡는 문제를 줄이기 위해 검증 절차를 다시 갱신한다.</li>
+</ul>
+<p>핵심은 <strong>“테스트가 초록색이다”와 “실제 산출물이 요구대로 작동한다”를 같은 말로 취급하지 않는 것</strong>이다. 영상은 컴퓨터 사용이나 종단 간 테스트처럼 실제 행동을 확인하는 더 깊은 검증을 강조한다.</p>
+<figure data-visual-kind="process" style="margin:1.5rem 0; overflow-x:auto;">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 920 360" role="img" aria-labelledby="workflow-title workflow-desc" style="width:100%; min-width:720px; height:auto; font-family:system-ui,sans-serif;;min-width:920.0px;max-width:none;">
+  <title id="workflow-title">영상 사례에서 나타난 작업 흐름</title>
+  <desc id="workflow-desc">요구와 제약을 파악한 뒤 작은 가능성 시험, 기본 구조, 병렬 탐색, 구현, 행동 검증, 감사를 거치는 과정이다.</desc>
+  <rect x="15" y="20" width="890" height="315" rx="18" fill="#f8fafc" stroke="#475569" stroke-width="2"/>
+  <g font-size="16" text-anchor="middle">
+    <rect x="40" y="80" width="120" height="90" rx="12" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+    <text x="100" y="115" font-weight="700">1. 틀 잡기</text>
+    <text x="100" y="142">요구·제약 파악</text>
+    <rect x="185" y="80" width="120" height="90" rx="12" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+    <text x="245" y="115" font-weight="700">2. 탐침</text>
+    <text x="245" y="142">가능성만 작게 시험</text>
+    <rect x="330" y="80" width="120" height="90" rx="12" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+    <text x="390" y="115" font-weight="700">3. 뼈대</text>
+    <text x="390" y="142">기본 구조 만들기</text>
+    <rect x="475" y="80" width="120" height="90" rx="12" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+    <text x="535" y="115" font-weight="700">4. 병렬 탐색</text>
+    <text x="535" y="142">대안 비교·통합</text>
+    <rect x="620" y="80" width="120" height="90" rx="12" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+    <text x="680" y="115" font-weight="700">5. 검증</text>
+    <text x="680" y="142">실제 행동 확인</text>
+    <rect x="765" y="80" width="120" height="90" rx="12" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+    <text x="825" y="115" font-weight="700">6. 감사</text>
+    <text x="825" y="142">거짓 주장 교정</text>
+  </g>
+  <g stroke="#334155" stroke-width="3" fill="#334155">
+    <line x1="160" y1="125" x2="185" y2="125"/><polygon points="185,125 174,118 174,132"/>
+    <line x1="305" y1="125" x2="330" y2="125"/><polygon points="330,125 319,118 319,132"/>
+    <line x1="450" y1="125" x2="475" y2="125"/><polygon points="475,125 464,118 464,132"/>
+    <line x1="595" y1="125" x2="620" y2="125"/><polygon points="620,125 609,118 609,132"/>
+    <line x1="740" y1="125" x2="765" y2="125"/><polygon points="765,125 754,118 754,132"/>
+  </g>
+  <rect x="170" y="225" width="580" height="65" rx="12" fill="#fff" stroke="#64748b" stroke-width="2"/>
+  <text x="460" y="252" text-anchor="middle" font-size="17" font-weight="700" fill="#0f172a">현실이 가정을 깨면 설계를 다시 바꾼다</text>
+  <text x="460" y="277" text-anchor="middle" font-size="15" fill="#334155">처음 계획을 지키는 것보다 확인된 사실에 맞추는 흐름</text>
+</svg></div>
+<figcaption><strong>영상 사례의 작업 흐름.</strong> 작은 탐침부터 감사까지 진행하며, 구현 중 발견한 현실에 맞춰 설계를 수정하는 과정을 나타낸다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽에서 오른쪽으로 진행한다. 아래 상자는 처음 세운 계획을 고정하지 않고 구현 중 드러난 제약에 따라 되돌아갈 수 있음을 뜻한다. 영상 사례에서는 마지막 감사 단계에서 에이전트가 스스로 세 가지 거짓 주장을 발견해 고쳤다고 화자가 말한다.</p>
+<h3>Arena와 Swarm은 무엇이 다른가</h3>
+<p>Pstack은 여러 에이전트를 병렬로 쓰는 두 방식을 소개한다.</p>
+<p><strong>Arena</strong>는 같은 문제를 세 개 또는 네 개의 에이전트에게 풀게 한 뒤, 각 설계에서 쓸 부분을 선택하거나 버리고 최종 결과에 합친다. 영상의 시연에서는 Claude, GPT, Grok, Claude Opus 5가 설계 아이디어를 다루는 장면이 제시된다.</p>
+<p><strong>Swarm</strong>은 같은 문제를 경쟁시키기보다 문제의 서로 다른 조각을 병렬 작업자에게 나눠 준 다음, 결과를 하나의 보고서로 모은다. 쉽게 말하면 Arena는 <strong>여러 답안을 비교하는 방식</strong>, Swarm은 <strong>하나의 큰 일을 분담하는 방식</strong>이다.</p>
+<p>화자는 브랜치와 작업 트리를 가로질러 결과를 모으면서 작업이 겹치지 않게 하는 것이 Pstack의 지향점이라고 설명한다. 그러나 자신도 충분히 사용하지 않아 실제로 항상 그렇게 되는지는 말할 수 없다고 선을 긋는다.</p>
+<h3>검증이 강해질수록 비용도 커진다</h3>
+<p>영상은 같은 프로젝트를 두 조건으로 실행했다고 말한다. Claude 5.1에 계획 모드와 추가 스킬을 붙이지 않은 조건에서는 약 30분이 걸렸고, Pstack을 사용한 조건에서는 1시간이 걸렸다. 화자는 두 결과의 차이가 상당했고 Pstack 쪽이 더 단단해졌다고 평가한다. 하지만 결함 수나 성공률처럼 독립적으로 비교할 수 있는 품질 수치는 제시되지 않는다.</p>
+<figure data-visual-kind="comparison" style="margin:1.5rem 0; overflow-x:auto;">
+<table style="width:100%; min-width:680px; border-collapse:collapse; font-size:1rem;">
+  <thead>
+    <tr style="background:#e2e8f0;">
+      <th style="padding:0.75rem; border:1px solid #64748b; text-align:left;">비교 항목</th>
+      <th style="padding:0.75rem; border:1px solid #64748b; text-align:left;">추가 스킬 없는 조건</th>
+      <th style="padding:0.75rem; border:1px solid #64748b; text-align:left;">Pstack 사용 조건</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;"><strong>영상에서 말한 시간</strong></td>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;">약 30분</td>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;">약 1시간</td>
+    </tr>
+    <tr>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;"><strong>검토 구조</strong></td>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;">계획 모드와 추가 스킬 없음</td>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;">병렬 탐색·검토·검증 포함</td>
+    </tr>
+    <tr>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;"><strong>품질에 대한 근거</strong></td>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;">정량 지표가 제시되지 않음</td>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;">화자가 결과 차이가 상당하다고 평가</td>
+    </tr>
+    <tr>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;"><strong>화자의 사용 판단</strong></td>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;">작고 단순한 변경에 가까움</td>
+      <td style="padding:0.75rem; border:1px solid #94a3b8;">중요하고 엄격한 품질이 필요한 기능에 가까움</td>
+    </tr>
+  </tbody>
+</table>
+<figcaption><strong>시간과 검증 강도의 비교.</strong> 시간 수치는 영상 속 한 사례이며, 품질 우위는 화자의 평가이지 독립적으로 측정된 결과가 아니다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 이 표는 “Pstack이 항상 더 낫다”는 결론이 아니라, 검증을 늘리면 시간과 토큰도 함께 늘어난다는 교환관계를 보여준다. 화자는 중요한 기능이고 토큰 비용을 감수할 수 있다면 Arena 같은 방식을 고려할 수 있지만, 작은 디자인 변경이나 프런트엔드 UI 작업에는 Pstack 전체가 필요하지 않을 수 있다고 말한다.</p>
+<h3>중요한 것은 모든 장치를 켜는 일이 아니라 선택 기준을 갖는 일</h3>
+<p>Pstack의 원칙에는 다음과 같은 방향이 반복된다.</p>
+<ul>
+<li>코드를 더 붙이기 전에 삭제하거나 가장 작은 변경으로 해결한다.</li>
+<li>새 기능을 억지로 덧붙이지 말고, 처음부터 있었던 기능이라면 구조를 어떻게 만들었을지 다시 생각한다.</li>
+<li>거대한 추상화와 흩어진 코드를 줄여 읽는 사람의 부담을 낮춘다.</li>
+<li>반복해서 손으로 확인할 일이라면 명령줄 도구나 스크립트로 만들어 재사용한다.</li>
+<li>중앙 대화의 맥락을 지키기 위해 작업 조각을 하위 에이전트에 맡기고 결과만 돌려받는다.</li>
+<li>에이전트가 일하는 동안 사람이 불필요하게 기다리지 않게 한다.</li>
+</ul>
+<p>따라서 Pstack을 써야 하는 이유는 모든 작업을 복잡하게 만들기 위해서가 아니다. <strong>중요한 작업에서 에이전트의 그럴듯한 답을 그대로 믿지 않고, 조사·대안 비교·행동 검증·감사의 절차를 가져오기 위해서</strong>다. 반대로 실패 비용이 낮은 작은 변경이라면 그 절차 전체가 오히려 낭비가 될 수 있다.</p>
+<p>출처에는 경계도 있다. 영상은 로렌 탄의 경력과 Pstack의 설계 의도를 소개하지만 이를 독립적으로 검증할 자료는 제공되지 않았다. 메타데이터의 원작자 필드는 비어 있고, Cursor 소속 및 로렌 탄 관련 출처는 이름과 SNS를 바탕으로 한 추정이라고 적혀 있다. 또한 메타 설명은 21가지 원칙이라고 하지만 제공된 전사는 그 전체 목록을 열거하지 않는다. 그러므로 이 노트는 영상 화자의 설명을 정리한 것이며, 모든 성능·경력·귀속 주장을 확인된 사실로 확정하지 않는다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>Pstack은 모델 하나가 아니라 원칙·플레이북·스킬을 묶어 코딩 에이전트의 작업 절차를 엄격하게 만드는 스택이다.</li>
+<li>Arena는 같은 문제의 여러 답을 비교하고, Swarm은 문제의 서로 다른 부분을 나눠 처리한다.</li>
+<li>테스트 통과와 실제 행동 검증은 다르며, Pstack은 별도 검증 스크립트와 교차 검토를 강조한다.</li>
+<li>추가 검증은 시간과 토큰을 더 쓰므로 중요한 작업에는 유용할 수 있지만 작은 변경에는 과할 수 있다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>Pstack은 왜 과한 도구처럼 보여도 써볼 가치가 있으며, 어떤 작업에서는 사용하지 않는 편이 나은가?</strong></p>
+</blockquote>
+<ul>
+<li>Pstack은 코딩 에이전트의 어떤 실패를 줄이려 하는가?</li>
+<li>Arena와 Swarm은 각각 어떤 문제에 맞는가?</li>
+<li>추가 시간과 토큰을 감수할 기준은 무엇인가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>한 에이전트가 만든 앱은 테스트를 통과했지만, 여러 프로젝트에서 데이터를 모으는 과정이 틀렸을 가능성이 남아 있다. Pstack은 별도의 검증 스크립트와 교차 확인을 만들고, 마지막 감사에서 에이전트가 했던 세 가지 거짓 주장을 찾아 고쳤다고 화자는 설명한다.</p>
+<p><code>"테스트는 통과했지만 실제 앱 동작과 데이터는 틀릴 수 있다"</code> <strong>문제</strong><br>
+→ <code>"여러 모델의 검토와 행동 검증 스크립트로 결과를 교차 확인한다"</code> <strong>작동 방식</strong><br>
+→ <code>"화자의 시연에서는 감사 단계에서 세 가지 거짓 주장을 발견해 교정했다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">공항 관제탑과 정비 절차</div>
+<p>Potato Mode는 비행 상황에 맞는 절차를 고르는 관제탑에 가깝다. Arena는 여러 조종안 중 더 나은 부분을 고르는 과정이고, Swarm은 관제·정비·수하물처럼 일을 나누는 과정이다. Verification은 계기판의 초록불만 믿지 않고 실제 기체 상태를 다시 확인하는 정비 절차에 대응한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 공항 절차는 역할과 안전 기준이 비교적 고정돼 있지만, 코딩 에이전트는 확률적으로 결과를 만들며 새 코드와 검증 코드 모두 틀릴 수 있다. Pstack이라는 절차가 정확성을 자동으로 보장하는 것도 아니다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pstack</strong></td>
+<td>에이전트의 작업 규칙 묶음</td>
+<td>원칙·플레이북·개별 스킬과 명령을 결합한 에이전트 엔지니어링 스택</td>
+<td>새로운 코딩 모델 하나라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>Potato Mode</strong></td>
+<td>어떤 도구를 먼저 쓸지 고르는 안내자</td>
+<td>요청을 적절한 플레이북이나 스킬로 보내는 라우터</td>
+<td>모든 작업을 직접 수행하는 단일 스킬이라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>Arena</strong></td>
+<td>같은 문제의 여러 답안을 경쟁시키기</td>
+<td>여러 에이전트가 동일한 문제를 풀고 결과의 일부를 선택·통합하는 병렬 탐색</td>
+<td>에이전트 수를 늘리기만 하면 품질이 보장된다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>Swarm</strong></td>
+<td>큰일을 여러 조각으로 나누기</td>
+<td>서로 다른 작업 조각을 병렬 작업자에게 배분하고 결과를 취합하는 방식</td>
+<td>Arena처럼 모두에게 같은 문제를 주는 방식으로 보는 것</td>
+</tr>
+<tr>
+<td><strong>행동 검증</strong></td>
+<td>실제로 되는지 따로 증명하기</td>
+<td>검증 스크립트, 컴퓨터 사용, 종단 간 테스트 등으로 산출물의 실제 동작을 확인하는 절차</td>
+<td>컴파일과 단위 테스트 통과만으로 같은 검증이 끝났다고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>코드가 컴파일되고 단위 테스트가 통과했는데도 Pstack이 별도의 행동 검증을 강조하는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>컴파일과 단위 테스트는 정해진 범위의 조건만 확인한다. 실제 앱은 여러 프로젝트, 설정, 외부 정보원을 함께 다룰 수 있어 겉보기에는 정상이어도 잘못된 데이터를 내놓을 수 있다. 그래서 Pstack은 실제 산출물의 행동을 확인하는 검증 스크립트와 교차 확인을 별도로 둔다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>Arena와 Swarm은 병렬 에이전트를 쓴다는 점은 같지만 작업을 어떻게 나누는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>Arena는 같은 문제를 여러 에이전트에게 맡겨 답안을 비교하고 좋은 부분을 합친다. Swarm은 문제의 서로 다른 조각을 각 작업자에게 나눠 맡기고 결과를 하나로 취합한다. 전자는 대안 탐색, 후자는 분업에 더 가깝다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 코딩 작업에 Pstack 전체를 적용할지 판단하려면 무엇을 먼저 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>실패했을 때의 영향, 실제 행동 검증의 필요성, 여러 대안을 비교할 가치, 추가 시간과 토큰을 감수할 수 있는지를 확인한다. 중요한 기능이고 잘못된 결과의 비용이 크다면 강한 검증을 시험할 이유가 있다. 작은 디자인 변경처럼 실패 영향이 낮다면 필요한 스킬만 제한적으로 쓰거나 전체 스택을 생략할 수 있다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 초록색 테스트와 확인된 가치는 다르다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 컴파일과 테스트 통과가 실제 산출물의 동작을 증명하는 것과 같지 않으며, 컴퓨터 사용이나 종단 간 테스트를 포함한 깊은 검증이 필요하다고 말한다.</li>
+<li><strong>[해석]</strong> 에이전트 평가에서는 “작업을 끝냈다”는 보고보다 사용자가 실제로 얻어야 할 결과를 다시 관찰해야 한다.</li>
+<li><strong>[경계]</strong> 검증 스크립트도 에이전트가 만들 수 있으므로 그 자체가 무오류라는 보장은 없다. 영상에는 독립적인 품질 측정 결과가 없다.</li>
+</ul>
+<h3>2. 엄격함은 무료가 아니라 선택할 품질 예산이다</h3>
+<ul>
+<li><strong>[원문]</strong> 영상 사례에서 추가 스킬이 없는 조건은 약 30분, Pstack 조건은 1시간이 걸렸다. 화자는 Pstack이 더 많은 시간과 토큰을 쓰지만 결과 차이가 상당했다고 평가한다.</li>
+<li><strong>[해석]</strong> 검증 강도는 무조건 최대화할 것이 아니라 실패 비용과 작업 중요도에 맞춰 구매하는 품질 예산으로 볼 수 있다.</li>
+<li><strong>[경계]</strong> 이 비교는 한 사례에 대한 화자의 보고다. 두 결과의 결함 수, 성공률, 사용 토큰 같은 비교 지표는 제공되지 않았다.</li>
+</ul>
+<h3>3. 숫자와 귀속은 범주와 근거를 분리해서 읽어야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 전사는 20개가 넘는 스킬과 22개 플레이북을 구분한다. 메타 설명은 21가지 원칙이라고 적지만, 전사는 원칙 전체를 열거하지 않는다. 전사는 로렌 탄의 경력과 Pstack 관련 역할도 소개한다.</li>
+<li><strong>[해석]</strong> 스킬·플레이북·원칙의 수를 하나의 개수처럼 섞지 말고 각각 다른 계층으로 읽어야 한다.</li>
+<li><strong>[경계]</strong> 20개 이상 스킬과 22개 플레이북은 서로 다른 대상이므로 직접 충돌하지 않는다. 21가지 원칙은 메타 설명에만 총수가 있으며 전사로 전체를 대조할 수 없다. 메타의 원작자 값은 비어 있고, Cursor 소속과 로렌 탄 관련 출처는 이름·SNS 기준 추정이라고 표시돼 있다. 또한 화자는 Pstack을 Cursor·Claude Code·Codex에서 쓸 수 있다고 말하지만, Cursor 외 환경에는 Michael Denier의 비공식 포팅 저장소를 언급하므로 지원 방식이 동일하다고 단정할 수 없다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> Pstack은 한 번 나온 답을 정답으로 처리하지 않고 여러 답안의 비교와 별도 검증을 요구한다.</li>
+<li><strong>통찰:</strong> 학습자의 “이해했습니다”라는 말보다, 설명·대조·새 사례 적용을 각각 확인하는 평가 구조와 닮았다.</li>
+<li><strong>질문/행동:</strong> 같은 개념을 설명하게 한 뒤, 대조 질문과 실제 적용 질문에서도 인과가 유지되는지 확인한다.</li>
+</ul>
+<h3>사업가 · 영감</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 더 단단한 결과를 얻는 대신 시간과 토큰 비용이 증가하는 교환관계를 보여준다.</li>
+<li><strong>통찰:</strong> APOM의 현재 시스템 상태는 출처에 없으므로 직접 적용 사실을 말할 수 없다. 다만 검증 전 가설로는 실패 비용이 큰 자동화일수록 추가 검증 자원을 배정하는 구조를 시험할 수 있다.</li>
+<li><strong>질문/행동:</strong> 특정 자동화가 틀렸을 때 생기는 손실과, 이를 발견하기 위한 검증 비용을 같은 의사결정표에 놓을 수 있는가?</li>
+</ul>
+<h3>마케터 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 “더 단단한 앱”이라는 주장과 함께 30분 대 1시간, 감사에서 찾은 세 가지 거짓 주장이라는 장면을 제시한다.</li>
+<li><strong>통찰:</strong> 강한 주장을 할 때 과정 장면과 수치를 붙이는 방식은 유용하지만, 결과 품질을 직접 측정한 수치가 없으면 체감 평가와 검증된 증거를 구분해야 한다.</li>
+<li><strong>질문/행동:</strong> 상세페이지에서 결과 주장 옆에 실제 확인 절차를 보여주되, 사례 하나를 일반적인 성능 보장처럼 표현하고 있지는 않은가?</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> Why, Interrogate, Create Verification은 에이전트가 조사·구현·검증을 분리하도록 만드는 구체적인 작업 패턴이다.</li>
+<li><strong>통찰:</strong> 전체 스택을 바로 도입하기보다, 중요한 한 작업에서 행동 검증을 추가하고 실제로 발견되는 오류가 있는지 측정할 수 있다.</li>
+<li><strong>질문/행동:</strong> 정상 경로의 테스트 외에 잘못된 데이터, 낡은 검증기, 병렬 작업 충돌을 확인하는 절차가 있는가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"코딩 에이전트의 결과가 그럴듯해 보여도 실제 행동이나 데이터가 틀릴 수 있다"</code> <strong>문제</strong><br>
+→ <code>"조사·교차 검토·행동 검증을 거친 더 단단한 산출물"</code> <strong>수혜자: 코딩 에이전트를 사용하는 개발자와 결과 사용자</strong><br>
+→ <code>"추가 시간·토큰·검토 노력 제공"</code> <strong>지불자 또는 자원 제공자: 에이전트 작업을 운영하는 팀 또는 개인</strong><br>
+→ <code>"검증 단계에서 발견해 수정한 실제 오류 수"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 앞으로 시험할 작은 비핵심 코딩 과제 3개에 대해, 구현 뒤 실제 행동을 확인하는 검증 스크립트 한 개씩을 추가한다.</li>
+<li><strong>측정 1개:</strong> 세 과제에서 검증 스크립트가 발견해 수정한 실제 오류의 합계.</li>
+<li><strong>중단 기준 1개:</strong> 세 과제의 실제 오류 발견 합계가 0이면 더 넓은 작업으로 확대하지 않고 실험을 멈춘다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>소개와 귀속</td>
+<td>화자는 로렌 탄의 경력과 Pstack을 소개하지만 귀속과 경력은 독립 검증되지 않았다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>구조와 설치</td>
+<td>원칙·플레이북·스킬로 구성되며 Potato Mode가 적절한 절차를 고른다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Molten Base 시연</td>
+<td>화자는 한 오후에 스킬 관리자를 만들며 Pstack의 작업 흐름을 시연했다고 말한다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>병렬 작업</td>
+<td>Arena는 동일 문제의 대안을 비교하고 Swarm은 서로 다른 조각을 분담한다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>조사와 검증</td>
+<td>Why, Recall, Interrogate, Create Verification, Maintain Verification을 소개한다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>엔지니어링 원칙</td>
+<td>작은 변경, 제1원칙 재설계, 독자 부담 감소, 반복 작업의 도구화를 강조한다.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>비용과 사용 범위</td>
+<td>사례에서는 30분이 1시간으로 늘었으며 작은 UI 변경에는 과할 수 있다고 말한다.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>충돌·불확실성 점검</td>
+<td>숫자 범주, 지원 방식, 인물 귀속과 품질 주장의 근거를 구분한다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 소개와 귀속</h3>
+<p>화자는 로렌 탄을 Netflix 근무 경력, React 코어 팀 구성원, SpaceX와 Cursor의 Principal Engineer 경력이 있는 인물로 소개한다. Pstack을 “시니어 엔지니어의 머리를 하나의 스택으로 뽑아낸 것”에 비유하지만 이는 화자의 평가다.</p>
+<p>메타데이터의 <code>provenance.creator</code>는 비어 있다. <code>provenance.affiliation</code>에는 Cursor가 적혀 있으나, 메타 주석은 채널이 원본 영상 링크를 제공하지 않았고 화자 이름과 SNS를 기준으로 출처를 추정했다고 밝힌다. 따라서 로렌 탄을 이 영상의 원작자나 직접 화자로 확정하지 않는다.</p>
+<h3>2. 구조와 설치</h3>
+<p>Pstack은 다음 세 층으로 설명된다.</p>
+<ol>
+<li>작업 판단의 기준이 되는 원칙과 엔지니어링 규칙</li>
+<li>에이전트가 다음에 무엇을 할지 알려 주는 플레이북</li>
+<li>실제 작업을 수행하는 개별 스킬과 슬래시 명령</li>
+</ol>
+<p>중심 라우터인 Potato Mode는 20개가 넘는 스킬 중 무엇을 먼저 사용할지 판단한다. 화자는 스킬 트리에 22개 플레이북과 사용 사례별 프롬프트가 있다고 말한다.</p>
+<p>Cursor에서는 <code>/add plugin Pstack</code> 명령으로 공식 플러그인을 추가할 수 있다고 설명한다. Claude Code, Codex, OpenCode에는 Michael Denier가 포팅한 비공식 저장소와 플러그인 마켓 설치를 언급한다. 따라서 모든 환경이 같은 공식 지원 경로를 가진다는 뜻은 아니다.</p>
+<h3>3. Molten Base 시연</h3>
+<p>화자는 여러 에이전트의 스킬을 관리할 도구가 마음에 들지 않아 한 오후 동안 Molten Base라는 스킬 관리자를 만들었다고 말한다. 하나의 프롬프트를 Potato Mode에 주었고, 첫 라우팅 결과는 “figure it out” 플레이북이었다.</p>
+<p>Pstack은 BMAD, Superpowers, OpenSpec처럼 사전 명세와 계획을 중심으로 설계된 도구가 아니며, 이미 존재하는 코드베이스에서 사용하는 데 초점을 둔다고 설명한다. 로렌 탄의 입장으로 “계획을 믿지 않는다. 최고의 명세는 코드다”라는 문장을 인용하며, Pstack에 계획 스킬이 의도적으로 포함되지 않았다고 말한다.</p>
+<h3>4. Arena와 Swarm</h3>
+<p>시연의 Arena 단계에서는 Claude, GPT, Grok, Claude Opus 5가 설계 아이디어를 다루는 장면이 제시된다. 화자는 중요한 기능이고 토큰이 문제가 되지 않을 때 세 개 또는 네 개의 에이전트가 같은 문제를 풀고, 각 결과의 좋은 부분을 최종 커밋에 합치는 방식이라고 설명한다.</p>
+<p>Arena는 각 하위 에이전트가 얻은 내용을 바탕으로 일부 설계를 채택하거나 거부한다. 화자는 유사한 기능이 Cursor에 약 6개월 전에 포함됐다가 제거됐다고 주장하지만 별도 근거는 제시하지 않는다.</p>
+<p>Swarm은 병렬 작업자에게 문제의 서로 다른 조각을 주고, 결과를 하나의 보고서로 취합한다. Pstack이 브랜치와 작업 트리의 결과를 겹침 없이 모으도록 설계됐다는 설명도 나온다. 다만 화자는 자신이 충분히 사용하지 않았기 때문에 실제로 항상 그렇게 작동한다고 말할 수 없다고 인정한다.</p>
+<h3>5. 조사와 검증 스킬</h3>
+<ul>
+<li><strong>TDD:</strong> 구현보다 단위 테스트를 먼저 만들고 통과를 확인한 뒤 진행한다.</li>
+<li><strong>Why:</strong> 프로젝트 전사만 보는 것이 아니라 사용 가능한 MCP와 CLI를 탐색한다. 예시로 PostHog 제품 정보, Slack 대화, Sentry 로그, ADR 같은 의사결정 기록을 든다.</li>
+<li><strong>Recall:</strong> 한 주 정도 떠나 있던 프로젝트를 다시 시작할 때 전사와 Notion, Linear, PostHog 같은 연결 정보를 조사해 현재 위치와 다음 작업을 복원한다.</li>
+<li><strong>Interrogate:</strong> 두 개 또는 세 개의 모델이 같은 코드를 기준에 맞춰 교차 검토한다.</li>
+<li><strong>Create Verification:</strong> 앱의 행동을 입증하는 검증 스크립트와 교차 확인 절차를 만든다.</li>
+<li><strong>Maintain Verification:</strong> 제품 변경으로 검증 스크립트가 실제 개발 상태와 어긋나지 않도록 갱신한다.</li>
+<li><strong>Unslop:</strong> 글에서 “pivotal moment”, “crucial”, “delve” 같은 상투적 표현과 긴 대시를 제거한다.</li>
+<li><strong>Bro:</strong> 복잡한 마지막 메시지를 전문용어 없는 쉬운 말로 다시 표현한다.</li>
+<li><strong>Show Me Your Work:</strong> 요구와 제약 파악, 가능성 탐침, 기본 구조, 병렬 설계, 검증, 감사로 이어진 작업 과정을 드러낸다.</li>
+</ul>
+<h3>6. 시연에서 드러난 작업 순서</h3>
+<p>화자는 완성 앱부터 만들지 않고 작은 스크립트로 가능성을 확인하는 탐침부터 시작했다고 설명한다. 요구 조건에는 먼저 Mac에서 작동하고 나중에는 다른 운영체제에서도 작동해야 한다는 내용이 있었다.</p>
+<p>기본 구조를 만든 뒤 네 개의 병렬 에이전트가 작업하는 Arena 단계로 이동했다. 구현 과정에서 현실이 초기 가정을 깨뜨리자 설계도 바뀌었다. 이후 검증 테스트와 감사가 진행됐고, 감사 단계에서 에이전트가 자신이 환각한 세 가지 거짓 주장을 찾아 수정했다고 화자는 말한다.</p>
+<h3>7. 주요 원칙</h3>
+<p>화자가 설명한 원칙은 다음과 같다.</p>
+<ul>
+<li><strong>게으름 프로토콜:</strong> 리팩터링할 때 코드를 더하기보다 삭제하거나 가장 작은 변경을 우선한다.</li>
+<li><strong>제1원칙 재설계:</strong> 새 기능이 처음부터 존재했다면 구조·데이터베이스·기본 뼈대를 어떻게 설계했을지 다시 생각한다.</li>
+<li><strong>독자 부담 최소화:</strong> 거대한 PR, 흩어진 추상화와 모듈을 피하고 읽을 코드를 단순하게 유지한다.</li>
+<li><strong>설계 공간 소진:</strong> 여러 모델과 에이전트가 같은 문제의 대안을 만들고 좋은 부분을 최종 결과에 합친다.</li>
+<li><strong>지렛대 만들기:</strong> 손으로 반복하는 작업은 CLI나 스크립트로 만들어 재사용한다.</li>
+<li><strong>검증:</strong> 컴파일과 테스트 성공을 실제 행동의 증명으로 취급하지 않는다.</li>
+<li><strong>맥락 창 보호:</strong> 작업 조각을 하위 에이전트에 넘기고 중앙 대화에는 결과를 모은다.</li>
+<li><strong>사람을 막지 않기:</strong> 에이전트 작업 때문에 사람이 불필요하게 대기하지 않도록 설계한다.</li>
+</ul>
+<p>메타 설명은 21가지 원칙이라고 적지만 제공된 전사는 전체 21개를 열거하지 않는다.</p>
+<h3>8. 시간과 비용</h3>
+<p>화자는 Claude 5.1을 사용한 비교에서 계획 모드와 추가 스킬이 없는 조건은 약 30분, Pstack 조건은 1시간이 걸렸다고 말한다. Pstack 쪽이 시간은 두 배였지만 결과 차이가 상당하고 앱이 더 단단해졌다고 평가한다.</p>
+<p>동시에 검증, 확인, Swarm이 많은 토큰을 소비한다고 경고한다. 모든 프로젝트에 “감자를 던질” 필요는 없으며, 작은 디자인 변경이나 프런트엔드 UI 작업에는 전체 스택이 필요하지 않을 수 있다고 결론짓는다.</p>
+<h3>9. 숫자·고유명사·수량 표현 대조</h3>
+<ul>
+<li>영상 길이 694초는 11분 34초이며 메타의 11.6분과 반올림 기준으로 일치한다.</li>
+<li>전사의 “20개가 넘는 스킬”과 “22개 플레이북”은 세는 대상이 다르므로 충돌이 아니다.</li>
+<li>Arena는 일반 설명에서 세 개 또는 네 개 에이전트를 사용한다고 했고, 시연에는 Claude, GPT, Grok, Claude Opus 5의 네 슬롯이 언급돼 수량상 충돌하지 않는다.</li>
+<li>Interrogate는 두 개 또는 세 개 모델을 사용한다고 설명한다. Arena의 수량과는 다른 스킬이므로 충돌이 아니다.</li>
+<li>기본 조건 약 30분과 Pstack 조건 1시간은 화자의 “두 배”라는 표현과 일치한다.</li>
+<li>감사에서 발견한 거짓 주장은 세 가지로 언급된다.</li>
+<li>메타 설명의 21가지 원칙은 전사에서 총수가 확인되지 않아 대조 불가다.</li>
+<li>전사는 Pstack을 Cursor, Claude Code, Codex에서 실행할 수 있다고 넓게 표현하지만, 뒤에서는 Cursor 공식 저장소와 다른 환경용 비공식 포팅을 구분한다. 지원 경로와 동일성은 확인이 필요하다.</li>
+<li>로렌 탄의 Netflix·React·SpaceX·Cursor 경력은 전사 속 화자의 주장이다. 메타의 원작자 필드는 비어 있고 Cursor 소속은 추정 출처라는 주석이 있어 독립적으로 확정하지 않는다.</li>
+<li>병렬 작업이 겹치지 않게 취합된다는 내용은 화자도 충분히 사용하지 않았다고 밝혔으므로 검증된 성능으로 취급하지 않는다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · Pstack은 과한 오버스펙일까요? 그래도 써봐야 하는 이유 · https://www.youtube.com/watch?v=lf75rqTaO8s · 전사: 제공된 영어 전사<br>
+메타데이터상 원작자 필드는 비어 있다. Cursor 소속과 로렌 탄 관련 출처는 이름 및 SNS를 기준으로 한 추정이며, 원본 영상 링크는 확인되지 않았다고 기록돼 있다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>이분은 Ninja Engineer인 Lauren Tan입니다. Netflix에서 일했고, React 코어 팀의 멤버이기도 합니다. React는 들어보셨을 겁니다. SpaceX와 Cursor에서는 Principal Engineer를 지냈습니다.</p>
+<p>코딩 에이전트나 어떤 형태의 소프트웨어 팩토리(software factory)를 구축하고 있다면, 그녀의 스킬 모음을 꼭 살펴봐야 합니다. 말 그대로 시니어 엔지니어의 사고방식을 하나의 스택으로 추출해 놓은 것입니다. 우리 친구 Theo도 그녀의 스킬이 얼마나 훌륭한지 심층 분석을 한 적이 있습니다. 그러니 Pstack을 실제로 사용하지 않더라도, 이것을 읽는 것만으로도 숙련된 에이전트 실무자가 규모 있게 일하는 방식을 파악할 수 있습니다.</p>
+<p>저는 단 한 오후 만에 여러 에이전트에서 사용하는 모든 스킬을 관리하기 위한 Molten Base라는 스킬 매니저를 만들었습니다. 그 과정의 일부를 보여드리고, 주목할 만한 스킬들을 정리해 보겠습니다. 몇 분만 투자해도 에이전트를 활용하는 작업 방식을 크게 개선하는 데 도움이 될 겁니다.</p>
+<p>Pstack은 그녀의 모든 원칙과 엔지니어링 규칙으로 나뉘어 있습니다. 그다음에는 플레이북(playbook)이 있는데, 에이전트가 다음에 무엇을 해야 하는지 알 수 있도록 해주는 운영 절차라고 생각하면 됩니다. 그리고 실제 작업을 수행하는 각각의 스킬과 슬래시 명령어(slash command)가 있습니다.</p>
+<p>에이전트를 2년 동안 사용하고 제 스킬 모음까지 직접 구축한 저도, 여기 있는 몇 가지 스킬은 확실히 기본 목록에 추가하려고 합니다.</p>
+<p>Pstack은 Cursor, Claude Code, Codex 어디서든 실행할 수 있습니다. Cursor와 Lauren이 만든 공식 저장소는 Cursor Pstack 플러그인 저장소에서 찾을 수 있습니다. 아래 설명란에 링크를 남겨두겠습니다. Cursor에서 <code>/add plugin Pstack</code>이라고 입력하기만 하면 될 정도로 간단합니다.</p>
+<p>Claude Code, Codex, OpenCode에서 실행하고 싶다면 Michael Denier가 만든 비공식 저장소를 찾았습니다. 각 에이전트용으로 포팅해 두었기 때문에, 플러그인 마켓플레이스에서 설치하면 실제로 실행할 수 있습니다.</p>
+<p>Pstack의 핵심은 Potato Mode입니다. 이것은 기본적으로 20개가 넘는 스킬 중 어떤 것을 먼저 사용해야 할지 결정하는 라우터(router)입니다. 여기 스킬 트리에는 본질적으로 22개의 플레이북이 있고, 각각의 프롬프트와 함께 다양한 사용 사례에 대한 좋은 예시를 제공합니다.</p>
+<p>저는 새로운 소프트웨어를 만들 기회가 생기면 늘 좋아합니다. 제가 즐겨 사용할 만한 좋은 스킬 매니저를 아직 찾지 못했으니, 직접 하나 만들어 보겠습니다. 여기 Potato Mode에 프롬프트를 입력해 두었으니, 시작하기 위해 어떤 스킬을 사용하는지 살펴보죠.</p>
+<p>가장 먼저 보이는 것은 Potato Mode가 실제로 이 작업을 “figure it out” 플레이북으로 라우팅했다는 점입니다. BMAD, Superpowers, OpenSpec 같은 것을 기대했다면, 이것은 반드시 명세와 계획 수립을 위한 도구는 아닙니다. 이미 구축된 코드베이스에서 작업하도록 설계된 것입니다.</p>
+<p>Lauren은 이에 대해 개인적으로 이렇게 말합니다. “저는 계획을 믿지 않습니다. 최고의 명세는 코드입니다.” 그래서 Pstack에는 의도적으로 계획 수립 스킬이 내장되어 있지 않습니다.</p>
+<p>여기서 이미 Arena 스킬이 작동하고 있는 것을 볼 수 있습니다. Claude, GPT, Grok, Claude Opus 5 사이에 설계 아이디어가 분산되어 있습니다. 토큰 예산이 빠르게 소진되고 있네요.</p>
+<p>개발해야 할 중요한 기능이 있고 토큰이 문제가 되지 않는다면 Arena를 실행할 수 있습니다. Arena는 서너 개의 서로 다른 에이전트에게 같은 문제를 맡기고, 각각의 가장 좋은 부분을 취합해 최종 커밋으로 묶습니다. Cursor에 6개월 전 내장되어 있다가 나중에 제거된 기능입니다.</p>
+<p>기본적으로 모든 에이전트가 경쟁하며 최상의 설계를 만들어 내도록 하고, 각 설계에서 가장 좋은 부분을 골라냅니다. 각 하위 에이전트가 문제를 해결하면서 얻은 결과를 바탕으로 Arena는 병합할지 아니면 거부할지를 결정합니다.</p>
+<p>이와 비슷하게 Swarm이라는 개념도 있습니다. 여기서도 병렬 작업자들을 사용하지만, 문제를 서로 다른 조각으로 나눠 줍니다. 그런 다음 모든 결과를 하나의 통합 보고서로 다시 모읍니다.</p>
+<p>Pstack은 두려움 없는 병렬성(fearless parallelism)을 얻을 수 있도록 설계되었습니다. 기능 브랜치, 워크트리 등을 넘나들며 작업할 때 Arena나 Swarm을 사용하더라도, 모든 작업을 하나로 통합하고 서로 겹치는 부분이 없도록 합니다. 원칙상 그렇다는 이야기입니다. 꽤 큰 주장입니다. 실제로 그런지는 충분히 사용해 보지 않아 말할 수 없지만, 이를 가능하게 하는 원칙들이 어떻게 내장되어 있는지는 볼 수 있습니다.</p>
+<p>TDD, 즉 테스트 주도 개발(test-driven development) 스킬을 사용해 먼저 여러 단위 테스트(unit test)를 만들고, 계속 진행하기 전에 테스트가 통과하는지 확인했습니다.</p>
+<p>제가 특히 좋아하는 스킬은 Why입니다. Why 스킬은 정말 훌륭합니다. 프로젝트의 트랜스크립트만 확인하는 대신, 프로젝트와 관련된 모든 MCP와 CLI를 사실상 순회합니다. PostHog에서 제품 정보를 확인하거나, 어떤 기능이 구현된 이유에 관한 Slack 대화 스레드로 이동하거나, Sentry에서 로그를 가져와 의사결정 기록 또는 ADR(architecture decision record), 즉 왜 그렇게 작업했는지에 대한 전체 맥락을 파악할 수 있습니다. 이건 저도 확실히 가져다 쓸 겁니다.</p>
+<p>유용성 측면에서 다음으로는 Recall이 있습니다. 방금 작업을 중단한 프로젝트를 다시 이어서 시작하고 싶을 때 Recall은 아주 훌륭합니다. 일주일 정도 지났고 어디까지 했는지 기억하려고 한다고 해보죠. 모든 트랜스크립트를 훑어봅니다. Notion, Linear, PostHog 같은 MCP를 확인하기 위해 Why 스킬까지 사용해서 현재 어디까지 와 있는지, 다음에 무엇을 해야 하는지 찾아냅니다.</p>
+<p>솔직히 말해 스킬 자체를 읽어보는 것만으로도 개발자에게 유용한 학습 요소가 상당히 많습니다. 정말 알아둘 가치가 있는 훌륭한 패턴들이 많이 들어 있습니다.</p>
+<p>코드 개발이 실제로 끝나면 검증 단계로 들어갑니다. 여기에는 Interrogate가 있습니다. Interrogate를 사용하면 서로 다른 두세 개의 모델이 코드를 기준에 맞춰 검토하거나 재확인하게 됩니다. 여러 모델이 같은 코드를 검토하고, 각자 의견을 돌려줍니다.</p>
+<p>이런 스킬 중 일부는 엄청난 양의 토큰을 소모할 겁니다. 하지만 궁극적으로 가장 높고 엄격한 코드 품질을 원한다면, 여기서는 토큰 수가 아마 중요하지 않을 겁니다.</p>
+<p>이건 제가 정말 좋아하는 스킬입니다. Create Verification 스킬입니다. 기본적으로 앱의 동작을 입증하기 위한 자체 스크립트 방식을 만들어 냅니다. 루트부터 여러 프로젝트와 설정까지 깊이 파고들어야 합니다. 모든 것이 최신 상태인지 확인하기 위해 지속적으로 스캔해야 합니다.</p>
+<p>이 앱은 겉보기에는 작동하는 것 같지만 실제로는 근본적으로 망가져 있거나 잘못된 데이터를 제공할 수 있는 영역이 매우 넓습니다. 그래서 검증 스크립트와 교차 확인 절차를 만들었습니다. 비결정적인 에이전트를 다룰 때 이런 검증 단계는 정말 큰 가치가 있습니다.</p>
+<p>Maintain Verification 스킬도 있습니다. 앱이 개발되면서 설정해 둔 스크립트나 검증기가 개발 내용과 어긋나는 경우가 많습니다. 이 스킬을 실행하면 다시 돌아가서 최신 상태로 업데이트되었는지 확인합니다.</p>
+<p>에이전트를 사용해 어떤 형태로든 글을 작성한다면 Unslop 스킬은 정말 큰 선물입니다. “pivotal moment”, “crucial”, “delve” 같은 성가신 표현을 모두 없애는 것이 목적입니다. 논란이 있는 관행이지만, em dash(대시)도 전부 제거합니다.</p>
+<p>저는 사실 em dash를 좋아합니다. AI가 등장하기 훨씬 전부터 사용해 왔습니다. 사라지는 것을 보니 안타깝지만, 누군가 그 짧은 선을 사용하는 것을 보면 AI를 사용했다는 큰 단서처럼 보이는 것 같기도 합니다.</p>
+<p>아침 내내 여러 에이전트를 병렬로 실행해서 머리가 완전히 멈춰 버렸다고 해보죠. 이건 제가 이해하기에 너무 많습니다. 이럴 때 Bro 스킬을 실행할 수 있습니다. 마지막 메시지를 전문 용어 없이 평범한 사람의 언어로 다시 설명해 줍니다. 한번 실행해 보죠.</p>
+<p>Bro 스킬은 명확성을 위한 정말 큰 선물입니다. 특히 머리가 10개의 서로 다른 에이전트를 처리하느라 과열된 상태라면 더욱 그렇습니다.</p>
+<p>Show Me Your Work 스킬을 통해 Pstack과 그 작동 방식을 아주 많이 배울 수 있습니다. 저는 이 프롬프트를 처음 실행할 때 이 스킬을 사용했습니다. 기억하시겠지만, 지금까지의 모든 과정은 우리가 처음 입력한 단 하나의 프롬프트를 한 번 실행한 결과였습니다.</p>
+<p>훌륭한 엔지니어라면 누구나 그렇듯, 먼저 탐색부터 시작했습니다. 프로브(probe)는 우리가 달성하려는 일이 애초에 가능한지 확인하기 위한 간단한 테스트입니다. 앱 전체를 만들지는 않습니다. 작은 스크립트를 작성하고 조사해서 실제로 가능한지 확인하는 것입니다.</p>
+<p>첫 단계는 요청의 요구 사항과 제약 조건을 이해하는 것입니다. 이 경우에는 Mac에서 작동시키고, 이후에는 다른 시스템에서도 작동시키고 싶다고 했습니다. 그래서 무엇을 구축해야 하는지에 대한 틀을 만들 수 있었습니다.</p>
+<p>그다음 앱의 기본 스캐폴딩(scaffolding)을 만든 뒤, 네 개의 병렬 에이전트가 문제를 해결하는 Arena 단계로 넘어갔습니다.</p>
+<p>이 부분은 특히 흥미롭습니다. 현실에 의해 강제된 설계 변경입니다. 처음부터 계획을 너무 많이 세우는 것의 문제는 때때로 여기에 있습니다. 에이전트가 매우 상세한 계획을 세울 때는 아직 현실을 다뤄 본 적이 없습니다. 실제로 만들고 개발하는 과정에서야 우리의 가정이 깨지고, 문제를 다시 작업하면서 즉석에서 새로운 계획을 세워야 합니다.</p>
+<p>여기 Phase E에서는 모든 검증 테스트를 진행하고, 마지막으로 감사를 수행합니다. 이것이 검증이 중요한 이유입니다. 에이전트는 일부 세부 사항을 환각했다는 사실을 깨달았습니다. 그리고 수정할 수 있었던 거짓 주장 세 가지를 직접 밝혔습니다.</p>
+<p>이제 핵심 원칙을 살펴보겠습니다.</p>
+<p>첫 번째는 게으름 프로토콜(laziness protocol)입니다. 저는 이 원칙을 정말 좋아합니다. 코드를 리팩터링할 때는 코드를 더 추가하기보다 가능하다면 삭제해서 훨씬 단순하게 만들어야 합니다. 작업을 끝내는 데 필요한 변경을 최대한 작게 만드는 것을 목표로 해야 합니다. 그렇게 하는 것이 결국 훨씬 더 유지보수하기 쉬운 코드로 이어지기 때문입니다.</p>
+<p>첫 번째 원칙에서 다시 설계하기(redesigning from first principles): 프로젝트가 커지고 기능을 추가하다 보면 에이전트는 다음 기능을 기존 코드 위에 덧붙이려고 할 수 있습니다. 첫 번째 원칙에서 다시 설계한다는 것은 기본적으로 이렇게 말하는 것입니다. “첫날부터 이 기능을 추가한다고 상상해 보자. 코드 구조를 어떻게 바라볼 것인가? 이 기능이 좀 더 자연스럽게 통합되도록 스캐폴딩, 데이터베이스, 구조를 어떻게 설계할 것인가?”</p>
+<p>이는 우리가 원하는 상태에 도달하기 위해 일부 구조와 코드를 제거하는 작업을 실제로 포함할 수도 있습니다. 다시 말해, Lauren의 목표는 코드가 더 많아지는 것이 아니라, 최소한의 코드로 최대한의 효과를 내는 것입니다.</p>
+<p>독자의 부담 최소화: 에이전트가 작성한, 여러 추상화와 모듈에 걸쳐 코드가 뒤엉킨 거대한 PR에 우리 모두가 너무 지쳐가고 있습니다. 여기서의 핵심은 독자의 부담을 최소화하는 것입니다. 추상화는 최소한으로 사용해 모든 것을 아주 단순하게 유지합니다.</p>
+<p>설계 공간 모두 탐색하기: 바로 이 지점에서 Agent Arena가 등장합니다. 여러 모델과 에이전트가 같은 문제를 해결하도록 하고, 그중 가장 좋은 결과를 찾아 최종 커밋에 가장 좋은 부분들을 조합할 수 있습니다.</p>
+<p>제 강의에서는 Design Mode라는 것을 가르칩니다. 데이터베이스나 백엔드 코드 없이 인터페이스가 어떻게 보일지 몇 가지 다른 변형을 먼저 구성하는 방식입니다. 이렇게 하면 앞으로 나아가기 전에 설계에 대한 최선의 선택지를 도출할 수 있습니다.</p>
+<p>다음 원칙은 레버를 만드는 것입니다. 에이전트와 함께 어떤 작업을 손으로 여러 번 반복하게 된다면, 그 작업을 위한 도구를 만드는 게 어떨까요? CLI나 스크립트처럼 같은 검증을 반복해서 수행하는 도구일 수 있습니다. Verification 스킬을 통해 이런 사례를 볼 수 있습니다.</p>
+<p>Lauren은 여기에도 훌륭한 규율을 몇 가지 적용해 두었습니다. 솔직히 말해 Fable이나 Astra 같은 모델이라면 이런 것들을 자연스럽게 고민하고 자체적으로 적용하기 시작하기를 기대할 것입니다. 하지만 검증 단계에 관해서는, 사후에 이런 종류의 규율을 적용한다고 해서 해가 될 것은 없습니다.</p>
+<p>전체 스택을 관통하는 가장 중요한 원칙 중 하나는 검증입니다. 코드가 컴파일되고 테스트가 통과되는 것만으로는, 실제 결과물을 더 심층적으로 검증해 제대로 작동하는지 테스트하고 입증하는 것과 같지 않습니다. 여기에는 컴퓨터 사용(computer use)이나 엔드투엔드 테스트(end-to-end testing)를 통한 검증도 포함됩니다.</p>
+<p>컨텍스트 창(context window)을 지키고, 절대로 사람을 막히게 하지 마세요. 스킬과 플레이북 전반에서 이러한 원칙을 확인할 수 있습니다.</p>
+<p>중앙 컨텍스트 창이 핵심입니다. 작업의 일부를 서브에이전트에게 어떻게 분담할까요? 서브에이전트는 작업을 수행할 자체적인 고유 컨텍스트 창을 갖고, 작업이 끝나면 중앙 스레드에 결과를 보고합니다.</p>
+<p>이러한 스킬과 방법론을 결합하면 시간과 토큰 비용이 훨씬 더 많이 들지만, 훨씬 더 견고한 애플리케이션을 만들 수 있습니다. Claude 5.1을 플랜 모드(plan mode) 없이, 스킬도 연결하지 않은 상태로 사용했을 때는 프로젝트를 완성하는 데 약 30분이 걸렸습니다. Pstack을 사용했을 때는 1시간이 걸렸으니, 시간이 두 배로 든 셈입니다. 하지만 두 프로젝트의 차이는 상당합니다.</p>
+<p>이제 분명히 말씀드리겠습니다. Pstack은 여러분의 저장소에 들어가 상당히 많은 비용을 발생시키는 일련의 장치와 스킬입니다. 이 모든 검증과 확인, 스워밍(swarming)은 많은 토큰을 소모합니다. 여러분이 진행하는 모든 프로젝트에 포테이토를 던질 필요는 없겠지만, 적어도 이것이 무엇에 강하고 어디에 사용할 수 있는지는 알 수 있습니다.</p>
+<p>작은 디자인 변경을 하거나 프런트엔드 UI를 작업하는 경우라면, 아마 이것을 사용할 필요는 없을 것입니다.</p>
+</details>
+</body></html>

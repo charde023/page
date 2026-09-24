@@ -1,0 +1,485 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>토큰에게도 각자의 역할이 필요합니다 — Anthropic의 에이전트 설계법</title>
+<meta name="description" content="같은 토큰 예산도 실행·조언·평가·회고로 역할을 나누면 결과가 달라진다는 주장과 금융 분석 실험, 실제 비용 관점을 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>토큰에게도 각자의 역할이 필요합니다 — Anthropic의 에이전트 설계법</h1>
+<div class="meta">업로드 2026-09-17 · 12.8분 · <a href="https://youtu.be/ULhklk4PCO4" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 발표가 묻는 질문은 단순하다. <strong>AI 에이전트의 결과를 개선하려면 토큰 예산을 늘리는 것만으로 충분한가?</strong> 여기서 토큰 예산은 에이전트가 작업하면서 사용할 수 있는 처리 분량을 뜻한다. 보통은 예산을 모두 직접 답을 만드는 데 쓰지만, 발표자들은 같은 예산의 일부를 조언, 검사, 회고에 배정하면 결과가 달라질 수 있다고 주장한다.</p>
+<p>핵심은 “토큰 자체에 고정된 직업이 있다”는 뜻이 아니다. 하나의 작업을 여러 에이전트나 단계로 나누어, 각 단계가 서로 다른 기능을 맡게 하자는 설계 원칙이다. 발표에서는 직접 작업하는 <strong>실행</strong>, 실행자에게 방향을 제시하는 <strong>조언</strong>, 정해진 기준으로 결과를 검사하는 <strong>평가</strong>, 지난 작업에서 배운 내용을 다음 실행을 위한 기억으로 남기는 <strong>회고</strong>를 구분한다.</p>
+<figure data-visual-kind="map" style="margin:1.5rem 0;padding:1rem;border:1px solid #9ca3af;border-radius:12px;">
+<div role="img" aria-label="토큰 예산을 역할별로 배분하고 결과를 업무 기준으로 평가하는 전체 지도" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:stretch;text-align:center;">
+  <div style="padding:14px;border:2px solid #374151;border-radius:8px;background:#f9fafb;"><strong>업무 목표</strong><br>무엇을 끝내야 하는가</div>
+  <div style="padding:14px;border:2px solid #2563eb;border-radius:8px;background:#eff6ff;"><strong>고정 예산</strong><br>토큰을 얼마나 쓸 것인가</div>
+  <div style="padding:14px;border:2px solid #7c3aed;border-radius:8px;background:#f5f3ff;"><strong>역할 배분</strong><br>실행·조언·평가·회고</div>
+  <div style="padding:14px;border:2px solid #047857;border-radius:8px;background:#ecfdf5;"><strong>업무 기준 평가</strong><br>정확도 또는 완전 통과</div>
+  <div style="padding:14px;border:2px solid #b45309;border-radius:8px;background:#fffbeb;"><strong>전략 선택</strong><br>효율과 신뢰성 비교</div>
+</div>
+<figcaption style="margin-top:10px;color:#4b5563;">전체 지도: 예산의 크기만 비교하지 않고, 역할 배분과 업무상 성공 기준을 함께 설계한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽에서 오른쪽으로 본다. 같은 예산이라도 역할을 어떻게 나누는지에 따라 결과가 달라질 수 있고, 어떤 결과를 성공으로 인정하느냐에 따라 선택할 전략도 달라진다. 이 도식은 개념 흐름이며 각 칸의 크기는 수치를 뜻하지 않는다.</p>
+<h3>세 가지 역할 전략</h3>
+<p>첫째는 <strong>조언 전략(Advising)</strong>이다. 실행자가 작업하다가 조언자에게 다음 단계가 맞는지 물을 수 있게 한다. 발표에서는 판매 에이전트가 후속 연락이 늦거나 거래가 멈춘 상황을 표시하는 사례를 든다. 실행자가 모든 판단을 혼자 하는 대신, 조언자가 진행 과정의 빠진 부분을 살피는 구조다.</p>
+<p>둘째는 <strong>평가 전략(Grading)</strong>이다. 좋은 결과가 무엇인지 평가표에 먼저 적고, 평가자가 실행 결과를 그 기준에 맞춰 검사한다. 통과하면 끝내고, 통과하지 못하면 다시 실행한다. 발표의 고객 서비스 사례에서는 환불 조건을 평가표로 만들고, 응답이 그 조건에 맞는지 별도 평가자가 확인한다.</p>
+<p>셋째는 <strong>회고 전략(Dreaming)</strong>이다. 회고자가 실행 과정과 기록을 살펴 발견한 내용을 기억에 남기고, 다음 실행자가 그 기억을 이용한다. 발표에서는 채용 과정에서 후보자와 조직 사이의 적합성에 관한 상호작용과 피드백을 다음 판단에 반영하는 사례를 제시한다.</p>
+<figure data-visual-kind="comparison" style="margin:1.5rem 0;overflow-x:auto;border:1px solid #9ca3af;border-radius:12px;">
+<table style="width:100%;min-width:680px;border-collapse:collapse;">
+<thead>
+<tr style="background:#f3f4f6;">
+<th style="padding:10px;border:1px solid #d1d5db;">구성</th>
+<th style="padding:10px;border:1px solid #d1d5db;">추가 역할의 질문</th>
+<th style="padding:10px;border:1px solid #d1d5db;">발표의 사례</th>
+<th style="padding:10px;border:1px solid #d1d5db;">기대하는 변화</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:10px;border:1px solid #d1d5db;"><strong>실행만</strong></td>
+<td style="padding:10px;border:1px solid #d1d5db;">주어진 일을 어떻게 끝낼까?</td>
+<td style="padding:10px;border:1px solid #d1d5db;">금융 분석 과제의 기준선</td>
+<td style="padding:10px;border:1px solid #d1d5db;">직접 산출물 생성</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #d1d5db;"><strong>실행 + 조언</strong></td>
+<td style="padding:10px;border:1px solid #d1d5db;">다음 단계가 맞는가?</td>
+<td style="padding:10px;border:1px solid #d1d5db;">판매 후속 연락과 정체된 거래</td>
+<td style="padding:10px;border:1px solid #d1d5db;">진행 중 판단 보완</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #d1d5db;"><strong>실행 + 평가</strong></td>
+<td style="padding:10px;border:1px solid #d1d5db;">평가표를 완전히 충족했는가?</td>
+<td style="padding:10px;border:1px solid #d1d5db;">환불 조건에 맞는 고객 응답</td>
+<td style="padding:10px;border:1px solid #d1d5db;">실패한 결과의 재시도</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #d1d5db;"><strong>실행 + 회고</strong></td>
+<td style="padding:10px;border:1px solid #d1d5db;">다음 실행에 무엇을 기억할까?</td>
+<td style="padding:10px;border:1px solid #d1d5db;">채용 상호작용과 피드백</td>
+<td style="padding:10px;border:1px solid #d1d5db;">다음 라운드의 개선</td>
+</tr>
+</tbody>
+</table>
+<figcaption style="padding:10px;color:#4b5563;">역할 비교: 추가 토큰은 답을 더 길게 만드는 대신 조언, 검사 또는 다음 실행을 위한 학습을 담당한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 행마다 추가된 역할이 무엇을 묻는지 본다. 조언은 실행 도중, 평가는 결과 직후, 회고는 다음 실행을 위해 작동한다. 세 전략은 발표자가 제시한 구분이며 모든 업무에서 같은 효과가 난다는 증거는 아니다.</p>
+<h3>같은 예산으로 비교해야 하는 이유</h3>
+<p>발표자들은 금융 분석 과제를 이용해 전략을 비교했다. 처음 한 번만 실행한 실험에서는 실행 전략의 정확도가 <strong>15%</strong>, 사용량이 <strong>39,000토큰</strong>이었다. 회고 전략은 좋은 결과를 냈다고 설명되지만 <strong>600,000토큰</strong>을 사용했다. 이 상태로는 역할 설계가 좋아서 결과가 개선된 것인지, 단순히 더 많은 토큰을 써서 좋아진 것인지 분리하기 어렵다.</p>
+<p>그래서 발표자들은 회고 전략이 사용한 <strong>약 600,000토큰</strong>을 공통 최대 예산으로 정했다. 이 조건에서 실행만 한 전략은 <strong>76%</strong>, 조언 전략은 <strong>89%</strong>의 정확도를 기록했다고 말한다. 발표자들은 같은 예산에서 생긴 이 차이를 활용할 수 있는 추가 효과, 즉 <strong>알파(alpha)</strong>라고 부른다.</p>
+<figure data-visual-kind="comparison" style="margin:1.5rem 0;padding:1rem;border:1px solid #9ca3af;border-radius:12px;">
+<div role="img" aria-label="고정된 약 60만 토큰 예산에서 실행 76퍼센트와 조언 89퍼센트 정확도를 비교한 막대">
+  <div style="margin-bottom:14px;"><strong>일반 정확도 · 같은 약 600,000토큰 예산</strong></div>
+  <div style="margin:10px 0;">
+    <span style="display:inline-block;width:72px;">실행</span>
+    <span style="display:inline-block;width:76%;max-width:500px;min-width:120px;background:#64748b;color:white;padding:7px;border-radius:5px;">76%</span>
+  </div>
+  <div style="margin:10px 0;">
+    <span style="display:inline-block;width:72px;">조언</span>
+    <span style="display:inline-block;width:89%;max-width:585px;min-width:140px;background:#2563eb;color:white;padding:7px;border-radius:5px;">89%</span>
+  </div>
+  <div style="margin-top:18px;padding-top:12px;border-top:1px solid #d1d5db;">
+    <strong>완전 통과 기준</strong><br>
+    실행 42% · 복합 전략 최고 75%라고 발표되었으나, 최고값에 해당하는 전략은 전사에서 특정되지 않는다.
+  </div>
+</div>
+<figcaption style="margin-top:10px;color:#4b5563;">발표 수치 비교: 일반 정확도와 완전 통과율은 서로 다른 평가 기준이므로 같은 막대로 합치지 않았다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위의 두 막대만 같은 지표로 직접 비교한다. 아래의 42%와 최고 75%는 “100% 정확한 결과만 통과”시키는 별도 평가다. 과제 수, 표본 수, 세부 채점표는 전사에 나오지 않으므로 수치의 일반화 가능성은 판단할 수 없다.</p>
+<h3>업무에서는 평균 점수보다 완전한 결과가 중요할 수 있다</h3>
+<p>발표자들은 손익계산서(P&amp;L)처럼 수입이나 비용 숫자를 임의로 만들 수 없는 금융 업무에서는 80% 정확한 결과도 실무자가 다시 계산해야 하므로 유용하지 않을 수 있다고 주장한다. 이에 따라 점수가 100%면 통과, 그보다 낮으면 실패로 처리하는 기준을 추가했다.</p>
+<p>이 기준에서 실행 전략의 완전 통과율은 <strong>42%</strong>, 더 복잡한 전략은 최고 <strong>75%</strong>라고 설명된다. 발표 후반에는 실행 전략이 완전한 답을 “약 40%”의 확률로 내므로 평균적으로 약 세 번 실행해야 하며, 한 번에 600,000토큰을 쓴다면 완전한 결과를 얻는 비용을 <strong>180만 토큰</strong>으로 볼 수 있다고 말한다.</p>
+<p>다만 <strong>42%</strong>, “약 40%”, “평균 세 번”은 서로 정확히 일치하는 표현이 아니다. 독립 실행에서 성공 확률이 일정하다는 조건도 전사에 제시되지 않았다. 따라서 180만 토큰은 발표자가 제시한 실무 비용 설명으로 이해해야 하며, 검증된 보편 공식으로 받아들이면 안 된다.</p>
+<h3>목적에 따라 전략이 달라진다</h3>
+<p>발표자들의 결론은 한 전략이 항상 최고라는 것이 아니다. 해당 금융 분석 실험을 바탕으로, 토큰 효율이 가장 중요하면 조언 전략을 고려하고, 한 번의 실행에서 완전한 답을 얻을 신뢰성이 중요하면 평가나 회고 전략 쪽을 고려할 수 있다고 말한다.</p>
+<p>이 역할들을 조합하려면 개별 에이전트를 실행하는 틀과 그 위에서 여러 에이전트를 조정하는 상위 구조가 필요하다. 발표자들은 Claude Managed Agents의 기본 요소를 조합해 실행자가 조언을 받고, 평가자가 결과를 검사하고, 통과한 기록을 회고 단계로 보내는 구조를 만들 수 있다고 설명한다.</p>
+<figure data-visual-kind="cycle" style="margin:1.5rem 0;padding:1rem;border:1px solid #9ca3af;border-radius:12px;">
+<div role="img" aria-label="실행에서 조언과 평가를 거쳐 회고 내용을 다음 실행에 전달하는 순환 구조" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;text-align:center;">
+  <div style="min-width:120px;padding:12px;border:2px solid #2563eb;border-radius:50%;background:#eff6ff;"><strong>실행</strong><br>초안 생성</div>
+  <div aria-hidden="true" style="font-size:24px;">→</div>
+  <div style="min-width:120px;padding:12px;border:2px solid #7c3aed;border-radius:10px;background:#f5f3ff;"><strong>조언</strong><br>진행 보완</div>
+  <div aria-hidden="true" style="font-size:24px;">→</div>
+  <div style="min-width:120px;padding:12px;border:2px solid #047857;border-radius:10px;background:#ecfdf5;"><strong>평가</strong><br>통과 여부</div>
+  <div aria-hidden="true" style="font-size:24px;">→</div>
+  <div style="min-width:120px;padding:12px;border:2px solid #b45309;border-radius:50%;background:#fffbeb;"><strong>회고</strong><br>기억 기록</div>
+  <div aria-hidden="true" style="font-size:24px;">↺</div>
+</div>
+<figcaption style="margin-top:10px;color:#4b5563;">순환 구조: 회고 결과는 다음 실행에 사용되며, 평가에서 실패하면 다시 실행하는 경로도 만들 수 있다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 화살표는 가능한 조합 순서를 나타낸다. 모든 작업에 네 단계를 반드시 붙여야 한다는 뜻은 아니다. 발표자들은 장기적으로 플랫폼과 모델이 작업에 맞는 전략을 동적으로 구성하게 만드는 것을 목표로 말했지만, 이는 앞으로의 목표이지 이미 완성되었다는 보고가 아니다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>같은 토큰 예산도 모두 실행에 쓰는 대신 조언·평가·회고로 나누면 결과가 달라질 수 있다.</li>
+<li>역할 전략의 효과를 비교하려면 토큰 예산을 같게 두고 업무에 맞는 성공 기준으로 평가해야 한다.</li>
+<li>평균 정확도가 높아도 완전한 답만 쓸 수 있는 업무에서는 완전 통과율과 통과 한 건당 총비용이 더 중요할 수 있다.</li>
+<li>발표의 금융 실험은 가능성을 보여 주지만, 표본과 세부 평가 정보가 없으므로 다른 업무에서 별도 검증해야 한다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>고정된 토큰 예산에서 실행·조언·평가·회고 역할을 어떻게 나누고, 어떤 기준으로 적합한 전략을 선택해야 할까?</strong></p>
+</blockquote>
+<ul>
+<li>예산을 고정하지 않으면 왜 역할 전략의 효과를 판단하기 어려운가?</li>
+<li>평균 정확도와 완전 통과율은 어떤 업무에서 다른 결론을 만드는가?</li>
+<li>조언·평가·회고 중 무엇을 붙일지는 어떤 병목을 보고 결정해야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>한 에이전트가 토큰을 모두 써서 답을 세 번 만드는 대신, 같은 한도 안에서 일부는 답을 만들고 일부는 기준에 맞는지 검사한다. 중요한 것은 역할 수를 늘리는 일이 아니라, 검사에 쓴 토큰이 재작업을 줄였는지 확인하는 것이다.</p>
+<p><code>"예산을 늘리면 역할 설계의 효과와 단순 계산량의 효과를 구분하기 어렵다"</code> <strong>문제</strong><br>
+→ <code>"예산을 고정하고 토큰을 실행·조언·평가·회고 역할로 배분한다"</code> <strong>작동 방식</strong><br>
+→ <code>"업무 기준을 통과한 결과의 비율과 통과 한 건당 비용으로 전략을 비교한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">한정된 인원의 작업팀</div>
+<p>모든 사람에게 같은 문서를 계속 작성하게 할 수도 있지만, 일부는 작성자, 일부는 조언자, 일부는 검사자, 일부는 작업 기록을 정리하는 담당자로 나눌 수 있다. 인원수가 같아도 역할 배치에 따라 오류와 재작업이 달라질 수 있다는 점이 토큰 역할 설계와 닮았다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 토큰은 독립적으로 판단하고 책임지는 사람이 아니다. 실제 구현에서는 에이전트, 지시, 평가표, 기억, 상위 조정 구조가 역할을 만든다. 사람을 나누기만 하면 협업이 생기는 것과 달리, 에이전트 사이의 입력과 종료 조건을 명시해야 한다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>토큰의 대체 가능성</strong></td>
+<td>어느 토큰을 어디에 써도 효과가 같다는 가정</td>
+<td>모든 토큰을 동일한 실행 자원처럼 취급하는 관점</td>
+<td>토큰의 기술적 종류가 서로 다르다는 주장으로 오해하기</td>
+</tr>
+<tr>
+<td><strong>조언 전략</strong></td>
+<td>실행 중 다른 역할에게 방향을 묻기</td>
+<td>실행자와 조언자를 분리하고 실행자가 조언을 호출하는 구성</td>
+<td>조언자가 최종 결과까지 대신 만든다고 보기</td>
+</tr>
+<tr>
+<td><strong>평가 전략</strong></td>
+<td>기준표로 검사하고 실패하면 다시 하기</td>
+<td>평가자가 루브릭에 따라 실행 결과를 채점하고 반복 여부를 정하는 구성</td>
+<td>평가자를 붙이면 평가 기준도 자동으로 생긴다고 보기</td>
+</tr>
+<tr>
+<td><strong>회고 전략</strong></td>
+<td>지난 작업의 교훈을 다음번에 쓰기</td>
+<td>실행 기록에서 발견한 내용을 기억에 기록하고 다음 실행이 읽게 하는 구성</td>
+<td>한 번의 실행 안에서 답을 고치는 평가 전략과 같다고 보기</td>
+</tr>
+<tr>
+<td><strong>완전 통과 비용</strong></td>
+<td>쓸 수 있는 결과 하나를 얻는 총비용</td>
+<td>완전 통과 기준을 만족할 때까지 발생하는 반복 실행의 토큰 비용</td>
+<td>한 번 실행할 때의 토큰 수만 실제 비용이라고 보기</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>역할 전략을 비교할 때 왜 각 전략의 토큰 예산을 같게 두어야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>예산이 다르면 결과 차이가 역할 배분 때문인지 단순히 더 많은 토큰을 사용했기 때문인지 분리할 수 없다. 발표의 첫 실험에서도 실행은 39,000토큰, 회고는 600,000토큰을 사용했기 때문에 바로 비교하기 어려웠다. 예산을 약 600,000토큰으로 고정한 뒤에야 실행 76%와 조언 89%의 차이를 역할 전략의 후보 효과로 해석할 수 있었다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>평가 전략과 회고 전략은 모두 결과를 살피는데, 무엇이 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>평가는 현재 결과를 평가표와 비교해 통과시키거나 다시 실행하게 한다. 회고는 실행 과정과 기록에서 배운 내용을 기억에 남겨 다음 라운드가 사용하게 한다. 따라서 평가는 현재 결과의 품질 통제에, 회고는 이후 실행의 개선에 초점이 있다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새로운 에이전트 업무에 조언·평가·회고 중 하나만 추가한다면 무엇을 기준으로 고를 것인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 실패가 발생하는 위치를 본다. 실행 도중 방향을 잃는다면 조언, 명확한 통과 기준은 있지만 결과 편차가 크다면 평가, 여러 실행에서 같은 실수가 반복되고 이전 기록을 활용할 수 있다면 회고를 우선 후보로 둔다. 같은 예산과 같은 평가 사례로 실행 전용 기준선과 비교한 뒤 선택해야 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 계산량보다 역할 배분을 함께 보라</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자들은 토큰을 모두 실행에 쓰는 대신 조언·평가·회고 역할로 나누자고 제안했다. 약 600,000토큰의 같은 예산에서 실행은 76%, 조언은 89%였다고 말했다.</li>
+<li><strong>[해석]</strong> 에이전트 개선의 첫 질문을 “토큰을 더 쓸까?”에서 “현재 실패를 줄일 역할은 무엇인가?”로 바꿀 수 있다.</li>
+<li><strong>[경계]</strong> 금융 과제의 표본 수, 세부 과제, 모델, 평가표는 전사에 없다. 76%와 89%는 발표자가 제시한 결과이며 다른 업무에 그대로 적용된다는 독립 증거가 아니다.</li>
+</ul>
+<h3>2. 업무상 쓸 수 있는 결과를 평가하라</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자들은 P&amp;L처럼 숫자 오류를 허용하기 어려운 업무에서는 80% 정확한 결과도 다시 계산해야 하므로, 100%일 때만 통과시키는 기준을 사용했다고 설명했다.</li>
+<li><strong>[해석]</strong> 평균 점수만 높이는 것보다 실제 사용자가 재작업 없이 받아들일 수 있는 결과의 비율과 그 결과 한 건을 얻는 총비용을 측정해야 한다.</li>
+<li><strong>[경계]</strong> “100% 미만은 무용하다”는 모든 업무의 규칙이 아니라 발표자가 해당 금융 업무에 적용한 주장이다. 허용 오차가 있는 업무에는 다른 통과 기준이 필요하다.</li>
+</ul>
+<h3>3. 복합 전략은 구성할 수 있지만 자동 구성은 목표 단계다</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자들은 개별 에이전트의 실행 틀 위에 다중 에이전트 조정 계층을 두고, 실행·조언·평가·회고를 조합할 수 있다고 설명했다. 동적 전략 구성은 장기 목표로 말했다.</li>
+<li><strong>[해석]</strong> 역할 이름보다 각 역할의 입력, 출력, 통과 조건, 기억 전달 경로를 조립 가능한 기본 요소로 설계하는 것이 중요하다.</li>
+<li><strong>[경계]</strong> Claude Managed Agents의 실제 제공 범위와 성능은 전사만으로 검증할 수 없다. 전사에 갑자기 등장하는 <code>Fable</code>과 <code>outcomes</code>의 정확한 의미도 설명되지 않는다. 메타데이터의 provenance에는 원작자와 소속이 비어 있고, 원본 영상 링크도 확인되지 않았다고 적혀 있어 원출처 귀속이 불확실하다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 발표는 실행 결과를 그냥 받아들이지 않고 평가표로 검사한 뒤 실패하면 다시 시도하는 구조를 제시한다.</li>
+<li><strong>통찰:</strong> 학습자의 이해도 정답 여부만 묻기보다, 자기 말로 원인·대조·적용을 설명하는 통과 기준으로 확인할 수 있다.</li>
+<li><strong>질문/행동:</strong> 설명 평가표를 먼저 만들고, 학습자의 답이 어느 기준에서 막혔는지 기록할 수 있는가?</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 발표는 한 번의 실행비가 아니라 완전한 결과를 얻을 때까지의 총 토큰 비용을 실제 비용으로 보자고 주장한다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용한다면 아직 검증 전 가설이다. 자동화 한 건의 호출비보다 재작업, 검수 시간, 오류 위험을 포함한 통과 한 건당 비용을 비교하는 구조가 닮았다.</li>
+<li><strong>질문/행동:</strong> 가상의 업무 하나를 정해 실행 전용과 평가 포함 방식의 완전 통과율 및 통과 한 건당 비용을 비교하면 결론이 달라지는가?</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 발표는 일반 정확도 76%와 89%, 완전 통과율 42%와 최고 75%, 실행 전략의 총비용 180만 토큰이라는 숫자로 문제를 다시 프레이밍한다.</li>
+<li><strong>통찰:</strong> “정확도가 높다”보다 “실제 통과 기준을 몇 번 만에 충족하는가”가 더 구체적인 증거가 될 수 있다.</li>
+<li><strong>질문/행동:</strong> 카피에 결과 수치를 쓸 때 예산, 평가 기준, 업무 범위와 함께 제시하고, 표본 정보가 없다는 한계도 구분할 수 있는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 실행자, 조언자, 평가자, 기억 작성자를 나누고 상위 조정 계층에서 연결하는 에이전트 구조가 발표의 핵심이다.</li>
+<li><strong>통찰:</strong> 역할을 많이 붙이는 것보다 같은 예산에서 완전 통과율과 통과 한 건당 비용이 개선되는지 시험해야 한다.</li>
+<li><strong>질문/행동:</strong> 실행 전용 기준선과 역할 전략에 같은 평가 사례, 예산, 통과 조건을 적용하고 실패 경로까지 기록할 수 있는가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"높은 평균 점수에도 결과 오류 때문에 전문가가 다시 작업해야 한다"</code> <strong>문제</strong><br>
+→ <code>"재작업 없이 사용할 수 있는 결과"</code> <strong>수혜자: 에이전트 결과를 사용하는 실무자</strong><br>
+→ <code>"토큰 예산·평가 기준·업무 데이터·검수 시간 제공"</code> <strong>지불자 또는 자원 제공자: 에이전트를 운영하는 조직과 실무자</strong><br>
+→ <code>"완전 통과율과 완전 통과 결과 한 건당 총 토큰 비용의 변화"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 하나의 비식별 또는 가상 평가 과제 묶음에서 총 토큰 예산을 같게 두고, 실행 전용 방식과 실행 후 평가 방식을 비교한다.</li>
+<li><strong>측정 1개:</strong> 각 방식의 완전 통과율.</li>
+<li><strong>중단 기준 1개:</strong> 평가를 추가한 방식의 완전 통과율이 실행 전용 방식보다 높지 않으면 확대하지 않는다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>문제 제기</td>
+<td>토큰을 모두 같은 실행 자원으로 보는 가정을 의심한다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>세 가지 전략</td>
+<td>조언·평가·회고에 토큰 역할을 배정한다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>금융 분석 실험</td>
+<td>예산을 고정하기 전과 후의 성능을 비교한다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>완전 통과 관점</td>
+<td>평균 정확도 대신 100% 통과율과 총비용을 본다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>전략 선택</td>
+<td>효율과 신뢰성 중 무엇을 최적화할지에 따라 선택한다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>구성 아키텍처</td>
+<td>개별 에이전트 위에 다중 에이전트 조정 계층을 둔다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 토큰은 모두 같은 자원인가</h3>
+<p>발표 도입에서 Katelyn은 자신을 Anthropic의 플랫폼 엔지니어링 리드로, Angela는 플랫폼 프로덕트 리드로 소개한다. 메타 설명에는 각각 Katelyn Lesse와 Angela Jiang이라는 전체 이름이 나오지만, provenance의 원작자 및 소속 필드는 비어 있고 원본 링크도 확인되지 않았다고 적혀 있다.</p>
+<p>발표자들은 에이전트 결과를 개선할 때 흔히 토큰을 더 쓰거나 더 비싼 토큰을 쓰는 선택을 한다고 말한다. 이 접근에는 모든 토큰이 서로 대체 가능하며 같은 실행 기능을 한다는 암묵적 가정이 있다고 지적한다.</p>
+<h3>2. 조언·평가·회고</h3>
+<ul>
+<li><strong>조언:</strong> 실행자가 조언자를 호출하고 다음 단계가 올바른지 확인한다. 판매 에이전트의 늦은 후속 연락이나 정체된 거래를 표시하는 사례가 제시된다.</li>
+<li><strong>평가:</strong> 좋은 결과의 조건을 평가표로 정의하고, 평가자가 실행 결과를 검사한다. 통과하지 못하면 다시 실행한다. 환불 조건에 따른 고객 서비스 응답이 사례다.</li>
+<li><strong>회고:</strong> 회고자가 실행 작업과 기록을 살펴 발견한 내용을 기억에 쓰고, 다음 실행자가 이를 읽는다. 채용 과정의 상호작용과 적합성 피드백이 사례다.</li>
+</ul>
+<p>발표자들은 실행 토큰과 다른 일을 하는 토큰을 함께 배치한 구성을 하나의 전략이라고 부른다.</p>
+<h3>3. 첫 금융 분석 실험과 예산 통제</h3>
+<p>발표자들은 전문 금융 분석가의 실제 업무를 닮은 과제 묶음을 만들었다고 설명한다. 단 한 번 실행한 첫 비교에서는 다음 수치가 제시된다.</p>
+<ul>
+<li>실행 전략 정확도: <strong>15%</strong></li>
+<li>실행 전략 사용량: <strong>39,000토큰</strong></li>
+<li>회고 전략 사용량: <strong>600,000토큰</strong></li>
+<li>회고 전략의 정확한 첫 실험 점수: 전사에 제시되지 않음</li>
+</ul>
+<p>회고 전략이 더 잘했다고 설명되지만 사용 토큰도 훨씬 많았기 때문에, 역할 배분 자체의 효과를 판단하기 어렵다고 인정한다.</p>
+<p>이후 회고 전략의 예산인 약 <strong>600,000토큰</strong>을 공통 최대 예산으로 고정한다.</p>
+<ul>
+<li>실행 전략: <strong>0.15에서 0.76</strong></li>
+<li>조언 전략: 고정 예산 조건에서 <strong>0.89</strong></li>
+<li>조언과 평가 전략의 초기 점수: “60%대”</li>
+<li>예산 확대 후 조언과 평가 전략: “90%에 가까움”</li>
+</ul>
+<p>모든 전략의 전체 정확한 점수는 전사에 나오지 않는다. 발표자들은 같은 예산에서 실행과 조언 사이에 남은 차이를 탐색할 수 있는 알파라고 부른다.</p>
+<h3>4. 완전한 답을 얻는 비용</h3>
+<p>발표자들은 P&amp;L 작성처럼 수입이나 비용 숫자가 틀리면 전문가가 다시 계산해야 하는 업무를 사례로 든다. 이 조건에서는 100% 점수만 통과, 그 미만은 실패로 처리했다고 설명한다.</p>
+<ul>
+<li>실행 전략의 완전 통과율: <strong>42%</strong></li>
+<li>복합 전략의 최고 완전 통과율: <strong>75%</strong></li>
+<li>75%에 해당하는 구체적인 전략: 전사에서 특정되지 않음</li>
+<li>후반 설명의 실행 성공률 표현: <strong>약 40%</strong></li>
+<li>발표자가 제시한 평균 실행 횟수: <strong>약 3회</strong></li>
+<li>회당 예산: <strong>600,000토큰</strong></li>
+<li>발표자가 계산한 완전한 답의 총비용: <strong>180만 토큰</strong></li>
+</ul>
+<p><strong>수치 충돌 및 조건:</strong> 42%와 “약 40%”는 반올림으로 볼 수 있지만, 이 성공률에서 “평균 세 번”이라는 표현은 정확한 산식과 가정을 제시하지 않는다. 독립 실행 여부와 재시도마다 같은 성공 확률이 유지되는지도 설명되지 않는다. 따라서 180만 토큰은 발표의 근사적 비용 프레임이다.</p>
+<h3>5. 무엇을 최적화할 것인가</h3>
+<p>발표자들은 해당 영역에서 토큰 효율이 가장 중요하면 조언 전략을 선택할 가능성이 높다고 말한다. 반대로 한 번의 실행에서 완전한 답을 얻는 비율이 중요하면 평가나 회고 전략을 고려할 수 있다고 주장한다.</p>
+<p>이 결론은 발표의 금융 분석 실험에 묶여 있다. 다른 업무에서는 오류 허용 범위, 평가표의 품질, 기억의 유효기간, 역할 사이의 추가 비용에 따라 결과가 달라질 수 있다.</p>
+<h3>6. 에이전트 구성과 시행 상태</h3>
+<p>발표자들은 Claude Managed Agents에 사용한 개별 에이전트 아키텍처 위에 다중 에이전트 조정 및 실행 계층을 둔다고 설명한다. 기본 요소를 조합해 다음 흐름을 만들 수 있다고 말한다.</p>
+<ol>
+<li>과제를 실행한다.</li>
+<li>실행자가 조언을 받을 수 있게 한다.</li>
+<li>결과를 평가자에게 보내 반복 과정에서 검증한다.</li>
+<li>통과한 작업과 기록을 회고 단계로 보내 다음 실행에 사용한다.</li>
+</ol>
+<p><code>Fable</code>이 조언자 역할을 할 수 있다는 말과 <code>dreaming and outcomes</code>가 기본 제공된다는 표현이 나오지만, 두 용어의 정확한 정의와 제공 조건은 전사에 없다.</p>
+<p>발표자들은 장기적으로 모델과 플랫폼이 작업 중에 적절한 전략을 동적으로 구성하도록 만드는 것을 목표로 밝힌다. 이는 <strong>앞으로의 목표</strong>이며, 현재 모든 전략이 자동으로 구성된다고 말한 것은 아니다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>채널/업로더: Tech Bridge · 원제: 토큰에게도 각자의 역할이 필요합니다 — Anthropic의 에이전트 설계법 · https://www.youtube.com/watch?v=ULhklk4PCO4 · 전사: 제공된 SOURCE_TRANSCRIPT(방식 미상)</p>
+<p>메타데이터의 provenance.note에는 원본 영상 링크를 확인하지 못했고 화자 이름과 SNS를 기준으로 출처를 추정했다고 적혀 있다. provenance.creator와 provenance.affiliation은 비어 있으므로 원작자와 원소속은 확정하지 않았다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요. 여러분 모두와 AI Engineer에 함께하게 되어 정말 기쁩니다.</p>
+<p>저는 케이틀린이고, Anthropic에서 플랫폼 엔지니어링을 이끌고 있습니다.</p>
+<p>저는 안젤라입니다. Anthropic에서 플랫폼 제품을 이끌고 있습니다.</p>
+<p>오늘은 저희가 많은 시간을 들여 고민하고 팀과 함께 작업해 온 개념에 대해 이야기하려 합니다. 바로 토큰에도 각자의 역할이 있어야 한다는 생각입니다.</p>
+<p>에이전트 시스템(agentic system)을 구축하고 특정한 결과를 달성하려 한다면, 에이전트를 활용해 무언가를 해내려는 것입니다. 더 나은 결과를 얻기 위해 누구나 사용하는 레버가 하나 있는데, 보통은 예산을 늘리는 것입니다. 즉, 더 많은 토큰을 사용하거나 더 비싼 토큰을 사용하는 것이죠.</p>
+<p>하지만 저희는 이렇게 생각해 왔습니다. 정말 그게 전부일까?</p>
+<p>예산을 사용하는 이런 가정의 밑바탕에는 모든 토큰이 사실상 서로 대체 가능하다는 암묵적인 관점이 있습니다. 저희는 이것이 정말 맞는지 궁금했습니다. 이 모든 토큰이 정말 서로 대체 가능한가?</p>
+<p>이를 검증하기 위해 이런 생각을 해 보았습니다. 토큰에 역할을 부여하면 어떨까?</p>
+<p>일반적으로 작업을 수행하도록 에이전트를 설정하는 방식을 생각해 보면, 에이전트에 작업과 토큰 예산을 부여합니다. 사용되는 토큰은 기본적으로 구별되지 않습니다. 모두 하나의 일을 하기 때문입니다. 그저 실행할 뿐이죠.</p>
+<p>그런데 일부 토큰을 가져와 단순히 실행만 하는 것이 아니라 다른 역할을 맡기면 어떨까요?</p>
+<p>예를 들어 일부 토큰이 실행 중인 토큰에 조언을 하도록 할 수 있습니다. 또는 실행 중인 토큰이 작업을 잘 수행하려고 할 때 다른 토큰이 실행자가 얼마나 잘하고 있는지 평가하도록 할 수도 있습니다. 그러면 실행자는 다시 시도하고 반복할 수 있겠죠.</p>
+<p>아니면 꿈꾸는 토큰(dreaming tokens)을 둘 수도 있습니다. 이 토큰은 다른 실행자들이 수행한 작업을 되돌아보고, 배운 점을 메모리에 기록해 다음에 다시 활용할 수 있도록 합니다.</p>
+<p>실행하는 일부 토큰과 다른 역할을 수행하는 일부 토큰을 두는 각각의 방식을 저희는 전략(strategy)이라고 부릅니다.</p>
+<p>첫 번째 전략인 조언 전략(advising strategy)을 살펴보겠습니다.</p>
+<p>여기서는 실행자(executor)와 조언자(advisor)를 나눕니다. 실행자는 당연히 실행하지만, 핵심적으로 조언자에게 조언을 요청할 수 있습니다. 그런 다음 이 조언을 활용해 다음 단계를 제대로 수행하고 있는지 판단할 수 있습니다.</p>
+<p>이는 영업 에이전트(sales agent)를 구축하는 것과 같은 사용 사례에서 매우 유용합니다. 이상적인 세상에서는 영업 에이전트가 영업 담당자에게 후속 조치가 늦어지고 있다거나 거래가 정체되고 있다는 사실을 알려 줄 수 있어야 합니다.</p>
+<p>이 구조에서는 조언자가 여러 요소가 실제로 제대로 작동하고 있는지 확인하도록 하는 것이 매우 유용합니다.</p>
+<p>또 다른 예는 채점(grading)입니다. 여러분이 실행을 하고 있고 무엇이 좋은 결과인지 정확히 알고 있다고 해 보겠습니다. 이를 루브릭(rubric)으로 정의할 수 있습니다. 실행자가 해당 결과를 달성하려고 시도할 때마다 채점자를 배정해 그 루브릭을 기준으로 실행자가 얼마나 잘했는지 평가할 수 있습니다.</p>
+<p>실행자가 잘했다면 그대로 완료하면 됩니다. 하지만 그다지 잘하지 못했다면 좋은 결과를 얻을 때까지 다시 반복할 수 있습니다.</p>
+<p>이를 실제로 활용할 만한 예로 고객 서비스 에이전트(customer service agent)를 들 수 있습니다. 여러분이 상점을 운영하고 있는데 고객들이 연락해 “이 물건은 환불받아야 합니다”라고 말한다고 해 보겠습니다. 고객 서비스 에이전트는 이에 응답할 수 있어야 합니다.</p>
+<p>아마 누군가에게 환불을 제공해야 하는 상황에 관한 꽤 구체적인 기준이 있을 것입니다. 그 기준을 사용하는 루브릭을 정의할 수 있습니다. 채점자가 고객 서비스 에이전트의 작업을 살펴보고 제대로 처리했는지, 올바른 결과에 도달했는지 판단하도록 할 수 있습니다.</p>
+<p>저희가 사용하는 마지막 전략은 꿈꾸기(dreaming)입니다. 꿈꾸기에서는 실행자가 자연스럽게 작업을 수행하고, 그다음에 꿈꾸는 자(dreamer)가 있습니다. 꿈꾸는 자는 실행자의 작업과 트랜스크립트를 살펴볼 수 있습니다. 그리고 발견한 내용을 메모리에 기록합니다.</p>
+<p>이 메모리는 다음 라운드에서 실행자가 활용하므로, 이상적으로는 실행자의 성능이 향상됩니다.</p>
+<p>이를 활용하기 좋은 사례는 채용 에이전트(recruiting agent)를 구축하는 경우입니다. 채용에는 많은 상호작용과 피드백이 필요합니다. 후보자가 적합한지, 양측이 잘 맞는지를 판단해야 하기 때문입니다.</p>
+<p>이런 유형의 데이터를 모두 활용해 이 에이전트에 꿈꾸기 유형의 전략을 구축하면, 다음 라운드를 더욱 정교하게 다듬어 점점 더 유용하게 만들 수 있습니다.</p>
+<p>몇 가지 실험을 통해 이를 구체적으로 살펴보겠습니다. 저희는 금융 분석과 관련된 작업들로 구성된 벤치마크(bench)를 만들었습니다. 각 작업에서 실제 세계의 전문 금융 분석가가 해당 작업을 얼마나 잘 수행하는지 재현하려고 했습니다.</p>
+<p>먼저 실행만 하는 대조군(control)을 설정했습니다. 각 작업을 시도하고 평가해, 실행만 했을 때 얼마나 잘하는지 살펴보는 것입니다. 그런 다음 각 전략을 실험해 성능이 얼마나 되는지 확인할 수 있습니다.</p>
+<p>아주 기본적인 실험부터 시작했습니다. 한 번만 시도해 보자는 것이었습니다. 각 전략으로 작업을 달성하려고 한 번 시도한 뒤 정확도를 확인했습니다.</p>
+<p>여기서 실행은 그다지 잘하지 못했습니다. 정확도가 15%였습니다. 하지만 한 번만 시도했기 때문에 전략이 실제로 토큰을 얼마나 사용할지 스스로 선택할 수 있었습니다. Execute는 토큰을 많이 사용하지 않기로 결정했고, 39,000토큰만 사용했습니다.</p>
+<p>더 크고 복잡한 전략으로 넘어가면서는 더 많은 토큰을 사용했고, 더 나은 성과를 냈습니다.</p>
+<p>하지만 이것만으로는 많은 것을 알 수 없습니다. 물론 Dream은 매우 뛰어난 성능을 보였지만, 무려 600,000토큰을 사용했기 때문입니다.</p>
+<p>맞습니다. 서로 다른 역할을 부여하는 것이 알파(alpha)를 만들어 내는지 확인하려면 예산을 일정하게 유지해야 합니다.</p>
+<p>이를 위해 Dreaming의 예산인 약 600,000토큰을 전체 전략에 동일하게 적용할 최대 고정 예산으로 삼았습니다. 각 전략에 이 예산을 부여해 성능을 분석했습니다.</p>
+<p>예상대로 많은 전략에 더 큰 예산을 주면 전반적으로 성능이 향상됩니다. Execute는 0.15에서 0.76으로 올랐습니다. Advise와 Grade는 60%대에서 90%에 가까운 수준으로 상승했습니다.</p>
+<p>테스트 시점 컴퓨트(test-time compute)를 더 많이 제공하면 일반적으로 성능이 향상된다는 점을 고려하면 이는 예상할 수 있는 결과입니다.</p>
+<p>하지만 중요한 것이 오직 이것뿐이라면, 정확히 같은 토큰 예산을 제공했을 때 Execute, Advise, Grade, Dream이 모두 정확히 같은 수준에 있어야 합니다.</p>
+<p>실제로 저희가 보고 있는 것은 알파, 즉 차이가 존재한다는 것이며, 따라서 저희가 활용할 수 있는 알파가 있다는 것입니다.</p>
+<p>정확히 같은 예산 수준에서 Execute는 0.76에 도달하지만 Advise는 0.89입니다. 차이가 크지는 않지만 분명히 존재하므로, 조사해 볼 만한 알파가 있습니다.</p>
+<p>저희는 이 분석을 완전히 다른 관점에서 살펴보기로 했습니다. 케이틀린이 언급했듯이, 저희는 실제 세계의 매우 복잡한 금융 작업들로 구성된 벤치마크를 진행하고 있으며, 실제 전문가가 에이전트를 사용하는 상황을 분석하고 싶었습니다.</p>
+<p>금융 분석 전문가를 생각해 보면, 에이전트와 함께 수행해야 하는 작업은 손익계산서(P&amp;L)를 작성하고 결과를 받는 것처럼 매우 구체적일 수 있습니다.</p>
+<p>그 결과가 벤치마크에서 80% 정확하다면 훌륭하게 들립니다. 하지만 현실에서 전문가에게 그것이 의미하는 바는 직접 돌아가 손익계산서를 다시 계산해야 한다는 것입니다. 아니면 또 다른 실행을 거쳐야 합니다.</p>
+<p>이런 종류의 분야와 작업에서는 100% 정확하지 않으면 실제로 유용하지 않기 때문입니다. 수입 금액이나 비용 금액을 임의로 만들어 낼 수는 없습니다. 반드시 100% 정확해야 합니다.</p>
+<p>이 분야에서 발생하는 현실적인 결과라는 관점에서, 저희는 실험을 다시 계산하고 점수를 조금 다르게 매겨야 했습니다.</p>
+<p>중요한 것은 실험이 다음과 같은 구조를 갖도록 하는 것이었습니다. 완벽하게 채점되면 통과로 처리하고, 해당 작업에서 100% 미만의 점수를 받으면 실패로 표시하는 것입니다.</p>
+<p>이 관점에서 실험 데이터를 다른 방식으로 살펴보겠습니다. 완벽한 실행, 즉 정확도 100%의 통과를 확인하는 것입니다.</p>
+<p>각 전략이 통과를 달성한 비율을 살펴보겠습니다. Execute는 42%이고, 더 복잡한 전략들은 최대 75%까지 조금 더 나은 성능을 보였습니다.</p>
+<p>다시 말하지만 이것만으로는 많은 것을 알 수 없습니다. 각 전략이 시간에 따라 서로 다른 예산을 사용할 수 있기 때문입니다.</p>
+<p>여기서 저희는 예산을 고정하고 물었습니다. 고정된 예산 안에서 각 전략은 얼마나 잘 수행하는가?</p>
+<p>저희에게 정말 중요한 것은 완벽한 답을 얻으려 할 때, 그리고 현실 세계에서 사업을 운영할 때, 그 완벽한 답에 도달하는 비용이 얼마인가입니다.</p>
+<p>이를 Execute 전략을 통해 생각해 볼 수 있습니다. Execute 전략은 약 40%의 확률로 완벽한 답을 제공합니다. 평균적으로 세 번 실행해야 하며, 그 세 번 중 언젠가는 완벽한 답을 얻기를 기대할 수 있습니다.</p>
+<p>앞서 말씀드렸듯이 저희는 가장 많은 토큰 예산을 사용하는 전략인 600,000토큰에 맞춰 예산을 고정했습니다. 매번 600,000토큰을 사용하고 약 세 번 실행해야 한다면, Execute 전략으로 완벽한 답을 얻기까지 평균 180만 토큰을 사용하게 될 것으로 예상할 수 있습니다.</p>
+<p>이 분석을 모든 전략에 적용하면, 해당 분야에서 그 전략을 사용하는 에이전트가 유용해지기 위해 실제로 드는 비용을 알 수 있습니다.</p>
+<p>케이틀린이 언급했듯이 기준선인 Execute의 경우 실제 총 토큰 비용은 180만 토큰입니다.</p>
+<p>하지만 Advise, Grade, Dream에서는 차이가 나타납니다. 특히 각 에이전트의 최종 결과물을 얻는 데 필요한 실제 사용량을 고려하면 Advise와 Grade는 토큰 효율이 상당히 높습니다.</p>
+<p>이것이 사업자 여러분에게 의미하는 바는 무엇일까요? 어떤 것을 최적화하려는지에 따라 크게 달라지며, 상황에 따라 달라질 것입니다.</p>
+<p>어떤 기업들은 이렇게 말할 것입니다. “저에게 가장 중요한 것은 토큰을 정말 효율적으로 사용하는 것입니다.” 그런 경우에는 최적화하려는 특정 도메인에 대해 Advise 유형 전략을 선택하는 것이 좋습니다.</p>
+<p>반면 이렇게 말할 다른 분야나 기업들도 있습니다. “토큰 효율성은 그다지 신경 쓰지 않겠습니다. 제가 정말 중요하게 생각하는 것은 그 답변의 신뢰성입니다. 완벽한 답변을 얻는 실행의 비율을 극대화해야 합니다.”</p>
+<p>그런 경우에는 완전히 다른 전략을 선택하게 됩니다. 아마 Grade나 Dream 쪽으로 기울게 될 것입니다.</p>
+<p>한 가지만 기억한다면, 모두가 다음과 같은 생각을 해보기를 바랍니다. 토큰은 서로 대체 가능한 것(fungible)이 아닙니다.</p>
+<p>토큰을 사용해 작업을 실행하고, 무작정 밀어붙이며, 더 많은 예산을 투입할 수 있습니다. 하지만 토큰이 이런 서로 다른 일을 하도록 만들고 다양한 전략을 시도하는 데 정말 영리해진다면, 정해진 예산 안에서 해당 작업에 대해 더 나은 결과를 얻을 가능성이 매우 높습니다.</p>
+<p>이제 실제로 전략을 어떻게 구축하고 구현하는지 조금 이야기해 보겠습니다.</p>
+<p>우리는 개별 에이전트를 위한 정말 뛰어난 하네스(harness)를 만들기 위해 많은 작업을 해왔습니다. 아래쪽에 있는 이 그림을 보시면, 이것은 실제로 Claude Managed Agents에 사용한 아키텍처입니다. Claude Managed Agents는 Claude 플랫폼 안에서 제공하는 에이전트 솔루션입니다.</p>
+<p>여기에 더해 우리가 하는 일은 메타 하네스(meta-harness) 수준, 즉 다중 에이전트 오케스트레이션과 실행 수준으로 들어가는 것입니다. 여기서 이 전략은 실행자(executor)와 조언자(advisor), 또는 우리 전략 안의 다른 에이전트들 사이에서 조정될 수 있습니다.</p>
+<p>이 중 Dreaming과 outcomes 같은 일부 기능은 Claude Managed Agents 안에서 기본 제공됩니다. 이러한 프리미티브(primitives) 세트를 사용하면 이런 종류의 아키텍처를 구성하는 일은 실제로 비교적 간단합니다. 서로 다른 유형의 전략을 결합하고, 이들이 어떻게 함께 작동해야 하는지 파악할 수 있기 때문입니다.</p>
+<p>예를 들어 이렇게 말하는 것은 비교적 간단합니다. “좋아요. 이제 이것으로 작업을 실행할 수 있을 뿐 아니라, 조언도 하도록 만들 수 있겠네요.” Fable이 다시 온라인 상태이므로, Fable이 실행자에게 조언하도록 할 수도 있습니다.</p>
+<p>그런 다음 이 모든 결과를 grader에 보내서, 말이 되는 방식으로 루프 안에서 검증되도록 할 수 있습니다. 통과한다면 정말 좋은 일입니다. 그 모든 내용을 Dreaming으로 보내 다음 실행이 그 어느 때보다 더 나아지도록 하고 싶을 것입니다.</p>
+<p>물론 여기서 멈출 필요는 없습니다. 적절한 프리미티브와 조정 기능이 있다면, 여러분이 마주하는 다양한 동적 문제에 맞는 정말 복잡한 구성을 만들 수 있습니다.</p>
+<p>다시 말해, 이런 대규모 아키텍처를 아주 간단하게 만들어낼 수 있고, 완전히 새로운 역할도 만들어낼 수 있습니다. Katelyn과 제가 이 대화에서 제시한 구성 요소에만 국한되지 않습니다.</p>
+<p>시간이 지날수록 우리의 큰 목표 중 하나는, 여러분이 작업을 수행하는 동안 모델과 플랫폼이 여러분을 위해 이런 전략을 동적으로 구성하는 능력을 점점 더 향상시키는 것입니다.</p>
+<p>그 목표를 향해 나아가는 동안에도, 다음과 같은 생각을 계속해 주시기를 바랍니다. 토큰에 역할을 부여하고, 이러한 프리미티브를 결합해 서로 다르고 새로운 전략을 사용함으로써 작업에 원하는 결과를 얻어야 합니다.</p>
+<p>함께해 주셔서 감사합니다.</p>
+<p>감사합니다.</p>
+</details>
+</body></html>

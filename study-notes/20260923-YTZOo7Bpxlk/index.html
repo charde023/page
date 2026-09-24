@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>&quot;80% of references are bullsh*t&quot; — Databricks&#x27; Ali Ghodsi on exec hiring</title>
+<meta name="description" content="임원 채용을 서두르면 이미 보였던 경고 신호를 무시하기 쉽다. 공식 추천과 과거 관리자 확인을 함께 쓰자는 화자의 주장과 수치 한계를 정리한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Sequoia Capital 학습노트</div><h1>&quot;80% of references are bullsh*t&quot; — Databricks&#x27; Ali Ghodsi on exec hiring</h1>
+<div class="meta">원작자 Ali Ghodsi · 업로드 2026-09-23 · 1.2분 · <a href="https://youtu.be/YTZOo7Bpxlk" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 4분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<h3>큰 그림: 공석의 불편함이 판단을 서두르게 한다</h3>
+<p>이 영상의 핵심은 <strong>좋은 임원을 찾는 데 시간이 걸리는데, 조직은 빈자리를 빨리 채우고 싶어서 이미 발견한 경고 신호까지 축소하기 쉽다</strong>는 주장이다. 화자는 좋은 탐색에는 적어도 6개월이 걸리고 1년까지 걸릴 수 있다고 말한다. 하지만 자리가 오래 비면 사람들은 “지금 구할 수 있는 최선이니 일단 앉히자”고 타협한다.</p>
+<p>화자는 자신이 채용했던 사람 중 잘되지 않은 두 사례를 돌아보니 면접 단계에서 신호가 이미 있었다고 말한다. 후보가 다른 사람과 크게 충돌했다는 식의 놀라운 이야기를 했는데도 당시에는 남의 일로 넘겼다. 나중에야 자신도 그 충돌의 다음 상대가 될 수 있었다고 해석했다. 두 사례 중 한 사례에서는 채용을 서둘렀다고도 밝힌다.</p>
+<figure data-visual-kind="map">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 760 330" role="img" aria-labelledby="map-title map-desc" style="width:100%;height:auto;display:block;min-width:760.0px;max-width:none;">
+  <title id="map-title">임원 채용 판단의 두 경로</title>
+  <desc id="map-desc">공석 압박에서 출발해 서둘러 경고 신호를 무시하는 경로와 계속 탐색하며 여러 경로로 확인하는 경로를 비교한다.</desc>
+  <defs>
+    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#9b2c2c"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#245b8a"/>
+    </marker>
+  </defs>
+  <rect x="280" y="15" width="200" height="55" rx="10" fill="#f4f4f4" stroke="#333"/>
+  <text x="380" y="38" text-anchor="middle" font-size="17" font-weight="700">임원 자리가 오래 비어 있음</text>
+  <text x="380" y="59" text-anchor="middle" font-size="14">“지금이라도 채우자”는 압박</text>
+
+  <path d="M330 70 C260 100,190 105,150 135" fill="none" stroke="#9b2c2c" stroke-width="3" marker-end="url(#arrow-red)"/>
+  <rect x="25" y="140" width="250" height="62" rx="10" fill="#fff3f3" stroke="#9b2c2c"/>
+  <text x="150" y="164" text-anchor="middle" font-size="16" font-weight="700">서둘러 후보를 선택</text>
+  <text x="150" y="187" text-anchor="middle" font-size="14">면접의 이상 신호를 축소</text>
+  <path d="M150 202 L150 248" stroke="#9b2c2c" stroke-width="3" marker-end="url(#arrow-red)"/>
+  <rect x="25" y="255" width="250" height="55" rx="10" fill="#fff3f3" stroke="#9b2c2c"/>
+  <text x="150" y="279" text-anchor="middle" font-size="16" font-weight="700">나중에 신호를 재발견</text>
+  <text x="150" y="299" text-anchor="middle" font-size="14">화자가 겪었다는 실패 사례</text>
+
+  <path d="M430 70 C500 100,570 105,610 135" fill="none" stroke="#245b8a" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <rect x="485" y="140" width="250" height="62" rx="10" fill="#eef7ff" stroke="#245b8a"/>
+  <text x="610" y="164" text-anchor="middle" font-size="16" font-weight="700">계속 탐색하며 확인</text>
+  <text x="610" y="187" text-anchor="middle" font-size="14">공식 경로와 과거 관리자 대화</text>
+  <path d="M610 202 L610 248" stroke="#245b8a" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <rect x="485" y="255" width="250" height="55" rx="10" fill="#eef7ff" stroke="#245b8a"/>
+  <text x="610" y="279" text-anchor="middle" font-size="16" font-weight="700">여러 각도에서 판단</text>
+  <text x="610" y="299" text-anchor="middle" font-size="14">화자가 말한 360도 관점</text>
+</svg></div>
+<figcaption>공석 압박 이후 선택할 수 있는 두 판단 경로를 보여준다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 시작해 왼쪽은 화자의 실패 회고, 오른쪽은 화자가 권하는 확인 방식이다. 화살표는 시간이 부족해서가 아니라 <strong>빨리 채우려는 압박이 경고 신호를 가볍게 보게 만드는 과정</strong>을 나타낸다. 오른쪽 경로가 실제로 더 좋은 채용 결과를 냈다는 비교 자료는 영상에 제시되지 않았다.</p>
+<h3>공식 추천만 받지 말고 과거 관리자에게도 물어본다</h3>
+<p>화자는 과거 관리자들에게 직접 이야기하는 방식을 <code>backdoor</code>라고 부른다. 이런 대화를 많이 하면 후보를 여러 방향에서 보는 <strong>360도 관점</strong>을 얻을 수 있다고 주장한다. 그렇다고 화자가 <code>front door</code>라고 부른 경로를 버리라는 뜻은 아니다. 그는 그 경로도 모두 진행하라고 말한다.</p>
+<p>다만 전사는 <code>front door</code>가 정확히 어떤 절차인지 정의하지 않는다. 따라서 여기서는 <strong>화자가 서로 구분한 두 추천 확인 경로</strong>로만 이해해야 한다.</p>
+<figure data-visual-kind="comparison">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;width:100%">
+  <section style="border:2px solid #7a5b18;border-radius:10px;padding:14px;background:#fffaf0">
+    <strong style="display:block;font-size:1.05rem;margin-bottom:8px">Front door</strong>
+    <p style="margin:0 0 8px">전사 안에서 구체적인 절차는 정의되지 않는다.</p>
+    <p style="margin:0"><strong>화자의 지침:</strong> 이 경로도 모두 진행한다.</p>
+  </section>
+  <section style="border:2px solid #245b8a;border-radius:10px;padding:14px;background:#eef7ff">
+    <strong style="display:block;font-size:1.05rem;margin-bottom:8px">Backdoor</strong>
+    <p style="margin:0 0 8px">후보의 과거 관리자들과 직접 이야기하는 경로로 설명된다.</p>
+    <p style="margin:0"><strong>화자의 기대:</strong> 후보를 여러 각도에서 파악한다.</p>
+  </section>
+  <section style="border:2px solid #444;border-radius:10px;padding:14px;background:#f5f5f5">
+    <strong style="display:block;font-size:1.05rem;margin-bottom:8px">화자가 제안한 결합</strong>
+    <p style="margin:0 0 8px">한 경로를 버리는 대신 두 경로를 함께 사용한다.</p>
+    <p style="margin:0"><strong>목적:</strong> 면접 때 놓친 경고 신호를 다시 확인한다.</p>
+  </section>
+</div>
+<figcaption>화자가 구분한 두 추천 확인 경로와 두 경로를 함께 쓰라는 주장을 비교한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽과 가운데는 서로 대체하는 선택지가 아니다. 오른쪽 상자처럼 함께 사용하라는 것이 화자의 주장이다. 다만 각 경로의 표본, 질문 방법, 동의 절차, 정확도는 영상에서 설명되지 않는다.</p>
+<h3>숫자는 강한 표현이지만 그대로 확정하면 안 된다</h3>
+<p>화자는 <code>front door</code> 중 실제로 진실한 것은 10%라고 말한다. 바로 다음에 “80%는…”이라고 시작하지만 제공된 전사는 그 문장에서 끊긴다. 영상 제목은 “80% of references are bullsh*t”라고 적혀 있으나, 전사만으로는 80%가 정확히 어떤 범주를 가리키는지와 나머지 10%가 무엇인지 확인할 수 없다.</p>
+<p>따라서 이 영상에서 안전하게 가져갈 수 있는 결론은 <strong>“80%라는 수치가 검증됐다”가 아니라, 중요한 채용을 서두르지 말고 면접의 이상 신호를 기록하며 서로 다른 경로로 확인하라는 화자의 경험적 조언</strong>이다. 좋은 탐색에 6개월에서 1년이 걸린다는 기간도 화자의 경험 주장이지, 모든 임원 채용에 적용되는 보편적 기준으로 검증된 수치는 아니다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>공석을 빨리 채우려는 압박은 이미 발견한 경고 신호를 축소하게 만들 수 있다.</li>
+<li>화자는 두 번의 실패 사례를 돌아보며 신호가 면접 단계부터 있었다고 말한다.</li>
+<li>화자는 공식 경로를 버리지 않으면서 과거 관리자들과도 이야기해 후보를 여러 각도에서 확인하라고 권한다.</li>
+<li>제목의 80%와 전사의 10%·미완성 문장은 범주가 불명확하므로 검증된 통계처럼 사용하면 안 된다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>중요한 채용을 서두를 때 왜 경고 신호를 놓치며, 화자는 이를 어떻게 보완하라고 제안하는가?</strong></p>
+</blockquote>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>오랫동안 비어 있던 임원 자리를 두고 면접관이 후보의 심각한 갈등 경험을 듣는다. 이상하다고 느끼지만 “지금 구할 수 있는 최선”이라는 압박 때문에 넘어간다. 채용이 실패한 뒤 기록을 다시 보니, 문제가 갑자기 생긴 것이 아니라 면접 때부터 신호가 있었다.</p>
+<p><code>"공석을 빨리 채워야 한다는 압박"</code> <strong>문제</strong><br>
+→ <code>"경고 신호를 축소하고 확인 절차를 서두름"</code> <strong>작동 방식</strong><br>
+→ <code>"실패 후에야 이미 보였던 신호를 재발견함"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">경고등이 켜진 중고차</div>
+<p>차가 급히 필요하다는 이유로 계기판의 경고등을 “별일 아닐 것”이라고 넘기는 상황과 닮았다. 구매 전에 정비 기록과 여러 사람의 설명을 함께 확인하면 처음의 이상 신호를 다시 검토할 수 있다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 사람에 관한 평가는 기계 진단처럼 객관적인 하나의 정답이 아니다. 과거 관리자의 기억과 이해관계도 편향될 수 있으며, 영상은 이를 교정하는 방법을 제시하지 않는다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Backdoor reference</strong></td>
+<td>과거 관리자들에게 직접 물어보기</td>
+<td>화자가 후보의 과거 관리자들과 대화해 여러 각도의 정보를 얻는다고 설명한 추천 확인 경로</td>
+<td>이 경로에서 들은 말은 모두 진실이라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>Front-door reference</strong></td>
+<td>화자가 별도로 구분한 공식 쪽 확인 경로</td>
+<td>화자가 <code>front door</code>라고 부르지만 전사에서는 구체적인 절차를 정의하지 않은 추천 확인 경로</td>
+<td>화자가 쓸모없으니 생략하라고 말했다고 이해하는 것</td>
+</tr>
+<tr>
+<td><strong>Postmortem</strong></td>
+<td>일이 끝난 뒤 원인을 되짚기</td>
+<td>실패한 채용 과정을 사후 검토해 당시 존재했던 신호와 판단을 확인하는 회고</td>
+<td>사후에 보인 신호가 당시에도 반드시 명백했다고 단정하는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>화자는 왜 임원 채용에서 이미 보였던 경고 신호가 무시된다고 보는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>좋은 탐색에는 시간이 걸리지만 공석이 오래되면 조직은 일단 누군가를 앉히고 싶어 한다. 이 압박 때문에 면접에서 이상하다고 느낀 말도 남의 일이나 예외로 축소하고, 추가 확인 없이 빠르게 결정할 수 있다는 것이 화자의 설명이다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>화자가 말한 <code>front door</code>와 <code>backdoor</code>는 어떻게 다르며, 둘 중 하나만 선택하라는 주장인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>전사는 <code>front door</code>의 절차를 정의하지 않지만, <code>backdoor</code>는 과거 관리자들과 직접 이야기하는 경로로 설명한다. 화자는 <code>backdoor</code>를 높게 평가하면서도 <code>front door</code> 역시 모두 진행하라고 말하므로 하나를 버리고 다른 하나로 대체하라는 주장은 아니다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>앞으로 중요한 사람이나 외부 파트너를 선택해야 한다면, 이 원리를 어떻게 과장 없이 적용할 수 있는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 면접이나 대화에서 불편했던 신호를 기록하고, 결정 전에 서로 다른 정보 경로에서 같은 신호를 확인하거나 반증할 수 있는지 본다. 다만 6개월·1년·10%·80%를 보편 법칙으로 사용하지 말고, 연락의 적절성과 각 증언의 편향도 함께 검토해야 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 실패는 신호 부족보다 신호를 다루는 방식에서 생길 수 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 잘되지 않은 두 채용을 사후 검토하니 면접에서 이상한 말이 이미 나왔으며, 한 사례에서는 채용을 서둘렀다고 말한다. 좋은 탐색에는 적어도 6개월, 길면 1년이 걸릴 수 있다고 주장한다.</li>
+<li><strong>[해석]</strong> 중요한 선택의 품질을 높이려면 정보량만 늘리기보다, 불편한 신호를 기록하고 결정 전에 다른 경로로 확인하는 절차가 필요하다.</li>
+<li><strong>[경계]</strong> 제목은 “추천의 80%”라고 표현하지만 전사는 “80%는…”에서 끊겨 정확한 대상과 정의를 확인할 수 없다. <code>front door</code>의 10%가 진실이라는 주장과도 범주가 완전히 설명되지 않아 나머지 10%의 의미가 불명확하다. 채용 기간과 정확도에 관한 독립 자료도 제시되지 않는다. <code>Ali Ghodsi</code>는 META의 후보 원작자이지만 원본 영상 링크가 확인되지 않았다는 추정 주석이 있으며, 소속 정보는 비어 있다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 면접에서 직접 들은 말만으로 판단하지 말고, 다른 맥락에서 그 사람이 어떻게 행동했는지 확인하려 한다.</li>
+<li><strong>통찰:</strong> 학습자의 준비된 답만 확인하는 것보다 설명, 적용, 실제 행동처럼 서로 다른 장면의 증거를 함께 보면 이해를 더 입체적으로 관찰할 수 있다는 구조적 비유가 가능하다.</li>
+<li><strong>질문/행동:</strong> 같은 개념을 설명 질문과 새 사례 적용 질문에서 각각 확인하면 판단이 달라지는가?</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 중요한 인력이나 외부 파트너를 급히 선택하면 공석 비용은 줄어도 경고 신호를 무시할 위험이 생길 수 있다.</li>
+<li><strong>통찰:</strong> APOM의 현재 채용·업체 선정 상태는 출처에 없으므로 직접 적용된 사실로 볼 수 없다. 다만 가상의 선정 상황에서 속도와 검증 범위를 함께 관리하는 원리로 시험할 수 있다.</li>
+<li><strong>질문/행동:</strong> 중요한 선택을 서두르게 만드는 비용과, 잘못 선택했을 때 생길 비용을 같은 결정표에 놓으면 결론이 달라지는가?</li>
+</ul>
+<h3>마케터 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 한쪽에서 준비한 추천 정보만으로는 충분하지 않다고 주장하지만, 이를 뒷받침하는 비교 자료는 제시하지 않는다.</li>
+<li><strong>통찰:</strong> 상세페이지에서도 선택된 후기와 판매자의 주장만 제시하기보다 독립적으로 확인 가능한 근거를 구분해 보여주는 구조를 생각해 볼 수 있다. 채용 추천과 고객 증거는 동일하지 않으므로 효과는 별도로 검증해야 한다.</li>
+<li><strong>질문/행동:</strong> 현재 제시하려는 증거가 판매자가 고른 주장인지, 독자가 독립적으로 확인할 수 있는 자료인지 표시할 수 있는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 후보가 준비한 면접 답과 과거 업무 맥락을 함께 보려는 구조는 제품 데모와 실제 작업 평가를 구분하는 문제와 닮았다.</li>
+<li><strong>통찰:</strong> AI 도구나 자동화도 제공자가 고른 성공 사례만 보지 말고 실제 작업, 실패 조건, 비용과 대기 시간을 별도로 시험해야 한다는 가설로 전이할 수 있다.</li>
+<li><strong>질문/행동:</strong> 도구가 준비된 데모가 아닌 실제 작업에서도 같은 품질을 내는지 독립 평가 항목 하나로 확인할 수 있는가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"공석 압박 때문에 면접의 경고 신호를 축소하는 문제"</code> <strong>문제</strong><br>
+→ <code>"성급한 오채용 위험 감소"</code> <strong>수혜자: 채용 조직과 함께 일할 사람들</strong><br>
+→ <code>"탐색 시간·후보 정보·과거 경험에 관한 대화 제공"</code> <strong>지불자 또는 자원 제공자: 채용 담당자와 추천 확인에 응하는 사람들</strong><br>
+→ <code>"결정 전에 확인되거나 반증된 경고 신호의 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 다음에 중요한 인력이나 외부 파트너를 검토할 일이 생기면, 대화에서 발견한 경고 신호를 적고 결정 전에 적절한 독립 정보 경로로 각각 확인하거나 반증한다.</li>
+<li><strong>측정 1개:</strong> 기록한 경고 신호 중 결정 전에 독립 경로로 확인 또는 반증된 신호의 비율.</li>
+<li><strong>중단 기준 1개:</strong> 그 비율이 0%라면 이 절차가 작동했다고 간주하지 않고 확대하지 않는다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>탐색 기간</td>
+<td>화자는 좋은 임원 탐색에 적어도 6개월, 길면 1년이 걸릴 수 있다고 주장한다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>타협의 압박</td>
+<td>공석이 길어지면 “지금 구할 수 있는 최선”을 받아들이며 서두르게 된다고 말한다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>실패 사례의 회고</td>
+<td>잘되지 않은 두 채용에는 면접 단계부터 경고 신호가 있었으며, 한 사례는 서둘렀다고 말한다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>추천 확인</td>
+<td>과거 관리자들과 많이 이야기해 360도 관점을 얻되 <code>front door</code>도 함께 진행하라고 권한다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 좋은 탐색에는 시간이 걸린다는 주장</h3>
+<p>화자는 좋은 탐색에는 적어도 6개월이 걸리며 더 오래 걸릴 수도 있다고 말한다. 실제로 1년이 걸린 탐색도 있었다고 주장한다. META 설명은 이를 “6~12개월”로 요약하지만, 영상에서는 모든 채용에 적용할 조건이나 표본을 제시하지 않는다.</p>
+<h3>2. 사람이 타협하는 순간</h3>
+<p>자리가 오랫동안 비어 있으면 담당자는 탐색을 다른 사람들에게 맡겼고 지금 후보가 구할 수 있는 최선이라고 생각하기 쉽다. 화자는 “일단 누군가를 자리에 앉히자”는 판단 자체가 문제라고 본다.</p>
+<h3>3. 두 번의 실패를 돌아본 장면</h3>
+<p>화자는 잘되지 않은 두 사람의 채용 과정을 돌아보면 신호가 모두 있었다고 말한다. 면접 과정에서 후보가 놀라운 이야기를 했고 화자도 그것이 이상하다고 느꼈지만, 후보와 다른 사람 사이의 큰 싸움을 자신의 일이 아니라고 넘겼다.</p>
+<p>나중에는 자신이 다음 갈등 상대가 될 수도 있었다고 해석했다. 두 사례 중 한 사례에 대해서는 채용을 서둘렀으며 당시에는 좋아 보였기 때문에 빠르게 진행했다고 밝힌다.</p>
+<h3>4. 두 추천 확인 경로</h3>
+<p>화자는 <code>backdoor</code>를 매우 유용하다고 평가하며, 과거 관리자들과 많은 대화를 하면 후보에 대한 360도 관점을 얻을 수 있다고 주장한다. 동시에 <code>front door</code>도 모두 진행하라고 말한다.</p>
+<p>전사는 <code>front door</code> 중 실제로 진실한 것이 10%라고 말한 다음 “80%는…”에서 종료된다. 제목에는 “80% of references are bullsh*t”라고 적혀 있지만 다음 사항은 확인되지 않는다.</p>
+<ul>
+<li>80%가 전체 추천인지 <code>front door</code> 추천인지 불명확하다.</li>
+<li>10%와 80%가 같은 분류 기준인지 설명되지 않는다.</li>
+<li>두 수치가 같은 전체를 나눈다면 남은 10%가 무엇인지 설명되지 않는다.</li>
+<li><code>truthful</code>과 제목의 <code>bullsh*t</code>를 어떤 기준으로 판정했는지 제시되지 않는다.</li>
+<li><code>backdoor</code> 방식이 실제 채용 성과를 높였다는 비교 결과는 제공되지 않는다.</li>
+</ul>
+<h3>5. 출처와 인물 식별 경계</h3>
+<p>META의 <code>provenance.creator</code>에는 <code>Ali Ghodsi</code>가 기재되어 있어 원작자 후보 이름으로 보존했다. 그러나 provenance 주석은 원본 영상 링크가 확인되지 않았고 화자 이름과 SNS를 기준으로 추정한 출처라고 밝힌다. <code>provenance.affiliation</code>은 비어 있으므로 소속을 별도 사실로 기재하지 않았다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Sequoia Capital · "80% of references are bullsh*t" — Databricks' Ali Ghodsi on exec hiring · https://youtu.be/YTZOo7Bpxlk · 전사: YouTube caption · 원작자 후보: Ali Ghodsi(META 주석상 화자 이름·SNS 기준 추정이며 원본 영상 링크 미확인)</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>좋은 인재를 찾으려면 최소 6개월은 걸린다고 생각해요. 어쩌면 그보다 더 오래 걸릴 수도 있고요. 1년이 걸릴 수도 있습니다. 실제로 1년이 걸린 채용도 있었죠?</p>
+<p>계속 찾아보세요. 사람들은 타협하고 이렇게 말하죠. “저 일은 전부 다른 사람들에게 맡겼어요. 우리가 구할 수 있는 사람은 이 사람이 최선이에요. 지금 이 역할에 사람이 없는 지 너무 오래됐잖아요. 일단 지금 당장 누군가를 자리에 앉히기만 하세요.” 그런데 그게 문제입니다.</p>
+<p>좋아요, 그러니까 당신은 이미 알고 있었던 거네요. 두 명이 잘되지 않았던 경우를 돌이켜보면, 그 두 사람을 채용하기 위해 제가 진행했던 과정을 봤을 때 모든 신호가 이미 거기에 있었어요. 면접 과정에서조차 그들은 좀 터무니없는 이야기를 했습니다. 저도 그게 터무니없다는 걸 알았지만, “뭐, 이 사람은 저 사람과 크게 싸웠나 보지. 내 알 바는 아니야”라고 생각했어요.</p>
+<p>그러다 “잠깐, 다음에는 내가 그 사람이 될 수도 있겠네”라고 생각했죠. 그래서 사후 분석(postmortem)을 해보면 항상 이런 생각이 듭니다. “이봐, 모든 징후가 이미 있었잖아. 나는 대체 뭘 하고 있었던 거지?” 아니면 그중 한 사례에서는 채용을 서둘렀어요. 좋아 보였거든요. 그래서 빨리 진행했습니다.</p>
+<p>그리고 저는 그 백도어 레퍼런스(backdoor reference)가 정말 대단하다고 생각해요. 말도 안 될 정도로 많은 백도어 레퍼런스를 진행하는 겁니다. 과거에 그 사람의 모든 상사들과 이야기하기만 해도 그 사람을 360도로 바라보는 놀라운 관점을 얻을 수 있어요. 그냥 그 사람의 과거 상사들을 전부 찾아가 이야기하세요.</p>
+<p>공식적인 경로(front door)도 모두 진행하세요. 제 경험상 공식적인 경로의 약 10%만 실제로 진실한 것으로 드러납니다. 80%는</p>
+</details>
+</body></html>
