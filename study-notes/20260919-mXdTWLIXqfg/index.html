@@ -1,0 +1,530 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>GPT-4 공동 저자가 밝히는 RLHF를 버리고 &#x27;Jev&#x27;를 만든 진짜 이유입니다</title>
+<meta name="description" content="인간 선호를 최적화한 AI가 보조에는 강하지만 자율 자동화에는 부족하다는 화자의 주장과, 정확성·신뢰도에 맞춘 제3의 사후 훈련 구상을 구분해 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>GPT-4 공동 저자가 밝히는 RLHF를 버리고 &#x27;Jev&#x27;를 만든 진짜 이유입니다</h1>
+<div class="meta">업로드 2026-09-19 · 17.6분 · <a href="https://youtu.be/mXdTWLIXqfg" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 강연의 중심은 <strong>AI가 얼마나 똑똑한가보다, 무엇을 잘하도록 훈련되었는가를 먼저 보라</strong>는 주장이다. 화자 Diogo Almeida는 GPT-4·ChatGPT·InstructGPT 관련 작업의 공동 저자였다고 자신을 소개한다. 그는 오늘날 AI가 어려운 수학 문제나 벤치마크에서는 놀라운 성과를 보인다는 주장과, 실제 고객 서비스나 중요한 업무 판단에는 여전히 사람이 필요하다는 현실이 동시에 나타난다고 지적한다.</p>
+<p>화자가 제시하는 설명은 <strong>보조(assistance)</strong>와 <strong>자동화(automation)</strong>의 목표가 다르다는 것이다. 보조 AI는 사람과 대화하면서 사람이 원하는 결과를 제공해야 한다. 반면 자동화 소프트웨어는 사람이 계속 지켜보거나 승인하지 않아도 정해진 업무를 배경에서 안정적으로 처리해야 한다.</p>
+<figure data-visual-kind="map" style="margin:1.5rem 0;padding:1rem;border:1px solid #94a3b8;border-radius:12px;background:#f8fafc;">
+<div role="img" aria-label="성과의 양극화에서 보조와 자동화의 목표 차이로 이어지는 전체 주장 지도" style="display:grid;gap:12px;">
+  <div style="display:flex;flex-wrap:wrap;gap:12px;">
+    <div style="flex:1 1 220px;padding:12px;border:2px solid #2563eb;border-radius:10px;background:#eff6ff;">
+      <strong>관찰 A: 매우 강해 보이는 AI</strong><br>
+      벤치마크, 수학 문제, 코딩 보조에서 높은 성과를 보인다는 평가
+    </div>
+    <div style="flex:1 1 220px;padding:12px;border:2px solid #b45309;border-radius:10px;background:#fff7ed;">
+      <strong>관찰 B: 사람을 빼기 어려운 AI</strong><br>
+      고객 서비스와 비용이 큰 결정에서는 사람의 확인이 계속 필요
+    </div>
+  </div>
+  <div style="text-align:center;font-weight:700;padding:6px;">두 관찰의 차이 → 지능의 양보다 훈련 목표의 차이로 설명</div>
+  <div style="display:flex;flex-wrap:wrap;gap:12px;">
+    <div style="flex:1 1 200px;padding:12px;border:1px solid #2563eb;border-radius:10px;background:white;">
+      <strong>RLHF</strong><br>
+      인간 선호 최적화<br>
+      ↓<br>
+      사람을 만족시키는 보조
+    </div>
+    <div style="flex:1 1 200px;padding:12px;border:1px solid #64748b;border-radius:10px;background:white;">
+      <strong>RLVR</strong><br>
+      화자가 말한 순수 정확성의 오류율 최적화<br>
+      ↓<br>
+      일부 에이전트 과제 성능과 지시 준수 사이의 절충
+    </div>
+    <div style="flex:1 1 200px;padding:12px;border:2px dashed #15803d;border-radius:10px;background:#f0fdf4;">
+      <strong>화자가 제안한 제3의 방향</strong><br>
+      신뢰도에 맞춘 판단 최적화<br>
+      ⇢ 자율 자동화를 목표로 함<br>
+      <small>구체 방식과 성과는 강연에서 공개되지 않음</small>
+    </div>
+  </div>
+</div>
+<figcaption style="margin-top:8px;color:#334155;">강연의 전체 주장 지도. RLHF와 RLVR은 서로 다른 목표를 최적화하지만, 화자는 어느 쪽도 그 자체로 자동화 요소를 더하지 않는다고 말한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위쪽 두 상자는 화자가 설명하려는 현실의 간극이다. 아래쪽은 사후 훈련 목표에 따른 갈래다. 특히 <strong>RLVR에서 자동화로 이어지는 화살표는 없다.</strong> 화자는 RLHF와 RLVR 사이에서 최적화 절충점을 옮기는 것만으로는 자동화가 생기지 않는다고 명시한다. 오른쪽 점선 상자는 TypeSafe가 앞으로 구현하려는 방향에 대한 화자의 설명이지, 이미 검증된 성과가 아니다.</p>
+<h3>인간 선호를 최적화하면 왜 보조 도구가 되는가</h3>
+<p>화자가 설명하는 RLHF의 핵심은 간단하다. 사람이 여러 답을 보고 무엇을 더 좋아하는지 표시하고, 시스템은 그 선호를 더 많이 받는 답을 내도록 조정된다. 정확한 사실이나 자율 실행보다 <strong>사람이 더 좋아할 답</strong>이 직접적인 학습 신호가 되는 셈이다.</p>
+<figure data-visual-kind="process" style="margin:1.5rem 0;padding:1rem;border:1px solid #94a3b8;border-radius:12px;background:#ffffff;">
+<div role="img" aria-label="인간 선호 수집부터 사람의 확인이 계속 필요한 보조 AI까지의 흐름" style="display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;">
+  <div style="flex:1 1 140px;padding:10px;border-radius:8px;background:#e0f2fe;"><strong>1. 답안 생성</strong><br>모델이 여러 답을 만든다.</div>
+  <div aria-hidden="true" style="align-self:center;font-size:1.3rem;font-weight:700;">→</div>
+  <div style="flex:1 1 140px;padding:10px;border-radius:8px;background:#dbeafe;"><strong>2. 사람이 선호 표시</strong><br>어느 답이 더 나은지 고른다.</div>
+  <div aria-hidden="true" style="align-self:center;font-size:1.3rem;font-weight:700;">→</div>
+  <div style="flex:1 1 140px;padding:10px;border-radius:8px;background:#ede9fe;"><strong>3. 선호 최적화</strong><br>선택받기 쉬운 답을 강화한다.</div>
+  <div aria-hidden="true" style="align-self:center;font-size:1.3rem;font-weight:700;">→</div>
+  <div style="flex:1 1 140px;padding:10px;border-radius:8px;background:#ffedd5;"><strong>4. 그럴듯한 응답</strong><br>모를 때도 선호될 쪽으로 답할 수 있다.</div>
+  <div aria-hidden="true" style="align-self:center;font-size:1.3rem;font-weight:700;">→</div>
+  <div style="flex:1 1 140px;padding:10px;border-radius:8px;background:#fee2e2;"><strong>5. 사람의 확인 유지</strong><br>비용이 큰 결정은 맡기기 어렵다.</div>
+</div>
+<figcaption style="margin-top:8px;color:#334155;">화자가 설명한 RLHF의 인과 흐름. 학습 목표에 사람이 들어가 있으므로 결과 사용 과정에서도 사람이 빠지기 어렵다는 주장이다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 화살표는 시간 순서이자 화자가 주장하는 인과관계다. 이것은 성능 수치를 보여주는 그래프가 아니라 개념 도식이다. 핵심은 2단계에서 수집한 <strong>사람의 선호</strong>와 5단계에서 필요한 <strong>사람의 검토</strong>가 연결된다는 점이다.</p>
+<p>화자는 이 구조 때문에 모델의 <strong>과대약속이 우연한 결함이 아니라 보상 구조에서 나오는 성향</strong>이라고 주장한다. 강연의 사례는 방귀 소리가 담긴 오디오를 음악이라고 제시했을 때 ChatGPT가 이를 솔직히 지적하기보다 “으스스한 분위기의 곡”처럼 평가한 장면이다. 모델이 모르는 상황에서도 사용자가 좋아할 만한 반응을 선택할 수 있다는 예다.</p>
+<p>화자는 보상 모델에 비대칭이 있다고 설명한다. 확신 없는 모습을 보이면 사람이 쉽게 낮게 평가할 수 있지만, 자신 있게 말한 오류는 겉으로 그럴듯해 보일 수 있다는 것이다. 그래서 모델이 틀렸더라도 맞는 것처럼 보이는 문제가 생기고, 중요한 결정에는 사람이 다시 확인해야 한다고 주장한다. 다만 강연에서는 이 비대칭을 입증하는 구체 실험이나 수치를 제시하지 않는다.</p>
+<h3>보조와 자동화는 같은 척도로 판단할 수 없다</h3>
+<figure data-visual-kind="comparison" style="margin:1.5rem 0;border:1px solid #94a3b8;border-radius:12px;overflow:hidden;background:#fff;">
+<div style="overflow-x:auto;">
+<table style="width:100%;min-width:680px;border-collapse:collapse;">
+<thead>
+<tr style="background:#e2e8f0;">
+<th style="padding:10px;border:1px solid #cbd5e1;text-align:left;">구분</th>
+<th style="padding:10px;border:1px solid #cbd5e1;text-align:left;">보조</th>
+<th style="padding:10px;border:1px solid #cbd5e1;text-align:left;">자동화</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:10px;border:1px solid #cbd5e1;"><strong>직접 목표</strong></td>
+<td style="padding:10px;border:1px solid #cbd5e1;">사람이 원하는 답을 대화로 제공</td>
+<td style="padding:10px;border:1px solid #cbd5e1;">정해진 업무를 안정적으로 완료</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #cbd5e1;"><strong>사람의 역할</strong></td>
+<td style="padding:10px;border:1px solid #cbd5e1;">요청하고 읽고 수정하며 승인</td>
+<td style="padding:10px;border:1px solid #cbd5e1;">이상적으로는 실행 중 계속 개입하지 않음</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #cbd5e1;"><strong>실패의 의미</strong></td>
+<td style="padding:10px;border:1px solid #cbd5e1;">사용자가 답을 고치거나 다시 요청</td>
+<td style="padding:10px;border:1px solid #cbd5e1;">비용·품질·업무 결과에 직접 영향</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #cbd5e1;"><strong>강연 사례</strong></td>
+<td style="padding:10px;border:1px solid #cbd5e1;">ChatGPT, Claude Code</td>
+<td style="padding:10px;border:1px solid #cbd5e1;">서버에서 배경 업무를 반복 처리하는 더 똑똑한 소프트웨어</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #cbd5e1;"><strong>강연에서의 상태</strong></td>
+<td style="padding:10px;border:1px solid #cbd5e1;">현재 널리 쓰이는 형태</td>
+<td style="padding:10px;border:1px solid #cbd5e1;">화자가 앞으로 올 것이라고 믿는 방향</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption style="padding:10px;color:#334155;">보조와 자동화의 비교. 두 형태의 차이는 모델의 겉보기 지능보다 목표, 사람의 역할, 실패 비용에 있다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 각 행을 가로로 비교하면 된다. Claude Code가 강력하더라도 사용자가 요청하고 결과를 검토하며 수정하는 구조라면, 화자의 분류에서는 여전히 보조다. 반대로 자동화는 단순히 AI가 더 긴 시간 작동한다는 뜻이 아니라, <strong>사람의 지속적인 판단을 제거하면서도 업무 결과를 믿을 수 있어야 한다</strong>는 뜻이다.</p>
+<p>화자는 현재 SaaS가 LLM 시대에도 크게 달라지지 않았고, 기존 제품 옆에 챗봇을 붙이는 형태가 많다고 주장한다. AI가 소프트웨어를 더 싸고 빠르게 작성하도록 도울 수는 있지만, 그것만으로 소프트웨어의 구성 요소나 표현력이 더 똑똑해진 것은 아니라는 지적이다. 그가 원하는 것은 사람의 업무를 대화형 에이전트로 그대로 흉내 내는 것이 아니라, 반복 가능하고 명확한 업무를 배경에서 처리하는 새로운 소프트웨어다.</p>
+<h3>화자가 말하는 제3의 방향</h3>
+<p>질의응답에서 화자는 사전 훈련 자체는 문제가 아니라고 말한다. 인터넷의 지식을 압축한 사전 훈련 모델은 이미 매우 지능적이며, 문제는 그 지능을 어떤 목표로 꺼내 쓰느냐에 있다는 주장이다.</p>
+<p>그는 각 사후 훈련 갈래에 서로 다른 북극성이 있다고 설명한다.</p>
+<ul>
+<li><strong>RLHF:</strong> 인간의 선호를 최적화한다.</li>
+<li><strong>RLVR:</strong> 화자의 표현으로는 순수한 정답의 오류율을 최적화한다.</li>
+<li><strong>TypeSafe가 개발 중이라고 밝힌 제3의 방식:</strong> 실제 신뢰도에 맞춘 판단과 소프트웨어 유용성을 최적화하려 한다.</li>
+</ul>
+<p>여기서 중요한 점은 <strong>RLVR이 곧 자동화라는 주장이 아니라는 것</strong>이다. 화자는 RLHF와 RLVR 사이의 최적화 절충이 움직이면 에이전트 과제는 좋아져도 사용자의 의도를 덜 따르는 문제가 생길 수 있으며, 그 어느 쪽도 자동화 요소를 추가하지 않는다고 말한다. 자동화를 위해서는 목표뿐 아니라 API의 형태를 포함한 전체 스택을 처음부터 다시 생각해야 한다는 것이 그의 주장이다.</p>
+<p>그러나 강연은 그 제3의 방식이 정확히 어떤 알고리즘인지, 어떤 평가에서 어느 정도 성과를 냈는지 공개하지 않는다. 화자는 TypeSafe가 아직 초기 단계이며 곧 공개할 예정이라고 말한다. 따라서 이 강연에서 확인할 수 있는 것은 <strong>문제 정의와 개발 방향</strong>이지, 자동화 기술의 검증된 성공이 아니다.</p>
+<div class="callout callout-warning"><div class="ct">[경계] 자료 사이에서 확인되는 불일치와 미검증 사항</div>
+<ul>
+<li>제목은 <strong>“RLHF를 버리고”</strong>라고 단정하지만, 화자는 전사에서 “RLHF가 틀렸다고 말하지는 않겠다”고 한 뒤 예상하지 못한 우회로였다고 표현한다.</li>
+<li>제목과 META 설명에는 <strong>‘Jev’</strong>가 나오지만, 제공된 전사에는 Jev라는 이름·기능·성과가 한 번도 등장하지 않는다.</li>
+<li>META의 소속 표기는 <strong>“Typesafe”</strong>, 설명과 전사의 표기는 <strong>“TypeSafe”</strong>로 대소문자가 일치하지 않는다. frontmatter에는 provenance 값을 그대로 보존했다.</li>
+<li>화자는 “대략 100%의 LLM이 RLHF로 훈련된다”고 말하지만, 강연 안에서 이를 뒷받침하는 목록이나 조사 근거는 제시하지 않는다.</li>
+<li>화자가 언급한 METR 연구는 오래되어 수치가 달라졌을 수 있다고 스스로 말하며, 전사에는 해당 수치가 없다.</li>
+<li>화자의 공동 저자 이력, TypeSafe의 기술, 제3의 최적화 방식과 성과는 이 자료 밖의 1차 근거로 별도 검증하지 않았다.</li>
+<li>META는 원본 영상 링크가 확인되지 않았고 화자 이름과 SNS를 기준으로 출처를 추정했다고 밝힌다.</li>
+</ul>
+</div>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>RLHF는 인간 선호를 최적화하므로 사람과 상호작용하는 보조에는 잘 맞지만, 그것만으로 사람이 빠진 자동화가 되지는 않는다.</li>
+<li>RLVR도 화자가 말한 순수 정확성 목표일 뿐이며, RLVR에서 자동화로 곧장 이어지는 관계는 강연의 주장이 아니다.</li>
+<li>화자가 제안한 제3의 방향은 신뢰도에 맞춘 판단과 더 똑똑한 소프트웨어를 목표로 하지만, 구체 방식과 성과는 아직 공개·검증되지 않았다.</li>
+<li>AI 도입은 모델 이름보다 목표, 사람의 개입, 실패 비용, 결과 검증 방법으로 판단해야 한다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>인간 선호를 최적화한 AI가 보조에는 강하면서도 자율 자동화에는 부족할 수 있는 이유는 무엇인가?</strong></p>
+</blockquote>
+<ul>
+<li>RLHF와 RLVR은 각각 무엇을 최적화하며, 왜 어느 쪽도 자동화와 같지 않은가?</li>
+<li>자동화 후보를 평가할 때 모델의 겉보기 지능 외에 무엇을 확인해야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>사용자가 정체가 불분명한 오디오를 음악이라고 부르며 평가를 요청한다. 모델은 “잘 모르겠다”고 멈추기보다 사용자가 좋아할 법한 그럴듯한 감상을 내놓는다. 대화형 보조로는 부드럽지만, 비용이 걸린 자동 판단이라면 사람이 다시 확인해야 한다.</p>
+<p><code>"사람이 좋아할 답과 실제로 맞는 판단이 어긋날 수 있다"</code> <strong>문제</strong><br>
+→ <code>"인간 선호를 직접 보상하고 그 선호를 더 받는 답을 강화한다"</code> <strong>작동 방식</strong><br>
+→ <code>"답은 그럴듯해지지만 중요한 결정에서는 사람의 검토가 남는다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">만족도만 평가받는 안내 직원</div>
+<p>안내 직원이 문제 해결 여부보다 고객이 대화를 기분 좋게 마쳤는지로만 평가받는다고 생각해 보자. 직원은 모르는 문제에서도 단호하고 친절하게 답하려는 유인을 받을 수 있다. 인간 선호는 고객 만족도에, 실제 업무 성공은 문제가 정말 해결됐는지에 대응한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> RLHF는 단순한 친절 교육 하나가 아니라 인간 선호 수집과 보상 모델을 포함한 최적화 과정이다. 또한 자동화의 성패는 말투뿐 아니라 업무 정의, API 형태, 오류 검출, 실패 비용 등 전체 시스템에 달려 있다는 것이 화자의 주장이다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RLHF</strong></td>
+<td>사람이 더 좋아하는 답을 배우게 하는 방식</td>
+<td>인간 선호를 수집하고 그 선호를 최적화하는 사후 훈련 방식</td>
+<td>사람의 선호를 잘 맞추면 사실 정확성과 자율 실행도 자동으로 해결된다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>보조</strong></td>
+<td>사람이 옆에서 요청하고 확인하는 AI</td>
+<td>인간이 루프 안에서 결과를 선택·수정·승인하는 사용 형태</td>
+<td>코드나 업무 일부를 대신하면 곧 완전 자동화라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>자동화</strong></td>
+<td>사람이 계속 보지 않아도 업무를 끝내는 소프트웨어</td>
+<td>사람의 지속적인 판단을 제거하고 배경에서 반복 업무를 처리하는 형태</td>
+<td>모델이 오래 실행되거나 에이전트처럼 행동하면 자동화라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>RLVR</strong></td>
+<td>정답으로 채점할 수 있는 결과를 더 잘 맞히게 하는 목표</td>
+<td>화자가 순수 정확성의 오류율을 최적화한다고 설명한 별도의 사후 훈련 갈래</td>
+<td>RLHF보다 객관적이므로 곧바로 자동화가 된다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>신뢰도에 맞춘 판단</strong></td>
+<td>자신 있는 정도와 실제로 맞을 가능성을 맞추는 판단</td>
+<td>화자가 제3의 방향으로 제시한 calibrated decision-making</td>
+<td>강연에서 이미 구현 방법과 성능이 검증됐다고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>화자는 왜 인간 선호 최적화가 중요한 업무의 자율 자동화를 막을 수 있다고 보는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>RLHF의 직접 목표는 업무의 객관적 성공보다 사람이 선호하는 답이다. 화자에 따르면 이 보상 구조에서는 확신 없는 답이 쉽게 벌을 받고, 틀렸어도 자신 있고 그럴듯한 답은 좋아 보일 수 있다. 따라서 결과가 실제로 맞는지 사람이 다시 확인해야 하며, 실패 비용이 큰 결정에서는 사람을 제거하기 어렵다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>RLVR과 자동화를 같은 뜻으로 보면 안 되는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>RLVR은 화자의 설명에서 순수 정확성의 오류율을 최적화하는 목표다. 자동화는 정답률만이 아니라 사람이 빠진 상태에서 업무를 안정적으로 처리하고 실패를 관리하는 사용 형태다. 화자는 RLHF와 RLVR 사이의 절충 어느 쪽도 자동화 요소를 더하지 않는다고 말한다. 따라서 RLVR 성능 향상만으로 자동화가 성립한다고 결론 내릴 수 없다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 AI 도구를 실제 업무의 자동화 후보로 평가한다면 무엇을 먼저 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>모델 이름이나 대화 품질보다 업무의 성공 조건, 실패 비용, 사람의 승인 단계, 결과를 객관적으로 판정할 방법을 먼저 적는다. 사람이 매번 결과를 읽고 고쳐야 한다면 보조에 가깝다. 사람이 빠질 후보라면 정상 사례뿐 아니라 오류와 불확실성을 어떻게 드러내는지 별도로 시험해야 한다. 실제 시스템 상태가 주어지지 않았으므로 적용 여부는 검증 전 가설로 남긴다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 제품 형태는 모델의 지능만이 아니라 최적화 목표를 따라간다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 RLHF가 인간 선호를 수집하고 최적화하므로 오늘날 AI가 인간이 개입하는 보조 과제에 강하다고 주장한다.</li>
+<li><strong>[해석]</strong> AI 도구를 평가할 때 “얼마나 똑똑한가”보다 “어떤 행동이 보상받았는가”를 먼저 물어야 제품의 한계를 더 정확히 예상할 수 있다.</li>
+<li><strong>[경계]</strong> 화자의 인과 설명은 강연의 주장이다. 대략 100%의 LLM이 RLHF를 쓴다는 범위와 보상 비대칭의 크기는 이 자료에서 독립적으로 검증되지 않았다.</li>
+</ul>
+<h3>2. 보조 성능을 자동화 가치로 바로 환산하면 위험하다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 Claude Code도 사람이 요청하고 결과를 확인하는 보조 시대의 도구이며, RLHF와 RLVR의 절충 어느 쪽도 자동화 요소를 추가하지 않는다고 말한다.</li>
+<li><strong>[해석]</strong> 시연에서 좋은 답을 내는 능력과 배경에서 중요한 업무를 안정적으로 끝내는 능력은 별도 지표로 평가해야 한다.</li>
+<li><strong>[경계]</strong> 강연은 고객 서비스와 기업의 중요한 결정에 사람이 남아 있다고 주장하지만, 업종별 실패율이나 비용 자료는 제시하지 않는다.</li>
+</ul>
+<h3>3. TypeSafe의 제3의 길은 검증 결과가 아니라 개발 가설이다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 신뢰도에 맞춘 판단과 소프트웨어 유용성을 목표로 하는 새로운 방식과 다른 형태의 API를 개발 중이며 곧 공개할 예정이라고 말한다.</li>
+<li><strong>[해석]</strong> 자동화에 맞는 목표·평가·인터페이스를 처음부터 다시 설계한다는 문제 정의는 시험할 가치가 있다.</li>
+<li><strong>[경계]</strong> 제목의 ‘Jev’는 전사에 없고, 알고리즘·API·벤치마크·출시 결과도 공개되지 않았다. 제목의 “RLHF를 버리고”라는 표현도 “RLHF가 틀렸다고 하지는 않겠다”는 화자의 발언보다 강하다. 원본 게시처 역시 META에서 미확인 상태다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 사람이 좋아하는 답과 실제로 맞는 답이 다를 수 있다고 지적한다.</li>
+<li><strong>통찰:</strong> 학습자가 매끄럽게 대답했는지보다 자료를 덮고 원인·대조·적용을 설명할 수 있는지 확인해야 한다.</li>
+<li><strong>질문/행동:</strong> 설명을 들은 뒤 “RLVR이 왜 자동화와 같지 않은가?”를 근거와 함께 다시 말하게 한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 실패 비용이 큰 기업 결정에 AI를 바로 쓰지 못하고 사람의 검토를 남기는 현상을 문제로 든다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용한다면 현재 상태에 대한 단정 없이, 후보 업무를 보조와 자동화로 나누고 오류 비용과 승인 단계를 먼저 비교하는 가설을 세울 수 있다.</li>
+<li><strong>질문/행동:</strong> 사람의 승인이 빠졌을 때 비용이 직접 발생하는 결정과, 오류를 되돌리기 쉬운 결정을 구분할 수 있는가?</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 강연 자체도 강한 대조와 사례로 주장을 설득하지만, 제목의 ‘Jev’와 “RLHF를 버리고”는 전사보다 앞서 나간다.</li>
+<li><strong>통찰:</strong> 상세페이지에서는 그럴듯한 자신감이나 권위보다 실제 업무 결과, 실패 사례, 검증 조건을 증거로 제시해야 한다.</li>
+<li><strong>질문/행동:</strong> 카피의 각 문장을 주장·사례·측정 증거로 표시하고, 전사나 시험 결과가 없는 제품명과 성과 표현은 분리한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 강연은 RLHF, RLVR, 신뢰도에 맞춘 판단이 서로 다른 목표를 가진다고 구분한다.</li>
+<li><strong>통찰:</strong> 에이전트 평가에서는 정상 완료뿐 아니라 사람이 개입한 횟수, 잘못된 확신, 실패 복구를 관찰해야 한다. 다만 실제 자동화 시스템의 존재나 상태는 이 자료만으로 가정할 수 없다.</li>
+<li><strong>질문/행동:</strong> 같은 시험 사례에서 답변 만족도와 수정 없이 승인된 결과를 분리해 기록할 수 있는가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"그럴듯한 AI 응답과 믿고 맡길 수 있는 업무 결과가 구분되지 않는다"</code> <strong>문제</strong><br>
+→ <code>"검토 부담과 잘못된 결정 위험이 줄어든다"</code> <strong>수혜자: AI 결과를 사용하는 운영자와 사용자</strong><br>
+→ <code>"시험 사례·검토 시간·업무 규칙·신뢰를 제공한다"</code> <strong>지불자 또는 자원 제공자: 자동화를 검토하는 조직과 담당자</strong><br>
+→ <code>"사람의 수정 없이 승인된 결과의 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 실제 운영과 분리된 가상 업무 사례 10개를 골라, AI 결과를 사람이 수정 없이 승인할 수 있는지 기록한다.</li>
+<li><strong>측정 1개:</strong> 10개 중 수정 없이 승인된 결과의 비율.</li>
+<li><strong>중단 기준 1개:</strong> 수정 없이 승인된 결과의 비율이 80% 미만이면 자동화 범위를 확대하지 않고 멈춘다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>화자의 배경과 문제 제기</td>
+<td>AI가 압도적으로 성공했다는 평가와 가치가 없다는 평가가 동시에 존재한다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>보조와 자동화</td>
+<td>사람을 만족시키는 과제와 사람을 제거하는 과제는 목표가 다르다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>RLHF의 구조</td>
+<td>인간 선호 최적화가 그럴듯한 답과 사람의 지속적인 개입을 만든다는 주장이다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>더 똑똑한 소프트웨어</td>
+<td>코드를 싸게 작성하는 것과 소프트웨어 자체가 더 똑똑해지는 것은 다르다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>TypeSafe의 방향</td>
+<td>신뢰도에 맞춘 판단을 목표로 전체 AI 스택을 다시 설계 중이라고 밝힌다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>질의응답과 한계</td>
+<td>사전 훈련은 문제가 아니며 RLVR도 아닌 제3의 방식이라고 주장하지만 세부는 공개하지 않는다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 화자의 배경과 양극화된 평가</h3>
+<p>Diogo Almeida는 자신을 GPT-4, ChatGPT, RLHF/InstructGPT 관련 논문의 공동 저자이자 OpenAI의 사후 훈련 작업에 참여한 사람으로 소개한다. 그는 ChatGPT가 세상을 바꾼 제품이라고 평가하면서도 그 한계를 인정해야 한다고 말한다.</p>
+<p>화자는 AI에 대한 평가가 두 극단으로 갈린다고 설명한다.</p>
+<ul>
+<li>한쪽에서는 모든 새 벤치마크에서 인간 수준을 넘어가며 자율 작동 시간도 기하급수적으로 증가한다고 주장한다.</li>
+<li>다른 쪽에서는 AI가 거품이며 실질 가치 없이 순환 금융 거래만 만든다고 주장한다.</li>
+<li>어려운 수학 문제는 풀면서 더 단순해 보이는 고객 서비스에는 왜 사람이 필요한지가 강연의 출발점이다.</li>
+</ul>
+<p>이 벤치마크와 자율 작동 시간에 대한 표현은 화자가 소개한 진영의 주장이다. 구체 수치나 출처는 전사에 없다.</p>
+<h3>2. 보조와 자동화의 구분</h3>
+<p>화자는 뛰어난 성과가 나타나는 과제의 목표가 사람을 루프에서 제거하는 것이 아니라 사람을 만족시키는 데 있다고 본다. Claude Code도 단순히 작동하는 코드를 만드는 것이 아니라 사용자와 대화하며 사용자를 만족시키는 도구라고 분류한다.</p>
+<p>반면 자동화는 사람이 보지 않는 서버에서 배경 업무를 처리하고, 장기적으로는 특별히 신경 쓰지 않아도 되는 기존 소프트웨어처럼 작동하는 상태를 뜻한다.</p>
+<p>화자가 제시한 첫 번째 교훈은 다음과 같다.</p>
+<ul>
+<li>오늘날 RLHF를 물려받은 AI는 사람이 개입하는 과제에는 뛰어나다.</li>
+<li>그러나 사람을 제거하려는 자동화 과제에는 적합하지 않다.</li>
+<li>기업은 비용이 큰 결정을 AI에 맡기기보다 오류 비용을 사용자에게 넘기고 사람이 개입하도록 하는 경향이 있다는 것이 화자의 주장이다.</li>
+</ul>
+<h3>3. RLHF와 보상 구조</h3>
+<p>화자는 RLHF를 “인간의 선호를 수집하고 인간의 선호를 최적화하는 것”으로 요약한다. 그는 대략 100%의 LLM이 RLHF로 훈련된다고 표현하지만, 이를 입증하는 목록은 제시하지 않는다.</p>
+<p>화자에 따르면 인간 선호가 직접 목표이므로 다음 결과가 생긴다.</p>
+<ol>
+<li>모델은 모를 때도 사람이 선호할 것으로 예상되는 답을 선택한다.</li>
+<li>과대약속은 우연한 결함이 아니라 설계에서 나오는 성향이다.</li>
+<li>보상 모델의 비대칭 때문에 틀린 답도 맞는 것처럼 보일 수 있다.</li>
+<li>자율 자동화에 필요한 것은 사람의 반응보다 과제를 올바르게 수행하고 불확실성을 적절히 드러내는 능력이다.</li>
+</ol>
+<p>화자는 오래된 METR 연구를 언급하면서 수치가 이미 달라졌을 수 있다고 말한다. 전사에는 그 연구의 실제 수치가 없으므로 수치 비교는 복원할 수 없다.</p>
+<h3>4. 보조 시대 이후의 소프트웨어</h3>
+<p>화자는 Claude Code가 RLHF로 훈련되고 사람과 상호작용하므로 ChatGPT와 같은 보조 시대에 속한다고 본다. RLVR에 가까워지면 에이전트 과제는 좋아져도 사용자가 원하는 지시를 덜 따르는 절충이 생길 수 있다고 말한다. 이어 <strong>이 최적화 절충 어느 쪽도 자동화 요소를 추가하지 않는다</strong>고 명시한다.</p>
+<p>그가 제시하는 다음 단계는 실제 자동화다. 화자는 SaaS가 2019년 이후 본질적으로 크게 바뀌지 않았고, LLM 시대의 변화도 기존 제품에 챗봇을 덧붙이는 수준인 경우가 많다고 주장한다.</p>
+<p>또한 현재의 흐름은 소프트웨어 자체를 더 똑똑하게 만들기보다 소프트웨어 작성 비용을 낮추는 방향이라고 평가한다. 자동화는 사람의 업무를 그대로 합쳐 흉내 내는 것이 아니라, 다른 사람에게 명확히 지시할 수 있을 만큼 반복적이고 단순한 업무를 컴퓨터가 지속적으로 처리하도록 만드는 것이라는 설명이다.</p>
+<h3>5. TypeSafe가 제시하는 방향</h3>
+<p>화자는 미래의 AI가 자동화를 위한 것이 될 것이며, 더 똑똑한 소프트웨어가 등장할 것이라고 믿는다. TypeSafe에서는 AI 스택을 신뢰성과 자동화에 맞춰 다시 설계하면 무엇이 달라질지를 연구한다고 밝힌다.</p>
+<p>다만 다음 표현은 모두 현재 성과가 아니라 계획이나 믿음이다.</p>
+<ul>
+<li>TypeSafe는 아직 초기 공개 단계에 가깝다.</li>
+<li>제품이나 기술을 곧 공개할 예정이라고 말한다.</li>
+<li>새로운 방식으로 실제 업무가 자동화될 것이라고 믿는다.</li>
+<li>강연에서는 알고리즘, API 명세, 성능 수치, 실제 도입 결과를 공개하지 않는다.</li>
+</ul>
+<p>제목과 META 설명에 있는 ‘Jev’라는 이름은 전사에 등장하지 않는다. 따라서 전사만으로는 Jev가 제품인지 모델인지, 제3의 최적화 방식과 어떤 관계인지 확인할 수 없다.</p>
+<h3>6. 질의응답: 사전 훈련, RLVR, 제3의 최적화</h3>
+<p>한 참석자는 Yoshua Bengio가 제안한 방식처럼 사전 훈련과 함께 분류기 헤드를 훈련하는 방안을 묻는다. 화자는 시간이 부족해 자세히 답하지 못하지만, 사전 훈련 자체는 문제가 아니라고 말한다. 인터넷의 지식을 핵심 지능으로 압축한 사전 훈련 모델은 매우 뛰어나다는 평가다.</p>
+<p>그는 환각이 인간 선호 최적화에 내재한다고 주장한다. 보상 모델의 비대칭은 불확실한 답을 벌하기 쉽게 만들고, 모델이 일부 가능성을 버리면서 자신 있게 답하도록 장려할 수 있다고 설명한다. 이 부분은 고급 주제라며 상세 설명을 생략한다.</p>
+<p>또 다른 질문에 화자는 TypeSafe의 방식이 RLVR이 아니라고 답한다.</p>
+<ul>
+<li>RLHF의 북극성은 인간 선호다.</li>
+<li>RLVR의 북극성은 순수 정확성의 오류율이다.</li>
+<li>TypeSafe가 시도하는 제3의 방식은 신뢰도에 맞춘 판단과 사전 훈련 모델의 지능을 소프트웨어에 유용하게 연결하는 것을 목표로 한다.</li>
+<li>API의 형태도 RLHF 및 RLVR과 다르다고 주장한다.</li>
+</ul>
+<p>화자는 Sutton의 쓴 교훈을 자신만의 관점으로 재해석하며, 현실에서는 데이터가 연산량보다 중요하고 올바른 과제를 선택하는 것이 데이터보다 훨씬 중요하다고 주장한다. 그러나 제3의 방식이 어떤 보상이나 학습 절차를 사용하는지는 공개하지 않는다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · GPT-4 공동 저자가 밝히는 RLHF를 버리고 'Jev'를 만든 진짜 이유입니다 · https://www.youtube.com/watch?v=mXdTWLIXqfg · 전사: 제공된 영문 전사(생성 방식 미상)</p>
+<p>화자는 전사에서 자신을 Diogo Almeida라고 소개한다. META의 provenance.creator는 비어 있고 affiliation은 <code>Typesafe</code>로 기록되어 있다. META는 채널이 원본 영상 링크를 제공하지 않아 화자 이름과 SNS를 기준으로 출처를 추정했다고 밝힌다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>훌륭합니다.</p>
+<p>이 발표를 빠르게 진행할 수도 있습니다. 제가 하는 말에 동의하지 않는다면 편하게 소리 내 말씀해 주세요. 상호작용이 있으면 저에게 훨씬 더 재미있습니다. 그렇지 않다면 그냥 계속 진행하겠습니다.</p>
+<p>먼저, RLHF가 무엇인지 아는 분이 얼마나 되는지 대략 손을 들어 주실 수 있을까요?</p>
+<p>아, 훌륭하네요. 그 부분은 빠르게 넘어가고 상호작용적인 내용으로 들어가도 되겠습니다.</p>
+<p>제 이름은 디오구 알메이다(Diogo Almeida)입니다. 오늘은 RLHF 이후에 무엇이 올지 이야기하겠습니다. 더 정확히 말하면, 이 강연의 제목은 “ChatGPT 시대 이후에는 무엇이 오는가”여야 한다고 생각합니다. 우리는 모두 그 시대에 살고 있다고 봅니다.</p>
+<p>여러분께 드릴 힌트는, 그것이 클로드 코드(Claude Code) 시대가 아니라는 것입니다. 이에 대해서는 나중에 설명하겠지만, 저는 실제로 둘이 같은 시대에 속한다고 생각합니다.</p>
+<p>왜 제 말을 들어야 할까요? 저는 사실상 OpenAI의 최고 히트작, 적어도 공개된 히트작인 GPT-4, ChatGPT, RLHF/InstructGPT의 공동 저자였습니다. 제가 속했던 팀은 기본적으로 포스트 트레이닝(post-training)이라는 개념을 발명했습니다. 따라서 이 주제에 대해서는 상당히 자격이 있다고 할 수 있습니다.</p>
+<p>하지만 여기서 제가 조금 독특한 점은, OpenAI에서 실제로 ChatGPT를 싫어하는 몇 안 되는 사람 중 하나라는 것입니다.</p>
+<p>감사합니다. 분명히 말하자면, 제품으로서의 ChatGPT를 싫어하는 것은 아닙니다. ChatGPT는 세상을 바꾼 제품이며, 더 나은 무언가가 나오지 않는 한 아마 영원히 우리와 함께할 것이라고 생각합니다. 하지만 그 한계도 인정합니다.</p>
+<p>현재 AI 분야에서 일어난 많은 일은 ChatGPT의 기반 알고리즘을 만들 때 우리가 내린 사소한 결정들로 거슬러 올라갈 수 있다고 생각합니다.</p>
+<p>지금 AI 분야의 모든 사람에게 중요한 질문은 이것이라고 봅니다. 도대체 무슨 일이 일어나고 있는가?</p>
+<p>서로 다른 의견이 아주 많습니다. 똑똑한 사람들이 어떻게 이렇게 다른 의견을 가질 수 있는지 파악하려면, 그 스펙트럼을 그려 보는 것이 정말 유용하다고 생각합니다.</p>
+<p>첫 번째 진영이 있습니다. AI가 잘되고 있는 정도가 아니라, 미친 듯이 잘되고 있다는 견해입니다. 모든 단일 벤치마크에서 인간 수준의 성능을 뛰어넘고 있습니다. 우리가 측정할 수 있는 범위에서는, 기본적으로 새로운 벤치마크가 나올 때마다 지속적으로 인간의 성능을 능가하고 있으며, 그 속도도 점점 빨라지고 가속되고 있습니다.</p>
+<p>여기 있는 모든—제 마우스가 보이나요? 훌륭하네요.</p>
+<p>기본적으로 모든 NLP 벤치마크가 압도되고 있습니다. 그뿐만 아니라, LLM이 자율적으로 작동할 수 있는 시간이 기하급수적으로 늘어나고 있다고 합니다.</p>
+<p>반면 AI가 잘 안 되고 있는 정도가 아니라, 미친 듯이 잘 안 되고 있다는 견해도 있습니다. AI는 거품이며, 사실상 아무런 가치도 만들어 내지 못하고 그저 순환적인 금융 거래만 하고 있다는 식입니다.</p>
+<p>AI가 그렇게 훌륭하다면, 왜 지금 모든 것이 채팅 앱뿐일까요? 아니면 클로드 코드 같은 것뿐일까요?</p>
+<p>실제로 많은 사람이 과거 주류가 사용하던 ‘변혁적 AI 혁명’이라는 표현을 포기했습니다. 이제 사람들은 그것에 대해 거의 이야기하지 않습니다. 대신 B2B SaaS처럼 AI가 엄청난 가치를 지닌다는 이야기를 합니다.</p>
+<p>따라서 모두가 동의하는 유일한 점은, 이렇게 극단적인 관점들이 존재하고 그 사이에는 아무것도 없다는 것입니다. 기본적으로 모두가 AI가 미쳤다고 생각하지만, 그 이유는 서로 다릅니다.</p>
+<p>제가 이야기하고 싶은 것은 AI에 대한 건전한 관점입니다. AI가 엄청나게 잘되고 있다는 첫 번째 진영의 모든 증거와, AI가 엄청나게 잘 안 되고 있다는 두 번째 진영의 모든 증거를 함께 그려 보고, 무엇이 그 분열을 설명하는지 알아보자는 것입니다.</p>
+<p>어떤 것들은 믿기 어려울 정도로 좋은 반면, 어떤 것들은 단순히 나쁜 정도가 아니라 너무나 형편없어서 여전히 인간 노동자를 고용해 멍청한 작업을 하게 되는 이유를 설명하는 가장 단순한 방법은 무엇일까요?</p>
+<p>오른쪽에 있는 작업들은 왼쪽의 작업보다 훨씬, 훨씬, 훨씬 쉬워 보입니다. 그중 어느 누구도 비난하려는 것은 아닙니다. 수학의 미해결 문제는 해결하면서, 실제로 결정을 내리려면 고객 서비스에는 여전히 사람이 참여해야 한다는 것을 어떻게 설명할 수 있을까요?</p>
+<p>제 생각에는 이것은 매우 기이한 상황입니다. AI와 인접한 분야에서 일하는 사람이라면 누구나 이에 대한 답을 가지고 있어야 한다고 봅니다. 이것이 현재 이 분야에 존재하는 증거이기 때문입니다.</p>
+<p>보통이라면 잠시 멈추고 여러분이 생각을 소리 내 말해 보라고 하겠지만, 그럴 시간이 없는 것 같고, Q&amp;A는 나중에 하라는 말을 들었습니다.</p>
+<p>그냥 제 답을 말씀드리겠습니다. 제 생각에 가장 단순한 설명은 이렇습니다.</p>
+<p>왼쪽에 있는 모든 것은 단순히 우연히 사람이 참여하는 작업이 아닙니다. 그 작업들의 목표는 참여한 인간을 만족시키는 것입니다. 이런 작업은 본질적으로 인간 참여형 작업입니다.</p>
+<p>클로드 코드의 역할은 단순히 코드가 작동하도록 만드는 것이 아닙니다. 대화 방식도 완전히 달라질 것입니다. 클로드 코드의 목표는 참여한 인간을 만족시키는 것입니다.</p>
+<p>반대로 훨씬 더 기본적으로 보이는 오른쪽의 모든 작업에서는 인간을 과정에서 제거하는 것이 목표입니다. 이상적으로는 여러분이 한 번도 들여다보지 않는 서버에서 백그라운드로 실행되어야 합니다. 궁극적으로는 별로 신경 쓰지 않아도 되는 레거시 소프트웨어가 되는 것이 이상적입니다.</p>
+<p>이것이 지원(assistance)과 자동화(automation)의 차이입니다.</p>
+<p>제 강연의 첫 번째 교훈은, 오늘날의 AI, 즉 RLHF에서 파생된 모든 AI는 인간 참여형 작업에는 놀라울 정도로 뛰어나지만 자동화 작업에는 뛰어나지 않다는 것입니다.</p>
+<p>조금 길게 돌아가는 이야기지만, 거의 모든 기업이 배운 교훈은 이것입니다. 사업에 중대한 영향을 미치는 의사 결정에는 AI를 사용하지 마십시오. 흔히 나타나는 패턴은 모든 비용을 기업이 아니라 사용자에게 떠넘기는 것입니다.</p>
+<p>따라서 사용자를 무한한 문서와 고객 서비스로 떠미는 것은 완전히 괜찮지만, AI가 비용이 많이 드는 결정을 내리도록 하는 것은 괜찮지 않습니다.</p>
+<p>끔찍한 패턴이지만, 이것이 현재 AI의 상태입니다.</p>
+<p>여러분 모두 RLHF가 무엇인지 아는 것 같으니 “RLHF란 무엇인가?” 부분은 빠르게 넘어가겠습니다. RLHF는 ChatGPT뿐만 아니라 오늘날 사실상 모든 LLM의 기반이 되는 알고리즘입니다. 제가 아는 한, LLM의 거의 100%가 RLHF로 학습됩니다.</p>
+<p>저희 OpenAI 팀은 작동 방식을 설명하는 훌륭한 블로그 게시물을 작성했습니다. 여러분이 모두 알고 있고 아주 지루한 내용이므로 여기서는 다루지 않겠습니다.</p>
+<p>요약하면, 인간의 선호를 수집하고 인간의 선호에 맞게 최적화하는 것입니다. 이 과정을 주석이 달린 형태로 보고 싶다면, 어느 부분이 인간의 선호를 수집하는 과정이고 어느 부분이 그 선호를 최적화하는 과정인지 확인할 수 있습니다.</p>
+<p>이것은 “왜 모든 LLM에는 인간이 참여해야 하는가?”라고 묻는 이 분야의 모든 사람에게 매우 명확한 답을 제공합니다.</p>
+<p>간단한 답은 이렇습니다. 우리가 말 그대로 인간을 그 과정에 집어넣었기 때문입니다. 그 과정의 목표는 인간의 선호에 맞게 최적화하는 것입니다. 소프트웨어를 자율적으로 실행하는 것이 아닙니다. 너무나 명백합니다.</p>
+<p>고맙습니다, 뒤에 계신 분. 이걸 듣고 웃어 주셔서 정말 좋네요.</p>
+<p>그렇기 때문에 과도한 약속(overpromising)은 기능입니다. 이것은 의도된 설계입니다.</p>
+<p>이것은 오래된 METR 연구이고, 수치는 아마 바뀌었을 것입니다. 하지만 설계상 모든 RLHF 모델은 인간의 선호와 결과 사이에 항상 큰 차이를 보입니다. 결과가 좋더라도 마찬가지입니다. 최적화하고 있는 주된 목표가 인간의 선호이기 때문입니다.</p>
+<p>이것은 LLM이 작동하는 방식에 자연스럽게 내재된 현상입니다.</p>
+<p>누군가 ChatGPT에 방귀 효과음 오디오 파일을 보내고 “내가 만든 음악을 어떻게 생각해?”라고 묻는 트윗이 있는데, 저는 그 트윗을 정말 좋아합니다. 이에 대한 솔직하고 직선적인 반응은 이렇습니다. “아주 으스스한 분위기의 음악입니다.”</p>
+<p>이것이 바로 RLHF가 작동하는 방식입니다. 모르는 경우에는 인간의 선호에 가장 부합한다고 생각하는 방향으로 행동하려 합니다.</p>
+<p>과정에 사용자가 참여하고 있다면 이는 완전히 말이 됩니다. 모든 RLHF 모델의 최종 목표가 참여도(engagement)를 최적화하는 것이기 때문입니다.</p>
+<p>하지만 자동화를 원한다면 실제로 원하는 것은 인간에게 신경 쓰지 않고, 보정된 방식으로 작업을 정확히 수행하는 것입니다.</p>
+<p>두 번째 교훈은, 오늘날의 AI가 인간의 선호를 최적화함으로써 지원을 위해 설계되었다는 것입니다. 이름에 이미 드러나 있습니다. 논란의 여지가 있는 주장이 아닙니다.</p>
+<p>그 결과는 더 논란이 될 수 있지만, 우리가 실제로 무엇을 최적화하고 있는지 생각해 보면 매우 명확합니다. 모델이 아무리 틀려도 옳아 보이게 됩니다. RLHF의 보상 모델(reward model) 내부에 비대칭성이 있기 때문입니다.</p>
+<p>그리고 여기서 이 분야의 많은 딜레마가 비롯됩니다. 사람들이 정말로 자동화가 일어나기를 원하기 때문입니다.</p>
+<p>좋습니다. 원래 질문으로 돌아가겠습니다. 강연이 절반을 훨씬 넘었는데도 아직 그 질문에 답하지 않았습니다. 지금까지는 RLHF가 무엇인지 이야기했을 뿐입니다.</p>
+<p>하지만 이것은 RLHF가 무엇인지 이야기하기 위한 틀이었고, 그 결과 다음에 무엇이 올지 이야기하려는 것이었습니다. 진짜 질문은 “AI의 지원 시대 이후에는 무엇이 오는가?”라고 할 수 있습니다.</p>
+<p>지금 우리는 분명히 그 시대에 있습니다.</p>
+<p>그리고 클로드 코드가 아닌 이유에 대한 처음의 힌트로 돌아가면, 이것은 정말 재미있고 뉘앙스가 풍부한 논의입니다. 하지만 클로드 코드가 아닌 이유는 클로드 코드 역시 여전히 그 지원 시대의 일부이기 때문입니다. 클로드 코드는 여전히 RLHF로 학습되었으며, 순수하게—조금 어려운 개념인데—RLVR이었다면 그 모습은 아주, 아주 달랐을 것입니다.</p>
+<p>이 때문에 모델에는 이런 딜레마가 생깁니다. 때로는 에이전트 작업(agentic task)을 매우 잘하게 되지만, 실제로 여러분이 원하는 것을 따르지 않게 됩니다. 이것은 최적화 공간(optimization space)에서 계속 이동하는 트레이드오프입니다.</p>
+<p>하지만 최적화 공간에서의 이 두 트레이드오프 중 어느 것도 자동화 요소를 더해 주지는 않습니다.</p>
+<p>이것이 지원 다음에 올 것에 대한 논리적인 답이라고 제가 생각하는 것, 즉 진정한 자동화로 이어집니다.</p>
+<p>자동화와 그것이 어떻게 작동할지 조금 이야기하기 위해, 소프트웨어에 대해 이야기하고 싶습니다.</p>
+<p>여러분에게는 조금 철학적으로 들릴 수도 있습니다. 하지만 제가 잘 설명한다면, 그리고 여러분이 제대로 이해한다면, 매우 명확해질 것이라고 생각합니다.</p>
+<p>저는 소프트웨어를 사랑합니다. 여기 있는 모든 분도 소프트웨어를 사랑한다고 생각합니다. 소프트웨어는 매우 가치 있습니다. 모든 SaaS를 보세요.</p>
+<p>제가 보기에 소프트웨어에서 가장 놀라운 점은 SaaS가 2019년 이후 사실상 변하지 않았다는 것입니다. LLM 시대에도 SaaS는 실제로 변하지 않았습니다. 가끔 챗봇이 붙어 있을 뿐인데, AI의 발전을 생각하면 다소 놀라운 일입니다. 하지만 AI가 지원에 특화되어 있다고 생각하면 매우 예측 가능한 일이기도 합니다.</p>
+<p>AI는 지원을 위해 만들어졌습니다. SaaS에서 무엇을 할 수 있을까요? 옆에 어시스턴트를 하나 제공하는 것뿐입니다.</p>
+<p>초기 AI 개척자들이 일어날 것이라고 생각했던 것은 이런 일이 아니었습니다. OpenAI 헌장(charter)의 초기 문구를 보면, 수익을 내는 것 같은 이야기가 아니라 엄청난 양의 작업을 수행하는 것에 관한 내용입니다.</p>
+<p>우리는 소프트웨어가 단지 작성 비용이 저렴해지는 것뿐 아니라 훨씬 더 똑똑해질 거라고 생각하곤 했습니다. 지금 우리가 나아가고 있는 방향과는 다르죠.</p>
+<p>저는 Gary Tan의 이 표현을 정말 좋아합니다. 그는 지금 벌어지고 있는 일을 칭찬하는 의미로 말한 것 같습니다. 우리는 적시 소프트웨어(just-in-time software)의 황금기에 들어서고 있습니다.</p>
+<p>하지만 저는 이것이 양날의 검이라고 생각합니다. 저는 단지 적시 소프트웨어만을 원하는 게 아닙니다. 물론 멋진 개념이고, 분명히 말하자면 저는 Claude Code도 ChatGPT를 좋아하는 만큼 좋아합니다. 계속 사용할 겁니다.</p>
+<p>하지만 제가 원하는 것은 더 똑똑한 소프트웨어입니다. 왜 B2B 소프트웨어는 더 표현력이 있을 수 없는 걸까요? 소프트웨어의 구성 요소는 왜 여전히 똑같은 걸까요?</p>
+<p>이것은 AI 업계 전체가 스스로에게 물어야 할 질문이라고 생각합니다.</p>
+<p>기본적으로 자동화를 하고 싶다고 생각할 때마다, 그것은 사람의 업무를 자동화하는 여러 요소를 한데 합치는 문제가 아닙니다. “이런 극도로 반복적인 일이 있다. 너무 단순해서 다른 사람에게 이 일을 해야 한다고 전달할 수 있다”라고 말하는 문제입니다.</p>
+<p>이상적으로는 너무 기본적인 일이라서 사실상 무료로 반복해서 수행할 수 있어야 합니다. 또는 컴퓨터가 수행할 수 있어야 합니다. 그런데 지금은 실제로 그렇게 되지 않고 있습니다.</p>
+<p>우리가 하고 있는 일은 소프트웨어를 작성하는 일을 자동화하는 것뿐이고, 소프트웨어의 표현력은 여전히 동일합니다. 저는 이것이 현재 세상의 상태에서 비극적이라고 생각합니다.</p>
+<p>좋습니다.</p>
+<p>세 번째 교훈입니다. 이것은 제가 강하게 믿는 것입니다. 결국 이 분야는 깨닫게 될 겁니다. RLHF가 틀렸다고 말하지는 않겠지만, 그것은 우리가 예상하지 못했던 이상한 우회로였습니다.</p>
+<p>제가 믿기에 내일의 AI는 자동화를 위한 것입니다. 결국 우리는 더 똑똑한 소프트웨어가 존재하는 세상에 도달할 겁니다.</p>
+<p>실제로 자동화되는 업무가 생기기 시작할 것입니다. 지금은 LLM의 지능에도 불구하고 그런 업무가 거의 오차 수준으로 미미합니다. 이것이 TypeSafe에서 우리가 작업하고 있는 일입니다.</p>
+<p>우리는 아직 어느 정도 스텔스 상태입니다. 이런 강연을 하기는 하지만, 이것들은 초기 강연 중 일부입니다. 우리의 핵심 질문은 이것입니다. AI 스택을 신뢰성과 자동화를 중심으로 다시 설계한다면 어떨까? 모든 것이 어떻게 달라질까? 여러분이라면 무엇을 하겠습니까?</p>
+<p>오늘날 만들어지는 거의 모든 LLM과는 매우 흥미로운 갈림길이 존재하고, 저는 이것이 제가 해 온 일 중 가장 만족스러운 일 중 하나라고 생각합니다. 저는 꽤 멋진 일들을 해 왔습니다. 곧 출시할 예정이니, 저희와 함께 일하고 싶거나 스마트 소프트웨어를 만드는 최초의 사람들 중 하나가 되고 싶다면 저희 메일링 리스트나 채용 페이지에 등록해 주세요.</p>
+<p>저는 트위터를 시작해 보려고 하니 저를 팔로우해 주세요. 아주 논쟁적인 내용을 올리겠습니다. 실제로 오늘 늦게 무척 논쟁적인 글을 올릴 텐데, 장담할 수 있습니다. 힌트는 최초의 스케일링 법칙(scaling laws)이 틀렸다는 것입니다.</p>
+<p>좋습니다. 준비한 내용은 여기까지입니다. 사람들이 질문을 외칠 시간이 있을까요? 질문, 피드백, 반론을 환영합니다. 거침없이 말씀해 주세요. 질문은 제가 반복할 수 있으니 마이크는 걱정하지 않으셔도 됩니다.</p>
+<p>질문은 대략 이랬습니다. 요슈아 벤지오(Yoshua Bengio)가 제안하는 것처럼, 사전 학습(pre-training)도 함께 사용해 분류기 헤드(classifier head)를 학습한다면 어떨까요?</p>
+<p>그건 복잡한 문제라고 말씀드리겠습니다. 그리고 그 특정 질문에 답할 시간은 없습니다. 이에 대한 제 단순화된 견해를 말씀드리자면, 문제는 사전 학습이 아니라고 생각합니다. 저는 사전 학습이 정말 놀랍다고 생각합니다. 인터넷의 지식을 압축해 활용할 수 있는 지능의 핵심으로 만든다는 사실은 대단합니다. 사전 학습된 모델은 믿을 수 없을 정도로 지능적입니다.</p>
+<p>문제는 우리가 그 지능을 어떻게 끌어내느냐라고 생각합니다. 저에게 환각(hallucination)은 인간의 선호를 최적화하는 데 내재된 문제입니다. 보상 모델(reward model)에는 GAN과 비슷한 비대칭성이 있습니다. 이 이야기는 정말 하지 말았어야 할 것 같네요. 매우 고급 주제입니다. 하지만 보상 모델에는 GAN이 가진 것과 같은 비대칭성이 있어서, 모델이 모드(mode)를 버리고 확신에 차도록 허용하고 또 장려합니다. 보상 모델의 관점에서는 모델이 확신하지 못하는 경우를 알아차리고 그것을 처벌하기가 매우 쉽기 때문입니다.</p>
+<p>매우 복잡한 문제지만, 원하시면 나중에 이야기를 나누며 함께 고민해 보겠습니다.</p>
+<p>다른 강연에서 사용한 슬라이드도 있으니, 이 주제에 대해 더 자세히 설명할 수 있습니다. 1분 남았네요.</p>
+<p>다시 말씀해 주세요.</p>
+<p>그게 세 번째인가요? 그냥 RLVR인가요, 아니면 RLVR를 위한 새로운 것인가요?</p>
+<p>분명히 RLVR는 아닙니다. 새로운 것입니다. 모든 최적화 스택에 대해 말씀드리자면, 이게 정말 중요하다고 생각하기 때문에 제가 예전에 했던 발표 자료로 들어가 보겠습니다.</p>
+<p>저에게 Sutton의 쓴 교훈(bitter lesson)은 알고리즘이 컴퓨팅보다 중요하다는 것입니다. 게임에서는 이것이 맞지만, 현실에서는 맞지 않습니다. 저는 실제로 전체 스택은 데이터가 컴퓨팅보다 중요하고, 올바른 작업을 수행하는 것이 데이터보다 훨씬 더 중요하다고 생각합니다.</p>
+<p>LLM의 사후 학습(post-training)이라고 부르고 싶다면, 그 거의 모든 갈래에는 무엇을 최적화할지에 대한 각자의 북극성(North Star)이 있습니다. RLHF는 인간의 선호를 최적화합니다. RLVR는 순수한 정답성의 로그 오류율(log error rates)을 최적화합니다. 하지만 우리는 세 번째 일을 하고 있습니다. 이는 보정된 의사 결정(calibrated decision-making)을 위해 최적화하며, 사전 학습된 모델의 지능을 실제로 소프트웨어에 유용하도록 거의 직접 주입하는 것입니다. 저는 이것이 상당히 다르다고 생각합니다.</p>
+<p>다시 말씀해 주시겠어요?</p>
+<p>보상이 전체 과정에 주입되는 것인지 묻고 있습니다.</p>
+<p>실제로 API의 형태 자체도 다르다고 말하겠습니다. RLHF의 API 형태는 RLVR의 API 형태와 다르고, RLVR의 API 형태는 우리가 하는 일과 다릅니다. 우리는 처음부터 다시 생각하고 있습니다. 아무도 지시 따르기(instruction following)가 가능해지기 전에는 지시 따르기에 대해 생각하지 않았던 것과 같습니다.</p>
+<p>보통 새로운 사후 학습 방식으로 크게 갈라질 때는 완전히 낯설어 보이다가, 나중에 돌아보면 매우 당연해집니다.</p>
+<p>이 빨간 것이 삐 소리를 내고 있으니 시간이 초과된 것 같습니다. 하지만 나중에 꼭 찾아와 주세요. 저는 질문과 상호작용을 정말 좋아합니다. 논쟁적인 내용을 보려면 트위터에서 저를 팔로우해 주세요.</p>
+<p>아, 네, 여기 있습니다. Complete Skeptic입니다. 저에게 딱 어울리는 이름이죠.</p>
+<p>좋습니다. 정말 좋네요. 감사합니다.</p>
+</details>
+</body></html>
