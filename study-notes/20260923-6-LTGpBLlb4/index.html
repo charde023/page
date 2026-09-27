@@ -1,0 +1,305 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Databricks CEO Ali Ghodsi built in 2 days what his team took 9 months to ship</title>
+<meta name="description" content="2일짜리 개념증명과 프로덕션 작업의 간극을 추적하고, AI 활용 주장·절차 개편·처리량 변화의 인과와 수치 경계를 구분한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Sequoia Capital 학습노트</div><h1>Databricks CEO Ali Ghodsi built in 2 days what his team took 9 months to ship</h1>
+<div class="meta">원작자 Ali Ghodsi · 업로드 2026-09-23 · 1.6분 · <a href="https://youtu.be/6-LTGpBLlb4" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 4분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상은 <strong>핵심 기능을 빠르게 만드는 일</strong>과 <strong>고객이 실제로 쓸 수 있는 상태까지 보내는 일</strong>이 왜 다른지를 다룬다. 화자는 connector라는 구성 요소를 이틀 만에 만들었다. 반면 팀은 기존 작업에 “3분기, 1인”이 걸린다고 말했다. 그러나 팀은 화자의 결과물이 핵심 가능성만 보여준 시제품일 뿐, 안전하지 않고 실제 운영에 쓸 수 없는 상태라고 반박했다.</p>
+<figure data-visual-kind="process" style="margin:1.2rem 0;">
+<div role="img" aria-label="이틀짜리 개념증명에서 프로덕션 처리량 개선 주장까지 이어지는 과정" style="display:flex;flex-wrap:wrap;align-items:stretch;gap:0.5rem;">
+  <div style="flex:1 1 9rem;padding:0.8rem;border:2px solid #315a7d;border-radius:0.5rem;"><strong>2일</strong><br>화자가 connector의 핵심 기능을 만듦</div>
+  <div aria-hidden="true" style="align-self:center;font-weight:bold;">→</div>
+  <div style="flex:1 1 9rem;padding:0.8rem;border:2px solid #8a5a12;border-radius:0.5rem;"><strong>팀의 반박</strong><br>보안·실제 작동·프로덕션 준비가 부족함</div>
+  <div aria-hidden="true" style="align-self:center;font-weight:bold;">→</div>
+  <div style="flex:1 1 9rem;padding:0.8rem;border:2px solid #6c4d87;border-radius:0.5rem;"><strong>절차 개편</strong><br>새 인물과 팀이 기존 과정을 다시 손봄</div>
+  <div aria-hidden="true" style="align-self:center;font-weight:bold;">→</div>
+  <div style="flex:1 1 9rem;padding:0.8rem;border:2px solid #276749;border-radius:0.5rem;"><strong>팀의 최종 보고</strong><br>한 분기에 connector 7개가 가능하다고 주장</div>
+</div>
+<figcaption>화자가 제시한 문제부터 팀의 처리량 개선 주장까지의 전체 흐름이다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 화살표는 이미 검증된 단일 원인을 뜻하지 않는다. 특히 마지막 변화에는 AI뿐 아니라 새 인물의 투입과 팀의 절차 개편도 함께 들어갔다. 따라서 “AI 하나가 전부 해결했다”고 읽으면 안 된다.</p>
+<p>화자는 이 간극을 제대로 이해하려면 코드가 저장소에 반영되고 실제 고객에게 닿는 단계까지 가봐야 한다고 판단했다. 다만 전사는 화자가 만든 이틀짜리 connector가 실제로 그 단계까지 배포됐다고 말하지 않는다. 이는 그가 앞으로 확인해야 한다고 말한 기준이다.</p>
+<figure data-visual-kind="comparison" style="margin:1.2rem 0;overflow-x:auto;">
+<table style="width:100%;min-width:560px;border-collapse:collapse;">
+<thead>
+<tr>
+<th style="padding:0.6rem;border:1px solid #777;text-align:left;">비교 기준</th>
+<th style="padding:0.6rem;border:1px solid #777;text-align:left;">이틀짜리 결과물</th>
+<th style="padding:0.6rem;border:1px solid #777;text-align:left;">팀이 말한 프로덕션 결과물</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:0.6rem;border:1px solid #777;"><strong>목적</strong></td>
+<td style="padding:0.6rem;border:1px solid #777;">핵심 기능의 가능성을 보여줌</td>
+<td style="padding:0.6rem;border:1px solid #777;">실제 고객이 쓰는 상태로 보냄</td>
+</tr>
+<tr>
+<td style="padding:0.6rem;border:1px solid #777;"><strong>팀이 제기한 조건</strong></td>
+<td style="padding:0.6rem;border:1px solid #777;">보안과 실제 작동이 부족하다고 평가</td>
+<td style="padding:0.6rem;border:1px solid #777;">보안·실제 작동·코드 반영·고객 노출 필요</td>
+</tr>
+<tr>
+<td style="padding:0.6rem;border:1px solid #777;"><strong>전사의 시간 표현</strong></td>
+<td style="padding:0.6rem;border:1px solid #777;">2일</td>
+<td style="padding:0.6rem;border:1px solid #777;">초기에는 3분기·1인, 이후 계획은 7.5개월·1인</td>
+</tr>
+</tbody>
+</table>
+<figcaption>두 결과물이 같은 완료 기준을 충족했는지 먼저 확인해야 시간 비교가 성립한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽과 오른쪽의 시간이 크게 달라도 곧바로 생산성 차이라고 결론 내릴 수는 없다. 비교 대상의 완료 기준이 다르기 때문이다. 다만 팀도 AI를 충분히 쓰지 않았다고 인정하며 기간을 줄일 계획을 제시했고, 이후 기존 설명을 그대로 받아들이지 않는 인물이 투입돼 팀과 절차를 개편했다.</p>
+<p>최종적으로 팀은 절차를 손본 뒤 한 분기에 connector 7개를 만들 수 있다고 보고했다. 이 사례에서 남는 핵심은 <strong>코딩 시작부터 고객 사용까지 전체 흐름을 측정해야 한다</strong>는 점이다. 다만 전사에는 같은 인원과 품질 기준으로 7개를 실제 완료했는지 보여주는 자료가 없다.</p>
+<p><strong>[경계]</strong> 제목은 “2일 대 9개월”을 같은 결과물처럼 표현하지만, 전사에서 팀은 이틀짜리 결과물이 프로덕션 준비 상태가 아니라고 명시한다. 제목의 9개월과 전사의 3분기는 표현이 다르며, 이어 제시된 7.5개월은 계획이지 완료 실적이 아니다. 마지막 “분기당 7개”도 팀의 보고이며, 인원수·보안 수준·완료 기준이 앞선 수치와 같은지는 확인되지 않는다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>빠른 개념증명과 고객이 실제로 쓰는 프로덕션 결과물은 같은 완료 기준이 아니다.</li>
+<li>화자는 코딩 시간만이 아니라 코드 반영부터 고객 노출까지의 전체 흐름을 봐야 한다고 판단했다.</li>
+<li>처리량 개선에는 AI 주장뿐 아니라 사람의 투입과 절차 개편이 함께 있었으므로 원인을 하나로 단정할 수 없다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>이 사례에서 이틀짜리 connector와 3분기짜리 개발이 함께 가능했던 이유는 무엇이며, 속도 개선 여부를 어떻게 판단해야 하는가?</strong></p>
+</blockquote>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>화자가 이틀 만에 만든 connector를 보여주자 팀은 “핵심은 움직이지만 안전하지 않고 실제 고객에게 보낼 수 없다”고 반박한다. 화자는 그 말이 맞는지 확인하려면 직접 프로덕션 단계까지 가봐야 한다고 판단한다.</p>
+<p><code>"시제품의 2일과 프로덕션의 3분기를 그대로 비교할 수 없음"</code> <strong>문제</strong><br>
+→ <code>"완료 기준을 고객 노출까지 넓히고 기존 절차를 다시 검토함"</code> <strong>작동 방식</strong><br>
+→ <code>"팀이 분기당 connector 7개가 가능하다고 보고함"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">모형 건물과 실제 입주 가능한 건물</div>
+<p>이틀짜리 개념증명은 건물의 모양과 핵심 구조를 보여주는 모형에 가깝다. 프로덕션 결과물은 사람이 실제로 들어가 쓸 수 있도록 안전 조건과 운영 조건을 충족한 건물에 가깝다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 소프트웨어 절차는 AI 활용이나 작업 방식 개편으로 빠르게 바뀔 수 있으며, 영상은 프로덕션 조건 전체를 열거하지 않는다. 물리적 건축의 시간과 규제를 그대로 대응시키면 안 된다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Connector</strong></td>
+<td>서로 다른 대상 사이를 이어 주는 구성 요소</td>
+<td>영상에서 개발 대상으로 언급된 connector. 연결 대상과 구체 기능은 제시되지 않았다.</td>
+<td>모든 connector의 난이도와 완료 기준이 같다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>개념증명</strong></td>
+<td>핵심 아이디어가 움직이는지 보여주는 시제품</td>
+<td>Proof of Concept, PoC</td>
+<td>핵심 기능이 작동하면 바로 고객에게 배포할 수 있다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>프로덕션 준비 상태</strong></td>
+<td>실제 고객에게 보내도 되는 상태</td>
+<td>Production-ready. 영상에서는 보안, 실제 작동, 코드 반영, 고객 노출이 기준으로 언급된다.</td>
+<td>기능 구현 시간만으로 전체 출시 시간을 판단하는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>왜 화자는 이틀 만에 만들었는데 팀은 3분기가 필요하다고 말했는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>화자는 핵심 기능을 보여주는 개념증명을 만들었지만, 팀은 보안과 실제 작동을 포함한 프로덕션 조건이 충족되지 않았다고 봤다. 팀의 기존 절차와 AI 미활용도 지연 요인으로 제기됐지만, 각 요인의 영향은 따로 측정되지 않았다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>개념증명과 프로덕션 준비 상태를 무엇으로 구분해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>개념증명은 핵심 가능성을 보여주는 데 초점이 있다. 프로덕션 준비 상태는 영상의 표현에 따르면 보안과 실제 작동을 갖추고, 코드가 반영돼 고객에게 닿을 수 있어야 한다. 따라서 같은 완료 기준을 적용하기 전에는 두 기간을 직접 비교하면 안 된다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 자동화나 기능의 개발 속도를 평가한다면 무엇부터 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 “완료”가 시연 가능한 상태인지, 실제 사용자에게 제공되는 상태인지 정한다. 그다음 같은 인원·품질·완료 기준 아래에서 처음 시작한 때부터 고객에게 닿을 때까지의 시간과 완료 수를 측정한다. AI 효과도 이 전체 경로에서 검증해야 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 빠른 데모보다 완료 기준이 먼저다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 connector의 핵심을 이틀 만에 만들었지만, 팀은 그것이 안전하지 않고 실제로 작동하지 않는 개념증명이라고 반박했다. 팀은 이후 AI 활용과 절차 개편을 언급했고, 최종적으로 분기당 7개가 가능하다고 보고했다.</li>
+<li><strong>[해석]</strong> 개발 속도는 코드 작성 시간보다 <strong>어디를 완료 지점으로 정했는가</strong>에 따라 크게 달라진다. 개선 여부는 고객에게 닿는 결과물의 처리량으로 확인해야 한다.</li>
+<li><strong>[경계]</strong> 제목의 9개월과 전사의 3분기는 표현이 다르다. “3분기·1인에서 7.5개월·1인으로 줄이겠다”는 말은 계획이며 실제 완료 기록이 아니다. 최종 수치는 “3분기 뒤 분기당 7개가 가능하다”는 팀의 주장으로, 인원수와 품질 기준이 앞선 조건과 같은지 알 수 없다. AI, 새 인물, 팀의 노력, 절차 개편이 함께 등장하므로 단일 원인도 확인되지 않는다. 화자 이름은 META의 추정 후보이며 전사 자체는 화자의 신원이나 직위를 밝히지 않는다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 핵심 기능의 시연과 실제 사용 가능 상태의 차이는, 설명을 들은 것과 보지 않고 적용할 수 있는 학습의 차이와 구조가 닮았다.</li>
+<li><strong>통찰:</strong> 이해 여부는 “들었다”가 아니라 자기 말로 설명하고 새 사례에 적용하는 완료 기준으로 관찰할 수 있다.</li>
+<li><strong>질문/행동:</strong> 학습자가 요약 없이 원인·대조·적용을 모두 설명할 수 있는지 확인한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 이 사례는 빠른 시제품, 실제 운영 조건, 인력 투입, 처리량 사이의 차이를 보여준다.</li>
+<li><strong>통찰:</strong> APOM이나 물류에 적용할 수 있는지는 현재 정보만으로 알 수 없다. 가상 적용 시에는 시제품 비용과 실제 운영에 필요한 보안·품질·고객 대응 비용을 분리해야 한다.</li>
+<li><strong>질문/행동:</strong> 후보 개선안의 완료 기준과 동일 조건의 단위 기간당 완료량을 먼저 정의할 수 있는가?</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 제목의 “2일 대 9개월”은 강한 대조를 만들지만, 전사에서는 두 결과물의 완성도가 다르다고 설명한다.</li>
+<li><strong>통찰:</strong> 큰 숫자 차이는 관심을 끌 수 있어도, 동일한 결과물을 비교한다는 증거가 없으면 과장으로 읽힐 수 있다.</li>
+<li><strong>질문/행동:</strong> 기간을 비교하는 카피에 완료 기준·인원·품질 조건을 함께 제시할 수 있는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 팀은 AI가 효과적이며 그동안 충분히 쓰지 않았다고 주장했지만, 최종 변화에는 절차 개편과 사람의 개입도 포함됐다.</li>
+<li><strong>통찰:</strong> AI 성능은 코드 생성 속도만이 아니라 프로덕션 기준을 통과한 결과물의 시간과 처리량으로 시험해야 한다.</li>
+<li><strong>질문/행동:</strong> AI 사용 전후를 같은 완료 기준으로 비교하고, 사람·절차 변화는 별도 변수로 기록할 수 있는가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"connector가 고객에게 닿기까지 오래 걸린다는 화자의 문제 제기"</code> <strong>문제</strong><br>
+→ <code>"더 빠르게 사용할 수 있는 connector"</code> <strong>수혜자: 고객과 이를 전달하는 팀</strong><br>
+→ <code>"개발 시간·검토 노력·AI 활용·절차 개편"</code> <strong>지불자 또는 자원 제공자: 팀과 조직</strong><br>
+→ <code>"같은 완료 기준을 통과한 분기당 connector 수"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 다음 후보 개발 작업 한 건에서 보안·실제 작동·코드 반영·사용자 노출을 완료 기준으로 먼저 적고, AI를 사용해 전체 경로를 시험한다.</li>
+<li><strong>측정 1개:</strong> 사전 완료 기준을 모두 통과한 작업 수(0개 또는 1개)</li>
+<li><strong>중단 기준 1개:</strong> 통과한 작업 수가 0개이면 같은 방식의 확대를 중단한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>이틀짜리 실험</td>
+<td>화자가 connector의 핵심 기능을 이틀 만에 만듦</td>
+</tr>
+<tr>
+<td>2</td>
+<td>팀의 반박</td>
+<td>결과물이 안전하거나 프로덕션 준비 상태가 아니라고 평가</td>
+</tr>
+<tr>
+<td>3</td>
+<td>AI 활용 계획</td>
+<td>팀이 AI 미활용을 인정하고 7.5개월·1인으로 줄이겠다고 제안</td>
+</tr>
+<tr>
+<td>4</td>
+<td>절차 개편</td>
+<td>새 인물의 개입과 팀의 작업으로 기존 과정을 다시 설계</td>
+</tr>
+<tr>
+<td>5</td>
+<td>최종 처리량 주장</td>
+<td>3분기 뒤 팀이 분기당 connector 7개가 가능하다고 보고</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 이틀짜리 실험과 팀의 기준</h3>
+<p>화자는 프로덕션까지 가는 일이 얼마나 어려운지 이해하려고 connector를 만들었다. 핵심 기능을 만드는 데 이틀이 걸렸지만, 기존 팀의 작업은 전사에서 “3분기, 1인”으로 표현된다.</p>
+<p>팀은 두 결과물이 같지 않다고 반박했다. 화자의 결과물은 프로덕션 준비 상태가 아니며, 안전하지 않고 실제로 제대로 작동하지 않는 개념증명에 가깝다는 설명이었다.</p>
+<h3>2. 화자가 확인하고 싶었던 간극</h3>
+<p>화자는 핵심 기능에 이틀이 걸리는데 그 위의 다른 작업에 3분기가 걸리는 이유를 확인하려 했다. 그가 제시한 확인 기준은 코드가 실제로 반영되고 고객을 상대하는 프로덕션 환경에 들어가는 것이었다.</p>
+<p>이는 필요성과 계획을 밝힌 말이다. 전사는 화자가 만든 이틀짜리 connector가 실제 고객에게 배포됐다고 확인하지 않는다.</p>
+<h3>3. AI에 대한 팀의 주장</h3>
+<p>팀은 화자의 문제 제기 뒤 다음과 같이 보고했다.</p>
+<ul>
+<li>AI는 효과적이다.</li>
+<li>팀은 그동안 AI를 사용하지 않았다.</li>
+<li>“3분기·1인”을 “7.5개월·1인”으로 줄이겠다.</li>
+</ul>
+<p>마지막 수치는 앞으로 줄이겠다는 계획이다. 실제로 7.5개월 만에 완료했다는 실적이 아니다. 화자도 이 제안이 충분한 개선인지 의문을 표시했다.</p>
+<h3>4. 사람의 투입과 절차 개편</h3>
+<p>화자는 기존 설명을 그대로 받아들이지 않을 사람을 찾았으며, 동시에 조직 안에 그런 사람이 있었다고 말한다. 그 사람의 정확한 신원과 역할은 나오지 않는다.</p>
+<p>그 사람이 개입한 뒤 팀은 함께 기존 절차를 다시 손봤다. 따라서 이후 결과를 AI 하나의 효과로 분리할 수 없다.</p>
+<h3>5. 최종 보고와 충돌 목록</h3>
+<p>3분기가 지난 뒤 팀은 한 분기에 connector 7개를 만들 수 있다고 보고했다. 다만 전사에는 이를 독립적으로 확인할 완료 기록이나 품질 자료가 없다.</p>
+<ul>
+<li>제목은 <strong>9개월</strong>이라고 쓰지만 전사는 초기 기간을 <strong>3분기</strong>라고 표현한다.</li>
+<li>제목은 화자의 결과물과 팀이 출하한 결과물을 직접 비교하지만, 팀은 화자의 결과물이 프로덕션 준비 상태가 아니라고 말한다.</li>
+<li>초기 조건과 중간 계획에는 <strong>1인</strong>이 명시되지만, 최종 수치는 새 인물과 팀이 함께 절차를 개편한 뒤 나온다. 최종 인원수는 제시되지 않는다.</li>
+<li><strong>7.5개월·1인</strong>은 앞으로 달성하겠다는 계획이고, <strong>분기당 7개</strong>는 이후 팀이 제시한 처리량 주장이다. 동일 조건에서 측정된 두 실적이라고 볼 근거가 없다.</li>
+<li>최종 처리량의 connector가 초기 connector와 같은 난이도·보안·품질 기준을 충족했는지 명시되지 않는다.</li>
+<li>META는 화자 후보를 Ali Ghodsi로 제시하지만, provenance.note는 이름과 SNS를 기준으로 한 추정이라고 밝힌다. 제공된 social_links와 original_links는 비어 있고, 전사 자체에는 화자 신원이 없다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>채널/업로더(META 원문): Sequoia Capital · Databricks CEO Ali Ghodsi built in 2 days what his team took 9 months to ship · https://www.youtube.com/watch?v=6-LTGpBLlb4 · 전사: YouTube caption(en-orig, META 품질: ok) · 화자 후보: Ali Ghodsi. provenance.note는 “채널이 원본 영상 링크를 안 검 — 화자 이름+SNS 기준 추정 출처”라고 밝히며, 소속과 원본 링크는 제공되지 않았다. 채널 필드는 원작자나 제작 주체를 확정하는 근거로 사용하지 않았다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>정확히 프로덕션(production)까지 가는 것이 얼마나 어려운지 이해하기 위해, 저는 커넥터(connector) 같은 무언가를 만들어 보는 실험부터 시작했습니다. 커넥터 하나를 만드는 데 이틀이 걸렸는데, 당시 우리 팀은 한 사람 기준으로 그런 커넥터를 만드는 데 3분기(three quarters), 즉 9개월이 걸리고 있었습니다.</p>
+<p>저는 “내가 이걸 이틀 만에 만들었는데, 여러분은 왜 3분기나 걸리죠?”라고 물었습니다. 그러자 그들은 “글쎄요, 당신이 만든 건 프로덕션에 바로 쓸 수 있는 상태(production-ready)가 아니에요. 안전하지도 않고요. 기본적으로 제대로 작동하지도 않습니다. 작동하는 개념 증명(proof of concept) 정도는 갖춰졌지만, 프로덕션에 배포할 수는 없어요”라고 말했습니다.</p>
+<p>그래서 저는 정말 알아내고 싶었습니다. 그들의 말이 맞는 걸까? 이 격차는 무엇일까? 핵심적인 부분을 만드는 데는 이틀이 걸렸는데, 그 위에 필요한 온갖 부수적인 것들을 추가하는 데는 어떻게 3분기가 걸릴 수 있을까?</p>
+<p>그것이 제가 다음과 같은 여정을 시작하게 된 계기였습니다. “고객을 직접 상대하는 프로덕션에 커밋된 코드(committed code)를 배포해야 한다. 그래야만 이 일이 실제로 어떻게 작동하는지 감을 잡을 수 있다.”</p>
+<p>우리가 배운 것은 사실 꽤 흥미로웠습니다. 팀은 제 압박을 계기로 다시 작업에 들어갔고, 돌아와서 이렇게 말했습니다. “당신 말이 어느 정도 맞았어요. AI는 매우 효과적입니다. 우리가 그동안 사용하지 않았던 거죠. 이제 걸리는 시간을 줄일 수 있습니다. 그래서 한 사람 기준 3분기였던 시간을 한 사람 기준 7개월 반으로 줄이겠습니다.”</p>
+<p>잠깐만요. 그게 어떻게 가능한 거죠?</p>
+<p>그래서 그들은 이렇게 말했습니다. “보세요, 프로덕션에 바로 쓸 수 있는 상태가 아니에요. 안전하지도 않고요. 그게 문제가 아닙니다.” 저는 한 사람을 찾아 나섰습니다. 이 모든 헛소리(BS)를 그냥 받아들이지 않을 사람이 한 명 있었습니다. 그는 직접 뛰어들었고, 팀은 함께 프로세스를 대대적으로 개선하기 위해 열심히 일했습니다.</p>
+<p>그 사람을 투입하고 3분기가 지난 뒤, 그들은 돌아와 이렇게 말했습니다. “한 분기에 커넥터 7개를 만들 수 있습니다.”</p>
+</details>
+</body></html>

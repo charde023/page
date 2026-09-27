@@ -1,0 +1,503 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>에이전트 검색에서 30년 된 BM25가 놀랍도록 강력한 이유입니다</title>
+<meta name="description" content="AI 에이전트가 검색 사용자가 되면서 BM25의 정확 일치, 반복 검색, 설명 가능성이 왜 다시 중요해졌는지 살펴본다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>에이전트 검색에서 30년 된 BM25가 놀랍도록 강력한 이유입니다</h1>
+<div class="meta">업로드 2026-09-20 · 18.0분 · <a href="https://youtu.be/yNPS1Z64wQM" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 발표의 핵심은 <strong>오래된 검색 공식이 갑자기 똑똑해졌다는 이야기가 아니다. 검색을 사용하는 주체가 사람에서 AI 에이전트로 달라지면서 같은 도구의 쓸모가 커졌다는 이야기</strong>다.</p>
+<p>BM25는 사용자가 입력한 단어와 문서에 들어 있는 단어가 얼마나 잘 맞는지를 바탕으로 문서에 점수를 주는 방식이다. 발표자는 이를 약 30년 된 어휘 기반 점수 함수라고 설명한다. 과거에는 사람이 짧은 검색어를 한 번 입력하고 상위 링크를 훑었다. 반면 AI 에이전트는 과제를 수행하는 동안 긴 검색어를 만들고, 결과를 읽고, 다시 검색어를 고쳐 여러 차례 검색할 수 있다.</p>
+<figure data-visual-kind="map">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg role="img" aria-labelledby="map-title map-desc" viewBox="0 0 960 350" width="100%" style="max-width:960px;height:auto;min-width:960.0px;max-width:none;">
+  <title id="map-title">에이전트 검색 시스템의 전체 지도</title>
+  <desc id="map-desc">과제를 받은 모델이 하네스를 통해 검색 엔진을 사용하고, 찾은 근거를 제한된 컨텍스트에 넣어 답을 만든 뒤 과제 성공으로 평가하는 흐름</desc>
+  <defs>
+    <marker id="mapArrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#315b7d"/>
+    </marker>
+  </defs>
+  <rect x="20" y="55" width="160" height="90" rx="12" fill="#eaf3f8" stroke="#315b7d" stroke-width="2"/>
+  <text x="100" y="88" text-anchor="middle" font-size="19" font-weight="700">과제와 정보 필요</text>
+  <text x="100" y="118" text-anchor="middle" font-size="16">질문·코드·조사</text>
+
+  <rect x="220" y="55" width="160" height="90" rx="12" fill="#f4f0ff" stroke="#674ea7" stroke-width="2"/>
+  <text x="300" y="88" text-anchor="middle" font-size="19" font-weight="700">유능한 모델</text>
+  <text x="300" y="118" text-anchor="middle" font-size="16">검색어 작성</text>
+
+  <rect x="420" y="55" width="160" height="90" rx="12" fill="#fff4df" stroke="#9a6700" stroke-width="2"/>
+  <text x="500" y="88" text-anchor="middle" font-size="19" font-weight="700">하네스</text>
+  <text x="500" y="118" text-anchor="middle" font-size="16">도구 연결 방식</text>
+
+  <rect x="620" y="55" width="160" height="90" rx="12" fill="#e8f5e9" stroke="#357a38" stroke-width="2"/>
+  <text x="700" y="88" text-anchor="middle" font-size="19" font-weight="700">검색 엔진</text>
+  <text x="700" y="118" text-anchor="middle" font-size="16">BM25 등으로 선별</text>
+
+  <rect x="800" y="55" width="140" height="90" rx="12" fill="#fdecec" stroke="#a33a3a" stroke-width="2"/>
+  <text x="870" y="88" text-anchor="middle" font-size="19" font-weight="700">근거 문서</text>
+  <text x="870" y="118" text-anchor="middle" font-size="16">컨텍스트에 투입</text>
+
+  <line x1="180" y1="100" x2="215" y2="100" stroke="#315b7d" stroke-width="3" marker-end="url(#mapArrow)"/>
+  <line x1="380" y1="100" x2="415" y2="100" stroke="#315b7d" stroke-width="3" marker-end="url(#mapArrow)"/>
+  <line x1="580" y1="100" x2="615" y2="100" stroke="#315b7d" stroke-width="3" marker-end="url(#mapArrow)"/>
+  <line x1="780" y1="100" x2="795" y2="100" stroke="#315b7d" stroke-width="3" marker-end="url(#mapArrow)"/>
+
+  <rect x="250" y="220" width="460" height="80" rx="12" fill="#f7f7f7" stroke="#555" stroke-width="2"/>
+  <text x="480" y="252" text-anchor="middle" font-size="19" font-weight="700">평가: 검색 목록의 모양보다 과제의 최종 성공</text>
+  <text x="480" y="280" text-anchor="middle" font-size="16">예: 수수께끼형 질문의 정확한 답을 찾았는가?</text>
+  <line x1="870" y1="145" x2="710" y2="230" stroke="#315b7d" stroke-width="3" marker-end="url(#mapArrow)"/>
+</svg></div>
+<figcaption>모델, 도구 연결부인 하네스, 검색 엔진이 함께 작동해야 최종 답에 필요한 근거가 들어온다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위쪽 화살표는 정보가 이동하는 순서다. 아래 상자는 전체 시스템을 무엇으로 평가할지를 보여준다. 이 그림은 수치를 비교하는 그래프가 아니라 발표의 구성 요소를 정리한 개념도다.</p>
+<h3>검색이 필요한 이유: 모든 문서를 한꺼번에 읽힐 수 없다</h3>
+<p>발표자는 모델이 한 번에 참고할 수 있는 정보 공간인 <strong>컨텍스트 윈도우</strong>를 플로피 디스크에 비유한다. 과거 플로피 디스크 한 장에는 약 1.4MB가 들어갔고, 발표자는 현재 모델도 품질이 떨어지기 전까지 실질적으로 약 35만 토큰 정도의 컨텍스트를 쓸 수 있다는 자신의 견해를 제시한다.</p>
+<p>핵심은 정확한 용량 자체보다 <strong>거대한 문서 모음 중 무엇을 이 제한된 공간에 넣을 것인가</strong>다. 필요한 증거 문서를 처음부터 넣어 주면 모델이 답을 잘할 수 있어도, 실제 시스템에서는 먼저 그 문서를 찾아야 한다. 따라서 모델의 추론 능력이 좋아져도 검색 과정이 틀린 문서를 고르면 최종 답은 실패할 수 있다.</p>
+<p>발표자가 든 BrowseComp+ 사례에는 수수께끼 같은 질문이 거의 정확히 830개 있고, 약 10만 5천 개의 웹 문서와 정답 자료가 있다고 설명된다. 필요한 증거 문서를 인위적으로 컨텍스트에 넣으면 정확도가 매우 높지만, 모델이 검색 도구를 직접 사용하게 하면 모델의 검색어 작성 능력, 하네스, 검색기의 품질에 따라 정확도가 떨어진다는 주장이다.</p>
+<h3>사용자가 바뀌면 같은 검색 도구의 성능도 달라진다</h3>
+<p>사람은 보통 몇 단어로 짧게 검색한다. 발표자가 조사했다는 GPT-5의 검색 궤적에서는 모델이 긴 검색어를 만들고, 이름·날짜·회사 같은 일반 지식을 활용하며, 문구 검색이나 사이트 지정과 같은 문법도 사용했다. 첫 결과가 부족하면 내용을 읽고 다시 검색한다.</p>
+<figure data-visual-kind="process">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg role="img" aria-labelledby="loop-title loop-desc" viewBox="0 0 900 390" width="100%" style="max-width:900px;height:auto;min-width:900.0px;max-width:none;">
+  <title id="loop-title">에이전트의 반복 검색 과정</title>
+  <desc id="loop-desc">정보 필요를 정하고 검색어를 작성한 뒤 결과를 읽고 부족하면 검색어를 고쳐 반복하며, 충분한 근거를 찾으면 답을 만드는 순환</desc>
+  <defs>
+    <marker id="processArrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#5b4b8a"/>
+    </marker>
+  </defs>
+  <circle cx="450" cy="190" r="74" fill="#f4f0ff" stroke="#5b4b8a" stroke-width="3"/>
+  <text x="450" y="180" text-anchor="middle" font-size="20" font-weight="700">에이전트 루프</text>
+  <text x="450" y="210" text-anchor="middle" font-size="16">읽고 다시 검색</text>
+
+  <rect x="35" y="145" width="180" height="85" rx="12" fill="#eaf3f8" stroke="#315b7d" stroke-width="2"/>
+  <text x="125" y="178" text-anchor="middle" font-size="18" font-weight="700">정보 필요 파악</text>
+  <text x="125" y="207" text-anchor="middle" font-size="15">무엇이 부족한가?</text>
+
+  <rect x="330" y="20" width="240" height="82" rx="12" fill="#fff4df" stroke="#9a6700" stroke-width="2"/>
+  <text x="450" y="52" text-anchor="middle" font-size="18" font-weight="700">구체적인 검색어 작성</text>
+  <text x="450" y="80" text-anchor="middle" font-size="15">이름·문구·연산자 활용</text>
+
+  <rect x="685" y="145" width="180" height="85" rx="12" fill="#e8f5e9" stroke="#357a38" stroke-width="2"/>
+  <text x="775" y="178" text-anchor="middle" font-size="18" font-weight="700">결과 읽기</text>
+  <text x="775" y="207" text-anchor="middle" font-size="15">단서와 부족함 확인</text>
+
+  <rect x="330" y="285" width="240" height="82" rx="12" fill="#fdecec" stroke="#a33a3a" stroke-width="2"/>
+  <text x="450" y="317" text-anchor="middle" font-size="18" font-weight="700">고치거나 종료</text>
+  <text x="450" y="345" text-anchor="middle" font-size="15">재검색 또는 최종 답 작성</text>
+
+  <path d="M215 160 Q300 80 330 70" fill="none" stroke="#5b4b8a" stroke-width="3" marker-end="url(#processArrow)"/>
+  <path d="M570 70 Q660 90 700 145" fill="none" stroke="#5b4b8a" stroke-width="3" marker-end="url(#processArrow)"/>
+  <path d="M775 230 Q690 310 570 320" fill="none" stroke="#5b4b8a" stroke-width="3" marker-end="url(#processArrow)"/>
+  <path d="M330 320 Q220 300 150 230" fill="none" stroke="#5b4b8a" stroke-width="3" marker-end="url(#processArrow)"/>
+</svg></div>
+<figcaption>에이전트 검색은 한 번의 검색 결과가 아니라 검색어 작성, 읽기, 수정이 이어지는 궤적이다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 사각형을 시계 방향으로 따라가면 된다. 근거가 부족하면 순환이 계속되고, 충분한 근거를 찾았거나 컨텍스트가 찼다면 종료된다. 횟수나 성공률을 표시한 수치 도표는 아니다.</p>
+<p>이런 사용자는 BM25의 약점을 모두 없애지는 않지만, <strong>정확히 일치하는 단어를 찾는 능력</strong>을 더 유용하게 만든다. 모델은 알고 있는 고유명사, 회사명, 우편번호, SKU 같은 식별자를 검색어에 넣을 수 있다. 결과에서 어떤 단어가 맞았는지 확인한 뒤 검색어도 고칠 수 있다.</p>
+<h3>왜 BM25인가: 정확 일치, 비용, 결과의 해석 가능성</h3>
+<p>발표자는 BM25가 에이전트 검색에 유용한 이유로 세 가지를 든다.</p>
+<ol>
+<li><strong>정확한 단어 일치:</strong> 이름, 엔티티, 우편번호, SKU처럼 문자 그대로의 일치가 중요한 정보에 유용하다.</li>
+<li><strong>상대적으로 단순한 비용 구조:</strong> 발표자는 일부 임베딩 모델이 약 80억 개의 매개변수를 가지며, 텍스트를 임베딩으로 바꾸는 추론과 인프라 비용이 필요하다고 대조한다.</li>
+<li><strong>결과를 조사하기 쉬움:</strong> 어떤 단어나 문구 때문에 문서가 검색됐는지 모델이 확인하고 다음 검색어를 고치기 쉽다.</li>
+</ol>
+<p>하지만 이것은 “BM25는 언제나 임베딩 검색보다 낫다”는 뜻이 아니다. 발표자가 든 BrowseComp+의 기존 BM25 기준선은 성능이 나빴다. 발표자는 긴 문서에 맞지 않는 매개변수를 썼기 때문이라고 설명하며, BM25의 매개변수와 구현이 결과에 큰 영향을 준다고 강조한다.</p>
+<figure data-visual-kind="comparison">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg role="img" aria-labelledby="compare-title compare-desc" viewBox="0 0 940 450" width="100%" style="max-width:940px;height:auto;min-width:940.0px;max-width:none;">
+  <title id="compare-title">발표에서 제시한 BM25와 임베딩 검색의 비교</title>
+  <desc id="compare-desc">BM25는 정확한 단어 일치와 조사 가능성에 강점이 있고 설정에 민감하며, 임베딩 검색은 별도의 추론 인프라가 필요하고 식별자 표현이 쉽지 않다는 화자의 대조</desc>
+  <rect x="20" y="20" width="430" height="335" rx="14" fill="#eaf3f8" stroke="#315b7d" stroke-width="3"/>
+  <text x="235" y="62" text-anchor="middle" font-size="24" font-weight="700">BM25</text>
+  <text x="55" y="108" font-size="18">• 문자 그대로의 단어·문구 일치</text>
+  <text x="55" y="151" font-size="18">• 일치 이유를 모델이 살피기 쉬움</text>
+  <text x="55" y="194" font-size="18">• 임베딩 추론 없이 사용할 수 있음</text>
+  <text x="55" y="237" font-size="18">• 매개변수와 구현에 민감함</text>
+  <text x="55" y="280" font-size="18">• 잘못 설정한 기준선은 약할 수 있음</text>
+
+  <rect x="490" y="20" width="430" height="335" rx="14" fill="#f4f0ff" stroke="#674ea7" stroke-width="3"/>
+  <text x="705" y="62" text-anchor="middle" font-size="24" font-weight="700">임베딩 기반 검색</text>
+  <text x="525" y="108" font-size="18">• 발표에서는 더 복잡한 대안으로 대조</text>
+  <text x="525" y="151" font-size="18">• 텍스트 인코딩과 인프라가 필요함</text>
+  <text x="525" y="194" font-size="18">• 고유 식별자 표현이 쉽지 않다는 주장</text>
+  <text x="525" y="237" font-size="18">• 부적절한 BM25 기준선과 비교하면</text>
+  <text x="545" y="270" font-size="18">우월해 보일 수 있음</text>
+
+  <rect x="150" y="382" width="640" height="50" rx="10" fill="#fff4df" stroke="#9a6700" stroke-width="2"/>
+  <text x="470" y="414" text-anchor="middle" font-size="19" font-weight="700">선택 기준: 이름보다 실제 작업과 최종 과제 성공률</text>
+</svg></div>
+<figcaption>두 검색 방식을 보편적인 승자와 패자로 나눈 그림이 아니라, 발표자가 강조한 장점·비용·주의점을 대조한 개념도다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽은 발표자가 강조한 BM25의 특성과 주의점, 오른쪽은 발표에서 임베딩 방식과 대조한 내용이다. 아래 상자는 기술 이름만으로 선택하지 말고 실제 과제 전체를 시험해야 한다는 해석이다.</p>
+<h3>검색 결과를 파일처럼 펼쳐 보는 방식</h3>
+<p>발표자는 워털루 대학교 Jimmy Lin 연구진의 논문으로 소개한 “Scaling Direct Corpus Interaction via Dynamic Workspace Expansion”을 다음 단계의 예로 든다.</p>
+<p>먼저 BM25 같은 검색기로 수십억 개일 수도 있는 문서 집합에서 후보를 좁힌다. 그 문서를 가상 파일 시스템 형태의 작업 공간에 둔다. 모델에는 처음부터 문서 전체를 주지 않고 제목과 짧은 일부만 보여준다. 모델이 필요하다고 판단한 문서만 더 읽게 한다. 이것이 <strong>점진적 공개</strong>다.</p>
+<p>이 작업 공간이 파일 시스템처럼 보이면 코딩 에이전트가 잘 다루도록 훈련된 <code>grep</code>, <code>ripgrep</code>, <code>sed</code>, <code>awk</code>, Bash 같은 원시 도구를 활용할 수 있다. 넓은 문서 집합은 검색 엔진이 줄이고, 좁혀진 작업 공간은 에이전트가 직접 조사하는 구조다.</p>
+<h3>평가는 한 번의 검색 순위보다 최종 과제로 옮겨간다</h3>
+<p>전통적인 정보 검색에서는 검색어 하나에 대한 순위 목록을 만들고 nDCG 같은 지표를 계산했다. 발표자는 에이전트가 검색어를 반복해서 고치는 환경에서는 이것만으로 충분하지 않다고 주장한다.</p>
+<p>예를 들어 질문 답변 시스템이라면 “첫 검색 결과의 순위가 얼마나 좋았는가?”뿐 아니라 <strong>여러 번의 검색 끝에 정확한 답을 냈는가?</strong>를 봐야 한다. 모델, 하네스, 검색기 중 어느 하나라도 약하면 전체 과제가 실패할 수 있기 때문이다.</p>
+<p>다만 기존 평가가 문자 그대로 모두 쓸모없어졌다고 확인된 것은 아니다. “고전적 평가가 죽었다”는 표현은 발표자의 강한 주장이다. 개별 검색 단계의 품질을 진단할 때 순위 지표가 어떤 역할을 유지하는지는 이 자료만으로 판단할 수 없다.</p>
+<h3>전체 통찰과 경계</h3>
+<p>BM25의 재평가는 알고리즘 하나의 승리라기보다 <strong>새로운 사용자와 새로운 작업 흐름의 등장</strong>으로 이해하는 편이 정확하다. AI 에이전트는 일반 지식을 이용해 구체적인 단어를 선택하고, 검색 결과를 읽고, 검색어를 반복해서 고친다. 이때 정확 일치와 결과의 조사 가능성이 다시 중요한 자원이 된다.</p>
+<p>그러나 발표에는 검증이 필요한 부분도 있다. 약 35만 토큰을 실질적인 컨텍스트 한계로 보는 것은 화자의 견해다. BrowseComp+와 Hornet 성능에 관한 수치와 비교도 이 전사만으로 독립 검증할 수 없다. Hornet의 비교 그림은 같은 종류의 하드웨어에서 단일 노드와 1억 개 웹 문서를 사용했다고 설명되지만, 경쟁 엔진은 익명이고 구체적인 QPS·지연시간 값도 전사에 없다.</p>
+<p>또한 발표자는 마지막에 “네 가지 주장”을 예고하지만, 전사에서는 첫째와 둘째만 명시적으로 번호를 붙인다. 이어지는 설명 가능성과 <code>grep</code> 결합을 각각 셋째와 넷째로 셀 수는 있으나, 구분이 명시되어 있지 않다. 소속도 META의 provenance에는 <code>Hornet</code>, 전사 첫 문장에는 <code>Hornet.dev</code>로 적혀 있어 동일 조직의 표기 변형인지 자료만으로 확정할 수 없다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>BM25가 바뀐 것이 아니라, 긴 검색어를 만들고 반복 검색하는 AI 에이전트가 새 사용자가 되었다.</li>
+<li>최종 답의 품질은 모델뿐 아니라 검색어를 쓰는 방식, 하네스, 검색기의 품질에 함께 달려 있다.</li>
+<li>정확 일치와 결과의 조사 가능성이 BM25의 장점이지만, 매개변수와 구현이 나쁘면 기준선도 약해질 수 있다.</li>
+<li>에이전트 검색은 한 번의 순위보다 여러 검색을 거친 최종 과제 성공으로 평가해야 한다는 것이 발표자의 주장이다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>BM25 자체는 바뀌지 않았는데 왜 AI 에이전트 검색에서 다시 강력해졌으며, 그 효과는 무엇으로 평가해야 하는가?</strong></p>
+</blockquote>
+<ul>
+<li>모델, 하네스, 검색기는 각각 어떤 역할을 하는가?</li>
+<li>BM25의 정확 일치가 에이전트의 반복 검색과 어떻게 연결되는가?</li>
+<li>한 번의 검색 순위와 최종 과제 성공은 왜 다른 평가 대상인가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>AI 에이전트가 긴 수수께끼 질문을 받는다. 첫 검색에서 답을 바로 찾지 못하지만, 결과에 나온 이름과 날짜를 읽어 더 구체적인 검색어를 만든다. BM25는 그 단어가 그대로 들어 있는 문서를 찾아 주고, 에이전트는 필요한 근거가 모일 때까지 이 과정을 반복한다.</p>
+<p><code>"거대한 문서 집합을 제한된 컨텍스트에 모두 넣을 수 없다"</code> <strong>문제</strong><br>
+→ <code>"에이전트가 정확한 단어로 검색하고 결과를 읽어 검색어를 반복 수정한다"</code> <strong>작동 방식</strong><br>
+→ <code>"최종 답에 필요한 근거 문서를 컨텍스트에 넣을 가능성이 높아진다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">단어 색인을 가진 도서관과 끈질긴 조사자</div>
+<p>BM25는 요청받은 이름과 문구가 들어 있는 자료를 찾아 주는 도서관 색인에 가깝다. AI 에이전트는 한 번 묻고 떠나는 방문자가 아니라, 첫 자료를 읽은 뒤 새 이름과 단서를 얻어 계속 질문을 고치는 조사자에 대응한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 실제 BM25는 단순히 단어가 있는지만 확인하지 않고 질의어와 문서 단어의 상호작용으로 점수를 계산한다. 또한 최종 성능에는 조사자인 모델뿐 아니라 도구를 연결하는 하네스, 매개변수, 검색 구현과 문서 집합도 영향을 준다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>에이전트 검색</strong></td>
+<td>AI가 과제를 하다가 필요한 자료를 반복해서 찾는 것</td>
+<td>에이전트 루프 내부에서 모델이 검색 도구를 사용하고 검색어를 재구성하는 검색 방식</td>
+<td>검색어를 한 번 입력하는 일반 검색과 같다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>BM25</strong></td>
+<td>검색어와 같은 단어가 잘 나타나는 문서에 점수를 주는 방법</td>
+<td>질의어와 문서 용어의 상호작용을 이용하는 어휘 기반 점수 함수</td>
+<td>설정과 구현에 관계없이 항상 같은 성능이 나온다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>하네스</strong></td>
+<td>모델과 검색 도구를 이어 주는 연결 장치</td>
+<td>도구 호출이나 코드 모드 등으로 검색 기능을 모델에 노출하는 실행 구조</td>
+<td>좋은 모델과 검색기만 있으면 연결 방식은 중요하지 않다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>점진적 공개</strong></td>
+<td>처음에는 조금만 보여 주고 필요할 때 더 여는 것</td>
+<td>작업 공간에서 제목과 일부 내용을 먼저 노출하고 모델이 선택한 문서를 추가로 읽게 하는 방식</td>
+<td>검색된 문서 전체를 한꺼번에 컨텍스트에 넣는 것</td>
+</tr>
+<tr>
+<td><strong>종단 간 과제 평가</strong></td>
+<td>결국 과제를 제대로 끝냈는지 확인하는 것</td>
+<td>검색의 개별 순위만이 아니라 모델·하네스·검색기를 거친 최종 과제 성공을 측정하는 평가</td>
+<td>단일 검색 목록의 nDCG와 항상 같은 결과가 나온다고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>오래된 BM25가 에이전트 검색에서 다시 유용해졌다고 발표자가 보는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>BM25 자체가 새로워진 것이 아니라 사용자가 달라졌기 때문이다. AI 에이전트는 일반 지식을 바탕으로 고유명사와 식별자를 포함한 긴 검색어를 만들고, 결과를 읽어 검색어를 반복 수정할 수 있다. 이 과정에서 BM25의 정확한 단어 일치와 일치 이유를 조사하기 쉬운 특성이 유용해진다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>단일 검색 순위 평가와 에이전트의 종단 간 과제 평가는 무엇이 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>단일 검색 순위 평가는 한 검색어에 대해 문서가 어떤 순서로 나왔는지를 본다. 종단 간 평가는 모델이 여러 검색어를 만들고 결과를 읽고 수정한 전체 과정 끝에 정답이나 과제를 완성했는지를 본다. 발표자는 에이전트 환경에서는 후자가 더 직접적인 기준이라고 주장한다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 검색 시스템에서 BM25와 다른 검색 방식을 비교한다면 무엇을 같게 두고 무엇을 측정해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>같은 문서 집합, 같은 질문, 같은 모델과 하네스를 사용해 검색 방식만 바꾸는 비교가 필요하다. 단일 검색 점수만 보지 말고 최종 정답 여부나 과제 성공 여부를 측정해야 한다. BM25는 매개변수와 구현에 민감하다는 발표자의 지적도 있으므로, 어떤 설정을 사용했는지 함께 기록해야 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 도구의 가치는 사용자와 작업 흐름에 따라 달라진다</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자는 BM25 함수는 그대로지만 일반 지식, 긴 검색어 작성, 빠른 반복 검색 능력을 가진 새 사용자인 AI 에이전트가 등장했다고 말한다.</li>
+<li><strong>[해석]</strong> 오래된 기술인지보다 현재 사용자가 그 기술의 장점을 얼마나 활용할 수 있는지를 봐야 한다. 기술 평가는 이름이 아니라 실제 작업 흐름 안에서 해야 한다.</li>
+<li><strong>[경계]</strong> 이 발표만으로 BM25가 모든 에이전트 검색에서 임베딩 방식보다 우수하다고 결론 내릴 수 없다. 문서, 질문, 설정에 따른 비교가 필요하다.</li>
+</ul>
+<h3>2. 검색은 모델 바깥의 부품이 아니라 최종 추론의 입력을 결정한다</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자는 필요한 증거를 컨텍스트에 직접 넣으면 정확도가 높지만, 검색 도구를 사용하게 하면 모델·하네스·검색기의 품질 때문에 정확도가 떨어진다고 설명한다.</li>
+<li><strong>[해석]</strong> 강한 모델을 쓰더라도 어떤 근거를 넣느냐가 틀리면 최종 답이 실패한다. 검색 품질은 추론 이전의 주변 기능이 아니라 추론 가능한 재료를 결정하는 병목이다.</li>
+<li><strong>[경계]</strong> 약 35만 토큰의 실질적 컨텍스트 한계와 “추론은 병목이 아니다”라는 표현은 화자의 견해와 특정 벤치마크 설명이다. 모든 모델과 과제에 일반화됐다고 확인된 자료는 없다.</li>
+</ul>
+<h3>3. 발표의 강한 결론과 검증 가능한 근거를 분리해야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자는 Hornet이 같은 종류의 하드웨어, 단일 노드, 1억 개 웹 문서 조건에서 익명 엔진보다 높은 처리량을 낸다고 주장한다. 마지막에는 네 가지 주장을 남긴다고 말한다.</li>
+<li><strong>[해석]</strong> 성능 주장을 적용하려면 실제 수치, 비교 엔진, 설정과 재현 조건이 필요하다. 발표의 메시지 구조도 명시적으로 구분된 주장만 근거로 세는 편이 안전하다.</li>
+<li><strong>[경계]</strong> 전사에는 그래프의 구체적인 QPS·지연시간 값과 비교 엔진명이 없다. “네 가지 주장”을 예고했지만 첫째와 둘째만 번호가 명시되며, 나머지를 설명 가능성과 <code>grep</code> 결합으로 나눴는지는 불명확하다. 소속도 META에는 <code>Hornet</code>, 전사에는 <code>Hornet.dev</code>로 표기된다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 발표는 필요한 증거를 처음부터 제공했을 때와 학습자가 직접 찾아야 할 때의 성과가 다를 수 있음을 보여 준다.</li>
+<li><strong>통찰:</strong> 설명을 들은 직후의 답만으로 이해를 판단하지 말고, 새 자료에서 단서를 찾고 질문을 고쳐 답을 완성하는 과정도 관찰해야 한다.</li>
+<li><strong>질문/행동:</strong> 학습자에게 근거를 바로 주지 않고, 검색어를 어떻게 수정했는지까지 설명하게 하면 어디서 막히는지 보이는가?</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 제한된 컨텍스트에 어떤 문서를 넣을지 결정하는 문제는 제한된 자원에 무엇을 우선 배정할지 결정하는 구조와 닮았다.</li>
+<li><strong>통찰:</strong> APOM의 실제 시스템 상태는 자료에 없으므로 현재 적용 사실로 말할 수 없다. 가상 적용에서는 모든 정보를 처리하기보다 의사결정에 필요한 증거를 먼저 선별하는 비용과 정확도를 비교할 수 있다.</li>
+<li><strong>질문/행동:</strong> 검증 전 가상 검색 업무 하나에서 더 복잡한 방식이 최종 과제 성공을 높이는 만큼의 추가 비용을 정당화하는가?</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 발표는 “30년 된 기술의 귀환”이라는 대조와 플로피 디스크 장면으로 복잡한 검색 병목을 설명한다.</li>
+<li><strong>통찰:</strong> 익숙한 비유는 문제를 빠르게 보여 주지만, 약 35만 토큰이나 Hornet의 효율처럼 화자의 견해와 자사 주장은 독립 증거와 구분해야 한다.</li>
+<li><strong>질문/행동:</strong> 상세페이지에서 성능 우위를 주장한다면 실제 수치, 비교 조건, 실패 사례 중 무엇을 함께 공개해야 과장이 되지 않는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 모델, 하네스, 검색기, 가상 파일 시스템, 원시 도구와 최종 과제 평가가 직접적인 시스템 설계 요소로 제시된다.</li>
+<li><strong>통찰:</strong> 검색 기술 이름만 비교하지 말고 동일한 모델과 과제에서 검색 궤적, 설정, 비용, 최종 성공을 함께 시험해야 한다.</li>
+<li><strong>질문/행동:</strong> 검증용 질문 세트에서 BM25 설정만 바꿨을 때 최종 정답 여부가 어떻게 달라지는지 기록할 수 있는가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"거대한 문서 집합에서 필요한 근거를 제한된 컨텍스트에 넣어야 한다"</code> <strong>문제</strong><br>
+→ <code>"과제에 필요한 근거를 더 잘 찾고 최종 답을 완성한다"</code> <strong>수혜자: 에이전트 사용자와 시스템 운영자</strong><br>
+→ <code>"문서·계산 자원·검색 인프라·평가 시간을 제공한다"</code> <strong>지불자 또는 자원 제공자: 시스템 구축·운영 주체</strong><br>
+→ <code>"동일한 검증 질문에서 나온 최종 정답 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 검증 전 가상 검색 환경에서 같은 질문 세트·모델·하네스를 유지하고, 현재 비교 구성과 조정한 BM25 구성을 각각 실행한다.</li>
+<li><strong>측정 1개:</strong> 각 구성의 최종 정답 비율을 기록한다.</li>
+<li><strong>중단 기준 1개:</strong> 조정한 BM25 구성의 최종 정답 비율이 비교 구성보다 높지 않으면 확대 적용을 멈춘다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>에이전트 검색의 구성</td>
+<td>유능한 모델, 하네스, 검색 엔진이 함께 필요하다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>BM25와 새 사용자</td>
+<td>점수 함수는 같지만 AI 에이전트의 검색 행동이 달라졌다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>BrowseComp+ 사례</td>
+<td>근거 문서의 검색 품질이 최종 정답에 영향을 준다는 주장이다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>동적 작업 공간</td>
+<td>검색 결과를 파일 시스템에 두고 필요한 문서만 점진적으로 연다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>평가와 구현</td>
+<td>단일 순위보다 최종 과제를 보고, BM25 설정과 구현 차이를 확인한다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 에이전트 검색의 세 구성 요소</h3>
+<p>발표자는 에이전트 검색을 에이전트 루프 안에서 일어나는 검색으로 정의한다. 에이전트는 코드 작성이나 심층 조사 같은 과제를 수행하다가 필요한 정보가 생긴다.</p>
+<p>좋은 시스템에는 다음 세 요소가 필요하다고 설명한다.</p>
+<ol>
+<li>도구를 쓰고 검색어를 만들 수 있는 유능한 모델</li>
+<li>검색 기능을 도구 호출이나 코드 모드로 노출하는 하네스</li>
+<li>잠재적으로 수십억 개의 문서를 효율적으로 찾는 검색 엔진</li>
+</ol>
+<h3>2. BM25의 정의와 변화한 사용자</h3>
+<p>발표자는 BM25를 “Best Match 25”라고 풀며, 여러 실험 중 25번이 가장 좋았기 때문에 붙은 이름이라고 설명한다. 이 유래는 발표자의 설명이며 전사 밖의 독립 자료로 검증되지 않았다.</p>
+<p>BM25는 질의어와 문서 용어의 상호작용으로 점수를 만들고, 관련성을 대신 나타내는 값으로 사용한다. 모든 문서에 점수를 매겨 상위 K개를 찾는 과정을 가속하기 위해 오랜 기간 여러 알고리즘이 연구됐다고 말한다.</p>
+<p>발표자의 중심 주장은 함수가 아니라 사용자가 달라졌다는 것이다. 사람의 짧은 검색어와 달리 모델은 일반 지식, 긴 검색어, 문구와 사이트 연산자를 활용하고 결과를 읽어 재검색할 수 있다.</p>
+<h3>3. BrowseComp+와 컨텍스트 병목</h3>
+<p>발표자는 BrowseComp+를 전년도 논문에 공개된 심층 조사 벤치마크로 소개한다. 전사에 따르면 수수께끼형 질문이 거의 정확히 830개이며, 문서 집합은 약 10만 5천 개의 웹 문서로 구성된다. 각 질문에는 정답 자료가 있어 전체 루프가 정확한 답을 냈는지 확인할 수 있다고 한다.</p>
+<p>필요한 증거 문서를 인위적으로 컨텍스트에 넣으면 GPT-4도 매우 높은 정확도로 답하지만, 검색 도구를 사용하게 하면 성능이 떨어진다고 설명한다. 이 차이를 근거로 모델의 추론보다 검색되는 근거가 병목이라는 주장을 제시한다.</p>
+<p>컨텍스트에 대해서는 품질이 떨어지기 전 약 35만 토큰이라는 화자 개인의 견해를 밝힌다. 이를 약 1.4MB였던 플로피 디스크 한 장에 비유한다.</p>
+<h3>4. BM25 기준선과 정확 일치</h3>
+<p>BrowseComp+ 원 논문의 BM25 기준선은 좋지 않았지만, 발표자는 긴 문서를 처리하기에 매개변수가 적절하지 않았다는 후속 연구가 있다고 말한다. BM25에는 점수 함수의 여러 성질을 조절하는 두 개의 초매개변수가 있다고 설명하지만 전사에서는 이름을 제시하지 않는다.</p>
+<p>발표자가 제시한 BM25의 장점은 다음과 같다.</p>
+<ul>
+<li>이름, 엔티티, 우편번호, SKU 등의 정확 일치</li>
+<li>임베딩 추론과 관련 인프라를 고려했을 때 상대적으로 낮은 비용</li>
+<li>어떤 단어와 문구가 결과를 만들었는지 조사하기 쉬운 성질</li>
+</ul>
+<p>일부 임베딩 모델은 약 80억 개의 매개변수를 가진다고 언급하지만, 특정 모델명이나 비교 비용 수치는 제공하지 않는다.</p>
+<h3>5. 동적 작업 공간과 원시 도구</h3>
+<p>워털루 대학교 Jimmy Lin 연구진의 최근 논문으로 “Scaling Direct Corpus Interaction via Dynamic Workspace Expansion”을 소개한다.</p>
+<p>검색기로 후보 문서를 찾은 뒤 이를 에이전트용 검색 결과 페이지처럼 작업 공간에 배치한다. 파일 시스템으로 구성하면 제목과 짧은 일부만 먼저 보여 주고, 모델이 선택한 문서를 더 읽게 할 수 있다.</p>
+<p>이 구조에서는 가상 파일 시스템, 샌드박스, Bash, <code>grep</code>, <code>ripgrep</code>, <code>sed</code>, <code>awk</code> 같은 도구를 함께 사용할 수 있다. 발표자는 최전선 모델들이 코딩과 도구 사용에 맞춰 개선되는 현재 상황을 활용하는 설계라고 평가한다. AGI가 브라우저를 직접 쓸 미래 가능성은 열어 두면서도, 현재에는 강력한 방법이라고 주장한다.</p>
+<h3>6. 평가 방식과 Hornet의 주장</h3>
+<p>전통적인 정보 검색은 하나의 검색어, 하나의 순위 목록과 nDCG 같은 지표를 중심으로 평가했다. 발표자는 에이전트가 검색어를 재구성하고 확장하는 환경에서는 최종 과제 성공을 봐야 한다고 주장한다. 질문 답변이라면 최종 답이 맞았는지가 예다.</p>
+<p>Hornet은 BM25를 핵심 구성 요소 중 하나로 보고 효율적인 구현과 평가에 투자한다고 한다. 발표자는 같은 종류의 하드웨어, 단일 노드, 1억 개 웹 문서 조건에서 Hornet이 익명 엔진보다 더 높은 처리량을 달성했다고 주장한다. 그래프의 가로축은 QPS, 세로축은 지연시간이라고 정정하지만 구체적인 값은 전사에 없다.</p>
+<p>마지막에는 네 가지 주장을 예고한다. 전사에서 명시적으로 번호가 붙은 내용은 다음 두 가지다.</p>
+<ol>
+<li>더 빠르게 읽고 검색어를 고치며 일반 지식을 활용하는 새 사용자가 등장했다.</li>
+<li>BM25는 구현, 성능, 매개변수에 따라 다르므로 어떤 BM25인지 물어야 한다.</li>
+</ol>
+<p>이어지는 문단에서는 설명 가능성과 <code>grep</code>을 결합한 정확 일치의 강점을 말한다. 이를 각각 셋째와 넷째 주장으로 볼 수 있지만 전사에서 번호와 경계가 명시되지는 않는다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · 에이전트 검색에서 30년 된 BM25가 놀랍도록 강력한 이유입니다 · https://www.youtube.com/watch?v=yNPS1Z64wQM · 전사: 제공된 SOURCE_TRANSCRIPT 영문, 생성 방식 미기재<br>
+화자는 전사에서 Jo Kristian Bergum, Hornet.dev CEO로 소개된다. META의 provenance 소속은 <code>Hornet</code>이며, 채널이 원본 영상 링크를 제공하지 않아 화자 이름과 SNS를 기준으로 원출처를 추정했다는 메모가 있다. 따라서 원본 게시 주체와 원본 영상 링크는 확인되지 않았다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>Jo Kristian Bergum, Hornet.dev의 CEO입니다.</p>
+<p>오늘은 에이전트 검색(agentic search)에서 BM25가 보이는 놀라울 정도의 효과에 대해 이야기하겠습니다.</p>
+<p>여러분 중 BM25에 대해 들어본 분이 얼마나 되나요? 처음 듣는 분도 있나요? 꽤 많군요. 좋습니다.</p>
+<p>저는 지금 월드컵도 보고 있습니다. 노르웨이가 코트디부아르와 후반전을 치르고 있습니다. 노르웨이가 앞서고 있어서 좋습니다.</p>
+<p>Hornet에서는 에이전트를 위한 검색 인프라(retrieval infrastructure)를 구축하고 있습니다. 저는 오랫동안 검색 및 검색 결과 조회(retrieval) 문제를 다뤄 왔습니다. 보시다시피 머리가 희끗희끗합니다. 이 분야에서 일한 지 20년이 넘었습니다.</p>
+<p>오늘 강연에서는 이 30년 된 어휘 기반 점수 함수(lexical scoring function)가 왜 강력하게 부활하고 있는지 이야기하겠습니다.</p>
+<p>먼저 제가 에이전트 검색, 또는 에이전트 검색 결과 조회(agentic retrieval)라고 부르는 것이 무엇인지 간단히 설명하고 정의하겠습니다.</p>
+<p>제가 정의하는 에이전트 검색은 본질적으로 에이전트 루프(agent loop) 안에서 이루어지는 검색입니다. 에이전트가 어떤 작업을 수행하려고 한다고 해 보겠습니다. 코드를 작성하거나, 심층 조사를 수행하거나, 그 밖의 어떤 작업이든 할 수 있습니다. 그 과정에서 에이전트가 작업을 성공적으로 완료하려면 어떤 형태로든 정보가 필요합니다.</p>
+<p>좋은 에이전트 검색 시스템을 구축하려면 본질적으로 세 가지가 필요합니다.</p>
+<p>첫째, 유능한 모델이 필요합니다. 도구를 사용하고 쿼리를 작성할 수 있는 모델이어야 합니다.</p>
+<p>또한 모델을 둘러싼 하네스(harness)가 필요합니다. 여기에는 검색 결과 조회 및 검색 기능을 모델에 어떤 방식으로 노출할지가 포함됩니다. 방법은 여러 가지가 있습니다. 도구 호출(tool calling)을 사용할 수도 있고, 코드 모드(code mode)를 사용할 수도 있습니다. Edo는 검색 결과 조회 인프라를 노출하는 방식으로 제가 코드 모드라고 부르는 것을 시연했습니다. 이것이 하네스 부분입니다.</p>
+<p>그다음에는 효율적으로 검색할 수 있는 검색 결과 조회 엔진이 필요합니다. 잠재적으로 수십억 개의 문서로 이루어진 문서 집합을 대상으로 검색할 수 있어야 합니다. 우리는 이 분야에 많은 투자를 하고 있으며, 이와 관련된 내용을 보여드리겠습니다.</p>
+<p>BM25를 정의하자면, BM25는 실제로 Best Match 25를 의미합니다. 연구자들이 여러 가지 실험을 진행했는데, 25번째 실험이 가장 좋은 결과로 나타났습니다. 이름의 배경은 이것입니다.</p>
+<p>본질적으로 이는 점수 함수입니다. 쿼리와 문서가 있다고 생각해 봅시다. 쿼리의 용어와 문서의 용어 사이의 상호작용을 바탕으로 점수를 계산합니다. 그런 다음 해당 문서가 쿼리와 얼마나 관련 있는지를 잘 대변하는 점수이기를 기대합니다.</p>
+<p>BM25를 계산하는 한 가지 방법은 모든 문서를 가져와 각각에 점수를 매긴 다음 상위 K개의 문서를 결정하는 것입니다. 이러한 유형의 상위 K개 검색(top-K retrieval)을 가속하는 방법에 대해서는 30~40년에 걸친 연구가 있었고, 다양한 알고리즘이 나왔습니다. 우리도 이 분야에 많은 투자를 하고 있으며, 이와 관련된 내용을 보여드리겠습니다.</p>
+<p>BM25는 점수 함수이고, 상위 K개 검색을 가속하는 방법들이 존재합니다.</p>
+<p>BM25는 변하지 않았습니다. 같은 점수 함수입니다. 달라진 점은 이제 더 강력한 사용자가 생겼다는 것입니다.</p>
+<p>Edo는 일반 지식에 대해 이야기했습니다. 오늘날의 LLM은 일반 지식을 많이 갖고 있습니다. 엔터티, 회사, 날짜 및 그 밖의 많은 것들을 알고 있습니다. 매개변수 모델(parametric model)에 내재된 지식을 활용하면, 본질적으로 검색을 매우 잘하게 됩니다.</p>
+<p>BM25가 이제 더 관련성 높은 기술이 된 진짜 변화는 바로 이것입니다.</p>
+<p>BM25는 과거에는 기준 함수(baseline function)였습니다. 정보 검색 연구라면 무엇이든 BM25 기준선을 포함한 다음, 뭔가 화려하거나 발전된 기법을 추가하고 BM25와 비교하곤 했습니다.</p>
+<p>과거에 검색을 어떻게 평가했는지도 흥미롭다고 생각합니다. 단순히 파란색 링크 10개를 보고 훑어본 다음, 몇 가지 지표를 계산했습니다. 이제 이런 방식의 상당 부분은 사라지고 있습니다. 에이전트는 인간보다 훨씬 많은 쿼리를 입력할 수 있기 때문입니다. 단 한 번의 쿼리(single-shot query)만으로 이러한 시스템을 평가하는 것은 이제 관련성이 낮아졌습니다.</p>
+<p>BrowseComp+는 제가 가장 좋아하는 벤치마크 중 하나입니다. 저는 벤치마크에 대해 이야기하는 것을 좋아합니다. 이는 지난해 논문으로 발표된 심층 연구 벤치마크(deep-research benchmark)이며, 질문은 거의 정확히 830개입니다.</p>
+<p>이 질문들은 수수께끼와 같은 문제입니다. 펍 퀴즈(pub quiz)라고 생각하면 됩니다. 미국에도 펍 퀴즈가 있나요? 좋습니다. 수수께끼 유형의 질문이고 꽤 깁니다.</p>
+<p>이 벤치마크의 에이전트, 즉 하네스와 프로토콜에는 검색(search)이라는 매우 단순한 도구를 제공받는 모델이 있습니다. 이 도구는 쿼리 문자열을 받아 모델에 스니펫(snippet)을 반환합니다.</p>
+<p>코퍼스에는 약 10만 5천 개의 문서가 들어 있으므로 상당히 작습니다. 이 문서들은 웹 문서입니다. 모든 질문에는 정답 기준 답안(gold-reference answer)이 있으므로, 모델과 전체 루프가 정확한 답을 산출하는지 확인할 수 있습니다.</p>
+<p>왜 검색 결과 조회가 필요할까요?</p>
+<p>저는 나이가 많기 때문에 컨텍스트 윈도(context window)를 플로피 디스크와 비교하는 것을 좋아합니다. 1980년대에는 플로피 디스크를 사용해 컴퓨터에 게임을 설치했습니다. 여러분 중에는 너무 젊어서 아마 이런 향수를 느끼지 못하는 분도 있겠지만, 플로피 디스크 한 장에는 약 1.4메가바이트의 데이터를 담을 수 있었습니다.</p>
+<p>현재 모델의 경우, 품질이 저하되기 시작하기 전의 컨텍스트 윈도는 제 생각에 약 35만 토큰입니다. 이는 데이터로 치면 플로피 디스크 한 장에 해당합니다.</p>
+<p>실제로 필요한 정보를 가져와 컨텍스트 윈도에 넣으려면 검색 결과 조회가 필요합니다.</p>
+<p>BrowseComp+는 검색 결과 조회 품질이 엔드투엔드 작업 정확도(end-to-end task accuracy)에 어떤 영향을 미치는지 잘 보여줍니다. 엔드투엔드 정확도란 본질적으로 이 검색 도구를 갖춘 모델이 수수께끼 같은 질문에 답할 수 있는지를 의미합니다.</p>
+<p>질문에 답하는 데 필요한 증거 문서를 인위적으로 모델의 컨텍스트 윈도에 넣으면 정확도는 매우 높습니다. 추론은 병목이 아닙니다. 증거가 처음부터 주어지면 GPT-4조차도 매우 높은 정확도로 질문에 답합니다.</p>
+<p>하지만 하네스를 통해 모델에 검색 도구를 제공하면 정확도가 떨어집니다. 이제 하네스, 모델의 쿼리 작성 능력, 검색 결과 조회기의 품질에 의존하기 때문입니다.</p>
+<p>저에게 이것이 중요한 이유는, 완벽한 모델, 즉 본질적으로 AGI이고 절대 실수하지 않는 모델을 얻더라도 여전히 대략 플로피 디스크 한 장에 해당하는 컨텍스트 윈도의 한계가 있기 때문입니다. 그 컨텍스트 윈도에 무엇을 넣을지 결정해야 합니다.</p>
+<p>앞 슬라이드에서 보았듯이 검색 결과 조회는 여전히 매우 중요합니다.</p>
+<p>BrowseComp+ 데이터셋에서는 이러한 수수께끼 같은 질문 중 하나가 검색 궤적(search trajectory)이 됩니다. 모델은 쿼리를 실행하고, 응답을 받고, 이를 읽고, 쿼리를 다시 작성하며, 컨텍스트 윈도를 채우거나 답을 찾을 때까지 계속합니다. 둘 중 먼저 일어나는 시점까지 진행합니다.</p>
+<p>우리는 GPT-5가 쿼리를 어떻게 작성하는지 알아보기 위해 이러한 궤적을 조사하는 데 시간을 들였습니다. 많은 흥미로운 측면을 발견했고, 최근 블로그 게시물에서 이를 설명했습니다. hornet.dev에서 확인할 수 있습니다.</p>
+<p>우리는 이것을 AOL 쿼리 로그와 비교하기를 좋아합니다. AOL은 당시 검색 인터페이스를 제공하던 서비스였습니다. 사람들이 웹에서 무엇을 검색했는지 보여주는 매우 큰 표본을 실수로 공개했습니다. 그 쿼리들은 상당히 짧았습니다.</p>
+<p>저는 더 최근의 쿼리 로그도 본 적이 있는데, 인간의 패턴은 여전히 몇 개의 용어만 사용해 검색하는 것입니다.</p>
+<p>반면 GPT-5는 훨씬 더 강력한 사용자입니다. 일반 지식을 갖고 있고, 매우 긴 쿼리를 작성할 수 있습니다. 유용한 구문 연산자(syntax operator)를 많이 사용할 수 있습니다. 사이트 연산자(site operator), 구문(phrase) 등을 포함한 웹 검색을 통해 학습했습니다.</p>
+<p>이는 새로운 유형의 워크로드입니다.</p>
+<p>BM25에는 점수 함수의 여러 측면을 제어하는 하이퍼파라미터(hyperparameter)가 본질적으로 두 개 있습니다. 기준선이 있다고 말씀드렸는데, BM25는 보통 기준선입니다.</p>
+<p>BrowseComp+에도 BM25 기준선이 있지만, 그 기준선은 형편없는 것으로 나타났습니다. 임베딩 모델(embedding model)과 같은 더 정교한 기법을 살펴보면, 원 논문만 봤을 때는 BM25보다 훨씬 나은 검색 패러다임처럼 보입니다.</p>
+<p>하지만 최근 연구에 따르면 BrowseComp+ 연구 논문에서 사용한 매개변수는 이러한 긴 문서를 처리하기에 적절하지 않았습니다.</p>
+<p>저는 “어떤 BM25를 말하는 건가요?”라고 묻는 것을 좋아합니다. 특정 벤치마크의 전체 정확도에 극적인 영향을 미치기 때문입니다.</p>
+<p>새로운 사용자와 함께 BM25가 이제 더 강력해진 이유는 무엇일까요?</p>
+<p>사용자의 일반 지식과 사용자가 더 빠르고 구체적으로 입력할 수 있다는 점을 언급했습니다.</p>
+<p>모델이 이름, 엔터티, 우편번호(ZIP code), SKU 등을 알고 있기 때문에 정확한 일치(exact matching)는 여전히 중요합니다. 이러한 것들은 모든 토큰을 고정된 어휘로 인코딩하는 임베딩 모델로는 쉽게 표현하기 어렵습니다.</p>
+<p>특히 임베딩 추론(embedding inference) 비용을 고려하면 상대적으로 저렴하기도 합니다. 일부 임베딩 모델은 약 80억 개의 매개변수를 갖고 있습니다. 텍스트를 인코딩하고 이를 위한 인프라를 구축해야 하는 등 여러 작업이 필요합니다.</p>
+<p>BM25는 상당히 단순합니다. 전체 생태계의 도구도 매우 훌륭하기 때문에 쉽게 사용할 수 있습니다.</p>
+<p>모델이 결과를 살펴보고 특정 쿼리 작성이 왜 그런 결과를 반환했는지 이해하기도 매우 쉽습니다. 문자 그대로의 용어와 구문을 일치시키기 때문입니다. 이는 모델이 쿼리를 다시 작성하는 데 도움을 줄 수 있습니다.</p>
+<p>핵심은 이 세 가지입니다.</p>
+<p>이제 그 밖에 무엇이 필요한지와 관련된 좀 더 뜨거운 주제로 넘어가겠습니다.</p>
+<p>이는 워털루대학교(University of Waterloo)의 지미 린(Jimmy Lin) 연구 그룹이 수행한 아주 최근의 연구입니다. 이들은 정보 검색 연구와 에이전트 검색 분야에서 훌륭한 일을 하고 있습니다.</p>
+<p>이들에게는 제가 좋아하는 최근 논문이 하나 있습니다. 제목은 “동적 작업 공간 확장을 통한 직접 코퍼스 상호작용 확장(Scaling Direct Corpus Interaction via Dynamic Workspace Expansion)”입니다.</p>
+<p>이 내용을 설명하는 데 시간을 좀 쓰겠습니다. 에이전트를 위한 웹 검색 인프라를 구축하려 한다고 상상해 보세요. 현재 많은 기업이 이를 추진하고 있고, 우리도 이 사용 사례를 위한 인프라 구축을 돕기 위해 그중 일부 기업과 협력하고 있습니다.</p>
+<p>잠재적으로 수십억 개의 문서가 있을 수 있습니다. 이 문서들은 컨텍스트 윈도에 들어가지 않으므로 당연히 검색 결과 조회가 필요합니다. BM25는 좋은 기준선이며, 해당 코퍼스에서 정보를 검색할 수 있게 해 줍니다.</p>
+<p>결과는 에이전트를 위한 검색 엔진 결과 페이지(search engine results page), 즉 SERP로 생각할 수 있습니다. 검색 결과 조회기가 가져온 문서를 작업 공간(workspace)에 배치할 수 있습니다.</p>
+<p>이 작업 공간을 파일 시스템으로 구성하면 스킬(skill)과 관련해 이미 알고 있는 동일한 개념을 사용할 수 있습니다. 점진적 공개(progressive disclosure)를 적용할 수 있습니다. 문서 제목과 짧은 스니펫을 모델에 노출하고, 모델이 “이 문서를 더 읽어야겠다”고 판단하도록 할 수 있습니다.</p>
+<p>그렇게 되면, 정말 잘 다루는 모든 기본 도구(primitive tools)를 사용할 수 있습니다. 여러분 모두 코딩 에이전트를 사용해 보셨을 테니, 컨텍스트를 관리하기 위해 grep, ripgrep, sed, awk와 그 밖의 여러 도구를 사용하는 것을 보셨을 겁니다.</p>
+<p>여기서는 양쪽의 장점을 모두 얻을 수 있습니다. 샌드박스 인프라, 검색 인프라, 가상 파일 시스템, Bash 등 여러 요소를 결합할 수 있습니다.</p>
+<p>지금 등장하고 있는 이 모든 새로운 패러다임을 결합한다는 점에서 상당히 흥미롭습니다. 저는 이 방향에 정말 기대가 큽니다.</p>
+<p>이는 현재 모델이 잘하는 작업에 맞춰 최적화하는 일종의 편법이기도 합니다. 모든 프런티어 LLM 기업은 코딩, Bash, 도구 사용에 맞춰 모델을 최적화하고 있습니다.</p>
+<p>엔드투엔드 작업을 그 궤도에 올려놓으면, 새로운 모델이 나올 때마다 이런 능력도 더 좋아질 것이라고 예상할 수 있습니다.</p>
+<p>그러니 AGI를 얻게 되면—</p>
+<p>에이전트가 그냥 브라우저를 사용할 수도 있겠죠. 두고 봐야 합니다. 하지만 현재로서는 검색 인프라와 에이전트형 검색(agentic search) 경험 전체를 구축하는 매우 강력한 방법입니다.</p>
+<p>평가에 관해서는 앞에서도 이야기했는데요. 전통적인 정보 검색(information retrieval)에서는 하나의 쿼리와 하나의 순위 목록만 놓고 nDCG를 계산해 비교하는 방식에 익숙했습니다. 하지만 새로운 사용자가 에이전트일 때는 더 이상 그다지 적절하지 않습니다. 에이전트는 쿼리를 다시 작성하고, 더 많은 쿼리를 발행하고, 확장(expansion)을 수행하는 등 온갖 다양한 작업을 할 수 있기 때문입니다.</p>
+<p>따라서 고전적인 정보 검색 평가의 상당 부분은 이제 사실상 죽었습니다. 대신 모델이 설정된 작업을 수행할 수 있는지를 보세요. 예를 들어 질의응답이라면, 정답을 맞혔는가를 보는 겁니다.</p>
+<p>Hornet에서는 BM25를 기본 요소 중 하나로 보고 있습니다. 우리는 BM25를 평가하는 가장 뛰어나고 효율적인 방법을 만들겠다는 비전을 세웠습니다. BM25가 매우 강력한 기본 요소라고 생각하기 때문입니다.</p>
+<p>이 그림은 단일 노드에서 1억 개의 웹 문서를 사용하고, 동일한 유형의 하드웨어에서 일부 익명화된 검색 엔진들과 Hornet을 비교한 것입니다. 보시다시피 Hornet은 다른 엔진보다 훨씬 효율적으로 구현되어 있으며, 동일한 유형의 장비에서 더 높은 처리량을 달성할 수 있습니다. 이는 현재 웹 검색 및 유사한 애플리케이션을 위한 인프라를 구축하는 많은 기업에 상당한 비용 절감을 의미합니다.</p>
+<p>x축은 QPS이고, y축은 지연 시간입니다. 죄송합니다.</p>
+<p>그럼 이 강연에서 기억해 갈 네 가지 주장을 말씀드리겠습니다. 새로운 사용자가 있습니다. 이 사용자는 더 강력하고, 더 빠르게 입력하고, 더 빠르게 읽고, 쿼리를 다시 작성할 수 있습니다. 또한 일반적인 지식도 많이 갖고 있기 때문에 grep과 BM25 같은 단순한 도구가 더 강력해집니다.</p>
+<p>첫째가 그렇습니다. 둘째는, 여러분이 말하는 BM25가 어떤 BM25인지 생각해 보라는 것입니다. 구현, 성능, 매개변수에 차이가 있으니 이를 고려해야 합니다.</p>
+<p>그렇다면 에이전트형 검색에 효과적인 이유는 무엇일까요? 단순히 모델이 이를 설명 가능하게 이해할 수 있기 때문입니다. 모델은 이를 보고 grep과 함께 사용할 수 있습니다. 문자 그대로 일치하는 결과가 나오기 때문입니다. grep도 거의 전적으로 문자 그대로의 일치에 관한 도구입니다. 이 둘을 결합하면 매우 강력한 에이전트형 검색, 또는 에이전트형 검색(retrieval) 패러다임이 됩니다.</p>
+<p>참고 자료는 많이 있습니다. 아마 이 강연을, 아니면 강연이 슬라이드와 함께 공개될 겁니다. 마음에 들지 않았다면 저에게 트윗을 보내셔도 됩니다.</p>
+<p>질문을 받을 시간이 없다고 들었지만, 검색에 관해서는 기꺼이 이야기하겠습니다. 학회 곳곳에서 저를 만나실 수 있을 겁니다. 저에게 연락하는 가장 좋은 방법은 아마 제 X 계정을 이용하는 것입니다.</p>
+<p>이상입니다.</p>
+</details>
+</body></html>
