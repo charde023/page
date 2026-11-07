@@ -1,0 +1,586 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>코드 리뷰의 종말: 데이터가 보여주는 진짜 현실입니다</title>
+<meta name="description" content="AI가 만든 코드를 사람이 줄마다 읽는 방식의 한계를 짚고, 테스트·자동 리뷰·인간 판단·운영 관측을 결합한 검증 시스템으로의 전환을 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>코드 리뷰의 종말: 데이터가 보여주는 진짜 현실입니다</h1>
+<div class="meta">업로드 2026-10-02 · 24.2분 · <a href="https://youtu.be/-TeOEuplMrQ" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<h3>큰 그림: 코드를 만드는 속도보다 믿을 수 있는지 확인하는 속도가 느리다</h3>
+<p>이 발표의 핵심은 <strong>코드 리뷰가 사라진다</strong>는 말보다 <strong>코드 리뷰의 작업 단위와 인간의 위치가 바뀐다</strong>는 데 있다. AI 에이전트는 많은 코드를 빠르게 만들 수 있지만, 그 코드가 테스트를 통과하는지, 기존 기능을 망가뜨리지 않는지, 회사의 숨은 사정을 지키는지, 실제 운영 환경에서도 안전한지는 별도의 문제다.</p>
+<p>화자는 AI 에이전트를 사용한 개발자들이 <strong>741% 더 많은 코드</strong>를 작성했지만, 실제 출시된 소프트웨어는 <strong>30% 증가</strong>했다는 연구를 출발점으로 제시한다. 이 수치가 정확히 검증됐는지는 제공 자료만으로 확인할 수 없지만, 화자가 강조한 인과는 분명하다. 코드 생성량이 늘어도 검토와 승인 능력이 같은 속도로 늘지 않으면, 생산성은 생성 단계가 아니라 검증 단계에서 막힌다.</p>
+<figure data-visual-kind="map">
+  <div style="max-width:720px;margin:1rem auto;display:grid;grid-template-columns:1fr;gap:8px;text-align:center;font-size:16px;line-height:1.5;">
+    <div style="border:2px solid #315b7d;border-radius:10px;padding:14px;background:#eef6fc;"><strong>AI가 코드 생성 비용을 낮춤</strong><br>대규모 변경과 여러 작업을 빠르게 생성</div>
+    <div aria-hidden="true" style="font-size:24px;font-weight:700;">↓</div>
+    <div style="border:2px solid #8a5a00;border-radius:10px;padding:14px;background:#fff7e6;"><strong>검토할 변경량이 인간의 읽기 능력을 초과</strong><br>줄 단위 리뷰가 새로운 병목이 됨</div>
+    <div aria-hidden="true" style="font-size:24px;font-weight:700;">↓</div>
+    <div style="border:2px solid #704c8c;border-radius:10px;padding:14px;background:#f7f0fb;"><strong>테스트와 자동 리뷰로 검증을 확장</strong><br>다중 검토, 도구 호출, 저장소 문맥을 사용</div>
+    <div aria-hidden="true" style="font-size:24px;font-weight:700;">↓</div>
+    <div style="border:2px solid #246b45;border-radius:10px;padding:14px;background:#edf8f1;"><strong>인간 판단을 더 높은 층에 배치</strong><br>좋음의 기준, 위험한 예외, 검토 시스템 자체를 점검</div>
+    <div aria-hidden="true" style="font-size:24px;font-weight:700;">↓</div>
+    <div style="border:2px solid #8b2f2f;border-radius:10px;padding:14px;background:#fff0f0;"><strong>운영 환경이 마지막 검토자가 됨</strong><br>실제 세계에서 시스템이 보인 행동을 관찰</div>
+  </div>
+  <figcaption>코드 생성 증가가 검토 병목을 만들고, 검증 시스템과 운영 관측으로 인간의 역할이 이동하는 전체 지도.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 이 도식은 측정 그래프가 아니라 발표의 인과를 정리한 개념 지도다. 핵심은 자동화가 사람을 단순히 삭제하는 것이 아니라, 사람이 판단할 위치를 코드 한 줄에서 검증 체계 전체로 옮긴다는 점이다.</p>
+<h3>왜 사람이 더 열심히 읽는 것만으로는 해결되지 않는가</h3>
+<p>화자는 Cisco에서 10개월 동안 수행한 연구를 인용한다. 이 연구에는 2,500건의 리뷰와 320만 줄의 코드가 포함됐으며, 한 번에 400줄을 넘겨 읽으면 결함을 찾는 효과가 떨어지고 시간당 450줄을 넘기면 효과가 급격히 낮아졌다고 설명한다. 이 속도로 10,000줄짜리 에이전트 PR 하나를 제대로 검토하려면 근무일 기준 3~4일이 걸린다는 계산이다.</p>
+<p>전사에는 한 개발자가 동시에 <strong>12개(a dozen)의 에이전트</strong>를 실행할 수도 있다는 표현도 나온다. 따라서 검토 담당자를 더 붙이거나 더 오래 읽게 하는 방식은 생성 속도를 따라잡기 어렵고, 반복적인 검토로 인한 소진도 생긴다는 것이 화자의 주장이다.</p>
+<h3>테스트 통과와 실제 병합 가능성은 다르다</h3>
+<p>테스트는 미리 적어 둔 질문에는 답할 수 있지만, 질문으로 적지 않은 상황은 검사하지 못한다. 예를 들어 특정 모듈을 외부 사용자 세 명이 사용하고 있다는 사실이나, 알려지지 않은 예약 작업이 그 모듈에 의존한다는 사정은 테스트에 들어 있지 않으면 보이지 않는다.</p>
+<p>화자가 소개한 METR 실험에서는 SWE-bench 채점기를 이미 통과한 PR을 실제 오픈소스 유지관리자 네 명이 다시 검토했다. 그 결과 실제로 병합할 만하다고 판단된 비율은 약 절반이었다고 한다. 실패 이유는 이미 통과한 테스트가 확인한 표면적 동작보다는 코드 품질, 다른 코드에 생긴 조용한 손상, 테스트 바깥의 맥락이었다.</p>
+<p>이 차이를 겨냥한 것이 <strong>병합해도 되는 상태인지 평가하는 기준(mergeability)</strong>이다. 화자는 FrontierCode가 동작의 정확성뿐 아니라 회귀, 안전, 변경 범위의 절제, 테스트 품질, 유지보수성까지 기계적으로 평가하려 한다고 설명한다.</p>
+<p>아래 표는 모바일에서 좌우로 이동해 볼 수 있다.</p>
+<figure data-visual-kind="comparison">
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #c8c8c8;border-radius:8px;">
+    <table style="border-collapse:collapse;min-width:720px;width:100%;font-size:15px;">
+      <thead>
+        <tr style="background:#eef2f5;">
+          <th style="border:1px solid #bbb;padding:10px;text-align:left;">검증 층</th>
+          <th style="border:1px solid #bbb;padding:10px;text-align:left;">잘 확인하는 것</th>
+          <th style="border:1px solid #bbb;padding:10px;text-align:left;">놓칠 수 있는 것</th>
+          <th style="border:1px solid #bbb;padding:10px;text-align:left;">화자가 든 근거</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="border:1px solid #bbb;padding:10px;"><strong>컴파일러·테스트</strong></td>
+          <td style="border:1px solid #bbb;padding:10px;">명시된 규칙과 예상 동작</td>
+          <td style="border:1px solid #bbb;padding:10px;">기록되지 않은 사용자·운영 맥락</td>
+          <td style="border:1px solid #bbb;padding:10px;">SWE-bench 통과 PR 중 약 절반만 유지관리자가 병합 가능하다고 판단했다는 METR 사례</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #bbb;padding:10px;"><strong>자동 코드 리뷰</strong></td>
+          <td style="border:1px solid #bbb;padding:10px;">반복 가능한 검사, 여러 검토 결과의 합의</td>
+          <td style="border:1px solid #bbb;padding:10px;">거짓 양성, 프롬프트 인젝션, 불완전한 기준</td>
+          <td style="border:1px solid #bbb;padding:10px;">Cursor의 다중 패스와 Anthropic 리뷰어의 보안 경고</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #bbb;padding:10px;"><strong>인간 판단</strong></td>
+          <td style="border:1px solid #bbb;padding:10px;">책임, 숨은 맥락, 큰 위험 반경</td>
+          <td style="border:1px solid #bbb;padding:10px;">대량 변경을 줄마다 읽는 확장성</td>
+          <td style="border:1px solid #bbb;padding:10px;">400줄·450줄 한계와 10,000줄 PR 사례</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #bbb;padding:10px;"><strong>운영 관측</strong></td>
+          <td style="border:1px solid #bbb;padding:10px;">실제 환경에서 나타난 행동의 흐름</td>
+          <td style="border:1px solid #bbb;padding:10px;">출시 전 예방 자체를 대신하지는 못함</td>
+          <td style="border:1px solid #bbb;padding:10px;">화자가 프로덕션을 마지막 검토자라고 표현한 결론</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption>테스트, 자동 리뷰, 인간 판단, 운영 관측이 서로 다른 종류의 실패를 찾는다는 비교.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽에서 검증 층을 고른 뒤 오른쪽으로 이동해 강점과 빈틈을 함께 본다. 어느 한 층이 모든 문제를 해결한다는 표가 아니다. 표의 수치와 사례는 화자가 소개한 주장이고, 제공 자료만으로 원 연구를 독립 검증하지는 못했다.</p>
+<h3>자동 리뷰는 한 번 묻는 것이 아니라 검증 절차를 설계하는 일이다</h3>
+<p>화자가 소개한 Cursor의 초기 리뷰어는 하나의 변경에 대해 여덟 번 검토하고, 검토 순서까지 섞어 다시 살폈다. 자동 리뷰가 정상 코드를 잘못 지적하는 <strong>거짓 양성</strong>을 많이 내면 개발자가 리뷰어 자체를 무시하기 때문이다. 베이징대학교 연구팀도 여러 번 검토해 서로 동의한 결과를 남기는 방식으로 품질이 최대 44% 높아졌다고 화자는 전한다.</p>
+<p>이후 Cursor는 모델이 변경 내용을 추론하고, 도구를 호출하고, 더 조사할 위치를 고르게 했다고 한다. 또한 “기본적으로 코드를 믿지 말고 문제가 있다고 가정하라”는 방향을 줬다. 리뷰 결과에서 수정 에이전트를 실행해 패치까지 만드는 방향도 소개된다.</p>
+<p>하지만 자동 리뷰의 성과 기준에도 인간이 남는다. 화자에 따르면 Cursor는 사람이 제안을 받아들이는 비율인 해결률을 52%에서 70% 이상으로 높였고, Graphite도 사람이 어떤 제안을 수용하거나 거절했는지로 평가 자료를 만든다. 즉 현재의 자동 리뷰는 인간 판단을 제거했다기보다, 인간 판단을 학습 신호와 최종 승인으로 사용한다.</p>
+<h3>인간은 코드 줄에서 검증 시스템의 설계자로 이동한다</h3>
+<p>화자가 제안하는 대안은 <strong>좋은 결과의 기준과 검사 절차를 묶은 장치(검증 하네스, verification harness)</strong>를 만드는 것이다. 여기에는 테스트, 평가 기준, 저장소와 회사의 맥락, 자동 리뷰어, 위험에 따른 인간 승인, 운영 로그가 들어갈 수 있다.</p>
+<figure data-visual-kind="cycle">
+  <p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 360 540" role="img" aria-labelledby="cycle-title cycle-desc" style="display:block;width:100%;max-width:430px;height:auto;margin:1rem auto;;min-width:420.0px;max-width:none;">
+    <title id="cycle-title">검증 하네스의 순환</title>
+    <desc id="cycle-desc">좋음의 기준 정의에서 시작해 검사, 자동 리뷰, 인간 판단, 운영 관측을 거친 뒤 운영 결과가 다시 기준 정의로 돌아간다.</desc>
+    <defs>
+      <marker id="cycle-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#334e68"></path>
+      </marker>
+    </defs>
+
+    <rect x="90" y="20" width="240" height="66" rx="10" fill="#eef6fc" stroke="#315b7d" stroke-width="2"></rect>
+    <text x="210" y="47" text-anchor="middle" font-size="15" font-weight="700">1. 좋은 결과의 기준 정의</text>
+    <text x="210" y="69" text-anchor="middle" font-size="13">범위·안전·유지보수성·맥락</text>
+
+    <line x1="210" y1="86" x2="210" y2="116" stroke="#334e68" stroke-width="3" marker-end="url(#cycle-arrow)"></line>
+
+    <rect x="90" y="120" width="240" height="66" rx="10" fill="#f7f0fb" stroke="#704c8c" stroke-width="2"></rect>
+    <text x="210" y="147" text-anchor="middle" font-size="15" font-weight="700">2. 실행 가능한 검사</text>
+    <text x="210" y="169" text-anchor="middle" font-size="13">테스트·평가·도구 호출</text>
+
+    <line x1="210" y1="186" x2="210" y2="216" stroke="#334e68" stroke-width="3" marker-end="url(#cycle-arrow)"></line>
+
+    <rect x="90" y="220" width="240" height="66" rx="10" fill="#fff7e6" stroke="#8a5a00" stroke-width="2"></rect>
+    <text x="210" y="247" text-anchor="middle" font-size="15" font-weight="700">3. 다중 자동 리뷰</text>
+    <text x="210" y="269" text-anchor="middle" font-size="13">합의 확인·거짓 양성 걸러내기</text>
+
+    <line x1="210" y1="286" x2="210" y2="316" stroke="#334e68" stroke-width="3" marker-end="url(#cycle-arrow)"></line>
+
+    <rect x="90" y="320" width="240" height="66" rx="10" fill="#fff0f0" stroke="#8b2f2f" stroke-width="2"></rect>
+    <text x="210" y="347" text-anchor="middle" font-size="15" font-weight="700">4. 인간의 고위험 판단</text>
+    <text x="210" y="369" text-anchor="middle" font-size="13">책임·숨은 맥락·검토자 점검</text>
+
+    <line x1="210" y1="386" x2="210" y2="416" stroke="#334e68" stroke-width="3" marker-end="url(#cycle-arrow)"></line>
+
+    <rect x="90" y="420" width="240" height="66" rx="10" fill="#edf8f1" stroke="#246b45" stroke-width="2"></rect>
+    <text x="210" y="447" text-anchor="middle" font-size="15" font-weight="700">5. 운영 행동 관측</text>
+    <text x="210" y="469" text-anchor="middle" font-size="13">실제 실행 흐름에서 실패 발견</text>
+
+    <path d="M90 453 H35 V53 H90" fill="none" stroke="#334e68" stroke-width="3" marker-end="url(#cycle-arrow)"></path>
+    <text x="18" y="278" text-anchor="middle" font-size="12" font-weight="700" transform="rotate(-90 18 278)">운영 결과로 기준 갱신</text>
+  </svg></div>
+  <figcaption>검증 하네스는 운영에서 발견한 실패를 다시 ‘좋은 결과의 기준’에 반영하는 순환 구조다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 가운데를 위에서 아래로 1번부터 5번까지 읽은 뒤, 왼쪽의 되돌아가는 화살표를 따라 5번에서 1번으로 돌아간다. 이 순환은 발표 내용을 묶은 편집 도식이며, 특정 회사가 이 다섯 단계를 그대로 운영한다는 뜻은 아니다.</p>
+<p>OpenAI 사례에서도 리뷰가 사라진 것이 아니라 형태가 바뀌었다. 화자에 따르면 에이전트가 다른 에이전트의 변경을 검토하고, 여러 검토자가 만족할 때까지 반복했다. 실행 가능한 환경과 로그도 에이전트에 제공했다. 여전히 그 검증 시스템과 기준을 설계하는 책임은 인간에게 있었다.</p>
+<p>프로덕션, 즉 실제 운영 환경은 이 체계의 마지막 층이다. 출시 전 테스트가 모두 통과해도 현실의 데이터와 사용자를 만났을 때 어떤 순서로 행동했는지는 운영에서만 볼 수 있다. 다만 운영 관측은 실패를 사전에 막아 주는 마법이 아니다. 위험이 큰 변경에서는 출시 전 인간 판단과 함께 써야 한다는 것이 이 발표의 방향이다.</p>
+<h3>핵심 통찰과 적용 한계</h3>
+<p>이 발표가 요구하는 변화는 “코드를 읽지 말라”가 아니다. 모든 PR을 사람이 같은 깊이로 줄마다 읽는 대신, <strong>무엇을 자동으로 검사할지, 무엇은 사람이 책임져야 하는지, 운영에서 무엇을 관찰할지</strong>를 먼저 설계하라는 주장이다.</p>
+<p>동시에 제시된 수치에는 주의할 부분이 있다. 전사에서 88%와 29%의 차이를 51%포인트라고 말하지만 실제 산술 차이는 59%포인트다. 또한 Bun의 13,044개와 비교 대상의 74개는 약 176배 차이인데, 화자는 이를 세 자릿수 규모가 아니라 “세 자릿수의 차수, 즉 세 orders of magnitude”로 표현한다. 이 표현은 산술적으로 맞지 않는다. 발표 후반의 공개 철회 대목도 Dexter Horthy를 설명한 직후 갑자기 OpenAI가 공개적으로 철회했다고 이어져 주체가 충돌한다. 따라서 이 노트는 발표의 중심 논리를 학습하되, 충돌하는 숫자와 귀속을 확정된 사실로 정리하지 않는다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>AI 시대의 병목은 코드 생성보다 <strong>생성된 코드를 믿을 근거를 만드는 일</strong>로 이동한다.</li>
+<li>테스트 통과는 병합 가능성과 같지 않으며, 테스트 바깥의 품질·맥락·위험을 별도로 다뤄야 한다.</li>
+<li>자동 리뷰는 한 번의 모델 판단보다 다중 검토, 도구, 인간 피드백, 운영 관측을 묶은 시스템으로 설계해야 한다.</li>
+<li>인간은 사라지기보다 좋은 결과의 기준과 고위험 예외, 검토 시스템 자체를 책임지는 위치로 이동한다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>AI 에이전트가 인간보다 훨씬 빠르게 코드를 만들 때, 코드 한 줄씩 읽는 리뷰를 무엇으로 재설계해야 신뢰를 잃지 않을까?</strong></p>
+</blockquote>
+<ul>
+<li>테스트 통과와 실제 병합 가능성은 왜 다른가?</li>
+<li>자동 리뷰를 신뢰하려면 어떤 검증 층이 함께 있어야 하는가?</li>
+<li>인간 판단은 어디에 남겨야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>한 개발자가 에이전트에게 큰 기능을 맡긴다. 에이전트는 10,000줄짜리 PR을 만들고 기존 테스트를 통과시킨다. 그러나 사람은 며칠 동안 줄을 읽어야 하며, 테스트에 적혀 있지 않은 외부 사용자와 운영 의존성은 여전히 보이지 않는다. 팀은 모든 줄을 같은 깊이로 읽는 대신 병합 기준을 검사로 만들고, 자동 리뷰 결과와 고위험 변경을 사람이 판단하며, 출시 뒤 실제 행동을 관찰한다.</p>
+<p><code>"코드 생성량이 인간의 줄 단위 검토 능력을 넘어선다"</code> <strong>문제</strong><br>
+→ <code>"테스트·다중 자동 리뷰·인간 판단·운영 관측을 검증 하네스로 묶는다"</code> <strong>작동 방식</strong><br>
+→ <code>"사람은 모든 코드를 읽는 엔진에서 신뢰 기준을 설계하는 조종자로 이동한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">공장 제품의 품질 검사선</div>
+<p>AI 에이전트가 빠른 생산 설비라면, 테스트와 자동 리뷰는 규격 검사 장치이고, 인간은 규격 자체와 예외 처리 기준을 정하는 품질 책임자에 가깝다. 실제 사용 중 발견된 문제는 다음 생산 기준에 반영된다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 코드와 리뷰 에이전트는 고정된 물건이 아니다. 검토 대상 코드가 리뷰어의 판단을 흔드는 프롬프트 인젝션처럼 검사 장치 자체에 영향을 줄 수도 있고, 저장소와 운영 맥락도 계속 변한다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>리뷰 병목</strong></td>
+<td>만드는 속도보다 확인하는 속도가 느린 상태</td>
+<td>코드 생성량이 검토·승인 처리 능력을 초과하는 검증 병목</td>
+<td>코드를 더 많이 만들면 출시량도 같은 비율로 증가한다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>병합 가능성</strong></td>
+<td>실제 저장소에 받아도 되는 상태</td>
+<td>정확성뿐 아니라 회귀, 안전, 범위 절제, 테스트 품질, 유지보수성을 포함한 mergeability</td>
+<td>테스트만 통과하면 바로 병합 가능하다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>검증 하네스</strong></td>
+<td>좋은 결과를 반복해서 검사하는 장치 묶음</td>
+<td>규칙, 테스트, 평가, 문맥, 리뷰어와 피드백을 결합한 verification harness</td>
+<td>특정 자동 리뷰 도구 하나를 설치하면 완성된다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>다중 패스 리뷰</strong></td>
+<td>여러 번 살피고 겹치는 지적을 남기는 방식</td>
+<td>순서나 관점을 달리한 복수의 검토 결과를 결합하는 multi-pass review</td>
+<td>같은 답을 반복 생성하면 자동으로 진실이 된다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>프로덕션 관측</strong></td>
+<td>실제 운영에서 무슨 일이 일어났는지 보는 것</td>
+<td>실행 단계별 행동과 결과를 살피는 production observability</td>
+<td>출시 전 검증을 생략해도 된다는 뜻으로 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>AI가 코드 생성 속도를 높였는데도 실제 출시량이 같은 비율로 늘지 않는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>화자의 설명에서는 생성 비용은 낮아졌지만 인간의 읽기 속도와 판단 능력은 그대로 남아 있다. 테스트가 확인하지 못하는 품질과 외부 맥락도 있기 때문에 생성된 코드는 검토·승인 단계에 쌓인다. 따라서 병목이 코딩에서 검증으로 이동한다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>테스트 통과와 병합 가능성은 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>테스트 통과는 미리 명시한 입력과 규칙에서 예상 동작을 보였다는 뜻이다. 병합 가능성은 여기에 회귀 위험, 변경 범위, 안전성, 유지보수성, 테스트 바깥의 사용자와 운영 맥락까지 포함한다. 테스트는 병합 판단의 중요한 근거지만 전체 판단과 같지는 않다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새로운 AI 코드 작업에서 무엇을 자동 검사하고 무엇을 사람이 판단할지 어떻게 나눌 수 있을까?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 반복 실행할 수 있고 결과를 명확히 판정할 수 있는 항목은 테스트와 자동 평가 후보로 둔다. 책임 소재, 큰 위험 반경, 숨은 사용자 맥락, 리뷰어 자체의 취약성처럼 값싸게 확인하기 어려운 항목은 인간 점검 대상으로 남긴다. 출시 후에만 보이는 행동은 운영 관측 항목으로 정의한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 생산성은 생성량이 아니라 검증을 통과한 결과로 봐야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 AI 에이전트를 켠 개발자들이 741% 더 많은 코드를 작성했지만 실제 출시 소프트웨어는 30% 증가하는 데 그쳤고, 연구 저자들이 리뷰를 병목으로 지목했다고 말한다.</li>
+<li><strong>[해석]</strong> 생성된 코드 줄 수만 보면 생산성을 과대평가할 수 있다. 신뢰할 근거를 갖추고 출시된 결과까지 이어지는 흐름을 함께 봐야 한다.</li>
+<li><strong>[경계]</strong> 원 연구 링크와 계산 정의는 제공되지 않았다. “741% 더 많다”는 총량 기준 8.41배인데 전사는 이를 “거의 8배”라고 바꾸어 말한다. 30%를 “3분의 1”이라고도 표현하며, 뒤에서는 출시량을 맞추기 위해 “두 번째 숫자를 낮춘다”고 말해 방향이 앞의 논리와 충돌한다.</li>
+</ul>
+<h3>2. 검증 기준은 측정 도구이자 다음 자동화의 학습 신호가 된다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 FrontierCode가 실제 유지관리자의 “이 PR을 병합하겠는가?”라는 질문을 행동 정확성, 회귀, 안전, 범위 절제, 테스트 품질, 유지보수성으로 기계 검사하려 했다고 설명한다.</li>
+<li><strong>[해석]</strong> 팀이 좋은 변경의 의미를 구체적으로 적을수록 자동 리뷰를 평가하고 개선할 수 있다. 반대로 기준에 없는 품질은 자동화가 안정적으로 지키기 어렵다.</li>
+<li><strong>[경계]</strong> 전사에서 Claude Opus 4.5의 88%와 29% 차이를 51%포인트라고 하지만 산술 차이는 59%포인트다. 서로 다른 벤치마크의 점수를 같은 난이도로 직접 비교할 수 있는지도 제공 자료만으로 확인할 수 없다.</li>
+</ul>
+<h3>3. 인간을 제거하는 것보다 인간의 위치를 바꾸는 것이 핵심이다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 OpenAI, Cursor, Carlini의 C 컴파일러, Bun의 포팅 사례를 통해 자동 검토가 가능해져도 테스트와 리뷰 시스템을 설계하고 고위험 맥락을 판단하는 인간이 남는다고 주장한다.</li>
+<li><strong>[해석]</strong> 인간의 제한된 시간을 모든 코드 줄에 균등하게 쓰기보다 검증 규칙, 예외, 책임이 큰 변경, 리뷰어 자체의 취약성을 점검하는 데 집중하는 편이 발표의 논리에 맞다.</li>
+<li><strong>[경계]</strong> Bun의 13,044개와 비교 대상 74개는 약 176배인데 화자는 이를 “세 orders of magnitude”라고 표현해 산술적으로 맞지 않는다. Dexter Horthy의 공개 철회를 설명한 직후 “OpenAI가 공개적으로 철회했다”는 문장이 이어져 철회 주체도 충돌한다. 또한 META 설명은 화자를 Laurie Voss와 Arize AI로 소개하지만 provenance.creator는 비어 있고 provenance.affiliation은 <code>Bsky</code>이며, note는 화자 이름과 SNS를 근거로 추정한 출처라고 밝힌다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 테스트 통과와 병합 가능성의 차이는 정답을 맞힌 것과 실제로 설명·적용할 수 있는 것의 차이와 구조가 닮았다.</li>
+<li><strong>통찰:</strong> 학습자의 이해도 한 번의 정답보다 원인 설명, 대조, 새 사례 적용이라는 여러 검증 층으로 확인할 수 있다.</li>
+<li><strong>질문/행동:</strong> 학습 결과를 평가할 때 현재 정답 검사 바깥에서 놓치는 맥락이 무엇인지 한 가지 적어 본다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 생성량은 늘었지만 출시량은 그만큼 늘지 않았다는 주장은 처리량이 특정 승인 단계에서 막히는 운영 병목과 연결된다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용한다면 실제 상태를 전제하지 말고, 자동 생성된 산출물이 어느 승인·검수 단계에서 쌓이는지 확인하는 가설로만 사용할 수 있다.</li>
+<li><strong>질문/행동:</strong> 검증 전 가상 적용으로, 처리량보다 신뢰 가능한 완료량을 제한하는 단계가 있는지 질문한다.</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 발표는 741% 대 30%, 88% 대 29%, 13,044 대 74처럼 강한 수치 대조로 문제를 선명하게 만든다.</li>
+<li><strong>통찰:</strong> 대조 수치는 주장을 기억하게 하지만, 계산이나 비교 조건이 틀리면 신뢰를 훼손한다. 수치 자체와 그 수치에서 끌어낸 문장을 별도로 검산해야 한다.</li>
+<li><strong>질문/행동:</strong> 카피에 수치 대조를 쓸 때 원자료, 분모, 기간, 산술 차이까지 확인할 수 있는지 점검한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 다중 패스 리뷰, 도구 호출, 거짓 양성, 프롬프트 인젝션, 운영 궤적은 에이전트 검증과 직접 연결된다.</li>
+<li><strong>통찰:</strong> 모델 성능만 비교하기보다 어떤 문맥을 볼 수 있고, 실패를 어떻게 재현하며, 사람의 승인과 운영 결과를 어떻게 피드백하는지 평가해야 한다.</li>
+<li><strong>질문/행동:</strong> 다음 에이전트 작업에서 테스트 통과 외에 병합 가능성을 판단할 검증 항목 하나를 먼저 정의한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"AI 생성 코드가 검토 능력보다 빠르게 쌓인다"</code> <strong>문제</strong><br>
+→ <code>"신뢰 근거가 있는 변경을 더 빠르게 구분한다"</code> <strong>수혜자: 개발팀과 소프트웨어 사용자</strong><br>
+→ <code>"검증 규칙을 작성할 시간, 도구, 로그, 판단 책임을 제공한다"</code> <strong>지불자 또는 자원 제공자: 개발 조직과 검토 책임자</strong><br>
+→ <code>"사전에 정의한 검증 항목 중 실행 결과와 근거가 기록된 항목의 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 다음에 낮은 위험의 AI 생성 변경 1건이 생기면, 병합 전에 확인할 기준을 짧은 검증 하네스로 적고 각 기준의 실행 결과를 기록한다.</li>
+<li><strong>측정 1개:</strong> 사전에 정의한 검증 기준 중 실행 결과나 판단 근거가 기록된 항목의 비율.</li>
+<li><strong>중단 기준 1개:</strong> 기록된 항목의 비율이 100%가 아니면 그 방식을 다른 변경으로 확대하지 않는다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>새로운 병목</td>
+<td>코드 생성은 급증했지만 검토와 출시는 같은 속도로 늘지 않았다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>인간 리뷰의 처리 한계</td>
+<td>400줄·450줄 기준과 10,000줄 PR 사례로 줄 단위 검토의 한계를 설명한다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>테스트와 병합 가능성</td>
+<td>테스트 통과가 품질·회귀·외부 맥락까지 보장하지는 않는다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>현재의 자동 리뷰</td>
+<td>다중 패스, 도구 호출, 인간 수용률을 이용해 리뷰어를 개선한다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>인간 없는 개발 실험</td>
+<td>C 컴파일러와 Bun 포팅은 자동화 가능성과 검증 사각지대를 함께 보여준다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>검증 시스템과 운영</td>
+<td>인간은 검증 기준과 시스템을 설계하고, 프로덕션은 마지막 관측 층이 된다.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>수치·귀속 충돌</td>
+<td>발표 안의 계산 차이와 철회 주체 충돌을 확정하지 않고 보존한다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 새로운 병목</h3>
+<p>화자는 자신을 Laurie라고 소개하며 Arize AI의 개발자 관계 총괄이고 과거 npm Inc.를 공동 창업했다고 말한다. META 설명은 이름을 Laurie Voss로 적지만 provenance.creator는 비어 있다.</p>
+<p>화자가 인용한 첫 연구는 경제학자 세 명이 GitHub 개발자 10만 명 이상과 AI 사용 시작 시점의 원격 측정 자료를 연결한 것이다. 자율 에이전트를 사용한 개발자는 741% 더 많은 코드를 작성했지만 출시한 소프트웨어는 30% 늘었다고 한다. 화자는 이를 리뷰 병목의 증거로 해석한다.</p>
+<p>생성 속도 사례로 다음을 제시한다.</p>
+<ul>
+<li>Stripe가 5천만 줄의 Ruby 코드베이스를 하루 만에 이전했으며, 원래 팀이 두 달 이상 걸릴 것으로 추정한 작업이었다는 주장</li>
+<li>Bun이 100만 줄 이상의 Zig 코드를 6일 만에 Rust로 이전했다는 주장</li>
+<li>OpenAI가 빈 저장소에서 출발해 5개월 뒤 약 100만 줄, 병합된 PR 약 1,500개를 세 명의 엔지니어로 만들었다는 주장</li>
+</ul>
+<p>이 수치들은 발표에서 인용된 주장으로, 제공 자료에는 원 연구나 기술 보고서 원문이 직접 연결돼 있지 않다.</p>
+<h3>2. 인간 리뷰의 처리 한계</h3>
+<p>화자가 소개한 Cisco 연구는 10개월 동안 2,500건의 리뷰와 320만 줄을 살폈다. 전사상 결론은 다음과 같다.</p>
+<ul>
+<li>한 번에 400줄을 넘기면 결함을 효과적으로 찾는 능력이 낮아진다.</li>
+<li>시간당 450줄을 넘겨 검토하면 효과가 급격히 떨어진다.</li>
+<li>이 속도로 10,000줄짜리 에이전트 PR 하나를 실질적으로 검토하려면 근무일 기준 3~4일이 필요하다.</li>
+<li>한 개발자가 동시에 12개(a dozen)의 에이전트를 실행할 수도 있다고 화자는 말한다.</li>
+</ul>
+<p>따라서 검토 인력을 단순히 더 오래 투입하면 지루함과 소진이 커지고, 에이전트가 만드는 변경량을 따라가기 어렵다는 것이 발표의 주장이다.</p>
+<h3>3. 테스트와 병합 가능성</h3>
+<p>METR 사례에서는 오픈소스 유지관리자 네 명이 SWE-bench 채점기를 통과한 PR을 다시 검토했다. 실제 병합에 적합하다고 본 것은 약 절반이었다고 한다. 화자는 테스트가 통과됐기 때문에 남은 실패가 단순 동작 오류보다는 코드 품질, 다른 코드의 손상, 테스트 바깥의 조건에 있었다고 설명한다.</p>
+<p>METR이 밝힌 제한으로는 에이전트가 피드백을 받고 다시 수정할 기회가 없었다는 점이 소개된다. 화자는 인간 기여자라면 피드백 뒤 다시 시도할 수 있지만, 인간을 완전히 빼는 가능성을 보는 목적에서는 이 제한이 핵심을 바꾸지 않는다고 주장한다.</p>
+<p>Cognition이 만든 FrontierCode에 대해서는 다음 수치가 제시된다.</p>
+<ul>
+<li>20명이 넘는 유지관리자가 자신의 저장소에서 150개 작업을 제작</li>
+<li>각 작업에 40시간이 넘는 전문가 작업이 필요</li>
+<li>동작 정확성, 회귀, 안전, 범위 절제, 테스트 품질, 유지보수성을 평가</li>
+<li>Claude Opus 4.5가 SWE-bench Pro에서 88%, FrontierCode의 가장 어려운 구간에서 29%</li>
+<li>GPT-5.5가 같은 테스트 묶음에서 6% 미만</li>
+</ul>
+<p>전사는 88%와 29%의 차이를 51%포인트라고 말하지만 실제 차이는 59%포인트다. 이 노트는 어느 숫자를 수정된 원자료로 채택하지 않고 충돌을 남긴다.</p>
+<p>화자는 컴파일러와 테스트가 값싼 검증자이기 때문에 모델의 학습 신호로 쓰일 수 있었다고 설명한다. 병합 가능성을 안정적으로 측정하는 기준도 만들어진다면 유지보수성, 범위 절제, 회귀 안전을 모델의 학습 신호로 바꿀 수 있다는 전망이다. 2024년 OpenAI의 CriticGPT 사례에서는 AI 검토를 받은 인간이 모델 단독과 인간 단독보다 더 나은 결과를 냈다고 주장한다.</p>
+<h3>4. 현재의 자동 리뷰</h3>
+<p>GitHub Copilot 리뷰어는 6천만 건의 리뷰를 수행했고 GitHub 전체 코드 리뷰의 5분의 1 이상을 차지한다고 화자는 말한다.</p>
+<p>Cursor의 초기 리뷰 구조는 변경 하나에 여덟 번의 리뷰 패스를 수행하고, 순서를 섞어 결과가 반복되는지 확인했다. 베이징대학교 연구팀도 여러 리뷰 결과 중 동의하는 내용을 남겨 품질을 최대 44% 높였다고 소개된다.</p>
+<p>이후 Cursor 리뷰어는 다음 방향으로 바뀌었다고 한다.</p>
+<ul>
+<li>변경 내용을 추론하고 필요한 도구를 호출</li>
+<li>더 깊이 조사할 위치를 선택</li>
+<li>코드를 기본적으로 믿지 않고 문제가 있다고 가정</li>
+<li>발견한 문제에서 수정 에이전트를 실행해 패치를 작성</li>
+<li>앞으로는 문제를 재현하기 위해 코드를 직접 실행하는 방향을 계획</li>
+</ul>
+<p>마지막 항목은 화자가 전한 향후 방향이지, 이미 완료된 기능으로 확정할 수 없다.</p>
+<p>전사상 제품별 수치는 다음과 같다.</p>
+<ul>
+<li>CodeRabbit: 1,300만 개가 넘는 PR 검토</li>
+<li>Greptile: 저장소 전체 그래프를 만들어 먼 코드에 미치는 영향까지 확인</li>
+<li>Graphite: 개발자가 제안을 수용하거나 거절한 결과로 평가 세트를 구축</li>
+<li>Cursor: 인간이 지적을 받아들이는 해결률을 52%에서 70% 이상으로 개선</li>
+</ul>
+<p>화자는 이 지표들이 자동 리뷰의 최종 기준으로 인간의 수용 판단을 사용하고 있음을 보여준다고 해석한다.</p>
+<h3>5. 인간 없는 개발 실험</h3>
+<p>Anthropic의 Nicholas Carlini 사례에서는 16개 에이전트가 Rust로 C 컴파일러를 처음부터 만들었다. 약 2,000개 세션을 거쳐 Linux 커널을 컴파일했으며 코드 작성 중 인간 승인은 없었다고 한다.</p>
+<p>그러나 테스트 하네스와 피드백 시스템은 인간이 만들었다. 화자는 이를 “human in the loop”는 없었지만 시스템 바깥에서 기준을 설계하는 “human on the loop”는 있었다고 설명한다.</p>
+<p>Bun의 Zig에서 Rust로의 포팅 사례에서는 다음 수치가 나온다.</p>
+<ul>
+<li>약 100만 줄을 6일 만에 에이전트가 작성</li>
+<li>기존 테스트 스위트의 99.8% 통과</li>
+<li>포팅된 코드에 13,044개의 <code>unsafe</code> 블록</li>
+<li>비슷한 크기의 인간 작성 Rust 코드에서는 약 74개라는 비교</li>
+</ul>
+<p><code>unsafe</code> 블록은 메모리 처리가 안전하다는 것을 컴파일러로 증명하기보다 작성자가 책임지고 주장하는 영역이라고 화자는 설명한다. 테스트는 외부 동작을 확인할 수 있지만, 처음부터 찾도록 설계되지 않은 내부의 메모리 안전성 주장을 모두 검증하지는 못한다는 사례다.</p>
+<p>13,044는 74의 약 176배다. 전사의 “세 orders of magnitude”라는 표현은 약 1,000배를 뜻하므로 계산과 맞지 않는다.</p>
+<h3>6. 검증 시스템과 운영</h3>
+<p>화자에 따르면 OpenAI의 시스템에서는 Codex가 자신의 변경을 리뷰하고, 다른 에이전트가 그 리뷰를 다시 검토하며, 모두 만족할 때까지 반복했다. 각 변경에서 Codex를 실행할 수 있게 하고 사용자 인터페이스와 로그도 볼 수 있게 했다고 한다.</p>
+<p>한동안 매주 금요일마다 인간이 AI가 만든 저품질 산출물을 손으로 정리했지만 확장되지 않았고, 이후 이를 찾고 제거하는 에이전트를 훈련했다고 말한다. 이 사례에서 리뷰는 삭제된 것이 아니라 인간이 만든 시스템으로 재구성됐다.</p>
+<p>Dexter Horthy는 6개월 동안 코드를 읽지 말고 에이전트가 그대로 출시하게 두라고 주장했다가, 실제 시스템의 큰 부분을 뜯어내고 교체한 뒤 공개적으로 “코드를 읽어 달라”고 철회했다고 전사는 설명한다.</p>
+<p>이어서 전사에는 “OpenAI is running, lived with the results, and reversed in public”이라는 문장이 나온다. 앞 문맥의 주체는 Dexter Horthy인데 갑자기 OpenAI로 바뀌므로 전사 손상 또는 귀속 충돌 가능성이 있다. 누가 무엇을 공개 철회했는지 이 문장만으로 확정하지 않는다.</p>
+<p>인간이 남는 지점으로 화자는 다음을 든다.</p>
+<ul>
+<li>정확성을 값싸게 검사할 수 없는 곳</li>
+<li>실패의 위험 반경이 큰 곳</li>
+<li>보안에 민감한 환경</li>
+<li>누군가 결과에 이름을 걸고 책임져야 하는 곳</li>
+<li>자동 리뷰 시스템 자체를 검토하는 메타 리뷰</li>
+</ul>
+<p>Anthropic의 자동 보안 리뷰어는 신뢰할 수 있는 PR만 검토해야 하며 프롬프트 인젝션에 강화되지 않았다는 경고를 둔다고 한다. 또 다른 연구에서는 악성 코드를 순진해 보이는 커밋 메시지로 꾸몄을 때 자율 리뷰 에이전트가 시도의 88%에서 속았고, 인간 리뷰어에게 보낸 같은 시도는 35%만 통과했다고 화자는 말한다. 여기서 “통과”가 정확히 공격 성공률을 뜻하는지 평가 절차는 제공 자료만으로 확인할 수 없다.</p>
+<p>마지막으로 화자는 프로덕션을 자동화할 수 없고 건너뛸 수도 없는 최종 검토자라고 표현한다. 출시 뒤에는 단순 테스트 결과보다 실제 세계에서 시스템이 단계별로 무엇을 했는지 보여주는 궤적이 중요하다고 주장한다.</p>
+<h3>7. 수치·고유명사·귀속 충돌 목록</h3>
+<ul>
+<li><strong>741%와 거의 8배:</strong> 741% 증가라면 원래의 8.41배다. “거의 8배”는 정확한 환산이 아니다.</li>
+<li><strong>30%와 3분의 1:</strong> 화자는 같은 증가를 30%와 약 3분의 1로 바꾸어 말한다.</li>
+<li><strong>두 번째 숫자를 낮춘다는 표현:</strong> 앞에서는 출시 증가율 30%를 생성 증가율에 가깝게 높이는 것이 문제인데, 이후 “두 번째 숫자를 낮춘다”고 말해 방향이 충돌한다.</li>
+<li><strong>88%와 29%의 차이:</strong> 전사는 51%포인트라고 하지만 실제 산술 차이는 59%포인트다.</li>
+<li><strong>13,044개와 74개의 배수:</strong> 약 176배이며 “세 orders of magnitude”와 맞지 않는다.</li>
+<li><strong>Dexter Horthy와 OpenAI:</strong> 공개 철회를 설명하는 문단에서 철회 주체가 Dexter Horthy에서 OpenAI로 갑자기 바뀐다.</li>
+<li><strong>화자와 provenance:</strong> 전사상 이름은 Laurie이고 소속은 Arize AI다. META 설명은 Laurie Voss라고 적지만 provenance.creator는 비어 있다. provenance.affiliation은 <code>Bsky</code>로 기록되어 있으나 provenance.note는 화자 이름과 SNS에 근거한 추정 출처라고 밝힌다. <code>Bsky</code>가 실제 소속이라는 확인 근거는 없다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · 코드 리뷰의 종말: 데이터가 보여주는 진짜 현실입니다 · https://www.youtube.com/watch?v=-TeOEuplMrQ · 전사: 제공된 SOURCE_TRANSCRIPT(방식 미기재)</p>
+<p>채널과 업로더는 META 원문상 모두 <code>Tech Bridge</code>다. 전사상 화자는 Laurie, META 설명상 화자는 Laurie Voss이며 Arize AI의 DevRel 총괄로 소개된다. 다만 provenance.creator는 비어 있고 provenance.affiliation은 <code>Bsky</code>로 기록되어 있으며, provenance.note는 화자 이름과 SNS를 기준으로 추정한 출처라고 밝힌다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>여러분, 안녕하세요. 코드 리뷰의 종말에 관한 세션을 따라와 주셔서 감사합니다. 코드 리뷰의 종말에 관한 세션으로 시작하게 됐네요.</p>
+<p>일정 결정이 어떻게 이뤄지는지는 모르겠지만, Swyx는 이 두 세션을 연달아 배치하면 재미있겠다고 생각한 모양입니다.</p>
+<p>저는 Laurie입니다. Arize AI에서 개발자 관계(Developer Relations)를 총괄하고 있습니다. 예전에 npm Inc.를 공동 창업했던 때의 저를 기억하는 분도 있을 겁니다. 요즘은 AI와 AI를 어떻게 테스트할지 생각하고 있습니다.</p>
+<p>오늘은 지금 모두가 목격하고 있는 문제에 대해 이야기하려고 합니다. AI 에이전트의 부상으로 개발자가 코드를 만들어 내는 속도는 극적으로 빨라졌지만, 사람이 코드를 리뷰하는 속도는…</p>
+<p>네, 지금 발표를 하고 있습니다.</p>
+<p>고마워요, Nathan. 아주 좋은提醒이네요.</p>
+<p>사람이 코드를 리뷰하는 속도는 정확히 그대로입니다. 그리고 이로 인해 모두가 체감하는 새로운 병목이 생겼습니다. 업계 전반의 엔지니어링 팀들이 이를 겪고 있는데, 그렇다면 우리는 무엇을 할 수 있을까요?</p>
+<p>몇 가지 선택지가 있습니다. 사람의 리뷰를 완전히 생략할 수도 있습니다. 실제로 그렇게 시도하는 사람들이 있습니다. 리뷰를 안정적으로 자동화할 수 있을까요? 그것 역시 시도하는 사람들이 있습니다. 오늘 제가 여러분께 하려는 일은 업계가 지금 실제로 무엇을 하고 있는지 살펴보고, 여러분이 이 자리를 떠나는 오늘 당장 무엇을 할 수 있을지 알아보는 것입니다.</p>
+<p>먼저 두 가지 숫자로 시작해 보겠습니다. 최근 세 명의 경제학자가 10만 명이 넘는 GitHub 개발자를 추적하면서, 각 개발자가 정확히 언제 AI를 사용하기 시작했는지를 보여 주는 텔레메트리(telemetry)와 대조했습니다. 자율 에이전트를 켠 개발자들은 작성한 코드가 741% 늘었지만, 실제로 배포된 소프트웨어는 30%만 증가했습니다.</p>
+<p>바로 이것이 문제의 규모입니다. 코드는 거의 8배 빠르게 작성했지만, 실제로 배포된 소프트웨어는 겨우 3분의 1 늘어났습니다. 그리고 연구 저자들은 리뷰가 병목이었다고 단호하게 말합니다.</p>
+<p>문제는 프로덕션으로 가는 경로가 여전히 사람을 거쳐야 한다는 것입니다. 특히 코드 리뷰 같은 인간의 단계가 그 이후의 모든 과정을 막고 있습니다.</p>
+<p>코드를 만들어 내는 비용은 갑자기 훨씬 저렴해졌습니다. 하지만 그 코드를 신뢰해도 되는지 판단하는 일은 여전히 매우 비쌉니다. 특히 영향 범위(blast radius)가 큰 민감한 코드를 다룬다면 더욱 그렇습니다.</p>
+<p>그 두 번째 숫자를 낮춰서, 우리가 작성할 수 있는 코드의 양과 실제로 배포하는 소프트웨어의 양을 다시 일치시키려면 어떻게 해야 할까요?</p>
+<p>먼저 한 걸음 물러나 보겠습니다. 문제가 실제로 존재한다는 점을 분명히 합시다. 이제 생성은 더 이상 병목이 아닙니다.</p>
+<p>Stripe는 올해 Anthropic이 Claude를 출시하면서 공개한 자료에서, 5,000만 줄 규모의 Ruby 코드베이스를 하루 만에 마이그레이션했다고 밝혔습니다. 이 작업은 원래 한 팀이 두 달 넘게 걸릴 것으로 예상했던 일이었습니다.</p>
+<p>현재 Anthropic의 일부가 된 Bun은 6일 만에 100만 줄이 넘는 Zig 코드를 Rust로 마이그레이션했다고 밝혔습니다.</p>
+<p>물론 이 방에 있는 우리 모두도 더 작은 규모로 이를 체감하고 있습니다. 에이전트가 앱 전체를 생성하고, 우리는 코드 diff를 읽지 않았다는 사실에 죄책감을 느끼면서 그냥 머지 버튼을 누르고 있습니다. 그저 작동하기를 바랄 뿐입니다.</p>
+<p>이대로 계속 갈 수는 없습니다.</p>
+<p>따라서 당연한 답, 그리고 일부 사람들이 시도하는 답은 더 많이 리뷰하는 것입니다. 이전에는 코드를 작성하면서 리뷰도 하던 사람들을 데려와 이렇게 말하는 겁니다. “항상 코드를 리뷰하세요. 이제 그게 당신의 일입니다.”</p>
+<p>하지만 이 방법은 통하지 않습니다. 일부는 정말 지루해서 그런 사람들이 매우 빠르게 번아웃되기 때문이고, 또 하나는 수치가 우리가 그렇게 할 수 없다는 것을 보여 주기 때문입니다.</p>
+<p>우리가 가진 최고의 연구는 20년 전 Cisco에서 10개월 동안 수행된 것입니다. 연구진은 2,500건의 리뷰와 320만 줄의 코드를 조사했고, 리뷰어가 한 번에 400줄이 넘는 코드를 읽으려고 하면 결함을 사실상 더 이상 발견하지 못하기 시작하며, 한 시간에 450줄이 넘는 코드를 리뷰하려고 하면 효과가 완전히 급격히 떨어진다고 결론 내렸습니다.</p>
+<p>계산해 보면, 이 속도로 에이전트가 만든 1만 줄짜리 풀 리퀘스트(pull request)를 실제 사람이 리뷰하려면 근무일 기준 3~4일이 걸린다는 뜻입니다.</p>
+<p>에이전트 하나가 만든 풀 리퀘스트 하나에 드는 시간입니다. 여러분을 위해 많은 작업을 수행하는 에이전트가 작성하는 코드가 1만 줄에 이르는 것은 전혀 이상하지 않습니다.</p>
+<p>그리고 이제 개발자는 한 번에 에이전트 12개를 실행할 수도 있습니다. 물론 저는 그렇게 하는 사람들을 보면 대체로 의심스럽기는 합니다.</p>
+<p>그러니 더 열심히 리뷰하는 것만으로는 안 됩니다. 우리 모두 그것을 체감하고 있습니다. 더 열심히 리뷰하려는 사람들이 번아웃되고 있습니다.</p>
+<p>그렇다면 대안은 무엇일까요?</p>
+<p>어떤 사람들은 코드를 아예 읽지 않기로 했습니다. OpenClaw를 만든 Peter Steinberger는 더 이상 코딩 에이전트에게 프롬프트를 작성해서는 안 된다고 말합니다. 대신 에이전트에게 프롬프트를 입력하는 루프(loop)를 설계해야 한다는 것입니다.</p>
+<p>OpenAI의 창립 엔지니어 중 한 명인 Andrej Karpathy도 인간을 루프에서 빼내는 것에 대해 같은 주장을 했습니다. 인간이 루프 안에 있으면 시스템을 붙잡아 두기 때문이라는 것입니다.</p>
+<p>하지만 이는 트위터의 대담한 주장에 그치지 않습니다. 올해 2월, OpenAI는 자체 제품을 만든 과정을 공개했는데, 그들의 표현에 따르면 수동으로 작성한 코드가 전혀 없었습니다.</p>
+<p>완전히 빈 저장소에서 시작했고, 에이전트가 모든 것을 작성했습니다. 5개월 뒤에는 약 100만 줄의 코드와 약 1,500개의 머지된 풀 리퀘스트가 있었으며, 이를 수행하는 데 엔지니어 3명을 사용했습니다.</p>
+<p>에이전트를 리뷰하는 에이전트의 발판(scaffolding) 같은 것까지도 에이전트가 작성했습니다.</p>
+<p>그들이 한 말은 이렇습니다. “사람이 풀 리퀘스트를 리뷰할 수도 있지만, 반드시 그래야 하는 것은 아닙니다. 리뷰 작업의 거의 전부를 에이전트 대 에이전트 방식으로 처리하도록 했습니다.”</p>
+<p>제가 보기에 OpenAI 실험의 흥미로운 점은 그들이 제품이 무엇을 하는지 알려 주지 않았다는 것입니다. 또 “우리가 이렇게 했고 여러분도 이렇게 해야 합니다”라고 말하는 오픈 소스 제품을 공개하지도 않았습니다. 이는 이 전략에 아직 빈틈이 있다는 뜻으로 보입니다.</p>
+<p>하지만 하나의 가능성인 것은 분명합니다. OpenAI가 할 수 있다고 말한다면, 여러분도 할 수 있을지 모릅니다.</p>
+<p>여기서의 내기는 루프 설계가 검사를 대체한다는 것입니다. 여러분의 모든 코드를 대신 리뷰할 만큼 충분히 좋은 루프를 만들 수 있는지는 전적으로 그 루프가 무엇을 볼 수 있느냐에 달려 있습니다.</p>
+<p>하지만 이는 엄청난 단서입니다. 루프가 정확히 무엇을 볼 수 있을까요? 그리고 코드 리뷰를 수행할 만큼 신뢰할 수 있을까요?</p>
+<p>수년 동안 업계가 품질의 대리 지표(proxy)로 삼아 온 것은 테스트가 통과했는지 여부였습니다. 벤치마크가 측정한 것이 그것이었기 때문입니다. 올해 3월, 아마 이전에도 들어 보셨을 연구 그룹 METR이 이 대리 지표를 직접 테스트했습니다.</p>
+<p>연구진은 SWE-bench가 테스트하는 동일한 오픈 소스 프로젝트에서 활동 중인 유지관리자 4명을 고용했고, SWE-bench의 채점기를 이미 통과한 PR을 살펴보게 했습니다.</p>
+<p>즉 SWE-bench가 “이 풀 리퀘스트는 머지하기에 충분히 좋다”고 말한 뒤, 오픈 소스 리뷰어들에게 정확히 같은 PR을 보고 “정말 머지하기에 충분히 좋은가?”라고 판단하게 한 것입니다. 그 결과 머지하기에 충분히 좋았던 경우는 절반 정도에 불과했습니다.</p>
+<p>실패 원인은 정확성 문제가 아니었습니다. PR이 모든 테스트를 통과했다는 점은 명백했기 때문입니다. 문제는 코드 품질, 그리고 다른 코드를 조용히 망가뜨린 변경처럼 테스트 스위트 외부에 있는 것들이었습니다.</p>
+<p>METR이 언급한 한 가지 단서는 에이전트에게 피드백을 받고 반복해서 수정할 기회가 주어지지 않았다는 것입니다. 물론 인간 기여자는 자신의 PR이 머지되지 않을 것이라는 말을 들으면 다시 시도할 수 있습니다. 하지만 이 단서는 우리의 목적에는 그다지 중요하지 않습니다. 그것은 단지 인간을 루프 안에 넣는 일이기 때문입니다. 우리가 확인하려는 것은 인간을 루프에서 완전히 빼낼 수 있는지 여부입니다.</p>
+<p>Devin을 만든 Cognition은 유지관리자가 실제로 던지는 질문, 즉 “이걸 머지하시겠습니까?”를 중심으로 벤치마크를 만들었습니다. 그들은 이를 FrontierCode라고 이름 붙여 6월에 출시했습니다.</p>
+<p>20명이 넘는 유지관리자가 자신들의 저장소에서 150개의 작업을 만들었고, 각 작업에는 40시간이 넘는 전문가 작업이 필요했습니다. FrontierCode는 행동적 정확성, 회귀(regression), 안전성, 범위 준수, 규율, 테스트 품질, 유지보수성을 평가합니다. 인간 리뷰 기준을 기계가 검사할 수 있도록 만든 것입니다.</p>
+<p>그들이 발견한 것은 다음과 같습니다. Claude Opus 4.5는 제거됐다가 다시 제거가 취소되기 전 기준으로 SWE-bench Pro에서 88%를 기록했지만, FrontierCode의 가장 어려운 영역에서는 29%에 불과했습니다.</p>
+<p>즉 같은 모델이 같은 표면에서 같은 작업을 수행할 때, 테스트를 통과했는지가 아니라 실제로 그 결과를 머지할 것인지를 묻는 순간 성능이 51%포인트 낮아집니다.</p>
+<p>그리고 이것은 한 모델이 어느 날 컨디션이 나빴던 문제가 아닙니다. 동일한 테스트 세트에서 GPT-5.5는 6% 미만을 기록합니다.</p>
+<p>따라서 우리가 가진 가장 강력한 모델들도 인간 리뷰를 안정적으로 통과하는 수준과는 거리가 멉니다.</p>
+<p>무엇이 실제로 머지 가능한지를 누군가는 적어 두어야 합니다. 아직 우리가 그렇게 하지 않았다는 점은 분명합니다.</p>
+<p>그들이 그렇게 하는 순간 어떤 일이 벌어질 것입니다. AI 분야의 저명한 투자자인 Sarah Guo는 이에 대해 글을 쓰면서, 진정한 머지 가능성을 측정하는 그 벤치마크를 해결하는 것이 코딩 모델 개발의 중요한 전환점이 될 것이라고 말했습니다.</p>
+<p>그녀는 이 주제를 다룬 에세이에서 모델이 코드를 그렇게 빠르게 잘 생성하게 된 이유를 분명히 밝혔습니다. 컴파일러가 무료 검증기(verifier)이기 때문입니다. 테스트 스위트도 무료 검증기이고, 저렴하게 검증할 수 있는 것은 무엇이든 능가할 때까지 학습시킬 수 있습니다.</p>
+<p>그리고 주요 모델 훈련 업체들에서 바로 그런 일이 일어나고 있습니다. 따라서 머지 가능성에 대한 벤치마크를 만들 수 있다면, 그것은 단순한 측정 수단에 그치지 않을 것입니다. 즉시 최첨단 모델을 위한 학습 신호가 될 것입니다.</p>
+<p>이는 유지보수성, 범위 규율, 회귀 안전성을 의미합니다. 누군가 이에 대한 신뢰할 만한 테스트를 만들어 내는 순간, 대형 모델은 그 테스트를 바탕으로 훈련될 것입니다. 그리고 오늘 리뷰 기준을 작성하는 사람이 내년의 기본 모델 행동을 작성하게 됩니다.</p>
+<p>여기에는 선례가 있습니다. 이미 이런 일이 일어나는 것을 본 적이 있습니다. 2024년, OpenAI는 모델이 작성한 코드에서 버그를 잡아내기 위해 CriticGPT라는 모델을 훈련했습니다. 이 모델과 함께 작업한 인간 리뷰어들은 모델만 사용했을 때보다, 또 인간만 사용했을 때보다 더 나은 성과를 냈습니다.</p>
+<p>그래서 OpenAI는 학습 데이터를 정제하기 위해 모델을 리뷰하는 모델을 만들었고, 이제 모델에 내장된 학습 신호를 만들어 냈습니다. 이를 통해 모델은 거의 즉시 더 좋아졌습니다.</p>
+<p>하지만 지금도 머지 가능성(mergeability) 기준은 아직 미래의 일입니다. 사람이 어떤 것이 머지 가능한지 판단할 때 고려하는 모든 요소를 담아내는 좋은 평가 기준(rubric)은 아직 없습니다.</p>
+<p>그래서 오늘 당장 할 수 있는 일을 말씀드리겠다고 약속했습니다. 그렇다면 현재 실제로 자동화된 리뷰를 운영하고 있는 곳은 어디일까요?</p>
+<p>그중 하나는 GitHub입니다. GitHub Copilot의 리뷰어는 지금까지 6,000만 건의 리뷰를 수행했으며, 현재 GitHub 전체 코드 리뷰 5건 중 1건 이상을 차지합니다.</p>
+<p>따라서 세계 최대 코드 호스팅 서비스에서 풀 리퀘스트(pull request)를 기계가 리뷰하는 것이 주류의 기본값입니다. 이것은 실험을 넘어선 일입니다. 대규모 프로덕션 배포입니다.</p>
+<p>Cursor도 엄청난 양의 코드 리뷰를 수행하고 있습니다. Cursor는 리뷰어의 아키텍처를 공개했기 때문에, 그들이 어떻게 하는지 알고 있습니다. 그리고 세부 사항을 보면 이 작업이 실제로 무엇인지 알 수 있습니다.</p>
+<p>첫 번째 버전의 리뷰어는 각 diff에 대해 8번의 리뷰 패스를 실행한 다음, 리뷰어들의 순서를 섞어 코드를 계속해서 다시 리뷰했습니다. 리뷰를 수행하는 순서가 리뷰 결과를 바꿨기 때문입니다.</p>
+<p>그들이 한 일은 오탐(false positive)을 걸러내는 것이었습니다. 실제로는 좋은 것을 나쁘다고 표시하는 자동 리뷰어는 사람들이 무시하게 되기 때문입니다.</p>
+<p>그리고 이런 일을 하는 것은 Cursor뿐만이 아닙니다. 이에 관한 연구도 있습니다. 베이징대학교의 한 팀이 같은 아이디어를 독립적으로 시험했습니다. 여러 번 리뷰 패스를 실행하고, 서로 동의하는 내용을 남겼더니 리뷰 품질이 최대 44% 향상된다는 결과를 얻었습니다.</p>
+<p>다중 패스 방식이 계속해서 재발견되는 이유는 오탐이 리뷰어를 망가뜨리는 요소이고, 이 방식이 실제로 효과가 있기 때문입니다.</p>
+<p>그래서 Cursor는 코드 리뷰어를 다시 만들었습니다. 모델이 diff를 추론하고, 도구를 호출하며, 어디를 파고들지 결정하도록 한 것입니다.</p>
+<p>그리고 제가 이 재구축에서 가장 좋아하는 세부 사항은 모델에게 코드에 대해 더 의심을 품으라고 말해야 했다는 점입니다.</p>
+<p>모델은 코드를 보고 “음, 내 눈에는 괜찮아 보이니 배포하자”라고 말하는 경향이 있었습니다. 바로 그 상황에서 인간이 할 법한 행동입니다.</p>
+<p>그들은 모델에게 이렇게 말해야 했습니다. “기본적으로 코드를 믿지 마라. 뭔가 잘못됐다고 가정하라.” 그리고 이 문장 어딘가에는 좋은 리뷰가 실제로 무엇인지에 관한 강연 전체가 들어 있습니다. 기본적으로 의심하는 것이 좋은 리뷰입니다.</p>
+<p>다음으로 일어나고 있는 일은 리뷰가 수정과 융합되기 시작했다는 것입니다. 이제 Cursor의 리뷰어는 자체 발견 결과를 바탕으로 수정 에이전트를 생성합니다. 따라서 버그를 표시하기만 하는 것이 아니라 패치를 작성하고, 승인할 수 있도록 diff를 돌려줍니다. 여러분이 그 diff를 승인하는 것은 분명 또 다른 인간의 개입입니다. 하지만 우리는 인간을 개입시키고 싶지 않습니다. Cursor가 다음으로 원하는 것은 리뷰어가 코드를 실행해 자체 버그 보고가 실제인지 입증하도록 하는 것입니다. 리뷰와 재작성 사이의 경계는 정말로 매우 얇아지고 있습니다.</p>
+<p>그리고 GitHub와 Cursor가 이 분야에 뛰어든 유일한 업체인 것도 결코 아닙니다. 이 분야는 매우 붐비고 있습니다. 수많은 회사가 있습니다.</p>
+<p>CodeRabbit은 가장 큰 전문 리뷰어이며, 지금까지 1,300만 건이 넘는 풀 리퀘스트를 리뷰했습니다. Greptile은 저장소 전체의 그래프를 구축해 리뷰어가 변경 사항이 멀리 떨어진 코드에 어떻게 반영되는지 볼 수 있도록 합니다. Graphite는 개발자들이 자체 제안 중 무엇을 수락하거나 거부했는지를 바탕으로 평가 세트를 구축합니다.</p>
+<p>하지만 이들 모두가 하는 일에서 주목해야 할 점은, 모두 성공의 정의로 같은 지표를 사용한다는 것입니다. 바로 “인간이 내 답변을 수락하는가?”입니다. Cursor는 이를 해결률(resolution rate)이라고 부르며, 52%에서 70% 이상으로 끌어올렸습니다. 리뷰어들은 매일 대규모로 인간의 수용 판단을 바탕으로 훈련됩니다. 인간의 수용이 정의하는 ‘좋음’의 기준을 더 잘 얻도록 자신들의 하네스(harness)를 훈련하고 있는 것입니다.</p>
+<p>이것은 모델이 앞으로 하게 될 일의 예고편입니다. 다만 이 회사들은 이미 그것을 출시했습니다. 따라서 현재 상황은 이렇습니다. 코드를 자동으로 생성할 수 있고, 코드를 자동으로 리뷰할 수 있지만, 인간은 여전히 리뷰 결과를 리뷰해야 합니다.</p>
+<p>그 부분을 완전히 건너뛸 수 있을까요? 인간을 루프에서 완전히 제외할 수 있을까요?</p>
+<p>제가 들어본 바로는 지금까지 시도한 두 가지 유명한 프로젝트가 있습니다. 올해 2월, Anthropic의 Nicholas Carlini는 16개의 에이전트에게 Rust로 처음부터 C 컴파일러를 만들도록 했습니다. 이 시스템은 인간의 개입 없이 약 2,000개의 세션에 걸쳐 Linux 커널을 컴파일할 수 있었습니다.</p>
+<p>하지만 그 실험을 자세히 읽어보면, 인간이 루프 안에 없었다는 것은 사실입니다. 코드가 작성되는 동안 승인하는 인간은 없었습니다. 그러나 인간은 분명히 루프 위에 있었습니다. 코드를 리뷰한 시스템, 코드가 해야 할 일을 하고 있는지 확인한 시스템은 모두 인간이 작성한 것이었습니다.</p>
+<p>테스트 하네스(test harness), 피드백 시스템, 그 모든 것은 인간이 작성해야 하는 테스트를 이용한 자동화 테스트였습니다. Carlini가 이 실험에 관해 쓸 때 직접 경고한 내용은, 테스트가 통과하는 것을 보고 일이 끝났다고 가정하기 쉽지만 실제로는 그런 경우가 드물다는 것이었습니다.</p>
+<p>이미 지나가며 간단히 언급했던 또 하나의 널리 알려진 실험은 Bun이 전체 런타임을 Zig에서 Rust로 포팅했을 때입니다. 에이전트들이 6일 동안 작성한 코드가 약 100만 줄에 달했습니다. 당연히 어떤 인간도 그 diff를 읽지 않았습니다. 그 실험의 관문은 기존 테스트 스위트(test suite)였습니다. 테스트 스위트의 99.8%가 통과했습니다. 따라서 테스트는 실제로 중요한 역할을 했습니다.</p>
+<p>그 실험의 재미있는 사실 하나는, 에이전트들이 모든 Zig 코드를 끝냈다고 판단하고 거대한 풀 리퀘스트 하나에서 Zig 코드를 전부 삭제했을 때, 또 다른 로봇이 이를 “이건 AI 슬롭입니다. 코드를 전부 삭제했을 리가 없습니다”라고 표시했다는 것입니다. 재미있는 여담이라고 생각했습니다.</p>
+<p>하지만 그 Bun 실험에는 중요한 단서가 몇 가지 있습니다. 누군가 포팅된 코드를 자세히 살펴보았고, 그 코드에는 안전하지 않은 블록(unsafe block)이 13,044개 있었습니다. 비슷한 규모의 인간 작성 Rust 코드베이스라면 약 74개 정도를 보게 됩니다. 메모리 안전성이 보장되지 않는 블록이 세 자릿수 규모로 더 많은 것입니다.</p>
+<p>안전하지 않은 블록은 메모리가 올바르게 처리되고 있다고 저자가 입증하는 대신 주장하는 곳입니다. 따라서 테스트 스위트는 공개 인터페이스에서의 동작을 인증할 수는 있습니다. 하지만 테스트 스위트가 애초에 확인하도록 설계되지 않은 13,000개의 주장을 인증할 수는 없습니다.</p>
+<p>따라서 인간을 루프에서 확실히 제외하기는 했지만, 그 결과 Rust 코드 표면 아래에 무엇이 숨어 있는지는 이제 알 수 없게 되었습니다.</p>
+<p>그러니 인간 리뷰를 건너뛰는 데 가장 멀리 나아간 OpenAI로 돌아가 보겠습니다. OpenAI는 인간 리뷰를 건너뛰는 데 어떤 대가가 드는지 보여줍니다. 그들은 리뷰를 삭제한 것이 아니라 옮겼습니다. Codex는 자신의 변경 사항을 리뷰한 다음, 모든 에이전트 리뷰어가 만족할 때까지 더 많은 에이전트를 불러 그 리뷰를 반복해서 리뷰하게 합니다.</p>
+<p>OpenAI는 모든 변경 사항에서 Codex를 부팅 가능하게 만들었습니다. 그래서 Codex가 실제로 Codex 사본을 실행하고, 그것을 살펴보고, UI를 보고, 버그가 수정되고 있는지 확인할 수 있습니다. 그리고 전체 로깅 스택을 에이전트에 공개합니다.</p>
+<p>그들의 글에 있는 한 문장은 시스코 연구가 말한 내용과 정확히 같습니다. 무언가 실패했을 때 해결책은 거의 절대로 더 열심히 시도하는 것이 아니었다는 것입니다. 때로는 그렇게 해도 작동하지 않았습니다.</p>
+<p>여러분도 자신의 한 주에서 알아볼 법한 세부 사항이 하나 있습니다. 이 프로젝트에서 한동안 그들은 매주 금요일마다 인간이 직접 AI 슬롭을 정리해야 했습니다. 결국 그것은 확장되지 않았고, 그래서 AI 슬롭을 찾아 제거하도록 에이전트를 훈련했습니다.</p>
+<p>이 실험의 교훈은 리뷰가 사라지지 않았다는 것입니다. 리뷰는 시스템으로 재구축되었고, 그 시스템은 인간이 만들었습니다.</p>
+<p>그렇다면 인간을 완전히 건너뛸 수 있을까요? 실제로 시도한 뒤 생각을 바꾼 사람으로 Dexter Horthy가 있습니다. 그는 6개월 동안 사람들에게 코드를 리뷰하지 말라고 말했습니다. 작년 AI Engineer에서 그렇게 말한 것으로 유명합니다. 그는 사람들에게 “그냥 배포하세요. 에이전트가 알아서 하게 두세요”라고 말했습니다. 그리고 올해 3월 무대에 올라 그 말을 철회했습니다. 그는 이렇게 말했습니다. “제가 틀렸습니다. 제발, 제발 코드를 읽으세요. 우리는 6개월 정도 코드를 읽지 않는 시도를 했습니다. 결과는 좋지 않았습니다. 그 시스템의 큰 부분을 뜯어내고 교체해야 했습니다.”</p>
+<p>이것은 벤치마크가 아닙니다. 실제로 이 실험을 수행하고, 실제 시스템의 실제 코드로 시도한 뒤, 자신의 발언을 철회한 사람의 이야기입니다. OpenAI는 이를 실행했고, 그 결과와 함께 살아봤으며, 공개적으로 방향을 되돌렸습니다.</p>
+<p>그래서 앞서 언급한 동일한 글에서 Sarah Guo는 왜 그런 일이 일어나는지 이야기했습니다. 테스트를 통과했다고 해서 변경 사항이 올바른 변경이라는 뜻은 결코 아니었습니다. 이 모듈이 존재하는 이유가 이 모듈의 외부 사용자가 3명 있기 때문이라는 사실을 테스트는 알려주지 않았습니다. 아무도 작성했다고 인정하지 않을 이 크론 작업(cron job)이 해당 모듈의 존재에 의존한다는 사실도 알려주지 않았습니다. 테스트 스위트 바깥에는 테스트가 찾아낼 수 없는 맥락이 있습니다.</p>
+<p>지금까지 살펴본 모든 사례에서 인간의 체크포인트(checkpoint)는 계속 살아남고 있습니다. 위치는 바뀌지만, 예측 가능한 곳에서 살아남습니다. 한 곳은 정확성을 저렴하게 확인할 수 없는 경우입니다. 또 다른 곳은 영향 범위(blast radius)가 큰 경우입니다.</p>
+<p>보안을 중시하는 환경에서는 누군가 “인간 리뷰를 그냥 없애도 됩니다”라고 말하는 순간 즉시 “안 됩니다”라는 답을 듣게 될 것입니다. 누군가 결과에 자신의 이름을 걸어야 하는 모든 곳에서 그렇습니다.</p>
+<p>하지만 일어나고 있는 일은 인간의 역할이 사라지는 것이 아닙니다. 인간의 역할은 스택 위쪽으로, 어쩌면 스택의 여러 단계 위쪽으로 이동하고 있습니다. 코드를 직접 검사하는 일에서 코드를 검사하는 시스템을 설계하고 조정하는 일, 그리고 무엇이 좋은 것인지에 대한 정의를 설계하는 일로 옮겨가는 것입니다.</p>
+<p>그러면 당연한 질문이 생깁니다. 그 시스템은 누가 리뷰할까요? 리뷰를 수행하는 시스템을 만들었다면, 리뷰어에 대한 메타 리뷰(meta-review)는 어떻게 할까요?</p>
+<p>답은 놀랍지 않을 것입니다. 인간입니다.</p>
+<p>Anthropic은 자동화된 보안 리뷰어를 배포하고 있으며, README에는 다음과 같은 큰 단서가 적혀 있습니다. “이 액션(action)은 프롬프트 인젝션(prompt injection) 공격에 대비해 강화되어 있지 않으므로, 신뢰할 수 있는 PR만 리뷰하는 데 사용해야 합니다.”</p>
+<p>따라서 Anthropic의 코드 리뷰어는 자신이 리뷰하는 바로 그 대상에 의해 자신의 발견 결과를 철회하도록 설득될 수 있습니다. 그리고 이는 재현된 결과입니다. 올해 3월의 한 연구는 악의 없는 커밋 메시지로 포장된 취약한 코드가 자율 리뷰 에이전트를 시도의 88%에서 속였다는 사실을 재차 확인했습니다. 동일한 시도를 인간 리뷰어에게 보냈을 때는 35%의 경우에만 통과했습니다.</p>
+<p>그러니 인간을 검토 과정에서 빼는 셈입니다. 단순히 리뷰어 한 명을 잃는 것이 아니라, 속이기 어려웠던 존재를 잃는 것입니다.</p>
+<p>따라서 자동화된 리뷰는 확신에 차게 포장된 나쁜 코드에 속아 넘어가고, 확신에 차게 포장된 나쁜 코드는 에이전트가 아주 잘 만들어 내는 바로 그런 종류의 코드입니다. 에이전트는 “이건 좋습니다. 저는 준비됐습니다”라고 말하는 것과 아주 비슷합니다. 그리고 때로는 틀립니다.</p>
+<p>또 다른 문제는 이 분야가 아직 이런 평가자들을 어떻게 평가할지조차 합의하지 못했다는 것입니다. 벤치마크 스캐폴드(benchmark scaffold)가 답을 유출한 사례가 적발되기도 했습니다. 연구자들은 품질을 어떻게 검토해야 하는지에 대해서도 의견이 엇갈립니다. 그 결과 자동화할 수도, 건너뛸 수도 없는 리뷰어가 하나 남습니다. 바로 프로덕션입니다.</p>
+<p>머지 전 리뷰(pre-merge review)가 전부 기계에 의해 이루어지면, 코드가 실제로 무엇을 하는지 지켜보는 것이 마지막까지 남은 리뷰어가 됩니다. 코드가 배포되고 나면 테스트 결과는 더 이상 흥미로운 대상이 아닙니다. 중요한 것은 궤적입니다. 시스템이 실제 세상과 맞닥뜨려 실행될 때 단계별로 실제로 무엇을 했는지가 중요합니다.</p>
+<p>여기서 Arize를 홍보하려는 것은 아닙니다. 이 컨퍼런스에는 Arize 홍보가 충분히 많으니까요. 하지만 자동으로 리뷰된 코드를 배포하고 있다면, 실제 환경에서 코드가 무엇을 하는지 검토하는 프로덕션 시스템은 필수불가결해집니다.</p>
+<p>그 모든 증거와, 자동화된 코드 리뷰에 대해 세상이 무엇을 하고 있는지 검토한 뒤 제가 내린 결론은 이렇습니다. 코드 리뷰가 완전히 사라진 것은 아니지만, 엄청난 변화를 겪고 있습니다. 코드 리뷰는 엔지니어링된 시스템으로 재구축되고 있습니다.</p>
+<p>인간은 코드를 한 줄씩 읽으며 코드 리뷰를 이끄는 엔진에서, 그 시스템의 파일럿으로 이동하고 있습니다. 그리고 우리가 처음에 살펴본 수치를 고려하면, 이것은 아마 올바른 교환일 것입니다.</p>
+<p>그 시스템의 모든 계층—벤치마크, 분류기(classifier), 루브릭(rubric), 테스트 스위트, 평가(evals)—은 누군가가 그것을 자신의 업무로 정하기 전까지는 그 자체로 리뷰되지 않은 상태입니다. 앞으로 몇 년 동안 승리할 팀은 가장 많은 코드를 생성하는 팀이 아닙니다. 자신들이 배포한 것을 왜 신뢰하는지 증거를 들어 말할 수 있는 팀입니다.</p>
+<p>그리고 저는 여러분이 여기서 바로 가져갈 수 있는 실용적인 무언가, 오늘 당장 할 수 있는 일을 알려드리겠다고 약속하며 시작했습니다. 그것은 PR을 그만 리뷰하는 것입니다. PR 리뷰는 2026년에 맞지 않는 추상화 수준입니다.</p>
+<p>여러분의 인간적 판단은 매우 가치 있지만, 지금보다 훨씬 더 큰 규모로 확장할 수 있습니다. 소중한 시간을 신뢰할 수 있는 리뷰 하네스(harness)를 구축하는 데 쏟으십시오. 무엇이 좋은 것인지에 대한 정의, 회사의 맥락, 도메인 지식을 코드화한 다음, 에이전트가 그것을 활용해 작업하도록 가속하십시오.</p>
+<p>리뷰어, 규칙, 평가라는 스택의 더 높은 계층에 노력을 집중한다면 3분의 1 더 빠른 것보다 훨씬 더 빠르게 진행할 수 있습니다. 오늘날 업계가 무엇을 하고 있는지 살펴본 이번 이야기가 여러분이 무엇을 해야 하고 다음에 무엇을 예상해야 할지 결정하는 데 도움이 되었기를 바랍니다.</p>
+<p>그리고 여러분의 시간과 관심에 진심으로 감사드립니다.</p>
+<p>감사합니다.</p>
+</details>
+</body></html>

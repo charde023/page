@@ -1,0 +1,516 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>AI 에이전트는 어떻게 쓸수록 나아질까? | 모델·하네스·컨텍스트</title>
+<meta name="description" content="AI 에이전트를 모델·하네스·컨텍스트로 나누고, 실행 기록과 평가를 이용해 개선하면서 이전 성능의 퇴행을 막는 방법을 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>AI 에이전트는 어떻게 쓸수록 나아질까? | 모델·하네스·컨텍스트</h1>
+<div class="meta">업로드 2026-10-29 · 7.1분 · <a href="https://youtu.be/wGnQt2RhWfc" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>AI 에이전트가 일을 반복한다고 해서 저절로 나아지는 것은 아니다. 먼저 <strong>무엇을 고칠지</strong>, 그다음에는 <strong>정말 좋아졌는지 어떻게 확인할지</strong> 정해야 한다. 영상은 에이전트를 <strong>모델·하네스·컨텍스트</strong>라는 세 부분으로 나눈다.</p>
+<ul>
+<li><strong>모델</strong>은 추론하고 다음 행동을 결정한다.</li>
+<li><strong>하네스</strong>는 모델 주변에서 입력을 보여 주고, 결정된 행동을 실행하며, 결과를 확인하고 파일이나 데이터베이스에 저장하는 시스템이다.</li>
+<li><strong>컨텍스트</strong>는 모델이 참고하는 글, 파일, 지식, 도구 같은 자료다.</li>
+</ul>
+<p>예를 들어 Claude Code나 Codex 같은 이름은 영상에서 하네스의 사례로 언급된다. 핵심은 제품명이 아니라, <strong>생각하는 모델과 실제 실행을 관리하는 주변 시스템을 구분하는 것</strong>이다.</p>
+<style>
+.agent-figure {
+  max-width: 860px;
+  margin: 1rem auto;
+  color: #172033;
+}
+.agent-frame {
+  border: 2px solid #334155;
+  border-radius: 16px;
+  padding: clamp(12px, 3vw, 24px);
+  background: #f8fafc;
+  min-width: 0;
+}
+.agent-title {
+  margin-bottom: 12px;
+  font-weight: 800;
+}
+.agent-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) 56px minmax(0, 1.2fr);
+  align-items: center;
+  gap: 10px;
+}
+.agent-context,
+.agent-harness,
+.agent-model,
+.agent-foundation {
+  box-sizing: border-box;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  border-radius: 12px;
+  padding: 14px;
+}
+.agent-context {
+  border: 2px solid #0369a1;
+  background: #e0f2fe;
+}
+.agent-arrow {
+  text-align: center;
+  font-weight: 800;
+  color: #475569;
+}
+.agent-harness {
+  border: 3px solid #7c3aed;
+  background: #f3e8ff;
+}
+.agent-model {
+  margin-top: 12px;
+  border: 2px solid #b45309;
+  background: #fef3c7;
+}
+.agent-foundation {
+  margin-top: 16px;
+  border: 2px dashed #166534;
+  background: #dcfce7;
+  text-align: center;
+}
+.agent-mobile-arrow {
+  display: none;
+}
+@media (max-width: 640px) {
+  .agent-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .agent-arrow {
+    display: none;
+  }
+  .agent-mobile-arrow {
+    display: block;
+    text-align: center;
+    font-weight: 800;
+    color: #475569;
+  }
+}
+</style>
+
+<figure data-visual-kind="layers" class="agent-figure">
+  <div class="agent-frame">
+    <div class="agent-title">에이전트 전체</div>
+    <div class="agent-grid">
+      <div class="agent-context">
+        <strong>컨텍스트</strong><br>
+        모델이 참고하는 글·파일·지식·도구
+      </div>
+      <div class="agent-arrow">지식 제공 →</div>
+      <div class="agent-mobile-arrow">지식 제공 ↓</div>
+      <div class="agent-harness">
+        <strong>하네스</strong><br>
+        입력 선택·행동 실행·결과 확인·상태 저장
+        <div class="agent-model">
+          <strong>모델</strong><br>
+          추론하고 행동을 결정
+        </div>
+      </div>
+    </div>
+    <div class="agent-foundation">
+      <strong>세 부분을 개선하는 공통 토대</strong><br>
+      실행 기록(Trace) + 평가(Eval)
+    </div>
+  </div>
+  <figcaption>에이전트의 세 구성 요소와 개선에 공통으로 필요한 기록·평가를 보여주는 계층도다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 데스크톱에서는 왼쪽 컨텍스트가 오른쪽의 모델·하네스에 참고 자료를 제공하는 관계로 읽는다. 모바일에서는 위에서 아래로 읽는다. 하네스 안에 모델이 들어 있는 모습은 하네스가 모델 주변의 실행 시스템이라는 뜻이다. 맨 아래의 기록과 평가는 세 부분 가운데 어디를 고칠지 판단하는 공통 근거다.</p>
+<h3>세 부분은 고치는 방법과 위험이 다르다</h3>
+<p><strong>모델을 바꾸는 방법</strong>으로 영상은 지도 미세조정(supervised fine-tuning)을 짧게 설명한다. 여러 실행 기록에서 에이전트가 잘한 사례를 골라 모델을 다시 학습시키는 방식이다. 이는 모델 주변의 코드나 지시를 고치는 일과 다르다.</p>
+<p><strong>하네스를 바꾸는 일</strong>은 코드, 프롬프트, 도구를 수정하는 것이다. 실행 기록에서 문제를 찾고 그 근거에 따라 바꾼다. 그러나 핵심 코드나 지시를 바꾸면 여러 사용자에게 영향을 줄 수 있으므로, 화자는 사람이 검토 과정에 들어가는 것이 좋다고 말한다.</p>
+<p><strong>컨텍스트를 바꾸는 일</strong>은 대체로 텍스트를 고치는 일이어서 상대적으로 쉽다. 사용자별 또는 조직별 기억을 따로 발전시키는 것도 가능하다. 다만 무엇을 기억하고 무엇을 잊을지, 어떤 방식으로 기억할지는 업무 영역에 따라 달라지는 어려운 문제다.</p>
+<figure data-visual-kind="comparison">
+  <p><strong>이 표는 화면이 좁으면 좌우로 이동해 볼 수 있다.</strong></p>
+  <div style="overflow-x:auto; max-width:100%; -webkit-overflow-scrolling:touch;">
+    <table style="min-width:760px; width:100%; border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th style="padding:10px; border:1px solid #94a3b8;">개선 대상</th>
+          <th style="padding:10px; border:1px solid #94a3b8;">무엇을 바꾸나</th>
+          <th style="padding:10px; border:1px solid #94a3b8;">기록은 어떻게 쓰나</th>
+          <th style="padding:10px; border:1px solid #94a3b8;">주의할 점</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th style="padding:10px; border:1px solid #94a3b8;">모델</th>
+          <td style="padding:10px; border:1px solid #94a3b8;">모델 가중치와 학습 결과</td>
+          <td style="padding:10px; border:1px solid #94a3b8;">잘한 실행 기록을 선별해 학습 자료로 사용</td>
+          <td style="padding:10px; border:1px solid #94a3b8;">주변 코드 수정과 다른 종류의 작업</td>
+        </tr>
+        <tr>
+          <th style="padding:10px; border:1px solid #94a3b8;">하네스</th>
+          <td style="padding:10px; border:1px solid #94a3b8;">코드·프롬프트·도구</td>
+          <td style="padding:10px; border:1px solid #94a3b8;">문제가 발생한 단계와 실행 순서를 추적</td>
+          <td style="padding:10px; border:1px solid #94a3b8;">핵심 변경이 전체 사용자에게 퍼질 수 있어 사람의 검토가 필요</td>
+        </tr>
+        <tr>
+          <th style="padding:10px; border:1px solid #94a3b8;">컨텍스트</th>
+          <td style="padding:10px; border:1px solid #94a3b8;">텍스트·지식·사용자별 또는 조직별 기억</td>
+          <td style="padding:10px; border:1px solid #94a3b8;">필요하거나 잘못된 정보를 찾아 추가·수정</td>
+          <td style="padding:10px; border:1px solid #94a3b8;">무엇을 기억하고 잊을지 정하는 일이 업무별로 다름</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption>모델·하네스·컨텍스트를 무엇이 바뀌는지와 변경 위험을 기준으로 비교한 표다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 한 행씩 오른쪽으로 읽으면 같은 실행 기록이 서로 다른 변경으로 이어지는 과정을 볼 수 있다. 이 표는 어느 부분이 항상 더 좋다는 순위가 아니다. 문제의 위치에 맞춰 변경 대상을 선택해야 한다는 비교다. 원문에서 ‘도구’라는 말은 컨텍스트와 하네스 설명에 모두 등장하므로, 실제 시스템에서는 참고 자료와 실행 기능의 경계를 따로 확인해야 한다.</p>
+<h3>실행 기록은 “무슨 일이 있었는지” 보여 준다</h3>
+<p>실행 기록(trace)은 단순한 최종 답변 모음이 아니다. 화자는 <strong>정확한 입력, 정확한 출력, 사건이 일어난 정확한 순서</strong>가 필요하다고 강조한다. 그래야 모델 학습 자료를 고르거나, 코딩 에이전트로 문제를 디버깅하거나, 하네스와 컨텍스트를 수정할 수 있다.</p>
+<p>또한 에이전트는 파일이나 데이터베이스를 바꿀 수 있다. 따라서 답변 문장이 그럴듯한지만 보면 부족하다. 작업 뒤 파일이나 데이터베이스가 어떤 상태가 되었는지, 도구를 어떤 순서로 호출했는지도 확인해야 한다.</p>
+<h3>평가는 “좋은 결과가 무엇인지” 정한다</h3>
+<p>평가(eval)는 실행이 성공했는지를 판단할 기준이다. 화자는 평가를 <strong>새로운 제품 요구사항 문서(PRD)</strong>라고 표현한다. AI 작업에는 예외 상황이 많기 때문에, 긴 설명보다 구체적인 평가 사례가 제품의 요구사항을 더 선명하게 보여 줄 수 있다는 주장이다.</p>
+<p>평가 기준은 긍정형과 부정형 모두 가능하다.</p>
+<ul>
+<li>답변에 반드시 포함해야 하는 내용</li>
+<li>답변에 들어가면 안 되는 내용</li>
+<li>작업 뒤 파일이나 데이터베이스가 도달해야 하는 상태</li>
+<li>도구 호출이 따라야 하는 순서</li>
+</ul>
+<p>이 기준은 개선 과정의 안전선이 된다. 새 변경이 현재 문제를 해결하더라도 이전에 통과하던 사례를 망가뜨릴 수 있기 때문이다. 그래서 실패 사례를 평가 데이터에 추가하고, 다음 변경에서도 그 사례가 다시 실패하지 않는지 확인해야 한다.</p>
+<figure data-visual-kind="cycle" style="max-width:520px; margin:1rem auto;">
+  <p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 440 760" role="img" aria-labelledby="cycle-title cycle-desc" style="width:100%; height:auto; display:block;;min-width:440.0px;max-width:none;">
+    <title id="cycle-title">에이전트 개선 순환</title>
+    <desc id="cycle-desc">실행에서 시작해 피드백, 기록 분석, 평가 추가, 변경 검토와 적용을 거친 뒤 왼쪽 복귀선으로 다시 실행에 연결되는 순환이다.</desc>
+    <defs>
+      <marker id="arrow-cycle" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"></path>
+      </marker>
+    </defs>
+
+    <rect x="120" y="50" width="290" height="92" rx="14" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"></rect>
+    <text x="140" y="84" font-size="18" font-weight="700" fill="#172033">1. 에이전트 실행</text>
+    <text x="140" y="114" font-size="15" fill="#334155">입력·출력·사건 순서를 기록</text>
+
+    <line x1="265" y1="146" x2="265" y2="184" stroke="#334155" stroke-width="3" marker-end="url(#arrow-cycle)"></line>
+
+    <rect x="120" y="190" width="290" height="92" rx="14" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"></rect>
+    <text x="140" y="224" font-size="18" font-weight="700" fill="#172033">2. 결과 피드백</text>
+    <text x="140" y="254" font-size="15" fill="#334155">사람 또는 업무별 판정 기준</text>
+
+    <line x1="265" y1="286" x2="265" y2="324" stroke="#334155" stroke-width="3" marker-end="url(#arrow-cycle)"></line>
+
+    <rect x="120" y="330" width="290" height="92" rx="14" fill="#fef3c7" stroke="#b45309" stroke-width="2"></rect>
+    <text x="140" y="364" font-size="18" font-weight="700" fill="#172033">3. 기록 안쪽 분석</text>
+    <text x="140" y="394" font-size="15" fill="#334155">어디서 무엇이 잘못됐는지 확인</text>
+
+    <line x1="265" y1="426" x2="265" y2="464" stroke="#334155" stroke-width="3" marker-end="url(#arrow-cycle)"></line>
+
+    <rect x="120" y="470" width="290" height="92" rx="14" fill="#dcfce7" stroke="#166534" stroke-width="2"></rect>
+    <text x="140" y="504" font-size="18" font-weight="700" fill="#172033">4. 평가 사례 추가</text>
+    <text x="140" y="534" font-size="15" fill="#334155">같은 실패와 이전 결과의 퇴행 점검</text>
+
+    <line x1="265" y1="566" x2="265" y2="604" stroke="#334155" stroke-width="3" marker-end="url(#arrow-cycle)"></line>
+
+    <rect x="120" y="610" width="290" height="92" rx="14" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"></rect>
+    <text x="140" y="644" font-size="18" font-weight="700" fill="#172033">5. 변경 제안·검토·적용</text>
+    <text x="140" y="674" font-size="15" fill="#334155">모델·하네스·컨텍스트 중 선택</text>
+
+    <path d="M 120 656 L 55 656 L 55 96 L 114 96"
+          fill="none" stroke="#334155" stroke-width="3"
+          marker-end="url(#arrow-cycle)"></path>
+    <text x="8" y="354" font-size="15" font-weight="700" fill="#334155">다시</text>
+    <text x="8" y="378" font-size="15" font-weight="700" fill="#334155">실행</text>
+  </svg></div>
+  <figcaption>실패를 평가 사례로 남기고 변경한 뒤, 실제 연결선으로 첫 단계에 돌아가는 에이전트 개선 순환이다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 1번부터 5번까지 읽는다. 마지막 변경 단계의 왼쪽에서 나온 선이 첫 실행 단계의 왼쪽으로 실제 연결되어 있으므로, 변경 후 같은 평가를 다시 실행하는 순환이다. 화살표는 시간 순서를 나타내며, 상자의 색은 단계를 구분할 뿐 성능이나 우선순위를 뜻하지 않는다.</p>
+<h3>자동 개선에는 아직 큰 경계가 있다</h3>
+<p>가장 어려운 문제는 <strong>무엇이 정말 옳은지 판정하는 일</strong>이다. 업무 지식 없이 모든 답의 정오를 판단하는 만능 판정기는 아직 없다고 화자는 말한다. 사람이나 온라인 판정기로 피드백을 받을 수 있어도, 그 판정이 모든 업무에서 통하는 보편적 정답기는 아니다.</p>
+<p>에이전트가 스스로 실수를 발견하고, 평가 사례를 만들고, 모델·하네스·컨텍스트까지 수정하는 모습은 영상에서 <strong>현재 완료된 기능이 아니라 지향점(North Star vision)</strong>으로 제시된다. 지금의 핵심은 정확한 실행 기록과 업무에 맞는 평가를 쌓고, 변경 후 실제로 개선되었는지 확인하는 것이다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>에이전트는 추론하는 <strong>모델</strong>, 실행을 관리하는 <strong>하네스</strong>, 참고 지식인 <strong>컨텍스트</strong>로 나눠 볼 수 있다.</li>
+<li>세 부분을 개선하려면 정확한 입력·출력·실행 순서를 담은 <strong>기록</strong>과 좋은 결과를 정의한 <strong>평가</strong>가 필요하다.</li>
+<li>최종 답변뿐 아니라 파일·데이터베이스의 최종 상태와 도구 호출 과정도 평가할 수 있다.</li>
+<li>스스로 모든 오류를 판정하고 수정하는 에이전트는 아직 지향점이며, 현재는 업무별 기준과 사람의 검토가 중요하다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>AI 에이전트의 어느 부분을 고칠지 어떻게 찾고, 변경 후 정말 좋아졌다고 어떻게 확인할 수 있을까?</strong></p>
+</blockquote>
+<ul>
+<li>모델·하네스·컨텍스트는 각각 무엇을 담당하는가?</li>
+<li>실행 기록과 평가는 왜 둘 다 필요한가?</li>
+<li>스스로 개선하는 에이전트가 아직 지향점인 이유는 무엇인가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>에이전트가 “작업을 완료했다”고 답했지만, 실제 파일은 잘못된 위치에 저장된 장면을 떠올려 보자. 최종 문장만 보면 성공처럼 보이지만, 실행 기록을 열면 어떤 도구를 어떤 순서로 호출했는지 보이고, 평가는 작업 뒤 파일 상태가 기준을 만족했는지 판정한다.</p>
+<p><code>"최종 답변만으로는 실패 지점을 알 수 없다"</code> <strong>문제</strong><br>
+→ <code>"입력·출력·도구 호출·환경 상태를 기록하고 평가 기준과 대조한다"</code> <strong>작동 방식</strong><br>
+→ <code>"문제 위치에 따라 모델·하네스·컨텍스트 중 바꿀 대상을 정하고 재평가한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">작업자·작업장·매뉴얼</div>
+<p>모델은 판단하는 작업자, 하네스는 작업자가 도구를 쓰고 결과를 저장하도록 관리하는 작업장, 컨텍스트는 참고하는 매뉴얼과 자료실에 가깝다. 실행 기록은 작업 일지이고, 평가는 완성품과 작업 과정을 확인하는 검사 기준에 해당한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 모델은 사람처럼 스스로 모든 의미와 정답을 이해하는 작업자가 아니다. 또한 검사표가 있다고 해서 정답 판정이 자동으로 해결되는 것도 아니다. 실제 평가는 업무 지식과 구체적인 성공 조건을 필요로 한다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>모델</strong></td>
+<td>생각하고 다음 행동을 고르는 부분</td>
+<td>추론과 의사결정을 담당하는 언어 모델</td>
+<td>모델을 바꾸는 것과 프롬프트·코드를 고치는 것이 같은 작업이라는 오해</td>
+</tr>
+<tr>
+<td><strong>하네스</strong></td>
+<td>모델이 실제로 일하게 만드는 주변 시스템</td>
+<td>입력 선택, 행동 실행, 관찰·검증, 상태 저장, 반복 제어를 담당하는 코드와 논리</td>
+<td>모델 자체가 파일 저장과 도구 실행을 모두 책임진다는 오해</td>
+</tr>
+<tr>
+<td><strong>컨텍스트</strong></td>
+<td>모델이 참고하는 자료</td>
+<td>실행 시 제공되는 텍스트·파일·지식 및 관련 정보원</td>
+<td>많이 기억할수록 언제나 좋다는 오해</td>
+</tr>
+<tr>
+<td><strong>실행 기록</strong></td>
+<td>무슨 일이 어떤 순서로 일어났는지 남긴 기록</td>
+<td>정확한 입력·출력·사건 순서를 담은 trace</td>
+<td>최종 답변만 저장하면 충분하다는 오해</td>
+</tr>
+<tr>
+<td><strong>평가</strong></td>
+<td>좋은 결과인지 확인하는 기준</td>
+<td>답변, 환경의 최종 상태, 도구 호출 순서를 판정하는 eval</td>
+<td>모든 업무의 정답을 가리는 만능 판정기가 이미 있다는 오해</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>최종 답변만 평가하면 에이전트의 실제 실패를 놓칠 수 있는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>에이전트는 답변뿐 아니라 파일과 데이터베이스를 바꾸고 도구를 호출한다. 문장이 그럴듯해도 환경의 최종 상태가 틀렸거나 잘못된 순서로 도구를 사용했을 수 있다. 따라서 정확한 실행 기록과 환경 상태 평가가 함께 필요하다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>모델을 다시 학습하는 것과 하네스 또는 컨텍스트를 고치는 것은 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>모델 개선은 선별한 실행 기록 등을 이용해 모델 자체를 다시 학습하는 일이다. 하네스 개선은 코드·프롬프트·도구 같은 실행 논리를 수정하는 일이고, 컨텍스트 개선은 모델이 참고할 텍스트·지식·기억을 수정하는 일이다. 같은 실패라도 원인에 따라 다른 층을 고쳐야 한다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>코딩 에이전트가 완료 메시지는 제대로 냈지만 잘못된 파일을 수정했다면, 무엇부터 확인해야 할까?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 정확한 입력, 수정된 파일, 도구 호출 순서와 최종 파일 상태를 실행 기록에서 확인한다. 다음으로 “지정된 파일만 올바르게 변경했는가”를 평가 기준으로 만든다. 기록상 실행 제어나 검증 논리가 문제라면 하네스를, 잘못된 자료나 지시가 원인이라면 컨텍스트를 우선 검토한다. 원인을 보기 전에 모델 변경으로 단정하지 않는다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 개선의 출발점은 더 좋은 모델이 아니라 관찰 가능한 실패다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 모델·하네스·컨텍스트의 개선 모두에 정확한 입력, 출력, 사건 순서를 담은 실행 기록과 평가가 필요하다고 말한다.</li>
+<li><strong>[해석]</strong> 성능이 나쁘다는 인상만으로는 어느 층을 고쳐야 할지 알 수 없다. 실패를 재현하고 위치를 구분할 수 있어야 변경 비용을 올바른 곳에 쓸 수 있다.</li>
+<li><strong>[경계]</strong> 영상은 모든 업무에 통하는 기록 형식이나 평가 기준을 제공하지 않는다. 구체적인 기준은 업무 지식에 따라 따로 설계해야 한다.</li>
+</ul>
+<h3>2. 평가는 정답표이면서 퇴행을 막는 안전선이다</h3>
+<ul>
+<li><strong>[원문]</strong> 실패 사례를 평가 데이터로 추가하고, 이후 개선이 그 사례와 이전 결과에서 퇴행하지 않는지 확인해야 한다고 설명한다.</li>
+<li><strong>[해석]</strong> 한 번의 성공보다 같은 기준으로 전후를 비교하는 과정이 중요하다. 평가 세트가 없으면 새 수정이 다른 능력을 망가뜨려도 알아차리기 어렵다.</li>
+<li><strong>[경계]</strong> 평가 자체가 틀리거나 핵심 조건을 빠뜨리면 통과율이 높아도 실제 업무 품질을 보장하지 못한다. 화자는 만능 정답 판정기가 없다고 명시한다.</li>
+</ul>
+<h3>3. 자율 개선은 현재 상태가 아니라 지향점이다</h3>
+<ul>
+<li><strong>[원문]</strong> 에이전트가 스스로 실수를 발견하고 평가 사례와 수정안을 만드는 모습은 Engine에서 생각하기 시작한 North Star vision으로 제시된다.</li>
+<li><strong>[해석]</strong> 현재 적용에서는 완전 자율 수정보다 기록, 업무별 평가, 사람의 검토를 먼저 갖추는 편이 원문의 시행 상태에 맞다.</li>
+<li><strong>[경계]</strong> META의 428초와 7.1분은 반올림 관계로 일치하고, 모델·하네스·컨텍스트라는 세 부분의 열거 수도 일치해 수치·개수 충돌은 발견되지 않았다. 다만 META의 원작자·소속·원본 링크는 비어 있으며, provenance.note도 출처를 추정한다고만 적어 원작자는 확인할 수 없다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 이해 여부를 최종 답변 하나가 아니라 실행 과정과 결과 상태로 확인한다.</li>
+<li><strong>통찰:</strong> 학습자의 말뿐 아니라 문제를 푸는 순서와 실제 적용 결과까지 보면 어디서 막혔는지 더 구체적으로 찾을 수 있다는 구조적 비유가 가능하다.</li>
+<li><strong>질문/행동:</strong> 학습자가 설명, 대조, 새 사례 적용을 각각 수행하는 평가 기준을 만들 수 있는가?</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 모델·하네스·컨텍스트를 구분하면 변경 비용과 전체 사용자에게 퍼지는 위험을 다른 층으로 나눠 볼 수 있다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용하려면 현재 시스템 사실로 가정하지 말고, 특정 자동화 업무의 오류가 판단, 실행 제어, 참고 정보 중 어디서 생기는지 검증하는 가설로 써야 한다.</li>
+<li><strong>질문/행동:</strong> 시험 가능한 한 업무에서 실패 비용과 변경 범위를 기록으로 구분할 수 있는가?</li>
+</ul>
+<h3>마케터 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 평가는 “좋은 결과가 무엇인지”와 “말하면 안 되는 것”을 긍정·부정 기준으로 정의한다.</li>
+<li><strong>통찰:</strong> 상세페이지에서도 좋은 주장뿐 아니라 반드시 제시할 증거와 피해야 할 표현을 평가 항목으로 만들 수 있다. 다만 영상은 마케팅 성과를 직접 검증하지 않는다.</li>
+<li><strong>질문/행동:</strong> 카피의 최종 문장뿐 아니라 근거 존재 여부와 금지 표현을 함께 점검할 수 있는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 기록, 평가, 환경 최종 상태, 도구 호출 순서는 에이전트 개발과 디버깅에 직접 연결된다.</li>
+<li><strong>통찰:</strong> 모델 이름부터 바꾸기보다 재현 가능한 trace로 실패 위치를 찾고, 같은 eval로 변경 전후와 퇴행을 확인해야 한다.</li>
+<li><strong>질문/행동:</strong> 현재 시험할 에이전트가 있다면 입력·출력·도구 호출·파일 상태를 한 사례에서 모두 재현할 수 있는가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"에이전트 실패의 위치와 개선 여부를 알기 어렵다"</code> <strong>문제</strong><br>
+→ <code>"더 재현 가능하고 안전한 개선"</code> <strong>수혜자: 에이전트 사용자와 운영자</strong><br>
+→ <code>"실행 기록·업무 지식·검토 시간·피드백을 제공"</code> <strong>지불자 또는 자원 제공자: 운영자와 업무 전문가</strong><br>
+→ <code>"고정 평가 세트의 통과율과 이전 통과 사례의 유지 여부"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 시험 가능한 샌드박스 에이전트 업무가 있다면, 실패 기록 1건을 골라 하네스나 컨텍스트 중 한 층만 수정한 뒤 고정 평가 사례 5건을 다시 실행한다.</li>
+<li><strong>측정 1개:</strong> 고정 평가 사례 5건의 통과율.</li>
+<li><strong>중단 기준 1개:</strong> 수정 후 통과율이 수정 전 통과율보다 높지 않으면 확대 적용을 중단한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>에이전트의 세 부분</td>
+<td>모델은 추론하고, 하네스는 실행을 관리하며, 컨텍스트는 참고 지식을 제공한다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>세 부분의 개선</td>
+<td>모델 학습, 하네스 코드·프롬프트 수정, 컨텍스트·기억 수정은 서로 다른 작업이다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>공통 토대</td>
+<td>정확한 입력·출력·사건 순서를 담은 실행 기록과 평가가 필요하다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>평가의 범위</td>
+<td>최종 답변, 환경 최종 상태, 도구 호출 순서를 긍정·부정 기준으로 평가한다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>개선 순환과 한계</td>
+<td>실패를 평가에 추가해 퇴행을 막되, 만능 판정기와 완전 자율 개선은 아직 해결되지 않았다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 모델·하네스·컨텍스트</h3>
+<p>화자는 에이전트를 세 부분으로 나눈다. 모델은 추론과 의사결정을 담당한다. 하네스는 모델이 보는 내용을 정하고, 결정된 행동을 실행하며, 결과를 관찰·검증하고, 디스크나 데이터베이스에 상태를 저장하고, 전체 반복을 제어한다. Deep Agents, Claude Code, Codex가 하네스의 사례로 언급된다.</p>
+<p>컨텍스트는 모델이 참고하도록 가져온 텍스트와 지식원이다. 전사에서는 Markdown, 파일, 지식, 도구가 사례로 제시된다. 다만 도구는 하네스 수정 항목에도 등장하므로 실제 구현에서 두 층의 경계는 별도로 확인해야 한다.</p>
+<h3>2. 세 부분을 바꾸는 방법</h3>
+<p>모델 개선 방법으로 지도 미세조정이 짧게 소개된다. 여러 실행 기록을 모으고, 에이전트가 잘한 기록을 골라 모델을 학습시키는 방식이다.</p>
+<p>하네스는 코드와 논리이므로 코드, 프롬프트, 도구를 수정한다. 먼저 여러 실행 기록에서 문제를 찾고 그 근거로 변경한다. 핵심 코드나 지시는 보통 모든 사용자에게 퍼질 수 있으므로 화자는 사람이 검토 과정에 들어가야 한다고 말한다.</p>
+<p>컨텍스트는 텍스트여서 상대적으로 수정하기 쉽다. 핵심 에이전트 수준뿐 아니라 사용자별·조직별 기억을 만들고 시간에 따라 바꿀 수 있다. 그러나 무엇을 기억하고 잊을지, 어떤 방식으로 기억할지는 업무 영역에 크게 의존한다.</p>
+<h3>3. 실행 기록과 평가</h3>
+<p>세 개선 방법의 공통 토대는 trace와 eval이다. 기록에는 정확한 입력, 정확한 출력, 사건이 일어난 정확한 순서가 있어야 한다. 이는 모델 미세조정용 자료를 고를 때도, 코딩 에이전트로 디버깅하고 코드를 수정할 때도 필요하다.</p>
+<p>평가는 좋은 결과를 정의한다. 화자는 이를 새로운 PRD라고 표현한다. 기준은 특정 내용이 답변에 포함되어야 한다는 긍정형이거나, 특정 내용을 말하면 안 된다는 부정형일 수 있다.</p>
+<h3>4. 답변 밖의 결과도 평가하기</h3>
+<p>에이전트가 환경과 상호작용한다면 최종 답변만 판단해서는 안 된다. 파일이나 데이터베이스가 작업 뒤 어떤 상태가 되었는지 확인해야 한다. 필요하면 정확한 도구 호출 순서도 평가할 수 있다.</p>
+<p>정답 여부를 판정하는 것은 단순하지 않으며 많은 업무 지식이 필요하다. 화자는 모든 답의 정오를 가리는 보편적 판정 문제는 해결하지 못했고, 만능 판정기가 없다고 말한다.</p>
+<h3>5. 개선 순환과 미래 지향점</h3>
+<p>현재의 추상적인 개선 순환은 다음과 같다.</p>
+<ol>
+<li>에이전트를 실행한다.</li>
+<li>사람이나 온라인 판정기로 결과 피드백을 받는다.</li>
+<li>실행 기록 안에서 무슨 일이 일어났는지 확인한다.</li>
+<li>실패를 평가 데이터 포인트로 추가한다.</li>
+<li>모델 가중치, 하네스 코드, 컨텍스트 가운데 변경할 부분을 제안한다.</li>
+<li>다시 실행해 개선 여부와 이전 결과의 퇴행을 확인한다.</li>
+</ol>
+<p>미래에는 에이전트가 스스로 실수를 발견하고, 평가 사례를 만들며, 변경과 수정까지 생성하는 모습을 목표로 한다. 화자는 Engine에서 이런 모습을 생각하기 시작했다고 말하지만, 이를 현재 완성된 기능이 아니라 North Star vision으로 규정한다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · AI 에이전트는 어떻게 쓸수록 나아질까? | 모델·하네스·컨텍스트 · https://www.youtube.com/watch?v=wGnQt2RhWfc · 전사: 제공된 SOURCE_TRANSCRIPT(방식 미기재)</p>
+<p>META의 channel과 uploader는 모두 <code>Tech Bridge</code>다. original creator·affiliation·원본 링크 값은 제공되지 않았다. provenance.note는 원본 영상 링크가 없고 화자 이름과 SNS를 기준으로 출처를 추정한다고 적지만, 후보 이름과 근거 링크가 비어 있어 원작자를 확인할 수 없다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>AI 에이전트는 우리가 사용할수록 어떻게 더 나아질까요? 오늘은 모델의 컨텍스트와 그에 수반되는 실행 기록(logs) 및 평가(evaluations)를 어떻게 바꿀 수 있는지 살펴보겠습니다. 그리고 하네스(harness)가 있습니다. Deep Agents, Claude Code 또는 Codex를 사용할 수 있죠. 이것이 모델의 하네스입니다. 하네스란 무엇일까요? 모델을 실제로 유용하게 만들어 주는, 모델을 둘러싼 시스템입니다.</p>
+<p>모델은 모든 추론과 의사결정을 담당하지만, 하네스는 모델이 무엇을 볼지 결정하고, 모델이 실행하기로 결정한 행동을 실제로 수행하며, 결과를 관찰하고 검증하고, 디스크나 데이터베이스에 내용을 저장하고, 이 루프에서 일어나는 모든 일을 제어합니다. 에이전트의 세 번째 부분은 컨텍스트(context)입니다.</p>
+<p>이것은 마크다운(Markdown)입니다. 파일, 지식 또는 에이전트가 사용하는 도구일 수 있습니다. 여기서 컨텍스트라고 할 때는 주로 가져오는 텍스트와 기타 지식 소스를 의미합니다. 우리는 이 세 가지가 에이전트를 구성한다고 생각합니다. 모델이 있고, 여기에 하네스를 씌우고, 컨텍스트에 연결하는 것입니다. 모델은 추론을 맡고, 하네스는 실행과 확인을 맡아요. 컨텍스트는 모델이 참고하는 지식이에요. 먼저 모델 자체를 바꾸는 방법부터 볼게요.</p>
+<p>지도 미세 조정(supervised fine-tuning)을 아주 높은 수준에서 간단히 말하면, 많은 실행 기록(trace)을 모은 뒤 에이전트가 학습하기를 원하는 것, 일반적으로는 잘 수행한 기록만 골라내고, 그 기록을 바탕으로 모델을 학습시킵니다. 모델을 다시 학습하는 것과 모델 주변의 코드나 지시를 고치는 것은 다른 작업이에요. 하네스 개선은 실행 기록에서 문제를 찾는 데서 시작해요.</p>
+<p>다음으로 업데이트할 수 있는 것은 하네스입니다. 어떻게 업데이트할까요? 기본적으로 코드와 로직이므로 코드, 프롬프트 또는 도구를 업데이트하면 됩니다. 이를 위한 일반적인 과정은 높은 수준에서 보면 꽤 간단합니다. 많은 실행 기록을 살펴보고, 문제를 파악한 다음, 그 기록을 바탕으로 변경합니다.</p>
+<p>이 작업에는 아마 사람을 참여시키는 과정(human in the loop)이 필요할 것입니다. 에이전트의 핵심 코드나 핵심 지시를 변경하게 되고, 그 변경은 대개 모든 사용자에게 적용되기 때문입니다. 따라서 이런 변경 사항을 사람이 검토하도록 하는 것이 좋습니다.</p>
+<p>마지막으로 컨텍스트 개선에 대해 이야기해 보겠습니다. 이것이 업데이트하기 가장 쉽습니다. 그저 텍스트이므로 업데이트하기가 매우 쉽습니다. 따라서 여러 수준에서 업데이트할 수 있습니다. 핵심 에이전트 수준에서만 순수하게 업데이트하는 대신, 사용자 또는 조직 수준에서 업데이트를 시작할 수 있고, 시간이 지나면서 발전하는 메모리를 그런 여러 차원에 둘 수도 있습니다.</p>
+<p>하네스를 업데이트하는 방식과 마찬가지로, 기본 과정은 많은 실행 기록을 살펴보고, 문제를 파악한 다음, 변경하는 것입니다. 다시 말해 텍스트를 변경하는 것이므로 훨씬 더 쉽게 할 수 있습니다. 컨텍스트는 텍스트이므로 비교적 쉽게 바꿀 수 있습니다. 사용자별 또는 조직별 메모리는 형태를 만들어 갈 수 있습니다. 하지만 무엇을 기억하고 무엇을 잊을지 결정하는 일은 여전히 중요합니다.</p>
+<p>그렇다면 이 세 가지 모두에 공통적인 것은 무엇일까요? 우리는 두 가지가 공통적이라고 생각합니다. 실행 기록(traces)과 평가(evals)입니다. 이것들이 개선 루프의 핵심 기반이라고 생각하며, 우리가 많은 시간을 투자하는 부분이기도 합니다. 이 개선 루프는 사용 사례와 분야별로 다르게 보일 수 있습니다. 개선 루프에서 가장 어려운 부분은 무엇을 기억하고, 무엇을 기억하지 않으며, 어떻게 기억할지를 정하는 일인 경우가 많습니다. 그중 상당 부분이 프롬프팅에 들어가므로, 매우 도메인 특화되어 있습니다.</p>
+<p>하지만 우리는 실행 기록과 평가를 통해 도움을 줄 수 있는 다른 방법들이 있다고 생각합니다. 중요한 것은 이 모든 경우에 정확한 입력, 정확한 출력, 그리고 정확한 사건의 순서를 확보하는 것입니다. 모델을 미세 조정하든, 코딩 에이전트로 디버깅한 다음 코드를 업데이트하든, 이것은 정말 필요합니다.</p>
+<p>정확히 무엇이 들어가고, 정확히 무엇이 나오며, 정확한 순서가 어떻게 되는지 볼 수 있는 능력은 정말 중요합니다. 실행 기록은 어떤 일이 있었는지 보여줘요. 평가는 무엇이 좋은 결과인지 정해요. 답변뿐 아니라 작업 뒤에 파일이나 데이터베이스가 어떻게 됐는지도 볼 수 있어요.</p>
+<p>다음은 평가입니다. 평가가 이 루프를 수행하는 데 매우 중요한 데에는 몇 가지 이유가 있습니다. 첫째, 평가가 새로운 PRD(product requirements document), 즉 제품 요구사항 문서이기 때문입니다. 제가 정말 좋아하는 말이 하나 있습니다. 제품이 무엇을 해야 하는지 설명하는 제품 요구사항 문서가 있을 수 있다는 것입니다.</p>
+<p>AI에는 엣지 케이스가 너무 많기 때문에, 이를 설명하는 가장 좋은 방법은 평가의 형태인 경우가 많습니다. 평가에서 무엇이 좋은 결과인지 정의합니다.</p>
+<p>좋은 결과란 특정 질의에 특정한 방식으로 답하는 것일 수 있습니다. 특정 질의에는 답하지 않는 것일 수도 있습니다. 한계를 정의하고 무엇이 좋은 결과인지 정의하는 것은 평가에서, 그리고 어떻게 개선할지를 정의하는 데서 정말 중요한 부분입니다.</p>
+<p>이것들은 개선 루프를 반복하는 동안 여러분을 안전 영역에 머물게 해 줄 안전장치(guardrails)입니다. 사람들이 하는 일을 보면 기준을 정의합니다. 예를 들어 이 에이전트의 답변에는 이것을 언급하는 부분이 있어야 한다거나, 이 답변에는 이런 말을 해서는 안 된다는 식입니다. 기준은 긍정적일 수도 부정적일 수도 있으며, 최종 답변 자체에 적용할 수도 있고 에이전트가 실행되는 환경에 적용할 수도 있습니다.</p>
+<p>이러한 에이전트는 환경과 상호작용하는 경우가 많습니다. 특정한 방식으로 데이터베이스를 변경하거나, 특정한 방식으로 파일을 조작할 수도 있습니다. 따라서 최종 답변만 평가해서는 안 됩니다. 에이전트가 환경과 어떻게 상호작용하는지, 더 구체적으로는 환경의 최종 상태가 어떻게 되었는지를 평가해야 합니다. 기준이 평가할 수 있는 세 번째 항목은 도구 호출의 정확한 순서이기도 합니다.</p>
+<p>평가 기준도 업무에 맞게 만들어야 해요. 발표자는 모든 답이 옳은지 그른지 가리는 만능 판정기는 아직 없다고 말해요. 이 한계를 함께 봐야 해요.</p>
+<p>여기서 과제는 어떤 것이 올바른지 우리가 어떻게 알 수 있느냐는 것입니다. 답변이 올바른지 아닌지를 판단하는 일은 사실 전혀 간단하지 않습니다. 방대한 도메인 지식이 필요합니다.</p>
+<p>그 일을 에이전트 루프(agent loop)의 일부로 안정적으로 수행할 수 있다면, 그냥 에이전트 루프의 일부로 넣어 실행하고 평가하면 됩니다. 틀렸다고 하면 계속 실행하면 됩니다. 올바름을 판단하는 보편적인 평가자(universal judge)가 없다는 점이 이 문제를 어렵게 만드는 요인 중 하나입니다.</p>
+<p>우리는 아직 이 문제를 해결하지 못했습니다. 올바름을 판단하는 보편적인 평가자가 없습니다. 큰 틀에서 보면, 시간이 지날수록 에이전트를 개선하기 위해 구축해야 하는 추상적인 플라이휠(flywheel)은 다음과 같습니다. 에이전트를 실행하고, 사람이든 온라인 평가자(online judge)든 에이전트의 성과에 대한 피드백을 받아야 합니다.</p>
+<p>그런 다음 해당 트레이스(trace)를 살펴 무슨 일이 일어났는지 확인하고, 그 피드백을 얻어야 합니다. 개선을 시도할 때 실제로 성능이 향상되고 이전 결과에 비해 퇴보하지 않았는지 확인할 수 있도록, 그 피드백을 평가 데이터 포인트(eval data point)로 추가해야 합니다. 그리고 에이전트에 대한 변경 사항을 제안해야 합니다. 모델 가중치(model weights) 업데이트, 하네스(harness) 코드 업데이트, 또는 컨텍스트(context) 업데이트가 될 수 있습니다.</p>
+<p>이것의 미래 버전은 이 모든 일을 에이전트 자체가 수행하는 형태입니다. 에이전트가 스스로 실수를 알아차리고, 자체 평가 데이터 포인트를 만들고, 컨텍스트·하네스 코드·모델 가중치에 대한 변경 사항을 스스로 제안하며, 직접 수정 사항을 생성하는 것입니다. 우리는 Engine에서 이것이 어떤 모습일지 고민하기 시작했습니다. 이는 매우 분명한 노스 스타 비전(North Star vision)입니다. 스스로 오류를 찾고 수정하는 에이전트는 아직 지향점입니다.</p>
+<p>지금은 기록과 평가를 쌓고 개선을 확인하는 과정이 중요해요. 영상이 도움이 되셨다면 구독과 좋아요 부탁드립니다. 시청해주셔서 감사합니다. 다음 영상에서 뵙겠습니다.</p>
+</details>
+</body></html>

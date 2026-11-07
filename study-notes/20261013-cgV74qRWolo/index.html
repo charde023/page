@@ -1,0 +1,347 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>AlphaGo Took 2 Years. AlphaZero Beat It in Hours | David Silver, Ineffable Intelligence</title>
+<meta name="description" content="인간이 다음 학습 단계를 계속 고르는 방식과 스스로 발견하게 하는 방식을 AlphaGo·AlphaZero 사례로 대조하고, 속도 주장의 근거와 한계를 살핀다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Sequoia Capital 학습노트</div><h1>AlphaGo Took 2 Years. AlphaZero Beat It in Hours | David Silver, Ineffable Intelligence</h1>
+<div class="meta">원작자 Ineffable Intelligence · 업로드 2026-10-13 · 1.6분 · <a href="https://youtu.be/cgV74qRWolo" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 4분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상의 중심은 <strong>사람이 학습 과정의 다음 단계를 계속 골라 주는 방식</strong>과 <strong>알고리즘이 스스로 다음 발견을 하게 하는 방식</strong>의 대조다. 화자는 AlphaGo를 만들 때 인간 데이터와 사람의 선택이 학습 과정 안에 깊이 들어가 있었다고 설명한다. 이전 세대를 보고 사람이 다음 세대를 어떻게 개선할지 정했고, Lee Sedol을 이기는 데까지 약 2년이 걸렸다는 주장이다.</p>
+<figure data-visual-kind="process" style="margin:1.25rem 0;">
+  <div role="img" aria-label="인간 개입형 개발에서 자기 발견형 학습으로 바뀌는 인과 흐름" style="display:grid;grid-template-columns:minmax(0,1fr);gap:0.45rem;max-width:760px;margin:0 auto;">
+    <div style="min-width:0;padding:0.85rem;border:2px solid #475569;border-radius:0.75rem;background:#f8fafc;overflow-wrap:anywhere;">
+      <strong>1. AlphaGo 개발</strong><br>
+      인간 데이터와 사람의 개선 선택이 학습 과정 안에 들어감
+    </div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;line-height:1;">↓</div>
+    <div style="min-width:0;padding:0.85rem;border:2px solid #9a3412;border-radius:0.75rem;background:#fff7ed;overflow-wrap:anywhere;">
+      <strong>2. 화자가 본 제약</strong><br>
+      시스템이 발견할 방향을 사람이 계속 정함
+    </div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;line-height:1;">↓</div>
+    <div style="min-width:0;padding:0.85rem;border:2px solid #166534;border-radius:0.75rem;background:#f0fdf4;overflow-wrap:anywhere;">
+      <strong>3. AlphaZero에서의 선택</strong><br>
+      인간 데이터를 놓고 스스로 발견하는 알고리즘에 집중
+    </div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;line-height:1;">↓</div>
+    <div style="min-width:0;padding:0.85rem;border:2px solid #1d4ed8;border-radius:0.75rem;background:#eff6ff;overflow-wrap:anywhere;">
+      <strong>4. 화자가 보고한 결과</strong><br>
+      몇 시간 만에 이전 2년 작업을 능가하고, 체스는 4시간, 바둑은 며칠이 걸렸다고 설명
+    </div>
+  </div>
+  <figcaption style="margin-top:0.65rem;color:#334155;">인간이 다음 개선을 선택하던 과정에서, 알고리즘이 스스로 발견하게 하는 과정으로 옮겨 갔다는 화자의 인과 설명이다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 핵심은 단순히 “사람보다 기계가 빠르다”가 아니다. 화자는 <strong>사람이 매 세대의 개선 방향을 고르는 구조 자체를 바꾼 것</strong>이 속도 차이를 만들었다고 본다. 다만 인간 데이터를 버렸다는 말이 인간의 모든 설계가 사라졌다는 뜻은 아니다. 화자도 먼저 “알고리즘을 제대로 만들었을 때”라고 조건을 붙인다.</p>
+<p>그는 AlphaZero가 준비된 뒤 몇 시간 만에 인간이 개입해 만든 2년의 작업을 능가했다고 말한다. 구체적으로 체스에서는 4시간 만에 “세계 챔피언, 즉 지금까지 만들어진 최고의 AI”를 이겼다고 표현하고, 바둑에서는 “내 생각에는 며칠 정도”라고 불확실하게 회상한다.</p>
+<p><strong>모바일에서는 아래 표를 좌우로 이동해 두 방식을 비교한다.</strong></p>
+<figure data-visual-kind="comparison" style="margin:1.25rem 0;">
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table style="width:100%;min-width:640px;border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th style="padding:0.7rem;border:1px solid #94a3b8;text-align:left;background:#e2e8f0;">비교 기준</th>
+          <th style="padding:0.7rem;border:1px solid #94a3b8;text-align:left;background:#fff7ed;">AlphaGo에 대한 설명</th>
+          <th style="padding:0.7rem;border:1px solid #94a3b8;text-align:left;background:#f0fdf4;">AlphaZero에 대한 설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th style="padding:0.7rem;border:1px solid #94a3b8;text-align:left;">학습 방향</th>
+          <td style="padding:0.7rem;border:1px solid #94a3b8;">사람이 이전 세대를 보고 다음 개선을 선택</td>
+          <td style="padding:0.7rem;border:1px solid #94a3b8;">알고리즘이 스스로 발견하도록 설계</td>
+        </tr>
+        <tr>
+          <th style="padding:0.7rem;border:1px solid #94a3b8;text-align:left;">인간 데이터</th>
+          <td style="padding:0.7rem;border:1px solid #94a3b8;">많이 넣었다는 설명</td>
+          <td style="padding:0.7rem;border:1px solid #94a3b8;">놓았다는 설명</td>
+        </tr>
+        <tr>
+          <th style="padding:0.7rem;border:1px solid #94a3b8;text-align:left;">보고된 시간</th>
+          <td style="padding:0.7rem;border:1px solid #94a3b8;">Lee Sedol을 이기기까지 약 2년</td>
+          <td style="padding:0.7rem;border:1px solid #94a3b8;">이전 작업 능가까지 몇 시간, 체스 4시간, 바둑은 며칠</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption style="margin-top:0.65rem;color:#334155;">두 시스템에 대한 화자의 설명을 학습 방향·인간 데이터·시간으로 대조한 개념 비교표다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 행별로 왼쪽과 오른쪽을 비교한다. 시간 숫자만 보지 말고, 그 앞의 학습 구조가 어떻게 달라졌다고 설명하는지 함께 봐야 한다. 또한 “2년”은 개발 기간이고 “몇 시간·4시간·며칠”은 각 성과에 도달한 시간으로 표현되어 있어 완전히 같은 측정값이라고 단정할 수 없다.</p>
+<p>화자는 이 대조를 오늘날의 LLM 회사에도 연결한다. 수천 명이 학습 과정에 들어간 반자율적 시스템도 상당한 성과를 내지만, 사람이 한발 물러나 스스로 학습하는 과정을 찾지 않으면 그가 말하는 “진정한 초학습자”에는 도달하기 어렵다는 주장이다. 이는 화자의 전망이지, 이 짧은 전사만으로 독립 검증된 결론은 아니다.</p>
+<p>또한 제목은 AlphaZero가 AlphaGo를 “몇 시간 만에 이겼다”고 읽힐 수 있지만, 전사에서는 바둑이 “며칠 정도”였다고 말한다. 몇 시간의 정확한 대상도 “인간이 개입한 2년의 작업을 능가했다”는 표현이다. 따라서 <strong>AlphaZero가 바둑에서 AlphaGo를 몇 시간 만에 이겼다고 확정해서는 안 된다.</strong></p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>화자는 AlphaGo의 2년 개발을 인간 데이터와 사람이 다음 개선을 고르는 구조로 설명한다.</li>
+<li>AlphaZero의 속도 향상은 인간의 모든 역할 제거가 아니라, 스스로 발견하는 알고리즘에 집중한 결과라는 주장이다.</li>
+<li>제목의 “몇 시간”과 전사의 “바둑은 며칠”은 같은 사건으로 단정할 수 없다.</li>
+<li>LLM에 대한 연결은 아직 검증 결과가 아니라 화자의 비판과 전망이다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>왜 화자는 인간이 학습 과정에서 한발 물러나야 시스템이 더 빠르게 발견할 수 있다고 주장하는가?</strong></p>
+</blockquote>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>한 연구팀이 이전 세대의 결과를 볼 때마다 사람이 다음 개선 방향을 고른다. 이후 사람의 선택을 매번 이어 붙이는 대신, 알고리즘이 스스로 발견하도록 만드는 데 집중한다. 화자는 이 구조 변화 뒤에 이전의 장기 작업을 훨씬 짧은 시간 안에 능가했다고 설명한다.</p>
+<p><code>"사람이 매 세대의 다음 개선을 선택한다"</code> <strong>문제</strong><br>
+→ <code>"인간 데이터를 놓고 스스로 발견하는 알고리즘에 집중한다"</code> <strong>작동 방식</strong><br>
+→ <code>"화자의 설명상 몇 시간 또는 며칠 안에 이전 성과를 능가한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">풀이 단계를 매번 정해 주는 교사</div>
+<p>교사가 학생에게 매 단계의 풀이 방향을 정해 주면 정해진 길은 빠르게 따라갈 수 있다. 반대로 학생이 스스로 방법을 찾아야 새로운 풀이를 발견할 여지가 생긴다. 교사는 인간 데이터와 개선 선택에, 학생은 학습 알고리즘에 대응한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 알고리즘은 학생과 같지 않으며, 인간 데이터를 놓았다고 해서 인간의 설계까지 모두 사라지는 것은 아니다. 전사에서도 알고리즘을 먼저 “제대로 만들었다”는 조건이 붙는다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>인간 개입 학습</strong></td>
+<td>사람이 다음 개선을 계속 골라 주는 방식</td>
+<td>인간이 학습 과정 안에서 데이터와 개선 방향에 관여하는 <code>human-in-the-loop</code> 방식</td>
+<td>인간이 조금이라도 관여하면 모두 같은 구조라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>자기 발견형 학습</strong></td>
+<td>시스템이 다음 방법을 스스로 찾게 하는 것</td>
+<td>화자가 AlphaZero에 대해 말한, 스스로 발견하도록 만든 학습 알고리즘</td>
+<td>인간의 설계·조건까지 전부 없어진다는 뜻으로 이해하는 것</td>
+</tr>
+<tr>
+<td><strong>초학습자</strong></td>
+<td>계속 배우며 기존 한계를 넘는 시스템</td>
+<td>화자가 <code>super learner</code>라고 부른 목표 상태</td>
+<td>이 영상에서 이미 달성됐거나 검증된 상태라고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>화자는 AlphaGo와 AlphaZero의 속도 차이가 왜 생겼다고 설명하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>AlphaGo에서는 인간 데이터와 사람의 개선 선택이 매 세대의 학습 과정에 들어갔지만, AlphaZero에서는 인간 데이터를 놓고 스스로 발견하는 알고리즘에 집중했기 때문이라고 설명한다. 다만 이는 화자의 인과 해석이며, 전사만으로 다른 조건이 모두 같았는지는 확인할 수 없다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>인간 데이터를 놓는 것과 인간의 모든 역할을 없애는 것은 무엇이 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>화자는 인간 데이터를 놓고 사람이 매번 개선 방향을 고르는 과정에서 물러났다고 말한다. 동시에 알고리즘을 “제대로 만들었다”는 조건을 붙인다. 따라서 설계까지 사라진 완전한 무인 시스템이라고 해석하면 안 된다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새로운 AI/SW 자동화에서 인간 개입을 줄일지 결정하려면 무엇을 비교해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>같은 과제와 성공 조건에서 사람이 다음 방법을 골라 준 경우와 시스템이 스스로 다음 시도를 고른 경우를 비교한다. 목표 성능까지의 시간과 인간 선택 개입을 같은 방식으로 기록해야 한다. 개입을 줄였다는 사실만으로 성공이라고 판단하지 않는다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 병목은 사람의 수가 아니라 사람이 차지한 학습 역할일 수 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 AlphaGo에서 이전 세대를 보고 사람이 다음 개선 방법을 정했으며, AlphaZero에서는 인간 데이터를 놓고 스스로 발견하는 알고리즘에 집중했다고 말한다.</li>
+<li><strong>[해석]</strong> 자동화의 핵심 질문은 “사람이 몇 명인가”보다 “사람이 매번 다음 선택을 대신하고 있는가”일 수 있다.</li>
+<li><strong>[경계]</strong> 이 영상은 인간 개입 외의 조건을 통제한 비교 실험을 제시하지 않는다. “2년”과 “몇 시간”도 동일한 측정 단위라고 확인되지 않는다.</li>
+</ul>
+<h3>2. 강한 숫자 대조는 기억하기 쉽지만 비교 대상을 확인해야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> AlphaGo에는 2년, 이전 작업을 능가하는 데에는 몇 시간, 체스에는 4시간, 바둑에는 “내 생각에는 며칠 정도”라는 표현이 나온다.</li>
+<li><strong>[해석]</strong> 숫자 자체보다 각 숫자가 개발 기간, 특정 게임의 성과, 이전 작업 능가 중 무엇을 가리키는지 구분해야 한다.</li>
+<li><strong>[경계]</strong> 제목의 “AlphaZero Beat It in Hours”는 바둑의 “며칠” 진술과 그대로 맞지 않는다. 체스의 “세계 챔피언”과 “최고의 AI”도 같은 대상을 가리키는지 표현이 모호하다. 메타데이터의 <code>Ineffable Intelligence</code> 역시 원본 링크를 확인하지 못한 상태에서 화자 이름과 SNS를 근거로 추정한 원작자 후보다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 사람이 다음 단계를 계속 정해 주면 학습자가 스스로 설명하거나 방법을 찾는 능력을 관찰하기 어렵다는 구조와 닮았다.</li>
+<li><strong>통찰:</strong> 설명을 제공한 뒤에는 자료를 덮고 원인과 대조를 자기 말로 재구성하게 해야 이해 여부를 볼 수 있다.</li>
+<li><strong>질문/행동:</strong> 답을 알려 주기 전, 학습자가 다음 설명 단계를 스스로 선택하도록 한 번 기다려 볼 수 있는가?</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 매 사례마다 사람이 다음 처리를 선택하는 업무는 인간 시간이 반복 투입된다는 점에서 원문의 구조와 닮았다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용하려면 현재 상태라고 가정하지 말고, 반복 업무에 이런 개입 구조가 실제로 있는지부터 확인해야 한다.</li>
+<li><strong>질문/행동:</strong> 비프로덕션 사례 하나에서 사람이 매번 다음 방법을 정하는 지점을 기록할 수 있는가?</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> “2년 대 몇 시간”이라는 대조는 강한 인상을 만들지만, 전사 안에서도 체스와 바둑의 시간 및 비교 대상이 다르다.</li>
+<li><strong>통찰:</strong> 강한 숫자 카피를 사용할 때는 대상·과제·측정 시점을 같은 문장 안에서 밝혀야 과장을 줄일 수 있다.</li>
+<li><strong>질문/행동:</strong> 숫자 옆에 무엇을 언제 능가했는지를 붙여도 같은 주장을 유지할 수 있는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 인간이 다음 개선을 고르는 학습 구조와 시스템이 스스로 발견하는 구조를 직접 비교한다.</li>
+<li><strong>통찰:</strong> 에이전트의 자율성은 이름이 아니라, 동일 과제에서 인간의 다음 행동 선택이 얼마나 필요한지로 시험할 수 있다.</li>
+<li><strong>질문/행동:</strong> 같은 성공 조건에서 인간 선택 개입 횟수를 비교하는 비프로덕션 시험을 설계할 수 있는가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"사람이 매번 다음 개선을 골라야 학습이 진행된다"</code> <strong>문제</strong><br>
+→ <code>"더 적은 인간 선택으로 빠르게 개선할 가능성"</code> <strong>수혜자: 학습 시스템을 만드는 팀</strong><br>
+→ <code>"인간 데이터와 개선 선택에 드는 시간"</code> <strong>지불자 또는 자원 제공자: 개발 과정에 참여하는 사람과 조직</strong><br>
+→ <code>"동일 과제에서 목표 성능에 도달하기까지 걸린 시간"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 검증 전 제안으로, 비프로덕션 반복 과제 하나를 골라 사람이 다음 방법을 고르는 A와 사전에 정한 성공 조건 아래 시스템이 다음 시도를 고르는 B를 각각 최대 10회 실행한다.</li>
+<li><strong>측정 1개:</strong> 10회 안에 성공 기준을 처음 충족하기까지 필요한 인간의 다음 방법 선택 횟수이며, 미성공은 11회로 기록한다.</li>
+<li><strong>중단 기준 1개:</strong> B의 인간 선택 횟수가 A보다 낮지 않으면 이 방식의 확대를 중단한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>AlphaGo 개발</td>
+<td>인간 데이터와 사람이 선택한 세대별 개선에 약 2년이 걸렸다는 설명</td>
+</tr>
+<tr>
+<td>2</td>
+<td>AlphaZero 전환</td>
+<td>인간 데이터를 놓고 스스로 발견하는 알고리즘에 집중했다는 설명</td>
+</tr>
+<tr>
+<td>3</td>
+<td>LLM 비판</td>
+<td>수천 명이 개입한 반자율 학습으로는 초학습자에 도달하기 어렵다는 전망</td>
+</tr>
+<tr>
+<td>4</td>
+<td>충돌과 불확실성</td>
+<td>제목의 시간 표현, 게임별 시간, 비교 대상과 출처 추정 상태를 분리</td>
+</tr>
+</tbody>
+</table>
+<h3>1. AlphaGo와 인간 개입</h3>
+<p>화자는 AlphaGo를 만드는 데 약 2년이 걸렸다고 말한다. 이 과정은 LLM 접근과 비슷하게 각 수준을 사람이 조립하고, 많은 인간 데이터를 넣으며, 이전 세대에서 다음 세대를 어떻게 개선할지 사람이 선택하는 방식이었다고 설명한다.</p>
+<p>그 결과 AlphaGo가 Lee Sedol을 이기기까지 2년이 걸렸다는 것이 화자의 서술이다. 이 전사는 그 기간이나 인과관계를 독립적으로 검증하는 자료는 제공하지 않는다.</p>
+<h3>2. AlphaZero와 시간 주장</h3>
+<p>화자는 AlphaZero에서 인간 데이터를 포기하고 스스로 발견할 수 있는 알고리즘을 만드는 데 집중했다고 말한다. 알고리즘을 제대로 만든 뒤에는 몇 시간 만에 인간이 개입해 수행한 2년의 작업을 능가했다고 주장한다.</p>
+<p>이어 체스에서는 4시간 만에 “세계 챔피언, 지금까지 만들어진 최고의 AI”를 이겼다고 표현한다. 바둑은 “내 생각에는 며칠 정도”라고 말해 시간에 불확실성을 남긴다.</p>
+<h3>3. 오늘날 LLM에 대한 연결</h3>
+<p>화자는 인간 데이터에서 벗어나는 일이 의식적인 선택이어야 한다고 주장한다. 많은 LLM 회사가 수천 명을 학습 과정 안에 둔 반자율적 인간 개입 학습 알고리즘을 만들고 있다고 본다.</p>
+<p>그는 이 방식도 작동하며 지금까지의 성과를 존중한다고 덧붙인다. 그러나 사람이 한발 물러나 스스로 배우는 과정을 발견하기 전에는 진정한 <code>super learner</code>에 도달하기 어렵다는 것이 그의 전망이다. 이 전망이 이미 시험되거나 검증됐다는 내용은 전사에 없다.</p>
+<h3>4. 수치·이름·출처 경계</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>자료에 나온 표현</th>
+<th>남는 충돌 또는 불확실성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>제목과 바둑 시간</td>
+<td>제목은 “AlphaZero Beat It in Hours”, 전사는 바둑에 “며칠 정도”</td>
+<td>바둑에서 AlphaGo를 몇 시간 만에 이겼다고 확정할 수 없음</td>
+</tr>
+<tr>
+<td>몇 시간의 대상</td>
+<td>“2년 동안 인간과 한 작업을 능가”</td>
+<td>정확히 어떤 시스템·과제·평가를 능가했는지 전사만으로 불명확</td>
+</tr>
+<tr>
+<td>체스 상대</td>
+<td>“세계 챔피언—지금까지 만들어진 최고의 AI”</td>
+<td>세계 챔피언과 최고의 AI가 동일 대상을 뜻하는지 문장이 모호함</td>
+</tr>
+<tr>
+<td>시간의 비교 단위</td>
+<td>AlphaGo 개발 2년, AlphaZero 몇 시간·4시간·며칠</td>
+<td>개발 기간과 과제별 성능 도달 시간이 동일 지표인지 확인되지 않음</td>
+</tr>
+<tr>
+<td>영상 길이</td>
+<td>97초와 1.6분</td>
+<td>환산상 서로 충돌하지 않음</td>
+</tr>
+<tr>
+<td>원작자</td>
+<td><code>Ineffable Intelligence</code></td>
+<td>원본 영상 링크를 확인하지 못했고 화자 이름과 SNS를 근거로 한 추정 후보</td>
+</tr>
+<tr>
+<td>채널·업로더</td>
+<td>메타데이터에 동일한 채널 및 업로더 값 기록</td>
+<td>수집 채널 값을 원작자나 제작 주체로 해석하면 안 됨</td>
+</tr>
+</tbody>
+</table>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>META channel: Sequoia Capital · uploader: Sequoia Capital · AlphaGo Took 2 Years. AlphaZero Beat It in Hours | David Silver, Ineffable Intelligence · https://www.youtube.com/watch?v=cgV74qRWolo · 전사: YouTube caption (en-orig, caption_quality: ok)<br>
+원작자 후보: Ineffable Intelligence — provenance.note에 따르면 원본 영상 링크를 확인하지 못했고 화자 이름과 SNS를 근거로 추정했다. META의 channel/uploader 값은 원작자나 제작 주체로 해석하지 않는다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>AlphaGo의 사례로 돌아가 보면, 우리가 그때 발견한 것은 인간 데이터를 내려놓는 순간이었습니다. 그런데 참고로 AlphaGo를 만드는 데 약 2년을 들였습니다. 이는 대규모 언어 모델(LLM) 접근 방식과 어느 정도 비슷합니다. 우리는 이 모든 과정을 각 단계별로 구축하면서, 다음 단계를 일종의 수작업으로 조합했고, 많은 인간 데이터를 투입했습니다. 그런 다음 인간이 학습 과정에 참여하는 방식(human-in-the-loop)으로 이를 개선했죠. 이전 세대를 가져와 다음 세대를 만들기 위해 어떻게 개선할지를 우리가 선택하는 방식이었습니다. 그러니 이 과정에 우리가 직접 관여하고 있었던 셈입니다. AlphaGo를 완성하고 이세돌을 이기기까지 2년이 걸렸습니다.</p>
+<p>AlphaZero를 제대로 만들었을 때, 우리는 인간 데이터를 포기하고 스스로 발견할 수 있는 알고리즘을 만드는 것이 어떤 모습일지에 마침내 집중했습니다. 그리고 그 알고리즘을 제대로 완성하자, 인간이 학습 과정에 참여했던 2년간의 작업을 능가하는 데 불과 몇 시간이 걸렸습니다. 체스에서는 세계 챔피언을 이기는 데 4시간이 걸렸습니다. 당시까지 만들어진 최고의 AI를 이긴 것이죠. 바둑에서는 이틀 정도였던 것 같은데, 어쨌든 놀라운 진전이었습니다.</p>
+<p>따라서 인간 데이터를 내려놓아야만, 경쟁을 훌쩍 앞서 나갈 수 있고 영원히 계속 학습하고 또 학습하는 것들을 발견할 수 있습니다. 이것은 의식적으로 선택해야 하는 일입니다. 그리고 그런 의식적인 선택을 하지 않는다면, 오늘날 많은 LLM 기업에서 제가 보는 것은 기본적으로 수천 명이 학습 과정에 참여하는 반자율적이고 인간이 학습 과정에 참여하는 방식의 학습 알고리즘을 구축하고 있다는 것입니다. 물론 작동하고, 그것이 얼마나 멀리 나아갈 수 있는지에 대해서는 저도 큰 존경심을 갖고 있습니다. 하지만 여기서 한 걸음 물러나 스스로 학습할 과정을 진정으로 발견하기 전까지는, 지금까지 우리가 이야기한 잠재력을 풀어내는 진정한 초학습자(super learner)에 끝내 도달할 수 없다고 생각합니다.</p>
+</details>
+</body></html>

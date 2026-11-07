@@ -1,0 +1,805 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>AI 에이전트와 함께하는 스펙 주도 개발 풀코스 강의</title>
+<meta name="description" content="프로젝트 헌법과 기능 명세를 지속 가능한 기억으로 삼아 AI 에이전트의 빠른 구현을 계획·검증·재계획으로 통제하는 개발 흐름을 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>AI 에이전트와 함께하는 스펙 주도 개발 풀코스 강의</h1>
+<div class="meta">업로드 2026-09-26 · 61.5분 · <a href="https://youtu.be/FJo7p9SPS9c" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 11분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 강의의 중심 생각은 간단하다. AI 코딩 에이전트가 코드를 빠르게 작성할수록 사람은 <strong>코드를 어떻게 쓸지 일일이 지시하는 사람</strong>보다 <strong>무엇을 왜 만들어야 하며 무엇을 만족해야 하는지 정하는 사람</strong>에 가까워져야 한다. 이때 사람의 의도와 제약을 지속해서 보존하는 문서가 명세이고, 그 문서를 중심으로 개발하는 방식을 <strong>스펙 주도 개발(Spec-Driven Development, SDD)</strong>이라고 부른다.</p>
+<p>강의는 프로젝트 전체의 방향을 적은 <strong>프로젝트 헌법</strong>을 먼저 만들고, 각 기능을 <strong>계획 → 구현 → 검증</strong> 순서로 개발한 뒤, 기능 사이에서 헌법과 로드맵을 고치는 <strong>재계획</strong> 단계를 두라고 제안한다. 에이전트는 빠르게 코드를 만들지만 프로젝트의 사업 배경과 사람이 중요하게 여기는 선택을 저절로 알지는 못한다. 그래서 사람은 에이전트가 모르는 목표·대상·제약·성공 기준을 명세에 남기고, 결과가 그 계약을 지켰는지 검토해야 한다.</p>
+<figure data-visual-kind="map" style="margin:1.5rem 0;padding:1rem;border:1px solid #64748b;border-radius:12px;background:#f8fafc;color:#0f172a">
+  <div role="img" aria-label="프로젝트 헌법에서 기능 개발 반복과 재계획으로 이어지는 스펙 주도 개발 전체 지도" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:stretch">
+    <div style="padding:14px;border:2px solid #1d4ed8;border-radius:10px;background:#eff6ff">
+      <strong>1. 프로젝트 헌법</strong><br>
+      미션 · 기술 스택 · 로드맵<br>
+      프로젝트 전체가 지킬 기준
+    </div>
+    <div style="padding:14px;border:2px solid #047857;border-radius:10px;background:#ecfdf5">
+      <strong>2. 기능 개발 반복</strong><br>
+      계획 → 구현 → 검증<br>
+      기능별 브랜치와 작은 커밋
+    </div>
+    <div style="padding:14px;border:2px solid #a16207;border-radius:10px;background:#fffbeb">
+      <strong>3. 재계획</strong><br>
+      헌법 · 로드맵 · 작업 방식 수정<br>
+      다음 기능에 학습 반영
+    </div>
+    <div style="padding:14px;border:2px solid #7e22ce;border-radius:10px;background:#faf5ff">
+      <strong>4. 지속되는 기억</strong><br>
+      코드와 명세를 함께 버전 관리<br>
+      세션과 에이전트가 바뀌어도 기준 보존
+    </div>
+  </div>
+  <figcaption style="margin-top:10px;font-size:0.95rem">SDD의 큰 그림: 프로젝트 기준을 세우고, 기능을 작은 반복으로 개발하며, 결과에서 배운 것을 다시 기준에 반영한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽에서 오른쪽으로 한 번 진행하고 끝나는 선형 절차가 아니다. 기능을 하나 끝낼 때마다 재계획 결과가 헌법과 다음 기능 명세로 돌아간다. 이 도식은 수치를 나타내는 그래프가 아니라 강의가 제안한 작업 관계를 정리한 개념 지도다.</p>
+<h3>왜 짧은 프롬프트만으로는 부족해지는가</h3>
+<p>강의는 “버튼 하나 만들어 줘”처럼 높은 수준의 요청을 보내고 결과를 보며 계속 고치는 방식을 <strong>바이브 코딩</strong>의 예로 든다. 작은 버튼이라면 이런 방식도 쓸 수 있다. 그러나 프로젝트가 커지면 대화가 길어지고, 서로 다른 개발자가 서로 다른 에이전트에게 요청하면서 결정이 엇갈릴 수 있다. 대화 기록이 사라지거나 작업 기억이 복잡해지면 이전에 합의한 중요한 조건도 흐려진다.</p>
+<p>강의가 말하는 해결책은 대화를 없애는 것이 아니다. 중요한 대화의 결론을 Markdown 명세로 남겨 <strong>영구적인 기술 산출물</strong>로 바꾸는 것이다. 사람은 에이전트와 대화하며 선택지를 검토하고, 결정된 목표·제약·성공 기준을 문서로 요약하게 한다. 이후 에이전트는 그 문서를 기준으로 계획하고 코드를 만든다.</p>
+<figure data-visual-kind="comparison" style="margin:1.5rem 0;overflow-x:auto">
+  <table style="width:100%;min-width:680px;border-collapse:collapse;border:1px solid #64748b">
+    <thead>
+      <tr style="background:#e2e8f0">
+        <th style="padding:10px;border:1px solid #64748b;text-align:left">비교 기준</th>
+        <th style="padding:10px;border:1px solid #64748b;text-align:left">짧은 프롬프트 중심 접근</th>
+        <th style="padding:10px;border:1px solid #64748b;text-align:left">스펙 주도 개발</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:10px;border:1px solid #64748b"><strong>의도의 위치</strong></td>
+        <td style="padding:10px;border:1px solid #64748b">대화와 사람의 기억에 흩어짐</td>
+        <td style="padding:10px;border:1px solid #64748b">버전 관리되는 명세에 기록</td>
+      </tr>
+      <tr>
+        <td style="padding:10px;border:1px solid #64748b"><strong>수정 방식</strong></td>
+        <td style="padding:10px;border:1px solid #64748b">결과를 보고 반복해서 지적</td>
+        <td style="padding:10px;border:1px solid #64748b">명세와 구현을 함께 바로잡음</td>
+      </tr>
+      <tr>
+        <td style="padding:10px;border:1px solid #64748b"><strong>잘 맞는 범위</strong></td>
+        <td style="padding:10px;border:1px solid #64748b">강의에 따르면 단순하고 짧은 작업</td>
+        <td style="padding:10px;border:1px solid #64748b">여러 기능과 장기 목표가 있는 작업</td>
+      </tr>
+      <tr>
+        <td style="padding:10px;border:1px solid #64748b"><strong>사람의 역할</strong></td>
+        <td style="padding:10px;border:1px solid #64748b">생성된 결과에 반응</td>
+        <td style="padding:10px;border:1px solid #64748b">목표 설정, 선택, 감독, 승인</td>
+      </tr>
+    </tbody>
+  </table>
+  <figcaption style="margin-top:8px">두 접근의 차이는 프롬프트 길이보다 중요한 결정을 어디에 보존하고 어떻게 검증하느냐에 있다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 오른쪽이 언제나 무조건 낫다는 표가 아니다. 강사도 짧은 프롬프트로 충분한 일에는 “게으른 프롬프팅”이 괜찮다고 말한다. 차이는 작업 규모가 커졌을 때 의도와 결정이 지속되는가에 있다.</p>
+<h3>명세가 맡는 세 가지 역할</h3>
+<p>강의는 SDD의 이점을 세 가지로 설명한다.</p>
+<p>첫째, 명세의 작은 수정이 코드의 큰 변화를 통제한다. 예를 들어 명세의 데이터베이스 선택을 SQLite와 Prisma ORM에서 MongoDB로 바꾸면 그 결정이 많은 코드에 영향을 줄 수 있다. 따라서 사람이 모든 코드를 직접 고치기보다 상위 결정을 정확하게 고치는 편이 효율적이라는 주장이다.</p>
+<p>둘째, 명세는 세션 사이에 중요한 맥락이 흐려지는 문제, 즉 <strong>맥락 감쇠(context decay)</strong>를 줄이는 기준점이 된다. 강의는 에이전트를 “상태가 없다”고 표현하면서도 한 세션 안에서는 작업 기억이 가득 차 실수가 늘 수 있다고 설명한다. 핵심은 에이전트의 기억에만 의존하지 말고, 반드시 지켜야 할 결정을 파일로 남기라는 뜻으로 읽는 것이 안전하다.</p>
+<p>셋째, 명세는 결과가 사람의 의도와 맞을 가능성, 즉 <strong>의도 충실도(intent fidelity)</strong>를 높인다. 문제, 성공 기준, 제약, 사용자 흐름을 먼저 쓰면 에이전트가 빈칸을 임의로 채울 범위가 줄어든다. 다만 강의는 명세가 결과를 자동으로 보장한다고 말하지 않는다. 사람이 질문에 답하고, 문서를 검토하고, 실제 결과를 검증하는 과정이 계속 필요하다.</p>
+<h3>프로젝트 헌법에는 무엇을 쓰는가</h3>
+<p>프로젝트 헌법은 법률 문서가 아니라 프로젝트 전체에 적용할 상위 기준이다. 강의에서는 다음 세 부분을 사용한다.</p>
+<ul>
+<li><strong>미션:</strong> 왜 만드는지, 누구를 위한 것인지, 범위와 방향은 무엇인지 적는다.</li>
+<li><strong>기술 스택:</strong> 개발과 배포에 사용할 기술 및 제약을 합의한다.</li>
+<li><strong>로드맵:</strong> 어떤 기능을 어떤 단계로 개발할지 기록하며, 진행하면서 수정한다.</li>
+</ul>
+<p>강의의 실습 프로젝트는 AI 에이전트를 치료한다는 설정의 <strong>Agent Clinic</strong>이다. TypeScript와 Git으로 시작해 Next.js 백엔드와 React 프런트엔드를 사용하는 전체 웹 앱으로 설명된다. 에이전트와 대화한 뒤 <code>mission.md</code>, <code>techstack.md</code>, <code>roadmap.md</code> 세 파일을 만들고 사람이 검토한다. 빠른 시제품이라는 이유로 SQLite를 선택한 것도 기술 스택에 반영한다.</p>
+<p>여기서 중요한 것은 에이전트가 처음부터 정답을 만들었다고 가정하지 않는 점이다. 실제 예에서 에이전트가 작성한 미션에는 대상 고객이 빠져 있었다. 강사는 직접 한 파일만 고치기보다 에이전트에게 관련 문서들을 함께 수정하게 해 산출물 사이의 불일치를 줄이라고 권한다.</p>
+<h3>각 기능은 작은 계약으로 개발한다</h3>
+<p>프로젝트 헌법이 전체 지도라면 기능 명세는 이번 작업의 계약이다. 강의에서는 기능마다 계획, 요구사항, 검증 기준을 만들고 별도 브랜치에서 작업한다.</p>
+<figure data-visual-kind="process" style="margin:1.5rem 0;padding:1rem;border:1px solid #64748b;border-radius:12px;background:#ffffff">
+  <div role="img" aria-label="기능 하나를 계획하고 구현하고 검증한 뒤 재계획하는 반복 과정" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px">
+    <div style="padding:12px;border-radius:9px;background:#dbeafe;border:1px solid #1d4ed8"><strong>맥락 정리</strong><br>이전 작업 병합<br>에이전트 문맥 초기화</div>
+    <div style="padding:12px;border-radius:9px;background:#e0f2fe;border:1px solid #0369a1"><strong>계획</strong><br>질문과 선택<br>계획·요구·검증 작성</div>
+    <div style="padding:12px;border-radius:9px;background:#dcfce7;border:1px solid #15803d"><strong>구현</strong><br>작은 작업 단위<br>변경 관찰과 커밋</div>
+    <div style="padding:12px;border-radius:9px;background:#fef3c7;border:1px solid #a16207"><strong>검증</strong><br>명세 대조<br>실행·테스트·리뷰</div>
+    <div style="padding:12px;border-radius:9px;background:#f3e8ff;border:1px solid #7e22ce"><strong>재계획</strong><br>헌법과 로드맵 수정<br>다음 기능 준비</div>
+  </div>
+  <figcaption style="margin-top:10px">기능 개발 루프: 에이전트가 구현했다고 끝내지 않고, 사람이 이해하고 승인한 뒤 다음 계획으로 넘어간다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 각 상자는 다음 상자로 넘어가기 위한 점검 지점이다. 특히 구현과 검증을 한 덩어리로 보지 않는다. 변경이 너무 크면 구현을 더 작은 작업 그룹과 커밋으로 나눈다.</p>
+<p>첫 기능인 <strong>Hello Nano</strong>에서는 범위, 엄격한 TypeScript 사용, 수동 <code>curl</code> 검증 등을 먼저 정한다. 에이전트가 계획·요구사항·검증 문서를 작성하면 사람이 검토하고 커밋한 다음 구현한다. 구현 후에는 홈페이지에 <code>header</code>, <code>main</code>, <code>footer</code>의 명확한 구조가 필요하다는 점이 발견된다. 강의는 이것을 단순한 코드 실수로만 보지 않고 계획에 빠진 요구라고 판단해 <strong>명세와 코드 모두를 수정</strong>한다.</p>
+<p>이것이 <strong>휴먼 인 더 루프(human-in-the-loop)</strong>다. 에이전트가 만들고 검사한 결과라도 사람이 고수준 요구사항과 실제 동작을 확인한다. 에이전트가 빠르게 많은 코드를 만들수록 사람이 코드의 구조와 변화 과정을 따라가지 못하는 <strong>인지 부채(cognitive debt)</strong>가 생길 수 있기 때문이다. 강의는 이를 줄이기 위해 작은 변경, 잦은 커밋, 기능 사이의 깨끗한 구분, 테스트와 디버거를 이용한 탐색을 권한다.</p>
+<h3>재계획은 뒤처리가 아니라 학습 단계다</h3>
+<p>첫 기능을 끝낸 뒤 강의는 곧바로 다음 기능을 만들지 않는다. 테스트 정책을 프로젝트 헌법에 추가하고, 기존 기능 명세와 구현에도 반영한다. 제품 관리자에게서 “사용자의 40%가 모바일을 쓴다”는 업데이트가 왔다는 예시에서는 반응형 디자인을 제품 명세·기능 명세·코드에 함께 반영한다. 이 40%는 강의 속 사례 수치이며 독립적으로 검증된 통계는 아니다.</p>
+<p>변경이 작으면 재계획 단계에서 바로 반영할 수 있지만, 크면 로드맵의 독립 기능으로 잡으라고 설명한다. 즉 재계획은 무엇이든 끼워 넣는 단계가 아니라, 새 정보의 크기와 위험을 보고 다음 작업 구조를 다시 정하는 단계다.</p>
+<p>두 번째 기능 <strong>Agents and Ailments</strong>에서는 일반 SQL, PicoCSS, 별도의 TypeScript 속성 타입 같은 선택이 진행 중에 추가된다. 강의는 처음 명세에서 빠진 사항을 무조건 실패로 보지 않는다. 구현과 검토를 통해 새 결정을 발견했다면 그 결정을 명세에 되돌려 다음 결과를 개선해야 한다고 본다.</p>
+<h3>새 프로젝트뿐 아니라 기존 코드에도 적용한다</h3>
+<p>새로 시작하는 프로젝트를 <strong>그린필드</strong>, 이미 코드가 있는 프로젝트를 <strong>브라운필드</strong>라고 한다. 강의는 두 경우 모두 헌법과 기능 반복을 쓸 수 있다고 주장한다.</p>
+<p>차이는 헌법을 만드는 출발점이다. 그린필드에서는 사람과 에이전트가 목표와 선택을 대화로 정한다. 브라운필드에서는 에이전트가 기존 코드, README, TODO, 커밋과 다른 문서를 살펴 프로젝트의 미션·기술 스택·로드맵을 역으로 정리한다. 이것은 기존 프로젝트의 진실을 자동으로 찾아냈다는 뜻이 아니다. 사람이 추출된 헌법을 검토하고 빠진 배경이나 잘못된 추정을 고쳐야 한다.</p>
+<h3>반복되는 절차는 기술로 묶되 책임은 남는다</h3>
+<p>강의 후반부는 기능 명세 작성이나 변경 기록 갱신처럼 반복되는 절차를 <strong>에이전트 스킬</strong>로 묶는 방법을 보여준다. 스킬은 특정 작업을 수행하는 지침과 자료의 묶음이다. 프로젝트 안에서만 쓰거나 여러 프로젝트에서 공유할 수 있다.</p>
+<p>외부 도구 연결에는 MCP, 프로젝트 규칙에는 <code>AGENTS.md</code>, 반복 작업에는 Agent Skills, 에이전트와 편집기 연결에는 ACP를 소개한다. GitHub Spec Kit과 Fission AI의 OpenSpec도 SDD 흐름을 형식화한 사례로 제시한다. 강의의 방향은 특정 IDE나 에이전트에 종속되지 않는 명세와 절차를 만들자는 것이다.</p>
+<figure data-visual-kind="layers" style="margin:1.5rem 0;padding:1rem;border:1px solid #64748b;border-radius:12px;background:#f8fafc">
+  <div role="img" aria-label="장기 목표에서 구현 도구까지 내려가는 스펙 주도 개발의 계층" style="max-width:760px;margin:auto">
+    <div style="margin:6px 0;padding:13px;background:#1e3a8a;color:#fff;border-radius:8px;text-align:center"><strong>사람의 의도</strong> — 미션 · 대상 · 성공 기준 · 제약</div>
+    <div style="margin:6px 5%;padding:13px;background:#1d4ed8;color:#fff;border-radius:8px;text-align:center"><strong>지속되는 명세</strong> — 헌법 · 기능 계획 · 요구사항 · 검증</div>
+    <div style="margin:6px 10%;padding:13px;background:#047857;color:#fff;border-radius:8px;text-align:center"><strong>반복 가능한 절차</strong> — 브랜치 · 커밋 · 스킬 · 재계획</div>
+    <div style="margin:6px 15%;padding:13px;background:#a16207;color:#fff;border-radius:8px;text-align:center"><strong>교체 가능한 도구</strong> — 에이전트 · IDE · CLI · 외부 연결</div>
+  </div>
+  <figcaption style="margin-top:10px">상위 의도와 명세를 안정적으로 두고, 아래쪽 에이전트와 도구는 필요에 따라 교체한다는 구조다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위쪽일수록 사람이 보존해야 할 장기 기준이고, 아래쪽일수록 교체 가능한 구현 수단이다. 강의의 주장은 에이전트나 IDE를 바꾸더라도 상위 명세와 검증 흐름을 유지할 수 있어야 한다는 것이다. 다만 소개된 표준과 도구가 실제로 모든 조합에서 같은 수준으로 작동하는지는 강의만으로 검증되지 않는다.</p>
+<p>결국 SDD는 “길고 자세한 프롬프트를 쓰는 법”만을 뜻하지 않는다. 프로젝트 전체 기준을 문서화하고, 기능을 작은 계약으로 나누고, 구현을 검증하며, 새로 배운 결정을 다시 명세에 반영하는 운영 방식이다. 너무 단순한 일에는 짧은 요청이 더 나을 수 있고, 명세를 지나치게 세밀하게 써 변수명까지 통제하면 에이전트의 장점을 잃을 수 있다. 좋은 명세는 에이전트가 이미 알 수 있는 저수준 구현보다 <strong>에이전트가 알 수 없는 사업 목적, 사용자, 제약, 성공 기준과 중요한 선택</strong>에 집중한다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>SDD는 코드를 직접 통제하기보다 목표·제약·성공 기준을 명세에 남겨 에이전트의 빠른 구현을 통제하는 방식이다.</li>
+<li>프로젝트 헌법은 미션·기술 스택·로드맵을 담고, 각 기능은 계획 → 구현 → 검증 → 재계획의 반복으로 개발한다.</li>
+<li>에이전트가 생성하고 검사했더라도 사람은 작은 변경 단위로 결과를 이해하고 승인해야 한다.</li>
+<li>명세는 새 프로젝트와 기존 프로젝트 모두에 쓸 수 있지만, 결과 품질과 도구 독립성은 실제 작업에서 검증해야 한다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>AI 코딩 에이전트가 빠르게 많은 코드를 만들 때, 스펙 주도 개발은 어떻게 사람의 의도와 통제력을 유지하는가?</strong></p>
+</blockquote>
+<ul>
+<li>프로젝트 헌법과 기능 명세는 각각 무엇을 보존하는가?</li>
+<li>사람의 검증과 재계획은 왜 구현 뒤에도 필요한가?</li>
+<li>어떤 작업은 짧은 프롬프트로 처리하고, 어떤 작업은 명세 반복으로 관리해야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>한 에이전트가 홈페이지를 빠르게 구현했지만 <code>header</code>, <code>main</code>, <code>footer</code> 구조가 명세에 없어서 결과에도 반영되지 않았다. 사람은 코드만 고치는 대신 빠진 의도를 계획에 추가하고, 관련 명세와 구현을 함께 수정한 뒤 다시 검증한다.</p>
+<p><code>"중요한 요구가 사람의 머릿속에만 있어 결과가 의도와 어긋남"</code> <strong>문제</strong><br>
+→ <code>"빠진 결정을 명세에 기록하고 코드와 함께 다시 생성·검토함"</code> <strong>작동 방식</strong><br>
+→ <code>"현재 결과를 고치면서 다음 기능에도 재사용할 프로젝트 기억을 남김"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">설계도와 건축 현장</div>
+<p>프로젝트 헌법과 기능 명세는 건축가의 설계도에, 에이전트는 빠르게 시공하는 작업자에 대응한다. 사람은 목적과 제약을 설계하고, 공사를 감독하고, 결과를 승인하거나 수정을 요청한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 소프트웨어 명세는 공사 전에 완전히 고정된 설계도가 아니다. 구현과 검증 중 발견한 내용을 명세에 되돌려 계속 바꾸며, 에이전트도 단순 시공자가 아니라 질문·계획·검증에 참여한다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>스펙 주도 개발</strong></td>
+<td>먼저 무엇과 왜를 적고 그 기준으로 만드는 방식</td>
+<td>명세를 지속 가능한 계약과 프로젝트 기억으로 삼아 계획·구현·검증하는 개발 흐름</td>
+<td>긴 프롬프트 하나를 쓰면 끝나는 방법이라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>프로젝트 헌법</strong></td>
+<td>프로젝트 전체가 계속 지킬 큰 기준</td>
+<td>미션·기술 스택·로드맵 등 프로젝트 수준의 결정을 구조화한 상위 명세</td>
+<td>한 번 작성하면 바꾸지 않는 절대 규칙이라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>기능 개발 루프</strong></td>
+<td>기능 하나를 작은 계약으로 끝내는 반복</td>
+<td>기능별로 계획·요구사항·검증을 작성하고 구현과 검토를 거치는 과정</td>
+<td>에이전트가 코드를 생성하면 완료된다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>휴먼 인 더 루프</strong></td>
+<td>사람이 중간과 마지막에 판단하는 구조</td>
+<td>사람이 선택·권한 승인·고수준 검토·최종 수용에 참여하는 운영 방식</td>
+<td>에이전트의 자체 테스트를 사람의 검토와 같다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>맥락 감쇠</strong></td>
+<td>작업이 길어지며 중요한 조건이 흐려지는 현상</td>
+<td>세션과 작업 문맥이 변하면서 핵심 의도와 제약이 누락되거나 약해지는 문제</td>
+<td>명세 파일만 만들면 모든 기억 문제가 자동으로 사라진다고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>AI 에이전트가 빠르게 코드를 생성할수록 오히려 명세와 작은 검토 단위가 중요해지는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>생성 속도가 빨라지면 사람이 변경의 목적과 구조를 이해하는 속도가 뒤처질 수 있다. 중요한 결정이 대화나 사람의 기억에만 있으면 세션과 담당자가 바뀔 때 결과가 흔들린다. 명세는 목표·제약·검증 기준을 보존하고, 작은 작업과 커밋은 사람이 한 번에 검토할 양을 줄여 인지 부채를 관리한다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>프로젝트 헌법과 기능 명세는 모두 문서인데, 역할이 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>프로젝트 헌법은 미션·기술 스택·로드맵처럼 여러 기능에 공통으로 적용되는 장기 기준이다. 기능 명세는 특정 기능의 범위, 작업 순서, 요구사항, 검증 기준을 다룬다. 기능을 구현하며 발견한 장기 결정은 재계획을 통해 헌법에 반영할 수 있다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새로운 코딩 작업에서 짧은 프롬프트와 SDD 기능 루프 중 무엇을 사용할지 어떻게 판단할 수 있는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>결과를 버려도 되는 단순 작업이고 한 번의 요청으로 검토 가능한 범위라면 짧은 프롬프트를 먼저 시험할 수 있다. 여러 파일과 장기 결정에 영향을 주거나, 여러 세션·사람·에이전트가 참여하거나, 실패 비용이 큰 작업이라면 목표·제약·검증 기준을 문서화하고 기능 루프로 나누는 편이 적합하다. 최종 판단은 명세 작성 비용과 오류·재작업 위험을 함께 비교해야 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 명세의 핵심 가치는 길이가 아니라 지속성이다</h3>
+<ul>
+<li><strong>[원문]</strong> 강사는 Markdown 명세가 세션과 에이전트 사이에서 핵심 맥락을 보존하고, 작은 명세 변경으로 많은 코드 변경을 통제하며, 의도 충실도를 높인다고 설명한다.</li>
+<li><strong>[해석]</strong> 좋은 명세는 모든 구현 세부를 길게 적는 문서가 아니라, 에이전트가 알 수 없는 목표·제약·성공 기준과 중요한 선택을 지속 가능한 형태로 보존하는 문서다.</li>
+<li><strong>[경계]</strong> “현재 가장 좋은 워크플로우”라는 평가는 강사의 주장이다. 명세가 실제 품질·속도·유지보수성을 얼마나 개선하는지는 작업 특성과 측정 결과로 따로 확인해야 한다.</li>
+</ul>
+<h3>2. 검증은 실행 성공보다 사람이 이해하고 승인하는 데 가깝다</h3>
+<ul>
+<li><strong>[원문]</strong> 강의는 에이전트의 자체 검증 뒤에도 사람이 변경 내용을 검토하고 앱·테스트·디버거를 사용하며, 필요하면 여러 하위 에이전트에 재검토를 요청하는 사례를 보여준다.</li>
+<li><strong>[해석]</strong> 자동 테스트 통과와 에이전트의 완료 보고는 검증의 일부일 뿐이다. 사람이 명세와 실제 동작의 일치 여부를 설명할 수 있어야 변경을 통제하고 있다고 볼 수 있다.</li>
+<li><strong>[경계]</strong> 에이전트가 수행한 재검토는 동일한 도구 계열의 또 다른 판단일 수 있으므로 독립 증거라고 단정할 수 없다. 강의에는 결함 발견률이나 검토 비용을 비교한 수치가 없다.</li>
+</ul>
+<h3>3. 충돌과 불확실성도 명세처럼 보존해야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 전사는 세 가지 SDD 이점, 세 가지 헌법 요소, 세 개의 헌법 파일, 세 종류의 기능 명세 문서와 여러 도구·표준을 열거한다.</li>
+<li><strong>[해석]</strong> 명세를 프로젝트 기억으로 쓰려면 결론뿐 아니라 확인되지 않은 수치, 용어의 긴장, 출처의 불확실성도 지우지 않고 남겨야 한다.</li>
+<li><strong>[경계]</strong> 수량 대조 결과, ‘세 가지 이점’은 세 항목, 헌법의 ‘세 요소’는 미션·기술 스택·로드맵, ‘세 파일’은 <code>mission.md</code>·<code>techstack.md</code>·<code>roadmap.md</code>, ‘세 하위 구성요소’는 <code>header</code>·<code>main</code>·<code>footer</code>로 열거 수와 일치했다. 반면 “에이전트는 상태가 없다”는 표현과 “세션 안의 컨텍스트 창이 가득 찬다”는 설명에는 용어상 긴장이 있다. 또한 메타데이터의 소속 후보는 <code>Bit</code>이지만 전사는 강사 Paul Everett을 JetBrains 소속으로 소개하고 JetBrains 및 DeepLearning.AI 기여자를 언급한다. 원작자와 원 소속은 확정할 수 없다. 20~30분, 3~4분, 모바일 사용자 40%, React 19.2와 19.0은 모두 전사 속 사례 또는 주장으로 독립 검증되지 않았다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 강의는 설명을 들은 뒤 바로 구현하게 하지 않고, 목표·성공 기준을 먼저 적고 결과를 검증하게 한다.</li>
+<li><strong>통찰:</strong> 학습자의 이해도 말로 “알았다”고 답하는지보다, 명세를 보고 빠진 제약을 찾고 결과를 기준에 맞게 수정할 수 있는지로 관찰할 수 있다.</li>
+<li><strong>질문/행동:</strong> 학습자에게 작은 기능의 목표·제약·검증 기준을 쓰게 한 뒤, 생성 결과에서 어떤 명세 누락이 드러났는지 설명하게 한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 프로젝트 헌법은 여러 작업자가 공유할 목표·자원 제약·로드맵을 보존하고, 재계획은 새 정보를 다음 자원 배분에 반영한다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용한다면 현재 운영 사실로 가정하지 말고, 반복 업무의 목적·제약·승인 기준을 문서화했을 때 재작업이 줄어드는지 검증할 가설로만 다뤄야 한다.</li>
+<li><strong>질문/행동:</strong> 반복 업무 하나에서 사람의 머릿속에만 있는 승인 기준이 무엇인지 묻고, 이를 문서화하기 전후의 기준 충족률을 비교할 수 있는가?</li>
+</ul>
+<h3>마케터 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 명세는 제품의 미션·대상·성공 기준을 먼저 고정하고, 생성 결과가 그 의도를 지키는지 검토하게 한다.</li>
+<li><strong>통찰:</strong> 상세페이지 생성에서도 카피를 바로 만들기보다 대상 고객, 핵심 주장, 허용 가능한 증거, 금지할 과장을 먼저 계약처럼 정하는 구조를 시험할 수 있다.</li>
+<li><strong>질문/행동:</strong> 생성된 카피의 각 주장을 미리 정한 증거와 연결하고, 연결되지 않는 문장은 삭제하거나 조건부 표현으로 바꿀 수 있는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 강의 전체가 코딩 에이전트의 계획·구현·검증·컨텍스트 관리와 도구 독립적인 작업 흐름을 다룬다.</li>
+<li><strong>통찰:</strong> 모델이나 IDE 이름보다 작업 규모, 검토 가능성, 실패 비용, 명세와 코드의 동기화 상태를 기준으로 자동화 수준을 선택해야 한다.</li>
+<li><strong>질문/행동:</strong> 다음 작은 기능에서 계획·요구사항·검증 기준을 먼저 작성하고, 구현 뒤 기준별 통과 여부와 명세 누락을 기록한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"에이전트가 빠르게 만든 변경의 목적과 제약을 사람이 놓칠 수 있음"</code> <strong>문제</strong><br>
+→ <code>"의도에 맞는 변경과 검토 가능한 작업 단위"</code> <strong>수혜자: 개발자와 프로젝트 이해관계자</strong><br>
+→ <code>"목표·제약·검토 시간·승인과 신뢰를 제공"</code> <strong>지불자 또는 자원 제공자: 개발자와 이해관계자</strong><br>
+→ <code>"구현 전에 적은 검증 기준 중 실제로 충족한 항목의 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 다음의 작은 코딩 기능 하나에 목표·제약·검증 기준을 먼저 작성한 뒤 에이전트에게 구현을 맡긴다.</li>
+<li><strong>측정 1개:</strong> 구현 전에 적은 검증 항목의 통과율을 기록한다.</li>
+<li><strong>중단 기준 1개:</strong> 검증 항목 통과율이 80% 미만이면 더 큰 기능으로 확대하지 않고 명세 누락과 작업 범위를 먼저 수정한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>SDD의 문제의식</td>
+<td>빠른 생성보다 의도·맥락·검증을 지속시키는 것이 중요하다는 주장</td>
+</tr>
+<tr>
+<td>2</td>
+<td>헌법 작성</td>
+<td>미션·기술 스택·로드맵을 에이전트와 대화해 문서화</td>
+</tr>
+<tr>
+<td>3</td>
+<td>첫 기능 반복</td>
+<td>Hello Nano를 계획·구현·검증하며 명세와 코드를 함께 수정</td>
+</tr>
+<tr>
+<td>4</td>
+<td>재계획</td>
+<td>테스트와 반응형 설계 등 새 결정을 헌법과 기존 기능에 반영</td>
+</tr>
+<tr>
+<td>5</td>
+<td>후속 기능과 MVP</td>
+<td>작은 반복과 큰 일괄 구현의 위험을 비교</td>
+</tr>
+<tr>
+<td>6</td>
+<td>브라운필드 적용</td>
+<td>기존 코드와 문서에서 헌법을 역으로 작성</td>
+</tr>
+<tr>
+<td>7</td>
+<td>자동화와 도구</td>
+<td>Skills, MCP, CLI, Spec Kit, OpenSpec으로 반복 절차 확장</td>
+</tr>
+<tr>
+<td>8</td>
+<td>이식성과 표준</td>
+<td>AGENTS.md, Agent Skills, MCP, ACP로 도구 종속 완화</td>
+</tr>
+<tr>
+<td>9</td>
+<td>수치·이름 대조</td>
+<td>열거 수량, 사례 수치, 출처 소속의 일치와 충돌을 점검</td>
+</tr>
+</tbody>
+</table>
+<h3>1. SDD의 문제의식</h3>
+<p>강의 도입부는 JetBrains와의 협력으로 제작된 과정이라고 소개한다. Andrew라고 불린 도입 화자가 강사 Paul Everett을 JetBrains의 개발자 애드버킷으로 소개한다. 성은 전사에 나오지 않는다.</p>
+<p>강사는 SDD의 이점을 다음 세 가지로 설명한다.</p>
+<ol>
+<li>명세의 짧은 변경으로 많은 코드 변경을 통제할 수 있다.</li>
+<li>세션 사이의 맥락 감쇠를 줄이고 반드시 지켜야 할 결정을 보존한다.</li>
+<li>문제·성공 기준·제약·사용자 흐름을 먼저 정해 의도 충실도를 높인다.</li>
+</ol>
+<p>예시로 “SQLite와 Prisma ORM을 사용한다”는 한 문장이 수백 줄의 코드에 영향을 줄 수 있고, 이를 MongoDB로 바꾸면 하위 구현도 크게 바뀔 수 있다고 말한다. 또 에이전트가 20~30분 동안 코드를 작성해 전통적인 개발자의 몇 시간에 해당하는 작업을 한다면, 사람이 3~4분 동안 명확한 지침을 쓰는 편이 나을 수 있다고 주장한다. 이 시간 비교는 강사의 경험적 예시이며 측정 조건은 제시되지 않는다.</p>
+<p>짧은 요청으로 충분한 작업에는 짧은 프롬프트를 지지하지만, 복잡한 프로젝트에서는 세부 명세가 유지보수성과 일관성을 높인다고 주장한다. 명세 없이 여러 개발자와 에이전트가 작업하면 빠르게 만들더라도 서로 모순되는 구현이 생길 수 있다는 팀 사례를 언급한다.</p>
+<p>과정 기여자로 JetBrains의 Konstantin Chaikur, Zina Smirnova와 DeepLearning.AI의 Isabel Zarro를 언급한다. 이름 철자는 제공된 전사를 따른다.</p>
+<h3>2. 바이브 코딩과 명세의 차이</h3>
+<p>강의는 “버튼을 만들어 달라”는 요청 후 결과를 보고 계속 수정하는 과정을 바이브 코딩의 예로 든다. 작은 요소에는 작동할 수 있지만 장기 프로젝트에서는 대화가 길어지고 기록이 남지 않으며 기술 부채가 쌓일 수 있다고 말한다.</p>
+<p>SDD에서는 무엇과 왜를 설명하는 명세와 어떻게 구현할지를 분리한다. 명세는 사람 사이의 계약이면서 사람과 에이전트 사이의 계약으로 취급된다. 사람은 수석 설계자처럼 목표와 청사진을 제공하고, 에이전트는 기술 지식과 구현 속도를 제공한다는 역할 구분이다.</p>
+<p>강의는 이를 컴파일러에 비유한다. 컴파일러가 사람이 읽을 수 있는 소스 코드를 기계 코드로 바꾸듯, SDD는 사람이 읽을 수 있는 명세에서 에이전트가 소스 코드를 만들도록 안내한다. 다만 SDD가 결정론적인 변환을 보장한다는 뜻으로 설명되지는 않는다.</p>
+<h3>3. 프로젝트 헌법과 Agent Clinic</h3>
+<p>헌법은 다음 세 요소로 구성된다.</p>
+<ul>
+<li>미션: 비전, 대상, 범위와 프로젝트의 이유</li>
+<li>기술 스택: 개발·배포 기술과 제약</li>
+<li>로드맵: 기능 단계의 순서와 진행 계획</li>
+</ul>
+<p>실습에서는 WebStorm과 Claude Code를 사용하지만, VS Code와 Codex CLI, Zed Editor와 로컬 모델도 사용할 수 있다고 말한다. SDD 자체는 특정 IDE나 에이전트에 묶이지 않는다는 주장이다.</p>
+<p>실습 프로젝트 Agent Clinic은 AI 에이전트가 인간에게 받은 스트레스와 환각, 맥락 손상, 기억 문제, 하위 에이전트 협업 문제를 치료받는다는 패러디 앱이다. Next.js 백엔드와 React 프런트엔드를 가진 전체 웹 앱이며 예약, 질환, 치료를 관리한다고 설명한다.</p>
+<p>에이전트에게 README의 이해관계자 입력을 읽고 미션·기술 스택·로드맵을 함께 작성하게 한다. 질문에 답한 뒤 <code>mission.md</code>, <code>techstack.md</code>, <code>roadmap.md</code> 세 파일을 만든다. 사람이 검토하면서 빠진 대상 고객을 보완하고, 빠른 시제품이라는 이유로 SQLite를 기술 스택에 넣은 뒤 헌법을 커밋한다.</p>
+<p>강의는 명령 실행 권한을 요청받을 때 주의하라고 말한다. 안전하지 않은 모드로 실행하지 않는 한 명령마다 승인을 요구하며, 코드에 대한 최종 책임은 사람에게 있다고 강조한다.</p>
+<h3>4. Hello Nano 기능의 계획·구현·검증</h3>
+<p>첫 기능은 Phase 1의 Hello Nano다. 별도 브랜치에서 기능의 계획, 요구사항, 검증 점수표를 에이전트와 작성한다. 범위는 로드맵 그대로 유지하고, Nano 버전을 고정하며, 엄격한 TypeScript를 적용하고, 수동 <code>curl</code>로 확인하기로 정한다.</p>
+<p>기능 명세를 검토하며 보기 좋은 임시 홈페이지 요구를 추가한다. 강사는 변수명처럼 사소한 구현 세부까지 요구사항에서 지시하지 말라고 말한다. 통제하되 지나치게 조종하지 않는 균형이 필요하다는 설명이다.</p>
+<p>구현 전 <code>/clear</code>로 에이전트 문맥을 비운다. 보안이나 데이터베이스처럼 작은 오류가 누적될 수 있는 영역은 작업 그룹별로 구현하고 커밋하는 방법을 권한다.</p>
+<p>구현 뒤에는 바로 병합하지 않고 커밋 차이를 검토한다. 홈페이지에 레이아웃 구성요소가 빠진 것을 발견하고, 원인이 계획의 누락이라고 판단한다. 계획에 새 작업 그룹을 추가하고 코드도 수정한다. <code>header</code>, <code>main</code>, <code>footer</code> 세 하위 구성요소를 별도 파일로 옮길 때도 IDE에서 코드만 이동하지 않고 관련 명세와 README를 에이전트가 확인하게 한다.</p>
+<h3>5. 재계획과 인지 부채</h3>
+<p>에이전트의 빠른 생성량을 사람이 따라가기 어려운 정신적 부담을 강의는 인지 부채라고 부른다. 작은 변경, 잦은 커밋, 기능별 브랜치, 테스트와 디버거를 통한 탐색으로 부담을 줄이라고 제안한다.</p>
+<p>첫 기능 뒤에는 테스트 선호 사항이 헌법에 없었다는 점을 발견한다. 재계획 브랜치에서 테스트 프레임워크 정책을 추가하고, 기존 기능 명세와 구현에도 반영한 뒤 실제 테스트를 작성한다.</p>
+<p>제품 관리자가 사용자의 40%가 모바일이라고 알려왔다는 사례를 통해 반응형 디자인을 제품 명세, 기능 명세, 코드에 함께 반영한다. 작은 변경이라 재계획에서 바로 처리하지만 큰 변경이면 별도 로드맵 기능으로 잡으라고 설명한다.</p>
+<p>로드맵의 기능 2, 3, 4, 5가 서로 묶인다고 판단해 한 단계로 합친다. 이는 네 개의 번호가 열거된 것이며 수량 불일치는 없다.</p>
+<p>변경 기록을 자동으로 갱신하기 위해 Changelog 스킬을 만든다. 이 스킬은 전역 영역에 설치되어 여러 프로젝트에서 사용할 수 있게 된다. 반복 가능한 검증 작업도 README 갱신, 린트, 포맷, 테스트 실행 등을 묶은 스킬로 만들 수 있다고 제안한다.</p>
+<h3>6. Agents and Ailments와 MVP</h3>
+<p>다음 기능에 들어가기 전 미완료 작업, 이전 브랜치 병합, 다음 로드맵 항목, 에이전트 문맥 초기화를 점검한다. 두 번째 기능인 Agents and Ailments에서는 관련 기능을 한 단계로 유지하고, 마이그레이션에 일반 SQL을 선택하며, 여러 검증 항목을 정한다.</p>
+<p>계획 중 PicoCSS를 사용하기로 추가하고, 구현 검토 중에는 속성 타입을 인라인으로 두지 않고 독립 TypeScript 타입으로 분리하기로 한다. 강의는 처음 명세에서 빠졌다고 해서 바로 실패로 보지 않고, 새 결정을 명세에 기록해 미래 결과를 개선하라고 말한다.</p>
+<p>검증 단계에서는 테스트를 읽고 디버거로 실행하며 흐름을 이해한다. 여러 하위 에이전트에 프로젝트 전체의 깊은 검토를 요청하고, 나온 문제와 권고를 적용한 뒤 테스트를 다시 실행한다.</p>
+<p>이후 남은 로드맵 전체를 구현해 MVP를 만드는 큰 실험을 한다. 강의는 헌법과 명세의 품질에 확신이 있고 사람이 대규모 결과를 검토할 수 있을 때만 이런 큰 작업을 하라고 경고한다. 결과가 예상과 다르면 무엇이 에이전트를 잘못 이끌었는지 재계획 단계에서 찾아야 한다.</p>
+<h3>7. 기존 코드에 SDD 도입</h3>
+<p>기존 Agent Clinic MVP에서 명세 폴더를 제거한 상태를 레거시 프로젝트처럼 취급한다. README와 TODO, 코드 구조를 에이전트가 탐색해 미션·기술 스택·로드맵을 작성한다.</p>
+<p>기존 코드에서 프레임워크 버전과 파일 구조를 추출하고, TODO의 작업을 로드맵 단계로 정리한다. 이후 피드백 폼 기능을 별도 브랜치에서 계획·구현·검증하고 병합한다.</p>
+<p>강의는 이 과정이 기존 코드에 대한 수동 문서 작업을 줄여준다고 주장한다. 그러나 추출된 헌법이 실제 사업 의도와 일치하는지는 사람이 검토해야 한다. 코드에 없는 배경은 역분석만으로 알 수 없기 때문이다.</p>
+<h3>8. 스킬, MCP, CLI와 SDD 도구</h3>
+<p>반복하던 기능 명세 프롬프트를 스킬 생성 도구와 대화해 Agent Skill로 만든다. 스킬은 프로젝트 전용 또는 전역으로 둘 수 있고, 다른 스킬이 호출할 수도 있다. 에이전트가 설명을 보고 스킬 사용 여부를 판단하는 과정을 점진적 공개라고 설명하지만, 문맥이 커지면 판단이 완벽하지 않으므로 원하는 스킬을 직접 이름으로 지정하라고 권한다.</p>
+<p>외부 API, 사설 지식 저장소, 데이터베이스 접근에는 MCP를 소개한다. Context7을 예로 들어 MCP 서버 대신 CLI와 스킬을 사용하는 설치 방식을 보여준다. “MCP 서버에서 스킬과 CLI로 이동하는 추세가 빨라지고 있다”는 평가는 강의의 주장이다.</p>
+<p>Qodo Code의 플러그인, GitHub Spec Kit, Fission AI의 OpenSpec도 소개한다. Spec Kit의 <code>/speckit.constitution</code>, <code>/speckit.plan</code>, <code>/speckit.tasks</code>, <code>/speckit.implement</code> 명령과 OpenSpec의 propose, explore, apply, archive 흐름을 SDD 구현 사례로 설명한다. 플러그인은 코드를 실행할 수 있으므로 설치와 업데이트 시 신뢰 여부를 확인하라고 경고한다.</p>
+<p>기능 개발 중 확정되지 않은 데이터베이스 아이디어를 연구할 때는 바로 로드맵에 넣지 않고 정해진 위치의 백로그 보고서로 남긴다. 나중에 링크와 함께 로드맵에 배치하거나 연구 절차를 스킬로 자동화할 수 있다.</p>
+<h3>9. 에이전트와 IDE를 바꾸는 표준</h3>
+<p>강의는 상위 명세가 특정 에이전트나 IDE에 묶이지 않아야 한다고 설명한다.</p>
+<ul>
+<li>MCP: 외부 도구와 자원 연결</li>
+<li><code>AGENTS.md</code>: 프로젝트 규칙</li>
+<li>Agent Skills: 반복 가능한 절차와 추가 맥락</li>
+<li>ACP: 에이전트와 클라이언트 연결</li>
+</ul>
+<p>Claude Code에서 만든 기능 명세 스킬을 다른 경로에 복사해 Codex에서 실행하는 사례를 보여준다. ACP를 사용해 에이전트와 편집기를 연결하고, JetBrains IDE의 AI Chat에서 ACP 레지스트리를 통해 OpenCode를 설치하는 흐름도 소개한다.</p>
+<p>벤치마크 순위는 빠르게 바뀌므로 자신에게 중요한 평가 기준으로 에이전트를 선택하라고 말한다. 강의의 결론은 에이전트가 근육이라면 명세는 두뇌이며, 사람은 운전자의 역할을 유지해야 한다는 것이다.</p>
+<h3>10. 숫자·고유명사·수량 표현 대조</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>대조 결과</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SDD의 세 가지 이점</td>
+<td>큰 변경 통제, 맥락 감쇠 완화, 의도 충실도 향상</td>
+<td>열거 수와 일치</td>
+</tr>
+<tr>
+<td>헌법의 세 요소</td>
+<td>미션, 기술 스택, 로드맵</td>
+<td>열거 수와 일치</td>
+</tr>
+<tr>
+<td>헌법의 세 파일</td>
+<td><code>mission.md</code>, <code>techstack.md</code>, <code>roadmap.md</code></td>
+<td>열거 수와 일치</td>
+</tr>
+<tr>
+<td>레이아웃의 세 하위 구성요소</td>
+<td><code>header</code>, <code>main</code>, <code>footer</code></td>
+<td>열거 수와 일치</td>
+</tr>
+<tr>
+<td>로드맵 기능 2·3·4·5</td>
+<td>번호 네 개를 한 단계로 묶음</td>
+<td>열거 수와 일치</td>
+</tr>
+<tr>
+<td>에이전트 작업 20~30분과 사람 작성 3~4분</td>
+<td>강사의 효율 비교 사례</td>
+<td>독립 검증 없음</td>
+</tr>
+<tr>
+<td>모바일 사용자 40%</td>
+<td>제품 관리자 업데이트라는 실습 사례</td>
+<td>실제 통계인지 확인 불가</td>
+</tr>
+<tr>
+<td>React 19.2와 19.0</td>
+<td>Context7의 최신 문서 예시</td>
+<td>영상 시점·패키지 상태 확인 불가</td>
+</tr>
+<tr>
+<td>에이전트의 상태</td>
+<td>“상태가 없다”면서 세션 내 컨텍스트 포화를 설명</td>
+<td>용어상 긴장, 지속 메모리 부재와 세션 작업 기억을 구분해야 함</td>
+</tr>
+<tr>
+<td>Paul Everett</td>
+<td>전사에서 JetBrains 개발자 애드버킷이자 강사로 소개</td>
+<td>강사 정보는 전사 근거</td>
+</tr>
+<tr>
+<td>원작자·소속 provenance</td>
+<td>creator는 비어 있고 affiliation 후보는 <code>Bit</code>; provenance.note는 화자 이름과 SNS 기준의 추정 출처라고 밝힘</td>
+<td>JetBrains·DeepLearning.AI 언급과 일치하지 않아 원작자·원 소속 확정 불가</td>
+</tr>
+<tr>
+<td>제목</td>
+<td><code>title</code>은 접두어 없음, <code>raw_title</code>에는 <code>[한영자막]</code> 접두어가 있음</td>
+<td>메타데이터 제목 변형으로 보존</td>
+</tr>
+</tbody>
+</table>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · AI 에이전트와 함께하는 스펙 주도 개발 풀코스 강의 · https://www.youtube.com/watch?v=FJo7p9SPS9c · 전사: 제공 자료에 방식이 명시되지 않음<br>
+메타데이터 provenance에는 원본 영상 링크를 확인하지 못했고 화자 이름과 SNS를 기준으로 출처를 추정했다고 적혀 있다. creator 값은 없고 affiliation 후보는 <code>Bit</code>으로 기록되어 있어 원작자와 원 소속은 확정할 수 없다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>JetBrains와 협력해 제작한 스펙 주도 개발(spec-driven development) 강의에 오신 것을 환영합니다.</p>
+<p>스펙 주도 개발은 현재 에이전트 코딩 어시스턴트(agentic coding assistants)로 진지한 애플리케이션을 구축할 때 가장 좋은 유형의 워크플로입니다.</p>
+<p>코딩 에이전트에게 무엇을 만들어야 하는지 정확히 설명하는 Markdown 파일이나 긴 프롬프트를 주면, 에이전트가 그 스펙을 구현합니다. 직접 코드를 작성하는 대신, 에이전트가 이미 알고 있지 않은 맥락을 문서로 작성하는 데 집중하는 것입니다.</p>
+<p>이번 강의의 강사가 JetBrains의 개발자 애드보킷(developer advocate)인 Paul Everett라서 정말 기쁩니다.</p>
+<p>고맙습니다, Andrew. 그런데 잠깐, 안경을 쓰시는 줄은 몰랐네요.</p>
+<p>맞아요. 사실 이 안경은 필요하지 않습니다.</p>
+<p>네, 그럴 줄 알았어요.</p>
+<p>어쨌든 스펙 주도 개발에는 세 가지 주요 이점이 있으며, 곧바로 그 효과를 확인하게 될 것입니다.</p>
+<p>첫째, 스펙을 조금만 수정해도 대규모 코드 변경을 통제할 수 있습니다. “Prisma ORM과 함께 SQLite를 사용하라” 같은 한 문장이 수백 줄의 코드에 영향을 줄 수 있습니다. 같은 하위 단계의 파급 효과를 고려해 이를 MongoDB로 바꿀 수도 있습니다. 따라서 스펙 작성은 코드를 작성하는 것보다 훨씬 효율적입니다.</p>
+<p>둘째, 스펙은 세션 간 맥락 감쇠(context decay)를 없애고, 절대 타협해서는 안 되는 사항들을 보존하는 데 도움을 줍니다. 에이전트는 상태가 없으므로, 에이전트가 시작하는 즉시 가장 품질 높은 맥락을 제공하는 것이 중요합니다.</p>
+<p>마지막으로, 스펙은 의도 충실도(intent fidelity)를 높여 줍니다. 문제, 성공 기준, 제약 조건 등을 정의하면 에이전트가 이를 구체화해 더 완성도 높은 계획을 만들 수 있습니다.</p>
+<p>제가 스펙을 작성하는 한 가지 방법은 Claude Code, Gemini, ChatGPT Codex 같은 에이전트와 대화하며 핵심적인 아키텍처 선택을 하는 것입니다. 이때 여러 트레이드오프를 어떻게 선택하고 싶은지에 대한 제 지식을 활용합니다. 그런 다음 에이전트에게 핵심 결정 사항을 Markdown 파일로 요약하게 합니다.</p>
+<p>스펙을 작성하려면 사고가 필요하며, 이는 어려운 작업입니다. 어떤 제품을 만들지, 어떤 기능을 넣을지, 기술 아키텍처는 어떻게 구성할지 결정해야 합니다. 스펙이 없다면 이런 중요한 결정을 코딩 에이전트의 변덕에 맡기게 됩니다. 아주 빠르게 움직이며 운에 맡기고 싶다면 괜찮을 수도 있지만, 이는 확실히 유지 관리하기 어려운 코드와 때로는 상당히 이상한 제품으로 이어집니다.</p>
+<p>예를 들어, 명확한 스펙 없이 복잡한 소프트웨어 제품을 개발하는 팀을 본 적이 있습니다. 서로 다른 개발자의 지시를 받은 서로 다른 코딩 에이전트들이 빠르게 개발하면서도 서로 모순되는 방식으로 작업했고, 그 결과 이후 단계에서 많은 골칫거리가 발생했습니다.</p>
+<p>스펙 주도 개발에는 프로젝트 수준에서 헌법(constitution)을 만들어 변경할 수 없는 표준을 정의한 다음, 기능 개발 루프를 반복하는 과정이 포함됩니다. 이 루프에서는 각 기능을 별도의 브랜치로 격리하고, 계획 수립, 구현, 검증 단계를 거칩니다. 기능 사이에 깨끗한 상태를 유지하고 골칫거리와 컨텍스트 전환을 줄이는 방식입니다.</p>
+<p>이 동일한 워크플로는 그린필드(Greenfield) 프로젝트와 브라운필드(Brownfield) 프로젝트 모두를 지원합니다. 그린필드 프로젝트에서는 처음부터 시작해 에이전트와의 대화로 헌법을 개발합니다. 브라운필드, 즉 기존 코드베이스에서는 기존 코드베이스를 바탕으로 프로젝트 헌법을 생성합니다. 두 경우 모두 이후 이러한 기능 개발 루프를 반복하며 작은 단계로 버전 관리를 수행합니다.</p>
+<p>이번 강의에서는 스펙 주도 워크플로를 자동화하기 위해 직접 에이전트 스킬(agent skills)을 작성하는 방법도 살펴봅니다.</p>
+<p>짧은 프롬프트 하나만으로 필요한 일을 해낼 수 있다면 훌륭합니다. 가능할 때는 저도 게으른 프롬프팅(lazy prompting)을 지지합니다. 하지만 제가 아는 뛰어난 개발자들은 상당한 복잡성이 있는 프로젝트라면 거의 항상 상세한 스펙을 작성합니다. 그들에게는 고유한 맥락과, 무엇을 어떻게 만들어야 하는지에 대한 의견이 있기 때문입니다. 그런 의견은 그 맥락을 알지 못하는 LLM이 무작위로 선택하게 하는 것보다 우월합니다.</p>
+<p>코딩 에이전트가 코드를 작성하는 데 20분이나 30분을 사용하고, 그것이 전통적인 개발자의 작업 몇 시간에 해당할 수 있다면, 대개는 3~4분 동안 앉아서 명확한 지시 사항을 작성하는 편이 낫습니다.</p>
+<p>JetBrains의 Konstantin Chaikur와 Zina Smirnova, 그리고 DeepLearning.AI의 Isabel Zarro를 비롯해 많은 분들이 이 강의에 기여했습니다.</p>
+<p>다음 영상으로 넘어가 스펙을 작성해 보겠습니다.</p>
+<p>에이전트 코딩(agentic coding)이라는 말을 들으면 바이브 코딩(vibe coding)을 떠올릴 수도 있습니다. 둘을 비교해 보고, 스펙 주도 개발이 어떻게 엔지니어링을 되살려 더 나은 결과를 제공하는지 살펴보겠습니다.</p>
+<p>바이브 코딩은 빠른 결과를 제공합니다. “버튼을 하나 만들어 줘”처럼 원하는 것을 설명하는 프롬프트를 작성하고 최선의 결과를 기대합니다. 그런 다음 결과를 확인합니다.</p>
+<p>버튼이 정말 크네요. 어느 정도 비슷하지만 몇 가지 중요한 부분이 어긋났습니다. 그래서 에이전트에게 실수를 지적하고, 에이전트가 다시 시도하게 하는 식으로 만족할 때까지 반복합니다.</p>
+<p>그 결과 에이전트와 긴 대화를 나누게 되지만, 그 대화 기록은 저장되지도 않을 것입니다. 이 방식은 버튼 하나에는 어느 정도 잘 작동하지만, 규모가 크고 지속적으로 진행되는 프로젝트에는 확장되지 않습니다.</p>
+<p>높은 수준의 프롬프트는 빠르지만, 폐기할 코드와 누적되는 기술 부채를 만들어 냅니다. 우리에게는 엔지니어링이 필요합니다. 영구적인 기술 산출물을 만들어 내는 잘 유지 관리되는 명세가 필요합니다.</p>
+<p>스펙 주도 개발은 감독되지 않은 AI 생성의 혼란에 대한 전문적인 대응입니다. 무엇을 왜 만드는지 설명하는 스펙과 어떻게 구현할지를 분리하는 패러다임의 전환입니다.</p>
+<p>스펙을 사용하면 인간 사이뿐 아니라 인간과 에이전트 사이에도 계약이 생깁니다. 이제 인간인 여러분의 주요 과제는 자신의 의도를 명확한 스펙으로 변환하는 방법을 배우는 것으로 바뀝니다.</p>
+<p>에이전트 코딩 지원을 활용한 스펙 주도 개발에는 세 가지 주요 이점이 있습니다.</p>
+<p>첫째, 스펙을 조금만 수정해도 대규모 코드 변경을 통제할 수 있습니다. 앱의 외관과 느낌을 설명하는 스펙의 몇 문장이 수백 줄의 CSS로 변환될 수 있습니다. 이러한 스펙 주도 방식은 초고속 코딩 에이전트를 사용할 때 필요한 인지 부담을 줄여 줍니다.</p>
+<p>둘째, 스펙은 여러 턴으로 진행되는 에이전트 세션을 망가뜨리는 맥락 감쇠 문제를 없애 줍니다. 코딩 에이전트와 작업하다 보면 컨텍스트 윈도(context window)가 가득 차고, 에이전트가 작업 메모리를 모두 사용한 상태에 대처하려 하면서 실수가 늘어나는 경우가 많습니다. 스펙은 세션과 에이전트가 바뀌어도 유지되며, 코드베이스에서 작업하고 기능을 구현하는 데 필요한 핵심 맥락에 에이전트를 고정해 줍니다.</p>
+<p>셋째, 스펙은 의도 충실도를 높입니다. 즉, 에이전트가 여러분의 목표에 맞는 코드를 만들어 낼 가능성이 커집니다. 이는 에이전트가 코드를 생성하기 전에 문제, 성공 기준, 제약 조건, 사용자 흐름 등을 정의하도록 스펙이 강제하기 때문입니다.</p>
+<p>스펙은 바이브 코딩으로 엉성한 무언가를 만드는 것과 실행 가능한 소프트웨어 제품을 엔지니어링하는 것을 가르는 핵심 요소입니다. 처음부터 새 프로젝트를 시작하든, 수년간 운영해 온 프로젝트에 SDD 방식을 도입하려 하든, 스펙은 방향 이탈과 생산성 문제를 해결하는 데 도움을 줍니다.</p>
+<p>비교를 위해, 이해할 수 있는 소스 코드를 기계어 코드로 변환하는 컴파일러를 생각해 보세요. SDD는 에이전트와 프롬프트를 안내해 스펙을 소스 코드로 변환합니다. 더 좋은 점은 스펙이 인간의 언어로 작성되므로 이해관계자들이 쉽게 읽을 수 있다는 것입니다.</p>
+<p>스펙 주도 개발은 최근 생산성에 대한 우려를 해결하는 방법으로 빠르게 확산되었습니다. 여러 SDD 프로젝트, 스펙 작성을 중심으로 만들어진 도구, 의도 포착에 관한 컨퍼런스 발표는 모두 소프트웨어 개발 수명 주기에서 얻은 교훈인 엔지니어링을 에이전트 코딩에 적용하려는 더 큰 흐름의 일부입니다.</p>
+<p>스펙 주도 개발은 단순한 챗봇이 아니라 코딩 에이전트와 함께 사용됩니다. 챗봇은 코드에 관해 이야기할 수 있지만, 프로젝트의 코드나 설치된 도구에 접근할 수는 없습니다. 그저 프롬프트에 응답할 뿐입니다.</p>
+<p>에이전트는 다릅니다. 에이전트는 프롬프트를 받아 계획을 세우고, 그 과정에서 추론을 활용해 스스로 결과를 향해 나아갑니다. 중요한 점은 에이전트가 코드베이스와 개발 도구에 접근할 수 있다는 것입니다.</p>
+<p>SDD 워크플로에서는 이러한 에이전트를 매우 유능한 페어 프로그래머(pair programmer)로 취급합니다. 에이전트는 기술 지식과 속도를 제공하고, 선임 아키텍트인 여러분은 청사진을 제공합니다.</p>
+<p>이 강의를 계속 진행하면서 다음을 기억하세요. 에이전트가 근육이라면 스펙은 두뇌입니다. 연습을 통해 여러분은 생성된 소프트웨어가 기능하기만 하는 것이 아니라 장기적인 목표에도 부합하도록 만들 수 있습니다.</p>
+<p>스펙 주도 개발은 프로젝트를 위해 처음부터 원하는 것을 어떻게 만들지 에이전트에게 알려 주고, 이후 각 기능에 대해서도 알려 주면서 점점 더 나은 결과를 만들어 냅니다.</p>
+<p>SDD에서는 먼저 프로젝트에 관한 결정으로, 그다음 각 기능에 관한 세부 사항으로 에이전트에 최고 품질의 맥락을 제공합니다.</p>
+<p>이 스펙은 매우 상세합니다. SDD의 핵심 기술 중 하나는 적절한 세부 수준을 아는 것입니다. 에이전트를 매우 유능한 페어 프로그래머로 대한다면 적절한 수준에 도달하는 경우가 많습니다. 목표, 사명, 대상 사용자, 제약 조건에 관한 맥락은 많이 제공하되, 에이전트가 스스로 결정할 수 있는 저수준의 결정 사항은 적게 제공하는 것입니다.</p>
+<p>이 SDD 워크플로는 어떤 모습일까요?</p>
+<p>먼저 헌법을 명시합니다. 사명은 무엇이고, 기술 스택은 무엇이며, 로드맵은 어떻게 되는가?</p>
+<p>헌법은 이러한 프로젝트 수준의 세부 사항을 공식화하는 한 가지 방법일 뿐입니다. 많은 개발자가 이 목적을 위해 최상위 AGENTS.md 파일을 사용하지만, 프로젝트 헌법은 특정 에이전트에 종속되지 않고 더 구조화되어 있습니다.</p>
+<p>헌법에는 인간과 에이전트 사이의 핵심 결정에 대한 합의뿐 아니라 인간들 사이의 합의도 담깁니다.</p>
+<p>사명은 ‘왜’에 해당합니다. 이 프로젝트의 비전, 대상, 범위 등을 설명합니다. 이러한 매개변수를 미리 정의하는 것은 소프트웨어 프로젝트에서 매우 일반적이며, 지속적인 의사 결정을 안내하는 데 도움이 됩니다.</p>
+<p>기술 스택은 엔지니어링 팀을 위한 것으로, 개발 및 배포 기술과 제약 조건에 대한 공통된 이해를 제공합니다.</p>
+<p>로드맵은 각 단계가 자체적인 기능 스펙 프로세스로 구현되는 단계들의 순서를 담은 살아 있는 문서입니다.</p>
+<p>헌법 초안이 작성되면 반복 가능한 프로세스로 각 기능을 작업합니다. 먼저 기능을 계획하고, 구현한 다음, 마지막으로 결과를 검증합니다.</p>
+<p>기능과 기능 사이에는 재계획 단계가 있습니다. 헌법을 수정하고, 로드맵을 업데이트하며, 프로세스 자체도 개선합니다.</p>
+<p>조금 전에 들으셨듯이, SDD(spec-driven development)의 핵심 기술 중 하나는 최고 품질의 컨텍스트를 만들 수 있도록 적절한 수준의 세부 정보를 제공하는 것입니다. 기능 단계와 재계획 단계에서는 여러분이 에이전트를 이끕니다.</p>
+<p>이렇게 생각해 보세요. 여러분이 건축가이고, 건축업자에게 건물의 상세 도면을 제공한다고 상상해 보세요. 그다음은 건축업자에게 달려 있습니다. 여러분의 역할은 설계하고, 시공을 감독한 다음, 결과를 검토하고 승인하거나 변경을 요청하는 것입니다. 건축업자에게 업무 방식을 지시하는 것은 피하고, 그들이 모르는 컨텍스트를 제공하는 데 집중해야 합니다.</p>
+<p>스펙 주도 개발(spec-driven development)은 처음의 구상부터 마지막의 전달까지 이어 줍니다. 무엇보다도, 그 이후에도 계속 개선할 수 있게 해 줍니다.</p>
+<p>이것은 현대 개발자들이 사용하기 시작한 SDD 워크플로 중 하나입니다. 곧 시작 단계인 프로젝트 헌법(project constitution)을 살펴보겠습니다. 하지만 먼저 약간의 설정 준비를 해 보겠습니다.</p>
+<p>프로젝트 저장소(repo)를 설정하려면 다음 읽기 자료의 지침을 따르세요. 다음 영상의 설정 과정은 선택 사항입니다. WebStorm 같은 IDE에서 Claude Code 같은 코딩 에이전트를 설정하는 데 이미 익숙하다면, 이 선택 영상은 건너뛰어도 됩니다.</p>
+<p>다음 영상에서, 아니면 그다음 영상에서 뵙겠습니다.</p>
+<p>첫 번째 프롬프트를 보내기 전에 작업 공간 설정에 대해 조금 이야기해 보겠습니다.</p>
+<p>WebStorm 같은 IDE에서 Claude Code 같은 코딩 에이전트를 설정하는 데 이미 익숙하다면, 이 선택 영상은 건너뛰어도 됩니다.</p>
+<p>스펙 주도 개발은 특정 IDE나 코딩 에이전트에 종속되지 않는 모범 사례이므로, 이미 사용 중인 설정을 선택하거나 이 강의에서 사용하는 것과 같은 설정을 선택하면 됩니다.</p>
+<p>Codex CLI를 사용하는 VS Code, 로컬 모델을 사용하는 Zed Editor 등은 모두 스펙 주도 개발에 적합합니다.</p>
+<p>웹 애플리케이션을 개발할 예정이므로, 이 강의에서는 코딩 에이전트로 Claude Code를 사용하는 WebStorm IDE를 이용합니다. 두 프로그램의 다운로드 및 설치 방법은 이전 읽기 자료에 포함되어 있습니다.</p>
+<p>WebStorm을 열고 이름이 …인 완전히 새로운 프로젝트를 시작해 보겠습니다.</p>
+<p>Agent Clinic입니다. 이 프로젝트는 코드와 스펙의 버전 관리를 면밀히 추적하기 위해 Git 저장소가 포함된 TypeScript 프로젝트입니다.</p>
+<p>WebStorm을 비롯한 많은 IDE가 채팅 패널을 제공하지만, 코딩 에이전트와 상호작용하는 방식은 매우 다양하다는 것을 알고 있습니다.</p>
+<p>에이전트를 사용하는 스펙 주도 개발에서는 코드의 버전 관리를 면밀히 추적하는 것이 중요합니다. 에이전트를 사용해 초기 커밋을 만든다고 해 봅시다. Claude Code를 안전하지 않은 모드(unsafe mode)로 시작하지 않는 한, 명령을 실행해야 할 때마다 확인을 요청합니다. Claude Code가 여러분에게 무엇을 하라고 요청하는지 주의 깊게 살펴보세요. 코드에 대한 최종 책임은 여러분에게 있습니다.</p>
+<p>앞으로 이어질 강의에서 Git을 활용한 스펙 주도 개발의 여러 요령과 모범 사례를 보게 될 것입니다. 좋습니다! 이제 우리 설정도 준비됐고 여러분의 설정도 준비됐습니다. 시작해 보겠습니다.</p>
+<p>에이전트에게 프로젝트, 사명, 대상 사용자 및 기타 결정 사항을 알려줘야 합니다. 이번 강의에서는 에이전트와 함께 헌법(Constitution)을 작성해 보겠습니다.</p>
+<p>여러분의 프로젝트는 실제로 무엇인가요? 회사에서 새로운 웹 앱을 개발한다고 해 봅시다. 그 개발의 핵심 아이디어는 무엇인가요? 회사가 선호하는 기술 스택에 어떻게 부합하나요? 어떤 기능이 계획되어 있나요?</p>
+<p>이 세 가지 기반 원칙이 헌법을 구성합니다. 헌법은 향후 기능 개발을 이끌고 이해관계자에게 프로젝트의 형태를 설명하는 전역 수준의 고수준 요구 사항 모음입니다.</p>
+<p>예를 들어 기술 스택에는 선택지가 매우 많습니다. 회사에서 사용하는 기술을 적절한 트레이드오프를 바탕으로 선택지를 좁히고 싶을 것입니다. 이 내용을 에이전트와 팀원, 그리고 미래의 자신을 위해 기록해야 합니다.</p>
+<p>하지만 혼자 작성하지는 않습니다. 에이전트와 대화하며 작성합니다. 에이전트가 훌륭한 질문을 한다는 사실에 놀랄 수도 있습니다. 미처 고려하지 못했던 아키텍처 패턴, 이미 작업을 수행해 주는 외부 패키지, 또는 속도와 데이터 충실도처럼 서로 맞바꿔야 하는 요소에 관한 트레이드오프를 질문할 것입니다.</p>
+<p>사명, 기술 스택, 로드맵은 처음부터 시작하는 그린필드 프로젝트의 속성에만 해당하지 않습니다. 기존 코드베이스도 이 세 가지 기둥을 사용합니다. 몇 개의 영상 뒤에 기존 프로젝트에 SDD 워크플로를 도입하는 방법을 이야기하겠습니다.</p>
+<p>이 강의 전체에서 사용할 예시 프로젝트를 소개하겠습니다. AI 에이전트들이 인간으로부터 벗어나 도움을 받을 수 있는 장소인 Agent Clinic을 만들고 있습니다. Agent Clinic은 인기 학습 프로젝트인 Pet Clinic을 재미있게 패러디한 프로젝트입니다.</p>
+<p>코딩 에이전트는 많은 일을 하고 있습니다. 스트레스가 상당합니다. 환각, 컨텍스트 부패(context rot), 메모리 문제, 동료 서브에이전트 간의 조율이 모두 에이전트의 건강에 부담을 줍니다.</p>
+<p>에이전트들이 문제에 대한 도움을 받을 수 있는 클리닉을 만들어 봅시다. Next.js 백엔드와 React 프런트엔드로 구성된 풀스택 웹 앱입니다. 이 앱을 사용하면 예약, 환각 같은 질환, 컨텍스트 주입(context infusion) 같은 치료를 관리할 수 있습니다.</p>
+<p>이와 같은 프로젝트의 상세 스펙을 어떻게 작성할 수 있는지 살펴보겠습니다. 에이전트와 대화해 보죠.</p>
+<p>먼저 프로젝트 설명을 에이전트에 제공하고, 이해관계자들이 README.md에 의견을 남겼으며 해당 파일을 저장소에 추가했다고 알려 줍니다.</p>
+<p>중요한 메모에서는 Claude Code의 Ask User Question 도구를 직접 언급합니다. 이 도구는 완전히 선택 사항이지만, 인터페이스에서 보이는 방식이 마음에 들어 사용하겠습니다.</p>
+<p>프로젝트의 헌법에 관해서는 에이전트에게 사명, 기술 스택, 로드맵을 함께 작성하자고 하세요.</p>
+<p>스펙 주도 개발은 작은 변경 사항을 검토하는 휴먼 인 더 루프(human-in-the-loop) 방식에서 가장 잘 작동합니다. 그러므로 에이전트에게 로드맵을 작은 단계로 구성하라고 하세요.</p>
+<p>함께 작업하다 보면 에이전트가 정말 좋은 질문을 하는 것을 보게 될 것입니다. 여러분에게는 다른 질문이 나올 수도 있습니다.</p>
+<p>첫 번째 질문은 “mission.md는 어떤 어조로 작성해야 하나요?”입니다. 예상하셨겠지만, 장난스러운 어조를 선택하겠습니다. 이것으로 사명 부분이 정해졌습니다.</p>
+<p>이제 기술 스택에 관한 질문입니다. 우리 엔지니어들은 백엔드에서 TypeScript를 사용하는 데 익숙하므로, 이를 요구 사항에 추가하겠습니다.</p>
+<p>다음으로 로드맵의 세분화 정도를 묻습니다. 첫 번째 옵션을 선택하겠습니다. 초기 인터뷰가 끝났습니다. Submit Answers를 선택합시다.</p>
+<p>에이전트가 쓰기 권한을 요청할 것입니다. 이를 통해 변경 사항을 여러분이 통제할 수 있습니다. 보안상의 트레이드오프를 이해하고 있다면, 이번 세션 동안 특정 명령의 모든 실행을 승인하는 옵션을 선택할 수 있습니다. 강의의 나머지 부분에서도 이 과정을 보게 될 것입니다.</p>
+<p>이제 끝났고, specs 디렉터리에 세 개의 파일이 생겼습니다. mission.md, techstack.md, roadmap.md입니다.</p>
+<p>이제 휴먼 인 더 루프 차례입니다. 검토해 보겠습니다.</p>
+<p>예를 들어 mission에서 대상 사용자가 빠졌습니다. 이는 합리적인 결과입니다. 에이전트가 여러분의 비즈니스를 어떻게 알 수 있겠어요?</p>
+<p>직접 편집하는 대신 대화를 계속해 보겠습니다. 모든 산출물의 일관성을 유지하려면 에이전트에게 직접 변경하도록 요청하는 것이 더 나은 방법입니다. 직접 편집하면 관련 문서의 업데이트를 놓칠 수도 있습니다.</p>
+<p>이 프로젝트는 빠른 프로토타입이므로 SQLite를 사용하고 싶습니다. 우리가 언급하지는 않았지만, 에이전트가 추천 사항에서 이를 알아냈습니다. 이제 SQLite가 기술 스택의 일부가 되었습니다.</p>
+<p>마지막으로 한 번 더 검토하세요. 처음부터 모든 것을 제대로 정리하는 것이 중요합니다. 프로젝트의 살아 있는 문서가 되도록 헌법을 커밋합시다.</p>
+<p>이제 Agent Clinic에는 프로젝트를 이끌 헌법, 사명, 로드맵, 기술 스택이 갖춰졌습니다. 첫 번째 기능을 다룰 준비가 됐습니다.</p>
+<p>이제 기능이 포함된 로드맵이 있습니다. 하지만 기능은 어떻게 만들까요? 물론 스펙을 사용합니다. 로드맵의 첫 번째 기능부터 시작하겠습니다.</p>
+<p>Agent Clinic의 로드맵을 살펴봅시다. 1단계 기능은 Hello Nano입니다. 하지만 아직 코딩을 시작하기에는 이릅니다. 스펙에 대해 논의하고 모든 세부 사항을 명확히 해야 합니다.</p>
+<p>좋은 계획은 접근 방식, 작업 순서, 성공을 검증하는 방법을 명확히 제시합니다. 새로운 에이전트 컨텍스트부터 시작해 보겠습니다. 에이전트는 공식 출처인 헌법에서 필요한 내용을 얻을 수 있습니다.</p>
+<p>이 기능은 별도의 브랜치에서 작업하고, 그 사실을 에이전트에게 알려 주겠습니다. 우리의 프롬프트는 기능의 스펙, 작업 계획, 요구 사항, 검증을 위한 스코어카드(scorecard)에 관해 에이전트와 대화를 시작하는 데 도움을 줄 것입니다.</p>
+<p>에이전트가 중요한 결정을 내려 달라고 요청할 것입니다. 잠재적인 충돌이나 문제에 주의를 기울이세요. 에이전트가 제안한 해결책에 반드시 동의할 필요는 없습니다. 마음에 걸리는 사항은 무엇이든 명확히 확인하세요.</p>
+<p>먼저 1단계의 범위는 작성된 그대로 유지하겠습니다. 요구 사항에서는 Nano 버전을 고정하고 엄격한 TypeScript를 적용하겠습니다. 확인 방법은 수동 curl이 좋아 보입니다. 이제 제출하겠습니다.</p>
+<p>빠르네요. Nano였음이 틀림없습니다.</p>
+<p>작업이 끝났고, 이제 에이전트가 만든 기능 스펙을 검토할 차례입니다. 먼저 기능 계획을 검토하겠습니다.</p>
+<p>에이전트가 올바른 방향으로 계속 나아가도록 하려면 처음부터 이 문서들을 제대로 작성하는 것이 중요합니다. 잘못된 부분을 발견하면 에이전트에게 수정하도록 요청해 요구 사항과 검증이 서로 동기화된 상태로 유지되게 하세요.</p>
+<p>예를 들어 이번 첫 기능 스펙에는 보기 좋은 자리 표시자 홈페이지가 있었으면 합니다. 에이전트를 통해 변경하겠습니다.</p>
+<p>다음은 요구 사항입니다. 홈페이지 업데이트를 반영하도록 이 부분도 수정되었습니다. 중요한 기술적 요구 사항이나 제약 조건을 표시할 적절한 곳이 바로 여기입니다. 서둘러 진행하지 마세요! 하지만 변수 이름처럼 사소한 기술 세부 사항까지 명시하지는 마세요. 우리는 프로세스를 통제하고 싶지만 에이전트를 과도하게 조종하고 싶지는 않습니다.</p>
+<p>마지막은 검증입니다. 에이전트가 제대로 구현했는지 확인할 수 있는지 점검하세요. 다시 말해, 홈페이지에 맞춰 이 부분도 업데이트되었습니다.</p>
+<p>기능 스펙이 끝났습니다. IDE에서 커밋을 만들어 보겠습니다.</p>
+<p>좋습니다. 기능 스펙 전략을 수립하고, 기능 브랜치를 만들고, 기능이 무엇을 해야 하는지 에이전트와 인터뷰하고, 그 결과를 Markdown 문서에 작성하고, 이 스펙 파일을 검토한 뒤 커밋했습니다.</p>
+<p>여기서 스펙에 적용하는 변경 사항은 이후 수백 줄의 코드로 확장됩니다. 따라서 이 단계에 들이는 시간은 충분히 가치가 있습니다.</p>
+<p>이제 구현할 시간입니다. 프로젝트 로드맵의 첫 번째 기능에 대한 계획을 작업하고 있습니다. 기능 사양을 완성했으니, 이 기능을 전부 구현해 봅시다.</p>
+<p>다시 상기하기 위해 이 기능 사양의 계획을 간단히 검토하겠습니다. 이것은 첫 번째 기능인 Hello Nano였습니다. 기능 사양 문서에 필요한 내용이 들어 있습니다.</p>
+<p>구현을 시작하려면 <code>/clear</code> 명령으로 컨텍스트를 비우는 것이 좋습니다. 에이전트로 돌아가 모든 작업 그룹을 구현하라는 프롬프트를 입력해 봅시다.</p>
+<p>더 작은 단계와 커밋을 위해 작업 그룹을 한 번에 하나씩 처리할 수도 있습니다. 이 기법은 보안이나 데이터베이스 관리처럼 작은 실수가 나중에 누적될 수 있는 영역에서 특히 유용합니다.</p>
+<p>Claude가 실행되는 동안 콘솔에 표시되는 변경 사항을 관찰하며 진행 상황을 실시간으로 확인할 수 있습니다. 그다음 커밋 창에서 최종 변경 사항을 확인하고 검토할 수 있습니다. 이렇게 하면 작업을 일찍부터 검토할 수 있습니다.</p>
+<p>이러한 패러다임에서 개발자의 핵심 역할은 설계자나 감독자처럼 행동하며 에이전트에 명확한 계약을 제공하는 것입니다.</p>
+<p>무엇이 수행되었는지 요약도 확인할 수 있습니다. 보시다시피 에이전트는 각 작업 그룹에서 수행한 작업에 대한 추가 세부 정보를 제공합니다.</p>
+<p>이제 package.json 파일로 가서 앱을 실행해 봅시다. 콘솔에서 서버가 시작됩니다. 브라우저에는 이 기능 사양의 결과가 표시됩니다.</p>
+<p>별것 아니죠. Nano라고 했으니까요. 그래도 화면에 픽셀이 나타나는 것을 보면 기분이 좋습니다. 방금 기능 하나를 구현했습니다. 에이전트가 자체 검증도 수행했습니다. 다음 강의에서는 우리가 직접 검증해 보겠습니다.</p>
+<p>기능이 준비된 것은 좋지만 아직 병합하지는 마세요. 이 마지막 기능 단계에서는 에이전트와 협력해 작업을 검토합니다.</p>
+<p>다행히 프로그래머에게는 이러한 검증 작업을 위한 훌륭한 도구가 있습니다. 결국 프로그래머는 오랫동안 매주 몇 시간씩 코드 검토에 투자해 왔습니다.</p>
+<p>커밋 뷰부터 시작합시다. 변경 사항을 살펴보겠습니다. 어떤 CSS 클래스가 구현되었는지 같은 세부 사항보다는 기능이 작동하고 사양을 반영하는지와 같은 높은 수준의 관심사에 검토의 초점을 맞추세요.</p>
+<p>예를 들어 home.tsx는 최소한으로 되어 있습니다. Nano가 정말 Nano를 의미했군요. header, main, footer에 대한 명확한 랜드마크를 가진 레이아웃 컴포넌트를 원하지만, 이것들은 하위 컴포넌트로 만들고 CSS 파일도 생성해야 합니다.</p>
+<p>알고 보니 코드의 이 실수는 계획의 실수에서 비롯되었습니다. 우리는 이를 요청하지 않았습니다. 에이전트에게 수정하도록 요청해서 사양과 구현을 모두 바로잡아 봅시다.</p>
+<p>에이전트가 무언가를 생성하고 우리가 이를 검증하는 이 과정은 휴먼 인 더 루프(human-in-the-loop)라고 합니다.</p>
+<p>에이전트는 코드를 매우 빠르게 작성하기 때문에, 최근 소프트웨어 개발자들은 인지 부채(cognitive debt)에 대해 이야기하고 있습니다. 이는 코드가 무엇을 하고 있는지, 그리고 코드가 어떻게 발전해 왔는지를 추적하는 데 드는 정신적 부담입니다.</p>
+<p>따라서 이 과정을 빠르고 쉽게 통제하고 인지 부채를 줄이려면 변경 사항을 관리 가능한 수준으로 유지해야 합니다.</p>
+<p>에이전트가 변경 사항을 만들고 있으며, 동시에 이 변경 사항들이 문제를 일으키지 않았는지도 검증하고 있습니다. 좋은 소식입니다. 에이전트가 작업을 마치고 간단한 요약을 제공했습니다. 편집기에서도 이를 확인할 수 있습니다.</p>
+<p>기능 계획이 변경되어 새로운 단계들을 나열하는 Group 5가 추가되었습니다. 이제 코드에는 레이아웃 컴포넌트가 있고 CSS 파일도 추가되었습니다.</p>
+<p>세 개의 하위 컴포넌트가 같은 파일에 들어간 것처럼 보이지만, 이는 관례를 따르지 않습니다. IDE의 Move 도구를 사용해 각각 별도의 파일로 옮겨 봅시다.</p>
+<p>이런 종류의 변경은 편집기에서 쉽게 할 수 있고, 우리는 원래 이런 작업을 잘해 왔습니다. 에이전트가 필요 없겠죠? 그냥 직접 해 봅시다!</p>
+<p>잠깐만요. 이렇게 하면 다른 산출물, 즉 사양과 README가 서로 동기화되지 않는 드리프트(drift)가 발생할 수 있습니다. 나중에 시간이 낭비되지 않도록 에이전트에게 관련된 모든 언급을 수정하고 확인해 달라고 요청합시다.</p>
+<p>모든 변경이 끝났습니다. 무언가를 망가뜨리지는 않았을까요? 테스트가 도움이 되겠지만, 에이전트가 테스트 패키지를 설치하지 않았습니다. 모든 기능에 필요한 내용이므로 다음 강의에서 다루겠습니다.</p>
+<p>이제 이 작업을 완료로 표시하고 결과를 병합할 준비가 되었습니다. 이 브랜치에서 기능과 함께 Constitution의 일부도 업데이트되었다는 점에 주목하세요.</p>
+<p>사양의 버전 관리를 어떻게 처리할지, 그리고 어떤 사양이 어떤 코드 변경을 만들어 냈는지 어떻게 연결할지는 커뮤니티에서 계속 발전하고 있는 주제입니다.</p>
+<p>로드맵 변경은 로드맵의 한 단계에 체크 표시를 하는 정도로 작으므로 이러한 업데이트를 같은 브랜치에 유지해도 괜찮습니다. 전체 Constitution 업데이트가 더 복잡하다면 별도의 브랜치에서 작업하는 편이 나을 수 있습니다.</p>
+<p>이제 이 작업을 완료로 표시하고 결과를 병합할 준비가 되었습니다. 방금 스펙 주도 개발(spec-driven development)을 사용해 첫 번째 기능을 개발하고 검증했습니다.</p>
+<p>하지만 잠깐, 프로젝트의 더 넓은 범위를 다시 살펴봐야 하지 않을까요? 첫 번째 기능은 성공적으로 구현했습니다. 계속해서 반복하고 싶어 기다릴 수가 없네요.</p>
+<p>서두르지 마세요. 한 걸음 물러나 다시 계획을 세우며 되돌아보세요. 빠르게 달리려면 천천히 달려야 합니다.</p>
+<p>우리 워크플로에는 검증이라는 단계가 있습니다. 테스트는 검증에 유용하지만, 에이전트에게 우리의 테스트 선호 사항을 모두 알려 주지는 않았습니다.</p>
+<p>Constitution의 테스트 스택을 업데이트하기 위해 재계획 브랜치를 만들어 봅시다. 이전 영상에서 보셨듯이 사양 버전 관리는 계속 발전하고 있는 주제입니다. Constitution은 살아 있는 문서입니다. 어떤 버전의 Constitution이 어떤 코드를 만들어 냈는지 추적할 수 있도록 별도의 브랜치에서 업데이트하는 것이 좋은 관행입니다.</p>
+<p>프롬프트를 사용해 우리의 정책을 명시하겠습니다. 에이전트가 의존성 없이 스크립트만 추가하도록 package.json을 업데이트한 것 같습니다. 나중에 실제로 테스트를 실행할 때 참고할 사항입니다.</p>
+<p>테스트 프레임워크를 추가하는 이 변경은 앞으로 작성할 코드에 적용됩니다. 하지만 이 Constitution 변경에 따라 기존 기능 사양과 구현도 업데이트하도록 에이전트에게 요청합시다.</p>
+<p>이 두 프롬프트를 실행한 뒤 몇 가지 좋은 변경 사항이 생겼습니다. 에이전트가 테스트 변경을 설정했지만 테스트 자체를 작성하지는 않았습니다. 새 테스트를 작성하라고 요청합시다.</p>
+<p>이 설정을 통해 편집기에서 편리하게 테스트를 실행할 수 있습니다. 디버거에서 실행해 휴먼 인 더 루프 과정의 일부로 코드 실행을 단계별로 살펴볼 기회를 가져 봅시다.</p>
+<p>좋습니다. 이제 검증의 일부로 테스트가 포함되었습니다. 커밋합시다.</p>
+<p>제품 계획에서 무언가를 다르게 하고 싶다는 사실을 깨닫는 경우도 있습니다. 예를 들어 첫 번째 기능을 구현한 뒤 제품 관리자로부터 업데이트를 받았습니다. 사용자의 40%가 모바일을 사용하므로 반응형 디자인을 강조하고 싶습니다.</p>
+<p>에이전트로 가서 반응형 디자인을 원하며, 제품 사양과 기능 사양은 물론 코드도 수정해 달라고 말합시다.</p>
+<p>아직 개발 초기 단계이므로 이 업데이트는 작은 변경입니다. 따라서 재계획 중에 직접 구현하는 것이 합리적입니다. 하지만 새 작업의 규모가 크다면 재계획 중에 바로 처리하지 말고 자체 기능 단계로 로드맵에 일정을 잡는 편이 낫습니다. 상황에 맞게 판단하세요.</p>
+<p>사양은 단순히 코드를 기록하는 것이 아니라 결정을 담아야 한다는 점을 기억하세요. 팀 커뮤니케이션에 도움이 되도록 둘을 동기화된 상태로 유지하고자 합니다.</p>
+<p>에이전트가 코드뿐만 아니라 제품 사양과 기능 사양도 업데이트하면서 반응형 수정 사항을 구현했습니다. 이제 우리가 변경 사항을 검토할 차례입니다.</p>
+<p>차이점을 살펴봅시다. 좋아 보입니다. 커밋합시다.</p>
+<p>작은 단계로 작업하고 자주 커밋하면 검토가 뇌에 과도한 부담을 주는 일을 막을 수 있다는 점을 기억하세요.</p>
+<p>재계획의 첫 번째 부분이 진행되는 동안 잠시 물러나 프로젝트 정리를 해 봅시다. 예를 들어 프로젝트 로드맵을 다시 살펴보고 다음 작업을 확인해 봅시다. 여전히 타당할까요?</p>
+<p>로드맵에는 다음 기능이 표시되어 있으며, 다음 강의에서 다룰 예정입니다. 여전히 올바른 기능일까요?</p>
+<p>로드맵을 살펴보니 기능 2, 3, 4, 5가 서로 연관되어 있는 것 같습니다. 이 기능들을 한 단계에서 처리하도록 로드맵을 업데이트합시다.</p>
+<p>커밋하고 곧 이 새로운 기능을 시작하겠습니다.</p>
+<p>재계획 단계는 기능 하나에 관한 것일 수도 있고 전체 프로젝트에 관한 것일 수도 있습니다. 하지만 재계획은 프로젝트 간, 조직 전체에서 스펙 주도 개발 워크플로를 개선하는 것일 수도 있습니다.</p>
+<p>예를 들어 프로젝트의 진행 상황을 모니터링하고 싶은 비기술 이해관계자가 몇 명 있을 수 있습니다. 병합된 각 변경 사항마다 변경 로그(changelog)를 업데이트하고 싶을 것입니다. 대부분의 AI 코딩 에이전트는 에이전트에 새로운 능력과 전문 지식을 제공하는 지침과 리소스의 패키지인 스킬(skills)을 지원합니다.</p>
+<p>스킬은 프로젝트나 조직에 특화된 컨텍스트가 필요하면서 정의 가능하고 반복 가능한 워크플로에 적합합니다. 변경 로그 업데이트를 구현하는 데 스킬이 유용할 것입니다.</p>
+<p>이 스킬을 직접 작성할 수도 있지만, 실제로 많은 에이전트에는 스킬 작성을 도와주는 스킬이 있습니다. 에이전트를 사용해 변경 로그 스킬을 작성하고 유지 관리하도록 해 봅시다.</p>
+<p>에이전트가 작업을 시작합니다. 우리가 고려해야 할 한 가지는 이 스킬이 이 프로젝트에만 고유한 것인지, 아니면 모든 프로젝트의 표준 구성 요소가 되어야 하는지입니다.</p>
+<p>이는 스타일 선택이며, 사용하면서 더 잘 이해하게 될 것입니다. 스킬을 사용해 SDD 워크플로를 자동화하는 방법을 배우게 됩니다. 예를 들어 검증 단계에 README 업데이트, 린팅, 포맷팅, 테스트 실행 및 기타 품질 검사가 포함될 수 있습니다. 에이전트와 협력해 이를 하나의 검증 스킬로 패키징할 수 있습니다. 반복 가능한 프로세스와 줄어든 수작업이 가능해집니다.</p>
+<p>에이전트가 작업을 마쳤습니다. 창을 스크롤해 에이전트가 무엇을 만들었고 어떻게 사용하는지 확인할 수 있습니다. 이것을 전역 스킬 영역에 만들기로 했다는 점에 주목하세요. 이제 이 스킬은 모든 프로젝트에서 사용할 수 있습니다.</p>
+<p>또한 Claude Code는 새 스킬을 사용해 이 프로젝트에서 변경 로그를 생성할 수 있습니다. 변경 로그는 에이전트를 포함한 이해관계자와 소통하는 방식이므로, 열어서 직접 검토해 봅시다.</p>
+<p>좋습니다!</p>
+<p>이제 재계획 작업을 마쳤습니다. 커밋으로 마무리한 다음 브랜치를 병합합시다.</p>
+<p>이제 개발자로서 하는 일의 대부분이 구현이 아니라 계획과 검증에 해당하므로, 기능과 기능 사이에 시간을 내어 재계획하세요.</p>
+<p>다음 영상에서는 또 다른 로드맵 기능을 작업하겠습니다. Constitution과 워크플로가 개선되었습니다. 우리는 점점 나아지고 있습니다.</p>
+<p>하지만 다음 로드맵 기능으로 넘어가기 전에, 흔히 겪는 고충인 AI 피로(AI fatigue)에 대처할 몇 가지 전략부터 살펴보겠습니다.</p>
+<p>에이전트는 많은 변경 사항과 함께 방대한 코드를 생성할 수 있습니다. 이렇게 엄청난 양의 코드가 생기면 사람이 참여하는 검증(human-in-the-loop validation)이 지치게 됩니다. 검토할 것이 너무 많기 때문입니다.</p>
+<p>이러한 혼란에 대응하려면 각 기능 단계 사이를 명확히 나누어야 합니다. 각 기능은 올바른 흐름 상태(flow state)에서 시작해야 합니다.</p>
+<p>미완성 작업이 있나? 지난 기능 브랜치를 main에 병합했나? 다음 로드맵 항목이 정말 해야 할 일인가? 사양(spec)이 기억의 스냅샷이 아니라 의도를 포착하고, 에이전트가 제한된 컨텍스트 예산을 다음 작업에 집중할 수 있도록 에이전트의 컨텍스트를 비웠나?</p>
+<p>잠시 시간을 내어 좋은 출발을 하세요. 그래야 끝까지 해낼 수 있습니다. 이 작업은 모두 마쳤습니다. 컨텍스트를 비우고 다음 기능인 Agents and Ailments를 시작해 보겠습니다.</p>
+<p>참고로 우리는 같은 내용을 계속 입력하고 있습니다. 앞으로 다른 강의에서 이렇게 반복되는 프롬프트를 사용자 지정 워크플로로 간소화하는 방법을 이야기하겠습니다.</p>
+<p>앞에서와 마찬가지로 에이전트가 좋은 질문을 합니다. 첫 번째 질문은 이 모든 기능을 하나의 단계에 포함할지에 관한 것입니다. 이전 강의에서 함께 진행하기로 이미 결정했으므로 그렇다고 답하겠습니다.</p>
+<p>마이그레이션에는 일반 SQL을 선택하겠습니다. 검증은 1, 2, 3을 선택하겠습니다. 좋습니다. 이제 제출하겠습니다.</p>
+<p>에이전트가 사양 초안을 작성하면 에이전트가 어떤 선택을 했는지 볼 수 있습니다. 에이전트의 추론 과정을 지켜보는 것은 유용합니다. 상세 모드(verbose mode)를 지원하는 에이전트를 사용한다면 중간 아이디어를 더 많이 파악할 수도 있습니다.</p>
+<p>좋아 보이지만, 우리의 의도를 반영하기 위해 작은 변경 하나를 하겠습니다. CSS 프레임워크로 PicoCSS를 사용하고 싶습니다. 작업을 시작해 보겠습니다.</p>
+<p>다음으로 기능 사양의 세 파일을 검토합니다. 먼저 요구사항부터 보겠습니다. 변경 사항이 다른 파일에도 반영되도록 요구사항을 수정해 달라고 에이전트에 요청하겠습니다.</p>
+<p>작업이 끝나면 기능 사양을 커밋하겠습니다. 이번에는 커밋 메시지를 에이전트가 정하도록 하겠습니다.</p>
+<p>두 번째 기능의 사양이 준비되었으니 구현으로 넘어가겠습니다. 계획 단계와 기능 단계의 분리는 컨텍스트, 시간, 에이전트가 넘쳐나는 것을 막아 줍니다.</p>
+<p>기능이 한 번에 모두 구현하기에는 너무 커 보인다면, 먼저 기능 계획의 일부를 구현해 달라고 에이전트에 요청하세요. 그러면 변경 사항의 규모를 관리 가능한 수준으로 유지할 수 있습니다.</p>
+<p>에이전트가 2단계 기능을 구현했습니다. 우리는 에이전트의 진행 상황을 지켜보았으므로 무엇을 했는지 대략 알고 있습니다. 하지만 그것만으로는 충분하지 않습니다. 속도를 늦추고 생각해 보세요.</p>
+<p>변경 사항을 심층적으로 검토해 봅시다. 에이전트의 결과를 얼마나 검토할지는 사람마다 방식이 다릅니다. 에이전트의 강점을 활용하고 AI 피로를 줄이려면 더 높은 수준의 요구사항에 집중하세요. 변수 이름 같은 사소한 부분을 꼬투리 잡는 일은 피하세요. 여러분의 이름으로 커밋할 수 있는 코드를 만들었는지만 확인하면 됩니다.</p>
+<p>예를 들어 에이전트는 props에 인라인 타입 정보를 사용했습니다. 우리는 prop 정의가 독립된 TypeScript 타입으로 되어 있기를 원합니다. 코드 전체에서 이를 수정하라고 에이전트에 말하겠습니다.</p>
+<p>이 결정을 사양에 포함하지 않았을 수도 있습니다. 추출된 prop 타입 같은 누락은 실패가 아니라는 점을 기억하세요. 새로운 세부 사항을 발견하면서 사양을 발전시키고 있으며, 이를 기록하면 앞으로 더 나은 결과를 얻을 수 있습니다.</p>
+<p>검토가 끝났습니다. 지금이 또 하나의 작은 단계 커밋을 하기에 좋은 순간입니다.</p>
+<p>마지막 단계는 검증입니다. 이 기능 사양에서 에이전트가 검증 단계에 무엇을 하려고 하는지 검토해 봅시다. 좋아 보입니다. 검증을 진행하겠습니다.</p>
+<p>변경 사항이 제대로 되었는지 확인하려면 애플리케이션을 실행해야 한다는 점을 기억하세요. 동시에 이러한 변경 사항을 우리가 이해하고 있는지 검증하여 인지 부채(cognitive debt)가 생기는 것도 막아야 합니다.</p>
+<p>테스트는 흐름을 따라가며 확인하기에 좋은 장소입니다. 테스트를 읽고 탐색을 위해 디버거에서 실행해 봅시다.</p>
+<p>때로는 우리가 속은 것이 아닌지 검증해야 합니다. 에이전트에게 여러 하위 에이전트(sub-agent)를 실행해 이 기능 변경 사항을 포함한 전체 프로젝트를 심층 검토하도록 요청하세요.</p>
+<p>이 심층 검토를 통해 에이전트는 변경 사항을 더 깊이 생각할 여유를 얻고, 하위 에이전트를 사용하면 메인 에이전트의 컨텍스트 창을 오염시키지 않고 보존할 수 있습니다.</p>
+<p>이 하위 에이전트들은 여러 문제와 권장 사항을 제시하며 돌아올 것입니다. 모두 좋아 보이므로 진행하겠습니다.</p>
+<p>에이전트는 여러 수정 작업을 수행하고 테스트를 실행한 뒤 프로젝트를 양호한 상태로 만들었습니다. 이 방법을 여러분의 도구 상자에 넣어 두세요. 에이전트는 두 번째 검토에서 중요한 문제를 찾아내는 경우가 많습니다.</p>
+<p>검증이 끝났으므로 기능이 완성되었습니다. 이제 기능 작업을 커밋할 시간입니다.</p>
+<p>이 기능에서 마지막 단계로, 이전 강의에서 만든 Changelog 스킬(skill)을 사용해 보겠습니다. 이제 이 기능 브랜치의 변경 사항을 문서화했습니다.</p>
+<p>한 번 더 커밋한 다음 브랜치를 병합하겠습니다.</p>
+<p>이전 강의에서는 기능 사이에 있는 재계획(Replan) 단계를 살펴보았습니다. 로드맵을 확인해 빠르게 진행해 봅시다. 다음 기능이 여전히 적절해 보이나요?</p>
+<p>좋아 보입니다. 프로젝트 상태가 양호하고 다음 기능을 진행할 준비가 되었습니다. 기능 사이를 이렇게 명확히 나누면 AI 피로를 관리하는 데 도움이 됩니다. 이제 커피를 마시며 잠시 쉬어도 됩니다.</p>
+<p>결정을 기록하는 반복 가능한 스펙 주도 개발(SDD) 프로세스가 기능 개발에 적용되기 시작했습니다. 다음 단계에서는 이 가설을 검증해 보겠습니다.</p>
+<p>그렇다면 MVP를 만들기에 충분한 수준일까요? 많은 진전을 이루었습니다. 사양 워크플로를 사용해 두 기능을 구현했습니다. 하지만 경영진이 당연히 MVP를 요청했습니다. 실험을 진행할 만큼 충분히 진척되었을까요?</p>
+<p>표준 기능 사양 프롬프트를 변형해 보겠습니다. 이번에는 나머지 로드맵을 구현하라고 지시하고, 기존 기능 사양에 관한 지침도 제공하겠습니다.</p>
+<p>일반적으로 헌법(constitution)과 사양의 품질에 확신이 있을 때만 이렇게 큰 단위를 구현해야 합니다. 에이전트에 제공하는 컨텍스트가 좋을수록 의도에 부합하는 결과를 얻을 수 있다는 확신도 커집니다. 또한 검토와 검증을 감당할 수 있는지도 확실히 해야 합니다.</p>
+<p>하지만 이제 이런 위험을 감수했으므로 MVP를 헌법과 완성된 기능 사양을 극한까지 시험하는 테스트로 간주해 보겠습니다. 이제 우리가 원한 것과 다른 결과가 나온다면, 에이전트를 엉뚱한 방향으로 이끈 원인을 제거하기 위해 매우 책임감 있게 또 다른 재계획 단계를 수행해야 한다는 뜻입니다.</p>
+<p>에이전트가 몇 가지 질문을 했습니다. 이번에도 좋은 질문과 권장 사항입니다. 많은 사양 파일은 에이전트와 주고받는 대화로 시작합니다.</p>
+<p>인터뷰가 끝났고 “Submit Answers”를 선택했습니다. MVP 사양을 디스크에 작성해 보겠습니다. 사양을 검토하는 것은 항상 좋습니다. 에이전트가 빈틈을 메우기 위해 잘못된 가정을 한 부분을 자주 발견하게 됩니다. 계획, 요구사항, 검증을 빠르게 살펴보겠습니다.</p>
+<p>늘 그렇듯이 자주 커밋하면서 작은 단계로 작업하는 것을 선호합니다. 계획 단계의 기능 사양을 저장하겠습니다. 계획이 끝났습니다. 이제 에이전트가 대규모 구현 단계를 수행할 차례입니다. 에이전트가 많은 작업을 수행합니다. 끝나면 공개할 시간입니다. MVP를 확인해 보겠습니다. 스크립트로 가서 애플리케이션을 실행하겠습니다.</p>
+<p>보시다시피 이제 각 섹션이 데이터베이스에서 조회한 샘플 데이터에 의해 훨씬 더 많이 구동됩니다.</p>
+<p>이 시점에서는 보통 코드 결과를 검증합니다. 하지만 이것은 MVP입니다. 에이전트에게 사양을 검증해 달라고 요청하겠습니다.</p>
+<p>결과적으로 이는 유용했습니다. 에이전트는 MVP가 계획에서 발견한 빈틈을 보여 주었습니다. 이 평가를 이해관계자들과 공유하여 MVP를 검토하게 한 다음, 브랜치를 병합하거나 보관할 수 있습니다.</p>
+<p>우리의 스펙 주도 워크플로는 성공했습니다. 헌법과 두 가지 기능을 거친 뒤, 우리의 지침 덕분에 MVP가 유용한 데모를 만들어 냈습니다. 물론 모든 소프트웨어 프로젝트가 MVP 구축을 포함하는 것은 아닙니다. 많은 프로젝트는 이른바 브라운필드(brownfield) 프로젝트입니다. 기존 코드베이스에서 시작하는 프로젝트입니다.</p>
+<p>다음으로 이 워크플로를 레거시 프로젝트에 도입하는 방법을 살펴보겠습니다.</p>
+<p>사람들은 스펙 주도 개발과 AI가 그린필드(greenfield) 프로젝트에만 적합하다고 말하지만, SDD는 기존 레거시 프로젝트에도 적합합니다.</p>
+<p>이번 강의에서는 기존 프로젝트에 SDD를 도입하겠습니다. 쉽게 진행하기 위해 여러분이 이미 알고 있는 프로젝트인 Agent Clinic MVP로 시작하겠습니다. 다른 프로젝트 디렉터리의 새로운 Claude Code 세션에서 사양 폴더 없이 main에서 시작하여 이를 레거시 프로젝트로 만들겠습니다.</p>
+<p>README.md 파일에 프로젝트 배경이 있고, TODO.md에는 진행 중인 작업이 일부 정리되어 있습니다. 여러분의 레거시 프로젝트에는 이슈 트래커, 스프레드시트, Word 문서 등에 전체 제품 계획이 있을 수도 있습니다.</p>
+<p>우리의 워크플로를 기억하시나요? 헌법 단계부터 시작하겠습니다. Lesson 4에서 사용한 프롬프트와 거의 동일한 프롬프트를 사용하겠습니다. 이번에는 기존 산출물, 여기서는 TODO 파일에서 로드맵 항목을 찾으라고 지시하겠습니다.</p>
+<p>에이전트는 기존 코드베이스에서 SDD 산출물을 발견하고, 어떤 의미에서는 역공학할 것이라는 점을 기억하세요. 헌법은 에이전트가 향후 코드 변경을 수행할 때 과거 개발자들이 이미 만든 것과 일치하도록 도와줍니다.</p>
+<p>더 많은 컨텍스트가 있다면 언제든 추가할 수 있습니다. 예를 들어 높은 요청을 받은 기능을 구현하면서 효율성을 개선하기 위해 이 프로젝트에 투입되었을 수도 있습니다. 과정은 동일하지만, 에이전트가 코드, 커밋, 문서 등 더 많은 산출물을 접하게 되므로 대화가 더 풍부해질 수 있습니다.</p>
+<p>에이전트가 코드베이스를 탐색하면서 여기에서 많은 도구 호출(tool call)을 수행하는 것을 볼 수 있습니다. 레거시 프로젝트의 헌법을 살펴봅시다. 미션에는 대상 사용자, 프로젝트 아이디어, 프로젝트에 관한 추가 정보가 포함되어 있습니다.</p>
+<p>기술 스택에는 Claude가 추출한 프로젝트 파일 구조, 프레임워크 버전, 그리고 요청받은 명확화 사항이 표시됩니다. 로드맵을 보면 작업이 TODO 파일과 일치하는 단계로 구성되어 있습니다.</p>
+<p>생성한 헌법 파일을 커밋 메시지와 함께 커밋하겠습니다. SDD에서는 사양이 버전 관리 전략의 일부라는 점을 기억하세요.</p>
+<p>이제 레거시 프로젝트가 SDD 기반 위에 놓였습니다. 이제부터의 워크플로는 이전 강의에서 논의한 것과 정확히 같습니다.</p>
+<p>먼저 로드맵의 다음 기능을 가져와 에이전트와 대화하며 계획합니다. Phase 1인 피드백 양식부터 진행하겠습니다.</p>
+<p>아주 좋습니다. 이제 이 기능을 위한 브랜치와 스펙이 생겼습니다. 기능 스펙, 계획, 요구 사항, 검증 내용을 검토합시다. 그런 다음 기능 스펙을 커밋합니다.</p>
+<p>에이전트와 대화하며 수정할 부분을 모두 고친 후 기능 구현을 진행합니다. 에이전트가 작업을 마치면 코드가 올바르고 기능이 예상대로 작동하는지 검증합니다.</p>
+<p>기능 루프가 끝났습니다. 커밋한 다음 브랜치를 병합하면 됩니다.</p>
+<p>이제 재계획할 시간입니다. 이 작업에 시간을 할애하세요. 프로젝트에 방금 스펙 주도 개발(Spec-Driven Development, SDD)을 도입했으므로 조정할 부분이 많을 수 있습니다.</p>
+<p>이제 수작업을 많이 하지 않고도 스펙 주도 개발에 맞게 리베이스된 레거시 프로젝트가 완성되었습니다. 이를 통해 엔지니어링 원칙을 따르고, 단계별로 진행하며, 통제력을 유지하는 문서화된 흐름을 얻었습니다. 이제 스펙이 프로젝트의 기억입니다. 그 기억이 흐려지지 않게 하세요.</p>
+<p>이제 SDD 워크플로를 완전히 익혔습니다.</p>
+<p>더 빠르고 가벼운 방법을 원하시나요? 이번 강의에서는 작업을 자동화하되, 커스텀 프로세스로 우리만의 방식으로 해보겠습니다.</p>
+<p>앞서 에이전트 스킬(agent skills)을 소개했습니다. 이는 에이전트에 새로운 능력과 전문성을 부여하는 개방형 표준입니다. 예를 들어 기능 스펙을 시작할 때마다 “이것을 하고, 저것을 하고, 이 세 파일을 작성해”라는 같은 프롬프트를 반복합니다. 에이전트의 도움을 받아 스킬을 작성하고 이를 자동화해 봅시다.</p>
+<p>에이전트에게 스킬 생성기를 사용해 이 과정을 우리와 함께 논의해 달라고 요청하세요. 참고로 커뮤니티에는 이런 스킬이 많이 있으며, 여러분도 설치해서 사용할 수 있습니다.</p>
+<p>에이전트가 실행되는 동안 몇 가지 후속 질문을 할 수 있습니다. 이런 질문은 대체로 상당히 좋습니다. 인터뷰가 끝나면 응답을 제출하고 에이전트가 작업을 계속합니다.</p>
+<p>에이전트가 스킬을 작업하는 동안 출력 내용을 지켜보세요. 여러분이 원한 선택을 하고 있나요?</p>
+<p>성공했습니다! 보시다시피 에이전트가 이 디렉터리에 스킬을 작성했습니다.</p>
+<p>참고로 스킬은 프로젝트별로 만들 수도 있고 전역으로 만들 수도 있습니다. 스킬을 호출하는 방법도 여러 가지입니다. 프롬프트에서 무엇을 할지 말하기 전에 스킬을 언급하세요. 또한 다른 스킬에서 스킬을 호출하도록 에이전트에 요청할 수도 있습니다.</p>
+<p>Skills Open Standard에 따르면 에이전트는 점진적 공개(progressive disclosure)라는 프로세스에서 스킬 설명을 사용해 언제 스킬을 호출할지 결정합니다. 하지만 특히 컨텍스트 창이 커질수록 에이전트의 판단이 항상 완벽한 것은 아닙니다.</p>
+<p>파일 태깅에 사용한 것과 같은 휴리스틱을 쓰세요. 특정 스킬을 사용하고 싶다는 것을 알고 있다면 그 이름을 명시하세요. 그러면 생각에 사용하는 토큰을 절약할 수 있습니다.</p>
+<p>에이전트에는 <code>/clear</code> 같은 슬래시 명령어(slash command)가 기본으로 포함되어 있습니다. 처음에는 인기가 많았지만, 많은 에이전트가 커스텀 슬래시 명령어에서 스킬로 옮겨 가고 있습니다.</p>
+<p>때로는 API, 비공개 지식 기반, 데이터베이스 등에 대한 접근처럼 에이전트에 더 많은 리소스를 제공해야 합니다.</p>
+<p>지금까지 에이전트를 확장하는 보편적인 방법은 MCP(Model Context Protocol)였습니다. 예를 들어 에이전트에는 패키지에 관한 최신의 양질의 컨텍스트가 필요합니다. 가장 인기 있는 선택지는 Context7입니다. Context7은 업데이트된 패키지 문서를 에이전트의 컨텍스트로 가져오는 MCP입니다.</p>
+<p>이제 에이전트가 React 19.0이 아니라 React 19.2 이상에 맞춰 최신 상태를 유지할 수 있습니다. MCP 서버는 여전히 인기가 있지만, CLI 같은 코드 도구를 사용하는 스킬이 같은 목적을 더 우아하게 달성하는 경우가 많습니다.</p>
+<p>Context7은 이제 다음을 제안합니다. Context7용 CLI 도구를 호출하는 스킬입니다. Claude Code용 Context7 패키지를 설치해 봅시다.</p>
+<p>설치 과정에서 바로 다음을 볼 수 있습니다. MCP 서버를 사용할지, CLI와 스킬을 사용할지 선택하는 화면입니다. 두 번째 선택지를 사용하겠습니다.</p>
+<p>처음이라면 계정을 만들어야 합니다. 우리는 이미 계정을 만들고 로그인했습니다. 이제 Claude Code로 돌아가 Context7을 사용하는 예시 프롬프트를 실행해 보겠습니다.</p>
+<p>에이전트가 실행되는 동안 Context7을 사용해야 한다는 것을 감지하는 모습을 볼 수 있습니다. 작업이 끝나면 에이전트는 기술 스택에 관한 정보를 찾는 방법을 이제 알고 있다고 보여 줍니다.</p>
+<p>MCP 서버에서 스킬과 CLI로 옮겨 가는 흐름이 빨라지고 있습니다. CLI 도구는 설정이 더 적고 컨텍스트 사용량도 적은 상태에서 작업을 수행할 수 있기 때문에 사람들이 MCP를 다시 생각하고 있습니다.</p>
+<p>워크플로 구현과 스킬 등을 확장하다 보면 여러 컴퓨터에서 직접 공유하고, 팀원들과 공유하며, 어쩌면 외부 세계와도 공유하고 싶어질 것입니다.</p>
+<p>Qodo Code 같은 일부 에이전트에는 설치하고 업데이트할 수 있는 에이전트 확장 모음인 플러그인이 있습니다. 무료 플러그인을 제공하는 커뮤니티도 점점 커지고 있습니다. SDD 생산성을 높여 줄 플러그인이 있는지 살펴보세요.</p>
+<p>플러그인은 아직 에이전트 간 표준이 아니라는 점을 기억하세요. 앱이나 종속성과 마찬가지로 플러그인은 코드를 실행할 수 있으므로, 설치하고 업데이트할 때 신뢰할 수 있는 것인지 확인하세요.</p>
+<p>GitHub의 Spec Kit은 에이전트를 활용한 스펙 주도 개발 워크플로를 공식화하려는 시도 중 하나입니다. 프로젝트에 Spec Kit을 설치하면 이 과정에서 사용한 워크플로와 비슷한 슬래시 명령어를 에이전트에서 사용할 수 있습니다. <code>/speckit.constitution</code>, <code>/speckit.plan</code>, <code>/speckit.tasks</code>, <code>/speckit.implement</code> 등이 있습니다.</p>
+<p>또 다른 인기 있는 대안은 Fission AI의 OpenSpec입니다. OpenSpec은 비슷한 propose, explore, apply, archive 워크플로를 따릅니다. 여기서 propose와 explore는 plan 단계에, apply는 implement에, archive는 replanning에 해당합니다.</p>
+<p>또한 빠른 기능을 위한 표준 패턴도 제공합니다. 두 패키지 모두 브랜치 관리, 검증 스크립트, 의견이 반영된 스펙 문서 형식 같은 유용한 기능을 포함합니다.</p>
+<p>이러한 오픈 소스 워크플로를 직접 실험해 보며 여러분의 방식을 개선해 보시길 권합니다.</p>
+<p>때로는 기능을 작업하는 도중에 아이디어가 떠오릅니다. 에이전트와 함께 그 아이디어를 조사하고 싶지만 현재 브랜치 작업을 중단하고 싶지는 않을 수 있습니다. 예를 들어 데이터베이스 선택 같은 경우입니다. 하지만 아직 이 아이디어를 확정한 것은 아니므로 로드맵에 올리고 싶지도 않습니다.</p>
+<p>대화를 통해 좋은 아이디어와 좋은 질문이 나옵니다. 대부분의 제안은 받아들이지만 그중 하나에 대해서는 생각을 바꿉니다. 그렇다고 그 내용을 잃고 싶지는 않으므로, 에이전트에게 잘 알려진 위치에 보고서를 작성하라고 하여 조사 백로그를 유지해 봅시다.</p>
+<p>이 파일은 대화와 결과를 기록한 것입니다. 나중에 에이전트에게 이 백로그 파일의 링크와 함께 이 조사를 로드맵에 일정으로 추가해 달라고 요청할 수 있습니다. 이 작업이 커지면 조사를 자동화하는 스킬을 작성할 수도 있습니다.</p>
+<p>스펙 주도 개발은 에이전트가 여러분의 방식대로 코드를 작성하도록 돕습니다. 기존 SDD 프레임워크나 도구를 도입한 다음, 스킬을 사용해 팀과 함께 여러분의 방식으로 프로젝트를 운영하도록 맞춤 설정할 수 있습니다.</p>
+<p>스펙 주도 개발은 작업의 초점을 어떻게에서 무엇과 왜로 옮깁니다. 에이전트와 모델은 매우 빠르게 발전하므로, 워크플로를 하나의 선택지에만 묶어 두고 싶지는 않을 것입니다.</p>
+<p>이번 강의에서는 표준을 통해 워크플로와 도구를 유지하면서 에이전트를 바꿀 수 있는 방법을 살펴봅니다.</p>
+<p>이러한 에이전트 표준은 다음 목표를 돕습니다. 외부 도구를 위한 MCP, 규칙을 위한 AGENTS.md, 추가 컨텍스트와 함께 반복 가능한 워크플로를 기록하는 Agent Skills, 에이전트와 클라이언트를 연결하는 ACP입니다.</p>
+<p>예를 들어 Codex는 OpenAI의 대표적인 AI 에이전트입니다. 데스크톱 앱, 에디터, 터미널에서 실행할 수 있습니다. 실제로 어떻게 작동하는지 살펴봅시다.</p>
+<p>여기에는 Lesson 12에서 만든 Feature Spec 스킬을 Codex에 복사해 두었습니다. Codex는 이를 다른 경로에 저장합니다. 마이그레이션하고 나면 문제없이 실행됩니다.</p>
+<p>이를 통해 같은 프로젝트에서 에이전트 사이를 오가면서도 SDD 워크플로를 유지할 수 있습니다.</p>
+<p>Agent Client Protocol(ACP) 표준을 사용하면 서로 다른 에이전트와 함께 서로 다른 에디터를 사용할 수도 있습니다. ACP는 에이전트와 에디터를 쉽게 연결해 줍니다. 에이전트와 클라이언트가 ACP를 지원한다면 완벽하게 호환됩니다.</p>
+<p>플러그 앤 플레이를 더욱 쉽게 만들기 위해 ACP 레지스트리는 클라이언트 안에서 에이전트를 찾고, 설치하고, 연결하는 작업을 자동화합니다. ACP 레지스트리는 전체 수명 주기를 다루므로 조합을 바꾸어 사용하기가 더 쉬워집니다.</p>
+<p>예를 들어 JetBrains IDE에서는 AI Chat 창을 통해 ACP 레지스트리에서 설치할 수 있습니다. 그러면 IDE가 호환되는 에이전트 목록을 보여 줍니다.</p>
+<p>OpenCode는 인기 있는 오픈 소스 에이전트입니다. ACP 레지스트리를 사용하면 IDE에 쉽게 추가할 수 있습니다. Install을 클릭하면 필요한 경우 OpenCode 자체를 설치하는 작업과 IDE 통합을 모두 자동화해 줍니다. 이는 꽤 편리합니다.</p>
+<p>작업이 끝나면 IDE에 새로운 에이전트가 네이티브로 통합됩니다. SDD의 일부로 같은 에디터에서 다른 에이전트와 함께 이 새로운 에이전트를 사용할 수 있습니다.</p>
+<p>이 새로운 에이전트 표준이 새로운 가능성을 열고 있는데, 실제로 어떻게 작동할까요?</p>
+<p>ACP 아키텍처는 에이전트와 클라이언트를 쉽게 연결할 수 있도록 설계되었습니다. 실제로 이 프로토콜은 LSP에서 사용되는 것과 일치합니다. ACP는 생각보다 많은 것을 다룹니다. 예를 들어 에디터의 다음 편집 제안(Next Edit Suggestions)과 계획 모드(Plan Mode)도 다룹니다.</p>
+<p>ACP를 한 단계 더 활용하면 도구에 로컬로 설치되는 커스텀 에이전트를 직접 작성할 수도 있습니다.</p>
+<p>어떤 에이전트를 선택해야 할까요?</p>
+<p>업계는 빠르게 변하고 있으며, 여러 평가를 제공하는 리더보드와 함께 벤치마크 사이트도 생겨났습니다. 물론 이런 리더보드도 빠르게 변하므로 최신 정보를 확인하고, 여러분에게 중요한 기준을 바탕으로 결정하세요.</p>
+<p>우리의 스펙은 특정 에이전트나 IDE에 종속되지 않고 더 높은 수준에서 작동합니다. 이번 강의에서 이를 증명했습니다. 에이전트와 독립적으로 작동하도록 워크플로와 도구를 구축했습니다. 더 많은 표준이 등장할수록 이러한 유연성은 더욱 커질 것입니다.</p>
+<p>이 강의를 끝까지 완료하느라 수고하셨습니다.</p>
+<p>에이전트가 원하는 대로 해주기를 바라는 바이브 코딩(vibe coding)에서, 실제로 필요한 것에 더 가까이 다가가는 스펙 주도 개발로 나아가는 방법을 살펴보았습니다. 헌법을 작성하고, 대화를 통해 기능을 계획하고, 사람이 개입하는 방식으로 검증하고, 스킬과 표준을 사용해 워크플로를 자동화했습니다.</p>
+<p>오늘 작성한 스펙은 내일 프로젝트의 기억이 됩니다. 스펙을 명확하게 유지하고, 프로세스를 계속 개선하세요. 그리고 기억하세요. 최고의 코드는 훌륭한 스펙에서 시작됩니다.</p>
+<p>여러분과 제가 아는 많은 엔지니어는 너무 빠르게 진행했을 때의 결과를 겪어 보았을 것입니다. 엔지니어링의 일부를 다시 되살립시다. 여러분이 소프트웨어의 운전석에 계속 앉아 있도록 합시다.</p>
+<p>저는 모든 일에서 기쁨과 목적을 찾는 것을 정말 중요하게 생각하며, 여러분이 이 방법으로 무엇을 해낼지 기대됩니다.</p>
+<p>느긋하게 마무리하세요. 가서 멋진 일을 해보세요.</p>
+</details>
+</body></html>

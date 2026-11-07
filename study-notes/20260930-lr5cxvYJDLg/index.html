@@ -1,0 +1,543 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>AI가 여러분의 데이터를 노출하고 있습니다: 눈에 보이지 않는 AI 보안의 숨은 위험</title>
+<meta name="description" content="AI에서 민감 데이터가 프롬프트·RAG·도구·에이전트와 직원 행동을 거쳐 이동하고 변형될 때, 데이터 계보로 노출 경로를 추적해야 한다는 주장이다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>AI가 여러분의 데이터를 노출하고 있습니다: 눈에 보이지 않는 AI 보안의 숨은 위험</h1>
+<div class="meta">업로드 2026-09-30 · 11.2분 · <a href="https://youtu.be/lr5cxvYJDLg" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<h3>큰 그림: AI 도구 목록보다 데이터의 이동 경로를 보라</h3>
+<p>이 영상의 중심 문제는 <strong>“어떤 AI를 사용하고 있는가?”만 알아서는 민감한 데이터의 노출을 막기 어렵다</strong>는 것이다. 데이터는 모델 하나에만 머물지 않는다. 학습 데이터, 사용자의 질문과 첨부 파일, 검색해서 가져온 자료, AI의 행동 규칙, 외부 도구, 데이터베이스, 다른 에이전트를 차례로 통과할 수 있다.</p>
+<p>이 과정에서 데이터의 모양도 바뀐다. 원본 파일이 요약문이나 벡터 데이터로 바뀌고, 새 문서나 파생 파일이 만들어질 수 있다. 따라서 원본 파일이나 처음 입력한 문자열만 찾는 보안 방식은 변형된 데이터를 놓칠 수 있다는 것이 화자의 주장이다.</p>
+<figure data-visual-kind="map" style="margin:1.4rem 0;padding:1rem;border:1px solid #9ca3af;border-radius:12px;background:#f8fafc;">
+  <div role="img" aria-label="AI 데이터 노출 문제와 대응을 위에서 아래로 연결한 전체 지도" style="display:grid;gap:0.55rem;max-width:760px;margin:0 auto;">
+    <div style="padding:0.85rem;border:2px solid #b45309;border-radius:10px;background:#fff7ed;">
+      <strong>1. 문제의 시작</strong><br>
+      승인되지 않은 AI 사용, 공개 챗봇 입력, 민감한 파일 업로드
+    </div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;line-height:1;">↓</div>
+    <div style="padding:0.85rem;border:2px solid #1d4ed8;border-radius:10px;background:#eff6ff;">
+      <strong>2. 데이터 이동과 변형</strong><br>
+      프롬프트·RAG·정책과 문맥·도구·데이터베이스·다른 에이전트를 통과
+    </div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;line-height:1;">↓</div>
+    <div style="padding:0.85rem;border:2px solid #7c3aed;border-radius:10px;background:#f5f3ff;">
+      <strong>3. 가시성의 빈틈</strong><br>
+      각 보안 도구가 일부만 보거나, 변형된 데이터를 원본과 연결하지 못함
+    </div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;line-height:1;">↓</div>
+    <div style="padding:0.85rem;border:2px solid #047857;border-radius:10px;background:#ecfdf5;">
+      <strong>4. 화자가 제안한 방향</strong><br>
+      지속적 발견·분류 → 데이터 계보 → 맥락 기반 조사 → 공통 정책과 보고
+    </div>
+  </div>
+  <figcaption style="margin-top:0.8rem;color:#374151;">AI 데이터 노출의 원인, 이동 과정, 가시성 문제, 대응 요구사항을 한 흐름으로 보여준다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 화면 폭과 관계없이 위에서 아래로 읽는다. 첫 상자는 위험이 생기는 입구, 둘째는 데이터가 퍼지는 과정, 셋째는 기존 관찰 방식의 빈틈, 마지막은 화자가 요구하는 대응 구조다. 수치를 나타내는 그래프가 아니라 영상의 주장을 정리한 개념 지도다.</p>
+<h3>데이터는 AI의 여러 입구와 출구를 지난다</h3>
+<p>화자가 설명한 경로는 다음과 같다.</p>
+<ol>
+<li><strong>학습 데이터</strong>가 모델을 만드는 데 사용된다.</li>
+<li>사용자가 <strong>프롬프트와 파일</strong>을 입력한다.</li>
+<li>AI가 외부 자료를 검색해 답에 보태는 방식인 <strong>검색 증강 생성(RAG)</strong>이 추가 데이터를 가져온다.</li>
+<li>AI가 어떻게 행동해야 하는지를 정하는 <strong>정책과 문맥</strong>에도 민감한 내부 정보가 포함될 수 있다.</li>
+<li>에이전트가 코드 작성, 데이터베이스 접근 같은 <strong>외부 도구</strong>를 호출한다.</li>
+<li>한 에이전트가 다른 에이전트를 만들거나 호출하면서 데이터가 더 멀리 전달될 수 있다.</li>
+</ol>
+<p>따라서 민감 정보는 어느 한 저장소에만 있는 것이 아니라 전체 경로에 섞일 수 있다. 화자는 개인정보, 건강 정보, 금융 데이터, 지식재산 등을 지속적으로 찾아 분류해야 한다고 말한다.</p>
+<figure data-visual-kind="process" style="margin:1.4rem 0;padding:1rem;border:1px solid #9ca3af;border-radius:12px;background:#ffffff;">
+  <div role="img" aria-label="민감 데이터가 입력에서 AI 처리와 외부 행동을 거쳐 목적지로 이동하는 세로 흐름" style="display:grid;gap:0.45rem;max-width:720px;margin:0 auto;">
+    <div style="padding:0.8rem;border-radius:9px;background:#fff7ed;border-left:6px solid #b45309;">
+      <strong>입력</strong><br>
+      학습 데이터 · 프롬프트 · 첨부 문서 · RAG 자료 · 정책과 문맥
+    </div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.35rem;">↓</div>
+    <div style="padding:0.8rem;border-radius:9px;background:#eff6ff;border-left:6px solid #1d4ed8;">
+      <strong>AI 내부 처리</strong><br>
+      모델이 정보를 조합하고 요약하거나 다른 형태로 변형
+    </div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.35rem;">↓</div>
+    <div style="padding:0.8rem;border-radius:9px;background:#f5f3ff;border-left:6px solid #7c3aed;">
+      <strong>행동과 전달</strong><br>
+      도구 호출 · 데이터베이스 기록 · 다른 에이전트 호출
+    </div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.35rem;">↓</div>
+    <div style="padding:0.8rem;border-radius:9px;background:#ecfdf5;border-left:6px solid #047857;">
+      <strong>목적지와 파생물</strong><br>
+      단말 시스템 · 다운로드 파일 · 복사된 내용 · 새로 만들어진 파생 파일
+    </div>
+  </div>
+  <figcaption style="margin-top:0.8rem;color:#374151;">민감 데이터가 원본 형태 그대로 또는 변형된 형태로 AI 시스템과 외부 목적지를 통과하는 과정이다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 데이터의 이동 순서를 따라간다. 각 상자는 서로 다른 보안 등급을 뜻하지 않는다. 어느 단계에서도 민감 정보가 들어가거나 새 형태로 파생될 수 있다는 관계를 보여주는 개념 도식이다.</p>
+<p>공개 챗봇에 민감한 스프레드시트를 입력하는 사례도 나온다. 화자는 이런 정보가 “사실상 공개 정보”가 되고 모델 학습에 쓰여 모두에게 이용될 수 있다고 강하게 표현한다. 그러나 영상에는 특정 서비스의 계약, 보존 정책, 학습 사용 조건이 제시되지 않는다. 그러므로 이는 모든 공개 챗봇에 항상 적용되는 검증된 사실이 아니라 <strong>화자가 경고를 위해 제시한 일반화된 주장</strong>으로 읽어야 한다.</p>
+<h3>시스템 내부와 직원 행동을 함께 봐야 한다</h3>
+<p>화자는 관찰 대상을 두 흐름으로 나눈다.</p>
+<ul>
+<li><strong>워크로드 흐름:</strong> AI 애플리케이션, RAG 파이프라인, 벡터 데이터베이스, 데이터 변형처럼 시스템 내부에서 벌어지는 일</li>
+<li><strong>워크포스 흐름:</strong> 직원의 파일 업로드·다운로드, 복사·붙여넣기, 파생 파일 생성, 다른 직원과의 공유처럼 사람이 AI를 사용하는 행동</li>
+</ul>
+<p>한쪽만 보면 경로가 끊긴다. 시스템 내부 기록만으로는 사용자가 어떤 파일을 넣고 어디로 옮겼는지 놓칠 수 있다. 반대로 단말의 업로드 기록만으로는 AI 내부에서 데이터가 어떻게 바뀌고 어떤 도구로 전달됐는지 알기 어렵다.</p>
+<figure data-visual-kind="comparison" style="margin:1.4rem 0;padding:1rem;border:1px solid #9ca3af;border-radius:12px;background:#f8fafc;">
+  <div role="img" aria-label="워크로드와 워크포스의 기록이 모두 하나의 데이터 계보로 합쳐지는 비교 도식" style="max-width:820px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:0.8rem;">
+      <section style="padding:0.9rem;border:2px solid #1d4ed8;border-radius:10px;background:#eff6ff;">
+        <strong>워크로드 기록</strong>
+        <ul style="margin:0.55rem 0 0;padding-left:1.2rem;">
+          <li>AI 앱과 RAG 입력</li>
+          <li>벡터 데이터베이스</li>
+          <li>데이터 변형</li>
+          <li>도구와 에이전트 호출</li>
+        </ul>
+        <div style="margin-top:0.65rem;padding-top:0.55rem;border-top:1px solid #93c5fd;"><strong>출력:</strong> 시스템 내부의 이동 기록</div>
+      </section>
+      <section style="padding:0.9rem;border:2px solid #b45309;border-radius:10px;background:#fff7ed;">
+        <strong>워크포스 기록</strong>
+        <ul style="margin:0.55rem 0 0;padding-left:1.2rem;">
+          <li>파일 업로드와 다운로드</li>
+          <li>복사와 붙여넣기</li>
+          <li>원본에서 파생된 파일</li>
+          <li>직원 사이의 공유</li>
+        </ul>
+        <div style="margin-top:0.65rem;padding-top:0.55rem;border-top:1px solid #fdba74;"><strong>출력:</strong> 사람의 사용과 전달 기록</div>
+      </section>
+    </div>
+    <div style="margin:0.8rem 0;text-align:center;font-weight:700;">
+      위 두 흐름의 기록을 모두 아래 합류점으로 보낸다<br>
+      <span aria-hidden="true" style="font-size:1.4rem;">↓</span>
+    </div>
+    <div style="padding:0.9rem;border:3px solid #047857;border-radius:10px;background:#ecfdf5;text-align:center;">
+      <strong>통합 데이터 계보와 공통 정책</strong><br>
+      출처 → 변형 → 사용 주체 → 목적지를 한 경로로 연결
+    </div>
+  </div>
+  <figcaption style="margin-top:0.8rem;color:#374151;">AI 시스템 내부와 직원의 사용 행동에서 나온 기록이 하나의 통합 계보로 합쳐져야 한다는 주장이다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 화면 폭과 관계없이 먼저 위의 두 기록 묶음을 각각 읽은 뒤, “두 흐름의 기록을 모두” 합친다는 문장을 거쳐 아래의 통합 계보로 이동한다. 모바일에서 두 상자가 세로로 놓여도 둘 다 같은 합류점의 입력이다. 색은 구분을 돕지만 관계는 상자 제목과 합류 문장으로도 표시되어 있다.</p>
+<h3>부분적인 발견 도구만으로는 전체 경로를 볼 수 없다</h3>
+<p>영상은 데이터를 보는 세 가지 관점을 열거한다.</p>
+<ol>
+<li><strong>에이전트 플랫폼 발견:</strong> 누가 어떤 모델에 프롬프트를 보냈는지, 어떤 에이전트가 실행됐는지, 어떤 MCP 도구가 호출됐는지 본다.</li>
+<li><strong>단말 DLP 발견:</strong> 기기에 존재하는 에이전트·확장 기능·MCP 서버와 파일·메모리·디지털 흔적을 본다.</li>
+<li><strong>클라우드 또는 사내 환경 발견:</strong> 데이터 원천, 민감도 분류, 소유자를 본다.</li>
+</ol>
+<p>세 관점은 각각 유용하지만 일부만 본다. 화자는 이들을 통합한 전체 시야가 필요하다고 주장한다. 앞부분에서 “기존 DLP와 AI 도구는 질문에 답할 수 없다”고 말하지만, 뒤에서는 단말 DLP가 일부 질문에는 답할 수 있다고 설명한다. 따라서 정확한 뜻은 <strong>DLP가 아무것도 못 한다는 것이 아니라, 단독으로는 전체 데이터 경로를 설명하지 못한다</strong>는 쪽에 가깝다.</p>
+<h3>필요한 것은 한 번의 검사가 아니라 계속 이어지는 계보다</h3>
+<p>영상이 제시한 대응 요구사항은 네 층으로 묶을 수 있다.</p>
+<figure data-visual-kind="layers" style="margin:1.4rem 0;padding:1rem;border:1px solid #9ca3af;border-radius:12px;background:#ffffff;">
+  <div role="img" aria-label="AI 데이터 보안을 위한 네 가지 요구사항을 위에서 아래로 쌓은 계층도" style="display:grid;gap:0.5rem;max-width:760px;margin:0 auto;">
+    <div style="padding:0.8rem;border-radius:10px;background:#e0f2fe;border:2px solid #0369a1;">
+      <strong>1층 · 지속적 발견과 분류</strong><br>
+      여러 플랫폼에서 데이터 원천과 민감도를 계속 식별
+    </div>
+    <div style="padding:0.8rem;border-radius:10px;background:#ede9fe;border:2px solid #6d28d9;">
+      <strong>2층 · 계보 기반 위험 가시성</strong><br>
+      데이터의 출처, 변형, 전파 경로, 최종 목적지를 연결
+    </div>
+    <div style="padding:0.8rem;border-radius:10px;background:#ffedd5;border:2px solid #c2410c;">
+      <strong>3층 · 맥락을 고려한 조사</strong><br>
+      사용자, 데이터 민감도, 목적지 등 사건의 조건을 함께 판단
+    </div>
+    <div style="padding:0.8rem;border-radius:10px;background:#dcfce7;border:2px solid #15803d;">
+      <strong>4층 · 공통 정책과 규제 보고</strong><br>
+      두 흐름에 정책을 적용하고 준수 상태를 보고
+    </div>
+  </div>
+  <figcaption style="margin-top:0.8rem;color:#374151;">발견에서 끝나지 않고 계보, 조사, 정책 집행과 보고까지 이어져야 한다는 요구사항의 층위다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 기능이 누적된다고 읽는다. 아래층이 더 중요하다는 순위가 아니다. 데이터가 무엇인지 발견하지 못하면 계보를 만들기 어렵고, 계보와 맥락이 없으면 조사와 보고도 불완전해진다는 의존 관계를 나타낸다.</p>
+<p>화자는 조사 시간을 보통 수주에서 수분으로 줄여야 한다고 말한다. 이는 영상에서 달성했다고 보고한 성과가 아니라 <strong>앞으로 필요한 목표</strong>다. GDPR, EU AI Act, SOC 2, ISO 27001, HIPAA도 대응 대상으로 열거하지만, 특정 도구가 이 규정들을 실제로 충족했다는 검증 결과는 제시하지 않는다.</p>
+<p>결국 핵심은 차단만이 아니다. AI가 데이터를 사용하도록 허용하되, <strong>어떤 데이터가 어디서 와서 어떤 형태로 바뀌었고 누구 또는 어떤 도구를 거쳐 어디로 갔는지</strong> 설명할 수 있어야 한다. 이 연결 기록을 데이터의 족보라는 뜻의 <strong>데이터 계보(data lineage)</strong>라고 한다.</p>
+<p>영상은 데이터를 인체의 피에 비유한다. 피가 움직여야 몸이 살지만, 어디에서 새는지 보지 못하면 위험하다는 것이다. 다만 이 영상은 요구사항을 설명할 뿐, 특정 통합 플랫폼을 실제 환경에서 시험해 성능이나 효과를 입증하지는 않는다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>AI 데이터 위험은 모델 하나가 아니라 프롬프트·RAG·정책·도구·에이전트·직원 행동이 연결된 전체 경로에서 생긴다.</li>
+<li>원본 데이터가 변형되거나 파생 파일로 복제되므로, 처음 형태만 찾는 방식은 이동 경로를 놓칠 수 있다.</li>
+<li>워크로드와 워크포스 기록을 함께 연결해 출처·변형·목적지를 보여주는 데이터 계보가 필요하다는 것이 영상의 핵심 주장이다.</li>
+<li>연속 분류, 통합 가시성, 빠른 조사, 규제 보고는 화자가 제안한 요구사항이며 영상에서 구현·검증된 결과는 아니다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>민감 데이터가 AI 구성요소와 직원 행동을 거치며 이동하고 변형될 때, 조직은 노출 경로를 어떻게 찾아 선제적으로 통제해야 하는가?</strong></p>
+</blockquote>
+<ul>
+<li>데이터가 AI 시스템에 들어오고 빠져나가는 경로에는 무엇이 있는가?</li>
+<li>워크로드와 워크포스 기록을 왜 함께 봐야 하는가?</li>
+<li>데이터 계보는 단순한 AI 도구 목록과 무엇이 다른가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>직원이 민감한 내용이 담긴 문서를 AI에 올린다. AI는 RAG 자료와 내부 문맥을 보태 답을 만들고, 에이전트는 그 결과를 도구나 데이터베이스에 전달한다. 원본 문서만 검사하면 변형된 답과 파생 파일의 목적지는 보이지 않을 수 있다.</p>
+<p><code>"데이터가 여러 입구·변형·목적지로 흩어져 전체 노출 경로가 보이지 않는다"</code> <strong>문제</strong><br>
+→ <code>"워크로드와 워크포스 기록을 데이터 계보로 연결한다"</code> <strong>작동 방식</strong><br>
+→ <code>"출처·변형·사용 주체·목적지를 추적해 위험을 더 일찍 조사한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">혈액과 혈관 지도</div>
+<p>영상은 데이터를 AI의 혈액에 비유한다. 데이터가 이동해야 AI가 작동하지만, 혈관 전체를 보지 못하면 어디에서 새는지 알아차리기 어렵다. 데이터 원천은 혈액의 출발점, RAG·도구·에이전트는 이동 경로, 데이터 계보는 그 경로를 보여주는 지도에 대응한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 실제 데이터는 혈액처럼 하나의 물질이 아니다. 복사되거나 요약되고, 여러 위치에 동시에 남을 수 있다. 또한 모든 이동이 누출은 아니며, 권한·정책·목적지·계약 조건을 함께 판단해야 한다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>섀도우 AI</strong></td>
+<td>조직이 모르게 쓰는 AI</td>
+<td>승인과 보안 통제 밖에서 도입·사용되는 AI 프로젝트나 도구</td>
+<td>모든 개인 실험이 곧 데이터 유출이라는 뜻은 아니다.</td>
+</tr>
+<tr>
+<td><strong>검색 증강 생성</strong></td>
+<td>답하기 전에 외부 자료를 찾아 보태기</td>
+<td>외부 데이터 원천에서 검색한 내용을 모델 입력에 추가하는 방식(RAG)</td>
+<td>검색 자료가 자동으로 안전하거나 정확해지는 것은 아니다.</td>
+</tr>
+<tr>
+<td><strong>워크로드·워크포스 흐름</strong></td>
+<td>시스템 안의 움직임과 사람의 사용 행동</td>
+<td>AI 앱 내부 활동과 직원의 업로드·다운로드·복사·공유를 나눈 관찰 관점</td>
+<td>둘 중 하나만 보면 전체 경로를 알 수 있다고 생각하기 쉽다.</td>
+</tr>
+<tr>
+<td><strong>데이터 계보</strong></td>
+<td>데이터의 출처와 이동 족보</td>
+<td>데이터가 어디서 와서 어떻게 변형되고 어디로 전파됐는지 연결한 기록(data lineage)</td>
+<td>원본 파일의 저장 위치만 적는 자산 목록과는 다르다.</td>
+</tr>
+<tr>
+<td><strong>데이터 손실 방지</strong></td>
+<td>민감 정보가 밖으로 나가는 것을 감시·통제하기</td>
+<td>민감 데이터의 이동과 유출을 탐지하거나 제한하는 보안 방식(DLP)</td>
+<td>영상도 DLP가 아무 역할을 못 한다고만 말하지는 않는다. 단독 가시성의 한계를 지적한다.</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>AI 도구의 목록을 알고 있어도 민감 데이터의 노출 경로를 놓칠 수 있는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>데이터는 프롬프트와 파일뿐 아니라 학습 데이터, RAG 자료, 정책과 문맥, 외부 도구, 데이터베이스, 다른 에이전트를 거친다. 이 과정에서 요약되거나 다른 형태로 바뀌고 파생 파일도 생긴다. 어떤 도구가 존재하는지만 아는 것은 데이터의 출처·변형·목적지를 연결해 주지 못한다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>AI 도구 발견과 데이터 계보는 무엇이 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>도구 발견은 어떤 모델·에이전트·확장 기능·MCP 서버가 존재하거나 호출됐는지를 보여준다. 데이터 계보는 특정 데이터가 어디서 와서 어떤 변형을 거쳐 누구 또는 어떤 도구에 의해 어디로 전달됐는지를 연결한다. 전자는 구성요소 목록에 가깝고, 후자는 데이터의 관계와 이동 경로에 가깝다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 AI 자동화를 시험한다면, 어떤 기록이 있어야 데이터 노출을 조사할 수 있다고 판단할 것인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>현재 운영 상태를 추정하지 말고 가상 워크플로부터 그린다. 입력 데이터의 출처와 민감도, RAG나 모델에서 생긴 변형, 호출된 도구와 에이전트, 사용자 행동, 최종 목적지를 연결할 수 있는지 확인한다. 정상 실행만이 아니라 업로드·복사·파생 파일 같은 경로도 같은 기록에서 추적되는지를 판단 기준으로 삼는다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 보안의 관찰 단위는 도구가 아니라 데이터의 관계다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 학습 데이터, 프롬프트, RAG, 정책과 문맥, 도구, 데이터베이스, 에이전트 전체에 민감 정보가 흐를 수 있다고 설명한다.</li>
+<li><strong>[해석]</strong> AI 제품 목록이나 저장 위치만 관리해서는 부족하다. 출처·변형·행동·목적지를 하나의 사건으로 연결해야 조사 가능한 보안 기록이 된다.</li>
+<li><strong>[경계]</strong> 화자는 공개 챗봇에 입력한 정보가 사실상 공개되고 모델 훈련에 쓰일 수 있다고 일반화하지만, 서비스별 계약과 보존·학습 정책은 제시하지 않았다. 모든 공개 챗봇에 동일하게 적용되는 사실로 확대하면 안 된다.</li>
+</ul>
+<h3>2. 워크로드와 워크포스는 따로 수집하되 함께 해석해야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 시스템 내부의 AI 앱·RAG·벡터 데이터베이스·변형과 직원의 업로드·다운로드·복사·공유를 서로 다른 흐름으로 나눈 뒤, 통합된 종단 간 가시성을 요구한다.</li>
+<li><strong>[해석]</strong> 시스템 로그와 사람의 사용 기록은 경쟁하는 대안이 아니다. 한 데이터의 처음과 끝을 연결하기 위한 서로 다른 증거다.</li>
+<li><strong>[경계]</strong> 앞에서는 전통적 DLP와 AI 도구가 필요한 질문에 답하지 못한다고 말하지만, 뒤에서는 단말 DLP가 일부 자산과 흔적을 발견할 수 있다고 설명한다. 따라서 “DLP는 무용하다”가 아니라 “각 도구의 부분 시야만으로는 충분하지 않다”로 제한해 이해해야 한다.</li>
+</ul>
+<h3>3. 영상은 검증된 구축 결과가 아니라 필요한 능력의 목록을 제시한다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 지속적 발견과 분류, 계보 기반 가시성, 맥락 기반 조사, 공통 정책, 단일 모니터링 화면, 규제 보고가 필요하다고 말한다. 조사 시간을 수주에서 수분으로 줄여야 한다고도 주장한다.</li>
+<li><strong>[해석]</strong> 제품 이름보다 먼저 “어떤 데이터를 어디까지 추적하고 어떤 증거로 조사 시간을 줄일 것인가”를 요구사항으로 정의해야 한다.</li>
+<li><strong>[경계]</strong> 수주에서 수분이라는 표현은 달성 결과가 아니라 목표다. 31%라는 수치는 “최근 연구”로만 소개되어 연구명·표본·조건을 확인할 수 없다. META의 <code>675초</code>는 11분 15초이지만 별도 <code>duration_min</code>은 11.2분으로 표시되어 정밀도가 일치하지 않는다. 또한 META 설명은 화자를 IBM의 Jeff Crume 박사로 소개하지만 <code>provenance.creator</code>는 비어 있고 원본 링크도 확인되지 않았다고 적혀 있어, 화자 이름을 확정하지 않았다. 소속 후보 <code>Ibm</code>만 원문 값 그대로 보존했다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 데이터의 원본만 찾으면 변형된 형태를 놓친다는 장면은 학습자가 외운 문장을 재현하는지만 보면 이해의 변형과 적용을 놓치는 구조와 닮았다.</li>
+<li><strong>통찰:</strong> 설명의 출처, 자기 말로 바꾼 과정, 새 사례에 적용한 결과를 연결하면 이해의 계보를 관찰할 수 있다. 보안 계보와 학습 평가는 분야가 다르므로 구조만 전이한다.</li>
+<li><strong>질문/행동:</strong> 학습자가 정의를 반복하는 대신 원인·대조·적용을 연결해 설명할 수 있는지 확인한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 AI 도입 속도와 데이터 위험 사이에서 가시성, 조사 시간, 규제 대응에 자원을 배분하는 문제를 다룬다.</li>
+<li><strong>통찰:</strong> APOM이나 이커머스 운영에 적용하려면 현재 시스템에 해당 경로가 있다고 가정하면 안 된다. 먼저 가상의 AI 업무 한 건에서 입력 데이터·도구·목적지·담당자의 연결을 확인하는 검증이 필요하다.</li>
+<li><strong>질문/행동:</strong> 데이터 이동을 설명하지 못해 생기는 조사 시간과 중단 위험을 어떤 기록으로 줄일 수 있는지 묻는다.</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 31%, “수주에서 수분”, 혈액과 출혈 비유가 위험을 빠르게 이해시키지만, 근거 수준은 서로 다르다.</li>
+<li><strong>통찰:</strong> 강한 숫자와 비유는 주목을 만들 수 있으나 연구 정보와 실제 검증 결과가 없으면 주장으로 표시해야 한다. 요구사항과 달성 성과도 구분해야 한다.</li>
+<li><strong>질문/행동:</strong> 상세페이지나 카피에서 목표 수치, 관찰된 결과, 비유를 각각 다른 증거 수준으로 표시할 수 있는지 점검한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 프롬프트·RAG·정책·도구·에이전트·목적지 사이의 데이터 이동은 AI 자동화와 에이전트 구조에서 직접 점검할 대상이다.</li>
+<li><strong>통찰:</strong> 정상 응답만 시험하지 말고 데이터 출처, 변형, 도구 호출, 파생물, 최종 목적지가 연결되는지 측정해야 한다.</li>
+<li><strong>질문/행동:</strong> 민감하지 않은 시험 데이터 한 건을 넣었을 때 모든 해당 단계를 같은 사건으로 추적할 수 있는지 확인한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"AI 데이터가 이동·변형되지만 전체 경로를 설명하기 어렵다"</code> <strong>문제</strong><br>
+→ <code>"노출 조사와 통제에 필요한 경로를 더 빨리 확인한다"</code> <strong>수혜자: AI 운영자·보안 담당자·조직 구성원</strong><br>
+→ <code>"로그·정책·검토 시간·도구 접근 권한을 제공한다"</code> <strong>지불자 또는 자원 제공자: 검증에 참여하는 조직과 운영 담당자</strong><br>
+→ <code>"시험 데이터의 출처·변형·목적지를 증거로 연결한 단계 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 실제 시스템 상태를 가정하지 말고, 가상 AI 워크플로 하나에 민감하지 않은 표식 데이터 한 건을 넣어 출처·변형·도구 또는 에이전트·최종 목적지의 해당 단계를 기록한다.</li>
+<li><strong>측정 1개:</strong> 사전에 정의한 해당 단계 중 출처부터 목적지까지 증거로 연결된 단계의 비율</li>
+<li><strong>중단 기준 1개:</strong> 연결된 단계의 비율이 100%가 아니면 적용 범위를 확대하지 않고 누락된 단계부터 보완한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>AI 도입과 노출 문제</td>
+<td>AI 도입 속도를 기존 보안 방식이 따라가지 못한다는 문제 제기</td>
+</tr>
+<tr>
+<td>2</td>
+<td>AI 아키텍처의 데이터 경로</td>
+<td>학습 데이터부터 도구와 다른 에이전트까지 민감 정보가 이동</td>
+</tr>
+<tr>
+<td>3</td>
+<td>두 가지 관찰 흐름</td>
+<td>워크로드와 워크포스 기록을 모두 추적해야 한다는 주장</td>
+</tr>
+<tr>
+<td>4</td>
+<td>세 가지 발견 관점</td>
+<td>에이전트 플랫폼, 단말 DLP, 클라우드·사내 환경이 각각 일부를 관찰</td>
+</tr>
+<tr>
+<td>5</td>
+<td>통합 대응 요구사항</td>
+<td>지속적 분류, 계보, 조사, 공통 정책, 규제 보고 요구</td>
+</tr>
+<tr>
+<td>6</td>
+<td>수치·명칭·상태 경계</td>
+<td>출처가 없는 수치, 목표와 결과 구분, 메타데이터 불일치</td>
+</tr>
+</tbody>
+</table>
+<h3>1. AI 도입과 노출 문제</h3>
+<p>화자는 대부분의 조직에서 민감 데이터가 이미 노출됐고 AI가 문제를 악화시키고 있다고 주장한다. “최근 연구”에서 조직의 31%가 AI 관련 사건으로 데이터 프라이버시 위반을 겪었다고 말하지만, 연구명과 표본은 제시하지 않는다.</p>
+<p>위험 사례로는 승인되지 않은 <strong>섀도우 AI 프로젝트</strong>와 공개 클라우드 챗봇을 든다. 섀도우 AI에는 조직 정책이 요구하는 보안 통제가 없을 수 있다. 공개 챗봇에 민감한 스프레드시트를 넣는 사례도 제시한다.</p>
+<p>다만 공개 챗봇 입력이 곧 모두에게 공개되고 학습에 사용된다는 표현은 서비스별 조건을 구분하지 않은 화자의 주장이다.</p>
+<h3>2. AI 아키텍처의 데이터 경로</h3>
+<p>영상의 데이터 흐름은 다음 순서로 설명된다.</p>
+<ul>
+<li>학습 데이터가 모델 훈련에 들어간다.</li>
+<li>사용자가 프롬프트와 문서 또는 스프레드시트를 입력한다.</li>
+<li>RAG가 다른 데이터 원천을 추가한다.</li>
+<li>정책과 문맥이 AI의 동작 방식과 답변 조건을 지정한다.</li>
+<li>에이전트가 코드 작성이나 데이터베이스 접근 같은 도구를 사용한다.</li>
+<li>에이전트가 다른 에이전트를 만들거나 호출할 수 있다.</li>
+<li>데이터가 데이터베이스나 다른 하위 시스템으로 이동할 수 있다.</li>
+</ul>
+<p>민감 정보는 학습 데이터, 사용자 입력, 내부 정책, 경쟁 우위와 관련된 문맥, 도구 입력과 출력에 모두 포함될 수 있다고 설명한다.</p>
+<h3>3. 두 가지 관찰 흐름</h3>
+<p><strong>워크로드 흐름</strong>은 AI 시스템 내부를 본다.</p>
+<ul>
+<li>AI 앱의 데이터 사용</li>
+<li>RAG 파이프라인으로 들어오는 정보</li>
+<li>벡터 데이터베이스</li>
+<li>데이터 변형</li>
+<li>출처와 최종 목적지</li>
+</ul>
+<p>화자는 변형 전 형태만 찾으면 다른 형태로 바뀐 데이터의 노출을 놓칠 수 있다고 말한다.</p>
+<p><strong>워크포스 흐름</strong>은 직원의 AI 사용을 본다.</p>
+<ul>
+<li>파일 업로드와 다운로드</li>
+<li>복사와 붙여넣기</li>
+<li>원본에서 만들어진 파생 파일</li>
+<li>직원이 정보를 소비하고 다른 직원과 공유하는 방식</li>
+</ul>
+<p>두 흐름에 공통 정책을 적용하고, 하나의 통합 화면에서 감시하며, 데이터가 빠져나간 뒤가 아니라 미리 위험을 식별해야 한다고 주장한다.</p>
+<h3>4. 세 가지 발견 관점</h3>
+<p>화자는 정확히 세 가지 관점 또는 도구 범주를 열거한다.</p>
+<ol>
+<li><strong>에이전트 플랫폼 발견</strong></li>
+<li>누가 어떤 모델에 프롬프트를 보냈는가</li>
+<li>어떤 에이전트가 실행됐는가</li>
+<li>
+<p>어떤 MCP 도구가 호출됐는가</p>
+</li>
+<li>
+<p><strong>단말 DLP 발견</strong></p>
+</li>
+<li>기기에 어떤 에이전트·확장 기능·MCP 서버가 있는가</li>
+<li>
+<p>파일·메모리·기타 디지털 흔적은 무엇인가</p>
+</li>
+<li>
+<p><strong>클라우드 또는 사내 환경 발견</strong></p>
+</li>
+<li>어떤 데이터 원천이 있는가</li>
+<li>데이터의 분류와 민감도는 무엇인가</li>
+<li>소유자를 확인할 수 있는가</li>
+</ol>
+<p>열거한 개수와 실제 항목 수는 모두 세 개로 일치한다. 문제는 개수가 아니라 각 도구가 전체 중 일부만 본다는 점이다.</p>
+<h3>5. 통합 대응 요구사항</h3>
+<p>화자가 제시한 요구사항은 다음과 같다.</p>
+<ul>
+<li>AI를 고려한 자동 데이터 발견과 분류</li>
+<li>계속 변하는 시스템을 위한 연속적 실행</li>
+<li>개인정보, 건강 정보, 금융 데이터, 지식재산 등 민감 데이터 인식</li>
+<li>RAG와 에이전트가 만든 변형 및 전파 경로 추적</li>
+<li>사용자와 목적지의 맥락을 고려한 조사</li>
+<li>조사 시간을 수주에서 수분으로 줄이려는 목표</li>
+<li>GDPR, EU AI Act, SOC 2, ISO 27001, HIPAA 관련 준수 보고</li>
+</ul>
+<p>영상은 이런 능력이 필요하다고 주장하지만, 특정 시스템이 이를 구현했고 규정을 충족했다고 검증하지는 않는다.</p>
+<h3>6. 수치·명칭·상태 경계</h3>
+<ul>
+<li><strong>31%:</strong> 연구명, 조사 시기, 표본, 위반 정의가 제공되지 않았다.</li>
+<li><strong>수주에서 수분:</strong> 이미 달성한 성과가 아니라 화자가 제시한 목표다.</li>
+<li><strong>DLP 표현:</strong> 초반에는 기존 DLP가 필요한 질문에 답하지 못한다고 말하지만, 후반에는 단말 DLP가 일부 자산과 흔적을 보여준다고 설명한다. 전체 경로를 단독으로 설명하지 못한다는 뜻으로 제한해야 한다.</li>
+<li><strong>공개 챗봇:</strong> 입력 데이터의 보존과 훈련 사용 여부는 서비스별 조건이 제시되지 않아 일반화할 수 없다.</li>
+<li><strong>영상 길이:</strong> META에는 675초와 11.2분이 함께 적혀 있다. 675초는 11분 15초이므로 분 단위 표기는 정밀도가 일치하지 않는다.</li>
+<li><strong>화자와 소속:</strong> META 설명은 IBM의 Jeff Crume 박사를 언급하지만 <code>provenance.creator</code>는 비어 있다. 원본 영상 링크도 확인되지 않았다는 메모가 있으므로 화자 이름은 확정하지 않았다. <code>provenance.affiliation</code>의 후보 값 <code>Ibm</code>은 그대로 보존했다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · AI가 여러분의 데이터를 노출하고 있습니다: 눈에 보이지 않는 AI 보안의 숨은 위험 · https://www.youtube.com/watch?v=lr5cxvYJDLg · 전사: 제공된 SOURCE_TRANSCRIPT(방식 미기재)</p>
+<p>META 설명은 화자를 IBM의 Jeff Crume 박사로 소개하지만 <code>provenance.creator</code>는 비어 있으며, 원본 영상 링크를 확인하지 못한 추정 출처라는 메모가 있다. 소속 후보는 META의 <code>Ibm</code> 값을 그대로 보존했다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>AI의 시대입니다. 여러분의 데이터가 어디에 있는지 알고 계신가요?</p>
+<p>글쎄요, 알고 있다고 생각하더라도 실제로는 모를 가능성이 큽니다.</p>
+<p>대부분의 조직과 마찬가지라면, 여러분의 민감한 데이터는 이미 노출되었고 AI는 그 문제를 더 악화시키고 있을 것입니다. 바로 눈앞에서 일어나고 있지만 여러분은 볼 수 없습니다.</p>
+<p>무슨 뜻인지 설명해 보겠습니다.</p>
+<p>AI 도입은 기존의 보안 접근 방식이 실제로 보호할 수 있는 속도보다 빠르게 진행되고 있습니다. 최근 한 연구에 따르면 조직의 31%가 AI 관련 사고로 인해 데이터 개인정보 보호 위반을 경험했습니다.</p>
+<p>섀도 AI 프로젝트(shadow AI project) 같은 것도 있습니다. 이는 기본적으로 사람들이 환경 내부에 배포하는 승인되지 않은 AI입니다. 그런 것들은 대개 정책상 갖춰야 하는 보안 통제를 갖추지 못합니다.</p>
+<p>그리고 퍼블릭 클라우드 챗봇을 사용하는 경우도 있습니다. 사람들은 질문을 입력하지만, 민감한 정보가 담긴 스프레드시트를 함께 올릴 수도 있습니다. 일단 퍼블릭 챗봇으로 전송되면, 해당 챗봇이 그 민감한 정보를 모델 학습에 사용할 수 있기 때문에 사실상 공개 정보가 되고, 이후 모든 사람이 이용할 수 있게 됩니다.</p>
+<p>AI가 이 데이터를 어떻게 사용하는지에 대해서도 답해야 할 질문이 있습니다. 우선 AI가 어떤 데이터를 사용했는가? 그 데이터는 어디에서 가져왔는가? 궁극적으로 AI 데이터 노출을 어떻게 선제적으로 관리할 것인가?</p>
+<p>기존의 DLP(데이터 유출 방지, data loss prevention)와 AI 도구로는 이런 질문에 답할 수 없습니다. 다른 접근 방식이 필요합니다.</p>
+<p>어떤 AI 도구가 사용되고 있는지 아는 것만으로는 충분하지 않습니다. 물론 그것은 좋은 출발점입니다. 하지만 민감한 데이터가 AI 시스템을 통해 어떻게 흐르고 어디에서 노출될 수 있는지도 알아야 합니다.</p>
+<p>그럼 제가 무슨 뜻인지 보기 위해 개괄적인 아키텍처를 살펴보겠습니다.</p>
+<p>먼저 특정 모델을 학습시키는 데 사용되는 학습 데이터가 있습니다. 그런 다음 사용자가 프롬프트를 입력하고, 이 프롬프트가 AI로 전달되어 AI가 다른 작업을 수행하게 됩니다.</p>
+<p>이 프롬프트에 검색 증강 생성(RAG, retrieval-augmented generation)을 통해 다른 데이터 소스를 추가할 수도 있습니다. 그리고 이 모든 것을 덮어쓰는 컨텍스트나 정책이 있을 가능성이 높습니다. 여기에는 AI의 작동 방식과 답변 생성 방식을 알려주는 다른 정보가 포함될 수 있으며, 그중 일부는 민감한 내용일 수 있습니다.</p>
+<p>그다음 에이전트라면 다양한 종류의 도구에 접근해 사용할 수도 있습니다. 이러한 도구 중 일부는 코드를 작성하거나, 데이터베이스에 접근하거나, 다른 에이전트를 생성할 수 있고, 그렇게 생성된 에이전트가 또 다른 에이전트를 생성할 수도 있습니다.</p>
+<p>자, 이것이 정보가 이동하는 방식과 모든 구성 요소, 그리고 구성 요소들이 상호작용하는 방식의 전반적인 흐름입니다. 데이터 관점에서는 어떨까요? 여기서 무엇이 민감할 수 있을까요?</p>
+<p>모델로 들어가는 학습 데이터에 민감한 정보가 포함되어 있을 수 있습니다. 사용자에게 민감한 정보가 있어서 프롬프트와 함께 입력할 수도 있습니다. 민감한 정보가 담긴 스프레드시트나 문서를 사용했을 수 있으며, 그 정보 역시 프롬프트와 함께 AI로 전달됩니다.</p>
+<p>정책과 컨텍스트에도 민감한 정보가 포함될 수 있습니다. 예를 들어 우리가 경쟁 우위라고 여기는 업무 방식이 있고, 경쟁사가 그 내용을 알기를 원하지 않을 수 있습니다. 이런 정보도 모델에 입력됩니다.</p>
+<p>그런 다음 모델은 도구에 접근해 사용합니다. 이 도구들은 어떨까요? 전달받은 정보를 어떻게 처리할까요? 정보를 보호하고 있을까요, 아니면 그렇지 않을까요? 이러한 도구를 통제하고 가시성을 확보하고 있습니까?</p>
+<p>도구가 정보를 데이터베이스에 기록한다면, 그 데이터가 어디로 가게 될지 알고 있습니까? 이후 다른 곳으로 전달될 수도 있습니다.</p>
+<p>그리고 이러한 에이전트가 있습니다. 잠재적으로 민감한 정보를 에이전트에게 넘기고, 에이전트가 다시 다른 에이전트를 생성할 수도 있습니다.</p>
+<p>이 구조를 보면 민감한 정보가 전체에 퍼져 있고 아키텍처 전반을 통해 흐른다는 것을 알 수 있습니다. 이 경우 고려해야 할 사항이 많습니다.</p>
+<p>우선 AI가 어떤 민감한 데이터를 사용하고 있는지 알아야 합니다. 그런 다음 노출 상황을 파악해야 합니다. 어떤 데이터가 노출되고 있는가? 승인을 받은 것인가? 적절히 관리되고 있는가?</p>
+<p>또한 데이터가 AI를 통해 이동하는 과정에서 무슨 일이 일어났는지 조사할 수 있어야 합니다. 궁극적으로 데이터 보안 격차를 만들지 않으면서 AI 도입을 가능하게 하려면 어떻게 해야 할까요?</p>
+<p>이를 위해서는 데이터가 어디로 이동하는지 확인하는 여러 기능을 수행할 수 있어야 합니다.</p>
+<p>저는 이를 두 가지 관점에서 살펴보겠습니다. 하나는 AI 시스템 내부를 의미하는 워크로드 스트림(workload stream)이고, 다른 하나는 직원의 AI 사용을 의미하는 워크포스 스트림(workforce stream)입니다.</p>
+<p>무엇을 해야 할까요? 데이터를 모니터링하고 추적한 다음, 데이터가 시스템을 통해 어떻게 이동했는지, 어떻게 사용되었는지, 어떻게 노출되었는지 보여줄 수 있어야 합니다.</p>
+<p>먼저 워크로드 사례를 살펴보겠습니다. AI 시스템 내부를 보는 것입니다. AI 애플리케이션 내부를 살펴보고 애플리케이션이 데이터를 어떻게 사용하는지 확인해야 합니다. RAG 파이프라인을 살펴보고 어떤 정보가 그런 방식으로 시스템에 들어오는지 확인해야 합니다.</p>
+<p>많은 생성형 AI 모델의 핵심인 벡터 데이터베이스(vector database)도 살펴봐야 합니다. 그런 다음 이 모든 것을 추적할 수 있어야 합니다.</p>
+<p>데이터 변환도 발생합니다. 정보가 처음에는 이런 형태였지만 이제는 다른 형태가 됩니다. 그래도 그 사실을 알아야 합니다. 특정 형태로만 찾는다면 데이터를 놓치고 데이터가 유출되었다는 사실을 인지하지 못할 수 있습니다.</p>
+<p>따라서 데이터가 변환되었을 때 이를 인식할 수 있어야 합니다. 그리고 이 모든 과정을 보여줄 수 있어야 합니다. 데이터가 어디에서 왔는지 그 출처를 보여줄 수 있어야 합니다. 방금 언급한 변환 과정을 보여줄 수 있어야 합니다. 그리고 궁극적으로 이 모든 정보가 어디로 가는지도 알아야 합니다.</p>
+<p>이것이 AI 내부 관점입니다.</p>
+<p>직원의 AI 사용을 보는 워크포스 관점은 어떨까요? 이 경우 파일 업로드와 다운로드를 살펴보고 싶습니다. 직원이 시스템에 무엇을 입력했고 시스템에서 무엇을 가져갔는지 확인하고 싶습니다.</p>
+<p>복사 및 붙여넣기 작업이 언제 이루어졌는지도 확인하고 싶습니다. 민감한 정보를 가져와 다른 곳에 붙여 넣었을 수도 있습니다. 그러면 데이터가 이제 다른 장소에 존재하게 됩니다.</p>
+<p>하위 정보도 살펴봐야 합니다. 원본 파일이 있고, 그 파일에서 파생된 하위 파일이 있을 수 있습니다. 민감한 정보가 담긴 원본 파일을 추적했던 것처럼 그 모든 파일도 추적할 수 있어야 합니다.</p>
+<p>직원들이 이 정보를 어떻게 소비하는지, 또 다른 직원들과 어떻게 공유하는지도 보여줄 수 있어야 합니다.</p>
+<p>이 모든 사항을 확인할 수 있어야 하며, 통합된 엔드투엔드 가시성 및 보호 플랫폼에서 이를 확인해야 합니다.</p>
+<p>그 플랫폼에서 어떤 기능이 필요할까요? 우선 데이터 계보(lineage)를 확인할 수 있어야 합니다. 데이터가 어디에서 왔고 시스템을 통해 어떻게 이동했는지 볼 수 있어야 합니다.</p>
+<p>출처가 어디인지, 데이터가 AI를 어떻게 통과했는지, 그리고 최종적으로 엔드포인트 시스템에 어떻게 도달했는지 등을 확인할 수 있어야 합니다.</p>
+<p>이 두 스트림 모두를 포괄하고, 두 스트림 전반에서 공유되며, 모니터링되고 적용되는 정책이 필요합니다.</p>
+<p>이 모든 것을 모니터링할 수 있는 단일 통합 화면(single pane of glass)도 필요합니다. 서로 통합되지 않은 여러 모니터링 시스템을 둘 여유는 없습니다. 그렇게 되면 상황을 파악할 수 없기 때문입니다.</p>
+<p>궁극적으로 위험을 식별할 수 있어야 합니다. 모든 데이터가 빠져나간 뒤에야 확인하는 것이 아니라, 선제적으로 위험을 볼 수 있는 위험 식별 기능이 필요합니다.</p>
+<p>그렇다면 제가 여기서 말한 수준의 가시성을 어떻게 확보할 수 있을까요? 이를 볼 수 있는 세 가지 렌즈, 즉 서로 다른 측면을 보여주는 세 가지 도구를 살펴보겠습니다.</p>
+<p>먼저 에이전트형 플랫폼 검색(agentic platform discovery)부터 시작하겠습니다. 이러한 기능을 제공하는 도구는 다음과 같은 질문에 답할 수 있습니다. 누가 어떤 특정 모델에 프롬프트를 입력했는가? 실제로 실행된 에이전트는 무엇인가? 어떤 MCP 도구가 호출되었는가?</p>
+<p>이런 부분이 이러한 도구가 특히 잘하는 일입니다.</p>
+<p>그다음 엔드포인트 DLP, 즉 데이터 유출 방지 검색 도구의 관점에서 볼 수도 있습니다. 이러한 도구는 존재하며, 각 장치에 어떤 에이전트, 확장 프로그램, MCP 서버가 있는지 알려줄 수 있습니다. 엔드포인트 장치에 있는 파일, 메모리, 그 밖의 디지털 잔여물에 대해서도 알려줄 수 있습니다.</p>
+<p>세 번째 관점은 클라우드 또는 온프레미스 검색입니다. 이를 통해 해당 플랫폼에 어떤 데이터 소스가 존재하는지 알 수 있습니다. 그곳에 있는 데이터의 분류와 민감도, 어쩌면 소유권까지 파악할 수 있습니다.</p>
+<p>좋습니다. 하지만 이 모든 기능은 유용합니다. 문제를 발견하셨나요? 각각의 도구는 전체 그림의 일부만 볼 수 있습니다.</p>
+<p>정말 필요한 것은 이 모든 요소를 고려하고 하나의 화면으로 통합하는 전체론적 관점입니다.</p>
+<p>그렇다면 AI로 인한 데이터 노출을 관리하려면 실제로 무엇이 필요할까요? 요구 사항을 살펴보겠습니다.</p>
+<p>먼저 AI를 인식하는 자동화된 데이터 분류 및 검색 시스템이 필요합니다. 시스템은 끊임없이 변하기 때문에 지속적으로 작동해야 합니다.</p>
+<p>모든 플랫폼에서 데이터 소스를 인식해야 하며, 우리가 보유한 민감한 데이터도 인식해야 합니다. 여기에는 개인 식별 정보(PII, personally identifiable information), 개인 건강 정보(PHI, personal health information), 금융 데이터, 지적 재산 등이 포함됩니다.</p>
+<p>다음으로 데이터 계보를 기반으로 위험 가시성을 제공하는 기능이 필요합니다. RAG가 데이터를 변환합니다. AI 에이전트와 시스템 등도 변환을 수행할 수 있습니다.</p>
+<p>그런 다음 데이터가 시스템을 통해 어떻게 전파되는지 확인해야 합니다. 경우에 따라 데이터가 전파되는 과정에서 변경되기도 합니다.</p>
+<p>마지막으로 지능적인 조사 기능이 필요합니다. 사용자의 민감도, 목적지, 그 밖의 여러 요인을 바탕으로 컨텍스트를 인식할 수 있어야 합니다.</p>
+<p>일반적으로 몇 주가 걸리는 조사 시간을 몇 분으로 단축할 수 있어야 합니다. 신속하게 운영해야 합니다.</p>
+<p>궁극적으로는 컴플라이언스 보고서가 필요합니다. 고려해야 할 사항은 매우 다양합니다. GDPR(General Data Protection Regulation, 일반 데이터 보호 규정), EU AI Act, SOC 2, ISO 27001, HIPAA 등이 있으며, 목록은 계속 이어집니다.</p>
+<p>이 모든 사항을 확인하고 우리의 AI가 이를 어떻게 준수하고 있는지 파악할 수 있어야 합니다.</p>
+<p>데이터는 AI의 생명줄입니다. 데이터가 계속 이동해야 하며, 그렇지 않으면 환자는 죽습니다. 하지만 데이터가 어디로 가는지 모니터링할 수 없다면, 우리가 피를 쏟고 있으면서도 그 사실조차 모를 수 있습니다.</p>
+<p>인체와 마찬가지로 시스템은 복잡하지만, AI로 인한 데이터 노출을 관리하는 데 도움이 되는 도구들이 있습니다.</p>
+<p>그게 좋은 소식입니다.</p>
+</details>
+</body></html>

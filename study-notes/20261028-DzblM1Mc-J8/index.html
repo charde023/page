@@ -1,0 +1,329 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Own Your Intelligence</title>
+<meta name="description" content="AI 모델을 단순히 내려받는 것과 기업의 업무·전문성·실패를 축적해 스스로 개선되는 특화 모델을 소유하는 것의 차이를 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Y Combinator 학습노트</div><h1>Own Your Intelligence</h1>
+<div class="meta">원작자 Own Your Intelligence · 업로드 2026-10-28 · 1.5분 · <a href="https://youtu.be/DzblM1Mc-J8" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 4분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상은 기업이 외부의 앞선 AI 제공자에게 요청을 보내고 답을 받은 뒤 사용료를 내는 방식을 <strong>지능 임대</strong>라고 부른다. 화자에 따르면 가장 좋은 모델이 다른 모델보다 크게 앞서 있고, 기업이 자기 데이터로 그 차이를 줄이기 어려웠던 시기에는 이 거래가 합리적이었다.</p>
+<p>화자는 이제 상황이 달라졌다고 주장한다. 학습된 내부 값인 <strong>가중치</strong>를 받아 직접 실행할 수 있는 모델, 즉 <strong>오픈 가중치 모델(open-weight model)</strong>이 의미 있는 평가에서 최상위 폐쇄형 모델과 경쟁할 수준이 되었다는 것이다. 이에 따라 기업은 모델을 원하는 장소에서 실행하고, 자기 데이터로 개선하며, 변경 시점도 직접 정하려 할 것이라고 전망한다.</p>
+<p>하지만 모델 파일을 내려받는 것만으로 기업의 지능을 소유하게 되는 것은 아니다. 반복되는 업무를 합격·불합격으로 판정할 기준인 <strong>평가 항목(evals)</strong>으로 바꾸고, 전문가의 판단을 <strong>훈련 데이터</strong>로 정리하며, 실제 운영 실패를 다음 개선에 반영해야 한다. 새로운 기반 모델이 나올 때도 이 자산을 이어 가야 한다.</p>
+<figure data-visual-kind="map" style="margin:1.5rem auto;max-width:420px;">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 400 410" role="img" aria-labelledby="intelligence-map-title intelligence-map-desc" style="display:block;width:100%;height:auto;;min-width:466.7px;max-width:none;">
+<title id="intelligence-map-title">업무 지식을 특화 모델로 바꾸는 전체 지도</title>
+<desc id="intelligence-map-desc">업무 흐름, 전문성, 운영 실패라는 세 독립 입력이 각각 평가 기준, 훈련 데이터, 개선으로 바뀐 뒤 하나의 특화 모델 자산으로 합쳐진다.</desc>
+<defs>
+<marker id="map-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+<path d="M0,0 L9,3 L0,6 Z" fill="#334155"></path>
+</marker>
+</defs>
+
+<rect x="8" y="25" width="140" height="58" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2"></rect>
+<text x="78" y="49" text-anchor="middle" font-size="14" font-weight="700" fill="#172033">업무 흐름</text>
+<text x="78" y="69" text-anchor="middle" font-size="12" fill="#334155">실제로 하는 일</text>
+<line x1="153" y1="54" x2="197" y2="54" stroke="#334155" stroke-width="2" marker-end="url(#map-arrow)"></line>
+<rect x="202" y="25" width="145" height="58" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="2"></rect>
+<text x="274.5" y="49" text-anchor="middle" font-size="14" font-weight="700" fill="#172033">평가 기준</text>
+<text x="274.5" y="69" text-anchor="middle" font-size="12" fill="#334155">evals</text>
+
+<rect x="8" y="115" width="140" height="58" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2"></rect>
+<text x="78" y="139" text-anchor="middle" font-size="14" font-weight="700" fill="#172033">전문성</text>
+<text x="78" y="159" text-anchor="middle" font-size="12" fill="#334155">전문가의 판단</text>
+<line x1="153" y1="144" x2="197" y2="144" stroke="#334155" stroke-width="2" marker-end="url(#map-arrow)"></line>
+<rect x="202" y="115" width="145" height="58" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="2"></rect>
+<text x="274.5" y="139" text-anchor="middle" font-size="14" font-weight="700" fill="#172033">훈련 데이터</text>
+<text x="274.5" y="159" text-anchor="middle" font-size="12" fill="#334155">배울 수 있는 사례</text>
+
+<rect x="8" y="205" width="140" height="58" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2"></rect>
+<text x="78" y="229" text-anchor="middle" font-size="14" font-weight="700" fill="#172033">운영 실패</text>
+<text x="78" y="249" text-anchor="middle" font-size="12" fill="#334155">실제 오류와 문제</text>
+<line x1="153" y1="234" x2="197" y2="234" stroke="#334155" stroke-width="2" marker-end="url(#map-arrow)"></line>
+<rect x="202" y="205" width="145" height="58" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="2"></rect>
+<text x="274.5" y="229" text-anchor="middle" font-size="14" font-weight="700" fill="#172033">개선</text>
+<text x="274.5" y="249" text-anchor="middle" font-size="12" fill="#334155">재발을 줄이는 변경</text>
+
+<line x1="347" y1="54" x2="376" y2="54" stroke="#7c3aed" stroke-width="2"></line>
+<line x1="347" y1="144" x2="376" y2="144" stroke="#7c3aed" stroke-width="2"></line>
+<line x1="347" y1="234" x2="376" y2="234" stroke="#7c3aed" stroke-width="2"></line>
+<path d="M376 54 V290 H200 V315" fill="none" stroke="#7c3aed" stroke-width="3" marker-end="url(#map-arrow)"></path>
+
+<rect x="35" y="320" width="330" height="75" rx="10" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"></rect>
+<text x="200" y="344" text-anchor="middle" font-size="15" font-weight="700" fill="#172033">기업의 업무 방식을 담은 특화 모델</text>
+<text x="200" y="366" text-anchor="middle" font-size="13" fill="#334155">사업이 배우면서 함께 개선</text>
+<text x="200" y="385" text-anchor="middle" font-size="12" fill="#334155">새 기반 모델이 나와도 축적 자산을 이어 감</text>
+</svg></div>
+<figcaption style="margin-top:.6rem;text-align:center;font-size:.9rem;color:#475569;">세 종류의 기업 지식이 각각 변환된 뒤 특화 모델의 개선 자산으로 합쳐지는 구조</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 세 단계를 밟는 그림이 아니다. 각 가로 행을 왼쪽에서 오른쪽으로 독립적으로 읽는다. 세 행의 오른쪽 결과가 바깥 연결선을 통해 아래의 특화 모델로 함께 들어간다. 이 그림은 화자의 개념 구조이며 성능 수치를 나타내지 않는다.</p>
+<p>화자가 예상하는 미래는 임대 모델을 전부 없애는 것이 아니다. 가장 어려운 문제에는 외부 최상위 모델을 계속 빌려 쓰면서, 반복적이고 기업 고유의 업무에는 자체 특화 모델을 함께 운용하는 혼합 구조다.</p>
+<figure data-visual-kind="comparison" style="margin:1.5rem 0;">
+<div style="display:grid;grid-template-columns:1fr;gap:.75rem;max-width:680px;margin:0 auto;">
+<div style="padding:1rem;border:2px solid #b45309;border-radius:10px;background:#fffbeb;">
+<strong style="display:block;margin-bottom:.35rem;color:#78350f;">위 카드: 지능 임대</strong>
+<span>토큰 전송 → 답 수신 → 사용료 지불</span><br>
+<span>모델의 실행 장소와 변경 시점을 제공자에게 의존</span>
+</div>
+<div style="padding:1rem;border:2px solid #047857;border-radius:10px;background:#ecfdf5;">
+<strong style="display:block;margin-bottom:.35rem;color:#065f46;">아래 카드: 특화 지능 소유</strong>
+<span>업무·전문성·실패를 평가와 훈련 자산으로 축적</span><br>
+<span>실행 장소, 개선 데이터, 변경 시점을 기업이 통제</span>
+</div>
+<div style="padding:.8rem 1rem;border:1px dashed #475569;border-radius:10px;background:#f8fafc;text-align:center;">
+<strong>화자의 전망: 어려운 문제는 임대하고, 기업 고유 업무는 소유하는 혼합 구조</strong>
+</div>
+</div>
+<figcaption style="margin-top:.6rem;text-align:center;font-size:.9rem;color:#475569;">모델 임대와 특화 모델 소유의 역할 차이</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 화면 폭과 관계없이 위 카드가 임대, 아래 카드가 소유다. 마지막 상자는 둘 중 하나만 선택하는 것이 아니라 두 방식을 함께 쓴다는 화자의 전망을 보여준다.</p>
+<p>화자는 엄격한 데이터 관리와 폐쇄적인 기반 시설이 필요한 규제 산업에서 이 문제가 특히 중요하다고 말한다. 다만 특정 산업명이나 기업 사례, 비용 수치, 평가 결과는 제시하지 않는다. 영상의 결론은 이런 전환을 돕는 기업을 찾는다는 제안이다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>지능 임대는 외부 모델에 요청을 보내 답을 받고 사용료를 내는 방식이다.</li>
+<li>오픈 모델을 내려받는 것과 기업의 지능을 소유하는 것은 같지 않다.</li>
+<li>소유의 핵심은 업무·전문성·실패를 평가, 훈련 데이터, 개선으로 계속 축적하는 데 있다.</li>
+<li>화자는 어려운 문제의 임대와 고유 업무용 특화 모델의 소유가 함께 남을 것으로 전망한다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>기업이 AI 모델을 내려받는 데서 그치지 않고, 자기 업무를 반영해 개선되는 지능을 소유하려면 무엇을 축적해야 하는가?</strong></p>
+</blockquote>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>규제 산업의 한 기업이 외부 모델에 요청을 보낼 때마다 비용과 데이터 관리 부담을 느낀다. 오픈 모델을 내려받았지만, 그 모델은 아직 기업의 업무 방식이나 실패 사례를 모른다. 기업이 업무를 평가 기준으로, 전문성을 훈련 데이터로, 실패를 개선 항목으로 바꿀 때 비로소 자체 특화 모델을 발전시킬 기반이 생긴다.</p>
+<p><code>"외부 모델 의존과 데이터·변경 통제의 제약"</code> <strong>문제</strong><br>
+→ <code>"업무·전문성·실패를 평가·훈련·개선 자산으로 변환"</code> <strong>작동 방식</strong><br>
+→ <code>"기업의 업무 방식을 담고 계속 개선되는 특화 모델"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">외부 주방과 사내 조리법</div>
+<p>외부 주방에 주문을 보내 음식을 받고 매번 비용을 내는 것은 모델 임대와 닮았다. 사내에 조리법을 두고 고객 반응과 실패를 기록해 계속 고치는 것은 기업의 업무 지식을 특화 모델에 축적하는 과정과 닮았다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 기업이 특화 모델을 운영하더라도 가장 어려운 문제에는 외부 모델을 계속 사용할 수 있다. 또한 모델 파일을 보유하는 것만으로 평가 기준, 훈련 데이터, 운영 개선까지 자동으로 생기지는 않는다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>지능 임대</strong></td>
+<td>외부 AI에 요청하고 답을 사는 방식</td>
+<td>토큰을 외부 최상위 모델 제공자에게 보내 추론 결과를 받고 비용을 지불하는 방식</td>
+<td>외부 모델을 쓰면 언제나 나쁘거나 곧 사라진다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>오픈 가중치 모델</strong></td>
+<td>내부 값을 받아 직접 실행할 수 있는 모델</td>
+<td>학습된 가중치를 받아 선택한 환경에서 실행할 수 있는 모델</td>
+<td>내려받는 즉시 기업의 업무를 이해한다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>특화 지능의 소유</strong></td>
+<td>회사가 배우는 내용을 모델 개선에 쌓는 것</td>
+<td>업무를 평가로, 전문성을 훈련 데이터로, 운영 실패를 개선으로 바꾸고 새 기반 모델에도 이어 가는 체계</td>
+<td>모델 파일의 보유만으로 소유가 완성된다고 생각하는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>오픈 모델을 내려받는 것만으로 기업의 지능을 소유했다고 보기 어려운 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>내려받은 기반 모델에는 해당 기업의 구체적인 업무 흐름, 전문가 판단, 운영 실패와 개선 이력이 자동으로 들어 있지 않다. 이를 평가 기준, 훈련 데이터, 개선 항목으로 변환하고 새 기반 모델에도 이어 가야 기업 고유의 특화 지능이 축적된다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>모델 임대와 특화 모델 소유는 무엇을 통제하고 축적하는지에서 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>임대 방식은 외부 모델에 요청을 보내 결과를 받고 비용을 내며, 모델의 실행 환경과 변경 시점에 대한 의존이 남는다. 특화 모델 소유는 실행 위치와 변경 시점을 선택하고, 기업의 업무·전문성·실패를 개선 자산으로 축적하는 데 초점이 있다. 다만 화자는 두 방식이 함께 사용될 것으로 본다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>APOM에 가상으로 적용한다면 어떤 업무는 계속 외부 모델에 맡기고, 어떤 업무는 특화 모델 후보로 검토해야 할까?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>현재 시스템 상태를 가정하지 말고 업무별로 판단한다. 드물고 매우 어려운 문제는 외부 최상위 모델을 사용할 후보가 될 수 있다. 반대로 반복되고, 성공·실패를 판정할 수 있으며, 기업 고유의 사례가 계속 쌓이는 업무는 특화 모델 후보로 검토할 수 있다. 실제 선택 전에는 성능, 데이터 관리, 운영 비용을 같은 평가 항목으로 비교해야 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 소유의 핵심은 모델 파일보다 개선 자산이다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 업무 흐름을 평가로, 전문성을 훈련 데이터로, 운영 실패를 개선으로 바꾸고 이를 새로운 기반 모델 출시 때마다 이어 가야 한다고 말한다.</li>
+<li><strong>[해석]</strong> 기업이 소유해야 할 핵심은 특정 모델 한 개가 아니라, 업무에서 배운 것을 다음 모델에도 옮길 수 있는 평가·데이터·개선 체계다.</li>
+<li><strong>[경계]</strong> 오픈 가중치 모델이 최상위 모델과 경쟁한다는 주장에는 평가 이름과 점수가 없다. 규제 산업에서 임대가 성능 대비 더 비싸다는 주장에도 비용 자료나 구체 사례가 없다. 더 많은 기업이 모델을 소유할 것이라는 내용은 화자의 전망이지 이미 검증된 시행 결과가 아니다. META의 89초와 1.5분은 반올림 관계로 충돌하지 않지만, provenance의 creator 후보는 제목과 같은 <code>Own Your Intelligence</code>이며 “화자 이름+SNS 기준 추정”이라고만 적혀 있다. 제공 자료에는 화자 이름, SNS 링크, 확인된 원본 링크가 없어 실제 원작자로 확정할 수 없다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 원문은 업무 흐름을 관찰 가능한 평가 항목으로 바꾸어야 한다고 말한다.</li>
+<li><strong>통찰:</strong> 학습 활동도 설명을 들었다는 사실보다, 보지 않고 원인을 설명하거나 실패 사례를 고칠 수 있는 평가로 바꿔야 이해 여부를 관찰할 수 있다.</li>
+<li><strong>질문/행동:</strong> 학습자가 정답을 외우지 않고 새 사례에 적용해야 통과하는 평가 항목은 무엇인가?</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 외부 모델 의존, 데이터 관리, 기반 시설, 사용 비용을 소유 여부의 판단 요소로 제시한다.</li>
+<li><strong>통찰:</strong> APOM에 적용 가능성은 아직 검증되지 않았다. 반복 업무와 고유 사례가 충분히 축적되는 경우에만 특화 모델이 자산이 될 수 있으며, 운영 비용과 위험도 함께 비교해야 한다.</li>
+<li><strong>질문/행동:</strong> 어떤 업무에서 평가 가능한 반복 사례가 계속 생기며, 그 가치가 모델 운영 비용과 위험을 넘는가?</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 “임대 대 소유”라는 선명한 대조와 업무→평가, 전문성→데이터, 실패→개선이라는 구체적인 변환 문장을 사용한다.</li>
+<li><strong>통찰:</strong> 강한 대조는 관심을 만들지만, 벤치마크 이름·점수·비용 자료가 없으면 경쟁력과 비용 우위를 증명한 것은 아니다.</li>
+<li><strong>질문/행동:</strong> 상세페이지에서 전망과 검증된 증거를 분리하고, 실제 평가 결과가 있을 때만 성능 우위를 주장할 수 있는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 평가 설계, 훈련 데이터, 운영 실패 반영, 기반 모델 교체는 자동화와 모델 운영에서 직접 시험할 수 있는 요소다.</li>
+<li><strong>통찰:</strong> 모델 이름부터 고르기보다 한 업무의 성공 기준을 평가로 만들고, 실패가 다음 버전에 반영되는지를 확인해야 한다.</li>
+<li><strong>질문/행동:</strong> 후보 업무 하나에서 모델 교체 후에도 그대로 재사용할 평가와 실패 기록을 먼저 만들 수 있는가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"외부 모델 의존으로 업무 지식과 개선 이력이 기업 자산으로 쌓이지 않음"</code> <strong>문제</strong><br>
+→ <code>"업무에 맞는 모델 통제와 누적 개선"</code> <strong>수혜자: AI를 핵심 업무에 쓰는 기업과 담당 팀</strong><br>
+→ <code>"업무 사례·전문성·실패 기록·운영 시간과 기반 시설 제공"</code> <strong>지불자 또는 자원 제공자: 해당 기업</strong><br>
+→ <code>"동일 업무 평가의 통과 건수와 운영 실패의 재발 여부"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 검증 전 가상 적용으로, 비민감 업무 하나를 골라 성공·실패를 판정할 평가 10건을 만들고 현재 임대 방식과 후보 오픈 가중치 모델에 동일하게 실행한다.</li>
+<li><strong>측정 1개:</strong> 각 방식이 통과한 평가 건수 10건 중 몇 건인지 기록한다.</li>
+<li><strong>중단 기준 1개:</strong> 후보 오픈 가중치 모델의 통과 건수가 현재 임대 방식보다 적으면 해당 업무의 소유 실험을 확대하지 않는다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>현재의 지능 임대</td>
+<td>기업은 외부 최상위 모델에 토큰을 보내 답을 받고 비용을 낸다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>바뀌었다는 전제</td>
+<td>화자는 오픈 가중치 모델의 경쟁력이 높아졌다고 주장한다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>소유의 의미</td>
+<td>실행 위치, 개선 데이터, 변경 시점을 기업이 통제하려 한다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>다운로드와 소유의 간격</td>
+<td>업무·전문성·실패를 재사용 가능한 개선 자산으로 바꿔야 한다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>혼합 구조의 전망</td>
+<td>어려운 문제는 임대하고 고유 업무에는 특화 모델을 소유할 수 있다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 현재의 지능 임대</h3>
+<p>화자는 오늘날 AI를 만드는 거의 모든 기업이 지능을 임대한다고 표현한다. 기업은 외부 최상위 모델 제공자에게 토큰을 보내고, 답을 받은 뒤 비용을 지불한다.</p>
+<p>화자의 설명에 따르면 가장 좋은 모델이 다른 선택지보다 수년 앞서 있었고 기업의 자체 데이터로도 그 차이를 줄이기 어려웠을 때는 이 방식이 쉬운 거래였다. 다만 이를 뒷받침하는 기간별 성능 자료는 영상에 없다.</p>
+<h3>2. 바뀌었다는 전제</h3>
+<p>화자는 오픈 가중치 모델이 의미 있는 벤치마크에서 최상위 모델과 경쟁할 수준이 되었다고 주장한다. AI가 기업 운영의 중심으로 이동하면서 기업도 모델 임대에 대한 의존을 더 의식하게 되었다고 말한다.</p>
+<p>영상은 구체적인 모델명, 벤치마크명, 점수 또는 비교 조건을 제공하지 않는다. 따라서 경쟁력은 화자의 주장으로만 보존해야 한다.</p>
+<h3>3. 기업이 원할 것이라는 통제</h3>
+<p>화자는 앞으로 더 많은 기업이 다음을 원할 것으로 전망한다.</p>
+<ul>
+<li>의존하는 모델을 직접 소유하기</li>
+<li>자체 데이터로 모델을 개선하기</li>
+<li>선택한 장소에서 모델을 실행하기</li>
+<li>모델을 언제 변경할지 직접 결정하기</li>
+</ul>
+<p>이는 미래 전망이며, 영상에서 이미 다수 기업이 이 전환을 완료했다고 주장한 것은 아니다.</p>
+<p>화자는 특히 엄격한 데이터 관리와 폐쇄적인 기반 시설을 요구하는 규제 산업에서 중요하다고 말한다. 이런 환경에서는 얻는 성능에 비해 임대가 더 비싸질 수 있다는 주장도 덧붙인다. 구체적인 산업명이나 비용 수치는 없다.</p>
+<h3>4. 다운로드와 소유 사이의 간격</h3>
+<p>화자가 강조하는 핵심은 오픈 모델 다운로드와 개선되는 기업 지능의 소유가 다르다는 점이다. 누군가는 다음 변환을 수행해야 한다.</p>
+<ul>
+<li>업무 흐름을 평가 기준으로 바꾸기</li>
+<li>전문성을 훈련 데이터로 바꾸기</li>
+<li>실제 운영 실패를 개선 사항으로 바꾸기</li>
+<li>새로운 기반 모델이 출시될 때 이 자산을 계속 이어 가기</li>
+</ul>
+<p>따라서 소유는 모델 파일 하나의 상태가 아니라 평가, 데이터, 실패 기록, 개선 절차가 함께 움직이는 운영 체계에 가깝다.</p>
+<h3>5. 임대와 소유가 함께 남는 전망</h3>
+<p>화자는 기업이 가장 어려운 문제에는 계속 외부 최상위 지능을 임대할 것이라고 전망한다. 동시에 많은 기업이 자기 사업의 작동 방식을 담고, 사업이 학습할수록 가치가 커지는 특화 모델도 소유할 것이라고 본다.</p>
+<p>마지막에는 기업이 지능을 소유하도록 돕는 사람이나 회사를 찾는다는 제안으로 끝난다. 이 기회가 실제로 어느 산업과 업무에서 경제성이 있는지는 영상만으로 확인할 수 없다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>채널/업로더: Y Combinator · 원제: Own Your Intelligence · https://www.youtube.com/watch?v=DzblM1Mc-J8 · 전사: YouTube caption</p>
+<p>META provenance는 원작자 후보를 <code>Own Your Intelligence</code>로 기록하고 “화자 이름+SNS 기준 추정 출처”라고 설명한다. 그러나 제공 자료에는 확인된 화자 이름, SNS 링크, 원본 링크가 없어 실제 원작자 여부는 미확정이다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>오늘날 AI를 구축하는 거의 모든 기업은 지능을 임대합니다. 프런티어 연구소(frontier lab)에 토큰을 보내고 답변을 받은 뒤 비용을 지불하는 방식입니다. 최고의 모델이 다른 모든 것보다 몇 년이나 앞서 있었고, 자체 데이터로 무엇을 하더라도 그 격차를 좁힐 수 없었던 때에는 쉬운 거래였습니다.</p>
+<p>하지만 상황이 바뀌었습니다. 오픈 웨이트 모델(open-weight models)은 이제 의미 있는 벤치마크에서 최고의 프런티어 모델들과 경쟁할 수 있으며, AI가 기업 운영 방식의 중심으로 이동하면서 기업들은 [음악] 모델 임대에 대한 의존도를 더욱 자각하게 되었습니다.</p>
+<p>우리는 더 많은 기업이 자신들이 의존하는 모델을 직접 소유하고, 자체 데이터로 모델을 개선하며, 원하는 곳에서 실행하고, 언제 변경할지 스스로 결정하고 싶어 할 것이라고 생각합니다. 이는 규제가 엄격한 산업에서 특히 중요합니다. 이러한 산업에서는 엄격한 데이터 거버넌스(data governance)와 통제된 인프라로 인해, 얻는 성능에 비해 임대 비용이 더욱 비싸기 때문입니다.</p>
+<p>하지만 오픈 모델을 다운로드하는 것과 사업을 개선하는 지능을 소유하는 것 사이에는 여전히 큰 격차가 있습니다. 누군가는 업무 흐름을 평가(evals)로, 전문성을 학습 데이터로, 프로덕션 장애를 개선 사항으로 바꾸고, 새로운 기반 모델(base model)이 출시될 때마다 이 모든 것을 계속 발전시켜야 합니다.</p>
+<p>기업들은 가장 어려운 [음악] 문제를 해결하기 위해 계속해서 프런티어 지능을 임대하겠지만, 많은 기업이 자사의 사업 방식이 어떻게 작동하는지를 담고 있으며 사업이 학습할수록 더 가치가 높아지는 특화 모델도 직접 소유하게 될 것이라고 생각합니다. 기업들이 자신들의 지능을 소유하도록 돕고 있다면, 여러분의 이야기를 듣고 싶습니다.</p>
+</details>
+</body></html>

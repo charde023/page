@@ -1,0 +1,469 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Jev로 더 빠르고 스마트한 에이전트 하네스를 구축하는 방법입니다</title>
+<meta name="description" content="Jev를 LLM 전체의 대체물이 아니라 라우팅, 위험 차단, 온라인 평가처럼 빠른 정형 판단이 필요한 곳에 배치하는 에이전트 구조를 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Jev로 더 빠르고 스마트한 에이전트 하네스를 구축하는 방법입니다</h1>
+<div class="meta">업로드 2026-09-25 · 9.2분 · <a href="https://youtu.be/BJeHhsMVc8A" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상의 핵심은 <strong>큰 언어 모델(LLM)을 모두 Jev로 바꾸자</strong>는 것이 아니다. 에이전트가 하는 일 가운데 긴 답을 만들거나 복잡하게 추론할 필요가 없는 판단을 골라, 그 부분만 빠른 전문 모델에 맡기자는 제안이다.</p>
+<p>일반적인 에이전트는 사용자의 요청을 LLM에 보내고, LLM이 필요한 도구를 호출하며, 도구가 돌려준 결과를 다시 읽는 과정을 반복한다. 이 구조는 강력하지만 LLM의 기본 입출력은 텍스트이므로 코드가 바로 사용하기 어려울 수 있다. 이를 보완하려고 도구 호출과 JSON 스키마에 맞춘 구조화된 출력이 도입됐다.</p>
+<p>Jev는 여기서 한 단계 더 좁은 역할을 맡는다. 상태와 질문을 받으면 긴 문장을 생성하기보다 <strong>선택, 점수, 예·아니요와 같은 형식이 정해진 답과 확률</strong>을 반환한다. 화자는 이를 빠른 직관에 빗댄 ‘시스템 1 모델’이라고 부른다.</p>
+<figure data-visual-kind="map" style="margin:1.4rem 0;padding:1rem;border:1px solid #94a3b8;border-radius:12px;">
+  <div style="display:flex;flex-wrap:wrap;gap:0.65rem;align-items:stretch;justify-content:center;">
+    <div style="flex:1 1 150px;padding:0.8rem;background:#eff6ff;border:1px solid #60a5fa;border-radius:8px;"><strong>사용자 요청</strong><br>에이전트가 해결할 작업</div>
+    <div aria-hidden="true" style="align-self:center;font-weight:bold;">→</div>
+    <div style="flex:1 1 170px;padding:0.8rem;background:#f5f3ff;border:1px solid #8b5cf6;border-radius:8px;"><strong>LLM의 핵심 작업</strong><br>문제 처리, 도구 선택, 결과 해석, 답 생성</div>
+    <div aria-hidden="true" style="align-self:center;font-weight:bold;">↔</div>
+    <div style="flex:1 1 160px;padding:0.8rem;background:#f8fafc;border:1px solid #64748b;border-radius:8px;"><strong>도구</strong><br>구조화된 요청을 실행하고 결과 반환</div>
+  </div>
+  <div style="margin-top:0.8rem;padding:0.8rem;background:#ecfdf5;border:2px solid #10b981;border-radius:8px;">
+    <strong>Jev가 맡을 수 있는 좁은 결정 지점</strong><br>
+    모델을 고르는 라우팅 · 위험한 도구 호출인지 판정 · 완성된 답을 기준표로 평가
+  </div>
+  <figcaption style="margin-top:0.65rem;color:#334155;">에이전트의 전체 작업과 그 주변에 배치되는 Jev의 판단 지점을 보여주는 개념 지도</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위쪽은 기존 에이전트의 중심 반복 구조다. 아래쪽의 Jev는 그 전체를 대신하는 새 중심이 아니라, 빠른 정형 판단이 필요한 특정 지점에 붙는 부품이다. 화자도 Jev가 LLM의 즉시 교체용 대체품은 아니라고 명시한다.</p>
+<h3>왜 이런 분업이 필요한가</h3>
+<p>간단한 분류에도 LLM을 쓰면, 필요한 답이 ‘위험함/위험하지 않음’ 하나뿐인데도 상대적으로 느리고 비싼 생성 과정을 거칠 수 있다. 화자는 분류형 작업에서 Jev가 LLM보다 <strong>20~200배 빠르고 40~400배 저렴할 수 있다</strong>고 말한다. 단, 비교 모델, 데이터셋, 측정 환경은 영상에서 제시되지 않으므로 보편적인 성능 사실로 확대하면 안 된다.</p>
+<p>영상의 개인정보 포함 여부 데모에서는 LLM이 텍스트와 구조화된 출력을 만드는 데 약 5초가 걸렸고, Jev는 거의 즉시 개인정보가 있을 확률을 98%로 반환했다고 소개한다. 이 사례가 보여주는 차이는 ‘좋은 문장을 누가 더 잘 쓰는가’가 아니라, <strong>정해진 판정만 필요할 때 어떤 도구가 더 알맞은가</strong>다.</p>
+<figure data-visual-kind="comparison" style="margin:1.4rem 0;border:1px solid #94a3b8;border-radius:12px;overflow:hidden;">
+  <div style="overflow-x:auto;">
+    <table style="width:100%;min-width:620px;border-collapse:collapse;">
+      <thead>
+        <tr style="background:#e2e8f0;">
+          <th style="padding:0.7rem;border:1px solid #cbd5e1;text-align:left;">비교 기준</th>
+          <th style="padding:0.7rem;border:1px solid #cbd5e1;text-align:left;">일반적인 LLM</th>
+          <th style="padding:0.7rem;border:1px solid #cbd5e1;text-align:left;">Jev</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:0.7rem;border:1px solid #cbd5e1;"><strong>주된 출력</strong></td>
+          <td style="padding:0.7rem;border:1px solid #cbd5e1;">생성된 텍스트 또는 구조화된 출력</td>
+          <td style="padding:0.7rem;border:1px solid #cbd5e1;">형식이 정해진 답과 확률</td>
+        </tr>
+        <tr>
+          <td style="padding:0.7rem;border:1px solid #cbd5e1;"><strong>영상이 강조한 역할</strong></td>
+          <td style="padding:0.7rem;border:1px solid #cbd5e1;">열린 문제, 단계적인 처리, 답 생성</td>
+          <td style="padding:0.7rem;border:1px solid #cbd5e1;">분류와 결정처럼 범위가 좁은 작업</td>
+        </tr>
+        <tr>
+          <td style="padding:0.7rem;border:1px solid #cbd5e1;"><strong>속도·비용 주장</strong></td>
+          <td style="padding:0.7rem;border:1px solid #cbd5e1;">비교 기준</td>
+          <td style="padding:0.7rem;border:1px solid #cbd5e1;">분류형 작업에서 20~200배 빠르고 40~400배 저렴할 수 있음</td>
+        </tr>
+        <tr>
+          <td style="padding:0.7rem;border:1px solid #cbd5e1;"><strong>관계</strong></td>
+          <td style="padding:0.7rem;border:1px solid #cbd5e1;" colspan="2">서로 완전히 교체하는 관계가 아니라 작업에 따른 분업 관계</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption style="padding:0.65rem;color:#334155;">영상이 제시한 LLM과 Jev의 역할 비교이며, 속도와 비용 수치는 화자의 조건부 주장이다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> Jev 쪽의 큰 배수만 보지 말고 첫 두 행을 먼저 봐야 한다. 출력과 작업 성격이 서로 다르므로 같은 일을 수행하는 범용 모델끼리의 단순 순위표가 아니다. ‘빠르다’는 장점은 문제가 미리 정해진 판단 형식으로 표현될 때 의미가 있다.</p>
+<h3>Jev가 답하는 세 가지 질문</h3>
+<p>화자는 Jev의 질문을 세 종류로 설명한다.</p>
+<ol>
+<li><strong>선택형:</strong> 정해진 후보 중 하나를 고른다. 고객 메시지를 어느 팀이 처리할지 묻는 사례에서 billing 점수 0.84와 confidence 0.596이 제시된다.</li>
+<li><strong>점수형:</strong> 상태가 척도상 어디에 놓이는지 평가한다. 고객의 불만 정도 사례에서는 1.035가 반환됐고, 화자는 이를 ‘불만이 있지만 매우 화난 정도는 아님’으로 해석한다.</li>
+<li><strong>불리언형:</strong> 예·아니요 성격의 확률을 반환한다. 긴급성이 있는지 묻는 질문에 0.999가 제시된다.</li>
+</ol>
+<p>하나의 상태에 여러 질문을 함께 보내 병렬로 답하게 할 수도 있다. 고객 메시지 하나를 읽고 담당 팀, 불만 정도, 긴급성을 동시에 판단하는 식이다.</p>
+<figure data-visual-kind="process" style="margin:1.4rem 0;padding:1rem;border:1px solid #94a3b8;border-radius:12px;">
+  <div style="padding:0.8rem;background:#fff7ed;border:1px solid #fb923c;border-radius:8px;">
+    <strong>하나의 상태</strong><br>
+    “Stripe 연결이 3일째 실패하고 매출을 잃고 있으니 빨리 도와 달라”는 고객 메시지
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.3rem;padding:0.35rem;">↓</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0.7rem;">
+    <div style="padding:0.8rem;background:#eff6ff;border:1px solid #60a5fa;border-radius:8px;"><strong>선택형</strong><br>어느 팀이 맡아야 하는가?</div>
+    <div style="padding:0.8rem;background:#f5f3ff;border:1px solid #a78bfa;border-radius:8px;"><strong>점수형</strong><br>고객이 얼마나 불만스러운가?</div>
+    <div style="padding:0.8rem;background:#ecfdf5;border:1px solid #34d399;border-radius:8px;"><strong>불리언형</strong><br>긴급성이 있는가?</div>
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.3rem;padding:0.35rem;">↓</div>
+  <div style="padding:0.8rem;background:#f8fafc;border:1px solid #64748b;border-radius:8px;">
+    <strong>병렬로 반환되는 정형 답</strong><br>선택 결과 · 척도상 점수 · 예/아니요 확률
+  </div>
+  <figcaption style="margin-top:0.65rem;color:#334155;">하나의 상태에 서로 다른 형식의 질문을 보내 정형 답을 받는 과정을 보여준다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 화살표는 긴 추론 단계가 아니라 입력과 출력의 관계를 뜻한다. 가운데 세 상자는 서로 다른 질문 형식이며, 한 상태에 여러 질문을 함께 보낼 수 있다는 것이 화자의 설명이다. 다만 점수형 1.035가 어떤 수치 범위에서 계산됐는지는 영상에 나오지 않는다.</p>
+<h3>에이전트에서 맡길 수 있는 세 가지 일</h3>
+<p>첫째는 <strong>모델 라우팅</strong>이다. 단순한 요청은 빠르고 저렴한 모델로, 복잡한 요청은 더 강력한 모델로 보내려면 먼저 작업 난도를 판정해야 한다. 화자는 LangChain이 내부 코딩 에이전트에서 이런 전환을 탐색하고 있다고 말한다. 이는 이미 전면 배포해 검증했다는 뜻이 아니라, Jev를 라우팅 단계에 쓸 수 있다는 제안이다.</p>
+<p>둘째는 <strong>위험한 도구 호출 차단</strong>이다. 화자는 이를 auto mode라고 부른다. 데이터베이스나 중요한 파일 삭제처럼 위험할 수 있는 호출을 실행 직전에 판정하여 막는 방식이다. 화자는 기존 분류 단계가 느려 자신의 코딩 에이전트에서 auto mode를 껐다가, Jev의 빠른 판단 덕분에 다시 켰다는 개인 사례를 말한다. 이 경험만으로 모든 위험 호출을 정확히 차단한다고 볼 수는 없다.</p>
+<p>셋째는 <strong>온라인 평가의 심사 모델</strong>이다. 에이전트의 질문과 답, 평가 기준표를 Jev에 주고 정확성, 기준 답 일치 여부, 근거성, 출처 인용 여부 등을 채점하게 한다. 화자는 이를 기존 LLM-as-a-Judge의 발전 형태로 설명하며, 관련 블로그 결과에서 더 저렴하고 빠르면서 평가 간 신뢰성과 일관성도 높았다고 주장한다. 영상에는 표본, 비교 모델, 오류 사례 같은 검증 세부 정보가 없다.</p>
+<p>따라서 이 영상이 제안하는 설계 원칙은 간단하다. <strong>문장을 만들어야 하는 일과 정해진 기준으로 판단해야 하는 일을 분리하고, 후자 중 속도와 비용이 중요한 곳에 Jev를 배치한다.</strong> 다만 빠른 분류기는 정책 자체를 대신 만들지 않는다. 무엇이 위험한지, 어떤 기준으로 복잡도를 나눌지, 평가 결과가 실제 품질과 일치하는지는 별도로 설계하고 검증해야 한다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>Jev는 LLM 전체를 대신하는 모델이 아니라 선택·점수·예/아니요 같은 정형 판단에 특화된 부품이다.</li>
+<li>에이전트에서는 모델 라우팅, 위험한 도구 호출 차단, 온라인 답변 평가에 배치할 수 있다.</li>
+<li>빠르고 저렴하다는 배수와 더 일관적이라는 평가는 화자의 조건부 주장으로, 영상만으로 일반화할 수 없다.</li>
+<li>적용할 때는 분류 속도뿐 아니라 오판, 정책 기준, 실제 작업 품질도 따로 검증해야 한다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>왜 Jev를 LLM의 대체물이 아니라 에이전트 하네스의 빠른 결정 부품으로 봐야 하며, 어디에 배치할 수 있는가?</strong></p>
+</blockquote>
+<ul>
+<li>Jev의 입력과 출력은 일반적인 LLM과 어떻게 다른가?</li>
+<li>라우팅, 위험 차단, 온라인 평가는 어떤 공통 구조를 가지는가?</li>
+<li>화자의 속도·비용·일관성 주장을 실제 도입 전에 무엇으로 검증해야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>코딩 에이전트가 데이터베이스 삭제 도구를 호출하려는 순간을 떠올린다. 실행 전에 Jev가 호출 내용을 위험 기준에 따라 판정한다. 화자가 제시한 예에서는 위험한 호출로 분류되면 실제 도구에 도달하기 전에 차단된다.</p>
+<p><code>"모든 도구 호출을 그대로 실행하면 위험한 작업도 통과할 수 있다"</code> <strong>문제</strong><br>
+→ <code>"실행 직전에 Jev가 정해진 위험 기준으로 호출을 분류한다"</code> <strong>작동 방식</strong><br>
+→ <code>"위험하다고 판정된 호출을 런타임에 차단한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">복잡한 상담사 앞에 있는 빠른 안내 데스크</div>
+<p>LLM이 여러 사정을 듣고 해결책을 만드는 상담사라면, Jev는 방문 목적을 정해진 항목으로 분류하고 어느 창구로 보낼지 빠르게 정하는 안내 데스크에 가깝다. 모델 라우팅은 창구 배정이고, 위험 차단은 출입 확인이며, 온라인 평가는 기준표를 사용한 검사에 해당한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 사람 안내원은 규칙 밖의 맥락을 새로 묻거나 판단을 보류할 수 있지만, Jev의 출력은 주어진 상태와 질문 형식에 묶인다. 반환 확률도 실제 안전을 보장하지 않으며, 잘못 설계된 기준은 빠르게 잘못된 결정을 만들 수 있다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>에이전트 하네스</strong></td>
+<td>모델과 도구가 안전하게 일하도록 둘러싼 실행 장치</td>
+<td>요청, 모델, 도구 호출, 결과 처리, 평가와 제어를 연결하는 운영 구조</td>
+<td>모델 자체와 같은 뜻이라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>시스템 1 모델</strong></td>
+<td>빠르게 정해진 판단을 내리는 모델</td>
+<td>화자가 소개한 TypeSafe AI의 표현으로, 상태와 질문을 평가해 정형 답과 확률을 반환하는 모델 부류</td>
+<td>사람의 인지 체계와 완전히 동일하거나 모든 사고를 대신한다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>정형 판단</strong></td>
+<td>코드가 바로 읽을 수 있는 형식의 답</td>
+<td>선택, 점수, 불리언처럼 타입이 정해진 답과 관련 확률</td>
+<td>구조화된 형식이면 판단도 자동으로 정확하다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>모델 라우팅</strong></td>
+<td>작업에 맞는 모델로 보내기</td>
+<td>요청의 복잡도나 기준을 평가해 사용할 모델을 선택하는 단계</td>
+<td>가장 강력한 모델을 항상 쓰는 것이 최적이라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>온라인 에이전트 평가</strong></td>
+<td>실제 실행 결과를 계속 채점하기</td>
+<td>실행 추적과 답을 기준표에 따라 평가하는 운영 중 평가</td>
+<td>자동 심사 모델의 점수를 인간 검증과 같은 확정 사실로 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>간단한 분류에 범용 LLM을 계속 사용하면 왜 에이전트의 속도와 비용 문제가 생길 수 있는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>필요한 결과가 선택 하나나 예·아니요 확률뿐이어도 범용 LLM은 텍스트 생성과 상대적으로 복잡한 처리를 수행할 수 있다. 화자는 이 좁은 작업을 정형 판단에 특화된 Jev로 분리하면 분류 단계의 지연과 비용을 줄일 수 있다고 주장한다. 다만 실제 절감 폭은 작업과 비교 조건으로 검증해야 한다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>Jev가 정형 답을 반환한다는 점은 LLM의 구조화된 출력과 같아 보이는데, 영상은 어떤 차이를 강조하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>둘 다 코드가 읽을 수 있는 결과를 만들 수 있다. 그러나 구조화된 출력은 LLM의 생성 결과를 정해진 스키마에 맞추는 장치이고, Jev는 처음부터 선택·점수·불리언 같은 빠른 판단에 특화된 별도 모델로 소개된다. 출력 형식이 비슷하다고 역할과 성능이 동일한 것은 아니다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새로운 에이전트 흐름에서 Jev를 시험한다면 어떤 단계를 먼저 후보로 골라야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 출력이 소수의 선택지, 점수 또는 예·아니요로 명확히 표현되는지 확인한다. 다음으로 그 판단이 자주 반복되어 지연과 비용의 영향이 큰지, 오판했을 때 복구하거나 인간에게 넘길 수 있는지 살핀다. 열린 답 생성이나 복잡한 예외 처리가 핵심이라면 LLM을 그대로 두고, 좁은 판정 단계만 Jev 후보로 삼는다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 좋은 하네스는 모든 일을 가장 강한 모델에 맡기지 않는다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 단순 작업과 복잡한 작업을 모두 처리하는 에이전트라면 모든 일에 가장 강력한 모델을 사용할 필요가 없으며, Jev로 작업 복잡도를 판정해 모델을 라우팅할 수 있다고 말한다.</li>
+<li><strong>[해석]</strong> 모델 선택은 브랜드나 단일 성능 순위보다 작업의 출력 형식, 지연 허용치, 오판 비용에 맞춰야 한다. 하네스의 역할은 하나의 모델을 숭배하는 것이 아니라 서로 다른 부품의 경계를 관리하는 것이다.</li>
+<li><strong>[경계]</strong> LangChain의 내부 코딩 에이전트 전환은 화자가 “탐색 중이며 원한다”고 설명한 사례다. 전면 시행이나 검증 완료로 바꾸어 해석하면 안 된다.</li>
+</ul>
+<h3>2. 빠른 안전 판정은 마찰을 줄이지만 안전 자체를 증명하지 않는다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 기존 위험 분류가 느려 자신의 코딩 에이전트에서 auto mode를 껐다가 Jev 덕분에 다시 켰다고 말하며, 데이터베이스나 중요 파일 삭제 호출을 차단하는 예를 든다.</li>
+<li><strong>[해석]</strong> 안전장치가 너무 느리면 사용자가 끌 유인이 생긴다. 따라서 안전 기능의 실제 가치는 판정 정확도뿐 아니라 작업 흐름을 방해하지 않을 정도의 응답성에도 좌우된다.</li>
+<li><strong>[경계]</strong> 이는 화자의 개인 사례이며 오탐, 미탐, 차단 해제 절차는 제시되지 않았다. Jev가 모든 위험 호출을 찾아낸다는 증거로 사용할 수 없다.</li>
+</ul>
+<h3>3. 인상적인 숫자와 평가 주장은 조건을 함께 보존해야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 전사는 분류형 작업에서 20~200배 빠르고 40~400배 저렴할 수 있다고 말한다. META 설명은 각각 최대 200배와 최대 400배만 강조한다. 화자는 관련 블로그에서 Jev가 LLM 심사 방식보다 더 신뢰성 있고 일관적이었다고도 주장한다.</li>
+<li><strong>[해석]</strong> 최대치만 떼어낸 홍보 문장보다 비교 범위와 적용 작업을 함께 제시해야 한다. 도입 판단에는 자체 로그와 기준표를 이용한 재측정이 필요하다.</li>
+<li><strong>[경계]</strong> 영상에는 비교 모델, 데이터셋, 표본 수, 가격 조건, 신뢰성 지표가 없다. 또한 화자는 “a couple of use cases”라고 말한 뒤 모델 라우팅, auto mode, 온라인 평가의 <strong>세 가지</strong> 사례를 열거한다. 선택형 사례의 0.84와 confidence 0.596의 관계, 점수형 1.035의 수치 범위도 설명되지 않았다. 원작자 후보는 전사의 자기소개상 Sydney이지만 성은 없고, META의 <code>provenance.creator</code>는 비어 있으며 provenance note는 화자 이름과 SNS를 기준으로 출처를 추정했고 채널이 원본 영상 링크를 확인하지 않았다고 밝힌다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 열린 답 생성과 선택·점수·불리언 판단을 구분하고, 한 고객 메시지에 세 질문을 적용한다.</li>
+<li><strong>통찰:</strong> 학습 확인도 “이해했는가?”라는 막연한 질문보다 분류, 정도 평가, 근거가 있는 예·아니요 질문으로 나누면 관찰하기 쉽다.</li>
+<li><strong>질문/행동:</strong> 학습자가 개념을 설명하게 한 뒤, 새 사례를 올바르게 분류하고 그 확신의 근거까지 말할 수 있는지 확인한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> Jev의 제안 가치는 반복되는 판단 단계의 시간과 비용을 줄이고, 위험한 실행을 사전에 걸러내는 데 있다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용한다면 이는 현재 운영 사실이 아니라, 정해진 항목으로 반복 분류되는 업무가 있는지부터 확인해야 하는 검증 전 가설이다.</li>
+<li><strong>질문/행동:</strong> 처리량이 많고 답 형식이 고정되어 있으며 오판을 되돌릴 수 있는 판단 단계가 실제로 존재하는지 찾는다.</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 5초 대 거의 즉시, 20~200배, 40~400배처럼 강한 대조 숫자를 사용해 필요성을 설명한다.</li>
+<li><strong>통찰:</strong> 숫자는 관심을 끌지만 ‘분류형 작업에서’, ‘~할 수 있다’는 조건과 측정 근거를 함께 보여줘야 신뢰를 해치지 않는다.</li>
+<li><strong>질문/행동:</strong> 성능 카피를 쓸 때 최대치만 남기지 말고 비교 대상, 작업 종류, 범위, 검증 방법을 같은 화면에 제시한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 라우팅, 실행 전 위험 판정, 실행 후 평가는 모두 에이전트 하네스에서 측정 가능한 결정 지점이다.</li>
+<li><strong>통찰:</strong> 모델 이름부터 고르기보다 필요한 출력 타입, 허용 지연, 오탐과 미탐의 비용, 실패 시 대체 경로를 먼저 정의해야 한다.</li>
+<li><strong>질문/행동:</strong> 실제 도입 전 자체 사례에 예상 정답을 붙이고, Jev의 일치율과 실패 사례를 기존 방식과 비교한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"간단한 판단에도 느리고 비싼 범용 LLM을 사용하고 위험 호출과 품질 평가를 일관되게 관리하기 어렵다"</code> <strong>문제</strong><br>
+→ <code>"더 빠른 응답과 통제 가능한 에이전트를 사용하는 사람과 운영자"</code> <strong>수혜자: 에이전트 사용자와 개발·운영 담당자</strong><br>
+→ <code>"API 비용, 평가 기준표, 실행 로그와 검토 시간을 제공한다"</code> <strong>지불자 또는 자원 제공자: 에이전트를 운영하는 조직</strong><br>
+→ <code>"같은 분류 작업의 결정 지연시간과 판단 일치율 변화"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 검증용 에이전트 사례 20건에 기대 분류를 미리 붙인 뒤, 같은 질문을 Jev에 보내 결과를 대조한다.</li>
+<li><strong>측정 1개:</strong> 기대 분류와 Jev 결과의 일치율</li>
+<li><strong>중단 기준 1개:</strong> 20건의 일치율이 90% 미만이면 해당 판단 단계로의 확대 적용을 멈춘다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>기존 에이전트 반복 구조</td>
+<td>요청, LLM, 도구 호출, 결과 처리, 종료가 이어진다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>구조화가 필요한 이유</td>
+<td>텍스트만으로는 코드 기반 응용 프로그램이 안정적으로 사용하기 어렵다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Jev의 정의와 성능 주장</td>
+<td>상태와 질문을 받아 정형 답과 확률을 반환하는 시스템 1 모델로 소개된다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>세 가지 질문 형식</td>
+<td>선택형, 점수형, 불리언형이며 여러 질문을 병렬로 보낼 수 있다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>LangChain 연동</td>
+<td>TypeSafe API 키와 <code>langchain_typesafe</code>의 classifier를 사용한다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>세 가지 활용 사례</td>
+<td>모델 라우팅, auto mode, 온라인 에이전트 평가가 제시된다.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>검증 경계</td>
+<td>배수의 조건, 점수 의미, 원작자 provenance와 열거 개수에 불확실성이 남는다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 기존 에이전트 반복 구조</h3>
+<p>화자는 요청이 LLM에 들어오면 모델이 도구를 호출하고, 도구 결과를 처리한 뒤 다음 호출을 계속하거나 최종 결과를 반환하는 구조를 먼저 설명한다. 이 반복은 강력하지만 LLM의 텍스트 입출력은 구조화된 타입에 의존하는 코드 응용 프로그램에서 예측하기 어렵다.</p>
+<p>이를 보완하는 두 장치가 제시된다.</p>
+<ul>
+<li><strong>도구 호출:</strong> 모델이 주문 ID가 포함된 주문 조회 요청처럼 구조화된 요청을 만들고, 도구도 구조화된 데이터를 반환한다.</li>
+<li><strong>구조화된 출력:</strong> 모델의 최종 결과가 자유 텍스트가 아니라 지정된 JSON 스키마를 따르게 한다.</li>
+</ul>
+<h3>2. Jev와 시스템 1이라는 이름</h3>
+<p>화자는 자신을 LangChain 오픈소스 팀의 제품 관리자 Sydney라고 소개하고, Jev를 TypeSafe AI에서 나온 새 모델이라고 설명한다.</p>
+<p>TypeSafe 문서에 따른 화자의 설명은 다음과 같다.</p>
+<ul>
+<li>Jev는 상태와 질문을 평가한다.</li>
+<li>타입이 정해진 답과 확률을 반환한다.</li>
+<li>일반적인 LLM처럼 텍스트를 입력받아 긴 텍스트를 생성하는 방식과 다르다.</li>
+<li>LLM의 즉시 교체용 대체품이 아니라, 현재 LLM에 맡기는 일부 전문 작업을 더 빠르고 저렴하게 처리하는 모델이다.</li>
+</ul>
+<p>‘시스템 1’은 화자의 설명상 Daniel Kahneman의 <em>Thinking, Fast and Slow</em>에서 가져온 표현이다. 빠르고 저렴한 직관을 시스템 1, 느리고 비싸지만 열린 문제를 단계적으로 다루는 사고를 시스템 2로 대조한다. TypeSafe가 이 인상을 Jev에 빌려왔다는 설명이지, 인간 인지와 모델이 동일하다는 뜻은 아니다.</p>
+<h3>3. 속도와 비용 데모</h3>
+<p>화자는 분류형 작업에서 Jev가 LLM보다 다음과 같은 성능을 낼 수 있다고 말한다.</p>
+<ul>
+<li>속도: <strong>20~200배 빠를 수 있음</strong></li>
+<li>비용: <strong>40~400배 저렴할 수 있음</strong></li>
+</ul>
+<p>개인정보가 텍스트에 포함됐는지 묻는 데모에서는 다음 결과가 소개된다.</p>
+<ul>
+<li>LLM: 텍스트 결과와 구조화된 출력을 만들며 약 5초 소요</li>
+<li>Jev: 거의 즉시 개인정보 포함 확률 98% 반환</li>
+</ul>
+<p>비교 조건과 반복 측정 결과는 영상에 나오지 않는다.</p>
+<h3>4. 세 가지 질문 형식</h3>
+<p>예시 상태는 Stripe 계정을 3일째 연결하지 못해 매출을 잃고 있으며 빨리 도와 달라는 고객 메시지다.</p>
+<ul>
+<li><strong>선택형:</strong> 어느 팀이 처리할지 고른다. billing 점수 0.84, confidence 0.596이 제시된다.</li>
+<li><strong>점수형:</strong> 고객의 불만 정도를 평가한다. 1.035가 반환되며 화자는 불만이 있지만 매우 화난 상태는 아니라고 해석한다.</li>
+<li><strong>불리언형:</strong> 긴급성 또는 시간 민감성이 있는지 묻는다. 0부터 1까지의 척도에서 0.999가 반환된다.</li>
+</ul>
+<p>하나의 상태에 여러 질문을 보내 병렬로 답하게 할 수 있다는 점도 강조된다. 다만 선택형의 score와 confidence 관계, 점수형 척도의 수치 범위는 설명되지 않는다.</p>
+<h3>5. LangChain 연동</h3>
+<p>화자는 LangChain-TypeSafe 통합이 공개됐다고 말한다.</p>
+<ol>
+<li>TypeSafe API 키를 얻는다.</li>
+<li><code>langchain_typesafe</code>에서 TypeSafe classifier를 가져온다.</li>
+<li>상태와 질문을 함께 전달한다.</li>
+<li>응답에서 각 질문의 답을 받는다.</li>
+</ol>
+<p>설치 명령으로 <code>uv pip install langchain-typesafe</code>가 제시된다.</p>
+<h3>6. 활용 사례</h3>
+<h4>모델 라우팅</h4>
+<p>단순한 작업과 복잡한 작업을 모두 처리하는 에이전트가 모든 요청에 가장 강력한 모델을 사용할 필요는 없다는 설명이다. LangChain은 내부 코딩 에이전트가 질문이나 코딩 작업의 복잡도에 따라 빠르고 저렴한 모델과 더 강력한 모델 사이를 전환하도록 하는 사례를 탐색하고 있다고 한다. Jev는 사전에 정한 기준으로 프롬프트를 평가해 이 선택을 빠르게 내리는 후보로 제시된다.</p>
+<h4>Auto mode</h4>
+<p>LangChain이 사전 구축된 auto-mode middleware를 이미 제공한다고 화자는 말한다. Jev가 도구 호출의 위험성을 분석하고 런타임에 차단하는 구조다.</p>
+<p>화자는 기존 위험 분류 단계가 너무 느려 자신의 코딩 에이전트가 생산적으로 느껴지지 않았기 때문에 auto mode를 껐지만, Jev가 빠르게 결정할 수 있게 된 뒤 다시 켰다고 말한다. 데이터베이스나 중요 파일 삭제 호출을 위험하다고 분류해 차단하는 상황이 예시로 나온다.</p>
+<h4>Jev-as-a-Judge</h4>
+<p>모든 실행 추적을 사람이 검사하기 어렵고, 코드 기반 평가만으로 답의 의미 품질을 판단하기 부족할 때 모델 심사 방식을 사용한다.</p>
+<p>Jev에는 다음 자료가 제공된다.</p>
+<ul>
+<li>최초 질문</li>
+<li>에이전트가 만든 답</li>
+<li>정확성, 기준 답 일치, 근거성, 출처 인용 여부 같은 평가 기준표</li>
+</ul>
+<p>화자는 Jev가 각 기준을 채점할 수 있으며, 관련 블로그에서 LLM 심사 방식보다 더 저렴하고 빠를 뿐 아니라 평가 간 신뢰성과 일관성도 높았다고 주장한다. 영상 안에는 이 결과를 독립적으로 확인할 세부 수치가 없다.</p>
+<h3>7. 숫자·이름·수량 표현 대조</h3>
+<ul>
+<li>전사는 속도를 <strong>20~200배</strong>, 비용을 <strong>40~400배</strong>의 범위로 말한다. META 설명은 각각 <strong>최대 200배</strong>, <strong>최대 400배</strong>만 적어 최대치는 일치하지만 하한과 범위가 생략돼 있다.</li>
+<li>화자는 “a couple of use cases”라고 말하지만 실제로는 모델 라우팅, auto mode, 온라인 평가의 <strong>세 가지</strong> 사례를 순서대로 열거한다.</li>
+<li>선택형 결과에는 billing의 score 0.84와 confidence 0.596이 함께 나오지만 두 값의 관계는 설명되지 않는다.</li>
+<li>점수형 결과 1.035는 calm, frustrated, very angry라는 설명과 함께 나오지만 정확한 수치 범위가 제시되지 않는다.</li>
+<li>채널과 업로더는 META상 모두 <strong>Tech Bridge</strong>다. <code>TechBridge-KR</code>은 이 노트의 수집·분류 라벨일 뿐 원본 채널명이나 제작 주체가 아니다.</li>
+<li>전사에서 화자는 자신을 <strong>Sydney</strong>, LangChain 오픈소스 팀의 제품 관리자라고 소개한다. META의 <code>provenance.creator</code>는 비어 있고 <code>provenance.affiliation</code>은 <strong>Langchain</strong>이다.</li>
+<li>META provenance note는 화자 이름과 SNS를 기준으로 출처를 추정했으며 채널이 원본 영상 링크를 확인하지 않았다고 밝힌다. 따라서 Sydney라는 후보와 Langchain 소속 표기는 보존하되 원작자·원본 출처가 독립적으로 확정됐다고 보지는 않는다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>채널/업로더: Tech Bridge · 원제: Jev로 더 빠르고 스마트한 에이전트 하네스를 구축하는 방법입니다 · https://www.youtube.com/watch?v=BJeHhsMVc8A · 전사: 제공된 영문 전사(방식 미상)<br>
+원작자 후보: Sydney — 전사에서 LangChain 오픈소스 팀 제품 관리자라고 자기소개함. META의 <code>provenance.creator</code>는 비어 있고, provenance note는 화자 이름과 SNS를 기준으로 추정한 출처이며 채널이 원본 영상 링크를 확인하지 않았다고 밝힘. META 소속 후보는 <code>Langchain</code>.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>안녕하세요, 여러분. 제 이름은 시드니이고, LangChain의 오픈 소스 팀에서 제품 관리자를 맡고 있습니다. 오늘은 TypeSafe AI에서 방금 출시한 새로운 모델 Jev를 사용해 하네스(harness)를 구축하는 방법을 소개하게 되어 기쁩니다.</p>
+<p>Jev가 무엇이고 왜 흥미로운지 살펴보기 전에, 우리 모두에게 익숙한 기본 에이전트 루프(agent loop)를 간단히 복습해 보겠습니다.</p>
+<p>요청이 들어오면 LLM에 전달하고, LLM은 도구를 사용해 작업을 수행할 수 있습니다. 도구를 호출하고 결과를 받아 처리한 다음, 이 도구 호출 루프를 계속 이어가거나 주어진 작업이 끝났다고 판단해 결과를 반환할 수 있습니다.</p>
+<p>이 루프는 강력하지만, LLM은 조금 예측하기 어렵습니다. 그렇죠? LLM은 텍스트를 입력받아 텍스트를 출력합니다. LLM이 처음 등장했을 때, 우리는 LLM이 단순한 원시 텍스트가 아니라 구조화된 타입에 본질적으로 의존하는 코드 기반 애플리케이션에서 잘 작동하도록 더 많은 구조를 부여할 방법이 필요하다고 판단했습니다.</p>
+<p>그래서 도구 호출(tool calling)과 구조화된 출력(structured outputs)이 등장했습니다.</p>
+<p>도구 호출을 사용하면 모델이 구조화된 요청을 보낼 수 있습니다. 여기서는 특정 ID를 사용한 주문 조회(get order) 요청입니다. 그러면 도구가 구조화된 데이터가 담긴 결과를 반환합니다.</p>
+<p>우리가 추가한 또 다른 기본 요소는 구조화된 출력입니다. 모델에 출력 타입을 연결하면, 단순한 원시 텍스트가 아니라 주어진 JSON 스키마를 따르는 최종 결과를 생성하게 할 수 있다는 개념입니다.</p>
+<p>이 두 가지 기본 요소 덕분에 코드 기반 애플리케이션에서 이 강력한 루프를 훨씬 쉽게 활용할 수 있게 되었습니다.</p>
+<p>이제 흥미로운 부분으로 넘어가 보겠습니다. Jev란 무엇일까요? 현재 트위터에서는 이 새로운 모델에 대한 이야기가 아주 많습니다. 모두가 Jev에 대해 이야기하는 이유는 무엇일까요?</p>
+<p>Jev는 TypeSafe AI라는 새로운 스타트업이 만든, 우리가 시스템 1 모델(System 1 model)이라고 부르는 모델입니다. 해당 문서에 따르면 시스템 1 모델은 소프트웨어가 직접 사용할 수 있는 빠르고 구조화된 결정을 내리도록 설계된 AI 모델의 한 종류입니다. 시스템 1 모델은 상태와 질문을 평가하고 타입이 지정된 답변과 확률을 반환합니다. 여기 슬라이드에서 상태와 질문, 그리고 타입이 지정된 답변의 예시를 볼 수 있습니다.</p>
+<p>흥미로운 점은 Jev가 우리가 익숙한 기존 LLM처럼 텍스트를 입력받아 텍스트를 생성하지 않는다는 것입니다. 현재 Jev가 큰 인기를 얻은 이유 중 하나는 분류 방식의 작업에서 LLM보다 20배에서 200배 빠르고, 비용은 40배에서 400배 저렴할 수 있기 때문입니다.</p>
+<p>Jev는 LLM을 그대로 대체하는 제품은 아니지만, 현재 LLM에 맡기고 있는 특수한 작업을 훨씬 빠르고 저렴하게 수행할 수 있습니다.</p>
+<p>“시스템 1”이라는 표현이 어디에서 유래했는지 궁금하실 텐데요. 심리학자 대니얼 카너먼의 책 <em>Thinking, Fast and Slow</em>에서 나온 표현입니다. 이 책에서 카너먼은 사고하는 두 가지 방식을 설명합니다. 빠르고 저렴한 시스템 1의 직관과, 느리고 비용이 많이 드는 시스템 2의 추론입니다.</p>
+<p>TypeSafe는 이러한 개념을 새로운 모델 Jev에 차용해, 텍스트를 생성하는 대신 거의 즉각적으로 타입이 지정된 결정을 반환하는 빠르고 저렴한 시스템 1 모델이라고 부르고 있습니다. 이는 표준 LLM과 의도적으로 대비됩니다. 표준 LLM은 시스템 2에 더 가까운 방식으로 작동하며, 더 느리고 비용이 많이 들지만 개방형 문제에 대해 단계별 추론을 더 잘 따릅니다.</p>
+<p>LLM이 질문에 답하는 방식과 Jev가 답하는 방식을 간단히 시연해 보겠습니다.</p>
+<p>질문은 다음과 같습니다. 이 텍스트에 개인 식별 정보(PII)가 포함되어 있습니까?</p>
+<p>LLM은 텍스트 결과와 구조화된 출력을 생성합니다. 약 5초가 걸립니다.</p>
+<p>Jev는 거의 즉시 응답합니다. PII가 포함되어 있을 확률은 98%입니다.</p>
+<p>이 데모에서 볼 수 있듯이, 단순한 분류 방식의 작업에서 Jev는 유용합니다. 현재 에이전트에게 LLM으로 처리하도록 맡기고 있는 분류 또는 의사 결정 방식의 작업 중에는 속도와 비용 측면에서 더 효율적으로 처리할 수 있는 작업이 많습니다.</p>
+<p>Jev가 어떤 종류의 질문에 답하는 데 도움을 줄 수 있는지 조금 더 이야기해 보겠습니다. 질문에는 세 가지 유형이 있으며, 이 예시를 통해 살펴보겠습니다.</p>
+<p>상태에는 다음과 같이 적혀 있습니다. “안녕하세요. 3일째 Stripe 계정을 연결하려고 하는데 계속 실패합니다. 판매를 잃고 있습니다. 최대한 빨리 도와주세요.”</p>
+<p>첫 번째 질문 유형은 선택(choice)입니다. 객관식으로, 하나의 옵션을 고르는 방식입니다. 예를 들어 이 문제를 어느 팀에서 처리해야 할까요? 점수는 결제(billing)가 0.84이고, 신뢰도는 0.596입니다.</p>
+<p>두 번째 질문 유형은 점수(score)입니다. 어떤 척도상의 위치를 묻는 방식입니다. 고객이 얼마나 답답해 보이나요? 침착함, 답답함, 매우 화남 중 어디에 해당할까요? 여기서 점수는 1.035입니다. 고객은 답답해 보이지만, 매우 화난 상태는 아닌 것 같습니다.</p>
+<p>세 번째 질문 유형은 불리언(Boolean)입니다. 예 또는 아니오로 답하는 방식입니다. 이 메시지가 긴급성이나 시간적 민감성을 전달하나요? 결과는 0.999입니다. 이는 0에서 1 사이의 척도이므로, 이 사례의 긴급성 확률이 높다는 뜻입니다.</p>
+<p>한 가지 더 주목할 점은 하나의 상태와 여러 질문을 보내면 Jev가 그 질문들에 병렬로 답한다는 것입니다. 따라서 Jev는 한 번에 많은 질문을 처리할 때 매우 효율적입니다. 이는 병렬 처리보다는 순차적 추론을 더 많이 수행하는 LLM과 대조적입니다.</p>
+<p>LangChain에서 Jev를 어떻게 사용할 수 있을까요? 저희는 방금 LangChain-TypeSafe 통합을 출시했습니다. <code>langchain_typesafe</code>에서 TypeSafe 분류기를 가져올 수 있습니다.</p>
+<p>먼저 TypeSafe API 키를 발급받아야 합니다. 그런 다음 이 분류기를 사용해 상태와 질문을 Jev에 전달할 수 있습니다. 응답에는 보낸 각 질문에 대한 답변이 포함됩니다.</p>
+<p>Jev에 적합한 몇 가지 사용 사례를 살펴보겠습니다.</p>
+<p>첫 번째는 모델 라우팅(model routing)입니다. 단순한 작업과 복잡한 작업을 모두 수행하는 에이전트가 있다면, 에이전트가 하는 모든 작업에 가장 강력한 모델을 사용하고 싶지는 않을 것입니다.</p>
+<p>최근 LangChain에서 살펴보고 있는 한 가지 예는 내부 코딩 에이전트가 질문이나 코딩 작업의 복잡도에 따라 빠르고 저렴한 모델과 더 비싸고 강력한 모델 사이를 전환하도록 하는 것입니다.</p>
+<p>Jev는 이러한 모델 라우팅 단계에 적합합니다. 특정 기준에 따라 주어진 프롬프트를 평가해 빠른 모델을 사용할지, 더 강력한 모델을 사용할지 결정하도록 할 수 있으며, Jev는 거의 즉시 결정을 내립니다.</p>
+<p>또 다른 흥미로운 사례는 저희가 자동 모드(auto mode)라고 부르는 기능입니다. LangChain에서는 이미 이를 사전 구축된 자동 모드 미들웨어(pre-built auto-mode middleware)로 제공하고 있습니다.</p>
+<p>Jev에게 주어진 도구 호출이 위험한지 분석하게 한 다음, 실행 시점에 해당 호출을 차단할 수 있다는 개념입니다.</p>
+<p>개인적으로 최근 코딩 에이전트에서 자동 모드를 껐습니다. 특정 도구 호출이 위험한지 판단하는 분류 단계가 너무 느려서 코딩 에이전트를 생산적으로 사용하기 어려웠기 때문입니다. 하지만 Jev가 이렇게 빠르게 결정을 내릴 수 있게 되면서 이제 자동 모드를 다시 켜 두었습니다.</p>
+<p>예를 들어 데이터베이스나 중요한 파일을 삭제하는 도구 호출이 발생하면 Jev는 이를 위험한 호출로 분류하고 해당 도구 호출을 차단합니다.</p>
+<p>세 번째로 흥미로운 사례이자, 아마 제가 가장 기대하고 있는 사례는 Jev를 온라인 평가(online evals)의 심사자(judge)로 사용하는 것입니다.</p>
+<p>어떤 작업을 에이전트가 잘 수행했는지 판단하는 데 도움을 줄 일종의 모델이 필요한 경우가 많습니다. 하지만 대규모로 평가를 실행할 때 모든 단일 트레이스를 사람이 감독하는 것은 현실적이지 않습니다. 에이전트가 작업을 잘 수행하고 있는지 판단하려면 코드 방식의 평가자만으로는 부족한 경우가 많습니다.</p>
+<p>Jev는 이 작업에 매우 적합합니다. 특정 평가를 위한 입력, 즉 최초 질문과 에이전트의 답변이 있습니다. 여기에 평가 기준이 담긴 루브릭(rubric)도 제공합니다. 예를 들어 이 답변이 정확한가? 참조 답변과 일치하는가? 근거가 있는가? 인용된 출처가 있는가?와 같은 기준입니다.</p>
+<p>그러면 Jev는 이러한 다양한 루브릭 기준에 따라 주어진 답변을 점수화할 수 있습니다.</p>
+<p>이는 현재 유용하지만 비용도 매우 많이 드는 LLM-as-a-Judge 온라인 평가의 발전된 형태입니다.</p>
+<p>저희는 Jev를 심사자로 사용하는 방법에 대한 블로그 글을 방금 작성했으며, Jev가 훨씬 저렴하고 빠를 뿐 아니라 흥미롭게도 LLM 대안보다 평가 전반에서 훨씬 더 신뢰할 수 있고 일관적이라는 결과를 담고 있습니다.</p>
+<p>마지막으로 이 말씀을 드리고 싶습니다. 이제 Jev로 멋진 무언가를 만들어 볼 때입니다.</p>
+<p><code>uv pip install langchain-typesafe</code>로 시작할 수 있습니다. 관련 블로그 글은 여기 링크에서 읽을 수 있습니다. typesafe.ai에서 API 키도 쉽게 발급받을 수 있습니다.</p>
+<p>X에서 저희 LangChainAI를 태그해 주세요. 여러분이 어떤 작업을 하고 있는지 보고 싶습니다.</p>
+<p>감사합니다, 여러분!</p>
+</details>
+</body></html>

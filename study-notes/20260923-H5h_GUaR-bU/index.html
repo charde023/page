@@ -1,0 +1,431 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>토큰맥싱과의 작별: AI 사용량보다 에이전틱 성과가 중요한 이유</title>
+<meta name="description" content="AI 토큰 사용량을 성과로 착각하거나 무조건 줄이지 말고, 배포·시간 절약·재작업 감소 같은 결과와 시스템 전체 비용으로 판단하는 법을 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>토큰맥싱과의 작별: AI 사용량보다 에이전틱 성과가 중요한 이유</h1>
+<div class="meta">업로드 2026-09-23 · 8.2분 · <a href="https://youtu.be/H5h_GUaR-bU" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상의 중심 문제는 <strong>AI를 얼마나 많이 썼는지를 AI가 얼마나 큰 가치를 만들었는지로 착각하는 것</strong>이다. 토큰은 AI 모델이 글을 처리할 때 사용하는 기본 단위다. 따라서 토큰 수는 사용량과 비용을 살피는 데 도움이 된다. 하지만 사용량만으로는 AI가 일을 제대로 끝냈는지, 개발 시간을 줄였는지, 재작업을 막았는지 알 수 없다.</p>
+<p>영상은 이를 영업 전화에 비유한다. 영업 담당자가 매주 전화 횟수 목표를 채워도, 그 숫자만으로 분기 실적 목표를 달성할지는 알 수 없다. 같은 방식으로 AI 토큰 소비량이 늘었다고 해서 배포가 늘거나 소프트웨어 품질이 좋아졌다고 바로 결론 내릴 수는 없다.</p>
+<figure data-visual-kind="map" style="margin:1.5rem 0;padding:1rem;border:1px solid #667085;border-radius:12px;overflow-x:auto">
+  <div role="img" aria-label="AI 활동 지표에서 결과 지표로 평가 기준을 옮기는 전체 지도" style="display:flex;align-items:stretch;gap:0.6rem;min-width:680px;text-align:center">
+    <div style="flex:1;padding:0.9rem;background:#eef4ff;border:2px solid #175cd3;border-radius:10px">
+      <strong>보이는 활동</strong><br>
+      사용자 수<br>토큰 소비량
+    </div>
+    <div aria-hidden="true" style="align-self:center;font-size:1.5rem">→</div>
+    <div style="flex:1;padding:0.9rem;background:#fff4ed;border:2px solid #c4320a;border-radius:10px">
+      <strong>잘못된 대리 지표</strong><br>
+      많이 쓰면 가치가 크다<br>적게 쓰면 효율적이다
+    </div>
+    <div aria-hidden="true" style="align-self:center;font-size:1.5rem">→</div>
+    <div style="flex:1;padding:0.9rem;background:#ecfdf3;border:2px solid #027a48;border-radius:10px">
+      <strong>확인할 결과</strong><br>
+      완료된 배포<br>절약된 시간<br>피한 재작업<br>해결된 취약점
+    </div>
+    <div aria-hidden="true" style="align-self:center;font-size:1.5rem">→</div>
+    <div style="flex:1;padding:0.9rem;background:#f4f3ff;border:2px solid #6938ef;border-radius:10px">
+      <strong>전체 시스템 판단</strong><br>
+      비용·맥락·도구·흐름·거버넌스
+    </div>
+  </div>
+  <figcaption style="margin-top:0.75rem"><strong>전체 지도:</strong> 토큰은 출발점인 활동 지표이고, 최종 판단은 업무 결과와 그 결과를 만든 시스템 전체를 향해야 한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽에서 오른쪽으로 본다. 파란 상자는 관찰 가능한 사용량, 주황 상자는 영상이 경고하는 두 가지 착각, 초록 상자는 실제 성과 후보, 보라 상자는 성과에 영향을 주는 시스템 요소다. 이것은 수치 그래프가 아니라 영상의 논리를 배열한 개념도다.</p>
+<h3>많이 쓰기와 적게 쓰기는 반대처럼 보여도 같은 함정이다</h3>
+<p>처음에는 AI 도입 여부를 확인하기 위해 사용자 수나 토큰 소비량을 볼 수 있다. 영상은 이런 지표가 <strong>도입 신호</strong>로는 작동했다고 말한다. 그러나 사용량 자체가 성공의 대리 지표가 되면 사람들은 대시보드 숫자를 올리는 데 적응할 수 있다. 영상이 인용한 IBM Consulting의 SVP Neil Dar는 진짜 지표가 없을 때 만들어진 사용량 대시보드가 빠르게 공략 대상이 되었다고 지적한다.</p>
+<p>이때 생기는 첫 번째 극단이 <strong>토큰맥싱(token maxing)</strong>이다. 많이 사용할수록 더 많은 가치가 생긴다고 보고 토큰 소비를 키우는 접근이다. 하지만 에이전틱 AI는 글이나 코드만 생성하지 않는다. 영상에 따르면 작업 흐름을 계획하고, 저장소를 분석하고, 도구를 호출하고, 해결책을 시험하고, 여러 시스템에 걸친 작업을 조정한다. 이런 활동은 토큰을 많이 쓸 수 있지만, 토큰 수만으로는 유용한 일이 끝났는지와 헛도는 활동이 늘었는지를 구별할 수 없다.</p>
+<p>비용이 커지면 두 번째 극단인 <strong>토큰 최소화(token minimization)</strong>가 나타난다. 최신 모델을 제한하거나, AI가 한 번에 볼 수 있는 정보 범위인 맥락 창을 줄이거나, 프롬프트를 짧게 만드는 방식이다. 불필요하게 큰 도구 목록이나 오래된 맥락을 제거하는 것은 합리적일 수 있다. 그러나 작업 설명, 업무 제약, 시스템 구조 같은 필수 정보까지 자르면 비용이 사라지는 것이 아니라 디버깅과 재작업 쪽으로 이동할 수 있다.</p>
+<figure data-visual-kind="comparison" style="margin:1.5rem 0;overflow-x:auto">
+  <div role="img" aria-label="토큰맥싱, 토큰 최소화, 밸류맥싱 비교" style="display:grid;grid-template-columns:repeat(3,minmax(210px,1fr));gap:0.75rem;min-width:700px">
+    <section style="padding:1rem;border-top:6px solid #c4320a;background:#fff4ed;border-radius:10px">
+      <strong>토큰맥싱</strong>
+      <p>질문: 얼마나 많이 썼는가?</p>
+      <p>위험: 활동 증가를 가치 증가로 오해한다.</p>
+    </section>
+    <section style="padding:1rem;border-top:6px solid #b54708;background:#fffaeb;border-radius:10px">
+      <strong>토큰 최소화</strong>
+      <p>질문: 얼마나 적게 썼는가?</p>
+      <p>위험: 필요한 맥락까지 잘라 재작업을 늘릴 수 있다.</p>
+    </section>
+    <section style="padding:1rem;border-top:6px solid #027a48;background:#ecfdf3;border-radius:10px">
+      <strong>밸류맥싱</strong>
+      <p>질문: 어떤 결과를 얻었는가?</p>
+      <p>판단: 결과에 비해 추가 토큰 사용이 정당한지 본다.</p>
+    </section>
+  </div>
+  <figcaption style="margin-top:0.75rem"><strong>비교:</strong> 앞의 두 접근은 방향은 반대지만 토큰을 중심 지표로 삼는다는 점이 같다. 밸류맥싱은 판단의 중심을 결과로 옮긴다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 각 칸의 질문과 위험을 짝지어 읽는다. 토큰맥싱과 토큰 최소화는 서로 반대되는 정책이지만, 둘 다 토큰 소비량 하나에 과도한 의미를 준다. 밸류맥싱은 토큰을 무시하지 않고 <strong>얻은 결과와 함께</strong> 판단한다.</p>
+<h3>입력 비용을 줄여도 전체 비용이 커질 수 있다</h3>
+<p>영상은 시스템 구조에 관한 맥락을 삭제하는 사례를 든다. AI가 그 정보 없이 코드를 만들면 코드 자체는 작동해도 더 큰 시스템과 맞지 않을 수 있다. 영상의 예에서는 입력에서 500토큰을 아꼈지만 디버깅과 재작업에 5,000토큰을 쓰게 된다. 이 수치는 실제 조사 결과가 아니라 영상이 비용 이동을 설명하기 위해 제시한 사례다.</p>
+<figure data-visual-kind="process" style="margin:1.5rem 0;padding:1rem;border:1px solid #667085;border-radius:12px;overflow-x:auto">
+  <div role="img" aria-label="필수 맥락 삭제가 재작업 비용으로 이어지는 과정" style="display:flex;align-items:center;gap:0.55rem;min-width:720px;text-align:center">
+    <div style="flex:1;padding:0.8rem;background:#f9fafb;border:1px solid #98a2b3;border-radius:8px">
+      <strong>절감 결정</strong><br>구조 맥락 삭제
+    </div>
+    <div aria-hidden="true" style="font-size:1.4rem">→</div>
+    <div style="flex:1;padding:0.8rem;background:#fffaeb;border:1px solid #f79009;border-radius:8px">
+      <strong>국소 결과</strong><br>코드는 따로 작동
+    </div>
+    <div aria-hidden="true" style="font-size:1.4rem">→</div>
+    <div style="flex:1;padding:0.8rem;background:#fff4ed;border:1px solid #f04438;border-radius:8px">
+      <strong>시스템 실패</strong><br>전체 구조와 충돌
+    </div>
+    <div aria-hidden="true" style="font-size:1.4rem">→</div>
+    <div style="flex:1;padding:0.8rem;background:#fef3f2;border:2px solid #b42318;border-radius:8px">
+      <strong>비용 이동</strong><br>디버깅·재작업 증가
+    </div>
+  </div>
+  <figcaption style="margin-top:0.75rem"><strong>인과 흐름:</strong> 입력 토큰만 줄이면 절감처럼 보이지만, 누락된 맥락이 오류와 재작업을 만들면 전체 작업 비용은 오히려 늘 수 있다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 화살표는 영상이 제시한 인과 순서다. 핵심은 첫 상자의 토큰 감소만 보고 성공이라고 판단하지 않는 것이다. 마지막 상자까지 측정해야 비용이 실제로 줄었는지 알 수 있다.</p>
+<h3>밸류맥싱은 토큰 대신 결과를 보자는 제안이다</h3>
+<p>영상은 Mark Boroditsky가 만들었다고 소개하는 <strong>밸류맥싱(Valuemaxxing)</strong>이라는 말을 사용한다. 핵심 질문은 “토큰을 얼마나 썼는가?”에서 다음과 같은 결과 질문으로 이동한다.</p>
+<ul>
+<li>완료된 배포는 몇 개인가?</li>
+<li>개발 시간을 얼마나 절약했는가?</li>
+<li>재작업을 얼마나 피했는가?</li>
+<li>취약점을 얼마나 해결했는가?</li>
+</ul>
+<p>이 결과들을 먼저 정하면 토큰은 버릴 지표가 아니라 <strong>결과를 얻기 위해 정당화해야 하는 자원 지표</strong>가 된다. 토큰이 조금 더 들더라도 재작업을 줄이고 성공적인 결과를 만들었다면 효율적일 수 있다. 반대로 토큰 사용량이 크게 늘었는데 완료된 일이 없다면 높은 사용량은 성공 근거가 아니다.</p>
+<h3>모델 하나보다 모델을 둘러싼 시스템이 중요해진다</h3>
+<p>영상은 AI 모델이 일상적인 기반 시설로 자리 잡을수록 좋은 모델에 접근하는 것만으로는 차별화하기 어렵다고 주장한다. 결과에는 맥락 관리, 작업 흐름 조정, 거버넌스, 최적화, 도구 연결이 함께 영향을 준다. 그래서 어떤 모델 하나를 선택할지보다 여러 모델과 도구를 어떻게 배치하고 조정할지 보는 <strong>모델 오케스트레이션(model orchestration)</strong>이 중요해진다는 논리다.</p>
+<p>개발자는 실행 전에 계획하고, 필요한 맥락을 관리하며, 비용과 결과의 교환 관계를 판단해야 한다. 플랫폼 리더는 비용과 결과를 함께 볼 수 있게 하고, 사용량보다 효율을 보상하며, 공통 지표와 관리 장치를 제공해야 한다. 영상은 플랫폼도 예산, 거버넌스, 분석, 작업 흐름, 기술과 도구 연결을 통해 AI 소비와 운영 결과를 이어줘야 한다고 말한다.</p>
+<h3>주장과 경계를 함께 보자</h3>
+<p>영상의 강한 통찰은 <strong>활동 지표를 성과 지표로 착각하지 말라</strong>는 것이다. 다만 제시된 모든 내용을 검증된 사실로 받아들여서는 안 된다. 500토큰 절감과 5,000토큰 재작업은 설명용 사례이며 실제 측정 조건이 없다. IDC의 “2028년까지 선도적인 대규모 AI 배포의 70%가 여러 모델을 사용할 것”이라는 예측도 영상 안에 조사 링크·표본·방법이 제시되지 않았다.</p>
+<p>또한 전사에는 “토큰 소비가 고품질 소프트웨어와 성공적인 결과에 뿌리를 둔다”는 취지로 읽히는 문장이 있다. 이는 토큰만으로 결과를 알 수 없다는 주변 논지와 표현상 충돌하거나 번역·전사상 의미가 불분명하다. 따라서 이 노트는 그 문장을 “토큰 사용은 결과와 연결해 판단해야 한다”는 주변 논지로 해석하되, 원문의 모호함 자체는 남긴다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>토큰 수는 AI 활동과 비용을 보여주지만, 업무 성과를 직접 증명하지는 않는다.</li>
+<li>무조건 많이 쓰기와 무조건 적게 쓰기는 모두 토큰을 중심 지표로 삼는 같은 함정이다.</li>
+<li>필요한 맥락을 잘라 아낀 비용은 디버깅과 재작업 비용으로 이동할 수 있다.</li>
+<li>AI 효율은 배포, 시간 절약, 재작업 감소 같은 결과와 시스템 전체 비용을 함께 측정해야 판단할 수 있다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>AI 사용 비용을 관리하면서도 토큰맥싱과 토큰 최소화의 함정을 피하려면 무엇을 측정해야 하는가?</strong></p>
+</blockquote>
+<ul>
+<li>토큰 사용량은 언제 유용하고, 언제 성과의 잘못된 대리 지표가 되는가?</li>
+<li>토큰을 줄였는데도 전체 비용이 커질 수 있는 이유는 무엇인가?</li>
+<li>결과 중심 측정을 하려면 개발자·리더·플랫폼은 각각 무엇을 봐야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>팀이 토큰 비용을 줄이려고 AI에게 제공하던 시스템 구조 설명을 삭제한다. AI는 따로 보면 작동하는 코드를 만들지만, 전체 시스템과 맞지 않아 다시 고치게 된다.</p>
+<p><code>"입력 토큰 수만 보고 필수 구조 맥락까지 삭제한다"</code> <strong>문제</strong><br>
+→ <code>"맥락이 부족한 AI가 국소적으로만 작동하는 결과를 만든다"</code> <strong>작동 방식</strong><br>
+→ <code>"입력 비용은 줄지만 디버깅과 재작업 비용이 늘어난다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">영업 전화 횟수와 분기 실적</div>
+<p>전화 횟수는 활동이 있었는지 보여주지만 실적 달성을 보장하지 않는다. 마찬가지로 토큰 수는 AI가 얼마나 사용됐는지 보여주지만, 배포 완료나 재작업 감소 같은 결과를 보장하지 않는다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 토큰은 단순 활동 횟수일 뿐 아니라 AI의 처리량과 비용을 나타내는 단위이기도 하다. 따라서 토큰을 완전히 버릴 것이 아니라 결과와 함께 측정해야 한다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>토큰</strong></td>
+<td>AI가 글을 처리할 때 세는 기본 조각</td>
+<td>AI 모델이 텍스트를 처리하는 기본 단위이며 사용량과 비용 측정에 쓰이는 값</td>
+<td>토큰이 많으면 성과도 반드시 크다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>토큰맥싱</strong></td>
+<td>AI를 많이 쓰는 것 자체를 목표로 삼기</td>
+<td>사용량 증가가 가치 증가로 이어진다고 보고 토큰 소비를 극대화하는 접근</td>
+<td>AI 도입률을 확인하는 것과 사업 성과를 증명하는 것이 같다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>토큰 최소화</strong></td>
+<td>비용을 줄이려고 입력을 계속 자르기</td>
+<td>토큰 소비를 핵심 목표로 삼아 모델·맥락·프롬프트 사용을 제한하는 접근</td>
+<td>입력 토큰이 줄면 전체 작업 비용도 반드시 줄었다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>밸류맥싱</strong></td>
+<td>쓴 양보다 얻은 결과를 크게 만들기</td>
+<td>토큰 소비를 배포, 시간 절약, 재작업 회피, 취약점 해결 같은 운영 결과와 연결해 판단하는 접근</td>
+<td>비용을 무시하고 결과만 보자는 주장으로 이해하는 것</td>
+</tr>
+<tr>
+<td><strong>모델 오케스트레이션</strong></td>
+<td>여러 모델과 도구의 일을 조정하기</td>
+<td>모델 선택을 넘어 맥락, 작업 흐름, 도구, 거버넌스를 시스템 수준에서 조정하는 접근</td>
+<td>가장 좋은 모델 하나만 고르면 시스템 성능도 자동으로 좋아진다고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>입력 토큰을 줄였는데도 AI 작업의 전체 비용이 더 커질 수 있는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>작업 설명, 업무 제약, 시스템 구조처럼 결과에 필요한 맥락까지 삭제하면 AI가 국소적으로만 맞는 결과를 만들 수 있다. 이때 입력 비용은 줄어도 오류 수정, 디버깅, 재작업에 더 많은 토큰과 시간이 들어간다. 비용이 사라진 것이 아니라 작업 흐름의 뒤쪽으로 이동한 것이다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>토큰맥싱과 토큰 최소화는 방향이 반대인데도 왜 같은 측정 함정이라고 할 수 있는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>토큰맥싱은 사용량 증가를, 토큰 최소화는 사용량 감소를 성공으로 본다. 방향은 반대지만 둘 다 토큰 소비량을 가장 중요한 성공 지표로 삼는다. 어느 쪽도 완료된 배포, 절약된 시간, 피한 재작업 같은 운영 결과를 직접 측정하지 않으면 실제 가치를 판단할 수 없다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새로운 AI 자동화를 시험한다면 토큰 수 외에 어떤 결과를 함께 기록해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 그 자동화가 끝내야 할 업무 결과를 정한다. 영상이 제시한 후보 중 해당 작업에 맞는 완료된 배포, 절약된 개발 시간, 피한 재작업, 해결된 취약점 등을 고를 수 있다. 그 결과와 토큰 비용을 함께 비교하고, 필요한 맥락을 줄였을 때 재작업이 늘어나는지도 확인해야 한다. 어떤 지표가 적절한지는 실제 작업 목적과 실패 비용에 따라 정한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 활동 지표는 출발점이지 성공 판정표가 아니다</h3>
+<ul>
+<li><strong>[원문]</strong> 영상은 사용자 수와 토큰 소비량이 AI 도입 신호로는 작동했지만, 사용량 대시보드가 가치의 대리 지표가 되면서 실제 성과와의 연결이 불분명해졌다고 주장한다.</li>
+<li><strong>[해석]</strong> 사용 여부를 확인하는 지표와 업무 성공을 확인하는 지표를 분리해야 한다. 토큰은 비용과 활동을 보여주고, 성과는 완료·시간 절약·재작업 감소 같은 결과로 확인한다.</li>
+<li><strong>[경계]</strong> 영상은 사용량 대시보드가 얼마나 자주 조작되었는지 보여주는 조사 수치나 원자료를 제시하지 않는다. Neil Dar의 발언도 이 전사 외에는 독립 확인되지 않았다.</li>
+</ul>
+<h3>2. 국소 절감은 시스템 전체의 절감과 다르다</h3>
+<ul>
+<li><strong>[원문]</strong> 영상은 구조 맥락을 삭제해 입력 500토큰을 아꼈다가 디버깅과 재작업에 5,000토큰을 쓰는 사례를 제시한다.</li>
+<li><strong>[해석]</strong> 비용은 한 단계에서 줄어도 다른 단계로 이동할 수 있다. 따라서 입력 비용만이 아니라 오류 수정과 재작업까지 포함한 전체 작업 흐름을 봐야 한다.</li>
+<li><strong>[경계]</strong> 500과 5,000은 서로 다른 작업 단계의 예시 수치이며 실제 측정 결과나 일반 비율로 제시되지 않았다. 이를 모든 AI 작업에 적용되는 10배 법칙으로 해석하면 안 된다.</li>
+</ul>
+<h3>3. 모델 선택보다 시스템 설계가 결과를 좌우할 수 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 영상은 맥락 관리, 작업 흐름 조정, 거버넌스와 최적화를 강조하며 모델 오케스트레이션이 모델 선택보다 중요해지고 있다고 주장한다. IDC가 2028년까지 선도적인 대규모 AI 배포의 70%가 여러 모델을 사용할 것으로 예측했다고도 말한다.</li>
+<li><strong>[해석]</strong> AI 성능을 모델 이름 하나로 평가하지 말고, 필요한 맥락이 보존되는지, 도구 호출이 유효한지, 결과와 비용을 함께 관찰할 수 있는지를 점검해야 한다.</li>
+<li><strong>[경계]</strong> IDC 예측의 보고서명, 발표일, 표본과 방법은 제공되지 않아 검증할 수 없다. 또한 “토큰 소비가 고품질 소프트웨어와 성공적인 결과에 뿌리를 둔다”는 전사 문장은 주변 논지와 표현상 충돌하거나 의미가 모호하다. META는 원본 영상 링크가 확인되지 않은 추정 출처라고 밝히며, 원작자 값은 비어 있고 소속 후보만 <code>Ibm</code>으로 제시한다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 전화 횟수와 실적을 구분해 활동과 이해·성과의 차이를 설명한다.</li>
+<li><strong>통찰:</strong> 학습 자료를 읽은 횟수보다 보지 않고 원인을 설명하거나 새 사례에 적용하는 결과가 이해를 더 직접적으로 보여준다.</li>
+<li><strong>질문/행동:</strong> 학습자가 용어를 반복하는 데서 멈추지 않고 “왜 비용이 이동하는가”를 자기 말로 설명할 수 있는지 확인한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 토큰 비용만 줄이다 재작업 비용이 늘어나는 구조는 한 단계의 절감과 전체 운영비 절감이 다를 수 있음을 보여준다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용한다면 현재 사실이 아니라 검증 전 가설로 다뤄야 한다. 특정 단계의 비용 감소가 오류, 반품, 대기 또는 재처리 증가로 이동하는지 전체 흐름에서 확인할 수 있다.</li>
+<li><strong>질문/행동:</strong> 비용을 줄였다고 판단한 과정에서 뒤쪽 재작업이 늘지 않았는지 어떤 동일 지표로 비교할 수 있는가?</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 사용자 수와 토큰 수 같은 큰 숫자가 활동의 증거일 수는 있어도 가치의 증거는 아니라고 구분한다.</li>
+<li><strong>통찰:</strong> 상세페이지나 카피에서도 “많이 사용됨”을 결과로 바꾸어 말하지 말고, 완료된 일이나 피한 재작업처럼 주장과 직접 연결되는 증거를 제시해야 한다.</li>
+<li><strong>질문/행동:</strong> 제시한 숫자가 단순 사용량인지 고객이 얻은 결과인지 표시하고, 결과라면 측정 조건을 함께 밝힌다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 에이전트가 계획, 저장소 분석, 도구 호출, 시험과 시스템 조정을 수행할수록 토큰 수만으로 품질을 판단하기 어려워진다.</li>
+<li><strong>통찰:</strong> 모델 이름보다 작업 성공, 재작업, 맥락 손실, 비용 이동을 함께 측정해야 한다. 여러 모델을 쓰는 것이 목표가 아니라 결과에 맞는 시스템 조정이 목표다.</li>
+<li><strong>질문/행동:</strong> 다음 자동화 시험에서 토큰 사용량과 함께 재작업 없는 완료 여부를 기록할 수 있는가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"AI 사용량을 실제 가치로 착각하거나 비용 절감 과정에서 필수 맥락까지 제거한다"</code> <strong>문제</strong><br>
+→ <code>"더 분명한 결과 판단과 불필요한 재작업 감소"</code> <strong>수혜자: 개발자·팀·플랫폼 리더</strong><br>
+→ <code>"AI 비용, 개발 시간, 운영 데이터와 관리 책임을 제공한다"</code> <strong>지불자 또는 자원 제공자: 조직과 플랫폼 운영 주체</strong><br>
+→ <code>"완료된 배포, 절약된 개발 시간, 피한 재작업, 해결된 취약점"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 반복 가능한 AI 보조 작업 하나를 골라 다음 시험에서 <strong>재작업 없이 완료되었을 때만 성공으로 기록하는 결과표</strong>를 사용한다.</li>
+<li><strong>측정 1개:</strong> 시도한 작업 중 재작업 없이 완료된 작업의 비율</li>
+<li><strong>중단 기준 1개:</strong> 재작업 없이 완료된 작업의 비율이 현재 방식의 비율보다 높아지지 않으면 확대하지 않고 중단한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>활동 지표의 한계</td>
+<td>사용자 수와 토큰 소비량은 도입을 보여주지만 성과를 증명하지 않는다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>토큰맥싱</td>
+<td>많이 사용할수록 가치가 커진다는 가정이 사용량과 결과를 혼동하게 만든다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>토큰 최소화</td>
+<td>필수 맥락까지 줄이면 절약한 비용이 디버깅과 재작업으로 이동할 수 있다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>밸류맥싱</td>
+<td>배포, 시간 절약, 재작업 회피, 취약점 해결을 중심으로 평가한다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>시스템과 책임</td>
+<td>맥락·작업 흐름·거버넌스와 개발자·리더·플랫폼의 공동 책임을 강조한다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>검증 경계</td>
+<td>예시 수치, IDC 예측, 이름과 출처 귀속에는 독립 검증 자료가 없다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 활동 지표가 성공 지표로 바뀌는 과정</h3>
+<p>영상은 직장에서 “AI를 더 많이 사용하라”는 요구를 받은 상황에서 출발한다. 활동 지표는 사용 상태를 알려주지만, 그것이 성공의 대리 지표가 되면 문제가 생긴다.</p>
+<p>영업팀 사례에서는 전화 횟수 목표를 매주 달성해도 그 횟수만으로 분기 최소 실적 달성 여부를 알 수 없다. AI에서도 사용자 수와 토큰 소비량은 도입 정도를 보여줄 수 있지만, 실제 업무 결과를 직접 말해주지는 않는다.</p>
+<p>토큰은 AI 모델이 텍스트를 처리하는 기본 단위이며 사용량과 비용을 측정하는 흔한 기준으로 소개된다. 사용량이 참여도의 대리 지표가 되면서 일부 팀은 소비가 많을수록 결과도 좋아질 것이라고 믿었다. 영상은 이를 토큰맥싱이라고 부른다.</p>
+<p>Neil Dar는 IBM Consulting의 SVP로 소개된다. 영상에 따르면 그는 진짜 지표가 없을 때 팀들이 사용량 대시보드를 만들었고, 사람들이 빠르게 그 지표를 공략하는 법을 배웠다고 지적했다. 다만 발언의 원문 링크와 별도 맥락은 제공되지 않는다.</p>
+<h3>2. 에이전틱 AI가 사용량 지표를 더 불충분하게 만드는 이유</h3>
+<p>영상은 에이전틱 AI가 코드 생성만 하지 않는다고 설명한다. 작업 흐름 계획, 저장소 분석, 도구 호출, 해결책 시험, 여러 시스템 간 작업 조정도 수행한다.</p>
+<p>더 많은 일을 하는 에이전트는 자연스럽게 더 많은 토큰을 소비할 수 있다. 그러나 토큰 소비량만으로는 유용한 활동과 측정 가능한 결과를 구분할 수 없다. 사용량이 계속 증가해도 무엇을 얻었는지 알지 못할 수 있다.</p>
+<p>이로 인해 “이 비용을 누가 지불하며, 실제로 무엇을 얻었는가?”라는 질문이 생긴다. 영상은 토큰 수가 올라가는 대시보드와 시스템 수준 결과 사이의 불분명한 연결이 다음 논의를 촉발했다고 설명한다.</p>
+<h3>3. 토큰 최소화와 비용 이동</h3>
+<p>비용이 증가하자 일부 팀은 사용량 제한, 최신 모델 제한, 맥락 창 축소, 프롬프트 축소에 집중했다고 영상은 말한다. 불필요하게 큰 도구 목록이나 오래된 맥락을 제거하는 것은 합리적인 정리로 인정한다.</p>
+<p>문제는 작업 설명, 업무 제약, 시스템 구조 정보까지 계속 제거할 때다. 구조 맥락이 없으면 AI가 따로는 작동하지만 전체 시스템을 깨뜨리는 코드를 만들 수 있다는 사례가 제시된다.</p>
+<p>영상의 예시 수치는 다음과 같다.</p>
+<ul>
+<li>입력에서 절약한 토큰: <strong>500</strong></li>
+<li>디버깅과 재작업에 사용한 토큰: <strong>5,000</strong></li>
+</ul>
+<p>두 수치는 같은 단계의 측정값이 아니라 입력 절감과 후속 비용을 대비한 설명용 사례다. 실제 프로젝트, 측정 기간, 반복 횟수는 제공되지 않는다. 따라서 이를 보편적인 배율로 일반화할 수 없다.</p>
+<h3>4. 밸류맥싱의 결과 지표</h3>
+<p>영상은 밸류맥싱을 Mark Boroditsky가 만든 용어라고 소개하며 그의 직함을 Nibus의 CRO라고 밝힌다. 별도의 링크나 철자 확인 자료는 제공되지 않는다.</p>
+<p>밸류맥싱이 묻는 결과 질문은 다음과 같다.</p>
+<ul>
+<li>완료된 배포 수</li>
+<li>절약된 개발 시간</li>
+<li>피한 재작업</li>
+<li>해결된 취약점</li>
+</ul>
+<p>핵심은 토큰을 측정하지 말자는 것이 아니다. 결과가 먼저 있고, 그 결과를 위해 추가 토큰 사용이 정당했는지를 판단하자는 것이다.</p>
+<p>전사에는 “Token consumption is rooted in higher-quality software and successful outcomes across the SDLC”라는 문장이 있다. 문자 그대로 읽으면 토큰 소비가 품질과 결과에 근거한다는 뜻처럼 보이지만, 주변에서는 토큰만으로 결과를 알 수 없다고 말한다. 표현이 잘못 옮겨졌거나 연결 의미가 생략되었을 가능성을 배제할 수 없으므로 모호한 문장으로 남긴다.</p>
+<h3>5. 모델 중심에서 시스템 중심으로</h3>
+<p>영상은 좋은 모델에 접근하는 것보다 모델을 둘러싼 시스템의 효과가 중요해지고 있다고 주장한다. 여기에 포함되는 요소는 다음과 같다.</p>
+<ul>
+<li>맥락 관리</li>
+<li>작업 흐름 오케스트레이션</li>
+<li>거버넌스</li>
+<li>최적화</li>
+<li>도구 연결</li>
+</ul>
+<p>영상의 논리는 결과가 토큰보다 중요하다면 모델 하나보다 시스템 전체가 중요하고, 따라서 모델 선택보다 모델 오케스트레이션이 중요해진다는 것이다.</p>
+<p>IDC가 <strong>2028년까지 선도적인 대규모 AI 배포의 70%가 단일 모델 대신 여러 모델에 걸쳐 작동할 것</strong>이라고 예측했다는 수치도 나온다. 그러나 보고서명, 링크, 조사 방법과 “선도적”의 기준은 전사에 없다.</p>
+<h3>6. 개발자·리더·플랫폼의 역할</h3>
+<p>개발자에게 AI 효율은 새로운 엔지니어링 기술로 소개된다. 클라우드 자원, 데이터베이스, 애플리케이션 성능처럼 AI 사용도 자원과 결과의 교환 관계를 고려해야 한다는 주장이다.</p>
+<p>영상이 개발자에게 제시한 요소는 다음과 같다.</p>
+<ul>
+<li>필요한 맥락을 관리한다.</li>
+<li>실행하기 전에 계획한다.</li>
+<li>비용과 결과 사이의 교환 관계를 이해한다.</li>
+</ul>
+<p>플랫폼 리더는 비용과 결과를 모두 볼 수 있어야 한다. 사용량보다 가치를 측정하고 효율을 보상하며, 팀이 영향과 결과를 추적할 수 있는 도구를 제공해야 한다.</p>
+<p>플랫폼에는 예산과 관리 기능, 사용 가시성, 운영 결과와 AI 소비를 연결하는 분석, 불필요한 작업을 줄이면서 필요한 맥락을 보존하는 작업 흐름과 도구 연결이 요구된다고 영상은 말한다.</p>
+<h3>7. 숫자·이름·출처 경계</h3>
+<ul>
+<li>영상 길이 <strong>493초</strong>와 META의 <strong>8.2분</strong>은 반올림 범위에서 서로 맞으며 충돌하지 않는다.</li>
+<li><strong>500토큰 절감</strong>과 <strong>5,000토큰 재작업</strong>은 서로 다른 단계의 설명용 수치다. 실측 자료라는 근거는 없다.</li>
+<li><strong>2028년·70%</strong>는 IDC 예측으로 귀속되지만 원 보고서 정보가 없어 검증되지 않았다.</li>
+<li><strong>Neil Dar · IBM Consulting SVP</strong>, <strong>Mark Boroditsky · Nibus CRO</strong>라는 이름과 직함은 전사에 나온 표기를 보존했다. 독립적인 철자·직함 확인은 하지 못했다.</li>
+<li>META의 <code>provenance.creator</code>는 비어 있다. <code>provenance.affiliation</code>은 <code>Ibm</code>으로 입력되어 있어 frontmatter에 후보 값을 보존했다.</li>
+<li>META의 provenance.note는 원본 영상 링크가 확인되지 않았고 화자 이름과 SNS를 기준으로 출처를 추정했다고 밝힌다. 따라서 <code>Ibm</code>을 확정된 원작자나 제작 주체로 단정할 수 없다.</li>
+<li>전사의 “토큰 소비가 고품질 소프트웨어와 성공적인 결과에 뿌리를 둔다”는 문장은 주변 논지와 표현상 충돌하거나 의미가 불분명하다. 이 노트는 이를 확정 사실로 사용하지 않는다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>채널/업로더: Tech Bridge · 원제: 토큰맥싱과의 작별: AI 사용량보다 에이전틱 성과가 중요한 이유 · https://www.youtube.com/watch?v=H5h_GUaR-bU · 전사: 제공된 SOURCE_TRANSCRIPT(방식 미상)<br>
+META의 provenance.note는 원본 영상 링크가 확인되지 않은 추정 출처라고 밝힌다. 원작자 값은 비어 있으며, 소속 후보 <code>Ibm</code>과 관련 링크만 제공되었다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>직장에서 순수한 사용량 자체가 보상받는 것처럼 더 많은 AI를 사용하라는 말을 들어본 적이 있습니까?</p>
+<p>팀은 AI가 어떻게 사용되고 있는지를 측정하기 위해 활동 지표에 의존하는 경우가 많지만, 이 지표가 단순한 활동의 지표가 아니라 성공의 대리 지표가 되면 문제가 생깁니다. 예를 들어 제가 영업팀에 있고 통화량에 집중하게 된다면 매주 활동 목표를 달성할 수는 있겠지만, 통화량만으로는 분기 최소 목표를 달성할 수 있는 궤도에 올라와 있는지 알 수 없습니다. 오늘은 팀들이 AI와 관련해 이와 비슷한 문제에 어떻게 직면하고 있는지 살펴보겠습니다.</p>
+<p>지난 1년 동안 많은 팀이 도입 지표(adoption metrics)를 통해 AI 사용량을 측정했습니다. 얼마나 많은 사람이 AI를 사용하고 있는가? 얼마나 많은 토큰이 소비되고 있는가? 토큰은 AI 모델이 텍스트를 처리하는 데 사용하는 기본 단위이므로, 토큰 소비량은 AI 사용량과 AI 비용을 측정하는 일반적인 방법이 되었습니다.</p>
+<p>토큰 소비는 참여도의 대리 지표가 되었습니다. 일부 팀은 AI를 폭넓게 사용하도록 장려했으며, 많이 소비하면 더 나은 결과로 이어질 것이라고 믿었습니다. 이것이 바로 토큰 맥싱(token maxing)입니다. 더 많은 활동이 더 많은 가치를 의미한다는 믿음 아래 AI 사용량을 극대화하는 것입니다.</p>
+<p>도입 신호로서는 효과가 있었지만, AI가 일상적인 인프라로 확장되면서 문제가 나타났습니다. IBM Consulting의 수석 부사장(SVP)인 Neil Dar가 지적했듯이, 진정한 지표가 없는 상황에서 팀은 사용량 대시보드를 만들었고, 사람들은 곧 그 대시보드를 조작하는 법을 익혔습니다. 사용량은 곧 가치의 대리 지표가 되었습니다.</p>
+<p>AI가 작업을 완료할 수 있는 시스템으로 발전하면서 이러한 접근 방식은 점점 한계에 부딪혔습니다. 에이전틱 AI 시스템(agentic AI systems)은 단순히 코드를 생성하는 것보다 훨씬 더 많은 일을 수행했습니다. 워크플로를 계획하고, 저장소를 분석하고, 도구를 호출하고, 솔루션을 테스트하며, 여러 시스템에 걸쳐 작업을 조율했습니다. 더 뛰어난 에이전트는 자연스럽게 더 많은 토큰을 소비했지만, 토큰 소비량만으로는 활동과 측정 가능한 결과를 구분할 수 없었습니다. 팀은 AI 사용량이 증가하는 것은 볼 수 있었지만, 어떤 가치가 만들어지고 있는지는 명확히 이해할 수 없었습니다.</p>
+<p>그래서 팀은 다르고 어려운 질문을 하기 시작했습니다. 이 모든 비용을 지불해야 한다면 실제로 무엇을 얻은 것인가? 대시보드에는 사용량 증가가 표시되고 토큰 수는 계속 올라갔지만, 그 활동과 시스템 수준의 결과 사이의 연결은 여전히 불분명했습니다. 소비와 가치 사이의 이러한 간극이 대화의 다음 단계로 이어졌습니다.</p>
+<p>AI 비용이 증가하자 팀은 가장 눈에 잘 띄는 지표인 토큰 소비에 집중하는 방식으로 대응했습니다. 사용량을 제한하고, 최신 모델을 제한하며, 컨텍스트 윈도(context window)를 줄이고, 프롬프트를 축소하는 새로운 정책이 등장했습니다. 하지만 토큰 최소화(token minimization) 역시 토큰 맥싱과 같은 함정에 빠집니다. 둘 다 토큰 소비가 가장 중요한 기본 지표라고 가정합니다. 어느 쪽도 운영 결과를 측정하지 않습니다.</p>
+<p>다음과 같은 일이 흔히 발생합니다. 팀은 지나치게 큰 도구 카탈로그나 오래된 컨텍스트처럼 명백한 비효율을 제거합니다. 이는 타당합니다. 하지만 이후에도 계속 줄여 나가면서 작업 설명, 도메인 제약 조건, 아키텍처 컨텍스트와 같은 핵심 정보까지 제거하기 시작합니다.</p>
+<p>예를 들어 토큰을 절약하기 위해 아키텍처 컨텍스트를 제거하면 AI가 독립적으로는 작동하지만 전체 시스템을 망가뜨리는 코드를 생성할 수 있습니다. 입력에서 토큰 500개를 절약했지만, 이제 디버깅과 재작업에 토큰 5,000개를 사용하게 됩니다. 비용은 사라지지 않고 그저 이동할 뿐입니다. 팀은 입력 토큰이 줄어든 것을 축하하면서도 워크플로의 다른 곳에서 동일한 복잡성에 대한 비용을 지불합니다.</p>
+<p>그렇다면 무엇을 최적화해야 할까요? Nibus의 최고매출책임자(CRO)인 Mark Boroditsky가 만든 용어인 가치 맥싱(Valuemaxxing)은 대화를 소비에서 결과로 전환합니다. 팀은 “토큰을 몇 개 사용했는가?”라고 묻는 대신 다른 질문을 합니다. 완료된 배포는 몇 건인가? 개발자의 시간이 얼마나 절약되었는가? 재작업을 얼마나 방지했는가? 해결된 취약점은 몇 개인가?</p>
+<p>이러한 지표는 AI가 측정 가능한 결과를 만들어 내고 있는지, 그리고 추가적인 토큰 사용이 정당한지를 결정합니다. 토큰 소비는 SDLC(소프트웨어 개발 생명주기) 전반에서 더 높은 품질의 소프트웨어와 성공적인 결과에 기반합니다.</p>
+<p>이제 한 단계 더 나아가 보겠습니다. 모델이 인프라가 되면서 이러한 구분은 중요해집니다. 뛰어난 모델에 대한 접근성은 더 이상 주요 차별화 요소가 아닙니다. 시스템의 효과성은 모델을 둘러싸고 구축된 시스템에 더 크게 좌우되고 있습니다.</p>
+<p>여기에는 컨텍스트 관리, 워크플로 오케스트레이션, 거버넌스, 그리고 최적화가 포함됩니다. 토큰보다 결과가 중요하다면 모델보다 시스템이 더 중요합니다. 이것이 모델 선택보다 모델 오케스트레이션이 더욱 중요해지는 이유입니다.</p>
+<p>IDC는 2028년까지 대규모 AI 배포를 선도하는 사례의 70%가 단일 모델에 의존하기보다 여러 모델에 걸쳐 작동할 것으로 예측합니다.</p>
+<p>개발자와 플랫폼 리더 모두 가치 맥싱에 책임이 있습니다. 개발자에게 AI 효율성은 새로운 엔지니어링 기술이 되고 있습니다. 개발자는 AI 사용을 클라우드 리소스, 데이터베이스 또는 애플리케이션 성능을 생각하는 방식과 동일하게 생각해야 합니다. 목표는 AI를 덜 사용하는 것이 아니라 AI를 더 효과적으로 사용하는 것입니다.</p>
+<p>훌륭한 컨텍스트 위생(context hygiene), 실행 전 계획 수립, 비용과 결과 사이의 트레이드오프 이해는 모두 더 높은 품질의 결과에 기여합니다.</p>
+<p>플랫폼 리더의 책임은 다릅니다. 플랫폼 리더는 비용과 결과를 모두 파악할 수 있어야 합니다. 이들은 양이 아니라 가치를 측정하고, 효율성을 보상하며, 팀이 영향을 이해하고 결과를 추적할 수 있는 도구를 제공해야 합니다.</p>
+<p>AI 효율성 문화를 구축하려면 엔지니어링 워크플로 전반에 걸쳐 책임성, 가시성, 그리고 공유 지표가 필요합니다. 플랫폼 역시 방정식의 일부입니다. 개발자와 리더만으로는 AI 효율성에 대한 책임을 감당할 수 없습니다. 이들이 사용하는 플랫폼은 AI 소비를 결과와 연결하는 데 도움을 주어야 합니다.</p>
+<p>관리 제어 기능은 예산, 거버넌스, 그리고 AI 사용 방식에 대한 가시성을 제공합니다. 분석 기능은 팀이 AI 소비를 토큰 수만이 아니라 운영 결과와 연결하도록 돕고, 워크플로 기능과 스킬, 도구 통합은 불필요한 작업을 줄이며 고품질 결과를 제공하는 데 필요한 컨텍스트를 보존합니다.</p>
+<p>모델 효율성이 개선되고 비용이 변화할 수 있는 만큼 AI의 경제성도 계속 달라질 것입니다. 첫 번째 장이 도입에 관한 것이었다면, 다음 장은 가치에 관한 것입니다. 토큰 소비는 팀이 AI가 사용되고 있는지를 이해하는 데 도움을 주었습니다. 가치 맥싱은 팀이 AI가 어떻게 가치를 창출하고 있는지를 이해하도록 돕습니다.</p>
+</details>
+</body></html>

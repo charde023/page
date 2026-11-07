@@ -1,0 +1,517 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>RAG만으로는 부족합니다: 토큰 비용을 절반으로 줄이는 관계형 컨텍스트 엔진</title>
+<meta name="description" content="흩어진 코드·PR·대화를 연결하고, 자연어를 검증된 구조화 쿼리로 바꿔 에이전트의 탐색 비용을 줄이는 컨텍스트 엔진의 원리와 한계를 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>RAG만으로는 부족합니다: 토큰 비용을 절반으로 줄이는 관계형 컨텍스트 엔진</h1>
+<div class="meta">업로드 2026-10-14 · 18.8분 · <a href="https://youtu.be/djKIU-30YVc" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 발표의 출발점은 간단하다. 사람이나 AI 에이전트가 소프트웨어 작업을 시작할 때 필요한 정보는 코드 한곳에만 있지 않다. 코드가 바뀐 이유는 풀 리퀘스트(PR)에 있고, 설계 배경은 문서에 있으며, 장애 경험과 논쟁은 이슈나 슬랙 대화에 남아 있을 수 있다. 이런 정보가 흩어져 있으면 에이전트는 새로 입사한 직원처럼 여러 곳을 돌아다니며 상황을 추측해야 한다.</p>
+<p>발표자가 말하는 <strong>컨텍스트 엔진</strong>은 이 흩어진 조직 지식을 연결해 현재 작업에 필요한 묶음으로 제공하는 장치다. 모든 자료를 무조건 많이 넣는 것이 아니라, 지금 하려는 일과 관련된 코드·문서·PR·대화를 골라 연결한다. 발표자는 이렇게 만든 정보를 서로 근거가 연결된 맥락, 즉 <strong>그라운디드 컨텍스트</strong>라고 부른다. 이 묶음은 작업 의도에 맞고, 질문한 사람을 구분하며, 접근 권한도 고려해야 한다.</p>
+<figure data-visual-kind="map">
+<div style="display:grid;gap:10px;max-width:760px;margin:16px auto;font-size:16px;line-height:1.5">
+  <div style="padding:14px;border:2px solid #64748b;border-radius:10px;background:#f8fafc">
+    <strong>흩어진 조직 지식</strong><br>
+    코드 · PR · 리뷰 · 이슈 · 티켓 · 문서 · 대화
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:24px">↓</div>
+  <div style="padding:14px;border:2px solid #2563eb;border-radius:10px;background:#eff6ff">
+    <strong>컨텍스트 엔진</strong><br>
+    의미를 찾고, 구조를 조회하고, 사람과 권한을 맞춘다.
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:24px">↓</div>
+  <div style="padding:14px;border:2px solid #0f766e;border-radius:10px;background:#f0fdfa">
+    <strong>작업별 컨텍스트 묶음</strong><br>
+    현재 작업에 필요한 정보와 추가 탐색용 링크
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:24px">↓</div>
+  <div style="padding:14px;border:2px solid #7c3aed;border-radius:10px;background:#f5f3ff">
+    <strong>에이전트 또는 사람의 작업</strong><br>
+    처음부터 전부 뒤지는 대신 관련 근거에서 시작한다.
+  </div>
+</div>
+<figcaption>흩어진 정보가 작업별 컨텍스트로 바뀌는 전체 지도</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 이것은 실제 데이터량을 나타낸 그래프가 아니라 발표의 작동 원리를 정리한 개념도다. 핵심은 정보를 단순히 모으는 것이 아니라 <strong>현재 작업과 관련된 관계를 함께 제공하는 것</strong>이다.</p>
+<p>발표자는 Claude에 특정 컴포넌트의 최적화 계획을 요청한 사례를 보여준다. 컨텍스트 엔진이 없을 때 Claude는 코드베이스를 검색하며 무엇이 중요한지 먼저 찾아야 했다. 컨텍스트 엔진을 붙였을 때는 소스 코드뿐 아니라 아키텍처를 설명하는 Notion 문서, 관련 PR, 최적화를 논의한 Slack 대화가 하나의 작업별 묶음으로 제공되었다.</p>
+<p>이 시연에서 발표자가 제시한 수치는 컨텍스트 엔진 사용 시 <strong>1.29달러와 약 1분 30초</strong>, 미사용 시 <strong>최대 2.60달러와 3분</strong>이었다. 발표자는 이를 비용이 사실상 50% 줄어든 결과로 설명했다. 다만 이것은 발표에 등장한 한 세션의 비교이며, 모든 업무와 모델에서 비용이 절반으로 줄어든다는 독립적인 검증 결과는 아니다.</p>
+<p>컨텍스트 엔진이 필요한 두 번째 이유는 <strong>의미가 비슷한 문서를 찾는 일과 정확한 조건으로 기록을 조회하는 일이 다르기 때문</strong>이다. 일반적인 RAG는 질문과 의미가 가까운 코드나 문서 조각을 찾는 데 강하다. 예를 들어 “인증을 논의한 슬랙 대화”나 “이 코드를 바꾼 PR”처럼 내용이 중심인 질문이다.</p>
+<p>그러나 “내가 지난주에 병합한 PR”, “결제 코드를 가장 많이 리뷰한 사람”, “현재 열려 있는 PR”, “1월 1일 이후의 주간 비율”은 다르다. 이런 질문에는 사람, 상태, 날짜, 횟수, 집계 같은 명시적인 조건이 들어간다. 의미가 비슷한 문서를 꺼내는 것만으로는 정확한 답을 만들기 어렵고, 데이터베이스가 이해하는 필터와 집계 쿼리가 필요하다.</p>
+<p>아래 비교표는 모바일에서 좌우로 움직여 읽는다.</p>
+<figure data-visual-kind="comparison">
+<div style="overflow-x:auto;margin:16px 0">
+<table style="min-width:700px;width:100%;border-collapse:collapse;font-size:15px">
+<thead>
+<tr>
+<th style="border:1px solid #94a3b8;padding:10px;background:#e2e8f0">구분</th>
+<th style="border:1px solid #94a3b8;padding:10px;background:#e2e8f0">의미 기반 검색</th>
+<th style="border:1px solid #94a3b8;padding:10px;background:#e2e8f0">구조화 조회</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="border:1px solid #94a3b8;padding:10px"><strong>찾는 것</strong></td>
+<td style="border:1px solid #94a3b8;padding:10px">내용이나 주제가 비슷한 자료</td>
+<td style="border:1px solid #94a3b8;padding:10px">조건과 집계에 맞는 기록</td>
+</tr>
+<tr>
+<td style="border:1px solid #94a3b8;padding:10px"><strong>발표 속 질문</strong></td>
+<td style="border:1px solid #94a3b8;padding:10px">코드, 관련 PR, 논의한 Slack 대화 찾기</td>
+<td style="border:1px solid #94a3b8;padding:10px">지난주 내 PR, 열린 PR, 기간별 비율 구하기</td>
+</tr>
+<tr>
+<td style="border:1px solid #94a3b8;padding:10px"><strong>중심 단서</strong></td>
+<td style="border:1px solid #94a3b8;padding:10px">문장의 의미와 유사성</td>
+<td style="border:1px solid #94a3b8;padding:10px">사람 · 날짜 · 상태 · 필터 · 집계</td>
+</tr>
+<tr>
+<td style="border:1px solid #94a3b8;padding:10px"><strong>발표의 결론</strong></td>
+<td style="border:1px solid #94a3b8;padding:10px">RAG가 잘 처리하는 절반</td>
+<td style="border:1px solid #94a3b8;padding:10px">별도의 쿼리 엔진이 필요한 나머지 절반</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption>의미 기반 검색과 구조화 조회가 담당하는 질문의 차이</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽은 질문의 종류이고, 가운데와 오른쪽은 각 검색 방식이 처리하는 범위다. 두 방식은 경쟁 관계라기보다 서로 다른 질문을 담당한다. “RAG만으로 부족하다”는 말은 RAG가 쓸모없다는 뜻이 아니라, 구조화 조건까지 자동으로 해결해 주지는 않는다는 뜻이다.</p>
+<p>발표의 구현 부분은 자연어 질문을 데이터베이스 쿼리로 바꾸는 <strong>Document Query Engine</strong>을 다룬다. 발표자는 쿼리 문장을 생성하는 것 자체보다 그 앞뒤의 안전장치가 더 어렵다고 말한다.</p>
+<p>첫째, 엔진은 데이터에 어떤 필드와 값이 있는지 알아야 한다. 발표에서는 MongoDB 문서를 표본으로 뽑아 실행 중에 구조를 추론하고, 가능한 값의 종류와 인덱스까지 찾아내는 <strong>자동 스키마 탐색</strong>을 소개한다. 발표자는 이런 작업의 상당 부분은 LLM보다 전통적인 절차형 코드로 결정적으로 처리할 수 있다고 강조한다.</p>
+<p>둘째, 서로 다른 시스템의 사용자 이름을 같은 사람으로 연결해야 한다. 자연어로 “Rashim의 열린 PR”을 물어도 GitHub의 사용자 이름이 다르면 바로 조회할 수 없다. 엔진은 이름을 유사하게 맞춰 보고, 꼭 필요할 때만 LLM을 동률 판정자로 사용할 수 있다. 이를 <strong>식별자 해소</strong>라고 한다.</p>
+<p>셋째, 질문한 사용자와 현재 시각 같은 정보를 스키마와 함께 LLM에 전달해 쿼리를 만든다. 그래야 “Peter의 PR”뿐 아니라 “내 PR”이나 “지난주 PR”도 해석할 수 있다.</p>
+<p>넷째, 만들어진 쿼리를 신뢰해서는 안 된다. 쿼리에 데이터베이스 서버에서 원시 JavaScript를 실행하는 연산자가 들어갈 수 있고, 숨겨야 할 필드나 다른 고객의 데이터에 접근할 가능성도 있다. 따라서 허용되지 않은 연산자를 차단하고, 테넌트 식별자처럼 반드시 적용해야 할 조건은 LLM이 직접 다루지 못하게 한 뒤 시스템이 뒤에서 넣어야 한다.</p>
+<figure data-visual-kind="process">
+<div style="display:grid;gap:8px;max-width:780px;margin:16px auto;font-size:16px;line-height:1.45">
+  <div style="padding:12px;border:2px solid #475569;border-radius:9px;background:#f8fafc"><strong>1. 스키마 탐색</strong><br>문서의 필드·값·인덱스를 파악한다.</div>
+  <div aria-hidden="true" style="text-align:center;font-size:22px">↓</div>
+  <div style="padding:12px;border:2px solid #475569;border-radius:9px;background:#f8fafc"><strong>2. 식별자 해소</strong><br>시스템마다 다른 사용자 이름을 실제 사람과 연결한다.</div>
+  <div aria-hidden="true" style="text-align:center;font-size:22px">↓</div>
+  <div style="padding:12px;border:2px solid #2563eb;border-radius:9px;background:#eff6ff"><strong>3. 쿼리 합성</strong><br>스키마·현재 시각·질문자 정보를 바탕으로 구조화 쿼리를 만든다.</div>
+  <div aria-hidden="true" style="text-align:center;font-size:22px">↓</div>
+  <div style="padding:12px;border:2px solid #b45309;border-radius:9px;background:#fffbeb"><strong>4. 안전 검증</strong><br>위험 연산자·숨김 필드·테넌트 경계를 검사한다.</div>
+  <div aria-hidden="true" style="text-align:center;font-size:22px">↓</div>
+  <div style="padding:12px;border:2px solid #0f766e;border-radius:9px;background:#f0fdfa"><strong>5. 실행</strong><br>허용된 쿼리를 데이터베이스에서 실행한다.</div>
+  <div aria-hidden="true" style="text-align:center;font-size:22px">↓ 오류가 나면</div>
+  <div style="padding:12px;border:2px dashed #be123c;border-radius:9px;background:#fff1f2"><strong>6. 제한된 재시도</strong><br>오류를 LLM에 돌려보내 다시 합성한 뒤, 3번부터 최대 재시도 횟수 안에서 반복한다.</div>
+  <div aria-hidden="true" style="text-align:center;font-size:18px;color:#be123c">↺ 3. 쿼리 합성으로 복귀</div>
+</div>
+<figcaption>자연어 질문을 안전한 구조화 쿼리로 바꾸는 단계와 오류 복귀 경로</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 진행한다. 마지막 재시도 단계의 복귀 표시는 3번 쿼리 합성으로 돌아간다는 뜻이다. 무한히 반복하는 구조가 아니라 최대 재시도 횟수를 둔 피드백 과정이다. 이것 역시 성능 수치가 아니라 발표에서 설명한 구성 요소를 배열한 개념도다.</p>
+<p>발표 데모에서는 제목에 인증 관련 내용이 있는 PR을 찾는 쿼리가 정규표현식을 사용하려 하자 검증기가 이를 거부했다. 오류를 LLM에 돌려보낸 뒤 허용된 <code>match</code> 방식으로 고쳤지만, 이번에는 제목 전체가 정확히 같아야 해서 결과를 찾지 못했다. 발표자는 이를 해결하기 위해 전문 검색, 즉 문장 속 단어를 검색하는 <strong>Full-text Search</strong>를 추가했다. 이 장면은 검증 통과와 유용한 검색 결과가 서로 다른 문제라는 점을 보여준다.</p>
+<p>또 다른 사례에서 발표자는 코드 리뷰 제품이 찾아내는 이슈 수가 줄어든 원인을 Unblocked가 추적했다고 설명한다. 시스템은 원인을 Opus 4.6에서 Opus 4.8로 바꾼 것과 연결하고, 관련 PR과 Slack 대화를 참고해 수정 PR까지 만들었다고 한다. 다만 모델명, 원인 판단, 수정 효과는 발표자의 사례 설명이며 제공 자료만으로 독립 검증할 수 없다.</p>
+<p>마지막으로 발표자는 작업별 컨텍스트 묶음이 실제로 도움이 되는지 비교하는 오픈소스 시뮬레이터를 소개한다. 같은 작업을 컨텍스트가 있는 조건과 없는 조건으로 실행해 A/B 비교하는 구상이다. 하지만 제공된 링크 목록에는 Document Query Engine 저장소만 명시되어 있고, 시뮬레이터의 정확한 저장소 URL이나 실제 비교 결과는 포함되어 있지 않다.</p>
+<p>결국 중심 원리는 세 가지다. <strong>첫째, 필요한 것은 더 많은 문서가 아니라 현재 작업에 맞게 연결된 정보다. 둘째, 의미 검색과 구조화 조회는 서로 다른 질문을 처리하므로 함께 써야 한다. 셋째, 자연어 쿼리 생성보다 스키마·신원·권한·검증·재시도 같은 주변 장치가 실제 신뢰성을 결정한다.</strong></p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>RAG의 의미 검색은 관련 내용을 찾지만, 날짜·사람·상태·집계를 포함한 질문에는 구조화 쿼리가 필요하다.</li>
+<li>컨텍스트 엔진은 코드·문서·PR·대화를 현재 작업에 맞게 연결하고 권한을 고려한 묶음으로 제공한다.</li>
+<li>자연어 쿼리 엔진의 핵심은 생성 자체보다 스키마 탐색, 식별자 해소, 안전 검증, 제한된 재시도에 있다.</li>
+<li>발표의 50% 비용 절감은 한 시연의 비교 결과이며 보편적인 효과로 검증된 수치는 아니다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>의미 기반 RAG만으로 답하기 어려운 업무 질문은 무엇이며, 컨텍스트 엔진은 이를 어떻게 안전한 구조화 조회로 바꾸는가?</strong></p>
+</blockquote>
+<ul>
+<li>컨텍스트 엔진은 단순히 더 많은 문서를 프롬프트에 넣는 방식과 어떻게 다른가?</li>
+<li>자연어 쿼리를 실행하기 전에 어떤 안전장치가 필요한가?</li>
+<li>비용 절감 주장을 실제 도입 판단에 쓰려면 무엇을 다시 측정해야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>한 개발자가 “지난주 내가 병합한 인증 관련 PR은 무엇인가?”라고 묻는다. 의미 검색만 사용하면 ‘인증’과 비슷한 내용을 찾을 수는 있지만, <strong>나·지난주·병합 완료·PR</strong>이라는 조건을 정확히 적용하기 어렵다. 컨텍스트 엔진은 질문자를 실제 계정과 연결하고 날짜와 상태 조건을 쿼리로 만든 뒤, 안전성을 검사하고 결과를 관련 문서와 함께 돌려준다.</p>
+<p><code>"의미는 찾지만 사람·날짜·상태 조건을 정확히 적용하지 못한다"</code> <strong>문제</strong><br>
+→ <code>"신원과 스키마를 바탕으로 쿼리를 만들고 실행 전에 검증한다"</code> <strong>작동 방식</strong><br>
+→ <code>"조건에 맞는 기록과 연결된 근거에서 작업을 시작한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">도서관 사서와 장부 담당자</div>
+<p>의미 검색은 “인증 문제를 다룬 자료를 찾아 달라”는 부탁을 받은 사서와 닮았다. 구조화 조회는 “지난주에 내가 처리한 미완료 항목만 집계해 달라”는 요청을 조건에 따라 계산하는 장부 담당자와 닮았다. 컨텍스트 엔진은 두 역할의 결과를 현재 작업에 맞게 연결한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 실제 시스템은 단순히 두 사람의 역할을 합치는 것이 아니다. 시스템별 사용자 식별자, 숨김 필드, 테넌트 경계, 위험한 데이터베이스 연산자, 실행 오류까지 기계적으로 통제해야 한다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>컨텍스트 엔진</strong></td>
+<td>흩어진 업무 지식을 현재 작업에 맞게 연결하는 장치</td>
+<td>코드·문서·대화·업무 기록을 관계화해 의도별·사용자별·권한별 컨텍스트를 제공하는 계층</td>
+<td>모든 문서를 한꺼번에 프롬프트에 넣는 것</td>
+</tr>
+<tr>
+<td><strong>의미 기반 검색</strong></td>
+<td>내용이 비슷한 자료 찾기</td>
+<td>질문과 자료의 의미적 관련성을 이용하는 검색</td>
+<td>날짜·상태·소유자 조건도 자동으로 정확히 처리한다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>구조화 쿼리</strong></td>
+<td>명확한 조건으로 기록 골라 계산하기</td>
+<td>스키마의 필드·필터·정렬·집계를 사용하는 데이터 조회</td>
+<td>자연어와 비슷한 문서를 찾는 검색과 같다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>식별자 해소</strong></td>
+<td>서로 다른 계정 이름이 같은 사람인지 맞추기</td>
+<td>여러 시스템의 사용자 식별자를 실제 인물 또는 통합 신원에 매핑하는 과정</td>
+<td>이름 문자열 하나만 같으면 항상 같은 사람이라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>쿼리 검증</strong></td>
+<td>실행 전에 위험한 명령을 막기</td>
+<td>허용 연산자·필드·테넌트 범위 등을 검사하고 강제하는 안전 계층</td>
+<td>LLM이 만든 쿼리는 자연스러우므로 바로 실행해도 된다고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>관련 문서를 잘 찾는 RAG가 있어도 “지난주 내가 병합한 PR”에 정확히 답하지 못할 수 있는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>이 질문은 내용의 유사성보다 질문자 신원, 날짜 범위, 병합 상태, 자료 유형이라는 구조화 조건이 중요하다. 벡터 저장소에 그 조건이 조회 가능한 형태로 인코딩되어 있지 않다면, 의미가 비슷한 문서를 찾는 것만으로 정확한 결과를 만들 수 없다. 스키마를 이해하는 쿼리 엔진이 별도로 필요하다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>컨텍스트 엔진과 “검색 결과를 많이 넣은 긴 프롬프트”를 어떻게 구분해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>긴 프롬프트는 자료의 양만 늘릴 수 있다. 발표자가 설명한 컨텍스트 엔진은 자료 사이의 관계, 현재 작업의 의도, 질문자의 신원, 접근 권한, 구조화 조건을 함께 반영한다. 따라서 판단 기준은 문서 수가 아니라 필요한 관계와 조건이 정확히 연결되었는지다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>업무용 에이전트에 구조화 조회를 추가하려면 어떤 순서로 안전성을 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 필요한 질문이 의미 검색인지 구조화 조회인지 구분한다. 구조화 조회라면 스키마 탐색과 신원 매핑을 확인하고, 허용 연산자와 필드를 제한하며, 테넌트 조건은 시스템이 강제로 넣는다. 그다음 실행 오류를 제한된 횟수 안에서 수정하게 하고, 같은 작업을 기존 방식과 비교해 비용과 결과를 측정한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 검색 품질보다 질문 유형 구분이 먼저다</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자는 코드나 관련 논의를 찾는 의미 질문과, 지난주 PR·열린 PR·기간별 비율을 묻는 구조화 질문을 구분했다.</li>
+<li><strong>[해석]</strong> 검색 시스템을 개선하기 전에 사용자의 질문이 ‘내용 찾기’인지 ‘조건 조회’인지 분류해야 한다. 잘못된 검색 방식을 더 정교하게 만드는 것보다 질문에 맞는 조회 수단을 붙이는 편이 중요하다.</li>
+<li><strong>[경계]</strong> 발표는 의미 검색과 구조화 조회의 결합 효과를 정량적으로 비교하지 않았다. “나머지 절반”은 기능 범위를 설명하는 표현이지 질문 비중을 측정한 수치가 아니다.</li>
+</ul>
+<h3>2. LLM보다 주변 통제 장치가 신뢰성을 결정한다</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자는 쿼리 생성은 쉬운 부분이며, 스키마 탐색·신원 매핑·검증·오류 재시도가 어려운 스캐폴딩이라고 설명했다.</li>
+<li><strong>[해석]</strong> 자연어를 코드나 쿼리로 바꾸는 데 성공하는 것만으로는 운영 가능한 시스템이 되지 않는다. 무엇을 볼 수 있는지, 누구의 데이터인지, 실패했을 때 어디까지 다시 시도할지를 별도 규칙으로 통제해야 한다.</li>
+<li><strong>[경계]</strong> 발표 데모는 특정 MongoDB 문서 저장소와 PR 데이터 중심이다. 다른 데이터베이스나 복잡한 권한 체계에서 같은 구현이 그대로 작동하는지는 제공 자료로 확인할 수 없다.</li>
+</ul>
+<h3>3. 비용 절감은 결과가 아니라 검증할 가설이다</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자는 한 Claude 세션에서 컨텍스트 엔진 사용 시 1.29달러·약 1분 30초, 미사용 시 최대 2.60달러·3분이 들었다고 제시했다.</li>
+<li><strong>[해석]</strong> 좋은 사전 컨텍스트가 에이전트의 탐색을 줄이면 비용과 대기시간이 감소할 수 있다. 그러나 도입 판단에는 동일 작업을 반복한 A/B 측정이 필요하다.</li>
+<li><strong>[경계]</strong> 비교 횟수, 모델 조건, 토큰 수, 작업 품질, 통계적 변동은 제시되지 않았다. 제목의 “절반”은 이 단일 시연에 근거한 화자의 주장이다. 또한 화자는 Peter로 자신을 소개했고 META 설명은 Peter Werry라고 적었지만, provenance.creator는 비어 있으며 원본 영상 링크가 확인되지 않았다는 추정 메모가 있다. 소속도 전사에서는 <code>Unblocked</code>, provenance에서는 <code>Getunblocked</code>로 표기가 다르다. 코드 리뷰 저하 원인으로 언급된 Opus 4.6·Opus 4.8 전환과 수정 효과도 독립 검증되지 않았다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 발표는 의미가 비슷한 자료를 찾는 것과 정확한 조건으로 답을 구성하는 것을 분리한다.</li>
+<li><strong>통찰:</strong> 학습자가 관련 용어를 말하는지만 보지 말고, 원인·조건·사례를 구조화해 설명하는지 확인할 수 있다.</li>
+<li><strong>질문/행동:</strong> 설명을 들은 뒤 “언제 의미 검색이 부족하며 어떤 조건이 추가로 필요한가?”를 자료 없이 답하게 한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 발표의 구조는 흩어진 기록을 연결해 탐색 시간과 에이전트 비용을 줄이려는 자원 배분 문제다.</li>
+<li><strong>통찰:</strong> APOM의 현재 시스템 상태는 자료에 없으므로 적용 사실로 단정할 수 없다. 다만 주문·상품·고객·물류 기록에 자연어 조회를 붙인다는 가상 적용에서는 신원, 권한, 데이터 경계를 먼저 검증해야 한다.</li>
+<li><strong>질문/행동:</strong> 실제 적용 후보가 있다면 “관련 문서 찾기”와 “기간·상태·담당자별 집계” 중 어느 질문이 더 자주 발생하는지 먼저 분류한다.</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 발표는 1.29달러 대 최대 2.60달러, 1분 30초 대 3분이라는 구체적 대조로 가치를 보여준다.</li>
+<li><strong>통찰:</strong> 구체적인 전후 비교는 강한 증거 장면이지만, 단일 사례를 보편적 성과처럼 확대하면 안 된다. 조건·작업·비교 방식이 함께 제시되어야 한다.</li>
+<li><strong>질문/행동:</strong> 비용 절감 문구를 사용할 때 비교 대상, 동일 작업 여부, 반복 횟수, 결과 품질을 함께 공개할 수 있는지 확인한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 발표는 에이전트용 자연어 쿼리 엔진의 스키마 탐색, 신원 매핑, 검증, 재시도를 구체적으로 설명한다.</li>
+<li><strong>통찰:</strong> 모델 선택보다 워크로드가 의미 검색인지 구조화 조회인지 구분하는 일이 먼저다. 위험 연산자 차단과 테넌트 조건은 프롬프트 요청이 아니라 실행 계층에서 강제해야 한다.</li>
+<li><strong>질문/행동:</strong> 작은 비민감 데이터셋에서 생성 쿼리의 정확성뿐 아니라 거부된 쿼리, 재시도 횟수, 테넌트 경계 준수를 함께 기록한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"에이전트가 흩어진 코드·문서·대화를 반복 탐색하고 구조화 질문에는 정확히 답하기 어렵다"</code> <strong>문제</strong><br>
+→ <code>"작업별로 연결된 근거에서 더 빠르게 시작한다"</code> <strong>수혜자: 개발자와 업무 에이전트 사용자</strong><br>
+→ <code>"업무 데이터·접근 권한·도입 시간과 비용을 제공한다"</code> <strong>지불자 또는 자원 제공자: 도입 조직</strong><br>
+→ <code>"동일 작업을 완료하는 데 든 총 토큰 비용의 변화"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 비민감 PR 표본에서 구조화 조건이 포함된 동일 질문들을 의미 검색만 사용한 조건과 스키마·검증을 포함한 쿼리 엔진 조건으로 각각 실행한다.</li>
+<li><strong>측정 1개:</strong> 각 쌍에서 작업 완료에 든 총 토큰 비용의 비율인 <code>쿼리 엔진 조건 ÷ 의미 검색 조건</code>을 기록한다.</li>
+<li><strong>중단 기준 1개:</strong> 비교한 질문들의 중앙 비율이 <code>1.0 이상</code>이면 토큰 비용 감소가 관찰되지 않은 것으로 보고 확대하지 않는다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>컨텍스트 엔진</td>
+<td>흩어진 조직 지식을 작업별·사용자별·권한별 맥락으로 연결</td>
+</tr>
+<tr>
+<td>2</td>
+<td>에이전트 시연</td>
+<td>관련 코드·문서·PR·대화를 먼저 제공해 탐색 비용을 줄였다는 사례</td>
+</tr>
+<tr>
+<td>3</td>
+<td>RAG의 빈틈</td>
+<td>의미 검색과 구조화 조건 조회의 차이</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Document Query Engine</td>
+<td>스키마 탐색, 식별자 해소, 자연어 쿼리 합성</td>
+</tr>
+<tr>
+<td>5</td>
+<td>검증과 재시도</td>
+<td>위험 연산자와 데이터 경계를 통제하고 오류를 되돌려 수정</td>
+</tr>
+<tr>
+<td>6</td>
+<td>전문 검색과 시뮬레이터</td>
+<td>정확 일치의 한계를 보완하고 컨텍스트 효과를 A/B 비교하는 구상</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 컨텍스트 엔진의 정의</h3>
+<p>발표자는 AI 에이전트가 없던 시기에는 사람이 직접 조직의 컨텍스트 계층 역할을 했다고 설명한다. 새 직원은 코드, 문서 시스템, 장애 기록과 조직의 누적된 경험을 직접 찾아야 했다.</p>
+<p>컨텍스트 엔진은 이런 지식을 모아 서로 연결된 맥락으로 만든다. 발표자가 제시한 속성은 다음과 같다.</p>
+<ul>
+<li>정보가 서로 연결되어 있다.</li>
+<li>현재 의도에 맞는다.</li>
+<li>질문한 사용자에 맞게 개인화된다.</li>
+<li>접근 권한을 고려한다.</li>
+</ul>
+<h3>2. Claude 작업 비교와 비용 주장</h3>
+<p>발표자는 Source Mark engine이라는 컴포넌트의 최적화 계획을 Claude에 요청한 세션을 비교했다.</p>
+<p>컨텍스트 엔진이 없을 때 Claude는 먼저 코드베이스를 검색하며 구조를 파악했다. 발표자는 Claude가 실제로 이해했는지와 별개로 이해했다고 자신 있게 표현할 수 있다고 지적했다.</p>
+<p>컨텍스트 엔진을 붙인 경우에는 다음 자료가 작업별 컨텍스트 묶음에 포함되었다.</p>
+<ul>
+<li>소스 코드</li>
+<li>아키텍처를 설명하는 Notion 문서</li>
+<li>관련 풀 리퀘스트</li>
+<li>해당 컴포넌트의 최적화를 논의한 Slack 대화</li>
+<li>추가 정보를 가져올 수 있는 링크</li>
+</ul>
+<p>발표 수치는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th>조건</th>
+<th style="text-align: right;">비용</th>
+<th style="text-align: right;">시간</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>컨텍스트 엔진 사용</td>
+<td style="text-align: right;">1.29달러</td>
+<td style="text-align: right;">약 1분 30초</td>
+</tr>
+<tr>
+<td>컨텍스트 엔진 미사용</td>
+<td style="text-align: right;">최대 2.60달러</td>
+<td style="text-align: right;">3분</td>
+</tr>
+</tbody>
+</table>
+<p>발표자는 이를 사실상 50% 비용 감소라고 표현했다. 단일 세션 외의 반복 측정과 결과 품질 비교는 제시되지 않았다.</p>
+<h3>3. 코드 리뷰 저하 원인 추적 사례</h3>
+<p>발표자에 따르면 동료 Richie가 작업하던 코드 리뷰 제품에서 찾아내는 이슈 수가 줄어들었다. Unblocked는 원인을 Opus 4.6에서 Opus 4.8로 바꾼 것과 연결했다고 한다.</p>
+<p>이어 시스템이 수정 PR을 만들고, 회귀를 일으킨 이전 PR과 관련 Slack 대화의 데이터를 설명에 반영했다고 발표자는 주장했다. 모델 전환이 실제 원인이었는지와 수정 후 성능은 제공 자료에서 확인되지 않는다.</p>
+<h3>4. 의미 검색과 구조화 조회</h3>
+<p>발표자는 PR, 리뷰, 댓글, 이슈, 티켓, 문서, 대화가 의미적으로 검색 가능하면서 동시에 구조를 가진다고 설명했다.</p>
+<p>RAG가 처리하기 좋다고 제시된 질문:</p>
+<ul>
+<li>관련 코드 찾기</li>
+<li>코드를 바꾼 PR 찾기</li>
+<li>해당 주제를 논의한 Slack 대화 찾기</li>
+</ul>
+<p>별도의 구조화 쿼리가 필요하다고 제시된 질문:</p>
+<ul>
+<li>지난주 내가 병합한 PR</li>
+<li>결제를 가장 많이 리뷰한 사람</li>
+<li>현재 열려 있는 PR</li>
+<li>1월 1일 이후의 주간 비율 차트</li>
+</ul>
+<p>후자의 질문에는 시간, 사람, 상태, 필터, 집계가 포함된다. 발표자는 벡터 저장소에 이런 정보가 조회 가능한 방식으로 인코딩되지 않았다면 쿼리 엔진이 필요하다고 설명했다.</p>
+<h3>5. Document Query Engine의 구축 순서</h3>
+<p>발표에서 사용한 오픈소스 저장소의 이름은 <strong>Document Query Engine</strong>이다.</p>
+<h4>자동 스키마 탐색</h4>
+<p>발표에서는 스키마가 고정되지 않은 MongoDB를 예로 들었다. 여러 문서를 표본으로 뽑아 필드 구조를 추론하며, 가능한 값의 종류인 enum을 추론하는 부분도 언급했다. 발견된 스키마와 인덱스는 이후 쿼리 생성과 성능 개선에 사용된다.</p>
+<p>발표자는 비결정적으로 보이는 작업이라고 해서 항상 LLM을 사용할 필요는 없으며, 전통적인 절차형 방식으로도 상당 부분 처리할 수 있다고 강조했다.</p>
+<h4>식별자 해소</h4>
+<p>GitHub 등 각 시스템의 사용자 이름이 실제 사람 이름과 다를 수 있다. 발표에서는 유사 문자열 매칭 같은 절차형 방법을 먼저 사용하고, 필요한 경우 이름 목록을 LLM에 전달해 동률 판정자로 쓰는 방식을 설명했다.</p>
+<h4>쿼리 합성</h4>
+<p>LLM에는 다음 정보가 전달된다.</p>
+<ul>
+<li>동적으로 발견한 스키마</li>
+<li>현재 날짜와 시각</li>
+<li>질문한 사용자에 관한 정보</li>
+</ul>
+<p>이를 통해 “Peter의 PR”뿐 아니라 “내 PR”과 같은 표현도 구조화 쿼리로 바꾸는 것을 목표로 한다.</p>
+<h3>6. 쿼리 검증과 권한 통제</h3>
+<p>발표자는 검증을 가장 중요한 단계라고 말했다. LLM이 만든 쿼리는 신뢰할 수 없는 입력으로 다뤄야 한다.</p>
+<p>제시된 위험은 다음과 같다.</p>
+<ul>
+<li>데이터베이스 서버에서 원시 JavaScript를 실행할 수 있는 함수 연산자</li>
+<li>LLM에 보여서는 안 되는 숨김 필드</li>
+<li>테넌트 식별자 같은 메타데이터 필드</li>
+<li>다른 테넌트의 데이터에 접근하는 쿼리</li>
+</ul>
+<p>발표자는 이런 필드를 LLM이 직접 다루지 못하게 하고, 시스템이 뒤에서 필요한 테넌트 조건을 주입하는 방식을 제안했다.</p>
+<h3>7. 오류 재시도와 전문 검색</h3>
+<p>데모에서는 제목에 authentication이 들어간 PR을 찾으려는 쿼리가 정규표현식을 사용하려 했다. 검증기는 정규표현식이 허용되지 않는다며 쿼리를 거부했다.</p>
+<p>오류를 LLM에 되돌려 보내자 몇 차례 시도 후 허용된 <code>match</code> 방식으로 수정했다. 그러나 이는 제목 전체의 정확 일치여서 원하는 PR을 찾지 못했다. 발표자는 전문 검색을 추가해 관련 단어가 포함된 항목을 찾도록 보완했다.</p>
+<p>이 과정은 다음 세 문제가 서로 다름을 보여준다.</p>
+<ol>
+<li>쿼리가 문법적으로 만들어졌는가</li>
+<li>쿼리가 안전한가</li>
+<li>쿼리가 사용자의 의도에 맞는 결과를 찾는가</li>
+</ol>
+<h3>8. 컨텍스트 엔진 시뮬레이터</h3>
+<p>발표자는 Unblocked를 바로 연결하기 어려운 환경을 위해 로컬에서 사용할 수 있는 오픈소스 프로젝트가 있다고 말했다. 설명한 구상은 다음과 같다.</p>
+<ol>
+<li>작업별 컨텍스트 묶음을 만든다.</li>
+<li>같은 작업을 컨텍스트가 있는 조건과 없는 조건으로 실행한다.</li>
+<li>두 결과를 A/B 비교한다.</li>
+</ol>
+<p>제공된 META에는 Document Query Engine의 GitHub 링크가 있지만, 시뮬레이터의 정확한 저장소 URL은 없다. 따라서 프로젝트의 현재 구현 상태와 실제 결과는 이 자료만으로 확인할 수 없다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>채널: Tech Bridge · 업로더: Tech Bridge · 원제: RAG만으로는 부족합니다: 토큰 비용을 절반으로 줄이는 관계형 컨텍스트 엔진 · https://www.youtube.com/watch?v=djKIU-30YVc · 전사: 제공된 영문 SOURCE_TRANSCRIPT, 생성 방식 미상<br>
+화자 후보 Peter Werry와 소속 Getunblocked는 META 설명 및 provenance에 근거한다. 다만 provenance.creator는 비어 있고, provenance.note는 원본 영상 링크가 확인되지 않아 화자 이름과 SNS를 기준으로 출처를 추정했다고 밝힌다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>여기서는 20분밖에 없기 때문에 조금 빠르게 진행하겠습니다. 저는 Unblocked의 Peter입니다.</p>
+<p>Unblocked에서는 컨텍스트 엔진(context engine)을 만듭니다. 몇 가지를 보여드리겠습니다. 이 발표는 두 부분으로 나뉩니다. 먼저 컨텍스트 엔진이 무엇이고 조직에 어떻게 가치를 더할 수 있는지 보여드린 다음, 컨텍스트 엔진의 한 구성 요소를 만들어 보겠습니다. 이후에 직접 사용해 볼 수 있는 오픈소스 프로젝트도 몇 가지 보여드리겠습니다.</p>
+<p>순서는 이렇습니다. 컨텍스트 엔진이란 무엇인가? 어떻게 가치를 제공하는가? 그리고 직접 만들어 보겠습니다. AI 에이전트가 등장하기 전, 아마 몇 년 전으로 잠시 돌아가 보죠. 당시에는 여러분이 컨텍스트 계층(context layer)이었습니다.</p>
+<p>여러분이 어떤 조직에 새로 입사해서 무슨 일이 일어나고 있는지 파악하려 한다고 상상해 보세요. 보통은 업무를 수행하는 데 필요한 정보를 찾기 위해 수많은 코드를 살펴보고 문서 시스템을 뒤져야 합니다. 여기에 조직 안에서 시간이 지나며 쌓인 모든 공유된 이력도 있습니다. 인시던트를 처리하면서 생긴 기록과 그에 따른 경험의 흔적까지 말이죠.</p>
+<p>컨텍스트 엔진은 그런 조직의 지식 전체를 가져옵니다. 흩어진 컨텍스트가 컨텍스트 엔진으로 들어가고, 반대편에서는 근거가 확보된 컨텍스트(grounded context)가 나옵니다. 이는 컨텍스트가 서로 연관되어 있다는 뜻입니다. 또한 의도에 맞고(intent-specific), 개인화되어 있으며, 권한을 인식합니다(permissions-aware).</p>
+<p>제가 무슨 뜻인지 정확히 보여드리겠습니다. Claude에 들어간다고 해보죠. 제가 진행했던 흥미로운 세션 몇 가지를 보여드리겠습니다. 여기서 Claude에게, 컨텍스트 엔진을 연결하지 않은 상태로, Source Mark 엔진이라는 저희 계층의 구성 요소를 최적화할 계획을 세워 달라고 요청했습니다.</p>
+<p>Claude가 새 작업을 시작할 때 무엇을 하는지는 다들 익숙하실 겁니다. 새로 입사한 직원과 같습니다. 여러분의 코드베이스나 조직에 대해 아무것도 이해하지 못합니다. 그래서 가장 먼저 하는 일은 코드베이스를 grep으로 여기저기 검색하며 무슨 일이 일어나고 있는지 파악하는 것입니다. 여기서 그 모습을 볼 수 있습니다. 결국에는 파악해 내거나, 적어도 파악했다고 자신 있게 추정하고 저에게 권고안을 제시합니다.</p>
+<p>이제 백엔드에 컨텍스트 엔진을 연결하면 어떤 모습인지 보여드리겠습니다.</p>
+<p>Claude는 Unblocked 컨텍스트 엔진을 호출하고, Unblocked는 이 작업에 맞춰 매우 포괄적이면서도 작업에 특화된 컨텍스트 번들(context bundle)을 제공합니다.</p>
+<p>소스 코드뿐만 아니라 아키텍처를 설명하는 Notion 문서, 풀 리퀘스트, 그리고 이 특정 구성 요소의 최적화에 관한 Slack 대화까지 참조하고 있는 것을 볼 수 있습니다.</p>
+<p>그 결과 모든 링크가 포함된 매우 밀도 높은 컨텍스트 번들을 얻게 됩니다. Claude가 더 많은 정보를 가져오고 싶을 때 다시 찾아갈 수 있는 훌륭한 출발점이 모두 마련되어 있는 것입니다.</p>
+<p>정말 흥미로운 점은 이것입니다. 이 작업에 1.29달러를 썼고 약 1분 30초가 걸렸습니다. 컨텍스트 엔진을 사용했을 때의 결과입니다. 사용하지 않으면 최대 2.60달러를 쓰고 3분이 걸립니다. 즉 비용이 본질적으로 50% 줄어든다는 뜻인데, 상당히 놀라운 결과입니다.</p>
+<p>이제 또 다른 흥미로운 데모를 보여드리겠습니다. 제 동료가 지난주에 Unblocked와 진행한 세션입니다. 저희에게는 코드 리뷰 제품도 있고, Richie가 그 제품을 담당하고 있습니다. 그는 코드 리뷰 제품이 발견해 내는 이슈의 수가 줄어들기 시작했다는 사실을 알아냈습니다. Richie가 Unblocked에 물었고, Unblocked는 관련 정보를 가져와 매우 빠르게 유력한 원인으로 범위를 좁혔습니다. Opus 4.6에서 Opus 4.8로 전환했는데, 내부의 동작 특성 때문에 해당 이슈들이 모두 줄어든 것이었습니다.</p>
+<p>그는 Unblocked에 수정을 요청했습니다. Unblocked는 내부적으로 PR을 생성할 수 있었고, 필요한 모든 컨텍스트를 갖고 무엇을 해야 하는지도 알고 있었습니다.</p>
+<p>정말 멋진 부분은 이렇게 설명을 작성했다는 점인데, 놀라울 정도입니다. 처음에 회귀를 일으킨 PR을 이해하고 있었습니다. 그런 다음 이 문제를 논의하던 Slack 대화를 찾아 수정에 참고할 데이터를 가져왔습니다. 정말 대단합니다.</p>
+<p>다시 돌아가겠습니다. 앗! 여기서 Keynote 프레젠테이션을 잃어버린 것 같네요. 어디 보자. 됐습니다.</p>
+<p>에이전트에도 같은 문제가 있죠? 비용입니다. 아, 죄송합니다. 잘못된 Keynote네요. 됐습니다.</p>
+<p>오늘은 시간이 상당히 부족하므로 이제 바로 구현 부분으로 들어가겠습니다. 간단히 요약하자면, 컨텍스트는 곳곳에 흩어져 있습니다. PR, 리뷰, 댓글, 이슈, 티켓, 문서, 대화에 컨텍스트가 있습니다. 이 모든 것은 의미적으로 질의할 수 있지만, 구조화되어 있기도 합니다.</p>
+<p>RAG는 콘텐츠 부분을 훌륭하게 처리합니다. 콘텐츠에 관한 질문, 예를 들어 코드를 찾아라, 코드를 변경한 PR을 찾아라, 또는 해당 내용을 논의하는 Slack 스레드를 찾아라 같은 요청을 처리할 수 있습니다. 여기에 에이전트 루프(agent loop)를 감싸면 정말 멀리까지 갈 수 있습니다. 에이전트 루프에 파일 검색 도구를 제공하면 매우 강력합니다.</p>
+<p>하지만 “지난주에 내가 병합한 PR”, “누가 payments를 가장 많이 리뷰했나?”, “열려 있는 PR”과 같은 다른 유형의 구조적 질문은 처리하지 못합니다.</p>
+<p>이런 것은 쿼리이지 의미 검색이 아닙니다. 여기서 Richie의 예시로 돌아가고 싶습니다. 그는 시간적 요소가 있기 때문에 Unblocked와의 대화를 쿼리 기반 질문으로 시작했습니다. “1월 1일부터 주별 ratio 차트를 보여줄 수 있어?”</p>
+<p>이를 수행하려면 벡터 스토어에서 정보를 가져올 수 없습니다. 해당 정보가 벡터 스토어에 인코딩되어 있는 것이 아니기 때문입니다. 일종의 쿼리 엔진을 통해 처리해야 합니다.</p>
+<p>검색(retrieval)에는 두 부분이 있습니다. 이런 의미 기반 질문을 처리할 수 있는 의미 검색(semantic retrieval)이 있고, 오늘은 구조화된 부분을 다루겠습니다. 자연어 쿼리를 구조화된 쿼리로 바꿔 보겠습니다.</p>
+<p>쿼리를 생성하는 것은 사실 쉬운 부분입니다. 어려운 부분은 그 주변을 받치는 기반 구조(scaffolding)입니다. 스키마를 이해해야 LLM에 전달하고 제약이 분명한 쿼리를 생성하도록 할 수 있습니다. 또한 신원을 매핑할 수 있어야 합니다. “Rashim이 작성한 열린 PR”이라고 물으면 Rashim이 누구인지 알 수 없습니다. GitHub에서 그의 신원이 완전히 다를 수 있기 때문입니다. 이를 어떤 방식으로든 매핑할 수 있어야 합니다.</p>
+<p>LLM에서 쿼리를 받아 오면 신뢰할 수 없습니다. 위험한 연산이 포함되어 있거나 테넌트 경계를 넘을 수 있으므로, 쿼리가 올바르고 안전한지 검증할 방법이 필요합니다.</p>
+<p>마지막으로 검증이 끝난 뒤에도 오류가 있을 수 있습니다. 실제로 데이터베이스에 쿼리를 실행할 때도 오류가 발생할 수 있습니다. 그런 상황에 빠지면 LLM이 스스로 수정을 시도하게 할 수 있습니다.</p>
+<p>이것이 우리가 목표로 하는 것입니다. “machine이 작성한 열린 PR”과 같이 말하면 이런 종류의 쿼리를 결과로 얻을 수 있어야 합니다.</p>
+<p>잠시 보시죠. 이것이 우리가 기반으로 구현할 오픈소스 저장소이고, 어떤 모습인지 바로 살펴보겠습니다. 이 저장소의 이름은 Document Query Engine입니다. 처음 부팅했을 때 어떤 모습인지 보여드리겠습니다.</p>
+<p>“Ground Zero의 Peter가 작성한 PR”이라고 말할 수 있습니다. 사실 지금은 실행 중이 아니니 돌아가겠습니다. 먼저 실행해 보죠.</p>
+<p>이제 질문을 할 수 있습니다. 시작할 때는 아무것도 연결되어 있지 않기 때문에 아무 결과도 나오지 않습니다. 이제 이 시스템을 단계적으로 구축해 보겠습니다.</p>
+<p>첫 번째로 이야기할 것은 자동 스키마 탐색(automatic schema discovery)입니다. 이는 완전히 동적입니다. MongoDB는 스키마리스(schemaless)입니다. 모든 데이터베이스가 스키마리스인 것은 아니지만, 같은 원칙을 적용할 수 있습니다. 런타임에 스키마를 동적으로 탐색할 수 있습니다.</p>
+<p>이 기법은 문서 저장소에서 많은 문서를 샘플링한 다음, 그로부터 스키마를 도출하는 방식입니다. 여기서 그중 까다로운 부분 하나인 열거형(enum) 추론을 보여드리겠습니다.</p>
+<p>결과적으로 LLM을 만능 망치(Thor’s hammer)처럼 사용할 수 있고, 꽤 잘 작동합니다. 하지만 전통적인 절차적 방법만으로도 정말 많은 것을 해낼 수 있습니다. 비결정적으로 보이는 작업을 수행하기 위해 항상 LLM으로 돌아갈 필요는 없습니다. 실제로 이는 상당히 결정적인 작업입니다.</p>
+<p>이제 스키마를 탐색했으니 데모에서 어떤 모습인지 보여드리겠습니다. 먼저 다음 단계로 올라간 다음 실행해야 합니다.</p>
+<p>이제 GitHub 컬렉션에서 스키마를 탐색했습니다. 여기에는 풀 리퀘스트만 들어 있습니다. 스키마뿐만 아니라 쿼리 성능을 향상하는 데 도움이 되는 인덱스도 포함되어 있습니다.</p>
+<p>다음 단계는 신원 확인(identity resolution)입니다. 앞서 말한 매핑, 즉 사용자를 실제 신원에 매핑하는 작업입니다. 여기에도 간단한 절차적 트릭을 사용할 수 있습니다. Unblocked에서도 대략 이런 방식으로 처리합니다.</p>
+<p>서로 다른 시스템의 사용자 이름이나 신원을 가져와 서로 매핑할 때 이런 종류의 퍼지 매칭(fuzzy matching)을 사용할 수 있습니다. 마지막으로 필요하다면 이름 목록을 LLM에 전달해 동률을 가르는 역할을 하게 할 수도 있습니다.</p>
+<p>멋진 결과를 보여드리기 전에 거쳐야 할 마지막 단계는 합성(synthesis)입니다.</p>
+<p>대략적으로 말하면 이 부분이 사실 가장 쉽습니다. 앞에서 동적으로 확인한 스키마와 현재 날짜 및 시간, 그리고 질문을 하는 사용자에 관한 정보를 가져옵니다. 그러면 “Peter의 PR”뿐만 아니라 “내 PR”과 같은 질문도 쉽게 해석할 수 있습니다. 그런 다음 이를 LLM에 전달해 쿼리를 합성해 달라고 요청합니다. 결과는 이런 형태가 됩니다.</p>
+<p>이 쿼리로 가보겠습니다. 이제 엔진으로 돌아가 다시 실행해 보겠습니다. 문서를 가져오고 이 쿼리를 생성할 것입니다.</p>
+<p>다음 단계는 앞서 말한 검증(validation)입니다. 실제로 가장 중요한 부분입니다.</p>
+<p>쿼리에는 예를 들어 함수 연산자(function operator)처럼 매우 위험한 연산자가 포함될 수 있습니다. 이 연산자는 데이터베이스 서버에서 원시 JavaScript를 실행합니다. 이는 분명 바람직하지 않습니다.</p>
+<p>여기서 하고 싶은 다른 작업도 있을 수 있습니다. 예를 들어 LLM에 노출하고 싶지 않은 숨겨진 필드가 있을 수 있고, LLM이 그런 필드를 추론하거나 실행하는 것도 원하지 않을 수 있습니다. 테넌트 ID 같은 메타데이터 필드도 있으며, 각 쿼리를 특정 테넌트로 격리하고 싶을 수 있습니다.</p>
+<p>LLM이 해당 필드들과 전혀 상호작용하지 않도록 하고, 백그라운드에서 이를 제한하는 편이 낫습니다. 그런 다음 그 필드들을 내부에 주입할 수 있습니다.</p>
+<p>이런 모습입니다. 다시 한번, 그 효과를 빠르게 보여드리겠습니다. 검증 단계로 가보죠. 이런, 다시 실행해 보겠습니다. 이제 다음과 같이 질문하면…</p>
+<p>제목에 authentication이 포함된 PR들. 아마 일종의 정규 표현식(regular expression)을 사용하게 될 겁니다. 자, 됐습니다. 검증 엔진이 이렇게 말했죠. “죄송하지만 정규 표현식은 허용되지 않습니다. 차단됩니다.” 이제 그렇게 할 수 없습니다.</p>
+<p>검증은 멋지지만, 그걸로 무엇을 할 수 있을까요? 오류가 발생했습니다. 대신 그 오류를 LLM에 다시 전달하고, LLM이 스스로 수정하도록 할 수 있습니다.</p>
+<p>기술적인 관점에서 보면 그게 전부입니다. 일종의 최대 재시도 횟수를 둔 루프일 뿐입니다. 다시 시도해 보겠습니다. 재시도 횟수를 늘리고 실행하죠.</p>
+<p>이제 같은 쿼리를 다시 시도해 보겠습니다. 이런, 잘못된 쿼리네요. 이걸로 해보죠.</p>
+<p>보시다시피 실제로 몇 번 시도했지만 결국에는 성공했습니다. 하지만 <code>match</code>를 사용하도록 제한되었고, 안타깝게도 이건 정확한 제목 일치입니다. 정확히 그 제목을 가진 PR이 없으므로 한 가지가 더 필요합니다. 바로 전문 검색(full-text search)입니다.</p>
+<p>이제 엔진에 전문 검색을 추가하면, 우리가 얻는 결과가 다음과 비슷해지기를 기대할 수 있습니다. 한 번 더 시도해 보죠.</p>
+<p>좋습니다. 처음부터 끝까지 해냈습니다. 이 프로젝트는 모두 오픈 소스이므로, 구현 방식을 살펴보고 직접 사용해 볼 수 있습니다.</p>
+<p>이것이 우리가 만든 것입니다. RAG의 다른 절반, 즉 구조 기반 데이터와 관련된 모든 것을 효과적으로 처리할 수 있는 무언가입니다.</p>
+<p>필터와 집계를 사용할 수 있습니다. 시간 범위도 적용되고, 스스로 수정하기도 합니다. 하지만 정말 멋진 점은 이것이 채팅 에이전트도 구동한다는 것입니다. 여기에서 다음과 같이 말해 보겠습니다. “지난주에 인증과 관련해 어떤 작업을 진행했나요?”</p>
+<p>그러면 이 시스템이 무엇을 하고 있는지, 생성한 모든 쿼리와 함께 정확히 보여주는 전체 내용이 나타납니다. 이제 데이터가 있으므로, 백그라운드에서 그 데이터를 추론하고 있습니다. 자, 됐습니다. 아주 멋지죠.</p>
+<p>이렇게 구조화되고 쿼리 가능한 컨텍스트(context)를 에이전트와 사람이 사용할 수 있게 됩니다. 이제 마지막으로 한 가지가 남았습니다. 설명에서 컨텍스트 엔진 시뮬레이터(context engine simulator)를 제공한다고 했던 것을 보셨을 겁니다. 환경상의 제약 때문에 당장 Unblocked를 연결하고 싶지 않다면, 이 모든 작업을 로컬에서 직접 수행할 수 있게 해주는 오픈 소스 프로젝트가 있습니다.</p>
+<p>아이디어는 작업별로 컨텍스트 번들(context bundle)을 생성한 다음, 그 컨텍스트 번들을 사용해 동일한 작업에 대한 A/B 테스트를 실행하고, 에이전트가 필요한 모든 컨텍스트를 손쉽게 활용할 때의 이점을 보여주는 것입니다. 원하신다면 이것이 해당 저장소(repo)입니다.</p>
+</details>
+</body></html>

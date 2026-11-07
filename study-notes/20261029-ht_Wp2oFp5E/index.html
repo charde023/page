@@ -1,0 +1,384 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>GPT 6.1 Terra, 빠르고 싼데 왜 평가는 갈릴까?</title>
+<meta name="description" content="GPT 6.1 Terra의 속도, 수정 능력, 작업 완수, 재시도 비용을 분리해 엇갈린 평가의 원인을 살펴본다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>GPT 6.1 Terra, 빠르고 싼데 왜 평가는 갈릴까?</h1>
+<div class="meta">업로드 2026-10-29 · 5.9분 · <a href="https://youtu.be/ht_Wp2oFp5E" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 7분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상은 GPT 6.1 Terra라는 모델을 처음 사용해 본 리뷰다. 리뷰어가 강하게 느낀 장점은 <strong>첫 결과가 나오는 속도</strong>였다. 하지만 게임, 로봇 팔, Blender 관련 작업을 살펴보자 속도와 별개로 오류, 망설임, 조기 중단이 나타났다. 그래서 중심 질문은 단순히 “빠른가?”가 아니라 <strong>“원하는 일을 얼마나 적은 재지시로 끝까지 마치는가?”</strong>가 된다.</p>
+<figure data-visual-kind="map" style="margin:1.5rem 0;padding:1rem;border:1px solid #94a3b8;border-radius:12px;background:#f8fafc;color:#0f172a;overflow-wrap:anywhere;word-break:keep-all;">
+  <div style="max-width:760px;margin:0 auto;text-align:center;">
+    <div style="padding:0.9rem;border-radius:10px;background:#0f172a;color:#fff;font-weight:700;">모델을 실제 작업에 쓸 수 있는가?</div>
+    <div aria-hidden="true" style="font-size:1.5rem;line-height:1.8;">↓</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:0.75rem;text-align:left;">
+      <div style="min-width:0;padding:0.85rem;border:2px solid #2563eb;border-radius:10px;background:#eff6ff;"><strong>첫 결과 속도</strong><br>스케이트 게임 사례에서는 2분 35초라는 시간이 제시됐다.</div>
+      <div style="min-width:0;padding:0.85rem;border:2px solid #0f766e;border-radius:10px;background:#f0fdfa;"><strong>결과의 기본 품질</strong><br>리플레이 기능과 게임의 기초는 있었지만 조작 방향과 보드 앞뒤가 뒤집혀 있었다.</div>
+      <div style="min-width:0;padding:0.85rem;border:2px solid #b45309;border-radius:10px;background:#fffbeb;"><strong>수정 반응</strong><br>수정 지시 뒤 조작 방향과 움직임 효과가 좋아진 사례가 있었다.</div>
+      <div style="min-width:0;padding:0.85rem;border:2px solid #be123c;border-radius:10px;background:#fff1f2;"><strong>끝까지 완수</strong><br>로봇 팔과 일부 Blender 작업에서는 시도하다 멈추거나 요청과 다른 행동을 했다.</div>
+    </div>
+    <div aria-hidden="true" style="font-size:1.5rem;line-height:1.8;">↓</div>
+    <div style="padding:0.9rem;border:2px solid #475569;border-radius:10px;background:#fff;font-weight:700;">속도·품질·수정 횟수·완수 여부를 함께 봐야 한다.</div>
+  </div>
+  <figcaption style="margin-top:0.8rem;color:#334155;font-size:0.95rem;">전체 평가 지도: 네 가지 관찰 항목이 최종 사용 판단으로 모이는 관계를 보여준다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 가운데 네 항목은 서로 대신할 수 있는 점수가 아니라 함께 확인해야 할 조건이다. 이 그림은 수치 그래프가 아니라 영상 사례를 정리한 개념 지도다.</p>
+<h3>빠른 첫 결과와 완성된 결과는 다르다</h3>
+<p>리뷰어는 C++ 스케이트 게임을 만들도록 시켰고, 한 실행에서 2분 35초 만에 결과가 나왔다고 말했다. 결과는 단순했지만 리플레이 기능을 갖추고 있어 “좋은 결과의 기초”는 보인다고 평가했다. 다른 실행에서는 최대 노력 설정으로 7분 41초가 걸렸다고 말한다.</p>
+<p>하지만 직접 조작해 보니 A키를 눌렀을 때 반대 방향으로 움직였고, 보드의 앞부분과 뒷부분도 뒤집혀 있었다. 보행자와 상호작용할 수도 없었다. 다시 충실도를 높이고 오류를 고치라고 지시하자 조작 방향이 바로잡혔고, 기울어지는 움직임 같은 세부 효과도 나타났다.</p>
+<p>여기서 중요한 점은 <strong>첫 결과의 생성 시간</strong>과 <strong>요구사항을 만족할 때까지 걸리는 전체 과정</strong>을 분리하는 것이다. 처음 결과가 빨라도 사람이 오류를 찾고 여러 번 고쳐 달라고 해야 한다면 실제 대기 시간과 사용량은 늘어난다.</p>
+<figure data-visual-kind="process" style="margin:1.5rem 0;padding:1rem;border:1px solid #94a3b8;border-radius:12px;background:#fff;color:#0f172a;overflow-wrap:anywhere;word-break:keep-all;">
+  <div style="max-width:620px;margin:0 auto;text-align:center;">
+    <div style="padding:0.85rem;border-radius:10px;background:#e0f2fe;border:2px solid #0369a1;"><strong>1. 작업과 완료 조건을 준다</strong><br>예: 조작 방향, 보드 방향, 상호작용을 요구한다.</div>
+    <div aria-hidden="true" style="font-size:1.4rem;line-height:1.7;">↓</div>
+    <div style="padding:0.85rem;border-radius:10px;background:#dcfce7;border:2px solid #15803d;"><strong>2. 첫 결과가 빠르게 나온다</strong><br>영상의 한 게임 사례: 2분 35초.</div>
+    <div aria-hidden="true" style="font-size:1.4rem;line-height:1.7;">↓</div>
+    <div style="padding:0.85rem;border-radius:10px;background:#fef3c7;border:2px solid #b45309;"><strong>3. 사람이 직접 검사한다</strong><br>반대 조작, 뒤집힌 방향, 빠진 상호작용을 발견한다.</div>
+    <div aria-hidden="true" style="font-size:1.4rem;line-height:1.7;">↓</div>
+    <div style="padding:0.85rem;border-radius:10px;background:#f3e8ff;border:2px solid #7e22ce;"><strong>4. 수정 지시를 내린다</strong><br>일부 오류는 고쳐졌지만 재지시 시간과 사용량이 추가된다.</div>
+    <div aria-hidden="true" style="font-size:1.4rem;line-height:1.7;">↓</div>
+    <div style="padding:0.85rem;border-radius:10px;background:#ffe4e6;border:2px solid #be123c;"><strong>5. 끝까지 완수했는지 판정한다</strong><br>첫 결과가 아니라 최종 완료 조건으로 평가한다.</div>
+  </div>
+  <figcaption style="margin-top:0.8rem;color:#334155;font-size:0.95rem;">작업 평가 흐름: 생성 속도만 재지 않고 검사와 수정 뒤의 최종 완수까지 확인하는 과정이다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 진행한다. 영상이 이 절차로 정식 실험을 했다는 뜻은 아니며, 영상 속 사례를 실제 평가 절차로 재구성한 도식이다.</p>
+<h3>로봇 팔에서는 ‘할 수 있음’보다 ‘계속 시도함’이 문제였다</h3>
+<p>로봇 팔 시험에서 모델은 카메라 각도가 좋지 않다며 수정을 요청했다. 리뷰어가 사진을 확인하고 각도를 조정했지만 모델은 여전히 충분히 보이지 않는다고 했다. 이후에는 자신의 지식과 서보 모터 연결 관계가 맞지 않는 것 같다며 행동을 꺼렸다. 격려를 받은 뒤 조금 더 시도했지만 결국 시각 정보가 충분하지 않다며 멈췄다.</p>
+<p>리뷰어는 이를 모델이 다소 주저하며 일찍 포기한 사례로 해석했다. 반면 GPT-6 Astra는 같은 종류의 로봇 팔 작업을 인상적으로 완수한 적이 있다고 주장했다. 다만 두 실행의 조건이 완전히 같았는지, 외부에서 재현됐는지는 이 자료만으로 확인할 수 없다.</p>
+<p>Blender 관련 사례에서도 비슷한 긴장이 보인다. 커뮤니티에는 이 모델로 장면을 빠르게 만들었다는 한 사용자의 사례가 있었지만, 리뷰어 자신의 작업에서는 손으로 더 정교하게 모델링하라는 요청 대신 카메라 시점을 움직이고 외형을 바꾼 뒤 끝냈다고 말했다. 따라서 한 성공 사례를 모든 작업에 일반화할 수도 없고, 서로 다른 결과의 품질이 같다고 볼 수도 없다.</p>
+<h3>싸다는 평가는 재시도까지 넣어야 한다</h3>
+<p>리뷰어는 가격을 말하다가 처음에는 “백만 단위당 2달러”라고 했다가, 곧 입력 백만 단위당 1달러와 출력 백만 단위당 5달러라고 정정했다. 이 수치는 화자의 발화이며 이 자료 안에서 별도로 검증되지 않았다.</p>
+<p>또한 표시 가격이 낮다고 실제 작업 비용까지 자동으로 낮아지는 것은 아니다. 작업을 끝내지 못해 다시 지시하면 사용량과 사람의 확인 시간이 늘어날 수 있기 때문이다. 영상에서도 X와 Reddit에 빠른 화면 조작을 칭찬하는 반응과 작업을 끝내지 않는다는 불만이 함께 있다고 전한다. 한 사용자의 버그 수정 시험에서는 생각하는 수준을 낮추자 점수가 크게 떨어졌다고 하지만, 구체적인 평가 조건과 점수는 제시되지 않았다.</p>
+<div style="overflow-x:auto;margin:1.5rem 0;border:1px solid #94a3b8;border-radius:12px;" role="region" aria-label="평가 기준 비교표. 좁은 화면에서는 좌우로 이동할 수 있습니다." tabindex="0">
+<figure data-visual-kind="comparison" style="margin:0;min-width:720px;background:#fff;color:#0f172a;">
+<table style="width:100%;border-collapse:collapse;table-layout:fixed;">
+<thead>
+<tr style="background:#0f172a;color:#fff;">
+<th style="padding:0.75rem;border:1px solid #64748b;">평가 항목</th>
+<th style="padding:0.75rem;border:1px solid #64748b;">영상의 긍정 사례</th>
+<th style="padding:0.75rem;border:1px solid #64748b;">영상의 한계 사례</th>
+<th style="padding:0.75rem;border:1px solid #64748b;">실제로 확인할 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;"><strong>속도</strong></td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">게임 첫 결과가 빠르게 생성됨</td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">빠른 결과에도 오류가 남음</td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">첫 결과 시간과 최종 완료 시간을 분리</td>
+</tr>
+<tr style="background:#f8fafc;">
+<td style="padding:0.75rem;border:1px solid #cbd5e1;"><strong>수정 능력</strong></td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">조작 방향과 움직임이 개선됨</td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">사람의 검사와 재지시가 필요함</td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">수정 횟수와 수정 뒤 남은 오류</td>
+</tr>
+<tr>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;"><strong>완수</strong></td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">단순한 게임의 기초를 만듦</td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">로봇 팔에서 조기에 멈춤</td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">재지시 없이 완료 조건을 충족하는 비율</td>
+</tr>
+<tr style="background:#f8fafc;">
+<td style="padding:0.75rem;border:1px solid #cbd5e1;"><strong>비용</strong></td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">화자는 표시 가격이 저렴한 편이라고 평가</td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">재시도와 사람의 확인 시간이 추가될 수 있음</td>
+<td style="padding:0.75rem;border:1px solid #cbd5e1;">토큰뿐 아니라 재시도와 대기까지 포함</td>
+</tr>
+</tbody>
+</table>
+<figcaption style="padding:0.8rem;color:#334155;font-size:0.95rem;">속도·수정·완수·비용의 차이: 영상에서 관찰된 장점과 한계를 같은 기준 위에 놓은 질적 비교다.</figcaption>
+</figure>
+</div>
+
+<p><strong>읽는 법:</strong> 행마다 왼쪽에서 오른쪽으로 읽는다. 좁은 화면에서는 표 영역을 좌우로 이동한다. 수치 점수를 매긴 표가 아니라, 무엇을 따로 측정해야 하는지 보여주는 비교표다.</p>
+<p>리뷰어의 최종 태도는 부정적이지 않다. 그는 이 모델에 분명한 강점이 있고 자신은 마음에 든다고 말했다. 다만 이는 출시 직후의 첫인상과 제한된 사례에 근거한 평가다. <strong>[원문] 빠른 생성과 일부 수정 성공이 관찰됐다. [해석] 속도는 가치가 있지만 완수율과 재시도 비용이 함께 측정돼야 한다. [경계] 설정, 과제, 비교 조건, 커뮤니티 사례의 원문 링크가 충분히 제시되지 않아 일반화할 수 없다.</strong></p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>빠른 첫 결과는 작업을 끝까지 완수했다는 뜻이 아니다.</li>
+<li>모델은 수정 지시로 좋아질 수 있지만, 재시도 횟수와 사람의 검사 시간도 비용이다.</li>
+<li>평가는 속도, 최종 완수, 설정, 실제 작업 종류를 함께 봐야 한다.</li>
+<li>이 영상은 제한된 첫 사용기이며 가격과 커뮤니티 주장은 독립적으로 검증되지 않았다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>GPT 6.1 Terra처럼 빠른 모델을 평가할 때 왜 속도와 표시 가격만 보지 않고 작업 완수와 재시도 비용까지 확인해야 할까?</strong></p>
+</blockquote>
+<ul>
+<li>게임, 로봇 팔, Blender 사례는 각각 무엇을 보여주는가?</li>
+<li>설정과 작업 종류가 달라지면 왜 평가도 달라질 수 있는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>로봇 팔 앞에서 모델이 카메라 각도를 바꿔 달라고 한다. 사용자가 각도를 조정하고 다시 시도하게 하지만, 모델은 시야와 서보 연결을 문제 삼으며 조금 움직이다 결국 멈춘다.</p>
+<p><code>"결과는 빨리 시작했지만 불확실성을 만나 주저한다"</code> <strong>문제</strong><br>
+→ <code>"사용자가 시야를 조정하고 재차 시도하도록 한다"</code> <strong>작동 방식</strong><br>
+→ <code>"일부 진행 뒤 작업을 끝내지 못하고 중단한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">빠른 출발을 하는 배달 기사</div>
+<p>모델의 첫 결과 속도는 기사가 창고에서 빨리 출발하는 것과 비슷하다. 하지만 주소가 틀렸거나 물건이 빠져 다시 돌아오면, 출발 속도가 빨라도 배송 완료는 늦어진다. 수정 지시는 빠진 물건을 확인해 다시 보내는 과정에 대응한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> AI 작업은 배송처럼 완료 상태가 항상 명확하지 않다. 코드 품질, 화면 조작, 로봇 제어처럼 작업마다 오류 위험과 완료 조건이 다르며 설정에 따라서도 결과가 달라질 수 있다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>첫 결과 속도</strong></td>
+<td>처음 무언가가 나올 때까지 걸린 시간</td>
+<td>첫 산출물 생성 지연 시간</td>
+<td>첫 결과가 빠르면 전체 작업도 끝났다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>작업 완수</strong></td>
+<td>요구한 일을 끝까지 해냄</td>
+<td>사전에 정한 완료 조건의 충족</td>
+<td>일부 시도나 그럴듯한 화면을 완료로 간주하는 것</td>
+</tr>
+<tr>
+<td><strong>수정 반복</strong></td>
+<td>다시 고쳐 달라고 하는 과정</td>
+<td>재지시와 재시도로 이루어진 수정 루프</td>
+<td>수정이 가능하면 재시도 비용은 무시해도 된다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>설정 민감도</strong></td>
+<td>생각하는 수준이나 실행 모드에 따라 결과가 달라짐</td>
+<td>추론 수준·노력 수준·속도 모드에 따른 성능 변화</td>
+<td>한 설정의 결과를 모든 설정에 적용하는 것</td>
+</tr>
+<tr>
+<td><strong>실효 비용</strong></td>
+<td>실제로 일을 끝내는 데 든 전체 자원</td>
+<td>토큰 사용량에 재시도·대기·검수 부담을 함께 고려한 비용</td>
+<td>표시된 토큰 가격만으로 실제 비용을 단정하는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>같은 모델을 두고 “매우 좋다”와 “쉽게 포기한다”는 평가가 함께 나오는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>평가자가 본 작업과 기준이 다르기 때문이다. 첫 결과 속도나 화면 조작을 중시하면 장점이 크게 보이지만, 로봇 팔처럼 불확실한 상황에서 끝까지 수행하는지를 중시하면 조기 중단이 큰 약점이 된다. 설정과 재지시 횟수도 결과를 바꿀 수 있다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>‘빠른 모델’, ‘싼 모델’, ‘일을 끝내는 모델’은 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>빠른 모델은 첫 결과가 빨리 나오고, 싼 모델은 표시된 사용 단가가 낮다. 일을 끝내는 모델은 정한 완료 조건을 적은 재지시로 충족한다. 세 조건은 함께 나타날 수 있지만 서로 같은 뜻은 아니다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 AI 모델을 실제 업무에 도입할지 판단한다면 무엇을 먼저 기록해야 할까?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 작업별 완료 조건과 설정을 고정한다. 그다음 첫 결과 시간뿐 아니라 재지시 없이 완료했는지, 수정이 몇 번 필요했는지, 마지막에 어떤 오류가 남았는지를 기록한다. 도입 판단은 홍보된 속도보다 실제 업무의 완수율과 검수 부담을 기준으로 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 속도는 출발점이지 완료 판정이 아니다</h3>
+<ul>
+<li><strong>[원문]</strong> 스케이트 게임의 한 결과는 2분 35초 만에 나왔고, 수정 지시 뒤 조작과 움직임이 좋아졌다. 반면 로봇 팔 작업은 진행하다 멈췄다.</li>
+<li><strong>[해석]</strong> 모델 평가는 첫 결과 시간과 최종 완료를 분리해야 한다. 빠른 초안이 검수와 수정 시간을 줄여 주는지는 별도의 문제다.</li>
+<li><strong>[경계]</strong> 게임과 로봇 팔은 작업 종류와 위험이 다르다. 이 사례만으로 전체 성능이나 다른 사용자의 완수율을 단정할 수 없다.</li>
+</ul>
+<h3>2. 낮은 표시 가격이 낮은 실효 비용을 보장하지 않는다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 입력 백만 단위당 1달러, 출력 백만 단위당 5달러라고 정정하며 저렴한 편이라고 평가했다. 동시에 재시도 횟수와 사용량에 따라 실제 비용이 달라질 수 있다고 말했다.</li>
+<li><strong>[해석]</strong> 비용은 토큰 단가뿐 아니라 재시도, 검수, 사용자 대기까지 포함해 판단해야 한다.</li>
+<li><strong>[경계]</strong> 가격은 화자의 발화일 뿐 이 자료에서 독립 검증되지 않았다. 작업별 토큰 사용량과 재시도 횟수도 제시되지 않아 실제 비용 비교는 할 수 없다.</li>
+</ul>
+<h3>3. 첫 사용기의 숫자와 조건에는 해소되지 않은 충돌과 모호함이 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 리뷰어는 출시 후 “4시간 또는 6시간”이라고 말했고, fast와 ultra 모드를 언급했다. 이후 2분 35초, 최대 노력 설정의 7분 41초, medium과 fast mode도 언급했다.</li>
+<li><strong>[해석]</strong> 설정별 결과를 비교하려면 각 시간과 결과가 어느 실행 조건에 대응하는지 먼저 고정해야 한다.</li>
+<li><strong>[경계]</strong></li>
+<li>출시 후 경과 시간은 <strong>4시간 또는 6시간</strong>으로 갈려 하나로 확정할 수 없다.</li>
+<li><strong>2분 35초</strong>는 뒤에서 <strong>2분 30초 정도</strong>로 둥글려 표현된다. 근사 표현일 수 있지만 정확한 기록은 2분 35초다.</li>
+<li>fast와 ultra를 모두 시험했다고 말하지만 <strong>2분 35초가 어느 모드의 결과인지 명확하지 않다</strong>.</li>
+<li><strong>7분 41초</strong> 결과는 최대 노력 설정이며 fast mode가 아니라고 했지만, 앞의 실행과 어떤 조건이 달랐는지 전부 제시되지 않았다.</li>
+<li>medium을 기본값이라고 말한 직후 fast mode라고도 말한다. 서로 다른 설정 축일 수 있으나 자료에서 관계를 설명하지 않는다.</li>
+<li>가격은 처음 <strong>백만 단위당 2달러</strong>라고 말했다가 <strong>입력 1달러·출력 5달러</strong>로 즉시 정정했다.</li>
+<li>비교 대상으로 “GPT-6 또는 6.1 모델”이라고 모호하게 말한 부분이 있어 정확한 모델을 특정할 수 없다.</li>
+<li>X·Reddit 반응과 Blender 사용 사례의 원문 링크가 없어 표본과 조건을 확인할 수 없다.</li>
+<li>META의 provenance.note는 출처가 화자 이름과 SNS를 기준으로 한 추정이라고 적지만, creator·affiliation 후보 이름과 원본 링크는 실제로 비어 있다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 게임이 빠르게 생성됐어도 직접 조작하기 전에는 반대 방향 입력과 뒤집힌 보드를 알 수 없었다.</li>
+<li><strong>통찰:</strong> 학습자의 빠른 답도 이해의 증거가 되지 않는다. 설명, 오류 수정, 새 사례 적용까지 관찰해야 한다.</li>
+<li><strong>질문/행동:</strong> “정답을 말했는가?” 대신 “틀린 조건을 찾아 자기 말로 고칠 수 있는가?”를 확인한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 낮은 단가와 빠른 처리도 재작업과 검수 부담이 커지면 실제 가치가 줄어든다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용한다면, 이는 검증 전 가상 적용이다. 자동화의 처리 속도보다 예외를 포함한 무재작업 완료율을 봐야 한다.</li>
+<li><strong>질문/행동:</strong> 특정 업무 하나에서 재작업 없이 완료된 비율을 측정할 수 있는지 먼저 묻는다.</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> “매우 빠르다”는 주장은 2분 35초 사례로 뒷받침되지만, “싸다”와 “좋다”는 평가는 재시도와 작업 조건이 빠져 있다.</li>
+<li><strong>통찰:</strong> 강한 속도 문구에는 첫 결과와 최종 결과를 구분하는 증거가 필요하다. 성공 장면만 보여 주면 완수 능력을 과장할 수 있다.</li>
+<li><strong>질문/행동:</strong> 카피에 속도 수치를 쓸 때 작업 조건, 남은 오류, 수정 횟수를 함께 공개할 수 있는지 확인한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 게임, 로봇 팔, Blender에서 속도·수정·조기 중단이 서로 다르게 나타났다.</li>
+<li><strong>통찰:</strong> 모델 이름보다 실제 작업 종류, 설정, 완료 조건, 실패 상태를 기준으로 평가해야 한다.</li>
+<li><strong>질문/행동:</strong> 자동화 시험에서 첫 응답 시간과 무재지시 완료율을 서로 다른 지표로 기록한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"빠른 첫 결과가 실제 작업 완수를 보장하지 않는다"</code> <strong>문제</strong><br>
+→ <code>"검수와 재시도가 줄어든 안정적인 결과"</code> <strong>수혜자: 모델을 업무에 쓰는 사용자</strong><br>
+→ <code>"토큰·시간·작업 데이터·검수 노력 제공"</code> <strong>지불자 또는 자원 제공자: 모델 사용자와 운영자</strong><br>
+→ <code>"재지시 없이 완료 조건을 충족한 실행 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 모델을 사용할 수 있다면 완료 조건이 명시된 동일한 소형 작업을 같은 설정으로 5회 실행한다.</li>
+<li><strong>측정 1개:</strong> 5회 중 사람의 재지시 없이 완료 조건을 충족한 실행 비율을 기록한다.</li>
+<li><strong>중단 기준 1개:</strong> 무재지시 완료율이 60% 미만이면 적용 범위를 확대하지 않는다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>출시 직후의 첫인상</td>
+<td>리뷰어는 모델이 매우 빠르다고 평가했다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>스케이트 게임</td>
+<td>빠르게 기초를 만들었지만 오류와 빠진 상호작용이 있었다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>로봇 팔</td>
+<td>시야와 서보 연결을 문제 삼으며 시도하다 멈췄다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Blender·설정·커뮤니티</td>
+<td>설정별 차이와 성공·실패 반응이 함께 제시됐다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>가격과 결론</td>
+<td>저렴하고 빠르다는 평가와 재시도 비용의 경계가 공존했다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 출시 직후의 첫인상</h3>
+<p>리뷰어는 모델이 출시된 지 “4시간 또는 6시간” 정도 됐다고 말하며 매우 빠르다고 강조했다. C++ 스케이트 게임 프롬프트를 fast mode와 ultra mode에서 사용했고, 몇 개의 하위 에이전트가 생성됐다고 말했다.</p>
+<p>한 실행은 2분 35초 동안 작동해 게임을 만들었다. 리뷰어는 결과가 단순하지만 좋은 결과의 기초가 보이고 리플레이 기능도 있다고 평가했다. 다만 이 시간이 fast와 ultra 중 어느 설정에 해당하는지는 명확하지 않다.</p>
+<h3>2. 스케이트 게임의 오류와 수정</h3>
+<p>다른 결과에는 최대 노력 설정에서 7분 41초가 걸렸다고 말했다. 게임은 대체로 작동했지만 A키 입력과 이동 방향이 반대였고, 보드의 앞뒤도 뒤집혀 있었다. 보행자와 상호작용하는 기능도 없었다.</p>
+<p>리뷰어는 이 결과에서 Astra 또는 Soul을 압축해 만든 듯한 느낌을 받았고, 아마 Astra에 가깝다고 주관적으로 평가했다. 그는 이를 나쁜 의미로 말한 것은 아니며, 단순하지만 대체로 유능하다고 보았다.</p>
+<p>충실도를 높이고 조작과 보드 방향을 고치라고 요청하자 조작 방향이 바로잡혔고 기울어지는 움직임 효과가 나타났다. 바닥에는 비둘기도 추가됐다. 이 사례는 수정 가능성을 보여주지만, 최초 결과가 완료 상태였다는 뜻은 아니다.</p>
+<h3>3. 로봇 팔 시험</h3>
+<p>모델은 처음에 카메라 각도가 적절하지 않다며 수정해 달라고 요청했다. 리뷰어가 모델이 보는 사진을 확인하고 카메라를 조정했지만 모델은 여전히 충분히 보이지 않는다고 했다.</p>
+<p>이후 모델은 자신의 지식상 서보 모터의 연결 관계가 잘못된 것 같아 행동하고 싶지 않다고 말했다. 리뷰어가 시도할 수 있다고 격려하자 조금 더 진행했지만, 결국 적절한 시각 정보가 없다며 멈췄다.</p>
+<p>리뷰어는 이를 조기에 중단하고 주저하는 행동으로 보았다. 그는 다른 GPT-6 또는 6.1 모델에서도 비슷한 모습을 봤다고 말했고, GPT-6 Astra는 같은 종류의 과제를 인상적으로 완료한 적이 있다고 주장했다. 비교 조건의 동일성은 확인되지 않는다.</p>
+<h3>4. Blender·설정·커뮤니티 반응</h3>
+<p>커뮤니티에는 한 사용자가 이 모델로 Blender 장면을 빠르게 만들었다는 사례가 있었다. 그러나 한 사람의 결과이며 다른 결과와 품질이 같다고 볼 수 없다고 자료 자체가 경고한다.</p>
+<p>리뷰어의 작업에서는 손으로 더 정교하게 모델링하라는 의도와 달리 모델이 카메라 시점을 움직이고 외형을 바꾼 뒤 작업을 끝냈다. 그는 이를 로봇 팔 사례처럼 쉽게 포기한 행동으로 연결했다.</p>
+<p>한 사용자의 버그 수정 시험에서는 생각하는 수준을 낮추자 점수가 크게 떨어졌다고 전한다. 구체적인 점수와 시험 조건은 없다. X와 Reddit에서도 빠른 화면 조작을 칭찬하는 반응과 작업을 끝내지 않는다는 불만이 함께 있다고 소개한다.</p>
+<h3>5. 가격과 최종 평가</h3>
+<p>리뷰어는 가격을 설명하며 처음에 백만 단위당 2달러라고 말했다가, 입력 백만 단위당 1달러와 출력 백만 단위당 5달러라고 정정했다. 그는 빠른 작업과 컴퓨터 사용 능력을 고려하면 저렴한 편이라고 평가했다.</p>
+<p>동시에 표시 가격만으로 실제 비용을 단정하기 어렵다. 작업을 다시 시키는 횟수와 사용 토큰이 달라질 수 있기 때문이다.</p>
+<p>최종적으로 리뷰어는 GPT-6.1 Terra에 강점이 있으며 자신은 이 모델을 좋아한다고 말했다. 다만 “미친 수준”이라는 표현을 고민한 이유도 고품질 코드 결과 자체보다 모델이 주는 속도감과 전반적인 느낌 때문이라고 설명했다. 이는 제한된 첫 사용기에 근거한 주관적 결론이다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · GPT 6.1 Terra, 빠르고 싼데 왜 평가는 갈릴까? · https://www.youtube.com/watch?v=ht_Wp2oFp5E · 전사: 제공된 SOURCE_TRANSCRIPT, 방식 미기재, 영어·한국어 혼합. META의 provenance.note는 출처를 추정이라고 표시하지만 원작자·소속 후보값과 원본 링크는 비어 있음.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>말씀드리자면, 저는 이제 잠시 동안 이걸 가지고 놀아 봤습니다. 출시된 지 아마 4~6시간 정도 된 것 같아요. 정말, 정말 빠릅니다. 그 점을 확실히 보여 주기 위해 빠른 모드와 울트라 모드에서 C++ 스케이트 게임 프롬프트를 입력해 봤습니다. 그러자 몇 개의 하위 에이전트(sub-agent)를 생성했습니다. 2분 35초 동안 작업해서 스케이트 게임을 만들었어요. 아직 확인해 보지 않았고, 이번에는 호기심을 참기 어려우니 빨리 한번 살펴보겠습니다.</p>
+<p>좋아요. 2분 30초 만에 어떤 결과를 냈는지 볼 수 있습니다. 단순하긴 하지만, 품질 좋은 결과를 위한 기본 토대는 갖춰져 있는 것 같아요. 재생(replay) 기능도 있네요. 바로 테스트에 들어가 버려서 죄송하지만, 이게 정말 말도 안 되게 빠르다는 점을 확실히 보여 드리고 싶었습니다. 커뮤니티에서도 이 모델로 블렌더 장면을 빠르게 만들었다는 사례가 나왔어요. 한 사용자의 결과라 일반화할 수는 없어요. 두 결과의 품질이 같다는 뜻도 아니에요.</p>
+<p>잠깐 강아지와 놀고 돌아왔습니다. 우선, 최대 노력(max effort) 모드에서 7분 41초가 걸렸고, 빠른 모드는 사용하지 않았다는 점을 말씀드리고 싶네요.</p>
+<p>조작 방향이 반대로 되어 있습니다. 왼쪽으로 움직인다는 의미의 A 키를 누르고 있는데 반대로 움직여요. 보드의 꼬리와 앞부분도 반대입니다. 이런 일은 가끔 발생합니다. 그래도 이 결과에서는 증류된 Astra 또는 Soul의 느낌이 아주, 아주 강하게 납니다. 아마 Astra 쪽인 것 같고, 나쁜 건 아닙니다. 다시 말하지만 단순하긴 해도 대체로 제대로 작동합니다.</p>
+<p>반대 방향으로 된 조작을 제외하면 보행자와 상호작용할 수 없습니다. 이런 부분은 Claude 모델과 GPT 모델의 차이에서 흔히 볼 수 있는 요소 중 하나입니다. Claude 모델은 스타일 측면에서 훨씬 더 깊이 들어갑니다. 예를 들어 “보행자와 부딪힐 수 있게 만들어야지. 좀 더 밀어붙이고 세부 묘사에도 공을 들여야겠다”라는 식이죠. 그래서 더 높은 충실도로 다시 만들라고 요청하고 있습니다. 전체적인 마무리 작업으로 보고, 반대로 된 조작과 보드의 꼬리 및 앞부분을 수정하라고 했습니다.</p>
+<p>좋아요. 바닥에 새, 그러니까 비둘기가 한 마리 있네요. 조작 방향은 제대로 되어 있습니다. 기울기 효과도 괜찮습니다. 수정 지시로 좋아진 부분도 있었어요. 그런데 로봇 팔에서는 진행을 멈췄어요. 첫 결과를 만드는 것과 완수하는 데는 차이가 있었어요.</p>
+<p>다음으로 로봇 팔 테스트를 살펴보겠습니다. 이 테스트 사례에서 본 결과 중 가장 당혹스러운 결과 중 하나였습니다. 처음에는 “카메라 각도가 최적이 아닙니다. 수정해 주시겠어요?”라고 말하며 시작했어요. 그래서 그렇게 했습니다. 자신이 보고 있는 장면의 사진을 보여 달라고 요청한 다음, 제가 조정했어요. 그런데도 여전히 “이걸 완전히 볼 수는 없을 것 같습니다”라는 식이었습니다. 실제로 이 작업을 시도하도록 설득하려면 거의 상담 세션(therapy session)이 필요했습니다.</p>
+<p>몇 번 시도하더니 “제가 아는 지식에 따르면 서보(servo)의 매핑이 잘못되어 있어서 이 작업을 하고 싶지 않습니다”라고 했습니다. 그래서 저는 “그냥 한번 시도해 봐도 될 것 같고, 나는 당신을 믿는다”고 했어요. 실제로 그런 취지로 말했더니 조금 더 작업했습니다. 결국에는 “이건 할 수 없습니다”라고 했는데, 적절한 시각 정보가 없었기 때문입니다. 어느 정도까지는 시도했지만 너무 일찍 멈췄고, 다른 GPT-6 또는 6.1 모델 중 하나에서도 이런 모습을 봤던 것 같습니다. 하지만 GPT-6 Astra는 제가 본 것 중 더 인상적인 방식으로 이 작업을 완수했습니다. 흥미롭고, 약간 주저했던 것처럼 보이기도 하네요.</p>
+<p>설정에 따라서도 결과가 달라요. 한 사용자의 버그 수정 테스트에서는 생각하는 수준을 낮추자 점수가 크게 떨어졌어요. 이 결과를 모든 작업에 적용할 수는 없어요.</p>
+<p>속도를 고려하면 나쁘지 않아요. 하지만 의도한 건 이걸 수작업으로 모델링하는 것이었죠. 좋습니다.</p>
+<p>기본적으로 마우스를 사용해서 이 작업을 하고 더 정교하게 다듬으라고 요청하고 있어요. 그런데 실제로는 카메라 시점을 움직이고, 저를 더 뚱뚱하게 만든 뒤 끝냈습니다.</p>
+<p>그런데 왜 그렇게 했을까요? 그냥 중간(medium)으로 설정해 보죠. 그게 기본값인 것 같고, 현재 빠른 모드(fast mode)로 되어 있네요. 이와 관련해 한 가지 언급하자면, 출시 이후 X에서 몇몇 사람들이 같은 의견을 공유하는 걸 봤습니다.</p>
+<p>로봇 팔의 경우처럼 아주 쉽게 포기하는 느낌이에요. “그래, 이건 했어. 하지만 내가 할 수 있는 건 여기까지야”라는 식이었죠. 지금 여기서도 똑같은 일이 일어나고 있고, X에서도 이런 현상이 나타난다는 이야기를 봤습니다. Reddit에서도 작업을 끝내지 않는다는 불만과 화면 조작이 빠르다는 칭찬이 함께 있어요. 토큰 가격만으로 실제 비용을 단정하기도 어려워요. 다시 시키는 횟수와 사용하는 토큰도 달라지니까요.</p>
+<p>영상 제목을 어떻게 정해야 할지 조금 고민하고 있어요. 이 모델의 가격을 생각해 보면, 처음에는 백만 토큰당 2달러라고 했다가—아니, 입력은 백만 토큰당 1달러이고 출력은 5달러예요—빠르게 많은 작업을 처리할 수 있는 모델치고는 저렴한 편입니다. 특히 그 가격에 컴퓨터 사용(computer use) 능력도 괜찮고 속도도 빠르다는 점을 고려하면요.</p>
+<p>거의 이건 미쳤다고 말하고 싶을 정도예요. 미친 듯이 보이는 고품질 코드 결과물을 만들어 내기 때문이 아니라, 그냥 이 모델에 대해 무의식적으로 드는 느낌 때문입니다. 실제로 그렇게 말할지는 모르겠지만, 만약 그렇게 한다면 바로 그 이유 때문일 거예요. 이 점을 짚고 넘어가고 싶었습니다.</p>
+<p>전반적으로 GPT-6.1 Terra를 처음 살펴보고 테스트한 내용은 이 정도로 마무리할 것 같습니다. 흥미로운 출시였고, 이 모델에는 분명 몇 가지 강점이 있습니다. 최근에 나온 일부 모델들처럼 “아, 알겠어요. 됐습니다”라는 반응이 나오는 모델은 아니었어요. 이번에도 그럴 거라고 예상했지만, 그렇지 않았습니다. 그래서 이 모델이 마음에 든다고 말씀드릴 수 있어 기쁘네요.</p>
+<p>속도와 함께 원하는 일을 끝까지 마쳤는지도 봐야겠죠. 영상이 도움이 되셨다면 구독과 좋아요 부탁드립니다. 시청해주셔서 감사합니다. 다음 영상에서 뵙겠습니다.</p>
+</details>
+</body></html>

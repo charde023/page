@@ -1,0 +1,590 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>[한영자막] Anthropic Claude Managed Agents: 두뇌와 손을 분리한 설계 (1부)</title>
+<meta name="description" content="에이전트의 영구 기록과 교체 가능한 실행부를 분리해 장애 복구, 자격 증명 보호, 모델 변화 대응력을 높이는 설계를 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>[한영자막] Anthropic Claude Managed Agents: 두뇌와 손을 분리한 설계 (1부)</h1>
+<div class="meta">원작자 Anthropic Claude Managed · Platform · 업로드 2026-10-18 · 14.7분 · <a href="https://youtu.be/3iOP4cXChAc" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 10분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 발표의 중심 질문은 간단하다. <strong>AI가 판단하는 부분, 작업을 실행하는 컴퓨터, 작업 기록을 한 덩어리로 묶어 두면 무엇이 잘못될 수 있으며, 어떻게 분리해야 장애와 변화에 강해지는가?</strong></p>
+<p>발표자는 에이전트를 <strong>도구를 사용하며 다음 행동을 반복해서 결정하는 모델</strong>이라고 설명한다. 모델만으로는 이 반복 실행을 관리하기 어렵기 때문에, 바깥에 모델 호출과 도구 사용, 대화 맥락을 관리하는 프로그램이 필요하다. 이것이 <strong>하네스(harness)</strong>다. 도구가 실행될 실제 컴퓨터 공간은 <strong>샌드박스(sandbox)</strong> 또는 컨테이너라고 부른다.</p>
+<p>Claude Managed Agents의 초기 구조에서는 작업 기록, 하네스, 샌드박스 실행을 모두 하나의 컨테이너에 넣었다. 한곳에서 파일을 고치고 실행할 수 있어 처음에는 단순했다. 그러나 컨테이너가 죽으면 기록과 실행부를 함께 잃을 위험이 있었고, 네트워크 패킷이 끊긴 것인지 컨테이너가 죽은 것인지 구분하기 어려웠다. 고객 데이터가 컨테이너에 있어 조사하기도 어려웠으며, 고객의 VPC 안에 있는 MCP에 연결하려면 네트워크 연결이나 하네스 배포 문제가 생겼다고 발표자는 말한다.</p>
+<p>이를 해결하기 위해 구조를 세 부분으로 나눴다.</p>
+<figure data-visual-kind="map">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 390 700" role="img" aria-labelledby="architecture-map-title architecture-map-desc" style="display:block;width:100%;max-width:620px;height:auto;margin:0 auto;min-width:420.0px;max-width:none;">
+  <title id="architecture-map-title">세션, 두뇌, 손으로 분리된 에이전트 구조</title>
+  <desc id="architecture-map-desc">세션의 추가 전용 기록을 두뇌가 읽고 새 이벤트를 추가한다. 두뇌는 필요할 때 샌드박스와 외부 도구를 호출하고 결과를 받는다.</desc>
+  <defs>
+    <marker id="map-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#34495e"></path>
+    </marker>
+  </defs>
+
+  <rect x="35" y="20" width="320" height="110" rx="14" fill="#e8f1fb" stroke="#27649a" stroke-width="2"></rect>
+  <text x="195" y="52" text-anchor="middle" font-size="19" font-weight="700" fill="#17324d">세션</text>
+  <text x="195" y="80" text-anchor="middle" font-size="15" fill="#17324d">지금까지 일어난 일을 보존하는</text>
+  <text x="195" y="103" text-anchor="middle" font-size="15" fill="#17324d">추가 전용 이벤트 기록</text>
+
+  <line x1="155" y1="135" x2="155" y2="238" stroke="#34495e" stroke-width="3" marker-end="url(#map-arrow)"></line>
+  <text x="145" y="184" text-anchor="end" font-size="13" fill="#34495e">기록 읽기</text>
+  <line x1="235" y1="235" x2="235" y2="137" stroke="#34495e" stroke-width="3" marker-end="url(#map-arrow)"></line>
+  <text x="245" y="184" font-size="13" fill="#34495e">이벤트 추가</text>
+
+  <rect x="35" y="250" width="320" height="120" rx="14" fill="#fff3d6" stroke="#a86b00" stroke-width="2"></rect>
+  <text x="195" y="283" text-anchor="middle" font-size="19" font-weight="700" fill="#523800">두뇌</text>
+  <text x="195" y="313" text-anchor="middle" font-size="15" fill="#523800">Claude와 하네스가 다음 행동을 판단</text>
+  <text x="195" y="339" text-anchor="middle" font-size="15" fill="#523800">모델·맥락·도구 호출을 관리</text>
+
+  <line x1="155" y1="375" x2="155" y2="478" stroke="#34495e" stroke-width="3" marker-end="url(#map-arrow)"></line>
+  <text x="145" y="427" text-anchor="end" font-size="13" fill="#34495e">도구 호출</text>
+  <line x1="235" y1="475" x2="235" y2="377" stroke="#34495e" stroke-width="3" marker-end="url(#map-arrow)"></line>
+  <text x="245" y="427" font-size="13" fill="#34495e">결과·오류</text>
+
+  <rect x="35" y="490" width="320" height="175" rx="14" fill="#e9f7ee" stroke="#297544" stroke-width="2"></rect>
+  <text x="195" y="523" text-anchor="middle" font-size="19" font-weight="700" fill="#174629">손</text>
+  <rect x="63" y="545" width="264" height="30" rx="7" fill="#ffffff" stroke="#5d8c6c"></rect>
+  <text x="195" y="566" text-anchor="middle" font-size="14" fill="#174629">필요할 때 만드는 샌드박스</text>
+  <rect x="63" y="586" width="264" height="30" rx="7" fill="#ffffff" stroke="#5d8c6c"></rect>
+  <text x="195" y="607" text-anchor="middle" font-size="14" fill="#174629">MCP 서버·고객 VPC의 도구</text>
+  <text x="195" y="642" text-anchor="middle" font-size="14" fill="#174629">실행이 끝나면 폐기하거나 교체 가능</text>
+</svg></div>
+<figcaption><strong>전체 지도.</strong> 오래 보존할 세션과 다시 만들 수 있는 판단·실행 구성요소를 분리한 구조다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 보면 된다. 세션은 기록을 보존한다. 두뇌는 그 기록을 읽고 다음 행동을 판단한다. 손은 실제 파일 수정, 코드 실행, 외부 도구 호출을 맡는다. 위로 향하는 화살표는 새 이벤트, 도구 결과, 오류가 다시 돌아오는 경로다.</p>
+<p>핵심은 세 부분의 중요도가 같지 않다는 데 있다. 발표자는 <strong>반드시 보호해야 할 것은 세션 기록이고, 나머지는 교체 가능하게 만들었다</strong>고 설명한다. 샌드박스가 죽으면 새 샌드박스를 만들 수 있다. 하네스가 죽어도 새 하네스가 세션 이벤트를 읽고 마지막 지점부터 계속할 수 있다. 실행부를 고쳐 살려야 하는 한 마리의 ‘애완동물’로 다루지 않고, 문제가 생기면 다른 개체로 바꿀 수 있게 만든 것이다.</p>
+<h3>왜 처음 구조가 불편했는가</h3>
+<p>초기 구조와 분리 구조의 차이는 단순히 서버 수가 늘었다는 것이 아니다. <strong>어디에 상태를 남기고, 어디까지 버려도 되는지 경계가 달라졌다.</strong></p>
+<p>아래 표는 폭이 좁은 화면에서 표 안을 좌우로 이동해 읽는다.</p>
+<figure data-visual-kind="comparison">
+<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #c8d0d8;border-radius:10px">
+<table style="min-width:720px;width:100%;border-collapse:collapse;margin:0">
+<thead>
+<tr style="background:#edf2f7">
+<th style="padding:12px;border:1px solid #c8d0d8;text-align:left">비교 기준</th>
+<th style="padding:12px;border:1px solid #c8d0d8;text-align:left">초기: 모두 컨테이너 안</th>
+<th style="padding:12px;border:1px solid #c8d0d8;text-align:left">변경: 세션·두뇌·손 분리</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:12px;border:1px solid #c8d0d8"><strong>작업 기록</strong></td>
+<td style="padding:12px;border:1px solid #c8d0d8">실행 컨테이너에 함께 존재</td>
+<td style="padding:12px;border:1px solid #c8d0d8">추가 전용 이벤트 로그로 별도 보존</td>
+</tr>
+<tr>
+<td style="padding:12px;border:1px solid #c8d0d8"><strong>장애 복구</strong></td>
+<td style="padding:12px;border:1px solid #c8d0d8">컨테이너를 살려야 할 가능성이 큼</td>
+<td style="padding:12px;border:1px solid #c8d0d8">하네스와 샌드박스를 새로 만들 수 있음</td>
+</tr>
+<tr>
+<td style="padding:12px;border:1px solid #c8d0d8"><strong>장애 조사</strong></td>
+<td style="padding:12px;border:1px solid #c8d0d8">패킷 손실과 컨테이너 사망이 비슷하게 보였다고 설명</td>
+<td style="padding:12px;border:1px solid #c8d0d8">이벤트와 구성요소 경계를 기준으로 조사 가능</td>
+</tr>
+<tr>
+<td style="padding:12px;border:1px solid #c8d0d8"><strong>외부 연결</strong></td>
+<td style="padding:12px;border:1px solid #c8d0d8">고객 VPC 연결이나 하네스 배포 부담</td>
+<td style="padding:12px;border:1px solid #c8d0d8">여러 종류의 ‘손’을 인터페이스로 연결</td>
+</tr>
+<tr>
+<td style="padding:12px;border:1px solid #c8d0d8"><strong>모델 변화</strong></td>
+<td style="padding:12px;border:1px solid #c8d0d8">하네스 가정이 구조와 강하게 결합될 위험</td>
+<td style="padding:12px;border:1px solid #c8d0d8">인터페이스를 유지하며 하네스와 압축 전략 교체</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption><strong>구조 비교.</strong> 변경의 핵심은 실행부를 늘리는 것이 아니라 영구 상태와 교체 가능한 구성요소의 경계를 다시 정한 것이다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 가운데 열은 실행 환경 하나를 계속 돌봐야 했던 구조, 오른쪽 열은 기록만 보존하고 나머지를 다시 만들 수 있게 한 구조다. 오른쪽 구조도 장애 자체를 없애지는 않는다. 대신 장애가 발생했을 때 기록을 바탕으로 다른 구성요소가 이어받도록 만든다.</p>
+<h3>하네스의 가정은 낡을 수 있다</h3>
+<p>하네스는 모델이 못한다고 생각하는 일을 대신한다. 하지만 모델이 바뀌면 그 가정도 바뀐다.</p>
+<p>발표자는 Sonnet 4.5가 맥락 한도에 가까워졌다고 느끼면 일을 빨리 마무리하려는 현상을 ‘context anxiety’라고 부르며, 당시 하네스에는 이를 피하기 위한 맥락 초기화가 필요했다고 설명한다. 반면 Opus 4.5에는 같은 제한이 없어 그 처리가 필요하지 않았다고 말한다.</p>
+<p>따라서 특정 모델의 단점을 전체 시스템 구조에 굳혀 버리면, 다음 모델에서는 불필요하거나 방해되는 장치가 될 수 있다. 발표의 결론은 <strong>가정 자체를 영구화하지 말고, 가정을 담은 하네스를 교체할 수 있도록 인터페이스를 오래 유지하라</strong>는 것이다.</p>
+<p>같은 원리로 맥락 압축 방식도 바꿀 수 있다. 세션에는 모든 이벤트를 추가 전용으로 남겨 두고, 현재 모델에 넣을 내용만 별도로 선택한다. 전체 기록을 요약할 수도 있고 마지막 몇 개의 이벤트만 넣을 수도 있다. 원본 이벤트를 미리 버리거나 덮어쓰지 않기 때문에 새로운 압축 전략을 시험할 여지가 생긴다.</p>
+<h3>자격 증명은 실행 환경에 넣지 않는다</h3>
+<p>샌드박스는 에이전트가 작성한, 오류가 있거나 신뢰할 수 없는 코드를 실행할 수 있다. 이 공간에 토큰을 넣으면 모델이 잘못된 명령이나 프롬프트 인젝션의 영향을 받아 토큰을 출력하거나 파일에 기록할 위험이 생긴다.</p>
+<p>발표에서 설명한 구조는 외부 호출을 프록시로 보낸 뒤, <strong>모델과 샌드박스가 보지 못하는 곳에서 프록시가 토큰을 넣는 방식</strong>이다.</p>
+<figure data-visual-kind="cycle">
+<p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 500 790" role="img" aria-labelledby="credential-cycle-title credential-cycle-desc" style="display:block;width:100%;max-width:620px;height:auto;margin:0 auto;min-width:500.0px;max-width:none;">
+  <title id="credential-cycle-title">프록시를 통한 요청과 결과 반환 경로</title>
+  <desc id="credential-cycle-desc">오른쪽 경로에서는 샌드박스의 토큰 없는 요청이 프록시로 전달되고, 프록시가 토큰을 넣어 외부 엔드포인트를 호출한다. 왼쪽 경로에서는 처리 결과가 외부 엔드포인트에서 프록시를 거쳐 샌드박스로 돌아온다.</desc>
+  <defs>
+    <marker id="credential-arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#384a5c"></path>
+    </marker>
+  </defs>
+
+  <rect x="95" y="25" width="310" height="110" rx="15" fill="#e8f1fb" stroke="#27649a" stroke-width="2"></rect>
+  <text x="250" y="62" text-anchor="middle" font-size="21" font-weight="700" fill="#17324d">샌드박스</text>
+  <text x="250" y="96" text-anchor="middle" font-size="17" fill="#17324d">토큰 없이 외부 작업을 요청</text>
+
+  <rect x="95" y="340" width="310" height="120" rx="15" fill="#fff3d6" stroke="#a86b00" stroke-width="2"></rect>
+  <text x="250" y="378" text-anchor="middle" font-size="21" font-weight="700" fill="#523800">프록시</text>
+  <text x="250" y="411" text-anchor="middle" font-size="17" fill="#523800">접근 제어 확인 후 토큰 주입</text>
+  <text x="250" y="438" text-anchor="middle" font-size="16" fill="#523800">모델에는 토큰을 노출하지 않음</text>
+
+  <rect x="95" y="655" width="310" height="110" rx="15" fill="#e9f7ee" stroke="#297544" stroke-width="2"></rect>
+  <text x="250" y="692" text-anchor="middle" font-size="21" font-weight="700" fill="#174629">외부 엔드포인트·MCP</text>
+  <text x="250" y="726" text-anchor="middle" font-size="17" fill="#174629">인증된 요청 처리 및 결과 반환</text>
+
+  <path d="M405 80 H460 V400 H412" fill="none" stroke="#384a5c" stroke-width="3" marker-end="url(#credential-arrow)"></path>
+  <rect x="270" y="205" width="170" height="58" rx="9" fill="#ffffff" stroke="#9aa7b2"></rect>
+  <text x="355" y="229" text-anchor="middle" font-size="15" font-weight="700" fill="#384a5c">요청 1</text>
+  <text x="355" y="251" text-anchor="middle" font-size="14" fill="#384a5c">토큰 없이 전달</text>
+
+  <path d="M405 420 H460 V710 H412" fill="none" stroke="#384a5c" stroke-width="3" marker-end="url(#credential-arrow)"></path>
+  <rect x="270" y="520" width="170" height="58" rx="9" fill="#ffffff" stroke="#9aa7b2"></rect>
+  <text x="355" y="544" text-anchor="middle" font-size="15" font-weight="700" fill="#384a5c">요청 2</text>
+  <text x="355" y="566" text-anchor="middle" font-size="14" fill="#384a5c">토큰을 넣어 호출</text>
+
+  <path d="M95 710 H40 V420 H88" fill="none" stroke="#384a5c" stroke-width="3" marker-end="url(#credential-arrow)"></path>
+  <rect x="60" y="520" width="170" height="58" rx="9" fill="#ffffff" stroke="#9aa7b2"></rect>
+  <text x="145" y="544" text-anchor="middle" font-size="15" font-weight="700" fill="#384a5c">응답 3</text>
+  <text x="145" y="566" text-anchor="middle" font-size="14" fill="#384a5c">처리 결과 반환</text>
+
+  <path d="M95 380 H40 V80 H88" fill="none" stroke="#384a5c" stroke-width="3" marker-end="url(#credential-arrow)"></path>
+  <rect x="60" y="205" width="170" height="58" rx="9" fill="#ffffff" stroke="#9aa7b2"></rect>
+  <text x="145" y="229" text-anchor="middle" font-size="15" font-weight="700" fill="#384a5c">응답 4</text>
+  <text x="145" y="251" text-anchor="middle" font-size="14" fill="#384a5c">샌드박스에 전달</text>
+</svg></div>
+<figcaption><strong>자격 증명 요청·응답 순환.</strong> 오른쪽은 토큰 없는 요청이 프록시를 거쳐 인증된 호출이 되는 경로이고, 왼쪽은 처리 결과가 샌드박스로 돌아오는 경로다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 오른쪽의 요청 1과 요청 2를 위에서 아래로 먼저 읽고, 왼쪽의 응답 3과 응답 4를 아래에서 위로 읽는다. 각 설명은 화살표와 분리된 상자에 놓여 있다. 토큰은 프록시가 외부 요청을 보낼 때만 넣는다. 원문은 이 보안 경계를 설명하지만, 프록시 내부 구현이나 모든 네트워크 예외 처리까지 제시하지는 않는다.</p>
+<h3>첫 에이전트를 만드는 순서</h3>
+<p>발표 후반부는 농담을 말하는 간단한 에이전트를 만드는 준비 과정을 소개한다. 발표자가 명시한 준비 단계는 <strong>환경 생성 → 에이전트 생성 → 세션 생성의 세 단계</strong>다. 세션을 만든 뒤 이벤트를 보내야 실제 작업이 시작된다. 이벤트 전송은 세 번째 단계 뒤에 이어지는 동작이지, 발표자가 열거한 네 번째 준비 단계가 아니다.</p>
+<figure data-visual-kind="process">
+<div style="max-width:620px;margin:0 auto;display:flex;flex-direction:column;align-items:stretch;gap:8px">
+  <div style="padding:15px;border:2px solid #27649a;border-radius:12px;background:#e8f1fb">
+    <strong>준비 1 · 환경 생성</strong><br>
+    <span><code>v1/environments</code>에서 네트워크 제한과 설치 패키지를 정한다.</span>
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:28px;line-height:1;color:#34495e">↓</div>
+  <div style="padding:15px;border:2px solid #a86b00;border-radius:12px;background:#fff3d6">
+    <strong>준비 2 · 에이전트 생성</strong><br>
+    <span>이름, 모델, 시스템 프롬프트, 도구를 정한다.</span>
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:28px;line-height:1;color:#34495e">↓</div>
+  <div style="padding:15px;border:2px solid #297544;border-radius:12px;background:#e9f7ee">
+    <strong>준비 3 · 세션 생성</strong><br>
+    <span>에이전트 ID와 환경 ID를 연결해 작업 단위를 만든다. 처음에는 유휴 상태다.</span>
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:28px;line-height:1;color:#34495e">↓</div>
+  <div style="padding:15px;border:2px dashed #59636e;border-radius:12px;background:#f5f6f7">
+    <strong>준비 완료 뒤 · 이벤트 전송</strong><br>
+    <span><code>user.message</code> 같은 이벤트를 보내면 에이전트가 작업하고 결과 이벤트를 돌려준다.</span>
+  </div>
+</div>
+<figcaption><strong>실습 준비와 실행 흐름.</strong> 번호가 붙은 준비는 세 단계이며, 이벤트 전송은 준비가 끝난 뒤의 별도 실행 동작이다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 세로로 내려간다. 앞의 세 상자만 발표자가 ‘첫 단계, 두 번째 단계, 세 번째 단계’로 열거한 준비 과정이다. 마지막 점선 상자는 세션에 일을 시키는 후속 동작이다.</p>
+<p>이벤트 스트림에는 사용자의 <code>user.message</code>, 에이전트의 응답, 사용자 정의 도구 호출과 결과가 쌓인다. 오류가 생기면 <code>session.error</code>, 작업하지 않는 상태는 <code>status.idle</code>, 중단 요청은 <code>interrupt</code>로 표현된다고 발표자는 설명한다.</p>
+<p>분리 설계는 성능에도 영향을 줬다고 한다. 샌드박스가 준비될 때까지 기다리지 않고 모델 추론을 먼저 시작할 수 있어 <strong>첫 토큰까지 걸리는 시간을 약 90% 줄였다</strong>고 발표자는 주장한다. 다만 영상에는 측정 조건, 비교 기준, 표본이 제시되지 않는다.</p>
+<div class="callout callout-warning"><div class="ct">해석할 때 지켜야 할 경계</div>
+<ul>
+<li>META의 업로드 영상 길이는 14.7분이지만, 발표자는 전체 워크숍 자리가 2시간이고 네 부분으로 나뉘었다고 말한다. 14.7분과 2시간은 같은 범위의 길이가 아니다.</li>
+<li>초기 구조를 출시한 시점은 “작년 12월”이라고만 말한다. 녹화일이 확인되지 않으므로 이를 특정 연도의 12월로 확정할 수 없다.</li>
+<li>실습 준비는 세 단계다. 이벤트 전송을 ‘4단계’로 다시 번호화하면 발표자의 원래 열거와 충돌한다.</li>
+<li>META의 원작자 후보는 <code>Anthropic Claude Managed</code>, 소속 후보는 <code>Platform</code>으로 적혀 있으나, META 자체가 화자 이름과 SNS를 근거로 한 추정이라고 밝힌다. 전사에서 직접 확인되는 발표자는 Anthropic의 Priyanka와 Gabe Czemach다.</li>
+<li>첫 토큰 시간 약 90% 감소, 보안 개선, 복구 동작은 발표자의 설명이다. 이 영상만으로 독립 검증된 결과는 아니다.</li>
+</ul>
+</div>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>에이전트의 작업 기록은 오래 보존하고, 하네스와 샌드박스는 장애 시 교체할 수 있게 분리한다.</li>
+<li>하네스는 모델에 대한 가정을 담으므로, 모델이 바뀌어도 인터페이스까지 다시 만들지 않도록 경계를 설계한다.</li>
+<li>자격 증명은 샌드박스에 넣지 않고 프록시에서 주입해 모델과 실행 코드의 노출을 줄인다.</li>
+<li>실습 준비는 환경 생성, 에이전트 생성, 세션 생성의 세 단계이며 이벤트 전송은 그 뒤의 실행이다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>Claude Managed Agents는 왜 세션 기록, 두뇌, 손을 분리하며, 이 구조가 장애·보안·모델 변화에 어떻게 대응하게 하는가?</strong></p>
+</blockquote>
+<ul>
+<li>무엇을 영구 상태로 남기고 무엇을 교체 가능하게 만드는가?</li>
+<li>프록시와 추가 전용 이벤트 로그는 각각 어떤 위험을 줄이는가?</li>
+<li>새 에이전트 자동화에 이 원리를 적용할 때 무엇을 실제로 시험해야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>한 에이전트가 파일을 수정하던 중 샌드박스가 갑자기 죽는다. 예전 구조라면 그 컨테이너를 복구해야 할 수 있다. 분리 구조에서는 오류가 이벤트로 돌아오고, 두뇌가 새 샌드박스를 만든 뒤 보존된 세션 기록을 바탕으로 작업을 이어갈 수 있다.</p>
+<p><code>"작업 기록과 실행 환경이 한 컨테이너의 생존에 묶인다"</code> <strong>문제</strong><br>
+→ <code>"세션 로그는 보존하고 두뇌와 손은 교체 가능한 인터페이스로 분리한다"</code> <strong>작동 방식</strong><br>
+→ <code>"장애 후 기록을 읽어 새 구성요소로 작업을 이어갈 수 있다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">작업 일지와 교대 가능한 작업자</div>
+<p>세션 로그는 모든 진행 상황이 순서대로 적힌 작업 일지다. 하네스는 일지를 읽고 다음 일을 지시하는 관리자이며, 샌드박스는 실제 일을 하는 작업자다. 작업자가 빠져도 새 작업자가 일지를 읽고 이어서 일할 수 있다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 실제 이벤트 로그가 작업 재개에 필요한 모든 외부 상태까지 자동으로 복원해 주는 것은 아니다. 외부 시스템의 변경, 중복 실행, 되돌릴 수 없는 부작용은 별도 설계가 필요하지만 이 영상은 그 세부를 다루지 않는다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>에이전트</strong></td>
+<td>도구를 쓰며 다음 행동을 반복해서 고르는 모델</td>
+<td>모델이 도구 호출과 결과 확인을 반복하는 실행 루프</td>
+<td>모델 호출 한 번이면 모두 에이전트라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>하네스</strong></td>
+<td>모델을 둘러싸고 실행을 관리하는 프로그램</td>
+<td>도구 호출, 반복 실행, 맥락 관리와 모델별 보완을 담당하는 계층</td>
+<td>항상 같은 규칙을 유지해야 한다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>추가 전용 이벤트 로그</strong></td>
+<td>과거를 지우지 않고 새 기록만 덧붙이는 일지</td>
+<td>세션에서 발생한 이벤트를 순서대로 보존하는 append-only log</td>
+<td>현재 프롬프트에 모든 이벤트를 항상 넣는다는 뜻으로 보는 것</td>
+</tr>
+<tr>
+<td><strong>샌드박스 격리</strong></td>
+<td>실행 사고가 번지는 범위를 좁히는 공간</td>
+<td>신뢰할 수 없는 코드 실행을 컨테이너 등 제한된 환경에 격리하는 방식</td>
+<td>샌드박스만 쓰면 모든 보안 문제가 해결된다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>두뇌와 손의 분리</strong></td>
+<td>판단과 실행을 서로 교체 가능한 부분으로 나누기</td>
+<td>세션, 하네스·모델, 실행 도구를 안정된 인터페이스로 분리하는 아키텍처</td>
+<td>모델과 도구가 서로 통신하지 않는다는 뜻으로 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>초기 구조에서는 왜 컨테이너 하나의 장애가 운영과 조사 모두를 어렵게 만들었는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>세션 기록, 하네스, 실제 실행이 같은 컨테이너에 있었기 때문이다. 발표자는 패킷 손실과 컨테이너 사망이 비슷하게 보였고, 고객 데이터 때문에 컨테이너에 들어가 조사하기도 어려웠다고 설명한다. 실행부를 잃으면 작업 상태까지 함께 위험해져 컨테이너를 쉽게 교체하기 어려웠다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>추가 전용 이벤트 로그를 보존하는 것과 모든 기록을 매번 모델의 맥락에 넣는 것은 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>이벤트 로그 보존은 원본 작업 이력을 남기는 저장 전략이다. 모델 맥락 구성은 그중 무엇을 이번 추론에 넣을지 결정하는 선택 전략이다. 원본을 보존해 두면 전체 요약, 최근 이벤트 선택 등 압축 방식을 나중에 바꿀 수 있지만, 모든 기록을 항상 모델에 넣어야 하는 것은 아니다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 에이전트 자동화를 설계한다면 무엇을 영구 상태로 두고, 무엇을 실패 시 다시 만들 수 있게 해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 작업 재개에 반드시 필요한 기록과 외부 부작용을 구분한다. 입력, 도구 호출, 결과, 오류와 재개 위치는 별도 상태로 보존할 후보가 된다. 모델 호출기와 샌드박스는 새 인스턴스로 교체해도 되는지 시험한다. 자격 증명은 실행 환경 밖에서 주입하고, 강제 종료 뒤 중복 실행 없이 이어지는지를 검증해야 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 복구의 출발점은 서버가 아니라 상태의 경계다</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자는 세션 로그만 보호할 가치가 있고, 하네스와 샌드박스는 죽으면 새로 만들 수 있게 했다고 설명한다.</li>
+<li><strong>[해석]</strong> 장애에 강한 시스템은 모든 구성요소를 절대 죽지 않게 만드는 것이 아니라, 죽어도 되는 부분과 잃으면 안 되는 기록을 먼저 구분한다.</li>
+<li><strong>[경계]</strong> 이벤트 로그만으로 외부 시스템의 모든 상태가 복원된다고 확인된 것은 아니다. 재시도에 따른 중복 부작용과 일관성 처리는 이 영상의 설명 범위 밖이다.</li>
+</ul>
+<h3>2. 하네스의 기능보다 하네스를 교체할 수 있는 경계가 오래간다</h3>
+<ul>
+<li><strong>[원문]</strong> Sonnet 4.5에는 맥락 초기화가 필요했지만 Opus 4.5에는 같은 처리가 필요하지 않았다는 사례를 들며, 하네스의 가정은 낡을 수 있다고 말한다.</li>
+<li><strong>[해석]</strong> 특정 모델의 현재 약점을 제품의 영구 구조로 만들지 말고, 모델별 보완책을 교체 가능한 계층에 가둬야 한다.</li>
+<li><strong>[경계]</strong> 두 모델의 행동과 명칭은 발표자의 사례다. 어떤 작업과 평가에서 같은 차이가 나타나는지 영상에는 측정 자료가 없다.</li>
+</ul>
+<h3>3. 숫자와 출처 범위를 구조 설명과 분리해야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자는 첫 토큰 시간을 약 90% 줄였다고 말하고, 실습 준비를 환경·에이전트·세션 생성의 세 단계로 열거한다.</li>
+<li><strong>[해석]</strong> 구조적 장점과 성능 수치는 분리해 읽어야 한다. 또한 준비 단계와 준비 후 실행을 구별해야 원문의 절차를 정확히 재현할 수 있다.</li>
+<li><strong>[경계]</strong> 90%의 기준과 측정 조건은 제시되지 않았다. 이벤트 전송을 네 번째 준비 단계로 번호화하면 원문의 세 단계 열거와 충돌한다. META의 원작자·소속은 추정 후보이며 전사에서 직접 확인되는 발표자 정보와 동일한 형식의 값이 아니다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 발표는 에이전트를 모델, 하네스, 샌드박스로 나눈 뒤 초기 구조와 변경 구조를 대조한다.</li>
+<li><strong>통찰:</strong> 용어를 암기했는지보다 “샌드박스가 죽었을 때 무엇이 남는가”를 설명하게 하면 구조 이해를 관찰할 수 있다.</li>
+<li><strong>질문/행동:</strong> 학습자에게 세션·두뇌·손 중 하나가 실패하는 장면을 주고, 복구 경로를 말로 설명하게 한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 하나의 실행 환경에 핵심 기록을 묶는 것은 특정 자원 하나의 실패가 전체 작업에 퍼지는 위험과 연결된다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용하려면 현재 상태를 단정하지 말고, 주문·작업 기록과 특정 실행자 또는 도구가 과도하게 결합돼 있는지 확인하는 가상 점검으로 써야 한다.</li>
+<li><strong>질문/행동:</strong> “특정 도구나 담당자가 중단돼도 보존된 기록으로 다른 실행자가 이어받을 수 있는가?”를 실제 흐름별로 확인한다.</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 발표의 강한 증거 장치는 초기 실패 장면, 애완동물과 가축의 대조, 첫 토큰 시간 약 90% 감소라는 숫자다.</li>
+<li><strong>통찰:</strong> 구조를 설명하는 장면과 성능 수치를 함께 쓰되, 수치의 측정 조건이 없으면 독립 검증된 결과처럼 확대하지 않아야 한다.</li>
+<li><strong>질문/행동:</strong> 상세페이지의 각 숫자 옆에 기준 조건과 측정 근거가 있는지 표시하고, 없으면 화자의 주장으로 구분한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 이벤트 로그, 샌드박스 격리, 자격 증명 프록시, 교체 가능한 하네스는 에이전트 아키텍처를 직접 평가할 기준이다.</li>
+<li><strong>통찰:</strong> 정상 실행만 보지 말고 하네스 종료, 샌드박스 종료, 도구 오류, 자격 증명 노출 가능성을 각각 시험해야 한다.</li>
+<li><strong>질문/행동:</strong> 현재 또는 가상의 에이전트 설계에서 상태 저장 위치와 강제 종료 후 재개 지점을 먼저 그린다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"실행 환경 하나의 장애가 작업 기록·보안·복구에 함께 영향을 준다"</code> <strong>문제</strong><br>
+→ <code>"장애 후에도 작업을 이어가려는 에이전트 운영자와 사용자"</code> <strong>수혜자: 운영자와 사용자</strong><br>
+→ <code>"컴퓨팅 자원, 작업 데이터, 접근 권한과 신뢰를 제공한다"</code> <strong>지불자 또는 자원 제공자: 운영 조직과 고객</strong><br>
+→ <code>"강제 장애 뒤 마지막 이벤트부터 작업을 재개한 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 외부 부작용이 없는 테스트 에이전트에서 이벤트 로그를 별도 보존하고, 실행 중 샌드박스를 강제 종료하는 복구 시험을 5회 실시한다.</li>
+<li><strong>측정 1개:</strong> 5회 중 마지막 기록부터 정상 재개한 복구 성공 횟수</li>
+<li><strong>중단 기준 1개:</strong> 복구 성공 횟수가 5회 중 5회가 아니면 실제 업무로 확대하지 않고 상태 저장과 재시도 경계를 다시 설계한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>발표자와 워크숍 범위</td>
+<td>Anthropic의 Priyanka와 Gabe Czemach가 Managed Agents 워크숍을 소개한다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>에이전트·하네스·샌드박스</td>
+<td>모델의 반복 판단, 이를 관리하는 하네스, 코드를 실행하는 격리 환경을 구분한다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>초기 아키텍처의 문제</td>
+<td>기록과 실행을 한 컨테이너에 넣어 장애 조사와 외부 연결이 어려웠다고 설명한다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>두뇌와 손의 분리</td>
+<td>세션 로그는 보존하고 하네스와 실행 환경은 교체 가능하게 만든다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>보안·맥락·성능</td>
+<td>프록시 자격 증명, 유연한 압축, 첫 토큰 시간 감소를 설명한다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>간단한 에이전트 준비</td>
+<td>환경, 에이전트, 세션의 세 단계를 만든다.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>이벤트 스트림</td>
+<td>메시지, 사용자 정의 도구, 오류, 유휴, 중단 이벤트를 소개한다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 발표자와 워크숍 범위</h3>
+<p>Priyanka는 자신을 Anthropic의 기술 직원이며 Claude Managed Agents를 만든 엔지니어링 팀의 리더라고 소개한다. Anthropic에서 2년을 조금 넘게 일했고 최근 12개월 동안 에이전트 인프라에 집중했다고 말한다.</p>
+<p>Gabe Czemach는 Priyanka의 팀에서 Claude Managed Agents를 만드는 기술 직원이라고 소개한다. Anthropic에서 1년을 조금 넘게 일했고 대부분의 재직 기간 동안 이 작업을 했다고 말한다.</p>
+<p>전체 워크숍은 Managed Agents의 발전 과정과 시행착오, 콘솔을 이용한 코드 없는 간단한 에이전트, Claude Code 또는 다른 코딩 에이전트를 이용한 금융 에이전트, 질의응답으로 진행될 예정이라고 설명한다. 발표자는 전체 자리가 2시간이고 네 부분으로 나뉘었지만 하나의 긴 발표와 같다고 말한다. 현재 영상의 META 길이 14.7분은 전체 워크숍 길이와 같은 범위가 아니다.</p>
+<h3>2. 에이전트·하네스·샌드박스</h3>
+<p>발표자는 에이전트를 “도구를 가진 루프 안의 모델”로 설명한다. 모델은 다음 행동을 결정하고 도구를 호출하며, 과업이 끝날 때까지 이를 반복한다.</p>
+<p>하네스는 모델을 감싸며 다음을 담당한다.</p>
+<ul>
+<li>반복 실행</li>
+<li>도구 호출</li>
+<li>맥락 관리</li>
+<li>모델이 하지 못한다고 가정한 기능의 보완</li>
+</ul>
+<p>Sonnet 4.5가 맥락 한도에 가까워지면 작업을 급히 마무리하려 했다는 사례를 들고, 이를 피하기 위해 맥락 초기화를 넣었다고 설명한다. Opus 4.5에는 같은 제한이 없어 해당 초기화가 필요하지 않았다고 말한다. 이 사례를 통해 하네스는 모델에 관한 가정을 담고 있으며, 모델 변화에 맞춰 갱신돼야 한다고 주장한다.</p>
+<p>샌드박스는 에이전트가 작성한 코드를 실행하는 컴퓨터 공간이다. 파일 수정과 의존성 설치 등이 가능하다. 발표자는 Claude Code를 로컬 컴퓨터에서 파일에 접근해 실행하는 하네스의 사례로 든다.</p>
+<p>에이전트가 작성한 코드는 오류가 있거나 신뢰할 수 없으므로, 운영 환경에서는 컨테이너에 격리하고 과업마다 별도 컨테이너를 사용해 피해 범위를 줄여야 한다고 말한다.</p>
+<h3>3. 초기 아키텍처의 문제</h3>
+<p>발표자는 “작년 12월” 초기 접근 고객에게 첫 아키텍처를 제공했다고 말하지만, 녹화일이 확인되지 않아 정확한 연도는 확정할 수 없다.</p>
+<p>초기 구조에서는 다음을 모두 컨테이너 안에 넣었다.</p>
+<ul>
+<li>세션에서 일어난 일을 담은 세션 로그</li>
+<li>하네스</li>
+<li>샌드박스 실행</li>
+</ul>
+<p>장점은 서비스 경계를 별도로 설계할 필요가 없고, 모든 것이 로컬에 있어 파일 수정이 시스템 호출로 처리될 만큼 단순했다는 것이다.</p>
+<p>그러나 발표자는 이를 ‘애완동물’을 갖게 된 상황에 비유한다. 애완동물은 이름을 붙이고 개별적으로 돌보며, 아프면 살려야 하는 존재다. 반대로 가축은 교체 가능하며 하나가 실패하면 다른 개체로 바꿀 수 있다. 단일 데이터베이스 샤드가 죽으면 제품 전체가 중단되는 구조와, 주 인스턴스가 죽어도 복제본을 올릴 수 있는 구조를 비교한다.</p>
+<p>초기 구조의 문제로 다음을 제시한다.</p>
+<ul>
+<li>모든 것이 컨테이너에서 실행돼 디버깅이 어려웠다.</li>
+<li>패킷 손실과 죽은 컨테이너가 비슷하게 보였다.</li>
+<li>WebSocket으로 컨테이너 안에 스트리밍해 조사해야 했다.</li>
+<li>고객 데이터가 컨테이너에 있어 내부 조사가 어려웠다.</li>
+<li>고객 VPC의 MCP에 연결하려면 네트워크 피어링을 하거나 하네스를 고객에게 보내 실행하게 해야 했다.</li>
+</ul>
+<h3>4. 두뇌와 손의 분리</h3>
+<p>변경 구조는 세 인터페이스로 나뉜다.</p>
+<ol>
+<li><strong>세션:</strong> 지금까지 발생한 일을 보존하는 추가 전용 로그</li>
+<li><strong>두뇌:</strong> Claude와 에이전트 루프 또는 하네스</li>
+<li><strong>손:</strong> 샌드박스, MCP 도구 호출 등 실제 실행부</li>
+</ol>
+<p>손은 필요할 때 만들어지고 작업이 끝나면 사라질 수 있다. 샌드박스가 죽으면 오류가 Claude에 돌아오고, Claude는 새 샌드박스를 만들거나 다른 방식으로 계속할 수 있다.</p>
+<p>하네스가 죽어도 새 하네스가 세션 이벤트 로그를 읽고 마지막 지점부터 이어갈 수 있다고 설명한다. 발표자는 보호할 가치가 있는 것은 세션 로그이고 나머지는 교체 가능하게 만들었다고 말한다.</p>
+<p>하나의 두뇌는 샌드박스 컨테이너, 고객 VPC, MCP 서버 등 여러 손을 호출할 수 있다. 이 구조가 연결 방식을 더 유연하게 했다고 주장한다.</p>
+<h3>5. 보안·맥락·성능</h3>
+<p>이전 구조에서는 자격 증명이 샌드박스에 들어갔다. 변경 구조에서는 인증이 필요한 외부 호출을 프록시로 보낸다. 프록시가 외부 엔드포인트나 MCP를 호출하기 전에 토큰을 넣는다.</p>
+<p>발표자는 이로 인해 Claude가 토큰을 볼 수 없고, 프롬프트 인젝션으로 토큰을 출력하거나 파일에 쓰게 할 수 없다고 설명한다. 다만 영상은 프록시 내부 구현이나 모든 공격 경로를 검증하지 않는다.</p>
+<p>세션의 이벤트 스트림은 덮어쓰거나 버리지 않는다. 맥락 구성 단계에서 다음과 같은 전략을 선택할 수 있다.</p>
+<ul>
+<li>전체 이벤트 로그를 보고 요약한다.</li>
+<li>마지막 몇 개의 이벤트만 맥락에 넣는다.</li>
+<li>하네스나 압축 전략을 교체한다.</li>
+</ul>
+<p>또한 샌드박스를 먼저 띄우지 않고 추론 호출을 즉시 시작해 첫 토큰까지 걸리는 시간을 약 90% 줄였다고 주장한다. 측정 조건과 기준 수치는 영상에 제시되지 않는다.</p>
+<h3>6. 간단한 에이전트 준비</h3>
+<p>발표자는 농담을 말하는 간단한 에이전트를 만드는 준비를 세 단계로 설명한다.</p>
+<ol>
+<li><strong>환경 생성:</strong> <code>v1/environments</code>를 사용해 샌드박스 템플릿을 만든다. 네트워크를 제한하지 않을지, 특정 도메인이나 MCP만 허용할지, 어떤 패키지를 설치할지 정한다.</li>
+<li><strong>에이전트 생성:</strong> 이름, 모델, 시스템 프롬프트, 도구를 정한다. 예시 이름은 <code>Joke Teller</code>다. 모델은 Opus 4.8, Haiku, Sonnet 중 선택할 수 있다고 말한다. 시스템 프롬프트 예시는 주제에 맞는 신선한 농담을 찾아 잘 전달하는 코미디언 역할이다. 기본 도구 집합에는 Bash, 읽기, 쓰기, grep 등이 포함된다고 설명한다.</li>
+<li><strong>세션 생성:</strong> 에이전트 ID와 환경 ID를 받아 하나의 작업 단위를 만든다. 세션이 생성된 직후에는 유휴 상태이며, 이벤트를 보내기 전에는 작업하지 않는다.</li>
+</ol>
+<p>이벤트 전송은 위 세 단계 이후에 설명되는 동작이다. 이를 네 번째 준비 단계로 번호화하면 발표자의 원래 열거와 충돌한다.</p>
+<h3>7. 이벤트 스트림</h3>
+<p>세션에는 사용자가 보내는 이벤트와 에이전트가 돌려주는 이벤트가 함께 나타난다.</p>
+<ul>
+<li><code>user.message</code>: 사용자가 보내는 메시지</li>
+<li>사용자 정의 도구 사용 이벤트: Claude가 사용자 정의 도구 사용을 요청</li>
+<li>사용자 정의 도구 결과: 외부 처리 결과를 Claude에 반환</li>
+<li><code>session.error</code>: 세션에서 오류가 발생</li>
+<li><code>status.idle</code>: 세션이 작업하지 않는 유휴 상태</li>
+<li><code>interrupt</code>: 진행 중인 작업을 멈추는 요청</li>
+</ul>
+<p>발표자는 이후 워크숍에서 다중 에이전트와 메모리도 더 깊이 다룰 수 있다고 언급한 뒤, 플랫폼 콘솔의 Managed Agents <code>Quick Start</code>로 이동한다.</p>
+<h3>수치·이름·범위 대조</h3>
+<ul>
+<li>영상 META 길이: <strong>14.7분</strong></li>
+<li>발표자가 언급한 전체 워크숍 자리: <strong>2시간</strong></li>
+<li>워크숍 분할: <strong>네 부분</strong></li>
+<li>실습 준비 열거: <strong>세 단계</strong></li>
+<li>이벤트 전송: <strong>세 단계 이후의 별도 동작</strong></li>
+<li>Priyanka의 Anthropic 재직: <strong>2년을 조금 넘음</strong></li>
+<li>Priyanka의 에이전트 인프라 집중 기간: <strong>최근 12개월</strong></li>
+<li>Gabe Czemach의 Anthropic 재직: <strong>1년을 조금 넘음</strong></li>
+<li>주장된 첫 토큰 시간 감소: <strong>약 90%</strong></li>
+<li>META 원작자 후보: <strong>Anthropic Claude Managed</strong></li>
+<li>META 소속 후보: <strong>Platform</strong></li>
+<li>전사에서 직접 확인되는 발표자: <strong>Priyanka, Gabe Czemach</strong></li>
+<li>전사에서 직접 확인되는 발표자 소속: <strong>Anthropic</strong></li>
+<li>초기 아키텍처 시점: <strong>작년 12월</strong>로만 제시돼 정확한 연도 미확정</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · [한영자막] Anthropic Claude Managed Agents: 두뇌와 손을 분리한 설계 (1부) · https://www.youtube.com/watch?v=3iOP4cXChAc · 전사: 제공된 영어 SOURCE_TRANSCRIPT</p>
+<p>META의 provenance는 <code>Anthropic Claude Managed</code>와 <code>Platform</code>을 원작자·소속 후보로 적었지만, 화자 이름과 SNS를 근거로 한 추정이라고 명시한다. 전사에서 직접 확인되는 발표자는 Anthropic의 Priyanka와 Gabe Czemach이며, META의 <code>channel</code>과 <code>uploader</code> 원문은 모두 <code>Tech Bridge</code>다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>함께해 주신 모든 분께 정말 감사드립니다. 자리가 꽉 찼으니 이제 시작하겠습니다.</p>
+<p>안녕하세요, 여러분. 제 이름은 프리양카입니다. Anthropic의 기술 스태프(member of technical staff)로 일하고 있습니다. 저는 Claude Managed Agents를 구축한 엔지니어링 팀을 이끌고 있으며, 여러분께 Managed Agent를 처음 출시하는 방법을 소개할 수 있어 정말 기쁩니다. Anthropic에 합류한 지 2년이 조금 넘었고, 지난 12개월 동안은 에이전트 인프라 구축에 집중해 왔습니다. 그 과정에서 얻은 몇 가지 교훈을 여러분과 나누고 싶습니다.</p>
+<p>안녕하세요, 제 이름은 게이브 즈마흐입니다. 프리양카의 팀에서 Claude Managed Agents를 구축하고 있는 기술 스태프입니다. Anthropic에 합류한 지 1년이 조금 넘었고, 그동안 거의 계속 이 일을 해 왔습니다.</p>
+<p>좋습니다. 오늘의 순서는 다음과 같습니다. 먼저 Managed Agents를 어떻게 구축하고 확장해 왔는지에 대한 간단한 발전 과정과, 그 과정에서 겪은 몇 가지 함정과 교훈을 살펴보겠습니다. 그런 다음 실습으로 넘어가겠습니다.</p>
+<p>첫 번째 실습에서는 Claude Platform의 콘솔을 사용해 아주 간단한 에이전트를 만들어 보겠습니다. 이 과정에서는 코드를 작성하지 않습니다. 프롬프트만으로 첫 에이전트를 만들고 테스트해 보겠습니다. 그다음 게이브에게 넘겨 실습을 진행하겠습니다. Claude Code나 여러분이 선호하는 코딩 에이전트를 사용해 코드를 작성하고, 더 복잡한 금융 에이전트를 만들어 보겠습니다.</p>
+<p>마지막에는 Q&amp;A를 위한 충분한 시간도 마련되어 있습니다. 전체 시간은 2시간입니다. 네 부분으로 나뉘어 있다고 들었지만, 사실상 하나의 긴 발표입니다. 2시간을 전부 쓰지는 않기를 바랍니다. 오늘은 상당히 상호작용적인 방식으로 진행하고 싶으니, 질문이 있으면 손을 들어 주세요. 특히 실습에 들어가면 주변에 있는 몇 분이 질문하실 분께 마이크를 가져다드릴 겁니다.</p>
+<p>좋습니다. 시작하겠습니다. 먼저 기본부터 살펴보죠. 에이전트란 무엇인지, 또는 에이전트를 작동하게 만드는 요소가 무엇인지부터 보겠습니다. 에이전트는 기본적으로 도구를 사용하는 루프(loop) 안의 모델입니다. 왼쪽을 보면 모델이 다음 행동을 결정하고 도구를 호출하는 과정을 작업이 끝날 때까지 반복합니다. 이것이 에이전트가 무엇인지에 대한 가장 기본적인 개념입니다.</p>
+<p>다음으로 하네스(harness)가 무엇인지 이야기해 보겠습니다. 하네스는 일반적으로 모델을 감싸는 계층으로, 작업의 결과를 얻을 수 있도록 이러한 도구 호출을 루프 안에서 수행하게 도와줍니다. 모델이 할 수 없는 일을 가정하고 그 빈틈을 메우려는 역할을 합니다. 즉, 루프를 실행하고, 도구를 호출하며, 컨텍스트를 관리하고, 모델이 할 수 없는 모든 일을 캡슐화합니다.</p>
+<p>좋은 예로 Sonnet 4.5 모델에는 우리가 ‘컨텍스트 불안(context anxiety)’이라고 부른 현상이 있었습니다. Sonnet 4.5는 컨텍스트 한도에 가까워지고 있다고 느끼면 작업을 아주 빠르게 마무리하려고 했습니다. 따라서 Sonnet 4.5를 감싸는 하네스를 만들 때는 이런 불안을 우회하기 위해 컨텍스트 리셋(context reset) 같은 기능을 추가해야 했습니다.</p>
+<p>하지만 다음 모델인 Opus 4.5에서는 달랐습니다. Opus 4.5에는 이런 제한이 없었기 때문에 컨텍스트 리셋이 필요하지 않았습니다. 따라서 하네스를 만들 때는 각 모델에 대한 이러한 가정을 모두 캡슐화하고, 새로운 모델이 나올 때마다 계속 최신 상태로 유지해야 합니다. 이것이 좋은 하네스를 만드는 일이 매우 중요한 이유입니다. Claude Managed Agents를 통해 우리가 시도한 것도 바로 이런 일이었습니다.</p>
+<p>마지막으로 에이전트가 샌드박스(sandbox)나 컴퓨터에 접근할 수 있어야 합니다. 즉, 에이전트가 작성한 코드를 실행해 작업을 수행할 장소가 필요합니다.</p>
+<p>일반적으로 Claude에 샌드박스나 컨테이너(container) 접근 권한을 부여하고, 그 안에서 Claude가 작성한 코드를 실행하게 합니다. 파일을 편집하고, 의존성을 설치하는 등의 작업을 수행할 수 있습니다. Claude Code가 아주 좋은 예입니다. Claude Code는 기본적으로 여러분의 컴퓨터에서 로컬로 실행되는 하네스이며, 파일에 접근하고 작업을 진행하면서 파일을 실행하고 업데이트합니다. 또한 신뢰할 수 없는 코드도 작성합니다. 코드에 버그가 있을 수 있으므로, 프로덕션 에이전트를 배포할 때는 에이전트가 작성하는 코드가 샌드박스 처리되고 컨테이너 내부에 격리되어 있는지 확인해야 합니다.</p>
+<p>또한 샌드박스는 격리되어 있어야 하며, 장애 영향 범위(blast radius)는 제한되어야 합니다. 일반적으로 각 작업을 별도의 컨테이너에서 실행해야 작업들이 서로 섞이거나 작업의 장애 영향 범위가 커지는 일을 막을 수 있습니다.</p>
+<p>다음으로, 우리가 Managed Agents를 처음 구축했을 때의 아키텍처를 설명하겠습니다. 지난해 12월에 이 첫 번째 아키텍처를 얼리 액세스 고객에게 제공했고, 많은 피드백을 받은 뒤 새로운 아키텍처로 전환했습니다. 첫 번째 아키텍처에서 발견한 몇 가지 함정과 문제를 설명하겠습니다.</p>
+<p>첫 번째 아키텍처에서는 모든 것을 컨테이너 안에 넣었습니다. 해당 세션에서 발생한 모든 일을 기록한 세션 로그(session log)가 있었습니다. 세션은 기본적으로 작업 단위입니다.</p>
+<p>하네스도 컨테이너 내부에서 실행되었고, 샌드박스 실행 역시 컨테이너 안에서 이루어졌습니다. 모든 것이 컨테이너 안에 있었기 때문에 설계해야 할 서비스 경계가 없다는 장점이 있었습니다. 모든 것이 로컬에 있었고 편집하기도 쉬웠습니다. 파일 편집은 사실상 시스템 호출(syscall)이었습니다.</p>
+<p>하지만 곧 우리가 반려동물을 키우게 되었다는 사실을 깨달았습니다. 예전 인프라 시절의 ‘반려동물과 가축(pet-and-cattle)’ 비유를 들어 보지 못하셨다면, 반려동물은 이름이 붙어 있고 세심하게 관리하는 개체를 의미합니다. 반려동물이 아프면 다시 살려내기 위해 돌봐야 합니다. 그렇지 않으면 사실상 잃어버릴 수 없습니다.</p>
+<p>가축은 서로 대체할 수 있고 폐기하기도 쉽습니다. 하나가 실패하면 다른 것으로 교체하고 계속 진행하면 됩니다.</p>
+<p>좋은 예로 단일 데이터베이스 샤드가 있다고 생각해 봅시다. 그 샤드가 다운되면 제품 전체가 다운됩니다. 이것이 반려동물입니다. 하지만 마스터-리플리카(master-replica) 구성을 사용한다고 생각해 보세요. 마스터가 다운되어도 리플리카를 올릴 수 있습니다. 이것이 가축입니다. 인스턴스가 여러 개 있고, 그중 하나가 다운되어도 문제가 되지 않습니다. 다시 올리면 됩니다.</p>
+<p>따라서 초기 설정에서 우리가 갖고 있던 것은 본질적으로 반려동물이었습니다.</p>
+<p>몇 가지 문제가 발생했습니다. 모든 것이 컨테이너 안에서 실행되고 있었기 때문에 디버깅이 매우 어려웠습니다. 무엇이 문제를 일으켰는지 알 수 없었습니다. 패킷이 끊긴 경우와 컨테이너가 종료된 경우가 매우 비슷하게 보였고, 디버깅하려면 사실상 WebSocket을 통해 컨테이너 안으로 스트리밍해 들어가야 했습니다.</p>
+<p>또 다른 문제는 조사가 어려웠다는 점입니다. 고객 데이터가 이러한 컨테이너에 저장되어 있었기 때문에 내부에 들어가 디버깅할 방법이 없었습니다. 이것이 얼리 액세스에서 발견한 또 다른 문제였습니다.</p>
+<p>마지막으로 고객이 자신의 VPC에서 실행되는 MCP에 연결해 달라고 요청한다고 해 봅시다. 그러면 네트워크 피어링(network peering)을 하거나, 우리의 하네스를 고객에게 제공해 고객이 직접 실행하도록 해야 했습니다. 이 아키텍처에는 좋은 해결책으로 극복하기 어려운 여러 문제가 있었습니다.</p>
+<p>그래서 우리는 두뇌와 손을 본질적으로 분리하기로 했습니다. 이제 그 의미를 자세히 설명하겠습니다.</p>
+<p>에이전트는 본질적으로 세 개의 서로 다른 인터페이스가 되었습니다. 왼쪽에는 세션이 있습니다. 이는 해당 세션에서 지금까지 발생한 모든 일을 추가만 할 수 있는 로그(append-only log)로 기록한 것입니다.</p>
+<p>가운데에는 두뇌가 있습니다. 바로 여러분의 하네스 또는 에이전트 루프(agent loop)와 Claude입니다. 오른쪽에는 손이 있습니다. 샌드박스, MCP 도구 호출 등이 여기에 해당합니다. 이들은 필요할 때 프로비저닝되고 작업이 끝나면 사라집니다. 샌드박스를 잃어도 다시 실행하기만 하면 됩니다.</p>
+<p>각 구성 요소는 본질적으로 가축처럼 대체 가능해졌습니다. 샌드박스가 종료되면 하네스나 Claude가 샌드박스를 다시 실행하도록 선택할 수 있습니다. 오류는 Claude로 돌아가고, 샌드박스는 Claude에게 다른 도구 호출과 같습니다. 도구 호출이 실패하고 샌드박스가 실패하면 Claude가 어떻게 할지 결정합니다. 다시 실행할 수도 있고, 계속 진행할 수도 있습니다.</p>
+<p>하네스가 종료되더라도 하네스의 새 인스턴스를 실행하고 세션의 이벤트 로그를 읽기만 하면 중단한 지점부터 계속할 수 있습니다. 마지막 이벤트부터 작업이 재개되므로, 아무 문제도 발생하지 않은 것처럼 계속 진행할 수 있습니다.</p>
+<p>여기서 보호할 가치가 있는 유일한 것은 세션 로그였습니다. 나머지는 모두 대체 가능했습니다. 종료되어도 다시 실행하면 됩니다.</p>
+<p>또 한 가지 변경한 점은 인증 정보(credentials)가 샌드박스에 절대 들어가지 않도록 한 것입니다. 이전 설정에서는 인증 정보가 샌드박스 안에 있었기 때문에 프롬프트 인젝션(prompt injection)에 더 취약했습니다.</p>
+<p>변경 후에는 샌드박스가 토큰이나 접근 제어가 필요한 곳에 연결해야 할 경우, 프록시(proxy)를 거치도록 했습니다. 프록시가 외부 엔드포인트나 외부 MCP를 호출하기 전에 토큰을 삽입합니다. 이렇게 하면 모델이 인증 정보나 토큰을 볼 수 없습니다. Claude에게 “토큰을 내놔”라고 말하게 하거나, 토큰을 출력하거나 파일에 쓰도록 프롬프트 인젝션을 할 수 없습니다. Claude가 토큰을 볼 수 없기 때문입니다.</p>
+<p>또한 세션에 추가만 가능한 이벤트 로그가 있었기 때문에 컴팩션 전략(compaction strategy)을 유연하게 유지할 수 있었습니다. 어떤 것도 버리지 않습니다. 이벤트 스트림을 압축하거나 변경하지 않습니다. 발생한 모든 이벤트를 하나씩 저장한 뒤, 컴팩션 전략이 “전체 이벤트 로그를 확인하고 요약해서 컨텍스트에 넣을 것인가? 아니면 마지막 n개의 이벤트만 확인해 컨텍스트에 넣을 것인가?”를 결정합니다.</p>
+<p>따라서 우리가 선택한 이 인터페이스 설계 덕분에 더욱 유연한 컨텍스트 전략을 사용할 수 있었습니다.</p>
+<p>또 다른 이점은 추론 호출(inference call)을 즉시 시작할 수 있었기 때문에 첫 토큰까지 걸리는 시간(time to first token)을 약 90% 줄일 수 있었다는 것입니다. Claude는 필요할 때만 샌드박스를 생성했고, 첫 토큰을 반환하기 전에 컨테이너 샌드박스가 실행되기를 기다리지 않았습니다. 그 결과 이 아키텍처 변경을 통해 훨씬 더 빠르고 즉각적인 경험을 제공할 수 있었습니다.</p>
+<p>하나의 두뇌가 여러 개의 손에 도달할 수 있는 방식을 보여주는 예시입니다. 이제 에이전트 루프(agent loop)나 하네스(harness)가 샌드박스 컨테이너(sandbox container)를 호출할 수 있습니다. 고객의 VPC를 호출할 수도 있고, MCP 서버를 호출할 수도 있습니다. 이 모든 손은 본질적으로 서로 교체 가능하며, 여러 개를 호출하고 연결할 수 있습니다. 덕분에 아키텍처가 훨씬 더 유연해졌습니다.</p>
+<p>이 내용에서 한 가지만 기억하신다면, 하네스에는 가정이 담기며 그 가정은 시대에 뒤처질 수 있다는 점입니다. 그래서 저희는 이러한 가정보다 오래 유지될 수 있는 인터페이스를 설계하고 아키텍처를 더 유연하게 만들었습니다.</p>
+<p>이를 통해 컴팩션(compaction) 전략을 변경하고 하네스를 완전히 교체할 수 있었지만, 인터페이스와 아키텍처는 그대로 유지되었습니다. 이를 운영하는 방식을 더 플러그인 방식으로 만들 수 있게 된 것입니다.</p>
+<p>좋습니다. 이제 간단한 실습 부분으로 넘어가겠습니다. 여러분에게 농담을 들려주는 아주 간단한 에이전트를 만드는 과정을 안내하겠습니다.</p>
+<p>먼저 저희의 핵심 API와 개념 중 일부를 다룬 다음, platform.claude.com으로 이동해 첫 번째 에이전트를 만들어 보겠습니다.</p>
+<p>첫 단계는 <code>v1/environments</code>인 Environments API를 만드는 것입니다. 이 API를 사용하면 샌드박스를 위한 환경 또는 템플릿을 만들 수 있습니다.</p>
+<p>여기에는 네트워킹 설정이 포함됩니다. 네트워킹을 제한 없이 허용할지, 아니면 특정 도메인이나 MCP로 제한할지 선택할 수 있습니다. 컨테이너나 샌드박스에 설치할 패키지도 정의할 수 있습니다.</p>
+<p>이것이 환경을 설정하기 위해 가장 먼저 수행할 단계입니다.</p>
+<p>다음으로 에이전트를 만듭니다. 에이전트는 기본적으로 이름을 지정할 수 있는 무언가입니다. 여기서는 Joke Teller라고 부르겠습니다. 이 에이전트에 사용할 모델을 선택합니다. Opus 4.8, Haiku, Sonnet 중에서 원하는 것을 선택할 수 있습니다. 그런 다음 에이전트에 시스템 프롬프트(system prompt)를 제공합니다. 이 경우에는 <code>"You're a comedian. Find a fresh joke on the topic and deliver it well."</code>이라고 하겠습니다.</p>
+<p>그런 다음 이 에이전트에 도구를 제공할 수 있습니다. 여기서는 기본 도구 모음과 같은 에이전트 툴셋(agent toolset)을 제공하겠습니다. Bash 툴셋과 비슷하게 read, write, grep 등이 포함됩니다. 거의 모든 에이전트에 필요할 것입니다. 이것이 두 번째 단계입니다.</p>
+<p>세 번째 단계는 마침내 세션을 만드는 것입니다. 세션은 에이전트 ID와 환경 ID를 받아 세션을 생성합니다. 이것이 여러분의 작업, 즉 작업 단위입니다. 세션이 프로비저닝되면 유휴 상태입니다. 아직 작업이 수행되지 않은 상태죠. 이벤트를 보내기 전까지는 그렇습니다.</p>
+<p>세션의 이벤트 스트림(event stream)은 대략 이런 모습입니다. 여러분이 보내는 이벤트와 에이전트가 여러분에게 돌려보내는 이벤트가 있습니다. 왼쪽에는 <code>user.message</code>가 보입니다. <code>"Oh, tell me a joke about distributed systems,"</code>라고 말하면 에이전트가 재미있는 농담으로 응답할 것입니다.</p>
+<p>커스텀 도구(custom tool)라는 것을 사용할 수도 있습니다. 커스텀 도구를 사용하면 도구를 정의하고 그 도구에 어떻게 응답할지 처리할 수 있습니다. Claude는 기본적으로 커스텀 도구 사용 이벤트를 이벤트 스트림에 추가하며, 여러분은 이를 수신할 수 있습니다. 그런 다음 해당 이벤트를 처리하고 커스텀 도구 결과(custom tool result)로 Claude에 반환할 수 있습니다.</p>
+<p>여기에는 볼 수 있는 이벤트 유형에 대한 다른 예시도 있습니다. 세션에서 오류가 발생하거나 오류 상태에 들어가면 <code>session.error</code>를 볼 수 있습니다. <code>status.idle</code>은 세션이 유휴 상태이고 작업을 수행하지 않을 때 나타나며, 일반적으로 샌드박스를 실제로 사용하고 있지 않을 때입니다. 왼쪽의 <code>interrupt</code>는 세션을 중지하거나 종료하고 더 이상 작업을 수행하지 않게 하려는 경우입니다.</p>
+<p>이것이 전체 기능 목록과 비슷한 것입니다. 시간이 남으면 마지막에 Gabe가 다시 이 부분으로 돌아와 자세히 설명할 수도 있습니다. Gabe는 워크숍의 자신의 파트에서 여러분과 함께 멀티 에이전트(multi-agent)와 메모리(memory) 같은 개념을 더 깊이 다룰 예정이며, 이러한 기능도 저희가 제공합니다.</p>
+<p>그 부분으로 넘어가기 전에, 이제 platform.claude.com으로 이동하겠습니다.</p>
+<p>API 크레딧을 사용해 지금 확인해 보실 수 있기를 바랍니다. 그렇지 않다면 Travis가 마이크를 들고 돌아다니고 있으니, 질문이 있거나 도움이 필요할 때 불러 세우시면 됩니다. 콘솔로 이동하면 Managed Agents 섹션에서 Quick Start라는 항목을 볼 수 있습니다. 이것은 첫 번째 에이전트를 만드는 과정을 안내하는 가이드 투어와 같은 것입니다.</p>
+</details>
+</body></html>

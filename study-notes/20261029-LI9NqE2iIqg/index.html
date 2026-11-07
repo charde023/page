@@ -1,0 +1,347 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Vertical Foundation Models</title>
+<meta name="description" content="범용 AI와 맞먹는 성능을 훨씬 적은 추론 연산으로 내는 전문 분야 기초 모델의 목표, TimesFM 3 사례, 전용 데이터 병목을 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Y Combinator 학습노트</div><h1>Vertical Foundation Models</h1>
+<div class="meta">원작자 Vertical Foundation Models · 업로드 2026-10-29 · 1.1분 · <a href="https://youtu.be/LI9NqE2iIqg" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 5분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상은 <strong>모든 일을 하도록 만든 거대한 AI 대신, 제조·에너지·생물학처럼 한 분야를 깊게 다루는 기초 모델을 만들자</strong>는 제안이다. 여기서 기초 모델은 특정 업무 하나만 수행하는 프로그램이 아니라, 한 번 학습한 뒤 같은 분야의 새로운 업무도 별도 학습 없이 또는 몇 개의 예시만 보고 처리하도록 설계한 모델을 뜻한다.</p>
+<p>화자가 원하는 출력도 일반적인 생성 문장과 다르다. 개발자가 바로 사용할 수 있도록 <strong>형식이 정해진 결정값과 그 결정의 확률</strong>을 내고, 새로운 업무가 생길 때마다 별도의 분류기를 다시 학습하지 않는 방식이다.</p>
+<figure data-visual-kind="map">
+<div style="display:grid;grid-template-columns:minmax(0,1fr);gap:8px;max-width:760px;margin:16px auto;">
+  <div style="padding:14px;border:2px solid #365486;border-radius:10px;background:#eef4ff;overflow-wrap:anywhere;"><strong>1. 원하는 출력</strong><br>생성 문장 대신 형식이 정해진 결정값과 확률</div>
+  <div aria-hidden="true" style="text-align:center;font-size:22px;line-height:1;">↓</div>
+  <div style="padding:14px;border:2px solid #6b4f9c;border-radius:10px;background:#f5f0ff;overflow-wrap:anywhere;"><strong>2. 먼저 제시된 성능 기준</strong><br>범용 모델과 같거나 더 나은 성능을 내면서 추론 연산은 자릿수가 다를 정도로 적게 사용</div>
+  <div aria-hidden="true" style="text-align:center;font-size:22px;line-height:1;">↓</div>
+  <div style="padding:14px;border:2px solid #27745d;border-radius:10px;background:#edf9f4;overflow-wrap:anywhere;"><strong>3. 뒤이어 나온 사례</strong><br>화자가 소개한 Google의 TimesFM 3</div>
+  <div aria-hidden="true" style="text-align:center;font-size:22px;line-height:1;">↓</div>
+  <div style="padding:14px;border:2px solid #9b5a24;border-radius:10px;background:#fff5e9;overflow-wrap:anywhere;"><strong>4. 핵심 병목</strong><br>품질 좋은 전문 분야의 비공개 데이터 확보</div>
+</div>
+<figcaption>화자의 논증 순서: 원하는 출력과 큰 성능 기준을 먼저 세우고, TimesFM 3를 사례로 든 뒤 데이터 병목을 지적한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 특히 TimesFM 3의 구체 수치는 큰 목표를 제시한 <strong>뒤</strong>에 나오는 사례이지, 전체 목표를 먼저 증명한 결과로 제시된 것은 아니다.</p>
+<p>화자가 세운 성능 기준은 높다. 전문 모델이 범용 모델의 성능과 같거나 더 좋아야 하며, 추론할 때 필요한 계산은 <strong>orders of magnitude less</strong>, 즉 자릿수가 달라질 정도로 적어야 한다는 것이다. 화자는 그렇게 되어야 많은 곳에서 저렴하게 실행할 수 있다고 주장하지만, 정확한 연산량 비율이나 검증 결과는 제시하지 않는다.</p>
+<figure data-visual-kind="comparison">
+<p style="margin-bottom:8px;"><strong>작은 화면에서는 아래 표를 좌우로 이동해 읽는다.</strong></p>
+<div style="overflow-x:auto;max-width:100%;">
+<table style="width:100%;min-width:660px;border-collapse:collapse;">
+<thead>
+<tr>
+<th style="padding:10px;border:1px solid #777;background:#f1f3f5;">비교 축</th>
+<th style="padding:10px;border:1px solid #777;background:#f1f3f5;">화자가 피하려는 방식</th>
+<th style="padding:10px;border:1px solid #777;background:#eaf4ff;">화자가 원하는 전문 모델</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:10px;border:1px solid #777;"><strong>출력</strong></td>
+<td style="padding:10px;border:1px solid #777;">생성된 문장</td>
+<td style="padding:10px;border:1px solid #777;">형식이 정해진 결정값과 확률</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #777;"><strong>새 업무</strong></td>
+<td style="padding:10px;border:1px solid #777;">업무마다 분류기를 다시 학습</td>
+<td style="padding:10px;border:1px solid #777;">별도 예시가 없거나 몇 개뿐이어도 적응</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #777;"><strong>성능 기준</strong></td>
+<td style="padding:10px;border:1px solid #777;">범용 모델이 비교 기준</td>
+<td style="padding:10px;border:1px solid #777;">성능은 같거나 더 높고 추론 연산은 훨씬 적게</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #777;"><strong>어려운 자원</strong></td>
+<td style="padding:10px;border:1px solid #777;">원문에 구체 설명 없음</td>
+<td style="padding:10px;border:1px solid #777;">품질 좋은 분야별 비공개 데이터</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption>업무마다 새 모델을 만드는 방식과 화자가 제안한 전문 분야 기초 모델의 차이.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 행별로 왼쪽과 오른쪽을 비교한다. 이 표는 화자의 제안을 정리한 개념 비교이며, 실제 성능 측정값을 보여주는 표가 아니다.</p>
+<p>성능 목표 다음에 화자는 <strong>Google의 TimesFM 3</strong>를 예로 든다. 화자의 설명에 따르면 이 모델은 매개변수 3억 3천만 개를 사용하며, 업무별 미세 조정 없이 관련된 여러 시계열을 함께 예측한다. 전체 예측을 한 번의 순방향 계산으로 내고, 학습은 한 번만 하며, 새 사용자는 자신의 과거 기록을 문맥으로 제공한다.</p>
+<p>하지만 이 사례가 제조·에너지·생물학의 전문 모델이 이미 같은 성과를 냈다는 뜻은 아니다. 화자는 그런 연구가 더 나오기를 <strong>희망</strong>하며, 해당 분야를 잘 아는 사람이 품질 좋은 전용 데이터를 확보한다면 효율적인 모델을 만들 수 있다고 제안한다.</p>
+<p><strong>[경계]</strong> TimesFM 3의 사양과 작동 방식은 이 전사에서 화자가 한 주장으로만 확인된다. Jeff가 누구인지와 첫 문장의 <code>it</code>이 정확히 무엇을 가리키는지는 자료에 나오지 않는다. 또한 “어디서나 실행할 만큼 저렴하다”는 표현, 결정 확률의 신뢰성, 전문 분야 모델의 실제 성능은 독립적으로 검증되지 않았다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>전문 분야 기초 모델은 새 업무마다 별도 분류기를 만들지 않고, 결정값과 확률을 내는 것을 목표로 한다.</li>
+<li>화자는 먼저 범용 모델과 맞먹는 성능과 훨씬 적은 추론 연산이라는 기준을 제시한 뒤 TimesFM 3를 사례로 들었다.</li>
+<li>TimesFM 3의 설명은 사례이며, 제조·에너지·생물학 모델이 이미 검증됐다는 증거는 아니다.</li>
+<li>가장 큰 조건이자 병목은 품질 좋은 전문 분야의 비공개 데이터다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>전문 분야 기초 모델은 왜 매력적이며, 실제로 성립하려면 어떤 성능 기준과 데이터 조건을 충족해야 하는가?</strong></p>
+</blockquote>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>가상의 제조 현장에서 새로운 판정 업무가 생겼다고 생각해 보자. 화자가 원하는 모델은 업무마다 새 분류기를 훈련하는 대신, 분야 지식과 소수의 예시 또는 기존 기록을 문맥으로 받아 <strong>정해진 형식의 결정과 확률</strong>을 내놓는다. 단, 범용 모델과 맞먹는 성능과 훨씬 적은 연산량을 실제 평가로 확인해야 한다.</p>
+<p><code>"새 업무마다 별도의 분류기를 학습해야 한다"</code> <strong>문제</strong><br>
+→ <code>"한 분야에서 새 업무를 무예시·소수 예시로 처리하는 기초 모델을 사용한다"</code> <strong>작동 방식</strong><br>
+→ <code>"결정값과 확률을 적은 추론 연산으로 얻는 것을 목표로 한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">다목적 거대 도구와 분야별 정밀 도구</div>
+<p>범용 모델이 여러 종류의 일을 처리하는 큰 다목적 도구라면, 전문 분야 기초 모델은 특정 현장의 자료와 판단 방식에 맞춘 정밀 도구에 가깝다. 사용자는 매번 새 도구를 만드는 대신, 같은 도구에 새로운 기록이나 몇 개의 예시를 넣어 다른 업무를 처리한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 보통의 정밀 도구는 용도가 고정되어 있지만, 화자가 말하는 모델은 같은 분야 안에서 새로운 업무를 무예시 또는 소수 예시로 배우는 것을 목표로 한다. 또한 실제 성능과 비용은 비유만으로 보장되지 않는다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>전문 분야 기초 모델</strong></td>
+<td>한 분야의 여러 업무를 처리하는 기본 AI</td>
+<td>제조·에너지·생물학 같은 수직 분야에 특화되어 새 업무에도 적응하도록 만든 기초 모델(Vertical Foundation Model)</td>
+<td>특정 업무 하나만 수행하는 고정 분류기와 같다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>무예시·소수 예시 학습</strong></td>
+<td>예시가 없거나 몇 개만 있어도 새 일을 처리함</td>
+<td>업무별 추가 학습 없이 처리하는 제로샷과 소수 예시로 적응하는 퓨샷(Zero-shot/Few-shot)</td>
+<td>어떤 분야에서나 데이터 없이 정확하게 작동한다는 뜻으로 보는 것</td>
+</tr>
+<tr>
+<td><strong>추론 연산량</strong></td>
+<td>학습된 모델이 답을 낼 때 쓰는 계산</td>
+<td>입력을 받아 예측을 생성하는 추론 단계의 계산 자원(Inference Compute)</td>
+<td>매개변수 수만 알면 실제 연산 비용도 확정된다고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>왜 품질 좋은 전문 분야의 비공개 데이터가 이 모델을 만드는 핵심 병목이 되는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>모델이 한 분야의 새로운 업무를 처리하려면 그 분야의 기록과 판단 구조를 학습해야 한다. 화자는 이를 위해 품질 좋은 분야별 비공개 데이터가 필요하며, 바로 그 데이터를 구하는 일이 어렵다고 말한다. 다만 어떤 데이터 품질 기준이 필요한지는 제시하지 않는다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>업무마다 새 분류기를 만드는 방식과 전문 분야 기초 모델은 무엇이 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>전자는 새 업무마다 해당 업무를 위한 분류기를 별도로 학습한다. 후자는 한 분야에서 먼저 학습한 모델이 새로운 업무도 추가 학습 없이 또는 몇 개의 예시만으로 처리하는 것을 목표로 한다. 이것은 목표의 차이이며, 실제 성공 여부는 성능과 추론 연산량을 함께 측정해야 판단할 수 있다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>어떤 업무가 전문 분야 기초 모델의 후보인지 판단하려면 무엇을 먼저 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>같은 분야 안에서 새로운 판정 업무가 반복되는지, 결정값과 확률처럼 정해진 출력이 필요한지, 품질 좋은 분야별 기록을 확보할 수 있는지 확인한다. 그다음 범용 모델과 같은 평가에서 성능을 맞추거나 넘으면서 추론 연산량이 자릿수 차이로 줄어드는지 시험해야 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 전문화의 가치는 작은 모델 자체가 아니라 성능·연산·적응의 동시 달성에 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 범용 모델과 같거나 더 나은 성능을 훨씬 적은 추론 연산으로 내고, 새 업무를 무예시 또는 소수 예시로 배우는 모델을 목표로 제시했다. 그 뒤 3억 3천만 매개변수의 TimesFM 3를 사례로 들었다.</li>
+<li><strong>[해석]</strong> 전문 모델의 후보를 고를 때는 모델 크기만 보지 말고, 정확한 출력 형식·새 업무 적응·성능·추론 연산량·데이터 확보 가능성을 한 묶음으로 평가해야 한다.</li>
+<li><strong>[경계]</strong> 원문 안에서 충돌하는 수치나 열거 개수는 발견되지 않았다. 영상 길이 65초와 1.1분은 반올림상 일치하며, 매개변수 수는 3억 3천만 개로 한 번만 제시된다. 다만 <code>orders of magnitude</code>의 정확한 배수, 비교 평가 결과, 확률의 신뢰성은 제시되지 않았다. 원작자 <code>Vertical Foundation Models</code>는 META가 화자 이름과 SNS를 근거로 추정한 후보이며, 확정 정보가 아니다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 자유로운 생성문보다 형식이 정해진 결정값과 확률을 원한다.</li>
+<li><strong>통찰:</strong> 학습 확인에서도 긴 감상보다 정해진 답과 판단 근거를 받으면 이해 여부를 더 선명하게 관찰할 수 있다는 구조적 비유가 가능하다.</li>
+<li><strong>질문/행동:</strong> 학습자에게 결론, 근거, 확신이 낮은 지점을 정해진 형식으로 설명하게 하면 무엇이 드러나는지 시험한다.</li>
+</ul>
+<h3>사업가 · 영감</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 더 적은 추론 연산과 전문 데이터 확보를 가치와 병목으로 제시한다.</li>
+<li><strong>통찰:</strong> APOM의 현재 시스템 상태는 자료에 없으므로 직접 적용을 단정할 수 없다. 다만 반복되는 분야별 판정 업무와 전용 데이터가 있는지는 전문 모델 후보를 찾는 질문이 될 수 있다.</li>
+<li><strong>질문/행동:</strong> 검증 전 가상 적용으로, 반복 판정이 많고 품질 좋은 내부 기록을 확보할 수 있는 후보 업무가 있는지 먼저 묻는다.</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 먼저 “범용 모델과 같거나 더 좋은 성능을 훨씬 적은 연산으로 낸다”는 기준을 제시하고, 그 뒤 TimesFM 3의 수치와 작동 방식을 사례로 들었다.</li>
+<li><strong>통찰:</strong> 설득 문장도 성공 기준을 먼저 밝힌 뒤 구체 사례를 붙이면, 사례가 무엇을 뒷받침하는지 독자가 따라가기 쉽다.</li>
+<li><strong>질문/행동:</strong> 카피를 만들 때 목표 기준과 사례의 순서를 유지하고, 사례가 전체 목표를 검증하지 않았다면 그 한계를 함께 표시한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 핵심 선택 기준이 모델 이름이 아니라 새 업무 적응, 출력 형식, 성능, 추론 연산량, 데이터라는 점에서 직접 관련된다.</li>
+<li><strong>통찰:</strong> 전문 모델은 “작다”는 이유만으로 선택하지 않고, 같은 평가 업무에서 범용 모델 대비 품질과 추론 연산량을 함께 비교해야 한다.</li>
+<li><strong>질문/행동:</strong> 후보 업무 하나에 대해 동일한 평가 기준을 적용하고, 성능을 충족한 경우의 추론 연산량 비율을 측정한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"새 업무마다 분류기를 다시 학습하면 시간과 연산이 반복해서 든다"</code> <strong>문제</strong><br>
+→ <code>"새 업무에 빠르게 적용할 수 있는 형식화된 결정과 확률"</code> <strong>수혜자: 개발자와 해당 분야 사용자</strong><br>
+→ <code>"과거 기록과 전문 분야의 비공개 데이터 제공"</code> <strong>지불자 또는 자원 제공자: 새 사용자와 분야 데이터 보유자</strong><br>
+→ <code>"범용 모델과 같은 수준 이상의 성능을 충족한 경우의 추론 연산량 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 검증 전 가상 적용으로 전문 지식이 필요한 후보 업무 하나를 정하고, 같은 평가 자료에서 범용 모델과 전문 모델 후보를 비교한다.</li>
+<li><strong>측정 1개:</strong> 동일한 성능 기준을 충족한 경우의 범용 모델 대비 추론 연산량 비율.</li>
+<li><strong>중단 기준 1개:</strong> 그 비율이 화자가 요구한 자릿수 차이의 연산 감소를 보이지 않으면 확대하지 않고 멈춘다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>원하는 출력</td>
+<td>생성 문장 대신 형식이 정해진 결정값과 확률</td>
+</tr>
+<tr>
+<td>2</td>
+<td>제안과 성능 기준</td>
+<td>제조·에너지·생물학용 모델을 희망하며 범용 모델 대비 큰 연산 절감을 요구</td>
+</tr>
+<tr>
+<td>3</td>
+<td>TimesFM 3 사례</td>
+<td>3억 3천만 매개변수, 업무별 미세 조정 없음, 한 번의 순방향 계산</td>
+</tr>
+<tr>
+<td>4</td>
+<td>데이터 병목과 제안</td>
+<td>품질 좋은 전문 분야의 비공개 데이터가 가장 어려운 조건</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 원하는 출력</h3>
+<p>화자는 Jeff가 어떤 중요한 요구를 건드렸다고 말한다. 그 요구는 개발자에게 생성 문장이 아니라 <strong>형식이 정해진 결정값과 확률</strong>을 주는 것이다. 또한 새로운 업무가 생길 때마다 별도의 분류기를 훈련하지 않는 방식을 원한다.</p>
+<p>자료에는 Jeff의 신원과 첫 문장의 <code>it</code>이 가리키는 대상이 명시되어 있지 않다.</p>
+<h3>2. 전문 분야 모델에 대한 희망과 기준</h3>
+<p>화자는 더 많은 연구소가 제조·에너지·생물학을 위한 전문 기초 모델을 만들기를 바란다. 이 모델은 예시가 전혀 없거나 몇 개만 있어도 새 업무를 처리해야 한다.</p>
+<p>화자가 제시한 기준은 다음과 같다.</p>
+<ul>
+<li>범용 모델과 같은 수준이거나 더 나은 성능</li>
+<li>자릿수가 달라질 정도로 적은 추론 연산</li>
+<li>많은 곳에서 실행할 수 있을 만큼 낮은 비용</li>
+</ul>
+<p>이는 앞으로 만들고 검증해야 할 목표다. 해당 세 분야에서 이미 이 기준을 달성했다는 결과는 원문에 없다.</p>
+<h3>3. TimesFM 3 사례</h3>
+<p>성능 기준을 제시한 뒤 화자는 Google의 TimesFM 3를 사례로 소개한다.</p>
+<ul>
+<li>매개변수: 3억 3천만 개</li>
+<li>관련된 여러 시계열을 함께 예측</li>
+<li>업무별 미세 조정 없음</li>
+<li>전체 예측을 한 번의 순방향 계산으로 출력</li>
+<li>학습은 한 번 수행</li>
+<li>새 사용자는 자신의 과거 기록을 문맥으로 제공</li>
+</ul>
+<p>이 항목들은 화자의 설명이며, 별도의 기술 문서나 평가 자료로 검증되지 않았다.</p>
+<h3>4. 데이터 병목과 창업 제안</h3>
+<p>화자는 가장 어려운 부분이 <strong>품질 좋은 전문 분야의 비공개 데이터 확보</strong>라고 말한다. 따라서 특정 분야를 충분히 이해하는 사람이라면 계산 효율이 높고 새 업무를 무예시 또는 소수 예시로 배우는 모델을 만들 수 있다고 제안한다.</p>
+<p>마지막에는 이런 모델을 만들고 있는 사람의 연락을 기다린다고 말한다. 이는 개발·지원 요청이지, 해당 모델들이 이미 구현되고 검증되었다는 뜻이 아니다.</p>
+<h3>수치·고유명사·수량 표현 대조</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>자료의 표현</th>
+<th>대조 결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>영상 길이</td>
+<td>65초, 1.1분</td>
+<td>반올림상 일치</td>
+</tr>
+<tr>
+<td>모델 이름</td>
+<td>Google의 TimesFM 3</td>
+<td>다른 이름과의 충돌 없음. 화자 주장으로만 확인</td>
+</tr>
+<tr>
+<td>매개변수</td>
+<td>3억 3천만 개</td>
+<td>경쟁하는 다른 수치 없음</td>
+</tr>
+<tr>
+<td>대상 분야</td>
+<td>제조·에너지·생물학</td>
+<td>세 분야가 실제로 열거되어 개수 불일치 없음</td>
+</tr>
+<tr>
+<td>추론 연산 절감</td>
+<td>orders of magnitude less</td>
+<td>정확한 배수 미제시</td>
+</tr>
+<tr>
+<td>원작자</td>
+<td>Vertical Foundation Models</td>
+<td>META provenance가 추정 후보로 기록했으며 확정되지 않음</td>
+</tr>
+</tbody>
+</table>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Y Combinator · Vertical Foundation Models · https://www.youtube.com/watch?v=LI9NqE2iIqg · 전사: 제공된 SOURCE_TRANSCRIPT, 방식 미명시<br>
+원작자 후보: Vertical Foundation Models · 소속: 자료에 없음 · META의 근거: “채널이 원본 영상 링크를 안 검 — 화자 이름+SNS 기준 추정 출처”</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>제프의 말이 핵심을 찌른 것 같습니다. 새로운 과제마다 분류기(classifier)를 따로 학습시키지 않고도, 생성된 텍스트 대신 타입이 지정된 결정값(typed decision)과 확률을 개발자에게 제공하기 때문입니다. 더 많은 연구소가 제조, 에너지, 생물학을 위한 특화된 파운데이션 모델(foundation model)을 구축해, 제로샷(zero-shot) 또는 소수의 예시만으로 작동하도록 하는 모습을 보고 싶습니다. 기준은 범용 모델과 맞먹거나 이를 능가하면서도 추론에 필요한 컴퓨팅 자원은 몇 자릿수나 적게 사용하는 것입니다.</p>
+<p>그래야 모든 기기에서 실행할 수 있을 만큼 저렴해집니다. 예를 들어 Google의 TimesFM 3는 예측(forecasting) 분야에서 이것이 어떤 모습인지 보여줍니다. 이 모델은 3억 3천만 개의 파라미터를 가진 모델로, 과제별 미세 조정(task-specific fine-tuning) 없이도 서로 연관된 시계열을 한 번에 예측하고, 한 번의 순전파(forward pass)로 전체 예측 결과를 출력합니다. 학습은 한 번만 이루어지고, 새로운 사용자는 각자 자신의 이력을 컨텍스트로 제공합니다. 어려운 부분은 수직 분야(vertical-specific)의 고품질 비공개 데이터를 확보하는 것입니다. 따라서 어떤 수직 분야를 충분히 잘 알고 있다면, 컴퓨팅 효율이 매우 높고 제로샷 또는 소수 샷(few-shot)으로 새로운 과제를 학습할 수 있는 도메인 특화 파운데이션 모델을 구축할 수 있습니다. 이를 만들고 계시다면, 여러분의 이야기를 꼭 듣고 싶습니다.</p>
+</details>
+</body></html>

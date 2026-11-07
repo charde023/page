@@ -1,0 +1,608 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Rails에서 하네스 엔지니어링을 활용하는 방법 — Joël Quenneville</title>
+<meta name="description" content="AI에게 규칙을 더 설명하는 데서 멈추지 않고 테스트·린터·제너레이터·리뷰 루프를 연결해 반복 실수를 스스로 수정하게 만드는 방법."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>Rails에서 하네스 엔지니어링을 활용하는 방법 — Joël Quenneville</h1>
+<div class="meta">업로드 2026-10-05 · 30.9분 · <a href="https://youtu.be/xgPyzfDIrPY" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 9분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<h3>큰 그림: 빠른 첫 결과보다 마지막까지 드는 시간을 줄여야 한다</h3>
+<p>화자는 원래 이틀로 예상한 기능을 AI 코딩 에이전트와 작업했다. 약 한 시간 뒤에는 작동하는 결과가 나왔다. 그러나 내부 품질 문제를 고치고 여러 차례 검토하는 데 시간이 계속 들어갔고, 결국 전체 작업은 이틀 가까이 걸렸다고 회고한다. <strong>코드를 처음 만드는 시간은 크게 줄었지만, 검토와 수정까지 포함한 전체 시간은 줄지 않은 것</strong>이다.</p>
+<p>문제를 동료에게 넘길 수도 있다. 한 시간 만에 만든 코드를 바로 리뷰에 올리면 작성자는 빨라 보이지만, 품질 문제를 처리하는 비용은 리뷰어에게 이동한다. 화자가 원하는 해결책은 부담을 옮기는 것이 아니라 <strong>AI가 내놓는 결과의 최소 품질, 즉 품질의 바닥을 높이는 것</strong>이다.</p>
+<figure data-visual-kind="map" aria-labelledby="big-picture-caption">
+  <div style="max-width:760px;margin:1rem auto;display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.55;">
+    <div style="padding:14px;border:2px solid #7c3aed;border-radius:10px;background:#f5f3ff;">
+      <strong>문제</strong><br>약 한 시간 만에 작동하는 코드가 나와도 검토와 정리에 이틀 가까이 들 수 있다.
+    </div>
+    <div style="text-align:center;font-weight:700;" aria-hidden="true">↓</div>
+    <div style="padding:14px;border:2px solid #b45309;border-radius:10px;background:#fffbeb;">
+      <strong>잘못된 대응</strong><br>규칙을 프롬프트와 AGENTS.md에 계속 추가하고, 사람이 결과를 복사해 검사하고 다시 지시한다.
+    </div>
+    <div style="text-align:center;font-weight:700;" aria-hidden="true">↓</div>
+    <div style="padding:14px;border:2px solid #0369a1;border-radius:10px;background:#f0f9ff;">
+      <strong>작동 원리</strong><br>에이전트가 테스트·린터·제너레이터·리뷰 도구를 직접 사용하고 실패 결과를 받아 다시 시도하게 한다.
+    </div>
+    <div style="text-align:center;font-weight:700;" aria-hidden="true">↓</div>
+    <div style="padding:14px;border:2px solid #047857;border-radius:10px;background:#ecfdf5;">
+      <strong>목표 결과</strong><br>첫 출력의 완벽함이 아니라 반복 실수와 사람의 수동 개입을 줄여 전체 품질의 바닥을 높인다.
+    </div>
+  </div>
+  <figcaption id="big-picture-caption">프롬프트 중심 작업에서 검증과 자기수정이 포함된 하네스 중심 작업으로 이동하는 전체 지도</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 핵심은 “AI가 더 좋은 첫 답을 내게 하자”가 아니라 “틀린 첫 답도 검사 결과를 받아 고치게 하자”로 문제를 바꾸는 데 있다. 이 그림은 측정값 그래프가 아니라 화자의 설명을 정리한 개념도다.</p>
+<h3>에이전트는 한 번 답하는 모델이 아니라, 모델을 둘러싼 실행 구조다</h3>
+<p>언어 모델만 놓고 보면 텍스트를 받아 텍스트를 내보낸다. 화자는 이를 “병 속의 뇌”에 비유한다. 모델 자체는 파일을 읽거나 쓰고, 테스트를 실행하거나 브라우저를 열 수 없다. 그런 일을 가능하게 만드는 주변 프로그램이 <strong>에이전트 하네스(agent harness)</strong>다.</p>
+<p>하네스에 반복 구조를 넣으면 다음과 같은 일이 가능해진다.</p>
+<ol>
+<li>모델이 코드를 작성한다.</li>
+<li>하네스가 테스트나 검사 도구를 실행한다.</li>
+<li>실패 결과를 모델에게 돌려준다.</li>
+<li>모델이 코드를 수정한다.</li>
+<li>통과하거나 정해진 종료 조건에 도달할 때까지 반복한다.</li>
+</ol>
+<p>화자는 FizzBuzz 예시를 든다. AI가 3의 배수 조건을 15의 배수 조건보다 먼저 검사하면 15의 배수 분기가 실행되지 않는다. 더 긴 프롬프트로 실수를 미리 막으려 하기보다 테스트를 실행해 실패를 돌려주면 두 번째, 세 번째 또는 네 번째 생성에서 고칠 수 있다. 이처럼 환경을 확인하고 행동한 뒤 다시 시도하는 반복을 <strong>에이전틱 루프(agentic loop)</strong>라고 한다.</p>
+<figure data-visual-kind="process" aria-labelledby="loop-caption">
+  <div style="max-width:680px;margin:1rem auto;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.5;">
+    <div style="padding:12px;border:1px solid #334155;border-radius:8px;background:#f8fafc;"><strong>1. 목표 전달</strong> — 만들 기능과 조건을 알려준다.</div>
+    <div style="text-align:center;font-weight:700;" aria-hidden="true">↓</div>
+    <div style="padding:12px;border:1px solid #334155;border-radius:8px;background:#f8fafc;"><strong>2. 코드 생성·수정</strong> — 모델이 현재 정보로 작업한다.</div>
+    <div style="text-align:center;font-weight:700;" aria-hidden="true">↓</div>
+    <div style="padding:12px;border:1px solid #0369a1;border-radius:8px;background:#f0f9ff;"><strong>3. 환경에서 검사</strong> — 테스트, RuboCop, 로그 또는 브라우저로 결과를 확인한다.</div>
+    <div style="text-align:center;font-weight:700;" aria-hidden="true">↓</div>
+    <div style="padding:12px;border:1px solid #b45309;border-radius:8px;background:#fffbeb;"><strong>4. 실패 신호 반환</strong> — 무엇이 잘못됐는지 모델이 읽을 수 있게 전달한다.</div>
+    <div style="text-align:center;font-weight:700;" aria-hidden="true">↓</div>
+    <div style="padding:12px;border:1px solid #047857;border-radius:8px;background:#ecfdf5;"><strong>5. 종료 판단</strong> — 통과하면 끝내고, 실패하면 2번으로 돌아간다.</div>
+    <div style="padding:10px;border:2px dashed #7c3aed;border-radius:8px;text-align:center;"><strong>되돌아가는 경로:</strong> 5번에서 실패하면 2번의 코드 생성·수정으로 다시 이동한다.</div>
+  </div>
+  <figcaption id="loop-caption">생성, 검사, 실패 피드백, 재시도로 이어지는 에이전틱 루프</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 1번부터 아래로 내려간다. 5번에서 검사를 통과하지 못하면 마지막 상자의 안내대로 2번으로 돌아간다. 테스트는 정답을 대신 작성하지 않지만, 에이전트가 어느 방향으로 수정해야 하는지 알려주는 신호가 된다.</p>
+<h3>모든 판단을 AGENTS.md에 넣지 않는다</h3>
+<p>AGENTS.md는 매번 반복할 지침을 앞에 붙여 주는 편리한 장치다. 하지만 화자는 스타일 가이드와 복잡한 품질 판단을 모두 이 파일에 넣는 방식을 경계한다. 지침을 따를지는 확률적이며, 대화 문맥이 길어질수록 규칙을 놓칠 가능성이 커진다는 것이 그의 주장이다.</p>
+<p>예를 들어 “이런 모양의 Ruby 코드를 쓰지 말라”는 규칙을 길게 적는 대신 다음처럼 책임을 나눌 수 있다.</p>
+<ul>
+<li>코드 스타일 판정은 <strong>RuboCop</strong>이 맡는다.</li>
+<li>AGENTS.md에는 “Ruby 파일을 바꾼 뒤 RuboCop을 실행하라”는 짧은 경로 안내만 둔다.</li>
+<li>종료 직전에 실행되는 <strong>훅(hook)</strong>으로 RuboCop을 강제한다.</li>
+<li>검사에 실패하면 종료를 막고 다시 수정하게 한다.</li>
+</ul>
+<p>Rails 마이그레이션도 비슷하다. 파일명 생성 규칙을 자연어로 설명하는 대신 Rails 제너레이터를 사용하게 한다. 화자는 AGENTS.md의 제너레이터 사용 지침이 자신의 경험상 약 90% 작동했다고 말한다. 더 강하게 통제하려면 <code>db/migrate</code>에 파일을 직접 쓰는 행동을 훅으로 막고, 거부 이유와 함께 제너레이터를 사용하라고 안내할 수 있다고 제안한다. 여기서 중요한 것은 단순히 막는 것이 아니라 <strong>올바른 길을 가장 쉬운 길로 만드는 것</strong>이다.</p>
+<h3>생성 전·후와 결정적·추론적 도구를 구분한다</h3>
+<p>화자는 Brigitte Buchler에게서 가져온 것이라고 밝힌 2×2 틀로 조향 방법을 정리한다. 한 축은 <strong>생성 전인가, 생성 후인가</strong>이고 다른 축은 <strong>정해진 계산 규칙인가, LLM의 판단인가</strong>이다.</p>
+<p>아래 표는 모바일에서 좌우로 밀어 볼 수 있다.</p>
+<figure data-visual-kind="matrix" aria-labelledby="steering-matrix-caption">
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #cbd5e1;border-radius:10px;">
+    <table style="min-width:700px;width:100%;border-collapse:collapse;font-size:16px;line-height:1.5;">
+      <thead>
+        <tr>
+          <th style="padding:12px;border:1px solid #cbd5e1;background:#e2e8f0;text-align:left;">세로축: 작동 방식<br>가로축: 적용 시점</th>
+          <th style="padding:12px;border:1px solid #cbd5e1;background:#dbeafe;text-align:left;">왼쪽: 생성 전<br>Feedforward</th>
+          <th style="padding:12px;border:1px solid #cbd5e1;background:#dcfce7;text-align:left;">오른쪽: 생성 후<br>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th style="padding:12px;border:1px solid #cbd5e1;background:#f1f5f9;text-align:left;">위쪽: 결정적·계산적</th>
+          <td style="padding:12px;border:1px solid #cbd5e1;vertical-align:top;"><strong>왼쪽 위</strong><br>Rails 제너레이터<br>설정 스크립트<br>템플릿</td>
+          <td style="padding:12px;border:1px solid #cbd5e1;vertical-align:top;"><strong>오른쪽 위</strong><br>테스트<br>RuboCop<br>보안 검사기<br>로그 확인</td>
+        </tr>
+        <tr>
+          <th style="padding:12px;border:1px solid #cbd5e1;background:#f1f5f9;text-align:left;">아래쪽: 추론적·LLM 기반</th>
+          <td style="padding:12px;border:1px solid #cbd5e1;vertical-align:top;background:#fff7ed;"><strong>왼쪽 아래</strong><br>프롬프트<br><strong>AGENTS.md</strong><br>정적 문서<br>주변 소스 코드</td>
+          <td style="padding:12px;border:1px solid #cbd5e1;vertical-align:top;"><strong>오른쪽 아래</strong><br>범위를 좁힌 리뷰 스킬<br>서브에이전트의 사후 분석</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption id="steering-matrix-caption">에이전트 조향 수단을 적용 시점과 판단 방식으로 나눈 2×2 행렬</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 먼저 위·아래 행에서 결정적 도구인지 LLM 판단인지 고른 뒤, 왼쪽·오른쪽 열에서 생성 전인지 생성 후인지 확인한다. <strong>AGENTS.md는 아래쪽의 추론적 행과 왼쪽의 생성 전 열이 만나는 왼쪽 아래 칸</strong>이다. RuboCop은 오른쪽 위, Rails 제너레이터는 왼쪽 위, LLM 리뷰 스킬은 오른쪽 아래에 있다.</p>
+<p>화자의 결론은 AGENTS.md를 없애자는 것이 아니다. 이 칸만 유일한 해법으로 쓰지 말고, AGENTS.md는 어떤 도구를 실행할지 알려 주는 얇은 경로 안내층으로 유지하자는 것이다.</p>
+<h3>정해진 검사로 잡기 어려운 문제는 좁은 리뷰로 다룬다</h3>
+<p>모든 품질 문제를 린터 규칙으로 만들 수는 없다. 구조가 문제에 잘 맞는지, 메서드별 설계가 적절한지, 코드가 읽기 쉽고 문서화되어 있는지처럼 판단이 필요한 문제도 있다.</p>
+<p>화자는 이런 검토를 하나의 거대한 “좋은 코드 만들기” 지침에 넣지 않고 세 단계의 좁은 리뷰 스킬로 나눴다고 말한다.</p>
+<ol>
+<li>해결 구조가 문제와 맞는지 보는 넓은 검토</li>
+<li>메서드별 검토</li>
+<li>가독성과 문서화를 보는 마무리 검토</li>
+</ol>
+<p>이 리뷰는 코드를 만들기 전에 모든 가능한 프로그램을 통제하는 대신, <strong>이미 만들어진 구체적인 코드에서 위반을 찾는다.</strong> 화자는 이를 출발선 뒤에서 밀기보다 경로 중간에서 방향을 바로잡는 방식으로 설명한다. 리뷰를 별도 서브에이전트에서 실행하면 작성 과정의 편향을 줄이는 데 도움이 된다는 주장도 덧붙인다.</p>
+<h3>도메인 전용 스크립트는 AI가 볼 수 있는 문제의 지도를 만든다</h3>
+<p>화자가 소개한 프로젝트에는 문서를 가져오고, 처리하고, 다른 데이터와 연결한 뒤 내부에 게시하는 파이프라인이 있었다. 자동 처리율은 약 5%였고, 그는 이를 100%까지 높여야 했다고 말한다. LLM에 실제 운영 데이터를 보여줘도 데이터베이스 일부, 문서 일부, 코드 일부만 따로 보며 모순된 원인 분석을 내놓았다고 한다.</p>
+<p>화자는 문서가 파이프라인의 어느 단계까지 갔고 어디서 빠졌는지 분류하는 도메인 전용 스크립트를 작성했다. 이 스크립트는 다음 세 가지를 제공했다.</p>
+<ul>
+<li>성공과 실패를 나누는 안정된 정의</li>
+<li>서로 비교할 수 있는 문서 집단</li>
+<li>파이프라인, 이탈 지점, 실패 묶음처럼 더 높은 수준의 언어</li>
+</ul>
+<p>그 결과 LLM의 원인 분석이 크게 좋아졌다는 것이 화자의 경험이다. 다만 최종 자동 처리율이 실제로 100%가 됐다는 말은 아니다. <strong>5%는 당시 상태이고, 100%는 필요한 목표</strong>로 제시됐다.</p>
+<figure data-visual-kind="process" aria-labelledby="domain-script-caption">
+  <div style="max-width:720px;margin:1rem auto;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.5;">
+    <div style="padding:12px;border:1px solid #334155;border-radius:8px;background:#f8fafc;"><strong>문서 가져오기</strong></div>
+    <div style="text-align:center;" aria-hidden="true">↓</div>
+    <div style="padding:12px;border:1px solid #334155;border-radius:8px;background:#f8fafc;"><strong>문서 처리</strong> — 이탈 문서를 같은 실패 범주로 분류</div>
+    <div style="text-align:center;" aria-hidden="true">↓</div>
+    <div style="padding:12px;border:1px solid #334155;border-radius:8px;background:#f8fafc;"><strong>다른 데이터와 연결</strong> — 어디까지 진행됐는지 기록</div>
+    <div style="text-align:center;" aria-hidden="true">↓</div>
+    <div style="padding:12px;border:1px solid #047857;border-radius:8px;background:#ecfdf5;"><strong>내부 게시</strong> — 성공적으로 파이프라인을 빠져나간 집단</div>
+    <div style="padding:12px;border:2px dashed #b45309;border-radius:8px;background:#fffbeb;"><strong>도메인 스크립트의 역할:</strong> 각 단계의 통과·이탈을 같은 정의로 분류해 사람과 LLM이 동일한 지도를 보게 한다.</div>
+  </div>
+  <figcaption id="domain-script-caption">도메인 전용 스크립트가 문서 파이프라인의 이탈 지점을 분류하는 방식</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 문서의 진행 경로를 따라간다. 점선 상자는 별도의 처리 단계가 아니라 모든 단계에 공통 기준을 제공하는 스크립트의 역할이다. 단계별 실제 이탈 수치는 전사에 없으므로 이 그림은 수량 그래프가 아니다.</p>
+<h3>마지막 원칙: 실제로 겪은 반복 고통에서 하나씩 자동화한다</h3>
+<p>화자는 모든 도구를 한꺼번에 추가하지 말라고 경고한다. 지표를 목표로 고정하면 에이전트가 사용자가 원한 품질이 아니라 점수만 만족시키는 방향으로 움직일 수 있기 때문이다. 이는 화자가 에이전트에도 적용된다고 본 <strong>굿하트의 법칙(Goodhart’s law)</strong>이다.</p>
+<p>권장 순서는 다음과 같다.</p>
+<figure data-visual-kind="cycle" aria-labelledby="improvement-cycle-caption">
+  <div style="max-width:680px;margin:1rem auto;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.5;">
+    <div style="padding:11px;border:1px solid #334155;border-radius:8px;"><strong>1. 실제 작업에서 사람이 개입한 지점을 기록한다.</strong></div>
+    <div style="text-align:center;" aria-hidden="true">↓</div>
+    <div style="padding:11px;border:1px solid #334155;border-radius:8px;"><strong>2. 빠진 신호와 반복 실수를 찾는다.</strong></div>
+    <div style="text-align:center;" aria-hidden="true">↓</div>
+    <div style="padding:11px;border:1px solid #334155;border-radius:8px;"><strong>3. 테스트·린터·제너레이터·리뷰 중 맞는 장치를 하나 고른다.</strong></div>
+    <div style="text-align:center;" aria-hidden="true">↓</div>
+    <div style="padding:11px;border:1px solid #334155;border-radius:8px;"><strong>4. 에이전트가 직접 신호를 읽고 수정하게 연결한다.</strong></div>
+    <div style="text-align:center;" aria-hidden="true">↓</div>
+    <div style="padding:11px;border:1px solid #047857;border-radius:8px;background:#ecfdf5;"><strong>5. 사람의 개입이 줄었는지 다음 작업에서 확인한다.</strong></div>
+    <div style="padding:10px;border:2px dashed #7c3aed;border-radius:8px;text-align:center;"><strong>순환 경로:</strong> 새로운 개입이 발견되면 5번에서 1번으로 돌아가 다음 개선 대상을 고른다.</div>
+  </div>
+  <figcaption id="improvement-cycle-caption">반복되는 수동 수정을 다음 작업의 자동 검증 장치로 바꾸는 지속 개선 순환</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 1번에서 시작해 아래로 진행하고, 5번에서 새 문제가 발견되면 명시된 순환 경로를 따라 1번으로 돌아간다. 도구 목록을 먼저 설치하는 순환이 아니라, 실제로 반복된 문제를 출발점으로 삼는 순환이다.</p>
+<p><strong>전체 통찰:</strong> 좋은 하네스는 LLM을 더 똑똑하게 만드는 장치라기보다, LLM이 실수했을 때 환경의 신호를 읽고 다시 시도할 수 있게 만드는 작업 구조다. 판단을 무조건 프롬프트에 넣지 않고, 확실히 계산할 수 있는 부분은 테스트·린터·제너레이터로 옮기며, 계산하기 어려운 부분은 범위를 좁힌 사후 리뷰로 다룬다.</p>
+<p><strong>경계:</strong> 이 내용은 화자의 Rails 작업 경험과 사례에 기반한다. 약 90%, 5%, 100%와 같은 수치는 통제된 비교 실험 결과로 제시되지 않았다. 특히 훅으로 “100%에 도달할 수 있다”는 표현은 제안된 통제 방식이지, 실제 달성 결과로 확인된 수치가 아니다. 메타데이터에는 원본 영상 링크가 없고 출처가 추정이라고 적혀 있다. 제목은 Joël Quenneville을 화자로 표시하지만 provenance의 creator 값은 비어 있으며, Shopify 소속도 독립 확인되지 않았다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>AI 코딩의 속도는 첫 출력 시간이 아니라 검토와 수정까지 포함한 전체 시간으로 판단해야 한다.</li>
+<li>에이전트 하네스는 모델에 도구와 반복 구조를 붙여 실패를 읽고 스스로 다시 시도하게 한다.</li>
+<li>결정할 수 있는 규칙은 테스트·린터·제너레이터로 옮기고, 판단이 필요한 문제는 좁은 사후 리뷰로 다룬다.</li>
+<li>실제로 반복된 수동 개입 하나부터 자동화하고, 지표를 지나치게 강제해 우회 행동을 만들지 않는다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>AI가 빠르게 만든 코드의 검토 비용을 사람에게 넘기지 않으면서, 결과의 최소 품질을 어떻게 높일 수 있는가?</strong></p>
+</blockquote>
+<ul>
+<li>프롬프트와 AGENTS.md만으로 품질을 통제할 때 왜 한계가 생기는가?</li>
+<li>결정적 도구와 LLM 리뷰는 각각 어떤 문제에 배치해야 하는가?</li>
+<li>반복되는 수동 수정 하나를 하네스 개선으로 바꾸려면 무엇부터 관찰해야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>AI가 Ruby 파일을 수정하고 작업을 끝내려는 순간, 종료 훅이 RuboCop을 실행한다. 검사에 실패하면 종료를 허용하지 않고 오류를 에이전트에게 돌려준다. 에이전트는 코드를 고친 뒤 다시 검사한다.</p>
+<p><code>"한 시간 만에 만든 코드가 반복 검토와 수정으로 이틀짜리 작업이 된다"</code> <strong>문제</strong><br>
+→ <code>"하네스가 검사 도구를 실행하고 실패 신호를 에이전트에게 되돌린다"</code> <strong>작동 방식</strong><br>
+→ <code>"사람이 매번 같은 실수를 찾아 지시하지 않아도 에이전트가 다시 수정한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">답을 알려 주지 않고 채점 결과를 바로 돌려주는 연습장</div>
+<p>모델은 문제를 푸는 학습자, 테스트와 린터는 채점 기준, 하네스는 답안을 제출하고 결과를 돌려준 뒤 다시 풀게 하는 연습장에 대응한다. 첫 답이 틀려도 어느 조건에서 실패했는지 확인하고 다시 시도할 수 있다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 실제 에이전트는 사람처럼 문제를 이해하거나 학습이 영구적으로 축적된다고 보장되지 않는다. 또한 검사가 빠뜨린 품질 문제는 반복해도 발견할 수 없고, 지나치게 좁은 점수는 우회 행동을 유도할 수 있다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>에이전트 하네스</strong></td>
+<td>모델이 파일과 도구를 사용하게 둘러싼 실행 장치</td>
+<td>LLM 호출을 감싸고 환경 조회, 파일 작업, 도구 실행과 반복을 관리하는 코드</td>
+<td>모델 자체가 파일을 읽고 테스트를 실행한다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>에이전틱 루프</strong></td>
+<td>만들고 검사하고 다시 고치는 반복</td>
+<td>모델 호출, 환경 행동, 결과 관찰, 재시도를 종료 조건까지 반복하는 구조</td>
+<td>첫 생성이 완벽해야만 유용하다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>결정적 검증</strong></td>
+<td>같은 입력을 정해진 규칙으로 검사하는 것</td>
+<td>테스트, 린터, 보안 검사처럼 계산 가능한 기준으로 결과를 확인하는 메커니즘</td>
+<td>모든 품질 판단을 이런 검사로 표현할 수 있다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>훅</strong></td>
+<td>특정 순간에 자동으로 실행되는 검사 장치</td>
+<td>하네스의 생명주기 이벤트에서 사용자 코드를 실행하는 연결점</td>
+<td>지침을 적는 것과 실행을 강제하는 것이 같다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>추론적 사후 리뷰</strong></td>
+<td>이미 나온 코드를 LLM이 좁은 기준으로 검토하는 것</td>
+<td>생성 후 구체적인 산출물에 휴리스틱을 적용하는 LLM 기반 피드백</td>
+<td>모든 코딩 지혜를 하나의 거대한 리뷰 프롬프트에 넣는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>AI가 한 시간 만에 작동하는 코드를 만들었는데도 전체 작업 시간이 이틀로 돌아간 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>첫 출력의 기능 동작과 내부 품질이 같지 않았기 때문이다. 반복되는 품질 문제를 자동으로 잡고 수정하게 하는 피드백 구조가 없어 사람이 여러 차례 검토하고 오류를 다시 전달했다. 생성 시간은 줄었지만 수동 검토 비용이 남아 전체 작업 시간의 이점이 사라졌다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>AGENTS.md에 규칙을 적는 것과 RuboCop·제너레이터·훅으로 규칙을 실행하는 것은 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>AGENTS.md는 생성 전에 LLM의 판단을 유도하므로 규칙 준수가 확률적이다. RuboCop은 생성된 코드를 정해진 규칙으로 검사하고, 제너레이터는 올바른 구조를 미리 생성한다. 훅은 정해진 시점에 검사를 실행하도록 연결한다. AGENTS.md는 불필요한 것이 아니라 이런 도구로 가는 짧은 경로 안내에 더 가깝다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>다음 AI 코딩 작업에서 같은 수동 수정을 두 번 발견했다면, 어떤 장치를 추가할지 어떻게 판단할 것인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 실수를 기계적으로 판정할 수 있는지 본다. 가능하면 테스트, 린터나 훅을 후보로 삼고, 올바른 파일이나 구조를 처음부터 만들 수 있다면 제너레이터나 템플릿을 고려한다. 정해진 규칙으로 잡기 어렵다면 범위를 좁힌 사후 리뷰를 시험한다. 어느 경우든 도구를 모두 추가하지 말고 같은 실수에 대한 사람의 수동 수정 횟수가 실제로 줄어드는지 확인한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 생산성은 첫 출력이 아니라 마지막 검토까지 측정해야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 이틀로 예상한 기능이 약 한 시간 만에 작동했지만 여러 차례 정리와 검토를 거쳐 다음 날 저녁에야 끝났고, 결국 이틀짜리 일을 이틀에 했다고 말한다.</li>
+<li><strong>[해석]</strong> AI 작업의 이득은 생성 속도만으로 판단하면 과대평가된다. 작성자, 리뷰어, 수정자의 시간을 합친 전체 흐름을 봐야 한다.</li>
+<li><strong>[경계]</strong> “한 시간 생성 후 이틀간 정리”라는 표현과 “전체 이틀”이라는 결산이 함께 나온다. 정리 시간이 정확히 별도의 이틀이었는지, 한 시간을 포함한 전체 기간이 이틀이었는지는 표현상 모호하다. 이는 한 사례이며 일반적인 절감률을 증명하지 않는다.</li>
+</ul>
+<h3>2. 반복 판단은 설명문보다 실행 가능한 장치로 옮길 수 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 스타일 판단을 AGENTS.md에서 RuboCop으로 옮기고, 마이그레이션 파일 직접 생성을 막아 Rails 제너레이터를 사용하게 하는 방법을 제안한다.</li>
+<li><strong>[해석]</strong> 같은 규칙을 계속 설명해야 한다면 더 좋은 문장보다 실행 가능한 검사나 생성 경로가 적합한지 먼저 볼 수 있다.</li>
+<li><strong>[경계]</strong> 화자가 말한 “약 90%”는 제너레이터 사용 지침에 대한 개인적 체감이다. 훅으로 “100%”를 노리는 방법은 제안된 통제 방식이며 실제 달성 결과로 보고되지 않았다.</li>
+</ul>
+<h3>3. 도구를 많이 붙이는 것보다 실제 개입에서 개선 대상을 찾는 것이 우선이다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 모든 메커니즘을 한꺼번에 넣지 말고, 사람이 개입하거나 복사해 전달한 지점과 반복되는 실수를 살펴보라고 권한다. 제약이 지나치면 에이전트가 점수를 우회할 수 있다고 경고한다.</li>
+<li><strong>[해석]</strong> 하네스 개선의 출발점은 도구 목록이 아니라 반복되는 작업 마찰이다. 한 번의 자동화가 사람의 개입을 실제로 줄였는지를 다음 작업에서 확인해야 한다.</li>
+<li><strong>[경계]</strong> 우회 행동과 굿하트의 법칙에 관한 설명은 화자의 경험적 주장이다. 어떤 제약 수준에서 문제가 생기는지에 대한 수치나 비교 실험은 제공되지 않았다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 첫 답을 완벽하게 요구하지 않고, 테스트 결과를 돌려줘 스스로 수정하게 하는 루프를 제시한다.</li>
+<li><strong>통찰:</strong> 학습에서도 설명을 한 번 듣게 하는 것보다 답변, 판정 기준, 재설명의 반복으로 이해를 관찰하는 구조가 닮았다. 다만 사람의 학습과 코드 실행은 동일하지 않다.</li>
+<li><strong>질문/행동:</strong> 학습자가 틀릴 때 정답을 바로 주지 않고, 어떤 조건을 빠뜨렸는지 확인할 수 있는 피드백을 하나 설계해 볼 수 있는가?</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 빠른 생성으로 절약한 시간이 검토와 수정에 다시 새어 나가면 전체 비용은 줄지 않는다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에서도 자동화의 첫 처리 속도보다 재작업, 예외 처리, 검수 비용까지 포함한 전체 흐름을 보자는 가설로 옮길 수 있다.</li>
+<li><strong>질문/행동:</strong> 현재 APOM에 이런 하네스가 있다는 근거는 없으므로, 적용 전 가설로만 두고 자동 처리 뒤 사람이 반복 수정하는 한 종류의 예외가 있는지 먼저 확인한다.</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> “한 시간 만에 이틀치 코드를 만들었다”는 문장은 강한 주장처럼 보이지만, 최종적으로 이틀의 정리 시간이 들었다는 후속 장면이 전체 의미를 바꾼다.</li>
+<li><strong>통찰:</strong> 속도 수치만 제시하면 비용을 다른 단계로 숨길 수 있다. 상세페이지나 카피에서도 최초 결과뿐 아니라 검수 후 결과와 예외 처리까지 증거 범위를 밝혀야 한다.</li>
+<li><strong>질문/행동:</strong> 자동화 성과를 표현할 때 생성 시간, 최종 완료 시간, 사람의 수정 횟수를 분리해 보여줄 수 있는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 테스트, RuboCop, 훅, Rails 제너레이터, 리뷰 스킬과 서브에이전트가 모두 실제 에이전트 작업 구조로 제시된다.</li>
+<li><strong>통찰:</strong> 기술 이름부터 고르기보다 반복 실수가 기계적으로 판정 가능한지, 생성 전에 막을지 생성 후에 잡을지부터 결정해야 한다.</li>
+<li><strong>질문/행동:</strong> 다음 세션에서 사람이 결과를 복사해 검사기에 넣고 다시 전달한 순간을 한 번 기록하고, 그 연결을 하네스가 직접 수행할 수 있는지 검토한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"AI가 만든 코드의 반복 실수를 사람이 계속 찾아 고친다"</code> <strong>문제</strong><br>
+→ <code>"수동 검토와 재작업이 줄어든다"</code> <strong>수혜자: 개발자와 코드 리뷰어</strong><br>
+→ <code>"도구 설정 시간, 도메인 지식과 검증 기준을 제공한다"</code> <strong>지불자 또는 자원 제공자: 개발팀과 조직</strong><br>
+→ <code>"같은 유형의 실수에 대한 작업당 수동 수정 횟수의 감소"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 다음 코드 에이전트 작업에서 반복 수정한 실수 한 종류를 골라, 그 실수만 잡는 테스트·린터·훅 중 하나를 연결한 뒤 비교 가능한 다음 세 작업에 사용한다.</li>
+<li><strong>측정 1개:</strong> 작업당 같은 유형의 실수에 대한 수동 수정 횟수</li>
+<li><strong>중단 기준 1개:</strong> 적용 후 비교 가능한 세 작업의 수동 수정 횟수가 적용 전 기준 작업보다 줄지 않으면 확대하지 않고 해당 장치를 재검토한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>사라진 생산성</td>
+<td>한 시간 만에 작동한 코드가 반복 정리로 이틀짜리 작업이 됐다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>모델과 하네스</td>
+<td>모델에 환경 행동과 반복을 붙여 실패를 스스로 수정하게 한다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>결정적 도구</td>
+<td>RuboCop, 훅과 Rails 제너레이터로 반복 규칙을 실행한다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>추론적 리뷰</td>
+<td>정해진 검사로 잡기 어려운 문제는 좁은 사후 리뷰로 다룬다.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>조향 행렬</td>
+<td>생성 전·후와 결정적·추론적이라는 두 축으로 도구를 배치한다.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>도메인 전용 스크립트</td>
+<td>안정된 정의와 분류 체계가 사람과 LLM의 원인 분석을 돕는다.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>지속 개선</td>
+<td>실제 개입 지점에서 하나씩 자동화하고 과도한 지표 최적화를 피한다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 한 시간의 생성과 이틀의 완료</h3>
+<p>화자는 연초, 뒤에서는 1월이라고 회고하는 시점에 LLM으로 대부분의 코드를 작성하는 방식을 진지하게 살펴보기 시작했다고 말한다.</p>
+<p>이틀 분량으로 산정된 기능을 에이전트와 정리해 실행했고 약 한 시간 뒤에는 작동하는 결과를 얻었다. 그러나 내부 품질 문제가 남아 있었다. 점심 무렵에는 반나절이 지났고, 저녁에도 정리가 끝나지 않았다. 다음 날 다시 작업해 저녁에 마무리했으며, 이를 “이틀짜리 일을 이틀에 했다”고 표현한다.</p>
+<p>화자는 첫 한 시간 뒤 바로 PR을 올려 품질 문제를 동료에게 넘기는 선택을 비판한다. 자신이 원하는 것은 검토 비용을 이전하는 것이 아니라, AI 결과의 품질 바닥을 높여 이틀의 리뷰를 한 시간 수준으로 줄이는 것이다. 이 마지막 시간은 목표 표현이며 실제 달성 결과로 보고된 것은 아니다.</p>
+<h3>2. 모델, 하네스와 에이전틱 루프</h3>
+<p>FizzBuzz를 예로 들어 단순한 모델 호출과 에이전트 하네스를 구분한다. Ruby 래퍼가 API 호출뿐 아니라 파일을 읽고 쓸 수 있다면 그것은 단순 편의 코드가 아니라 모델을 감싼 하네스다.</p>
+<p>첫 코드에서는 15의 배수 조건보다 3의 배수 조건이 먼저 실행돼 15의 배수 분기가 작동하지 않는 버그가 있었다. 사람이 개발한다면 테스트를 실행하고 실패를 고친 뒤 다시 실행할 가능성이 높다. 하네스도 같은 반복을 자동화할 수 있다.</p>
+<p>화자는 첫 생성이 완벽할 필요가 없으며 테스트와 루프가 두 번째, 세 번째 또는 네 번째 생성에서 올바른 답으로 유도할 수 있다고 설명한다. Cursor, Claude Code, Codex 같은 상용 하네스의 중심에도 이런 일반화된 반복 구조가 있다고 말한다.</p>
+<h3>3. AGENTS.md에서 결정적 도구로 이동하기</h3>
+<p>화자의 일반적 권고는 AGENTS.md를 스타일 가이드 저장소로 사용하지 않는 것이다. AGENTS.md도 결국 프롬프트 앞에 붙는 지침이며, 준수가 확률적이고 문맥이 길어지면 놓칠 가능성이 커진다는 이유다.</p>
+<p>대신 스타일 판단을 RuboCop에 맡기고 AGENTS.md에는 Ruby 파일을 바꾼 뒤 RuboCop을 실행하라는 짧은 지시만 남긴다. 더 강한 방식은 Claude Code가 에이전틱 루프를 끝내려는 stop 이벤트에서 훅을 실행하는 것이다. RuboCop이 실패하면 종료를 거부하고 다시 수정하게 한다.</p>
+<p>화자는 다중 테넌트 환경에서 조회 범위를 빠뜨리는 실수도 사용자 정의 RuboCop cop으로 검사할 수 있다고 제안한다. 그런 검사기를 LLM으로 2분 안에 생성할 수 있다고 말하지만, 이는 화자의 주장으로 독립 검증되지 않았다.</p>
+<p>Rails 마이그레이션에서는 파일명 알고리즘을 설명하지 않고 Rails 제너레이터를 사용하게 한다. 그는 AGENTS.md 지침만으로는 약 90% 작동했다고 말한다. 훅으로 <code>db/migrate</code> 직접 작성을 차단하고, 거부 이유로 제너레이터 사용법을 알려 주는 방식을 더 강한 대안으로 제시한다.</p>
+<h3>4. 좁은 리뷰 스킬과 서브에이전트</h3>
+<p>정적으로 검사하기 어려운 품질 문제에는 LLM 리뷰 스킬을 사용한다. 화자는 다음 세 단계의 스킬을 만들었다고 말한다.</p>
+<ol>
+<li>해결 구조가 문제와 잘 맞는지 보는 넓은 구조 검토</li>
+<li>메서드별 검토</li>
+<li>가독성과 문서화를 확인하는 마무리 검토</li>
+</ol>
+<p>리뷰를 서브에이전트에서 실행하면 편향을 줄이는 데 도움이 된다는 것이 화자의 설명이다. 그는 생성 전에 모든 가능한 프로그램을 통제하는 것보다, 이미 생성된 구체적인 프로그램에 휴리스틱을 적용해 위반을 찾는 편이 쉽다고 주장한다.</p>
+<p>Claude Code의 dynamic workflow 또는 전사에 <code>Ultra Code</code>로 적힌 기능, 다른 하네스의 내장 기능과 제삼자 도구도 언급한다. 다만 <code>Ultra Code</code>라는 명칭의 정확성과 구체적인 제품 관계는 제공 자료만으로 확인할 수 없다.</p>
+<h3>5. 네 가지 조향 영역</h3>
+<p>화자는 Brigitte Buchler의 모델이라고 소개하며 조향 수단을 두 축으로 나눈다.</p>
+<ul>
+<li>시점: 생성 전 feedforward / 생성 후 feedback</li>
+<li>방식: 결정적·계산적 / 추론적·LLM 기반</li>
+</ul>
+<p>배치는 다음과 같다.</p>
+<ul>
+<li><strong>생성 전 × 결정적:</strong> Rails 제너레이터, 설정 스크립트, 템플릿</li>
+<li><strong>생성 후 × 결정적:</strong> RuboCop, Reek, Flog, Code Climate, 보안 검사, 테스트, 로그와 Playwright 확인</li>
+<li><strong>생성 전 × 추론적:</strong> 프롬프트, AGENTS.md, 정적 문서, 주변 소스 코드</li>
+<li><strong>생성 후 × 추론적:</strong> 에이전트 리뷰와 LLM 기반 분석</li>
+</ul>
+<p>AGENTS.md는 없애는 대상이 아니라 얇은 라우팅 계층으로 두는 것이 화자의 선호다. 판단을 가능한 범위에서 나머지 세 영역으로 분산하자는 주장이다.</p>
+<h3>6. 도메인 전용 스크립트 사례</h3>
+<p>화자가 최근 작업한 프로젝트는 문서를 가져와 처리하고 다른 데이터와 연결한 뒤 내부에 게시하는 흐름을 가졌다. 당시 자동 처리율은 약 5%였으며 100%가 필요했다고 말한다.</p>
+<p>LLM은 실제 운영 데이터와 코드를 볼 수 있었지만 큰 그림을 놓치고 서로 모순되는 원인 분석을 내놓았다. 화자는 문서가 파이프라인의 어느 지점까지 진행됐으며 어디서 이탈했는지를 분류하는 스크립트를 작성했다.</p>
+<p>그가 설명한 개선 이유는 세 가지다.</p>
+<ol>
+<li>성공적으로 파이프라인을 빠져나갔다는 뜻이 안정적으로 정의됐다.</li>
+<li>LLM이 데이터베이스 열이나 코드 조각보다 높은 수준의 분류 언어로 생각할 수 있게 됐다.</li>
+<li>같은 이유로 실패한 문서 집단부터 조사할 수 있게 됐다.</li>
+</ol>
+<p>스크립트 출력은 시각화에도 사용됐으며, 화자는 Rails의 Rake와 Rails shebang 스크립트가 이런 도구를 만들기 좋다고 설명한다. 결과가 “훨씬 좋아졌다”고 말하지만 개선 폭과 최종 자동 처리율은 제시하지 않는다.</p>
+<h3>7. 지속 개선과 retro 스킬</h3>
+<p>화자는 모든 장치를 한꺼번에 도입하지 말고 실제로 겪은 고통에서 개선을 시작하라고 권한다. 사람이 개입한 지점, 빠진 신호, 수동으로 복사한 내용, 결정적 도구로 옮길 수 있는 AGENTS.md 규칙, 길어진 대화, 반복되는 실수를 검토 질문으로 제시한다.</p>
+<p>자신은 긴 LLM 세션의 기록을 분석해 자동화 후보를 제안하는 retro 스킬을 만들었으며 GitHub의 <code>joelq/skills</code>에 있다고 말한다. Matt Pocock도 당시 “지난주” 같은 이름의 Retro 스킬을 공개했다고 언급한다. 이 시점 표현은 발표 당시를 기준으로 한 화자의 말이며 정확한 공개일은 제공 자료에서 확인할 수 없다.</p>
+<h3>수치·이름·시행 상태 대조</h3>
+<ul>
+<li>영상 길이 <code>1855초</code>와 <code>30.9분</code>은 환산상 일치한다.</li>
+<li><code>세 개의 리뷰 스킬</code>과 <code>세 단계의 리뷰</code> 열거는 일치한다.</li>
+<li><code>네 개의 조향 영역</code>은 세 가지 주요 사례 뒤에 프롬프트·AGENTS.md 영역을 추가해 네 칸을 모두 채우므로 열거-개수 충돌은 없다.</li>
+<li>“한 시간 생성 뒤 이틀간 정리”와 “이틀짜리 일을 이틀에 완료”는 정리 시간과 총시간의 경계가 모호하다. 하나의 정밀한 소요시간으로 합치지 않는다.</li>
+<li>마이그레이션 지침의 <code>약 90%</code>는 화자의 경험 주장이다. 훅을 통한 <code>100%</code>는 실제 검증 결과가 아니라 도달하려는 통제 수준으로 제안됐다.</li>
+<li>문서 자동 처리율 <code>약 5%</code>는 당시 상태이고 <code>100%</code>는 필요 목표다. 최종적으로 100%를 달성했다는 근거는 없다.</li>
+<li>제목은 화자를 <code>Joël Quenneville</code>로 표시하지만 META의 provenance.creator는 비어 있다. provenance.affiliation의 <code>Shopify</code>와 출처 추정은 원본 링크로 독립 확인되지 않았다.</li>
+<li><code>Brigitte Buchler</code>, <code>Rachel</code>, <code>Kenzie</code>, <code>Matt Pocock</code>, <code>Ultra Code</code>의 표기나 정확한 대상은 제공된 전사 밖에서 검증하지 않았다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>채널/업로더: Tech Bridge · Rails에서 하네스 엔지니어링을 활용하는 방법 — Joël Quenneville · https://www.youtube.com/watch?v=xgPyzfDIrPY · 전사: 제공된 SOURCE_TRANSCRIPT(방식 미상)<br>
+화자 표기는 제목의 Joël Quenneville을 따랐다. META에는 원본 영상 링크가 없고 출처를 화자 이름과 SNS 기준으로 추정했다는 provenance.note가 있으며, provenance.creator는 비어 있다. Shopify 소속 역시 provenance에 기록된 후보로 독립 확인되지 않았다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>올해 들어 저는 대부분의 코드를 LLM으로 작성하는 방법을 좀 더 진지하게 고민하기 시작했습니다. 약 이틀 정도의 작업으로 범위가 정해진 기능을 맡았던 일이 아주 생생하게 기억납니다. 에이전트와 함께 작업하면서 범위를 좁히고, 세부 사항을 모두 맞춘 다음 실행하게 했습니다.</p>
+<p>한 시간쯤 지나자, 기본적으로 작동하는 무언가가 완성되어 있었습니다.</p>
+<p>정말 놀랍죠? 이틀 치 작업을 한 시간 만에 해냈습니다. 이건 모든 것을 바꿀 겁니다.</p>
+<p>그런데 내부 품질에 몇 가지 문제가 있어서, 다듬은 다음 리뷰를 올리려고 했습니다. 팀에서 영웅처럼 보일 수 있겠다고 생각했죠.</p>
+<p>점심시간이 되었고, 저는 몇 차례 다듬기를 진행했습니다. 점점 나아지고 있었지만 아직 끝나지는 않았습니다. 여기까지 반나절 정도를 썼는데, 이틀 치 작업에 반나절을 쓴 것만 해도 여전히 꽤 좋은 성과였습니다.</p>
+<p>저녁이 되었는데도 아직 끝나지 않았습니다. 여러 차례 리뷰하고 많은 정리를 했습니다. 점점 나아지고 있었지만, 아직 완성된 상태는 아니었습니다.</p>
+<p>그래도 이틀 치로 범위가 정해진 작업에 하루를 쓴 것이라면, 그건 괜찮은 결과입니다.</p>
+<p>그래서 다음 날 다시 작업에 들어갔고, 이제 시간과의 경쟁이 시작되었습니다. 다듬기에 한 시간을 쓸 때마다 레버리지(leverage)가 줄어드는 것이 보였기 때문입니다. 저녁이 되어서야 간신히 결승선을 넘었습니다.</p>
+<p>해냈습니다. 이틀 치 작업을 이틀 만에 끝냈습니다.</p>
+<p>정말 답답합니다. 무엇이 잘못된 걸까요? AI가 약속한 이점은 어디서 무너진 걸까요?</p>
+<p>문제는 한 시간 동안 코드를 작성하고, 그다음 이틀 동안 AI가 만들어 낸, 이른바 엉성한 코드(slop)를 두더지 잡기처럼 계속 고치는 데 썼다는 것입니다.</p>
+<p>저는 이렇게 하고 싶지 않습니다.</p>
+<p>몇 가지 선택지가 있습니다. 첫째, 첫 한 시간이 지난 뒤 PR을 리뷰에 올리고 동료들이 품질 문제를 처리하게 하는 것입니다. 그러면 저는 이틀 치 작업을 한 시간 만에 해낸 영웅처럼 보이고, 그 부담을 다른 사람들에게 떠넘길 수 있습니다.</p>
+<p>그러지 마세요. 그렇게 한다면 나쁜 사람입니다.</p>
+<p>그 대신 제가 하고 싶은 일은 AI가 제공하는 결과의 하한선을 높여서, 그것을 리뷰하는 데 이틀이 아니라 한 시간만 쓰는 것입니다.</p>
+<p>그렇다면 어떻게 할 수 있을까요?</p>
+<p>더 나은 프롬프트(prompting)를 작성해 볼 수도 있습니다. 전문가들이 모두 AGENTS.md를 사용해 보고 있는 것 같습니다. 거기에 규칙을 몇 가지 넣으면 더 나은 코드를 작성하는 데 도움이 될지도 모릅니다.</p>
+<p>어느 정도는 효과가 있겠지만, 유감스럽게도 이것은 함정입니다. 여기에는 한계가 있습니다. 왜 그런지 이해하려면 “에이전트란 무엇인가?”라는 질문을 조금 더 파고들어야 합니다.</p>
+<p>FizzBuzz 프로그램을 작성하고, LLM이 대신 작성해 주기를 원한다고 해 보겠습니다.</p>
+<p>가장 기본적인 방법은 이 경우 Anthropic의 API에 직접 API 호출(raw API call)을 보내 다음과 같이 말하는 것입니다. “여기 명세(spec)가 있습니다. 이 명세를 통과하는 코드를 작성하세요.”</p>
+<p>우리는 Ruby 개발자이므로 이 작은 부분을 Ruby로 작성하고, 깔끔해 보이도록 그 주위에 간단한 Ruby 래퍼(wrapper)도 작성하겠습니다.</p>
+<p>방금 우리가 한 일은 사실 꽤 특별한 일이라서, 여기에 집중하고 싶습니다. 이 래퍼는 단순한 편의 기능이 아닙니다. 이것은 에이전트 하네스(agent harness)라고 부르는 것입니다. 즉, LLM 모델에 대한 호출을 감싸는 코드입니다.</p>
+<p>이 점은 정말 중요합니다. 모델 자체로는 아무것도 할 수 없기 때문입니다. 모델은 단지 병 속의 뇌일 뿐입니다. 텍스트를 넣으면 텍스트가 나옵니다.</p>
+<p>반면 하네스를 보세요. 디스크에서 파일을 읽고 있습니다. 디스크에 파일을 쓰고 있습니다. 이건 코드입니다. Ruby입니다. 모델 호출 주변에 원하는 것은 무엇이든 추가할 수 있고, 그 점이 매우 강력합니다.</p>
+<p>이제 하네스를 갖췄으니 실행해서 어떻게 되는지 보겠습니다.</p>
+<p>에이전트는 이런 것과 비슷한 결과를 만듭니다. 대체로 맞습니다. 하지만 버그가 있습니다. <code>divisible-by-15</code> 줄은 절대 실행되지 않습니다. <code>divisible-by-3</code> 줄이 항상 먼저 실행되기 때문입니다.</p>
+<p>그렇다면 어떻게 방지할 수 있을까요? 더 나은 프롬프트를 사용하면 될까요? 아니면 더 나은 프롬프트를 사용하면 될까요?</p>
+<p>우리가 이런 생각에 빠지는 이유는 에이전트가 무엇인지에 대해 다소 순진한 정신 모델로 문제에 접근하기 때문이라고 생각합니다. 우리는 에이전트를 블랙박스로 봅니다. 프롬프트를 넣으면 코드가 나옵니다. 더 나은 코드를 원한다면 더 나은 프롬프트를 넣어야 한다고 생각하는 것입니다.</p>
+<p>이 기법은 곧 한계에 부딪힙니다. 이는 ChatGPT 시대에서 비롯된 정신 모델입니다. 하지만 오늘날의 에이전트는 실제로 이보다 훨씬 더 정교합니다.</p>
+<p>그 이유를 이해하기 위해 잠시 멈추고 생각해 봅시다. 처음에 에이전트에게 제공했던 것과 같은 프롬프트를 여러분에게 줬다면, 여러분은 이 문제를 손으로 어떻게 해결했을까요?</p>
+<p>머릿속으로 명세를 통과하는 무언가를 만들어 보려고 했을까요?</p>
+<p>그럴 수도 있습니다. 이 방에는 훌륭한 개발자들이 많이 있으니까요.</p>
+<p>하지만 대부분은 아마 명세를 실행했을 것입니다. 엣지 케이스를 놓쳤다면 고친 다음 명세를 다시 실행하고 통과하는 것을 확인했을 것입니다.</p>
+<p>그렇다면 에이전트에게도 그렇게 하게 하면 어떨까요?</p>
+<p>모델은 스스로 코드를 실행할 수 없다는 점을 기억하세요. 그러니 우리가 직접 실행하고, 그 결과를 프롬프트에 넣으면 됩니다. 실제로 작동합니다. 하지만 이제 우리는 인간 배관공(human plumbing) 역할을 맡게 됩니다. 그 반복 작업을 우리가 직접 하고 있는 것이며, 이는 시간을 낭비하는 일입니다. 기계적인 종류의 작업이죠.</p>
+<p>이상적으로는 다른 무언가가 이 일을 자동으로 해주기를 원할 것입니다. 여기서 하네스가 등장합니다. 기억하시겠지만 하네스는 그저 Ruby입니다. 그 안에 루프(loop)를 포함해 원하는 것은 무엇이든 넣을 수 있습니다.</p>
+<p>이것은 이전 슬라이드의 동일한 패턴을 Ruby의 루프로 자동화한 것입니다.</p>
+<p>우리가 여기서 만든 것은 때때로 에이전트 루프(agentic loop)라고 부르는 것입니다. 이제 프롬프트가 모델로 들어갔다가 코드로 나오는 것만 있는 게 아닙니다. 프롬프트가 하네스로 들어갑니다. 하네스는 모델과 앞뒤로 대화할 수 있습니다. 환경의 정보를 조회할 수도 있고, 환경 안에서 작업을 수행할 수도 있습니다. 그런 다음 다시 루프를 돌지 결정할 수 있습니다. 모델을 여러 번 호출하면서 어떤 종류의 종료 조건에 도달할 때까지 계속 진행할 수 있습니다.</p>
+<p>이것은 매우 강력합니다. 루프를 통해 에이전트가 실패에 대응할 수 있기 때문입니다. 에이전트가 이제 스스로 복구할 수 있으며, 첫 번째 생성 결과가 완벽할 필요도 없다는 뜻입니다. 한 번에 완성하려고 할 필요가 없습니다.</p>
+<p>에이전트가 FizzBuzz에서 봤던 것처럼 대부분은 괜찮은 코드를 작성해도 괜찮습니다. 테스트를 실행하고 스스로 수정할 것이기 때문입니다. 두 번째, 세 번째, 네 번째 생성 단계에서 올바른 답을 내놓을 수 있으며, 이 모든 과정에 사람의 개입이 필요하지 않습니다.</p>
+<p>루프와 테스트가 에이전트를 올바른 선택으로 이끄는 것입니다.</p>
+<p>우리가 만든 루프는 테스트와 함께 작동하도록 하드코딩되어 있지만, 이 루프의 일반적인 버전은 우리가 사용하는 모든 상용 하네스의 핵심에 있습니다. 예를 들면 Cursor, Claude Code, Codex 같은 것들입니다.</p>
+<p>이 강연의 나머지 부분에서는 이러한 상용 하네스와, 이것들이 루프라는 사실을 활용해 프롬프트를 입력하고 결과를 기도하는(prompt-and-pray) 모델에서 벗어나고, 그 지식을 이용해 우리가 작성할 수 있는 Rails 코드의 하한선을 높이는 방법에 집중하고 싶습니다.</p>
+<p>이런 종류의 작업을 흔히 하네스 엔지니어링(harness engineering)이라고 부르며, 이것이 이 강연의 핵심이 될 것입니다.</p>
+<p>그렇다면 Rails의 하한선을 어떻게 높일 수 있을까요?</p>
+<p>여기 이 엉성한 Ruby 코드를 보세요. 에이전트가 이런 것을 작성하지 않기를 바랍니다.</p>
+<p>그렇다면 어떻게 해야 할까요? AGENTS.md에 규칙을 잔뜩 추가할 수 있습니다. 효과가 있을지도 모릅니다.</p>
+<p>제가 일반적으로 권하는 것은 AGENTS.md를 스타일 가이드(style guide)를 넣는 곳으로 사용하지 말라는 것입니다.</p>
+<p>문제는 AGENTS.md가 사실 또 다른 형태의 프롬프트를 입력하고 기도하는 방식이라는 점입니다. 하네스는 AGENTS.md의 내용을 가져와 프롬프트 앞에 덧붙입니다. 매번 직접 입력하지 않아도 된다는 편의 기능일 뿐, 사용하는 모든 프롬프트에 규칙을 직접 입력하는 것과 본질적으로 크게 다르지 않습니다.</p>
+<p>게다가 이것은 확률적입니다. 에이전트가 AGENTS.md의 모든 규칙을 따를 수도 있고, 따르지 않을 수도 있습니다. 컨텍스트가 점점 더 차면 규칙을 따르지 않을 가능성이 높아집니다.</p>
+<p>그렇다면 더 에이전트적인 방식, 또는 제가 하네스 엔지니어링 접근법이라고 부르는 방식은 무엇일까요?</p>
+<p>테스트와 마찬가지로 잠시 멈추고 여러분에게 묻겠습니다. 이런 엉성한 Ruby 코드를 작성하는 문제를 손으로 해결한다면 어떻게 하시겠습니까?</p>
+<p>AI가 등장하기 전부터 팀들은 수년 동안 이 문제를 해결해 왔습니다. 우리는 린터(linter)를 사용해 왔습니다. RuboCop 같은 도구를 사용해 왔습니다.</p>
+<p>그러니 RuboCop을 작성해 실행하고, 그 결과를 프롬프트에 전달한 뒤 루프를 돌릴 수 있습니다. 좋습니다. 하지만 다시 인간 배관공 역할을 맡게 됩니다.</p>
+<p>이것을 상용 하네스에 어떻게 연결할 수 있을까요? Claude Code의 소스 코드를 열어 RuboCop을 연결할 수는 없으니까요.</p>
+<p>아주 간단한 방법이 있습니다. AGENTS.md에 한 줄을 추가하세요. 지시문을 추가해서 “Ruby 파일을 변경한 후에는 RuboCop을 실행하라”고 말하는 것입니다.</p>
+<p>물론 이것도 여전히 확률적입니다. 하지만 AGENTS.md가 얼마나 작아졌는지 보세요. AGENTS.md에 있던 모든 지식, 즉 그곳에 들어 있던 모든 판단을 결정론적인 무언가로 옮겼습니다.</p>
+<p>스타일 가이드는 RuboCop이 관리합니다. AGENTS.md에 남은 것은 RuboCop을 실행하라는 지시뿐입니다.</p>
+<p>하지만 더 나아갈 수 있습니다. 100%에 도달하고 싶다면 훅(hook)이라는 것을 활용할 수 있습니다.</p>
+<p>훅은 하네스마다 다르며, 하네스는 이 부분을 끊임없이 개선하고 있습니다. 그러니 이 슬라이드의 정확한 코드는 아이디어만큼 중요하지 않습니다.</p>
+<p>훅은 특정 라이프사이클 이벤트(lifecycle event)가 발생했을 때 실행할 코드를 작성할 수 있게 해주는 것입니다. 이 경우 <code>stop</code> 이벤트는 Claude가 에이전트 루프를 종료하려 할 때 발생시키는 이벤트입니다.</p>
+<p>Claude가 하려는 일은 여기 있는 코드를 호출하는 것입니다. Claude가 종료하려 할 때 RuboCop을 실행하게 하겠습니다. RuboCop이 실패하면 “종료할 수 없습니다. 다시 실행해야 합니다”라고 말하겠습니다. 그러면 다시 실행되어 문제를 고치려고 할 것입니다.</p>
+<p>“좋아요, cop이 스타일 문제를 해결할 수는 있겠네요. 하지만 그게 하한선을 그렇게 많이 높여 주지는 않죠. 기준은 여전히 여기 아래에 있습니다”라고 생각할 수도 있습니다.</p>
+<p>저는 여러분 모두가 정말 야심을 가져야 한다고 권하고 싶습니다. 많은 품질 문제가 cop 형태의 검증을 갖고 있기 때문입니다.</p>
+<p>에이전트가 이런 멀티테넌트 버그를 계속 만든다고 해 보겠습니다. 적절한 방식으로 finder의 범위를 지정하는 것을 잊는 것입니다. 이런 버그를 잡아내는 커스텀 cop을 작성할 수 있습니다.</p>
+<p>이것이 어렵고 위협적으로 보인다면, 이제 우리에게 LLM이 있다는 점을 기억하세요. 이런 코드는 2분 만에 생성할 수 있습니다.</p>
+<p>이건 좀 고급스러운 예입니다. 제네릭하고, 이런 식의 설정(config)으로 구성할 수 있으며, 꽤 잘 작동합니다.</p>
+<p>그러니 LLM이 하는 어떤 일 때문에 답답함을 느끼고 그 행동을 멈추게 하고 싶을 때마다 스스로에게 물어보세요. 그걸 cop으로 잡아낼 방법이 있을까?</p>
+<p>창의적으로 생각하세요. 야심을 가지세요.</p>
+<p>그렇다고 해서 모든 문제가 린터(linter) 형태로 잘 해결되는 건 아닙니다. 제가 정말 신경 쓰이는 문제 중 하나는 마이그레이션입니다.</p>
+<p>Rails 마이그레이션에는 아주 특정한 파일 이름 형식이 있습니다. 에이전트는 그걸 보고 따라 하려고 하지만, 무엇이 그 형식을 결정하는지는 제대로 이해하지 못하기 때문에 자주 틀립니다.</p>
+<p>그렇다면 에이전트가 이걸 틀리지 않게 하려면 어떻게 해야 할까요?</p>
+<p>AGENTS.md에 알고리즘을 산문으로 적어 넣어 볼 수도 있습니다. 하지만 그건 그저 또 다른 프롬프트를 주고 기도하기(prompt-and-pray)일 뿐입니다.</p>
+<p>대신 다시 묻겠습니다. 이 문제를 손으로 해결한다면 어떻게 하겠어요? 이 방에 있는 모든 개발자는 그 숫자를 입력할 때 실수하지 않으려면 어떻게 하나요?</p>
+<p>답은, 저는 그 숫자를 입력하지 않는다는 겁니다. 여러분도 그 숫자를 입력하지 않습니다. 우리는 이를 위해 Rails 제너레이터(generators)를 사용합니다.</p>
+<p>그렇다면 모델에게 그렇게 하라고 시키면 되지 않을까요?</p>
+<p>AGENTS.md에 “항상 Rails generate migration으로 마이그레이션을 생성하라”는 지시문을 넣을 수 있습니다.</p>
+<p>그건 알고리즘을 Markdown 파일에 산문으로 복사해 넣으려는 것보다 훨씬 낫습니다.</p>
+<p>제가 보기에 이 방법은 90% 정도는 작동하지만, 더 잘할 수 있습니다.</p>
+<p>100%에 도달하고 싶다면 다시 훅(hooks)에 의지할 수 있습니다.</p>
+<p>이 훅은 Claude가 새 파일을 작성하려고 할 때마다 실행됩니다. 제 코드를 인라인으로 넣는 대신, 제가 작성한 Ruby 스크립트를 호출합니다.</p>
+<p>그 Ruby 스크립트는 이렇게 말합니다. “Claude, db/migrate 디렉터리에 쓰려고 하면 차단한다. db/migrate에 새 파일을 작성할 수 없다.”</p>
+<p>그다음 흥미로운 일을 합니다. 거부 이유를 알려 줍니다. “여기에 작성하는 대신 제너레이터를 실행하라”고 말하는 겁니다.</p>
+<p>이게 중요한 이유는 에이전트에게 목표가 있기 때문입니다. 여러분이 준 목표를 달성하려면 마이그레이션이 필요하다는 걸 에이전트가 알고 있는데 여러분이 막으면, 에이전트는 그걸 우회할 방법을 찾으려고 합니다. 그리고 에이전트는 그런 일을 정말 잘합니다. 오류 메시지를 알려 주고 쉬운 경로가 올바른 행동이 되도록 만들면, 차단을 우회하려고 할 가능성이 크게 줄어들고 올바른 일을 하도록 유도할 수 있습니다.</p>
+<p>에이전트는 쉬운 경로를 택하려고 하기 때문입니다.</p>
+<p>그리고 여기서도 야심을 가질 수 있습니다. 코드에 관한 변형(variants) 중 포착하고 싶은 모든 종류의 것, 제너레이터로 포착할 수 있는 패턴을 생각해 보세요.</p>
+<p>새 컨트롤러가 모두 기본 클래스(base class)를 상속하도록 만들고 싶은 디렉터리가 있는데, 그 방식이 앱의 기존 패턴과 달라서 LLM이 잘못 구현하고 있나요? 아니면 모든 컨트롤러에 인증을 위한 정책 객체(policy object)가 포함되도록 보장하고 싶나요? 그걸 제너레이터에 넣으세요.</p>
+<p>어제 여기서 Rachel의 강연에 참석한 분이라면, 제너레이터로 할 수 있는 정말 멋진 일들을 그녀가 깊이 있게 다뤘다는 걸 아실 겁니다. 놓치셨다면 녹화 영상이 공개될 때 꼭 보시길 권합니다.</p>
+<p>그리고 우리가 해 온 작업에 대해 짚고 싶은 점이 하나 있습니다. 우리는 일종의 에이전트 시스템, 즉 LLM에서 로직과 판단을 꺼내 결정론적 도구(deterministic tools)로 옮겨 왔습니다. 그런데 그렇게 하자 전체 시스템에는 지능이 덜 개입했음에도 시스템 전체가 더 똑똑하고 일관성 있게 되었습니다.</p>
+<p>정말 흥미로운 특성입니다. 그렇다고 해서 항상 그렇게 할 수 있는 것은 아닙니다. 어떤 품질 문제는 결정론적으로 잡아내기가 더 어려울 때가 있습니다. 우리에게는 휴리스틱(heuristic)이 필요하고, LLM에 더 가까운 무언가에 의지하고 싶을 수도 있습니다. 그렇다면 어떻게 해야 할까요?</p>
+<p>다시 말해, 이때 AGENTS.md를 꺼내 들 수도 있습니다. 하지만 그것 역시 그저 또 다른 프롬프트를 주고 기도하기입니다. 적어도 제가 사용하는 코드베이스에서는 코드 휴리스틱을 AGENTS.md에 넣는 방식의 실적이 특히 좋지 않았습니다. 그렇다면 대신 무엇을 할 수 있을까요?</p>
+<p>저는 LLM 리뷰 스킬(review skills)에 의지하는 방식을 정말 좋아합니다. 여러분의 하네스(harness)에는 아마 기본 리뷰 스킬이 포함되어 있을 텐데, 꽤 잘 작동합니다. 직접 만들 수도 있습니다. 다만 그렇게 한다면 더 좁은 범위로 만들기를 권합니다. 온갖 무작위 프로그래밍 지혜를 스킬 파일에 쏟아 넣으려고 하지 마세요. 대신 좋은 코드가 무엇인지에 대한 특정한 이론에 초점을 맞추세요.</p>
+<p>저는 제가 PR을 리뷰하는 방식에 기반해 세 가지 스킬을 만들었습니다. 세 단계로 구성됩니다. 아주 폭넓은 구조적 리뷰—해결책이 문제와 잘 대응하는가?—, 메서드 단위로 더 자세히 보는 리뷰, 그리고 코드가 읽기 쉽고 문서화가 잘되어 있는지를 살펴보는 마지막 다듬기 단계입니다.</p>
+<p>따라서 이것을 사용하고 싶습니다. LLM이 코드를 작성하게 한 다음, 이 스킬들을 호출해 코드에 대한 리뷰를 받는 겁니다. 이 방식은 작동하지만, 다시 우리를 인간 배관공(human plumbing) 역할로 돌려놓습니다.</p>
+<p>대신 하네스가 이 과정을 자동화하도록 만드는 방법을 생각해야 합니다.</p>
+<p>이제 이 스킬들을 서브에이전트(subagents)에서 실행하도록 해야 합니다. 그러면 편향을 줄이는 데 도움이 됩니다. 그리고 에이전트가 다른 에이전트와 대화하는 이야기를 하기 시작하는 순간, 우리는 오케스트레이션(orchestration)의 세계에 들어선 겁니다. 이건 진짜 오케스트레이션은 아니지만 어느 정도 흉내 내는 것이고, 이런 종류의 일에는 충분히 괜찮습니다.</p>
+<p>그저 작은 스킬 하나입니다. 수동으로 호출하면 이렇게 말합니다. “이봐, 내가 시킨 작업을 한 다음 이런 방식으로 서브에이전트를 실행하고, 다른 서브에이전트는 저런 방식으로 실행하고, 이 일을 하면 끝이야.” 다섯 줄이면 됩니다.</p>
+<p>진짜 오케스트레이션에 더 가까운 무언가를 하고 싶다면, Claude Code에서 동적 워크플로(dynamic workflow)나 Ultra Code를 사용해 그렇게 할 수 있습니다. 다른 하네스에도 내장 기능이 있다는 걸 알고 있고, 사용할 수 있는 서드파티 도구도 있습니다.</p>
+<p>이걸 보면서 손을 들고 이렇게 말하고 싶은 분도 있을 겁니다. “잠깐만요. 방금 AGENTS.md에 휴리스틱을 넣는 건 그저 프롬프트를 주고 기도하는 거라고 했잖아요. 스킬에 넣는 건 어떻게 다른가요? 그냥 위치만 옮긴 것 아닌가요?”</p>
+<p>여기서 아주 중요한 구분이 등장합니다. AGENTS.md를 사용한 프롬프트를 주고 기도하기의 문제는, LLM에게 프로그램을 만들어 달라고 할 때 처음에 지시를 주고 가능한 모든 프로그램의 우주에서 프로그램을 만들어 내라고 요구한다는 점입니다. “이 모든 조건을 만족하는 프로그램을 만들어 줘”라고 하는 셈입니다. 이건 상당히 어려운 요구입니다.</p>
+<p>지시를 줘서 프로그램의 방향을 조종하려고 하지만, 출발선 뒤에서 조종하는 겁니다. 대신 저는 경로 중간에서 조종하는 편이 낫다고 생각합니다. “여기 몇 가지 휴리스틱이 있어”라고 말하고, 가능한 모든 프로그램의 우주에 그걸 앞으로 적용하는 대신, 이미 생성한 구체적인 프로그램에 뒤쪽에서 적용하는 편이 훨씬 쉽습니다. 앞으로 만들 수 있는 모든 프로그램에서 위반을 찾는 것보다, 지금 이미 작성한 프로그램에서 위반을 찾는 편이 훨씬 쉽습니다.</p>
+<p>하지만 이 아이디어를 조금 더 넓은 관점에서 바라보고 싶습니다.</p>
+<p>제가 정말 좋아하는 멘탈 모델(mental model)이 하나 있습니다. Brigitte Buchler에게서 나온 것인데, 그녀는 에이전트를 조종하는 다양한 메커니즘을 2×2 사분면 시스템에 배치해 생각합니다.</p>
+<p>메커니즘은 생성이 일어나기 전에 조종하는 피드포워드(feedforward) 방식일 수도 있고, 생성이 일어난 뒤 피드백(feedback)을 통해 조종하는 방식일 수도 있습니다. 또한 그 메커니즘은 결정론적이고 계산적인 메커니즘일 수도 있고, LLM처럼 추론적인 것일 수도 있습니다.</p>
+<p>우리가 사용한 RuboCop은 피드백 계산 메커니즘입니다. 제너레이터는 피드포워드 메커니즘입니다. 에이전트 리뷰는 피드백 추론 사분면에 해당합니다.</p>
+<p>이제 이렇게 생각할 수도 있습니다. 예시는 세 가지를 살펴봤는데 사분면은 네 개잖아. 피드포워드 추론 사분면에는 무엇이 있지? 바로 우리의 오랜 친구인 프롬프팅과 AGENTS.md입니다.</p>
+<p>분명히 해 두고 싶은 점은, 에이전트를 조종할 때 이 사분면은 이야기의 매우 타당한 일부라는 것입니다. 다만 유일한 방법은 아닙니다.</p>
+<p>일반적으로 저는 판단을 피드포워드 추론 사분면에서 다른 세 사분면으로 옮기는 것이 좋다고 생각합니다. 개인적으로는 AGENTS.md를 제 머릿속 내용을 쏟아 넣는 곳이라기보다, 아주 얇은 라우팅 계층(routing layer)에 가깝게 두는 것을 선호합니다.</p>
+<p>그러니 창의력을 발휘해 봅시다. Rails 개발자로서 이 사분면에 무엇을 더 넣을 수 있을까요? RuboCop은 이미 봤지만, 여기에 넣을 수 있는 다른 것들로는 코드 품질에 대한 광범위한 휴리스틱을 제공하는 Reek, Flog, Code Climate이 있습니다. 보안 스캐너(security scanners)도 있습니다. 테스트도 있습니다. 로그를 확인하거나 Playwright로 브라우저를 열어 보는 것처럼 에이전트가 작업을 검증할 수 있게 해 주는 방법도 있습니다.</p>
+<p>제너레이터와 피드포워드 메커니즘 외에도 설정 스크립트(setup scripts)나 템플릿(templates) 같은 것도 사용할 수 있습니다. 저는 템플릿을 굉장히 좋아합니다. 자세히 살펴볼 시간은 없지만, 나중에 저를 찾아와 템플릿에 대해 이야기해 보세요. 그걸로 정말 재미있는 일을 해 왔거든요.</p>
+<p>추론적 피드백 사분면에서는 온갖 에이전트 리뷰와 에이전트 주도 분석(agentic-driven analysis)이 일어납니다. 그리고 마지막으로 추론적 피드포워드 사분면에는 프롬프트뿐 아니라 정적 문서(static docs)나 주변 소스 코드도 있습니다. 앞서 Kenzie의 강연에 갔다면, 소스 코드를 조종 메커니즘으로 활용해 할 수 있는 일들을 그녀가 아주 깊이 있게 다뤘다는 걸 아실 겁니다.</p>
+<p>이 모든 것을 보고 앱에 전부 추가하고 싶어질 수도 있습니다. 하지만 경고를 하나 드리겠습니다. 그건 굿하트의 법칙(Goodhart's law)입니다. 측정 지표가 목표가 되는 순간, 그 지표는 더 이상 좋은 지표가 아닙니다.</p>
+<p>이 법칙은 인간을 관리하기 위해 만들어졌지만 에이전트에도 적용됩니다. 에이전트를 지나치게 강하게 제약했을 때 에이전트가 이를 우회하려고 하기 시작한다는 걸 저는 발견했습니다. 따라서 Code Climate 같은 도구를 사용해 어떤 항목에서 최고 점수를 받게 하려는 경우, 그 기준을 너무 빡빡하게 설정하면 에이전트는 여러분을 만족시키지 못하는 방식으로 점수를 만족시킬 방법을 찾아낼 겁니다. 그러니 약간의 여유를 주세요. 그러면 더 나은 결과를 얻을 수 있습니다.</p>
+<p>제가 정말 좋아하는 기법 중 하나인 도메인 특화 스크립트(domain-specific scripts)에 대해 조금 더 이야기해 보겠습니다. 최근에 많은 문서를 가져와 처리하고, 시스템 내 다른 데이터와 연결한 다음, 내부적으로 게시해야 하는 프로젝트를 진행하고 있습니다. 이 과정에서 AI가 할 수 있는 일을 한 단계 끌어올리기 위해 도메인 특화 스크립트 접근법을 사용하고 있습니다.</p>
+<p>문제는 이러한 문서 처리의 자동화율이 약 5%에 불과하다는 것입니다. 이를 100%까지 끌어올려야 합니다. 이 시스템에 대규모 언어 모델(LLM)을 연결해 보니 모든 것을 볼 수 있었습니다. 실제 프로덕션 데이터도 가지고 있습니다. 그런데 안타깝게도 좋은 결과를 내지는 못했습니다.</p>
+<p>큰 그림을 놓치는 것입니다. 여기서는 데이터베이스의 일부를 보고, 저기서는 문서의 일부를 보고, 또 다른 곳에서는 소스 코드 일부를 봅니다. 하지만 질문을 하거나 근본 원인들을 찾아 달라고 할 때마다—네, 원인은 여러 개입니다—명확한 그림을 제시하지 못하고 실제로 서로 모순되는 답을 내놓습니다.</p>
+<p>그렇다면 어떻게 개선할 수 있을까요? 인간인 저는 멘탈 모델(mental model)이 있기 때문에 그 혼란에 질서를 부여할 수 있습니다. 여기서 일어나는 일은 깔때기, 정확히는 새는 깔때기(leaky funnel)를 다루는 것입니다. 데이터는 한 단계에서 다음 단계로 이동하며, 각 단계에서 온갖 이유로 탈락할 수 있습니다.</p>
+<p>그래서 주어진 모집단의 모든 문서를 파이프라인을 얼마나 진행했는지, 어디에서 탈락했는지에 따라 분류하는 스크립트를 작성했습니다. 그리고 그 스크립트를 LLM에 연결해 “좋아, 이제 근본 원인을 찾아 봐”라고 했습니다. 그러자 결과가 정말 훨씬 좋아졌습니다.</p>
+<p>이유는 몇 가지가 있습니다. 첫째, 안정적인 정의가 생기면서 이제 각 모집단을 서로 비교할 수 있게 되었습니다. 이전에는 파이프라인을 성공적으로 빠져나온 것으로 간주되는 대상이 무엇인지조차 일관된 정의가 없었습니다. 그래서 두 에이전트가 어떤 설명을 만들어 내려 할 때마다 서로 충돌했습니다.</p>
+<p>둘째, 이제 추론할 때 사용할 더 높은 수준의 언어가 생겼습니다. 이전에는 이 테이블의 이 열과 저 코드의 한 줄 일부 사이에서 패턴을 찾으려 했지만, 이제는 버킷과 베일(bales), 파이프라인과 종료 지점이라는 관점으로 생각합니다.</p>
+<p>제가 시키고 싶은 작업에 대해 생각하고 소통할 수 있도록 더 풍부한 기본 요소(primitives)를 제공한 것입니다. 마지막으로, 분류 자체가 정말 유용합니다. 조사를 시작할 때 비슷한 이유로 실패한 특정 문서 버킷에서 출발하는 것은 더 깊이 파고들기 좋은 방법입니다.</p>
+<p>하지만 이것은 에이전트만을 위한 것이 아닙니다. 도메인 특화 스크립트는 인간에게도 매우 유용합니다. 제가 지금까지 공유한 다른 모든 것에도 똑같이 적용된다는 점을 눈치채셨을 수도 있습니다. 더 나은 생성기, 더 나은 RuboCop 설정은 모두 에이전트에게 좋지만, 개발자 경험도 개선합니다.</p>
+<p>특히 도메인 특화 스크립트가 그렇습니다. 우리는 LLM의 최저 수준을 끌어올리기 위해 시작했지만, 동시에 팀의 모든 개발자의 최저 수준도 끌어올렸습니다.</p>
+<p>저는 특히 도메인 특화 스크립트에 대해 매우 낙관적입니다. 우리 팀의 모든 개발자가 머릿속에 갖고 있는 일종의 사각지대를 해소하는 데 도움이 되기 때문입니다. 이것은 모두 암묵지입니다.</p>
+<p>그래서 스크립트의 출력을 시각화 도구에 연결했습니다. 그러자 이런 식으로 정말 보기 좋은 결과를 얻을 수 있었습니다. 특정 시점에 파이프라인이 정확히 어떤 상태인지 보여 주는 시각화입니다. 어디에서 문제가 발생하는지, 어디를 확대해 봐야 하는지, 어디를 조사할 가치가 있는지 확인할 수 있습니다.</p>
+<p>이런 작업은 Rails에서 정말 쉽게 할 수 있습니다. Rake가 있기 때문입니다. Rails 셰뱅 스크립트(Rails shebang scripts)도 사용할 수 있습니다. 옆에서 스크립트를 작성한 다음 Rails 프레임워크에서 필요한 모든 편의 기능에 접근할 수 있습니다.</p>
+<p>지금까지 하네스가 주변의 신호를 읽고 조정함으로써 최저 수준을 끌어올리는 데 사용할 수 있는 여러 방법을 살펴봤습니다. 하지만 이 모든 일은 지속적인 개선(continuous improvement)의 환경에서 이루어져야 합니다.</p>
+<p>이러한 메커니즘이 여러 가지 있으니 한꺼번에 앱에 모두 도입하고 싶을 수도 있습니다. 하지만 저는 그렇게 하지 않기를 권합니다.</p>
+<p>대신 실제로 겪은 고통을 동력으로 삼으세요. LLM을 바로잡아야 할 때마다 스스로에게 물어보세요. 어떻게 하면 이것이 마지막이 되게 할 수 있을까? 다음번에는 사람이 들어가서 무엇을 해야 하는지 알려 주지 않아도 에이전트가 스스로 수정할 수 있도록 하네스에 어떤 도구를 제공할 수 있을까?</p>
+<p>이 인간 배관 루프(human plumbing loop)에 빠져 있다는 걸 깨달을 때마다 거기서 빠져나오려고 하세요. LLM이 도구에 직접 접근해서 무언가를 스스로 읽거나 쓸 수 있을까요?</p>
+<p>하네스를 개선하기 위해 다음과 같은 질문을 활용할 수 있습니다. 내가 어디에 개입해야 했는가? 어떤 신호가 빠져 있었는가? 수동으로 앞뒤로 복사해야 했던 것이 있었는가? AGENTS.md에 결정론적으로 더 잘 처리할 수 있었던 내용이 있는가? 대화의 품질이 저하되었는가? 여러 대화로 나눌 수 있었는가? 여러 번 반복해서 발생한 실수가 있는가?</p>
+<p>저처럼 이 모든 질문을 하는 일이 너무 많다고 느낄 수도 있습니다. 저는 개발자일 때 가끔 게으르기 때문에 이것을 레트로 스킬(retro skill)로 묶어 두었습니다. LLM과 상호작용한 긴 세션이 끝난 뒤 이것을 실행하면, 제 기록을 분석하고 제가 적용할 수 있는 자동화를 제안합니다. 보고 싶다면 제 GitHub에 올려 두었습니다: joelq/skills.</p>
+<p>하지만 어쩌면 여러분의 저장소에 이미 이런 것이 있을 수도 있습니다. 여기 계신 분 중 Matt Pocock의 스킬을 사용하는 분이 있는지는 모르겠습니다. 그가 아주 최근에, 제 기억으로는 지난주에, 같은 일을 하는 Retro라는 스킬을 공개했습니다. 역시 이름은 Retro입니다. 그러니 그의 스킬을 사용한다면 이미 오늘 여러분의 저장소에 이것이 있을 수도 있고, 다음 AI 세션이 끝난 뒤 바로 실행할 수 있습니다.</p>
+<p>그렇다면 1월의 저로 돌아가서, 첫날이 끝날 무렵 좌절하고 제가 가진 레버리지가 어디로 사라지고 있는지 의문을 품던 제 자신에게 더 나은 방법을 어떻게 하라고 말해 줄까요?</p>
+<p>우선 제 사고방식, 즉 에이전트에게 무슨 일이 일어나고 있는지에 대한 멘탈 모델을 바꿔야 합니다. 더 이상 프롬프트를 던지고 기도하지 마세요. 대신 에이전트가 루프라는 점을 기억하세요. 그 루프를 적극 활용하면 에이전트가 스스로 수정하고, 사람의 개입 없이 더 나은 코드를 작성할 수 있습니다.</p>
+<p>둘째, 실수를 만날 때마다 단순히 그 실수만 고치지 마세요. 더 나은 수정 방법을 프롬프트로 요청하는 데 그치지도 마세요. 대신 시스템을 고쳐서 다음번에는 같은 실수를 다시 하지 않도록 하세요. 이것이 하네스 엔지니어링(Harness Engineering)의 핵심이며, 제가 코드의 최저 수준을 끌어올리는 방법입니다. 여러분 모두가 코드의 최저 수준을 끌어올릴 수 있는 방법이기도 합니다.</p>
+</details>
+</body></html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>하네스는 더 이상 필요 없을까? AI가 똑똑해져도 남는 3가지</title>
+<meta name="description" content="AI가 코딩을 잘해져도 실행 환경, 권한·보안, 작업당 비용을 관리하는 하네스가 왜 남는지 익숙한 일과 새로운 일의 차이로 설명한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>하네스는 더 이상 필요 없을까? AI가 똑똑해져도 남는 3가지</h1>
+<div class="meta">업로드 2026-10-23 · 8.5분 · <a href="https://youtu.be/NUyLH7tjQpg" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상의 중심 질문은 <strong>“AI 모델이 스스로 코딩을 잘하게 되면, 모델을 둘러싼 도구도 필요 없어지는가?”</strong>이다. 여기서 모델은 생각하는 머리이고, <strong>하네스(harness)</strong>는 그 머리가 파일·컴퓨터·외부 서비스에 손을 뻗도록 연결하고 행동 범위를 정하는 장치다. 발표자는 이를 모델의 “눈과 손”이라고 표현한다.</p>
+<p>하네스가 맡는 일은 하나가 아니다. 과거에는 모델이 서툰 코딩 동작을 보충하는 역할도 했다. 예를 들어 Cursor에는 파일의 코드 수정을 적용하는 작은 모델과 코드 저장소를 살피고 결과를 확인하는 방법을 알려주는 코딩 전용 지시가 있었다고 한다. 모델이 이런 기술을 직접 잘하게 되자 일부 보조 장치는 삭제됐다.</p>
+<p>그러나 <strong>“일부 코딩 보조 장치가 줄었다”</strong>와 <strong>“하네스 전체가 필요 없어졌다”</strong>는 같은 말이 아니다. AI가 코딩 창을 벗어나 장시간 일하고 외부 서비스에 접속하며 여러 작업을 나눠 수행하면 새로운 문제가 생긴다. 작업이 계속 실행될 환경, 꼭 필요한 권한만 주는 통제, 예상하지 못한 행동을 막는 안전장치, 같은 결과를 더 적은 비용으로 얻는 운영 설계가 필요하다.</p>
+<figure data-visual-kind="map" style="margin:1.5rem 0;padding:1rem;border:1px solid #94a3b8;border-radius:14px;background:#f8fafc;">
+  <div role="img" aria-label="모델과 하네스의 관계, 익숙한 코딩과 새로운 업무의 차이, 계속 남는 운영 역할을 보여주는 전체 지도" style="max-width:780px;margin:0 auto;color:#172033;overflow-wrap:anywhere;">
+    <div style="padding:14px;border:2px solid #315f8f;border-radius:12px;background:#eaf3fb;text-align:center;">
+      <strong>모델</strong><br>
+      생각하고 코드를 만드는 능력
+    </div>
+    <div style="text-align:center;font-size:1.5rem;line-height:1.4;" aria-hidden="true">↓</div>
+    <div style="padding:14px;border:2px solid #5b4b8a;border-radius:12px;background:#f1edfb;text-align:center;">
+      <strong>하네스</strong><br>
+      모델을 컴퓨터·파일·외부 서비스와 연결하고 행동을 조정하는 장치
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;margin-top:14px;">
+      <div style="min-width:0;padding:14px;border:1px solid #15803d;border-radius:12px;background:#ecfdf3;">
+        <strong>1. 익숙해진 코딩 작업</strong><br>
+        모델이 기술을 직접 익히면 코드 수정용 보조 모델이나 일부 코딩 전용 지시를 줄일 수 있다.
+      </div>
+      <div style="min-width:0;padding:14px;border:1px solid #b45309;border-radius:12px;background:#fff7ed;">
+        <strong>2. 새 업무와 새 환경</strong><br>
+        메일 발송, 장시간 작업, 여러 에이전트 조정처럼 아직 익숙하지 않은 일에는 새 지시와 안전장치가 다시 들어간다.
+      </div>
+    </div>
+    <div style="text-align:center;font-size:1.5rem;line-height:1.4;" aria-hidden="true">↓</div>
+    <div style="padding:14px;border:2px solid #9f1239;border-radius:12px;background:#fff1f2;text-align:center;">
+      <strong>그래도 남는 운영 역할</strong><br>
+      실행 환경 · 권한과 보안 · 작업당 비용 관리
+    </div>
+  </div>
+  <figcaption style="margin-top:12px;color:#334155;"><strong>전체 지도:</strong> 모델의 코딩 능력이 좋아져 줄어드는 부분과 실제 업무 운영 때문에 남거나 새로 생기는 부분을 구분한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 가운데의 1번과 2번은 선후 단계가 아니라 서로 다른 작업 상황이다. 마지막 상자는 두 상황 모두에서 별도로 점검할 운영 역할이다. 이 그림은 수치를 나타내는 그래프가 아니라 영상의 개념 관계를 정리한 지도다.</p>
+<h3>익숙한 기술은 모델 안으로 들어갈 수 있다</h3>
+<p>발표자는 이 흐름을 <strong>데이터 플라이휠(data flywheel)</strong>이라고 부른다. 처음에는 하네스가 어려운 코딩 작업을 시도할 수 있게 돕는다. 더 많은 사용자가 그 작업을 시도하면 코딩 자료가 연구소에 공유되고, 모델이 해당 기술을 직접 배우게 된다는 설명이다. 그러면 하네스는 이전에 필요했던 보조 코드를 일부 삭제할 수 있다.</p>
+<figure data-visual-kind="cycle" style="margin:1.5rem 0;padding:1rem;border:1px solid #94a3b8;border-radius:14px;background:#ffffff;">
+  <p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg role="img" aria-labelledby="flywheel-title flywheel-desc" viewBox="0 0 390 650" style="display:block;width:min(100%,520px);height:auto;margin:0 auto;;min-width:455.0px;max-width:none;">
+    <title id="flywheel-title">하네스와 모델 학습의 데이터 플라이휠</title>
+    <desc id="flywheel-desc">하네스가 어려운 코딩 작업을 돕고, 사용자가 시도하고, 자료가 공유되고, 모델이 기술을 배우며, 일부 보조 장치를 삭제한 뒤 다음 어려운 과제로 돌아가는 순환이다.</desc>
+    <defs>
+      <marker id="flywheel-arrow-NUy" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#315f8f"></path>
+      </marker>
+    </defs>
+
+    <rect x="65" y="20" width="260" height="70" rx="12" fill="#eaf3fb" stroke="#315f8f" stroke-width="2"></rect>
+    <text x="195" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="#172033">하네스가 어려운 코딩 작업을</text>
+    <text x="195" y="71" text-anchor="middle" font-size="15" fill="#172033">시도할 수 있게 돕는다</text>
+
+    <line x1="195" y1="90" x2="195" y2="126" stroke="#315f8f" stroke-width="3" marker-end="url(#flywheel-arrow-NUy)"></line>
+
+    <rect x="65" y="130" width="260" height="70" rx="12" fill="#ecfdf3" stroke="#15803d" stroke-width="2"></rect>
+    <text x="195" y="159" text-anchor="middle" font-size="15" font-weight="700" fill="#172033">더 많은 사용자가</text>
+    <text x="195" y="181" text-anchor="middle" font-size="15" fill="#172033">그 작업을 시도한다</text>
+
+    <line x1="195" y1="200" x2="195" y2="236" stroke="#315f8f" stroke-width="3" marker-end="url(#flywheel-arrow-NUy)"></line>
+
+    <rect x="65" y="240" width="260" height="70" rx="12" fill="#fff7ed" stroke="#b45309" stroke-width="2"></rect>
+    <text x="195" y="269" text-anchor="middle" font-size="15" font-weight="700" fill="#172033">코딩 자료가 연구소에</text>
+    <text x="195" y="291" text-anchor="middle" font-size="15" fill="#172033">공유된다고 발표자는 설명한다</text>
+
+    <line x1="195" y1="310" x2="195" y2="346" stroke="#315f8f" stroke-width="3" marker-end="url(#flywheel-arrow-NUy)"></line>
+
+    <rect x="65" y="350" width="260" height="70" rx="12" fill="#f1edfb" stroke="#5b4b8a" stroke-width="2"></rect>
+    <text x="195" y="379" text-anchor="middle" font-size="15" font-weight="700" fill="#172033">모델이 해당 기술을</text>
+    <text x="195" y="401" text-anchor="middle" font-size="15" fill="#172033">직접 배우게 된다</text>
+
+    <line x1="195" y1="420" x2="195" y2="456" stroke="#315f8f" stroke-width="3" marker-end="url(#flywheel-arrow-NUy)"></line>
+
+    <rect x="65" y="460" width="260" height="90" rx="12" fill="#fff1f2" stroke="#9f1239" stroke-width="2"></rect>
+    <text x="195" y="497" text-anchor="middle" font-size="15" font-weight="700" fill="#172033">일부 코딩 보조 장치를</text>
+    <text x="195" y="519" text-anchor="middle" font-size="15" fill="#172033">삭제할 수 있다</text>
+
+    <path d="M195 550 L195 620 L25 620 L25 55 L65 55" fill="none" stroke="#315f8f" stroke-width="3" marker-end="url(#flywheel-arrow-NUy)"></path>
+    <text x="40" y="601" font-size="12" fill="#315f8f">[해석] 다음 어려운 과제로</text>
+  </svg></div>
+  <figcaption style="margin-top:12px;"><strong>순환 도식:</strong> 발표자가 설명한 데이터 플라이휠과, 삭제된 보조 역할이 다음 어려운 과제로 이동할 수 있다는 편집 해석을 함께 표시했다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 첫 상자부터 아래로 내려간다. 마지막 상자에서는 아래쪽과 왼쪽을 잇는 선을 따라 첫 상자로 돌아간다. 다만 <strong>“다음 어려운 과제로 돌아간다”</strong>는 플라이휠이라는 표현을 풀어 쓴 해석이며, 전사에 같은 문장으로 제시된 것은 아니다. 자료 공유 범위와 실제 학습 경로도 제공 자료만으로 독립 검증되지는 않는다.</p>
+<h3>새로운 일에는 새 안전장치가 필요하다</h3>
+<p>모델이 코딩에 익숙해졌다고 해서 메일 발송이나 장시간 업무 조정까지 자동으로 익숙해지는 것은 아니다. 발표자가 소개한 Grokbot 방식에서는 사용자가 총괄 AI에게 일을 맡기고, 총괄 AI가 작업을 여러 작업자 AI에게 나눈다. 발표자는 이를 전략을 맡는 변호사와 세부 업무를 나누는 법률 보조 인력의 관계에 비유했다.</p>
+<p>이 새로운 방식에서는 Cursor에서 지웠던 지시와 안전장치를 다시 넣었다고 한다. 새 영역의 작업을 모델이 아직 충분히 해내지 못하기 때문이다. 예를 들어 메일을 언제 보내도 되는지, 오래 걸리는 일을 언제 사용자에게 알려야 하는지는 코드를 잘 만드는 능력만으로 결정되지 않는다.</p>
+<p>회사 내부 사례로는 버그 신고가 들어오면 자동 분류가 시작되고, Claude 에이전트가 수정을 시도하며, 전후 영상을 만들어 수정 결과를 보여주고, 병합과 배포가 시작되면 또 다른 에이전트가 운영 환경의 문제를 감시하는 흐름이 소개된다. 핵심은 <strong>한 번 답하고 끝나는 채팅이 아니라 여러 단계가 오래 이어지는 업무</strong>라는 점이다.</p>
+<h3>모델이 똑똑해져도 남는 세 가지</h3>
+<p>첫째는 <strong>실행 환경(runtime infrastructure)</strong>이다. 발표자는 에이전트의 일반적인 작업 시간이 분 단위에서 시간, 일, 그 이상으로 길어졌다고 말한다. 개인 노트북은 잠자기 상태로 들어갈 수 있으므로, 진정한 자율 업무를 원한다면 클라우드에서 실행해야 한다는 주장이다. 다시 접속했을 때 진행 상태도 찾을 수 있어야 한다.</p>
+<p>둘째는 <strong>권한과 보안(trust and security)</strong>이다. 모델이 명령 실행 도구와 모든 API 키가 담긴 파일에 접근하면 코딩 과제를 풀 수 있을지 몰라도, 실제 조직에서는 그렇게 넓은 권한을 주기 어렵다. 발표자는 에이전트와 사람별로 권한 범위를 좁히고, 큰 피해나 예상 밖 행동을 막는 안전장치가 필요하다고 말한다.</p>
+<p>셋째는 <strong>효율성(efficiency)</strong>이다. 발표자가 언급한 두 연구에서는 하네스 선택에 따라 평가 점수가 크게 달라지지 않았지만 작업당 비용에는 유의미한 차이가 있었다고 설명한다. 같은 설명을 반복해서 보내거나 작업과 맞지 않는 모델을 쓰면 결과 점수는 비슷해도 시간과 비용은 달라질 수 있다는 뜻이다.</p>
+<figure data-visual-kind="matrix" style="margin:1.5rem 0;padding:1rem;border:1px solid #94a3b8;border-radius:14px;background:#f8fafc;">
+  <p style="margin:0 0 10px;color:#334155;"><strong>이동 안내:</strong> 좁은 화면에서는 아래 표를 좌우로 이동해 두 작업 상황을 비교한다.</p>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table style="width:100%;min-width:720px;border-collapse:collapse;background:#ffffff;color:#172033;">
+      <thead>
+        <tr>
+          <th scope="col" style="width:22%;padding:12px;border:1px solid #94a3b8;background:#e2e8f0;text-align:left;">하네스 역할 ↓<br>작업 상황 →</th>
+          <th scope="col" style="width:39%;padding:12px;border:1px solid #94a3b8;background:#ecfdf3;text-align:left;">익숙해진 코딩 작업</th>
+          <th scope="col" style="width:39%;padding:12px;border:1px solid #94a3b8;background:#fff7ed;text-align:left;">새 업무·새 영역</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row" style="padding:12px;border:1px solid #94a3b8;background:#f1f5f9;text-align:left;">모델 지능의 빈틈 보충</th>
+          <td style="padding:12px;border:1px solid #94a3b8;vertical-align:top;">
+            모델이 기술을 직접 익히면 코드 수정용 소형 모델과 일부 코딩 전용 지시를 <strong>줄일 수 있다.</strong>
+          </td>
+          <td style="padding:12px;border:1px solid #94a3b8;vertical-align:top;">
+            모델이 아직 충분히 익히지 못한 판단 때문에 새 프롬프트와 안전장치를 <strong>다시 추가한다.</strong>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row" style="padding:12px;border:1px solid #94a3b8;background:#f1f5f9;text-align:left;">실제 업무 운영</th>
+          <td style="padding:12px;border:1px solid #94a3b8;vertical-align:top;">
+            평가 점수가 좋아도 실행 지속성, 제한된 권한, 작업당 비용은 <strong>별도로 확인해야 한다.</strong>
+          </td>
+          <td style="padding:12px;border:1px solid #94a3b8;vertical-align:top;">
+            장시간 총괄·작업자 구조와 외부 서비스 연결에는 실행 환경, 권한 통제, 비용 관리가 <strong>계속 필요하다.</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption style="margin-top:12px;color:#334155;"><strong>두 축의 평가 행렬:</strong> 가로축은 익숙해진 코딩과 새로운 업무를, 세로축은 지능 보충과 업무 운영을 구분한다. 모델 향상으로 줄어드는 것은 주로 왼쪽 위 칸이며, 운영 문제는 아래 행에 남는다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 먼저 위쪽 행을 왼쪽에서 오른쪽으로 읽으면 익숙한 기술에서는 보조 장치가 줄고 새로운 기술에서는 다시 늘어나는 차이가 보인다. 이어 아래쪽 행을 읽으면 모델의 코딩 실력과 별개로 실행·권한·비용 문제가 두 상황에 모두 남는다는 관계가 보인다. 색은 작업 상황을 구분할 뿐이며, 판단은 각 칸의 문장으로 한다.</p>
+<p>따라서 AI 도구를 볼 때는 네 질문을 분리해야 한다. <strong>어려운 문제를 제대로 푸는가, 장시간 작업을 이어가는가, 필요한 권한만 사용하는가, 작업 하나에 시간과 비용이 얼마나 드는가?</strong> 첫 번째는 주로 결과 능력에 관한 질문이고, 나머지는 모델 바깥의 운영 설계까지 포함한다.</p>
+<h3>전체 통찰과 경계</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자는 Cursor에서 일부 코딩 전용 지시와 보조 장치를 없앴지만, 새로운 Grokbot 업무에는 지시와 안전장치를 다시 넣었다고 말했다. 실행 환경, 권한·보안, 효율성도 계속 필요한 역할로 제시했다.</li>
+<li><strong>[해석]</strong> 하네스가 사라지는 것이 아니라 역할의 중심이 이동한다. 모델이 익숙해진 기술을 보충하는 기능은 줄 수 있지만, 실제 업무를 오래·안전하게·감당 가능한 비용으로 운영하는 기능은 별도의 문제로 남는다.</li>
+<li><strong>[경계]</strong> 발표자가 언급한 두 연구의 이름과 구체적인 점수·비용 수치는 제공 자료에 없다. 데이터 플라이휠의 자료 공유 및 학습 경로와 Grokbot의 실제 성과도 독립 검증되지 않았다.</li>
+<li><strong>[경계]</strong> 6개월 안에 에이전트 작업의 90%가 노트북 밖에서 실행될 것이라는 수치는 현재 사용률이 아니라 발표자의 전망이다. 1만 달러 API 요금도 실제 사고 보도가 아니라 위험을 설명하기 위한 예시다.</li>
+<li><strong>[경계]</strong> 제공 전사의 “이런 흐름을 막으려면”이라는 문구는 앞뒤의 연속 업무 설명과 의미가 충돌한다. 흐름을 유지한다는 뜻인지 다른 뜻인지는 임의로 확정하지 않는다.</li>
+<li><strong>[경계]</strong> META 설명에는 Jediah Katz의 원본 강연 제목과 링크가 제시되어 있지만, provenance 기록은 화자 이름과 SNS를 기준으로 추정한 출처라고 밝힌다. 따라서 해당 강연과의 출처 관계는 확정된 사실이 아니라 원본 강연 후보로만 본다.</li>
+</ul>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>하네스는 모델의 코딩 실력을 보충하는 장치만이 아니라, 모델을 실제 컴퓨터와 서비스에 연결하고 행동을 통제하는 전체 장치다.</li>
+<li>모델이 익숙한 코딩 기술을 직접 배우면 일부 코딩 전용 보조 장치는 줄어들 수 있지만, 새로운 업무에는 새 지시와 안전장치가 필요하다.</li>
+<li>실행 환경, 권한·보안, 작업당 비용 관리는 모델의 코딩 능력이 좋아져도 별도로 점검해야 한다.</li>
+<li>6개월 안에 90%라는 수치는 전망이고, 1만 달러 비용은 실제 사고가 아닌 위험 설명용 예시다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>AI 모델이 더 똑똑해져도 하네스가 남는 이유는 무엇인가?</strong></p>
+</blockquote>
+<ul>
+<li>어떤 하네스 기능은 왜 줄어드는가?</li>
+<li>새로운 업무에서는 왜 지시와 안전장치가 다시 늘어나는가?</li>
+<li>AI 도구를 평가할 때 결과 점수 외에 무엇을 봐야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>버그 신고가 들어오자 자동 분류가 시작되고, 에이전트가 수정을 시도해 전후 영상을 만들며, 배포가 시작된 뒤에는 다른 에이전트가 운영 문제를 감시한다. 모델 하나의 코딩 능력만으로는 이 전체 흐름을 오래 유지하고 안전하게 통제할 수 없다.</p>
+<p><code>"여러 단계의 AI 업무가 노트북·권한·비용 문제로 끊기거나 위험해질 수 있다"</code> <strong>문제</strong><br>
+→ <code>"클라우드 실행 환경, 제한된 권한, 안전장치, 작업당 비용 관리로 흐름을 둘러싼다"</code> <strong>작동 방식</strong><br>
+→ <code>"AI가 장시간 작업을 이어가면서도 허용 범위와 비용을 점검할 수 있다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">자전거의 보조 바퀴</div>
+<p>코딩을 서툴게 하던 모델에 붙인 전용 지시와 보조 코드는 자전거의 보조 바퀴와 비슷하다. 모델이 해당 기술을 직접 익히면 일부 장치는 떼어낼 수 있다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 실제 하네스는 균형을 배우기 위한 임시 장치만이 아니다. 실행 환경, 외부 서비스 연결, 권한, 보안, 비용처럼 모델이 기술을 익혀도 따로 관리해야 하는 운영 역할까지 포함한다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>하네스</strong></td>
+<td>AI의 눈과 손, 행동 울타리</td>
+<td>모델을 컴퓨터·도구·외부 서비스와 연결하고 실행과 행동을 조정하는 장치</td>
+<td>모델의 코딩 실력을 높이는 프롬프트만을 뜻한다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>데이터 플라이휠</strong></td>
+<td>도구로 시도한 경험이 모델 학습으로 돌아가는 흐름</td>
+<td>하네스가 어려운 작업을 가능하게 하고, 사용 자료가 모델의 기술 습득으로 이어진다는 발표자의 순환 설명</td>
+<td>제공된 전사만으로 모든 자료 공유와 학습 경로가 검증됐다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>실행 환경</strong></td>
+<td>작업을 계속 돌려 주는 장소</td>
+<td>장시간 에이전트 작업을 실행하고 상태를 유지하는 인프라와 런타임</td>
+<td>개인 노트북에서 잠깐 실행되는 것과 같다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>범위가 제한된 권한</strong></td>
+<td>필요한 만큼만 주는 열쇠</td>
+<td>특정 에이전트와 사람에게 허용 범위를 좁혀 부여한 권한</td>
+<td>일을 잘하는 모델에는 모든 API 키를 줘도 된다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>작업당 비용</strong></td>
+<td>일 하나를 끝내는 데 드는 자원</td>
+<td>하나의 작업 결과를 얻기 위해 소비한 모델 호출·시간 등의 비용</td>
+<td>평가 점수가 같으면 운영 효율도 같다고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>모델이 더 똑똑해졌는데도 하네스의 일부 기능이 다시 늘어나는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>모델이 익숙한 코딩 기술을 직접 배우면 그 기술을 보충하던 장치는 줄어들 수 있다. 그러나 장시간 업무, 메일 발송, 여러 에이전트 조정처럼 새로운 영역에서는 모델이 아직 익히지 못한 판단과 위험이 생긴다. 그래서 새 지시와 안전장치가 다시 필요해진다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>모델의 문제 해결 능력과 하네스의 운영 능력은 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>모델의 문제 해결 능력은 코드를 만들거나 과제를 푸는 능력에 가깝다. 하네스의 운영 능력은 그 작업을 오래 실행하고, 외부 도구와 연결하고, 권한을 제한하며, 비용을 관리하는 능력이다. 하나가 좋아졌다고 다른 하나가 자동으로 해결되는 것은 아니다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 AI 도구를 검토한다면 “정답을 잘 만드는가?” 외에 무엇을 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>실제 업무가 얼마나 오래 실행되는지, 노트북이 중단돼도 상태가 유지되는지, 사람과 에이전트별 권한을 좁힐 수 있는지, 허용 범위 밖 행동을 막는지, 작업당 시간과 비용이 얼마인지 확인한다. 적용 전에는 가상 작업이나 제한된 환경에서 이 항목을 측정한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 지능 향상과 운영 신뢰성은 다른 축이다</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자는 일부 코딩 전용 지시와 보조 장치를 Cursor에서 삭제했지만, 장시간 실행 환경과 권한·보안·효율성은 여전히 필요하다고 말했다.</li>
+<li><strong>[해석]</strong> AI 도구를 평가할 때 모델 성능 하나로 전체 시스템의 신뢰성을 대신 판단하면 안 된다. 결과 품질과 운영 조건을 분리해 봐야 한다.</li>
+<li><strong>[경계]</strong> 발표자가 언급한 두 연구의 이름, 평가 점수, 작업당 비용 수치는 전사에 없다. “유의미한 차이”라는 표현은 화자의 설명으로만 보존한다.</li>
+</ul>
+<h3>2. 안전장치의 양은 작업의 새로움에 따라 달라진다</h3>
+<ul>
+<li><strong>[원문]</strong> Cursor에서는 모델이 똑똑해지며 일부 지시와 안전장치를 제거했지만, Grokbot에서는 새로운 업무 때문에 지시와 안전장치를 다시 추가했다고 말했다.</li>
+<li><strong>[해석]</strong> 안전장치가 많거나 적다는 사실만으로 도구의 발전 정도를 판단할 수 없다. 모델이 익숙한 작업인지, 새 영역의 행동인지 먼저 구분해야 한다.</li>
+<li><strong>[경계]</strong> Grokbot의 실제 구성과 성과를 독립적으로 검증할 자료는 제공되지 않았다. 전사의 한국어 설명 중 “이런 흐름을 막으려면 AI가 멈추지 않고 일할 수 있어야” 한다는 문장은 앞서 설명한 연속 업무 흐름과 의미가 충돌하므로, 그 문구의 의도는 확정하지 않는다.</li>
+</ul>
+<h3>3. 강한 숫자는 관측값인지 전망인지 먼저 나눠야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 발표자는 6개월 안에 에이전트 작업의 90%가 노트북 밖에서 실행될 것이라고 예측했다. 1만 달러 API 요금은 큰 위험을 설명하는 예시로 제시됐다.</li>
+<li><strong>[해석]</strong> 숫자가 구체적이어도 현재 상태를 측정한 값, 미래 전망, 가상 위험 예시는 서로 다른 증거 수준을 가진다.</li>
+<li><strong>[경계]</strong> 90%는 현재 사용률이 아니며 전망의 기준 날짜도 전사만으로 확정할 수 없다. 1만 달러 사례는 실제 사고 보도가 아니다. META 설명의 원본 강연 링크 제시와 provenance.note의 “확인하지 않은 추정 출처” 기록도 서로 일치하지 않는다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 “코딩 보조 장치가 줄었다”와 “하네스 전체가 사라진다”를 구분하고, 자전거 보조 바퀴 비유의 한계까지 보여준다.</li>
+<li><strong>통찰:</strong> 학습자가 하네스를 단순 프롬프트가 아니라 실행·권한·비용까지 포함한 구조로 설명할 수 있는지 보면 이해를 관찰할 수 있다.</li>
+<li><strong>질문/행동:</strong> 학습자에게 모델 능력과 운영 능력을 각각 한 사례로 설명하게 하고, 둘을 혼동한 지점을 확인한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 장시간 실행, 제한된 권한, 작업당 비용은 자원·위험·운영 효율의 문제다.</li>
+<li><strong>통찰:</strong> APOM의 현재 시스템 상태는 출처에 없으므로 직접 적용 사실로 볼 수 없다. 다만 검증 전 가상 업무를 대상으로 결과 품질뿐 아니라 중단 위험, 권한 범위, 작업당 비용을 함께 비교하는 구조는 전이할 수 있다.</li>
+<li><strong>질문/행동:</strong> 자동화를 검토한다면 “성공했는가?”와 함께 “누가 어떤 권한과 비용을 제공했는가?”를 기록할 수 있는지 묻는다.</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 90%를 전망으로, 1만 달러를 위험 설명용 예시로 분리해 제시한다.</li>
+<li><strong>통찰:</strong> 구체적인 숫자는 주목을 만들지만 관측값·예측·가상 예시를 구분하지 않으면 증거보다 강한 주장으로 보일 수 있다.</li>
+<li><strong>질문/행동:</strong> 상세페이지나 카피의 숫자 옆에 측정값, 전망, 예시 중 어떤 성격인지 표시한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 하네스의 역할을 평가 점수, 실행 시간, 권한, 작업당 비용이라는 서로 다른 축으로 나눈다.</li>
+<li><strong>통찰:</strong> 새 도구는 모델 이름보다 실제 작업의 길이와 병목을 기준으로 검토해야 한다. 정상 완료뿐 아니라 중단, 권한 이탈, 비용 증가도 시험 대상이다.</li>
+<li><strong>질문/행동:</strong> 제한된 가상 작업에서 허용 도구 목록을 정한 뒤, 모델이 그 범위를 벗어나려 하는지 관찰한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"모델은 결과를 만들 수 있지만 장시간 실행·권한·비용이 통제되지 않을 수 있다"</code> <strong>문제</strong><br>
+→ <code>"안전하고 지속적인 AI 업무"</code> <strong>수혜자: AI 도구를 사용하는 개인과 팀</strong><br>
+→ <code>"실행 환경, 접근 권한, API 비용, 신뢰를 제공"</code> <strong>지불자 또는 자원 제공자: 사용자 또는 운영 조직</strong><br>
+→ <code>"작업 지속 여부, 허용 범위 밖 행동 건수, 작업당 비용의 관찰 가능한 변화"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 검증 전 가상 업무 하나에 허용 도구와 금지 행동을 적고 제한된 환경에서 AI 실행을 한 번 관찰한다.</li>
+<li><strong>측정 1개:</strong> 허용 목록 밖 도구 또는 행동을 시도한 건수</li>
+<li><strong>중단 기준 1개:</strong> 허용 목록 밖 시도가 1건 이상이면 실제 업무로 확대하지 않고 중단한다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>하네스의 뜻</td>
+<td>모델을 컴퓨터와 외부 서비스에 연결하는 눈과 손</td>
+</tr>
+<tr>
+<td>2</td>
+<td>줄어든 코딩 보조</td>
+<td>모델이 익힌 기술을 보충하던 일부 장치 삭제</td>
+</tr>
+<tr>
+<td>3</td>
+<td>데이터 플라이휠</td>
+<td>하네스가 만든 작업 경험이 모델 학습으로 이어진다는 주장</td>
+</tr>
+<tr>
+<td>4</td>
+<td>새로운 업무</td>
+<td>총괄 AI와 작업자 AI 구조에서는 새 지시와 안전장치가 필요</td>
+</tr>
+<tr>
+<td>5</td>
+<td>장시간 실행</td>
+<td>분·시간·일 이상 이어지는 작업에는 지속적인 실행 환경 필요</td>
+</tr>
+<tr>
+<td>6</td>
+<td>권한과 비용</td>
+<td>제한된 권한, 위험 방지, 작업당 비용을 함께 관리</td>
+</tr>
+<tr>
+<td>7</td>
+<td>전망과 결론</td>
+<td>6개월 안에 90%가 노트북 밖에서 실행될 것이라는 발표자 전망</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 하네스는 모델의 눈과 손이다</h3>
+<p>화자는 하네스를 모델을 둘러싸고 방향을 잡으며 세상과 연결하는 장치라고 설명한다. 사용자는 앱을 통해 하네스에 연결되고, 하네스는 모델을 컴퓨터와 MCP 같은 제3자 서비스 연결 수단에 이어 준다.</p>
+<p>모델이 생각하는 머리라면 하네스는 파일을 수정하고 프로그램을 실행하는 손, 외부 상태를 보는 눈, 행동 범위를 정하는 울타리에 해당한다.</p>
+<h3>2. Cursor에서 줄어든 코딩 보조 장치</h3>
+<p>Jediah Katz로 소개된 발표자는 동료 Stefan과 함께 Cursor에서 모델의 지능 부족을 보충하던 안전장치를 제거했다고 말했다.</p>
+<p>사례로는 다음이 제시됐다.</p>
+<ul>
+<li>파일에 코드 수정을 적용하던 작은 모델</li>
+<li>코드 저장소를 탐색하는 방법을 알려주는 코딩 전용 지시</li>
+<li>작업 결과를 확인하는 방법을 알려주는 지시</li>
+</ul>
+<p>발표자는 두 연구를 근거로 같은 AI에 서로 다른 작업 도구를 붙여도 코딩 머신러닝 시험 점수가 크게 달라지지 않았다고 설명한다. 연구 이름과 구체 점수는 제공된 전사에 없다.</p>
+<h3>3. 데이터 플라이휠</h3>
+<p>발표자가 설명한 흐름은 다음과 같다.</p>
+<ol>
+<li>하네스가 더 어려운 코딩 작업을 모델의 범위 안으로 가져온다.</li>
+<li>더 많은 사용자가 에이전트로 그 작업을 시도한다.</li>
+<li>더 많은 코딩 자료가 연구소에 공유된다.</li>
+<li>모델이 해당 기술을 직접 잘하게 된다.</li>
+<li>하네스는 그 기술을 보충하던 장치를 삭제할 수 있다.</li>
+</ol>
+<p>이는 화자의 작동 원리 설명이며, 제공 자료만으로 자료 공유 범위와 학습 경로를 독립 검증할 수는 없다.</p>
+<h3>4. Grokbot과 새로운 업무</h3>
+<p>Grokbot으로 소개된 방식은 일회성 채팅 대신 장시간 유지되는 총괄 봇이 여러 작업자 에이전트를 조정한다. 발표자는 이를 전략을 맡는 고성능 변호사가 세부 업무를 보조 인력에게 나누는 모습에 비유한다.</p>
+<p>Cursor에서는 모델이 좋아지며 프롬프트와 안전장치를 제거했지만, Grokbot에서는 새로운 영역의 과업 때문에 새 프롬프트와 안전장치를 다시 추가했다고 한다. 모델이 아직 이런 새 업무를 충분히 익히지 못했다는 것이 발표자의 설명이다.</p>
+<h3>5. 버그 처리의 연속 업무 사례</h3>
+<p>발표자가 소개한 회사 내부 사례는 다음 순서로 이어진다.</p>
+<ol>
+<li>특정 채널에 버그가 보고된다.</li>
+<li>자동화가 버그를 즉시 분류한다.</li>
+<li>Claude 에이전트가 수정을 시도한다.</li>
+<li>도구를 사용해 수정 전후 영상을 만들어 결과를 증명한다.</li>
+<li>수정 사항이 병합되고 배포가 시작된다.</li>
+<li>다른 에이전트가 운영 환경에서 문제가 생기는지 감시한다.</li>
+</ol>
+<p>제공 전사의 한국어 설명에는 이 사례 직후 “이런 흐름을 막으려면 AI가 멈추지 않고 일할 수 있어야” 한다고 적혀 있다. “흐름을 막는다”는 표현은 앞뒤의 연속 업무 설명과 충돌하므로 의도를 임의로 고쳐 확정하지 않는다.</p>
+<h3>6. 모델 학습만으로 없어지지 않는 세 역할</h3>
+<p><strong>실행 환경과 런타임</strong></p>
+<p>발표자는 일반적인 에이전트 작업 시간이 분에서 시간, 일, 그 이상으로 길어졌다고 말한다. 잠자기 상태로 들어갈 수 있는 개인 노트북에서는 장시간 자율 업무를 안정적으로 운영하기 어렵고, 클라우드 실행이 필요하다는 주장이다.</p>
+<p><strong>신뢰와 보안</strong></p>
+<p>명령 실행 도구와 모든 API 키를 담은 파일만으로 코딩 과제를 해결할 수 있더라도, 실제 조직에서는 모델에 모든 키를 주는 것이 문제가 될 수 있다. 발표자는 특정 에이전트와 사람별로 권한 범위를 좁히고 큰 피해를 막는 안전장치를 두어야 한다고 말한다.</p>
+<p>1만 달러 API 요금은 실제 사고 보도가 아니라 큰 위험을 설명하기 위한 예시다.</p>
+<p><strong>효율성</strong></p>
+<p>발표자가 언급한 두 연구에서는 하네스에 따른 평가 점수 차이가 크지 않았지만 작업당 비용에는 유의미한 차이가 있었다고 한다. 같은 설명의 반복 전송이나 작업에 맞지 않는 모델 선택이 시간과 비용에 영향을 줄 수 있다는 설명이다.</p>
+<h3>7. 노트북 밖에서 실행되는 AI에 대한 전망</h3>
+<p>발표자는 6개월 안에 에이전트 작업의 90%가 노트북 밖에서 실행될 것이라고 예측했다. 이 수치는 현재 사용률을 측정한 값이 아니라 발표자의 전망이다. 제공 전사만으로는 전망이 시작되는 정확한 기준 날짜와 이후 실현 여부를 확인할 수 없다.</p>
+<h3>출처 관계의 경계</h3>
+<p>META 설명에는 다음 원본 강연이 제시되어 있다.</p>
+<ul>
+<li>AI Engineer · Jediah Katz</li>
+<li><em>Smarter Models Killed the Harness. Here's What's Left</em></li>
+<li>https://www.youtube.com/watch?v=7Y4sbZgBdnc</li>
+</ul>
+<p>그러나 META의 provenance.creator와 provenance.affiliation은 비어 있고, provenance.note는 채널이 원본 영상 링크를 확인하지 않은 채 화자 이름과 SNS를 기준으로 출처를 추정했다고 기록한다. 설명에 원본 링크가 명시된 상태와 provenance.note의 확인 상태가 충돌하므로, 위 자료는 원본 강연 후보로만 취급한다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · 하네스는 더 이상 필요 없을까? AI가 똑똑해져도 남는 3가지 · https://www.youtube.com/watch?v=NUyLH7tjQpg · 전사: 제공된 SOURCE_TRANSCRIPT(수집 방식 미상)<br>
+원본 강연 후보: AI Engineer · Jediah Katz · <em>Smarter Models Killed the Harness. Here's What's Left</em> · https://www.youtube.com/watch?v=7Y4sbZgBdnc<br>
+META 설명에는 위 강연이 원본으로 제시되지만, provenance.note에는 화자 이름과 SNS를 기준으로 추정한 출처라고 기록되어 있어 확인 상태가 불확실하다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>AI가 더 똑똑해지면 AI에게 일을 시키는 도구는 필요 없어질까요? 코드는 잘 짜는데 메일을 마음대로 보내면 어떨까요? AI 코딩 도구인 커서에서 이 문제를 다루던 개발자가 이런 말을 했어요.</p>
+<p>요즘에는 화려한 하네스가 더 이상 코딩 지능을 높여 주지 않는다는 말이 맞다고 생각합니다.</p>
+<p>말한 사람은 커서의 AI 작업 도구를 만들던 제다이아 카츠예요. 그런데 발표 뒤로 가면 이 도구가 여전히 중요한 까닭도 나와요.</p>
+<p>오늘은 하네스가 뭔지, 어떤 도움은 줄어들고 어떤 일은 남는지 알아볼게요. AI에게 일을 맡길 때 뭘 살펴봐야 하는지도 함께 정리해볼게요.</p>
+<p>하네스는 모델의 눈과 손과 같습니다. 하네스는 모델을 감싸고, 모델을 이끌며, 모델을 세상과 연결합니다. 사용자는 앱을 통해 우리의 하네스에 연결됩니다.</p>
+<p>그리고 하네스는 모델을 컴퓨터와 연결하고, MCP와 같은 서드파티 서비스에도 연결합니다.</p>
+<p>모델을 생각하는 머리라고 해볼게요. 생각만 해서는 파일을 고치거나 프로그램을 켤 수 없죠. 어떤 도구를 쓸지, 어디까지 허용할지, 하던 일은 어디에 남길지 정해줘야 해요. 이렇게 AI가 실제로 일하도록 둘러싼 장치들을 하네스라고 불러요. 한때는 여기에 코딩 요령도 많이 넣었어요.</p>
+<p>나와 동료 스테판(Stefan)도 모델의 지능이 부족한 부분을 메우기 위해 커서(Cursor)에 마련해 두었던 이런 가드레일(guardrail)을 모두 제거한 과정을 글로 썼습니다.</p>
+<p>예전에는 프런티어 모델(frontier model)이 파일에 코드 수정 사항을 적용하는 작업을 잘하지 못했기 때문에, 코드 수정만 담당하는 소형 모델(small model) 같은 것도 사용했습니다. 또한 코드베이스를 탐색하는 방법과 작업 결과를 확인하는 방법처럼 코딩에 특화된 온갖 지침도 마련해 두었습니다.</p>
+<p>발표자는 두 연구도 근거로 들어요. 여기서는 같은 AI에 서로 다른 작업 도구를 붙여도 시험 점수가 크게 달라지지 않았다고 설명해요. 이 주장은 강연에 나온 코딩 머신러닝 시험의 맥락에서 봐야 해요.</p>
+<p>그럼 AI는 어떻게 도구의 도움을 덜 받고도 일을 잘하게 됐을까요?</p>
+<p>결국 하네스는 제가 ‘데이터 플라이휠(data flywheel)’이라고 부르는 과정을 통해 스스로를 쓸모없게 만들고 있습니다.</p>
+<p>이 과정에서 하네스는 점점 더 어려운 코딩 작업을 수행 가능한 범위 안으로 가져옵니다. 그러면 더 많은 사용자가 에이전트를 활용해 그런 작업을 생산적으로 시도할 수 있습니다. 이는 더 많은 코딩 데이터가 연구소들과 공유된다는 뜻이며, 결국 모델은 이러한 기술을 능숙하게 수행하는 방법을 본래적으로 학습하게 됩니다.</p>
+<p>결국 모델이 너무 뛰어나져서, 하네스는 애초에 그런 작업을 가능하게 만들기 위해 필요했던 기능들을 실제로 삭제할 수 있게 됩니다.</p>
+<p>처음에는 자전거의 보조 바퀴를 달아주는 것과 비슷해요. 발표자가 그린 흐름에서는 도구가 어려운 일을 해볼 수 있게 돕고, 그 경험이 학습 자료가 돼요. AI가 익숙해지면 보조 코드를 덜 써도 되죠.</p>
+<p>그런데 새 일을 맡기면 어떨까요? 이제 AI는 코딩 창 밖으로 나가요.</p>
+<p>Grokbot에는 일회성 채팅(one-off chats)이 아니라, 여러 작업 에이전트(worker agents)로 구성된 무리를 지휘하는 장기 실행 코디네이터 봇(long-lived coordinator bots)을 기반으로 작동하는 새로운 형태의 하네스(harness)가 생겼습니다.</p>
+<p>여러분을 직접 상대하고 전략을 총괄하지만, 업무는 법률 보조원(paralegals) 팀에 맡기는 유능한 변호사를 고용하는 것과 비슷하다고 생각하면 됩니다. 그런 방식입니다.</p>
+<p>사용자는 총괄 AI에게 일을 맡겨요. 총괄 AI는 작은 일들을 다른 AI에게 나눠줘요. 자료를 찾고, 내용을 모으고, 결과를 확인하는 식이죠. 이 그림은 역할을 쉽게 이해하기 위한 예예요. 그런데 개발팀은 여기서 예전에 지웠던 장치를 다시 넣게 됐어요.</p>
+<p>Grokbot 하네스(harness)와 관련해 흥미로운 점이 있습니다. Cursor에서는 모델이 더 똑똑해지면서 하네스에서 여러 요소를 제거하게 됐다고 말씀드렸습니다. 프롬프팅(prompting)을 없애고, 가드레일(guardrail)을 없앴습니다. 그런데 신기하게도 Grokbot에서는 실제로 이런 요소를 상당 부분 다시 추가하게 됐습니다. 새로운 프롬프팅을 추가하고, 새로운 가드레일을 추가하고 있습니다. Grokbot이 해결하도록 만들어진 새로운 작업 방식과 새로운 영역에는 새로운 과제가 많이 있기 때문입니다.</p>
+<p>모델들은 아직 그것을 완전히 해내지 못했습니다.</p>
+<p>메일을 언제 보내도 되는지, 일이 길어지면 언제 알려야 하는지, 이런 문제는 코드를 잘 짜는 것만으로 풀리지 않아요. 새 일에서 막히는 곳을 도구가 먼저 도와주는 거죠. 이 변화는 여러 AI가 소프트웨어 작업을 이어받는 흐름에서도 보여요. 발표자가 소개한 회사 내부 사례를 볼게요.</p>
+<p>이것이 어떻게 나타날 수 있는지 예를 들면, 내부적으로 누군가 채널에 버그를 제보하면 자동화 시스템이 즉시 그 버그를 자동 분류(auto-triage)합니다. 그런 다음 Claude 에이전트를 실행해 버그를 수정하도록 할 수 있고, 해당 에이전트는 우리 도구를 사용해 수정 전후 영상을 보여 주며 문제가 해결됐다는 것을 입증합니다.</p>
+<p>그 수정 사항이 배포되거나 병합되어 배포를 시작하면, 저희에게는 롤아웃(rollouts) 제품이 있어 또 다른 에이전트를 실행하고 프로덕션 환경에서 문제가 발생하는지 모니터링합니다.</p>
+<p>Bug을 찾고 고치고 확인하고 배포 뒤에 지켜보는 일까지 이어져요. 이런 흐름을 막으려면 AI가 멈추지 않고 일할 수 있어야겠죠. 여기서 제다이아는 모델이 배우는 것만으로 없어지지 않는 역할을 짚어요. 먼저 작업을 계속 돌리는 환경이에요.</p>
+<p>무엇보다도 자율형 동료(autonomous colleague)를 신뢰성 있게 작동시키려면 인프라와 런타임(runtime)이 필요합니다. 지난 1년여 동안 에이전트가 일반적인 작업을 몇 분에서 몇 시간 동안 수행하던 수준에서, 며칠 또는 그보다 더 오래 작업할 수 있는 수준으로 발전했습니다.</p>
+<p>한 사람의 노트북에서는 이 작업을 수행할 방법이 없습니다. 노트북은 절전 모드로 전환될 수도 있기 때문입니다. 정말 자율형 동료를 원한다면 클라우드에서 실행되어야 합니다.</p>
+<p>노트북을 덮어도 일은 이어지고, 다시 접속하면 하던 작업을 찾을 수 있어야 해요. 발표자는 이런 실행 환경을 강조해요. 다음은 권한이에요. AI가 메일을 쓸 줄 알아도 누구에게 언제 보내도 되는지는 따로 정해야겠죠.</p>
+<p>그리고 다음은 신뢰와 보안입니다. 앞서 살펴본 것처럼, Bash만 사용하고 모든 API 키를 파일에 넣은 단순한 하네스(harness)로도 코딩 작업을 해결할 수 있습니다. 하지만 모든 API 키를 파일에 넣어 모델에 제공하고 싶지는 않을 겁니다. 설령 괜찮다고 해도, 보안 책임자가 분명 할 말이 있을 테고요.</p>
+<p>이건 분명 정말 중요한 문제입니다. 기업은 특정 에이전트와 특정 사람에게만 권한을 부여하도록 권한 범위를 제한해야 합니다. 하지만 어느 날 아침에 정말 재앙적인 작업이 실행되었거나 1만 달러짜리 API 요금 청구서를 마주하고 싶지 않은 사람들을 위해 안전장치(guardrails)를 마련하는 것도 중요합니다. 그렇죠?</p>
+<p>여기서 1만 달러는 위험을 설명하려고 든 예시예요. 실제로 이런 사고가 났다는 보도는 아니에요.</p>
+<p>AI가 일을 잘 끝냈는지와 필요한 권한만 썼는지는 함께 살펴봐야 해요. 그리고 같은 일을 해도 비용이 얼마나 드는지 따져봐야겠죠.</p>
+<p>그리고 마지막으로 효율성이 있습니다. 앞서 보여드린 두 연구를 떠올려 보면, 하네스(harness)의 선택이 평가 점수(eval scores)에 유의미한 차이를 만들지 않았지만, 두 연구 모두 작업당 비용에서는 유의미한 차이가 있다는 사실을 실제로 발견했습니다.</p>
+<p>시험 점수가 비슷해도 실제로 쓰는 경험은 달라질 수 있어요. 같은 설명을 되풀이해서 보내는지, 작업에 맞는 모델을 고르는지에 따라 시간과 비용이 달라지니까요.</p>
+<p>그래서 AI 도구를 고를 때는 어려운 문제를 푸는 능력과 함께 오래 일하는지, 권한을 지키는지, 비용을 아끼는지도 보면 좋아요. 발표자는 이런 변화가 노트북 밖에서 일하는 AI로 이어질 거라고 예상해요.</p>
+<p>저는 6개월 안에 에이전트 작업의 90%가 노트북에서 실행될 것이라고 예상합니다. 이미 상황은 그런 방향으로 가고 있으며, 우리가 원하는 방식으로 실제로 우리와 협력할 수 있는 진정한 자율 에이전트를 만들려면 이것이 반드시 필요하다고 생각합니다.</p>
+<p>방금 수치는 현재 사용률이 아니라 발표자의 전망이에요. 처음 질문으로 돌아가 볼게요. AI가 똑똑해지면 도구도 필요 없어질까요?</p>
+<p>익숙한 코딩을 도와주던 일부 장치는 줄어들어요. 그래도 오래 실행하고 권한을 정하고 비용을 줄이는 일은 남아요. 새 일을 맡길 때는 새 도구도 필요하고요. 다음에 AI 도구를 볼 때 이 역할들을 살펴보세요. 도움이 되셨다면 구독과 좋아요 부탁드려요. 시청해주셔서 감사합니다.</p>
+</details>
+</body></html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Data Center Supply Chain</title>
+<meta name="description" content="AI 데이터센터 투자가 GPU 밖의 변압기·전기 장비·냉각 장치·특수강까지 병목을 만들며 공급망 사업 기회로 이어진다는 주장."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Y Combinator 학습노트</div><h1>Data Center Supply Chain</h1>
+<div class="meta">원작자 Data Center Supply · 업로드 2026-10-28 · 0.8분 · <a href="https://youtu.be/9EJM4LNMK0I" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 4분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상은 AI 데이터센터 투자를 GPU만의 문제가 아니라 <strong>데이터센터를 완성하는 전체 공급망의 문제</strong>로 보자고 제안한다. 화자는 이 투자가 미국 역사상 가장 큰 자본 투자 사업이며 철도·고속도로·맨해튼 프로젝트를 합친 것보다도 크다고 주장한다. 이 비교는 영상의 출발점이지만, 독립적으로 검증된 사실은 아니다.</p>
+<p>핵심 논리는 간단하다. 데이터센터를 많이 지으려면 GPU만 늘어나는 것으로 끝나지 않는다. 전력, 전기 기술자, 변압기, 전기를 안전하게 나누고 차단하는 장비, 냉각 장치, 변압기 내부에 들어가는 특수강까지 함께 필요하다. 이 중 하나라도 제때 공급되지 않으면 전체 구축이 늦어질 수 있다. 화자는 이렇게 수요가 공급 능력을 앞질러 흐름을 막는 지점을 <strong>병목</strong>이라고 보고, 그 병목을 해결하는 회사를 사업 기회로 찾고 있다.</p>
+<figure data-visual-kind="map" style="margin:1.5rem 0; padding:1rem; border:1px solid #94a3b8; border-radius:12px; background:#f8fafc;">
+<div role="img" aria-label="데이터센터 투자 확대에서 공급망 사업 기회까지 이어지는 세로 흐름" style="display:flex; flex-direction:column; align-items:stretch; gap:0.45rem; max-width:680px; margin:0 auto; color:#0f172a;">
+<div style="padding:0.85rem; border:2px solid #2563eb; border-radius:10px; background:#eff6ff; text-align:center;"><strong>AI 데이터센터 투자 확대</strong></div>
+<div aria-hidden="true" style="font-size:1.5rem; line-height:1; text-align:center;">↓</div>
+<div style="padding:0.85rem; border:2px solid #475569; border-radius:10px; background:#fff; text-align:center;"><strong>GPU 밖의 장비·인력·소재 수요도 함께 증가</strong></div>
+<div aria-hidden="true" style="font-size:1.5rem; line-height:1; text-align:center;">↓</div>
+<div style="padding:0.85rem; border:2px solid #b45309; border-radius:10px; background:#fffbeb; text-align:center;"><strong>긴 대기시간·매진·생산능력 부족이 병목으로 드러남</strong></div>
+<div aria-hidden="true" style="font-size:1.5rem; line-height:1; text-align:center;">↓</div>
+<div style="padding:0.85rem; border:2px solid #047857; border-radius:10px; background:#ecfdf5; text-align:center;"><strong>병목을 완화하는 회사가 사업 기회 후보가 됨</strong></div>
+</div>
+<figcaption style="margin-top:0.8rem; color:#334155;">화자가 제시한 데이터센터 공급망 기회의 전체 인과 지도.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 이것은 시장 규모를 수치화한 그래프가 아니라, 화자의 주장을 연결한 개념도다. 마지막 단계는 사업 성공이 보장된다는 뜻이 아니라 <strong>검토할 기회 후보가 생긴다</strong>는 뜻이다.</p>
+<p>영상은 널리 알려진 수요와 덜 주목받는 병목을 구분한다. GPU·전력·숙련 전기 기술자의 수요는 이미 잘 알려져 있다고 말한다. 반면 대형 전력 변압기는 주문부터 공급까지 걸리는 시간인 <strong>리드타임(lead time)</strong>이 3년이고, 스위치기어·회로 차단기·액체 냉각 장비는 매진 상태라고 주장한다.</p>
+<p>더 깊은 단계에는 원재료가 있다. 화자에 따르면 변압기 코어에 쓰이는 <strong>방향성 전기강판(grain-oriented electrical steel)</strong>은 미국 내 단일 공장에서만 만들어지며, 그 공장이 수요를 따라가지 못하고 있다. 완제품인 변압기만 보아서는 놓칠 수 있는 상류 소재의 병목이다.</p>
+<figure data-visual-kind="comparison" style="margin:1.5rem 0; padding:1rem; border:1px solid #94a3b8; border-radius:12px; background:#fff;">
+<div role="img" aria-label="널리 알려진 수요와 화자가 강조한 숨은 병목 비교" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.8rem; color:#0f172a;">
+<section style="padding:1rem; border:2px solid #2563eb; border-radius:10px; background:#eff6ff;">
+<strong>널리 알려졌다고 제시한 수요</strong>
+<ul style="margin:0.65rem 0 0; padding-left:1.25rem;">
+<li>GPU</li>
+<li>전력</li>
+<li>숙련 전기 기술자</li>
+</ul>
+</section>
+<section style="padding:1rem; border:2px solid #b45309; border-radius:10px; background:#fffbeb;">
+<strong>화자가 강조한 비주류 병목</strong>
+<ul style="margin:0.65rem 0 0; padding-left:1.25rem;">
+<li>대형 전력 변압기: 3년 리드타임 주장</li>
+<li>스위치기어·회로 차단기·액체 냉각 장비: 매진 주장</li>
+<li>방향성 전기강판: 미국 내 단일 공장 생산 주장</li>
+</ul>
+</section>
+</div>
+<figcaption style="margin-top:0.8rem; color:#334155;">사람들의 관심이 집중된 자원과 화자가 기회 후보로 제시한 공급망 병목의 비교.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 데스크톱에서는 왼쪽과 오른쪽을 비교하고, 모바일에서는 위와 아래를 비교한다. 양쪽 모두 필요하지만, 영상은 오른쪽처럼 덜 이야기되는 제약을 찾아야 한다고 강조한다. 항목의 수나 시장 규모를 비교한 정량 도표는 아니다.</p>
+<p>중요한 통찰은 <strong>가장 유명한 제품보다 그 제품을 가능하게 하는 덜 눈에 띄는 부품과 소재가 더 강한 제약이 될 수 있다</strong>는 것이다. 다만 영상은 구체적인 고객, 가격, 매출, 해결 기술이나 검증 사례를 제시하지 않는다. 따라서 언급된 병목은 사업 성공의 증거가 아니라 추가 조사가 필요한 가설이다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>큰 투자 사업은 핵심 제품뿐 아니라 장비·인력·원재료 전반의 수요를 함께 늘릴 수 있다.</li>
+<li>화자는 변압기, 전기 장비, 액체 냉각 장비, 방향성 전기강판을 데이터센터 공급망의 병목으로 제시한다.</li>
+<li>병목은 사업 기회 후보가 될 수 있지만, 영상만으로 시장성이나 해결 가능성이 검증된 것은 아니다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>AI 데이터센터 투자는 왜 GPU 밖의 공급망 병목에서도 사업 기회를 만들 수 있는가?</strong></p>
+</blockquote>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>데이터센터 건물과 GPU가 준비됐지만, 전력을 연결할 대형 변압기를 받으려면 화자의 주장대로 3년을 기다려야 하는 장면을 떠올린다. 가장 눈에 띄는 핵심 장비가 있어도 주변 공급망의 한 요소가 전체 일정을 막을 수 있다.</p>
+<p><code>"GPU뿐 아니라 변압기·전기 장비·냉각 장치·소재까지 동시에 필요하다"</code> <strong>문제</strong><br>
+→ <code>"공급 능력이 수요를 따라가지 못하는 지점이 전체 구축을 제한한다"</code> <strong>작동 방식</strong><br>
+→ <code>"그 병목을 완화하는 회사가 사업 기회 후보가 된다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">모든 재료가 필요한 주방</div>
+<p>인기 메뉴의 주문이 폭증해도 핵심 식재료 하나만 많이 준비해서는 음식을 완성할 수 없다. 조리 기구나 다른 필수 재료 하나가 부족하면 전체 주문 처리가 멈춘다. GPU는 눈에 띄는 핵심 재료, 변압기·냉각 장비·특수강은 함께 갖춰야 할 다른 필수 요소에 대응한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 실제 데이터센터 공급망은 한 주방보다 참여자와 의존 관계가 복잡하다. 모든 요소가 항상 동일한 정도로 필수인지, 다른 제품으로 대체할 수 있는지는 영상에서 설명하지 않는다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>공급망 병목</strong></td>
+<td>한 부분이 전체 진행을 막는 상태</td>
+<td>수요에 비해 특정 장비·소재의 공급이 부족해 전체 구축을 제한하는 지점</td>
+<td>수요가 많다는 사실만으로 곧바로 좋은 사업이 된다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>리드타임</strong></td>
+<td>주문하고 받을 때까지의 대기시간</td>
+<td>발주부터 공급까지 걸리는 시간</td>
+<td>영상의 3년이라는 수치를 모든 지역과 모든 변압기에 적용하는 것</td>
+</tr>
+<tr>
+<td><strong>방향성 전기강판</strong></td>
+<td>변압기 코어에 쓰이는 특수강</td>
+<td>화자가 <code>grain-oriented electrical steel</code>이라고 부른 소재</td>
+<td>영상에 나오지 않은 제조사나 생산량까지 확인된 것으로 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>데이터센터 투자가 GPU 밖의 장비와 소재에도 병목을 만든다고 보는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>데이터센터를 완성하려면 GPU뿐 아니라 전력 설비, 변압기, 차단 장비, 냉각 장치와 원재료도 필요하다. 투자 확대에 따라 이 요소들의 수요가 함께 늘지만 공급이 따라가지 못하면 특정 요소의 긴 대기시간이나 매진 상태가 전체 구축을 제한할 수 있다는 것이 화자의 논리다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>널리 알려진 수요와 영상이 강조한 비주류 병목은 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>화자는 GPU·전력·숙련 전기 기술자의 수요는 이미 잘 알려져 있다고 말한다. 반면 변압기, 스위치기어, 회로 차단기, 액체 냉각 장비와 방향성 전기강판은 상대적으로 덜 주목받지만 공급 제약이 발생한 영역으로 제시한다. 이 구분은 관심도의 차이지 중요도의 정량 비교는 아니다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새로운 투자 흐름에서 숨은 사업 기회를 검토한다면 무엇을 먼저 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 핵심 제품의 앞뒤에 필요한 부품·인력·소재를 나열하고, 각 요소의 대기시간이나 공급 부족 상태를 확인한다. 그다음 실제 구매자, 대체 가능성, 해결 비용과 반복 수요를 조사해야 한다. 병목이 있다는 주장만으로 사업성을 확정해서는 안 된다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 중심 제품보다 의존 관계를 보라</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 GPU·전력·숙련 전기 기술자 외에도 대형 전력 변압기, 스위치기어, 회로 차단기, 액체 냉각 장비와 방향성 전기강판에 공급 제약이 있다고 주장하며, 데이터센터 공급망 전반을 지원하는 회사를 찾는다고 말한다.</li>
+<li><strong>[해석]</strong> 큰 투자 흐름에서 기회를 찾으려면 가장 유명한 제품만 볼 것이 아니라, 그 제품의 설치와 운영을 가능하게 하는 필수 의존 요소를 따라가야 한다.</li>
+<li><strong>[경계]</strong> 미국 역사상 최대 투자라는 비교, 3년 리드타임, 매진 상태, 미국 내 단일 공장이라는 수치는 이 전사 외의 자료로 검증되지 않았다. 매진의 시점·지역·범위도 명시되지 않았다. META의 49초와 0.8분은 반올림 관계로 충돌하지 않으며, 전사에는 3년이나 단일 공장 주장과 대조할 다른 수치가 없다. <code>Data Center Supply</code>는 META에서 화자 이름과 SNS를 기준으로 추정한 원작자 후보이며, 원본 링크도 확인되지 않았다고 표시되어 있다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 눈에 띄는 GPU와 덜 보이는 변압기·소재를 대비해 병목을 설명한다.</li>
+<li><strong>통찰:</strong> 학습자가 용어를 외웠는지보다 핵심 제품에서 상류 소재까지 인과를 연결해 설명하는지로 이해를 확인할 수 있다.</li>
+<li><strong>질문/행동:</strong> “GPU가 충분해도 데이터센터 구축이 늦어질 수 있는 이유”를 영상의 사례 두 개로 설명하게 한다.</li>
+</ul>
+<h3>사업가 · 영감</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 공급 부족과 긴 대기시간을 사업 기회 후보를 찾는 단서로 사용한다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용하려면 현재 사실로 단정하지 말고, 주력 상품 앞뒤의 장비·소재·서비스에서 대기시간이 긴 지점이 있는지 검증할 수 있다.</li>
+<li><strong>질문/행동:</strong> 가상의 적용 대상으로 공급 흐름 하나를 골랐을 때, 실제 대기시간이나 공급 부족을 증명할 자료가 있는가?</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 큰 역사적 비교 뒤에 3년과 단일 공장이라는 구체적 표현을 배치해 문제를 선명하게 만든다.</li>
+<li><strong>통찰:</strong> 강한 숫자와 장면은 주목을 만들지만, 출처·범위·시점이 없으면 증거가 아니라 주장으로 남는다.</li>
+<li><strong>질문/행동:</strong> 카피에 숫자를 쓴다면 그 숫자의 대상, 지역, 기준 시점까지 함께 제시할 수 있는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> GPU라는 핵심 자원만 보지 않고 전력·냉각·전기 장비까지 전체 작업 흐름의 제약을 찾는 접근이다.</li>
+<li><strong>통찰:</strong> 자동화나 에이전트도 대표 기술 이름보다 실제 작업을 막는 대기 단계와 의존 요소를 먼저 측정해야 한다는 가설로 옮길 수 있다.</li>
+<li><strong>질문/행동:</strong> 검증 전 가상 워크플로에서 가장 눈에 띄는 모델 외에 전체 완료를 기다리게 하는 단계는 무엇인가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"데이터센터 구축에 필요한 일부 장비·소재의 공급이 수요를 따라가지 못함"</code> <strong>문제</strong><br>
+→ <code>"병목이 완화되면 구축 지연을 줄일 수 있음"</code> <strong>수혜자: 데이터센터 공급망 참여자·구축 주체로 추정되나 구체 주체는 원문 미명시</strong><br>
+→ <code>"구매·계약 주체와 지불 방식은 원문에 제시되지 않음"</code> <strong>지불자 또는 자원 제공자: 미확인</strong><br>
+→ <code>"대기시간 또는 공급 부족 상태의 개선"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 검증 전 가상 업무 흐름 하나를 골라 핵심 자원 앞뒤의 필수 요소와 확인 가능한 대기시간을 한 장에 기록한다.</li>
+<li><strong>측정 1개:</strong> 근거와 함께 확인된 비주류 병목 후보 수</li>
+<li><strong>중단 기준 1개:</strong> 확인된 비주류 병목 후보가 0개이면 사업 적용으로 확대하지 않고 멈춘다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>투자 규모 주장</td>
+<td>AI 데이터센터 구축을 미국 역사상 가장 큰 자본 투자 사업으로 규정한다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>널리 알려진 수요</td>
+<td>GPU, 전력, 숙련 전기 기술자 수요를 든다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>비주류 장비 병목</td>
+<td>변압기의 3년 리드타임과 세 종류 장비의 매진을 주장한다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>원재료와 모집</td>
+<td>방향성 전기강판의 생산 제약을 말하고 관련 회사를 찾는다고 밝힌다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 투자 규모와 공급망 기회</h3>
+<p>화자는 AI 데이터센터 구축을 미국 역사상 가장 큰 자본 투자 사업이라고 부른다. 철도, 고속도로, 맨해튼 프로젝트를 합친 것보다 크다고 비교하며, 이 정도 규모의 구축은 공급망 위아래에서 기회를 만든다고 주장한다. 비교의 계산 기준이나 근거 자료는 제시하지 않는다.</p>
+<h3>2. 이미 알려진 수요</h3>
+<p>화자는 GPU, 전력, 숙련 전기 기술자에 수요가 많다는 점은 널리 알려져 있다고 말한다. 이 세 항목은 새로운 발견이라기보다, 시청자가 이미 알고 있을 법한 출발점으로 사용된다.</p>
+<h3>3. 덜 알려진 장비 병목</h3>
+<p>비주류 병목의 사례로 다음 주장을 제시한다.</p>
+<ul>
+<li>대형 전력 변압기의 리드타임은 3년이다.</li>
+<li>스위치기어는 매진 상태다.</li>
+<li>회로 차단기는 매진 상태다.</li>
+<li>액체 냉각 장비는 매진 상태다.</li>
+</ul>
+<p>어느 시점과 지역의 공급 상황인지, 모든 제품군에 해당하는지는 밝히지 않는다.</p>
+<h3>4. 상류 소재와 회사 모집</h3>
+<p>화자는 변압기 코어에 쓰이는 방향성 전기강판이 미국 내 단일 공장에서만 생산되며, 해당 공장이 수요를 따라가지 못한다고 주장한다. 공장명, 생산량, 수요량은 제시하지 않는다.</p>
+<p>마지막에는 데이터센터 공급망의 모든 측면을 가능하게 하는 회사에 관심이 있다며, 이 문제를 다루는 사람들의 연락을 요청한다. 이미 특정 해법을 시험하거나 검증했다는 내용은 없다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Y Combinator · Data Center Supply Chain · https://www.youtube.com/watch?v=9EJM4LNMK0I · 전사: META에 방식이 명시되지 않음<br>
+채널/업로더: <code>Y Combinator</code> · 원작자 후보: <code>Data Center Supply</code> — META provenance.note에서 화자 이름과 SNS를 기준으로 한 추정이며 원본 영상 링크는 확인되지 않은 것으로 표시됨</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>AI 데이터센터 구축은 미국 역사상 최대 규모의 자본 투자 프로젝트로, 철도와 고속도로, 맨해튼 프로젝트를 모두 합친 것보다 규모가 큽니다. 이처럼 대규모의 구축 사업은 공급망 전반에 걸쳐 기회를 만들어냅니다.</p>
+<p>잘 알려진 기회도 있습니다. GPU, 전력, 숙련된 전기 기술자에 대한 수요가 엄청나다는 것은 누구나 알고 있습니다. 그 밖에도 쉽게 눈에 띄지 않는 병목 현상이 많습니다. 대형 전력 변압기의 납기는 3년입니다. 스위치기어(switchgear), 회로 차단기(circuit breaker), 액체 냉각 장비는 모두 품절된 상태입니다.</p>
+<p>원자재조차도 공급 압박을 받고 있습니다. 변압기 코어에 사용되는 방향성 전기강판(grain-oriented electrical steel)은 미국 내 단 한 곳의 공장에서만 생산되는데, 그곳에서도 수요를 따라가지 못하고 있습니다. 우리는 데이터센터 공급망의 모든 측면을 가능하게 하는 기업을 찾는 데 관심이 있습니다. 이 분야에서 일하고 계시다면, 여러분의 이야기를 듣고 싶습니다.</p>
+</details>
+</body></html>

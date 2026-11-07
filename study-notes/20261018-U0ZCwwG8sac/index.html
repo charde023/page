@@ -1,0 +1,669 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>[한영자막] Claude Managed Agents로 리서치 에이전트를 만들어봅니다 (2/4)</title>
+<meta name="description" content="관리형 에이전트에 이벤트 스트림, 스킬, 하위 에이전트, 결과 평가, 공유 메모리를 붙여 장기 리서치 작업으로 확장하는 워크숍."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>[한영자막] Claude Managed Agents로 리서치 에이전트를 만들어봅니다 (2/4)</h1>
+<div class="meta">원작자 Claude Managed Agents · Platform · 업로드 2026-10-18 · 35.1분 · <a href="https://youtu.be/U0ZCwwG8sac" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 12분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<h3>큰 그림: 직접 서버를 돌보는 대신 작업 구조에 집중한다</h3>
+<p>이 워크숍의 중심은 <strong>단순히 질문에 답하는 챗봇을 만드는 것</strong>이 아니다. 화자들은 Claude Managed Agents를 이용해, 오래 걸리는 금융 리서치를 여러 작업자에게 나누고 결과를 검사하며 기억까지 남기는 시스템을 구성한다.</p>
+<p>관리형 에이전트에서는 플랫폼이 인프라, 호스팅, 실행용 격리 공간인 샌드박스, 확장, 이벤트 기록 저장을 관리한다고 설명한다. 개발자는 그 위에서 에이전트의 지시문, 모델, 도구, 접근 권한, 평가 기준과 결과물을 설계한다. 즉, 실행 기반 전체를 직접 조립하기보다 <strong>에이전트가 무슨 일을 하고 어떻게 성공 여부를 판단할지</strong>에 더 집중하려는 접근이다.</p>
+<figure data-visual-kind="map" style="max-width:760px;margin:1.5rem auto;padding:1rem;border:1px solid #94a3b8;border-radius:12px;background:#f8fafc;">
+  <div style="padding:1rem;border:2px solid #334155;border-radius:10px;background:#ffffff;">
+    <strong>1. 에이전트 정의</strong><br>
+    지시문, 모델, 기본 도구와 권한을 정한다.
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.5rem;line-height:1.7;">↓</div>
+  <div style="padding:1rem;border:2px solid #2563eb;border-radius:10px;background:#eff6ff;">
+    <strong>2. 실행 환경</strong><br>
+    샌드박스 템플릿, 패키지, 접속 가능한 도메인을 정한다.
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.5rem;line-height:1.7;">↓</div>
+  <div style="padding:1rem;border:2px solid #0f766e;border-radius:10px;background:#f0fdfa;">
+    <strong>3. 세션과 이벤트 스트림</strong><br>
+    메시지와 실행 사건을 보내고, 에이전트가 돌려주는 사건을 계속 받는다.
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.5rem;line-height:1.7;">↓</div>
+  <div style="padding:1rem;border:2px solid #7c3aed;border-radius:10px;background:#f5f3ff;">
+    <strong>4. 능력 확장</strong><br>
+    스킬, 하위 에이전트, 맞춤 도구, 공유 메모리를 붙인다.
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.5rem;line-height:1.7;">↓</div>
+  <div style="padding:1rem;border:2px solid #b45309;border-radius:10px;background:#fffbeb;">
+    <strong>5. 결과 평가</strong><br>
+    과업과 채점 기준을 함께 주고, 결과가 기준을 충족하는지 검사한다.
+  </div>
+  <figcaption style="margin-top:1rem;color:#334155;"><strong>전체 지도:</strong> 한 줄짜리 에이전트가 장기 리서치 시스템으로 확장되는 층을 보여준다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 내려간다. 앞 단계는 뒤 단계의 기반이다. 이 도식은 성능 수치를 나타내는 그래프가 아니라 워크숍의 개념 구조다.</p>
+<p>첫 데모는 매우 단순하다. 사용자가 주제를 주면 농담을 만드는 에이전트를 생성하고, 환경을 만든 뒤 세션을 시작한다. 데모에서는 환경에 제한 없는 접근을 주지만, 화자는 실제 운영 환경이라면 접속 가능한 도메인과 MCP 서버를 좁혀야 한다고 말한다. 이 구분이 중요하다. <strong>데모의 편리한 설정이 운영 권장 설정은 아니다.</strong></p>
+<h3>채팅 화면의 핵심은 메시지 창이 아니라 이벤트 흐름이다</h3>
+<p>연구 데스크 애플리케이션에서는 브라우저가 사용자 메시지 사건을 세션으로 보낸다. 백엔드는 에이전트가 내보내는 이벤트 스트림을 듣고, 이를 다시 브라우저로 전달해 화면에 표시한다. 겉으로는 채팅처럼 보이지만 내부에서는 한 번의 요청과 한 번의 답으로 끝나는 것이 아니라, 생각·도구 호출·하위 작업·완료 같은 사건이 계속 흐른다.</p>
+<p>화자들은 이 지점까지만 구현해도 채팅형 애플리케이션을 만들 수 있다고 설명한다. 그러나 워크숍의 목표는 몇 분짜리 채팅을 넘어 몇 시간, 며칠, 몇 주 또는 몇 달 동안 이어질 수 있는 비동기 작업이다.</p>
+<h3>스킬과 하위 에이전트로 일을 나눈다</h3>
+<p>다음 단계에서는 기본 에이전트에 SEC 웹사이트를 호출하고 기업 공시를 분석하는 스킬을 붙인다. 별도의 금융 분석 담당과 위험 평가 담당 같은 하위 에이전트도 구성한다. 주 에이전트는 전체 목표를 관리하고, 전문 작업은 하위 에이전트에 위임한 뒤 결과를 모은다.</p>
+<p>하위 에이전트가 주 에이전트의 복사본으로 만들어질 때도 기존 세션의 전체 대화 기록을 그대로 넘기는 것은 아니라고 설명한다. 전달되는 것은 도구 설명, 스키마와 지시문이다. 따라서 “하위 에이전트가 지금까지의 모든 대화를 자동으로 안다”고 이해하면 안 된다.</p>
+<p>스킬은 실행 중인 모든 세션에 즉시 덮어쓰는 고정물이 아니라 갱신 가능한 자원으로 설명된다. 화자는 스킬을 새 버전으로 게시하면 이후 그 스킬을 참조하는 새 세션이 갱신된 정보를 받는다고 말한다.</p>
+<h3>결과물뿐 아니라 합격 기준도 함께 준다</h3>
+<p>장기 작업에서는 “알아서 잘 조사해 줘”만으로 부족하다. 워크숍에서는 <strong>해야 할 일과 성공 기준을 함께 지정하는 구조</strong>를 Outcome이라고 부른다.</p>
+<p>Nvidia 분석 예시에서는 최근 분기 자료를 찾고, 이미 저장된 분석이 있는지 메모리에서 확인한 뒤, 정해진 형식의 점수표와 기업별 메모를 파일로 남기도록 한다. 과업에는 채점 기준과 최대 반복 횟수도 포함된다. 주 에이전트가 작업을 마쳤다고 판단하면 별도의 하위 에이전트가 산출물과 세션의 작업 내용을 채점 기준에 맞춰 검사한다. 기준을 충족하지 못하면 다시 시도하도록 설계된다.</p>
+<figure data-visual-kind="process" style="max-width:680px;margin:1.5rem auto;">
+  <p class="diagram-scroll-hint">도식은 글자 크기를 유지해 표시해. 좁은 화면에서는 그림 안을 좌우로 스크롤해 봐.</p><div class="diagram-scroll" role="region" aria-label="좌우로 볼 수 있는 도식" tabindex="0" style="overflow-x:auto;max-width:100%;"><svg viewBox="0 0 390 720" role="img" aria-labelledby="outcome-title outcome-desc" style="width:100%;height:auto;display:block;;min-width:420.0px;max-width:none;">
+    <title id="outcome-title">Outcome 기반 작업과 재시도 흐름</title>
+    <desc id="outcome-desc">과업과 채점 기준을 정의하고, 주 에이전트와 하위 에이전트가 작업한 뒤 평가자가 검사한다. 미달이면 작업 단계로 돌아가고, 충족하면 결과를 확정한다.</desc>
+    <defs>
+      <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L7,3 z" fill="#334155"></path>
+      </marker>
+    </defs>
+    <rect x="45" y="20" width="280" height="78" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"></rect>
+    <text x="185" y="51" text-anchor="middle" font-size="15" font-weight="700" fill="#172554">과업 + 채점 기준 + 최대 반복</text>
+    <text x="185" y="76" text-anchor="middle" font-size="14" fill="#172554">무엇을 만들고 어떻게 검사할지 정의</text>
+
+    <line x1="185" y1="98" x2="185" y2="135" stroke="#334155" stroke-width="2" marker-end="url(#arrowhead)"></line>
+
+    <rect x="45" y="140" width="280" height="78" rx="12" fill="#f0fdfa" stroke="#0f766e" stroke-width="2"></rect>
+    <text x="185" y="171" text-anchor="middle" font-size="15" font-weight="700" fill="#134e4a">주 에이전트가 작업 계획 수립</text>
+    <text x="185" y="196" text-anchor="middle" font-size="14" fill="#134e4a">필요하면 전문 하위 에이전트에 위임</text>
+
+    <line x1="185" y1="218" x2="185" y2="255" stroke="#334155" stroke-width="2" marker-end="url(#arrowhead)"></line>
+
+    <rect x="45" y="260" width="280" height="92" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"></rect>
+    <text x="185" y="291" text-anchor="middle" font-size="15" font-weight="700" fill="#4c1d95">자료 조사와 산출물 작성</text>
+    <text x="185" y="316" text-anchor="middle" font-size="14" fill="#4c1d95">점수표·파일·메모리 갱신</text>
+    <text x="185" y="337" text-anchor="middle" font-size="14" fill="#4c1d95">작업 기록도 세션에 남김</text>
+
+    <line x1="185" y1="352" x2="185" y2="389" stroke="#334155" stroke-width="2" marker-end="url(#arrowhead)"></line>
+
+    <rect x="45" y="394" width="280" height="78" rx="12" fill="#fffbeb" stroke="#b45309" stroke-width="2"></rect>
+    <text x="185" y="425" text-anchor="middle" font-size="15" font-weight="700" fill="#78350f">평가 하위 에이전트가 검사</text>
+    <text x="185" y="450" text-anchor="middle" font-size="14" fill="#78350f">채점 기준과 산출물을 대조</text>
+
+    <line x1="185" y1="472" x2="185" y2="509" stroke="#334155" stroke-width="2" marker-end="url(#arrowhead)"></line>
+
+    <polygon points="185,514 295,569 185,624 75,569" fill="#fff7ed" stroke="#c2410c" stroke-width="2"></polygon>
+    <text x="185" y="563" text-anchor="middle" font-size="15" font-weight="700" fill="#7c2d12">기준 충족?</text>
+    <text x="185" y="586" text-anchor="middle" font-size="13" fill="#7c2d12">아니면 다시 작업</text>
+
+    <path d="M295 569 L350 569 L350 179 L328 179" fill="none" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#arrowhead)"></path>
+    <text x="353" y="380" text-anchor="middle" font-size="13" fill="#991b1b" transform="rotate(90 353 380)">미달: 작업 단계로 복귀</text>
+
+    <line x1="185" y1="624" x2="185" y2="661" stroke="#334155" stroke-width="2" marker-end="url(#arrowhead)"></line>
+
+    <rect x="75" y="666" width="220" height="48" rx="12" fill="#ecfdf5" stroke="#15803d" stroke-width="2"></rect>
+    <text x="185" y="696" text-anchor="middle" font-size="15" font-weight="700" fill="#14532d">충족: 결과 확정</text>
+  </svg></div>
+  <figcaption style="margin-top:.75rem;color:#334155;"><strong>평가 흐름:</strong> 작업 완료 선언과 실제 기준 충족을 분리하고, 미달이면 작업 단계로 연결해 다시 시도한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 마름모에서 기준을 충족하면 아래 결과로 가고, 충족하지 못하면 오른쪽의 붉은 복귀선이 작업 단계로 실제 연결된다. 화자가 설명한 개념 흐름이며 성공률을 나타내는 수치 도표는 아니다.</p>
+<p>여기서 중요한 제한도 있다. Outcome은 전체 세션 수준에서 정의된다. 현재는 하위 에이전트별로 별도의 하위 Outcome을 정의하는 기능이 없다고 답한다. 또한 라이브로 시작한 Nvidia 분석은 당시 아직 실행 중이었고, 화자가 성공 사례로 보여준 것은 전날 실행한 별도 세션이다. 따라서 라이브 실행도 성공했다고 바꾸어 말하면 안 된다.</p>
+<h3>공유 메모리는 세션 사이에 지식을 넘기는 장치다</h3>
+<p>각 세션이 완전히 처음부터 시작하면 이전 조사 결과를 반복해서 찾을 수 있다. 워크숍에서는 여러 세션이 함께 쓰는 메모리 저장소를 붙여, 기업별로 이미 조사한 내용을 확인하고 새로운 결과를 보태도록 한다.</p>
+<p>여러 사용 범위를 분리할 수도 있다고 설명한다. 예를 들어 사용자별 메모리와 조직 전체 메모리를 각각 붙여 한 세션에서 함께 이용할 수 있다는 주장이다. 메모리 내용을 다른 시스템으로 꺼낼 수 있지만, 다른 메모리 제공자를 세션에 바로 연결하는 기능은 현재 기본 지원되지 않는다. 필요하다면 MCP나 맞춤 도구로 직접 연결해야 한다.</p>
+<p>여러 세션의 대화 기록과 메모리를 분석해 기억을 정리하는 기능은 dreaming이라고 부른다. 다만 현재 dreaming의 대상은 메모리 저장소로 제한된다. 스킬, 지시문, 에이전트 정의까지 자동 개선하는 기능은 향후 확장 가능성으로만 언급됐다.</p>
+<h3>현재 제공되는 것과 계획 중인 것을 구분해야 한다</h3>
+<figure data-visual-kind="comparison" style="margin:1.5rem 0;">
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #94a3b8;border-radius:10px;">
+    <table style="border-collapse:collapse;min-width:720px;width:100%;background:#ffffff;">
+      <thead>
+        <tr style="background:#e2e8f0;">
+          <th style="padding:.8rem;border:1px solid #cbd5e1;text-align:left;">영역</th>
+          <th style="padding:.8rem;border:1px solid #cbd5e1;text-align:left;">현재 지원한다고 설명한 것</th>
+          <th style="padding:.8rem;border:1px solid #cbd5e1;text-align:left;">현재 없거나 계획으로 말한 것</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;"><strong>세션 제어</strong></td>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;">새 사용자 메시지로 실행 중인 에이전트를 조정할 수 있으며, 한 번에 메시지 10개를 보내도 대기열에 넣을 수 있다고 설명</td>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;">과거 시점으로 되감아 수정한 뒤 다시 진행하는 기능은 없음. 세션 분기는 로드맵</td>
+        </tr>
+        <tr>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;"><strong>비용 통제</strong></td>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;">맞춤 오케스트레이션은 사용자가 설계</td>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;">세션별 금액·토큰 상한은 당시 제공하지 않으며 탐색 중</td>
+        </tr>
+        <tr>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;"><strong>평가</strong></td>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;">전체 세션 수준 Outcome과 평가 하위 에이전트</td>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;">하위 에이전트별 하위 Outcome은 지원하지 않음</td>
+        </tr>
+        <tr>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;"><strong>학습·기억</strong></td>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;">세션 간 공유 메모리와 메모리 대상 dreaming</td>
+          <td style="padding:.8rem;border:1px solid #cbd5e1;">dreaming으로 스킬·지시문·에이전트 정의까지 고치는 것은 현재 기능이 아닌 확장 가능성</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption style="margin-top:.75rem;color:#334155;"><strong>지원 상태 비교:</strong> 시연 당시 제공된 기능과 로드맵·탐색 단계의 기능을 분리한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 모바일에서는 표 영역을 좌우로 이동해 읽는다. 가운데 열은 화자가 현재 지원한다고 설명한 내용이고, 오른쪽 열은 현재 없거나 미래 가능성으로 말한 내용이다.</p>
+<h3>비밀 정보와 사내 데이터는 접근 경로를 제한한다</h3>
+<p>Vault는 실제 비밀값을 지시문이나 코드에 직접 넣는 대신 자리표시자를 사용하게 한다. 에이전트가 허용된 호스트에 요청할 때만 실제 값으로 바꾼다고 설명한다. 예를 들어 SEC에만 허용된 비밀값이라면 다른 도메인 요청에는 주입하지 않는다는 식이다. Vault ID를 세션에 붙여 여러 인증 정보를 묶어 공급할 수도 있고 OAuth 자격 증명도 지원한다고 답한다.</p>
+<p>사내 데이터 연결에 관한 답변에는 중요한 수량 충돌이 있다. 화자는 먼저 <strong>“두 가지 방법”</strong>이라고 예고하지만 실제로는 다음 <strong>세 경로</strong>를 제시한다.</p>
+<figure data-visual-kind="map" style="max-width:760px;margin:1.5rem auto;padding:1rem;border:1px solid #94a3b8;border-radius:12px;background:#f8fafc;">
+  <div style="padding:1rem;border:2px solid #2563eb;border-radius:10px;background:#eff6ff;">
+    <strong>경로 1. MCP 또는 CLI 직접 연결</strong><br>
+    API나 MCP로 접근하고 Vault를 통해 인증 정보를 제공한다.
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.4rem;line-height:1.7;">↓ 또는</div>
+  <div style="padding:1rem;border:2px solid #0f766e;border-radius:10px;background:#f0fdfa;">
+    <strong>경로 2. MCP 터널</strong><br>
+    MCP를 인터넷에 공개하지 않고 내부 네트워크에서 플랫폼 쪽으로 터널을 만든다.
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.4rem;line-height:1.7;">↓ 또는</div>
+  <div style="padding:1rem;border:2px solid #7c3aed;border-radius:10px;background:#f5f3ff;">
+    <strong>경로 3. 자체 호스팅 샌드박스</strong><br>
+    조직 네트워크와 연결된 자체 샌드박스에서 내부 서비스에 접근한다.
+  </div>
+  <figcaption style="margin-top:1rem;color:#334155;"><strong>사내 데이터 연결 답변:</strong> “두 가지”라는 예고와 달리 전사에는 세 경로가 열거된다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 우선순위를 뜻하는 것이 아니라, 답변에서 실제로 나온 세 대안을 분리한 것이다. 숫자 불일치를 숨기지 않기 위해 “두 경로”로 합치지 않았다.</p>
+<h3>이 워크숍에서 실제로 확인된 범위</h3>
+<p>화자들은 한 종목 분석을 여러 하위 에이전트에 맡기고 점수표와 메모리를 만드는 이전 실행 사례를 보여준다. 이어 10개 또는 100개 종목을 각각 다른 세션에 나누고 결과를 모으는 MapReduce 같은 오케스트레이션을 만들겠다고 설명한다. 정기 실행용 deployments API와 dreaming 데모도 예고한다.</p>
+<p>그러나 제공된 전사는 그 구현과 실행 결과를 보여주기 전에 질의응답 도중 끝난다. 따라서 다중 종목 오케스트레이션, 정기 배포, dreaming은 이 전사 범위에서 <strong>완료된 시연이 아니라 설명 또는 앞으로 보여주겠다는 계획</strong>으로 남겨야 한다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>관리형 에이전트는 인프라를 대신 관리하고, 개발자가 지시문·도구·권한·평가 기준과 제품 경험에 집중하게 하려는 구조다.</li>
+<li>스킬과 하위 에이전트는 능력과 역할을 나누고, Outcome은 전체 세션의 결과를 채점 기준에 맞춰 검사하고 재시도하게 한다.</li>
+<li>공유 메모리는 세션 사이의 지식을 잇지만, 현재 dreaming과 Outcome에는 적용 범위 제한이 있다.</li>
+<li>시연된 기능, 현재 없는 기능, 앞으로 보여주겠다는 계획을 구분해야 하며, 사내 데이터 연결 답변에는 “두 가지”와 실제 세 경로의 수량 충돌이 있다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>Claude Managed Agents는 단순 채팅 에이전트를 어떻게 장기 리서치 시스템으로 확장하며, 그 과정에서 무엇을 사용자가 직접 통제해야 하는가?</strong></p>
+</blockquote>
+<ul>
+<li>이벤트 스트림, 스킬, 하위 에이전트와 Outcome은 각각 어떤 역할을 하는가?</li>
+<li>현재 지원되는 기능과 계획 단계의 기능을 어떻게 구분해야 하는가?</li>
+<li>민감한 데이터와 비용 위험을 고려할 때 무엇을 먼저 검증해야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>Nvidia 분석을 맡은 주 에이전트가 이전 메모리를 확인하고, 금융 분석과 위험 평가를 하위 에이전트에 나눈다. 결과를 점수표와 메모리로 남긴 뒤, 다른 하위 에이전트가 채점 기준과 산출물을 대조한다.</p>
+<p><code>"오래 걸리는 조사를 한 에이전트가 전부 처리하면 역할·완료 기준·재사용 지식이 흐려진다"</code> <strong>문제</strong><br>
+→ <code>"스킬과 하위 에이전트로 나누고, Outcome의 채점 기준과 공유 메모리로 결과를 검사한다"</code> <strong>작동 방식</strong><br>
+→ <code>"구조화된 산출물을 만들고 기준 미달이면 다시 시도할 수 있는 리서치 세션이 된다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">연구팀장·전문가·검수자의 작업표</div>
+<p>주 에이전트는 전체 과업을 맡은 연구팀장, 하위 에이전트는 금융 분석가와 위험 평가자, Outcome의 채점 기준은 납품 검사표에 대응한다. 공유 메모리는 다음 조사에서도 참고하는 공동 연구 노트와 비슷하다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 하위 에이전트는 인간 전문가처럼 독립적인 책임과 지속적인 전체 맥락을 자동으로 갖지 않는다. 전사에 따르면 복제된 하위 에이전트에는 기존 세션의 전체 대화가 아니라 지시문, 도구 설명과 스키마가 전달되며, 평가는 전체 세션 수준에서 이뤄진다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>관리형 에이전트</strong></td>
+<td>실행 기반을 플랫폼이 맡는 에이전트</td>
+<td>호스팅, 샌드박스, 확장과 이벤트 로그 저장 등을 플랫폼이 관리한다고 설명된 Claude Managed Agents</td>
+<td>운영 권한과 보안 설계까지 모두 자동으로 안전해진다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>이벤트 스트림</strong></td>
+<td>실행 중 생기는 사건이 계속 오가는 통로</td>
+<td>세션에 사건을 보내고 에이전트가 내보내는 사건을 받아 UI로 다시 전달하는 통신 구조</td>
+<td>일반적인 한 번의 요청·한 번의 응답과 같다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>스킬·하위 에이전트</strong></td>
+<td>재사용 능력과 전문 작업자</td>
+<td>SEC 접근법 같은 스킬과 별도 지시문·도구·권한을 가진 위임 대상</td>
+<td>하위 에이전트가 주 세션의 전체 대화를 자동으로 복사받는다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>Outcome</strong></td>
+<td>과업과 합격 기준을 함께 주는 방식</td>
+<td>과업, 채점 기준, 최대 반복과 산출물을 정의하고 세션 수준에서 평가하는 구조</td>
+<td>각 하위 에이전트에도 별도 Outcome이 현재 지원된다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>Vault·공유 메모리</strong></td>
+<td>비밀값을 제한적으로 넣고 지식을 함께 쓰는 장치</td>
+<td>허용 호스트에서 자격 증명을 교환하는 Vault와 여러 세션이 붙일 수 있는 메모리 저장소</td>
+<td>Vault가 모든 데이터 접근 위험을 자동 해결하거나 다른 메모리 제공자가 기본 연결된다고 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>왜 채팅 UI만 만든 상태로는 워크숍이 목표로 한 장기 리서치 시스템이 되지 않는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>채팅 UI와 이벤트 스트림은 사용자 메시지를 보내고 실행 사건을 표시할 수 있게 한다. 그러나 장기 리서치에는 전문 작업 위임, 정해진 형식의 산출물, 성공 기준에 따른 검사, 실패 시 재시도, 세션 간 지식 재사용이 추가로 필요하다. 워크숍은 이를 스킬, 하위 에이전트, Outcome과 공유 메모리로 보완한다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>Outcome 평가와 하위 에이전트 위임은 무엇이 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>하위 에이전트 위임은 일을 전문 역할로 나누는 실행 방식이다. Outcome은 전체 세션이 최종 목표와 채점 기준을 충족했는지 판단하는 평가 방식이다. 전사 기준으로 하위 에이전트별 하위 Outcome은 현재 지원되지 않으므로, 역할 분담과 품질 판정을 같은 기능으로 보면 안 된다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새로운 내부 리서치 업무를 관리형 에이전트로 옮길지 판단할 때 무엇부터 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 결과물을 관찰 가능한 형식과 채점 기준으로 정의할 수 있는지 확인한다. 다음으로 필요한 데이터의 접근 경로, 허용 도메인, 비밀 정보 주입 방식과 메모리 범위를 정한다. 마지막으로 당시 세션별 토큰·금액 상한이 제공되지 않는다는 설명을 고려해 자체 중단 조건과 비용 관찰 방법을 마련한다. APOM의 현재 시스템이나 데이터 연결 상태는 출처에 없으므로 실제 적용 가능성은 별도로 검증해야 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 에이전트의 핵심 제품 단위는 답변보다 검증 가능한 작업이다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자들은 채팅형 인터페이스를 만든 뒤 SEC 스킬, 하위 에이전트, 맞춤 도구, Outcome과 공유 메모리를 추가했다. Nvidia 사례에서는 점수표와 메모리를 정해진 위치에 만들고 평가 하위 에이전트가 채점 기준을 검사했다고 설명했다.</li>
+<li><strong>[해석]</strong> 에이전트가 그럴듯한 문장을 만드는 것보다, 산출물·완료 조건·재시도 구조를 함께 설계하는 것이 장기 작업의 품질을 더 관찰 가능하게 만든다.</li>
+<li><strong>[경계]</strong> 성공 판정은 화자들이 정의한 채점 기준 안의 판단이다. 라이브 Nvidia 세션은 당시 실행 중이었고, 만족 판정이 나온 사례는 전날 실행한 별도 세션이다. 외부 정확성까지 독립적으로 검증됐다는 근거는 없다.</li>
+</ul>
+<h3>2. 역할 분담만으로는 통제가 완성되지 않는다</h3>
+<ul>
+<li><strong>[원문]</strong> 주 에이전트는 금융 분석과 위험 평가를 하위 에이전트에 위임했다. 반면 Outcome은 전체 세션 수준에서만 정의되며 하위 Outcome은 현재 지원되지 않는다고 답했다. 세션별 금액·토큰 상한도 당시 제공하지 않았다.</li>
+<li><strong>[해석]</strong> 다중 에이전트는 병렬화와 전문화에는 도움이 될 수 있지만, 역할마다 품질·비용·실패를 독립적으로 통제하는 구조와 같지는 않다.</li>
+<li><strong>[경계]</strong> 10개나 100개 종목을 여러 세션으로 나누는 오케스트레이션은 설명됐지만 제공된 전사에서는 완성된 실행 결과가 나오지 않는다. deployments API와 dreaming 시연도 예고 상태로 끝난다.</li>
+</ul>
+<h3>3. 접근 편의성과 운영 안전을 분리해서 읽어야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 데모 환경은 제한 없는 접근으로 만들었지만 실제 운영에서는 도메인과 MCP 서버를 제한해야 한다고 말했다. Vault, MCP 터널과 자체 호스팅 샌드박스를 데이터 접근 방법으로 설명했고, 실행 중에는 한 번에 메시지 10개를 보낼 수 있다고 답했다.</li>
+<li><strong>[해석]</strong> 쉬운 데모 설정은 시작 속도를 높이지만, 운영 판단에서는 네트워크 범위, 비밀값 사용처, 세션 제어와 비용 중단 조건을 별도로 설계해야 한다.</li>
+<li><strong>[경계]</strong></li>
+<li>사내 데이터 연결 답변은 <strong>“두 가지 방법”</strong>이라고 시작하지만 실제로는 <strong>① Vault 인증을 이용한 MCP/CLI 직접 연결, ② MCP 터널, ③ 자체 호스팅 샌드박스</strong>의 세 경로를 열거한다.</li>
+<li>크레딧 지급 안내문에는 <strong>1~2일</strong>이라고 적혀 있지만 화자는 <strong>5분 이내</strong>에 들어올 것이라고 말했다. 실제 지급 시간은 이 전사만으로 확인할 수 없다.</li>
+<li>“한 번에 메시지 10개”는 화자의 명시적 설명이다. 대기열의 용량·처리 순서·실패 조건은 추가로 제시되지 않았다.</li>
+<li>META의 <code>original_creator</code> 후보는 <code>Claude Managed Agents</code>, <code>original_affiliation</code> 후보는 <code>Platform</code>이다. provenance.note는 원본 영상 링크가 제공되지 않아 화자 이름과 SNS를 기준으로 추정한 출처라고 밝히므로 확정된 원작자·소속으로 볼 수 없다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 워크숍은 결과를 냈다는 선언과 채점 기준을 충족했다는 판정을 분리한다.</li>
+<li><strong>통찰:</strong> 학습자의 이해도 “알겠다”가 아니라 설명·산출물·평가 기준을 통해 관찰할 수 있다.</li>
+<li><strong>질문/행동:</strong> 한 학습 과제에 결과물 형식과 합격 기준을 함께 주고, 자기 설명이 그 기준을 충족하는지 확인한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 스킬·하위 에이전트·메모리는 반복 업무의 분담과 재사용을, Outcome은 납품 기준을 다룬다.</li>
+<li><strong>통찰:</strong> APOM에 적용한다면 먼저 비민감한 반복 조사 한 건을 가상 후보로 삼아 시간 절감보다 재작업과 오류가 줄어드는지 검증해야 한다. 현재 APOM 시스템과의 연결 가능성은 출처에 없다.</li>
+<li><strong>질문/행동:</strong> 사람이 다시 확인해야 하는 지점, 비밀 데이터가 필요한 지점, 비용을 중단해야 하는 지점을 먼저 표시할 수 있는가?</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 데모는 “관리된다”는 주장에 그치지 않고 이벤트 기록, 하위 작업, 구조화된 점수표와 평가 과정을 화면으로 보여준다.</li>
+<li><strong>통찰:</strong> 카피의 신뢰는 기능 이름보다 입력, 처리 과정, 산출물과 실패 처리의 증거를 함께 보여줄 때 높아질 수 있다.</li>
+<li><strong>질문/행동:</strong> 상세페이지에서 성공 사례만 제시하지 않고 평가 기준, 실패 시 재시도와 현재 지원되지 않는 범위도 함께 표시할 수 있는가?</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 이벤트 스트림, 샌드박스, 도메인 제한, 하위 에이전트, 평가, 메모리와 세션 제어가 모두 실제 설계 요소로 등장한다.</li>
+<li><strong>통찰:</strong> 모델 이름보다 작업 시간, 데이터 접근 범위, 산출물 검증, 반복 횟수와 비용 중단 방식을 함께 시험해야 한다.</li>
+<li><strong>질문/행동:</strong> 비민감한 한 작업에서 이벤트 기록, 결과 파일, 평가 판정과 재시도 횟수를 한 화면에서 관찰할 수 있는가?</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"오래 걸리는 리서치의 역할 분담·완료 판정·지식 재사용이 불명확하다"</code> <strong>문제</strong><br>
+→ <code>"검사 가능한 결과와 반복 조사 감소"</code> <strong>수혜자: 리서치 결과를 사용하는 팀</strong><br>
+→ <code>"과업 정의, 데이터 접근 권한, 실행 비용과 검토 시간을 제공"</code> <strong>지불자 또는 자원 제공자: 시스템 운영자와 업무 담당자</strong><br>
+→ <code>"정해진 채점 기준을 충족한 실행의 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 비민감한 샘플 리서치 한 종류에 산출물 형식과 채점 기준을 정의하고 같은 조건으로 3회 실행한다.</li>
+<li><strong>측정 1개:</strong> 3회 중 사람의 수정 없이 채점 기준을 충족한 실행 횟수.</li>
+<li><strong>중단 기준 1개:</strong> 3회 중 사람의 수정 없이 기준을 충족한 실행이 2회 이하이면 업무 범위를 확대하지 않는다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>세션 저장 구조</td>
+<td>저장 기능을 세션 동작과 느슨하게 분리하도록 인터페이스를 추상화</td>
+</tr>
+<tr>
+<td>2</td>
+<td>빠른 시작과 워크숍 설정</td>
+<td>농담 에이전트 생성 후 연구 데스크 저장소와 환경 변수 준비</td>
+</tr>
+<tr>
+<td>3</td>
+<td>이벤트 스트림 채팅</td>
+<td>사용자 사건을 보내고 SSE 스트림을 브라우저로 다시 전달</td>
+</tr>
+<tr>
+<td>4</td>
+<td>스킬·하위 에이전트·메모리</td>
+<td>SEC 분석 능력과 전문 역할, 공유 지식을 추가</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Outcome과 Nvidia 사례</td>
+<td>구조화된 산출물과 평가 하위 에이전트로 세션 결과를 검사</td>
+</tr>
+<tr>
+<td>6</td>
+<td>확장 계획</td>
+<td>다중 종목 오케스트레이션, deployments API와 dreaming을 예고</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Q&amp;A와 현재 한계</td>
+<td>Vault, 인프라, 세션 제어, 비용 상한, 메모리, 내부 데이터 접근을 설명</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 세션 저장 구조의 변화</h3>
+<p>첫 질문은 세션 설계의 첫 번째와 두 번째 반복 사이에 무엇이 달라졌는지 묻는다. Gabe는 저장하려는 미래 이벤트를 세션 동작 방식에 강하게 묶지 않기 위해 가능한 많은 요소를 추상화하고 별도 구성 요소로 나눴다고 답한다.</p>
+<p>이 원칙을 서비스 경계뿐 아니라 이벤트 계층까지 적용해 인터페이스를 만들고 가상화했다고 설명한다. 구체적인 저장 기술이나 성능 수치는 제공되지 않는다.</p>
+<h3>2. 농담 에이전트와 연구 데스크 설정</h3>
+<p>빠른 데모에서는 “주제를 주면 매번 농담을 말하는 에이전트를 만들어 달라”고 입력한다. Claude가 시스템 지시문, 이름, 설명과 모델을 제안하고, 사용자가 에이전트 도구 집합을 허용한 뒤 생성한다.</p>
+<p>그다음 샌드박스 템플릿인 환경을 만든다. 데모에는 제한 없는 접근을 주지만, 화자는 운영 환경에서는 접속 가능한 도메인과 특정 MCP 서버를 제한해야 한다고 명시한다. 세션을 시작해 고양이 농담을 요청하고 결과를 확인한다.</p>
+<p>화자는 플랫폼이 인프라, 호스팅, 하네스, 샌드박스 관리, 확장과 이벤트 로그 저장을 맡는다고 주장한다. 사용자는 세션을 시작하고 사건을 보내고 돌려받으며 그 위의 제품에 집중할 수 있다는 설명이다.</p>
+<p>실습 저장소에서는 QR 코드로 저장소에 접근하고 <code>research-desk</code> 디렉터리에서 <code>npm install</code> 또는 <code>bun i</code>를 실행한다. 서버는 <code>bun run dev</code>로 시작한다.</p>
+<p>워크숍은 <strong>여섯 막</strong>으로 진행한다고 말한다. <code>workshop start</code>로 시작하고 <code>workshop next</code>로 다음 단계로 넘어간다. 전사는 여섯 막의 정식 제목을 모두 번호로 열거하지는 않는다.</p>
+<p>환경 설정에서는 <code>.env.example</code>을 <code>.env.local</code>로 복사하고 API 키와 EDGAR 식별 정보를 넣는다. SEC 호출에는 이름과 이메일이 필요하다고 설명한다. 현장의 Wi-Fi 문제로 실제 참가자의 동시 실습은 제한됐다.</p>
+<h3>3. 이벤트 스트림으로 채팅 UI 만들기</h3>
+<p>설정 버튼은 두 자원을 만든다.</p>
+<ul>
+<li><strong>환경:</strong> 샌드박스의 템플릿. SEC 중심의 일부 웹사이트 접근과 Python 패키지를 설정한다.</li>
+<li><strong>에이전트:</strong> 처음에는 지시문과 기본 도구만 있으며 스킬과 하위 에이전트 조정은 없는 기본 에이전트다.</li>
+</ul>
+<p>브라우저 채팅창에서 Enter를 누르면 <code>user.message</code> 사건을 세션에 보낸다. 백엔드는 API의 SSE 스트림을 듣고 그 사건들을 프런트엔드로 다시 전달해 화면에 표시한다.</p>
+<p>화자는 여기까지 구현하면 채팅형 애플리케이션이 된다고 말한다. 이후 목표는 몇 분을 넘어 몇 시간, 며칠, 몇 주 또는 몇 달 동안 실행되는 비동기 작업이다.</p>
+<h3>4. SEC 스킬과 하위 에이전트</h3>
+<p>다음 버전에는 SEC와 통신하는 스킬, EDGAR 식별 정보 사용법, 이후 오케스트레이션에서 사용할 <code>Dispatch Analysis</code> 맞춤 도구를 추가한다.</p>
+<p>새 에이전트 버전에는 여러 하위 에이전트와 자기 자신에 대한 참조가 들어간다. 자기 참조를 이용하면 필요한 작업의 종류를 미리 세세하게 모를 때도 같은 지시문을 가진 하위 에이전트를 만들 수 있다고 설명한다.</p>
+<p>이때 기존 세션의 전사 전체가 하위 에이전트에 복사되지는 않는다. 도구 설명, 스키마와 지시문이 전달된다.</p>
+<p>화자는 사전에 만들어 둔 스킬을 삭제하고 다시 프로비저닝하는 과정을 보여준다. 구성 후에는 다음을 확인한다고 설명한다.</p>
+<ul>
+<li>SEC 분석 스킬</li>
+<li>각자의 지시문·도구·권한을 가진 하위 에이전트</li>
+<li>주 에이전트의 지시문과 모델</li>
+<li>여러 세션이 공유할 수 있는 장기 메모리 저장소</li>
+</ul>
+<p>스킬은 갱신 가능한 자원이며, 새 양식을 분석하는 내용을 게시하면 이후 그 스킬을 참조하는 새 세션이 새 정보를 받는다고 말한다.</p>
+<h3>5. Outcome과 Nvidia 분석</h3>
+<p>Outcome은 과업과 채점 기준을 함께 정의해 자기 평가를 구성하는 방식으로 설명된다. 에이전트가 작업을 완료했다고 판단하면 하위 에이전트가 기준과 결과를 대조한다. 충족하면 끝내고, 충족하지 못하면 다시 시도한다.</p>
+<p>UI에서는 Nvidia 분석을 시작한다. 라이브 세션은 <strong>약 10분 정도 걸릴 것</strong>이라고 말하며 시연 당시 계속 실행 중이었다. 화자는 대신 전날 실행한 세션을 보여준다.</p>
+<p>전날 세션에 준 요구사항은 다음과 같다.</p>
+<ul>
+<li>Nvidia의 가장 최근 분기 자료 분석</li>
+<li>EDGAR 식별 정보 이용</li>
+<li>메모리에서 이전 분석 여부 확인</li>
+<li>관심 있는 최근 양식 탐색</li>
+<li>기업별 메모리 노트 작성</li>
+<li>정해진 구조의 점수표 작성</li>
+<li>지정한 파일 위치에 결과 저장</li>
+</ul>
+<p>주 에이전트는 메모리에서 기존 노트를 찾지 못한 뒤 금융 분석 또는 추출 담당과 위험 평가 담당 하위 에이전트를 실행한다. 콘솔의 각 줄은 하위 에이전트 작업을 나타내는 스레드로 설명된다.</p>
+<p>하위 에이전트들이 결과를 돌려주자 주 에이전트가 JSON 파일을 만들고 메모리를 갱신한다. 이후 평가 하위 에이전트가 채점 기준, 세션 작업과 산출물을 검사한다. 이전 실행에서는 점수표, 수치 정의와 메모리 갱신이 기준을 충족했다고 판단한 것으로 소개된다.</p>
+<p>이 판정은 화자의 데모 내부 평가이며 금융 분석의 외부 정확성을 독립적으로 보증하는 근거는 아니다.</p>
+<h3>6. 다중 세션 오케스트레이션과 예정된 기능</h3>
+<p>화자는 종목 <strong>100개 또는 10개</strong>를 동시에 분석하려면 각 종목을 다른 세션에 맡기고 결과를 모으는 맞춤 하네스가 필요하다고 설명한다. 이를 MapReduce와 비슷한 방식이라고 부른다.</p>
+<p>주 에이전트가 <code>Dispatch Analysis</code> 맞춤 도구를 호출하면 서버가 여러 세션을 만들고, 완료 후 점수를 집계하는 구조를 만들겠다고 말한다.</p>
+<p>또한 다음을 보여주겠다고 예고한다.</p>
+<ul>
+<li>정기 실행 일정을 설정하는 deployments API</li>
+<li>여러 세션의 기록과 메모리를 정리하는 dreaming</li>
+<li>공유 메모리를 장기간 개선하는 과정</li>
+</ul>
+<p>제공된 전사는 이 기능들의 완성된 시연 전에 질의응답 도중 끝난다. 따라서 실행·검증 완료 상태로 기록하지 않는다.</p>
+<h3>7. 인프라와 샌드박스</h3>
+<p>관리형 에이전트는 화자 측의 자체 인프라에서 실행하는 일차 제공 방식이 있다고 답한다. AWS 크레딧을 이용하려는 경우 AWS의 클라우드 플랫폼도 언급한다.</p>
+<p>자체 호스팅 샌드박스 제공자 예시로 Vercel, Modal, Daytona가 나오며 Google Cloud와 AWS 환경도 언급된다. 이는 화자의 지원 범위 설명으로, 전사 밖에서 호환성을 검증한 것은 아니다.</p>
+<p>환경 의존성은 실행할 때마다 설치하는 것이 아니라 <strong>환경 생성 시점</strong>에 설치하고 캐시해 샌드박스 재생성 때 다시 사용한다고 답한다. 패키지는 NPM, Cargo, Pip 등에서 접근 가능해야 하며, 파일을 세션에 직접 올리거나 GitHub 저장소를 이용하는 방법도 말한다.</p>
+<h3>8. Vault와 인증 정보</h3>
+<p>SEC 데모에서는 이름과 이메일을 지시문에 직접 넣는다. 실제 운영에서는 Vault를 이용한다고 설명한다.</p>
+<p>Vault의 흐름은 다음과 같다.</p>
+<ol>
+<li>환경 변수에 넣을 비밀 정보를 정의한다.</li>
+<li>실제 값 대신 자리표시자를 사용한다.</li>
+<li>자격 증명에 허용된 호스트 도메인을 지정한다.</li>
+<li>에이전트가 그 도메인에 요청할 때 실제 값으로 교환한다.</li>
+<li>허용되지 않은 다른 도메인에서는 교환하지 않는다.</li>
+</ol>
+<p>Vault에 이름을 붙이면 ID가 생성되고, 이 ID를 세션에 넣어 MCP나 CLI 인증에 이용한다고 설명한다. 여러 자격 증명을 하나의 Vault에 묶을 수 있고 MCP OAuth와 일부 사전 정의 OAuth 연결도 언급한다.</p>
+<h3>9. Agent SDK와 관리형 하네스</h3>
+<p>질문자는 이 시스템이 Claude Agent SDK 위에 있는지 묻는다. 답변에서는 Agent SDK를 헤드리스 Claude Code 또는 어디서든 실행할 수 있는 바이너리 형태에 가깝다고 설명한다.</p>
+<p>Managed Agents는 Agent SDK의 장점과 교훈에서 영향을 받았지만 코딩 작업에만 한정되지 않는 별도 범용 하네스를 다시 만들었다고 답한다. “일종의 포크”라는 표현도 사용하지만, 이어 자체 하네스라고 설명한다.</p>
+<h3>10. 반복 실행, 비용과 세션 제어의 한계</h3>
+<p>다중 에이전트가 반복에 빠져 토큰을 과도하게 쓰는 것을 막는 장치가 있는지 묻자, 맞춤 하네스의 일부 통제는 사용자가 직접 설계해야 한다고 답한다.</p>
+<p>세션별로 다음과 같은 제한을 두는 기능은 탐색 중이지만 당시 제공하지 않는다고 말한다.</p>
+<ul>
+<li>특정 금액 이상 쓰지 않기</li>
+<li>특정 토큰 수 이상 쓰지 않기</li>
+</ul>
+<p>실행 중 잘못된 방향을 발견하면 새 <code>user.message</code> 사건을 보내 조정할 수 있다. 화자는 <strong>한 번에 메시지 10개를 보내도 괜찮으며 대기열에 들어간다</strong>고 설명한다.</p>
+<p>현재는 특정 과거 시점으로 되감은 뒤 수정하고 다시 진행하는 기능이 없다. 세션 분기는 일부 고객이 요청했으며 로드맵에 있다고 답한다.</p>
+<h3>11. 공유 메모리와 dreaming</h3>
+<p>여러 사용자의 금융 조사에서 집단 지식을 쌓을 수 있느냐는 질문에, 이미 공유 메모리 저장소를 지원하며 데모에서도 사용한다고 답한다.</p>
+<p>여러 메모리 저장소를 한 세션에 붙일 수 있으므로 사용자별 메모리와 조직 전체 메모리를 함께 구성할 수 있다고 설명한다.</p>
+<p>데이터는 API로 꺼내 다른 시스템으로 이동할 수 있다고 주장한다. 다만 다른 메모리 제공자를 세션에 바로 연결하는 기능은 현재 기본 지원되지 않는다. MCP나 맞춤 도구를 만들어 연결하는 방식을 제안한다.</p>
+<p>dreaming은 여러 세션의 대화 기록과 생성된 메모리를 분석해 메모리를 갱신하는 기능으로 설명한다. 현재는 메모리 저장소에만 제한된다. 스킬, 지시문과 에이전트 정의까지 확장하는 것은 미래 가능성으로 제시한다.</p>
+<h3>12. 하위 에이전트 평가 범위</h3>
+<p>Outcome은 전체 세션 수준에서 정의한다. 주 에이전트가 하위 에이전트들과 협력해 작업을 마친 뒤 완료를 선언하면 평가가 시작된다.</p>
+<p>현재 하위 에이전트 작업마다 별도의 하위 Outcome을 정의하는 기능은 없다고 명시한다. 따라서 주 에이전트의 전체 결과가 기준을 충족하는지와 각 하위 작업이 독립적으로 올바른지는 같은 평가 단위가 아니다.</p>
+<h3>13. 사내 데이터 연결 답변의 수량 충돌</h3>
+<p>화자는 사내 데이터에 안전하게 접근하는 방법이 <strong>두 가지</strong>라고 먼저 말한다. 하지만 실제 답변에는 다음 <strong>세 경로</strong>가 나온다.</p>
+<ol>
+<li>API가 있는 CLI 또는 MCP를 만들고 Vault 인증을 붙여 직접 호출</li>
+<li>MCP를 인터넷에 노출하지 않는 MCP 터널 사용</li>
+<li>조직 네트워크와 연결된 자체 호스팅 샌드박스 사용</li>
+</ol>
+<p>이 열거-개수 불일치는 “몇 가지 방법”이나 “두 경로”로 완곡하게 바꾸지 않고 그대로 보존해야 한다.</p>
+<h3>14. 크레딧 지급 시간 충돌</h3>
+<p>현장 질문에서 신청 양식은 크레딧 지급까지 <strong>1~2일</strong>이라고 표시한다고 언급된다. 화자는 실제로는 <strong>5분 이내</strong>에 받을 것이라고 답한다.</p>
+<p>어느 시간이 실제 보장 조건인지는 전사만으로 확인할 수 없다.</p>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · [한영자막] Claude Managed Agents로 리서치 에이전트를 만들어봅니다 (2/4) · https://www.youtube.com/watch?v=U0ZCwwG8sac · 전사: 제공된 SOURCE_TRANSCRIPT 영문 전사, 생성 방식 미기재</p>
+<p>원작자·소속 후보: <code>Claude Managed Agents</code> · <code>Platform</code>. META의 provenance.note는 “채널이 원본 영상 링크를 안 검 — 화자 이름+SNS 기준 추정 출처”라고 밝혀 확정 정보가 아니다. META 설명은 원본 채널을 <code>AI Engineer</code>라고 적고, 전사에는 발표자 이름으로 Priyanka Phatak과 Gabe Cemaj가 등장한다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>발표 감사합니다. 궁금해서 여쭤보는데요. 세션 설계에서 첫 번째 버전과 두 번째 버전 사이에 무엇이 바뀌었나요? 좋은 질문입니다, Gabe. 첫 번째와 두 번째 버전 사이의 세션 스토리지 변경 사항에 대해 답해 주시겠어요?</p>
+<p>네. 가장 크게 바뀐 점은 가능한 한 많은 것을 추상화하고 서로 다른 컴포넌트로 분리하려 했다는 것입니다. 그래서 세션 작동 방식의 메커니즘에 지나치게 얽매이지 않고, 앞으로 저장하고 싶은 이벤트에 맞춰 스토리지 메커니즘을 확장할 수 있도록 했습니다.</p>
+<p>기본적으로 인터페이스를 구축하고 가상화하는 동일한 원칙을 끝까지 적용했습니다. 서비스 경계를 가로지르는 부분뿐 아니라 이벤트 레이어에도 적용한 것입니다.</p>
+<p>알겠습니다, 감사합니다. 아마 모두가 내용을 따라가기는 어려울 수도 있겠지만, 이 슬라이드를 공유할 방법을 찾아서 집에서도 직접 해볼 수 있기를 바랍니다. 휴대폰이 있다면 핫스팟에 연결해서 따라올 수 있는지 확인해 보세요.</p>
+<p>좋습니다. 한 번 더 해보겠습니다. “주제를 줄 때마다 농담을 해주는 에이전트를 만들어줘”라고 말한 다음 Enter를 누릅니다.</p>
+<p>Claude가 시스템 프롬프트를 만들고 있는 것을 볼 수 있습니다. 이름과 설명을 만들고 모델을 선택했습니다. 원한다면 이 모델을 바꿀 수 있고, 에이전트 툴셋(agent toolset)에 접근 권한을 부여할 수도 있습니다. 그런 다음 Create Agent를 누르면 됩니다.</p>
+<p>그러면 v1 에이전트 엔드포인트를 호출해 에이전트를 생성합니다. 좋습니다, 생성됐습니다. 다음으로 샌드박스의 템플릿인 환경을 구성하겠습니다. 새 환경을 하나 만들겠습니다.</p>
+<p>이번에는 제한 없는 접근 권한을 주겠습니다. 물론 프로덕션 에이전트를 구축할 때는 접근 권한을 제한하고, 어떤 도메인에 접근할 수 있는지 또는 어떤 특정 MCP 서버에 접근할 수 있는지 제어해야 합니다. 여기서는 제한 없이 진행하겠습니다.</p>
+<p>여기서 설치할 패키지 등을 선택할 수 있습니다. 다음으로 세션을 시작하겠습니다.</p>
+<p>좋습니다. 이제 세션을 테스트 실행해 보겠습니다. “고양이에 관한 농담을 해줘.”</p>
+<p>모델이 생각하기 시작했고, 고양이 농담을 만들어낸 것을 볼 수 있습니다.</p>
+<p>에이전트를 만드는 일이 이렇게 쉽습니다. 이 에이전트는 이제 클라우드에서 실행되고 있습니다. 에이전트와 세션을 시작하고, 이벤트를 보내고, 이벤트를 받기만 하면 됩니다. 나머지는 모두 저희가 관리합니다. 인프라, 호스팅, 하네스(harness), 샌드박스 관리, 확장, 이벤트 로그 저장을 저희가 담당합니다. 여러분은 이 위에 제품을 구축하는 데 집중하면 됩니다.</p>
+<p>감사합니다. 이제 실습을 진행할 Gabe에게 넘기겠습니다. 이번에는 Wi-Fi가 더 잘 되기를 바랍니다. 감사합니다.</p>
+<p>제 목소리 들리나요? 좋습니다. 뒤쪽에 많은 분이 빽빽하게 서 계시네요. 모두 들어오실 수 있도록 여기와 여기에도 자리가 있습니다.</p>
+<p>시작하기 전에 오늘 사용할 저장소(repository)를 보여드리겠습니다. QR 코드를 사진으로 찍고 싶다면 저장소를 클론한 다음 research-desk 디렉터리로 이동해서 <code>npm install</code> 또는 <code>bun i</code>를 실행하세요.</p>
+<p>그동안 여러분이 진행하시면, 오늘 함께 무엇을 만들지 설명하겠습니다. 아직도 휴대폰을 보고 계신 분들이 있네요.</p>
+<p>Wi-Fi에 문제가 있다는 걸 알고 있습니다. 저장소에 접속할 수 있기를 바랍니다. 좋습니다. 보고 있습니다. 멋지네요.</p>
+<p>좋습니다. 오늘 무엇을 만들까요? Claude Managed Agents를 사용해 다양한 애플리케이션을 만드는 방법을 보여드리겠습니다.</p>
+<p>먼저 에이전트와 대화할 수 있는 맞춤형 채팅 형태의 인터페이스를 만들겠습니다. 인사말을 보낼 수 있겠죠. 그런 다음 이 에이전트를 멀티 에이전트 생태계로 확장해서 하위 에이전트(subagent)에 작업을 위임할 수 있도록 하겠습니다.</p>
+<p>에이전트에 스킬(skill)을 추가하겠습니다. 구체적으로는 SEC 웹사이트를 호출하고, 개별 티커(ticker)의 SEC 공시를 가져오며, 특정 양식을 분석할 수 있는 스킬입니다. 그러면 이렇게 향상된 에이전트를 사용해 실행에 오랜 시간이 걸릴 수 있는 더 비동기적인 에이전트 작업을 수행할 수 있습니다.</p>
+<p>이 모든 것을 일종의 MapReduce 인터페이스로 통합하겠습니다. 에이전트와 대화하면 그 에이전트가 여러 에이전트에 작업을 위임하고 일종의 MapReduce 작업을 수행하는 방식입니다. 이를 통해 Claude Managed Agents 위에 맞춤형 하네스를 구축하고, 맞춤형 도구로 작업을 오케스트레이션하며, 여러 세션 간 상호작용을 관리하는 방법을 보여드리겠습니다.</p>
+<p>마지막으로 배포 API(deployments API)를 보여드리겠습니다. 이를 사용하면 일정에 따라 반복 작업을 설정할 수 있습니다. 정해진 주기로 세션을 실행해 계속 업데이트되는 장기 분석을 수행할 수 있습니다.</p>
+<p>괜찮나요?</p>
+<p>조용하네요. 좋습니다.</p>
+<p>코딩 인터페이스로 전환하겠습니다. 여기서는 Claude Code를 사용하겠습니다. 원하는 코딩 에이전트를 자유롭게 사용하셔도 됩니다. 아무도 코드를 직접 손으로 작성하고 있지는 않을 것 같으니, 저도 그렇게 하지는 않겠습니다.</p>
+<p>여러분의 저장소에는 실습을 단계별로 안내하는 스킬이 로드되어 있습니다. 제가 끝난 뒤 Wi-Fi와 인터넷 환경이 더 나아졌을 때 실습을 다시 실행하고 싶다면 집에서 그렇게 할 수 있습니다.</p>
+<p>가장 먼저 할 일은 저장소를 확인하고, research-desk 저장소로 이동한 다음 <code>bun i</code>를 실행하는 것입니다. <code>bun run dev</code>로 서버를 시작하겠습니다. 화면을 좀 키우겠습니다. 아마 아무도 안 보일 것 같네요.</p>
+<p>좋습니다. 이제 더 잘 보이나요?</p>
+<p>네. Gabe가 발표하는 동안 질문이 있으면 손을 들어 주세요. 제가 마이크를 들고 달려가겠습니다. 도와드릴 사람들이 있으니 문제가 생기면 손을 들어 주세요. 사람들이 와서 도와드릴 겁니다.</p>
+<p>여기까지 진행했다면 이 웹사이트를 불러올 수 있을 겁니다. 가장 먼저 설정 페이지로 이동하세요.</p>
+<p>여기까지 모두 따라오고 계신가요?</p>
+<p>네. 좋습니다. 이제—</p>
+<p>좋습니다. 그분이 사진을 찍고 나면 실습 스킬을 시작하겠습니다.</p>
+<p>Claude Code에서 <code>workshop start</code>를 입력하면 실습이 시작됩니다. 총 6개의 막으로 진행하겠습니다. 죄송하지만 중간 휴식 시간은 없습니다. 괜찮으시길 바랍니다. 계속 진행하겠습니다. Claude가—</p>
+<p>자동 모드로 들어가겠습니다. Claude가 각 막의 진행 상황을 기억하므로 계속 이어갈 수 있습니다. <code>workshop next</code>를 계속 입력하면 다음 단계로 진행할 수 있습니다.</p>
+<p>Claude에게 대신 진행해 달라고 하되, 무엇을 하고 있는지 저에게 안내하고 가르쳐 달라고 요청하겠습니다. 가장 먼저 전제 조건이 설정되어 있는지 확인할 것입니다. <code>.env.example</code> 파일을 <code>.env.local</code>로 복사하게 됩니다.</p>
+<p>아, 안 돼요! 멈춰요. 아직 거기까지 안 갔습니다. 조금 성급하네요.</p>
+<p>좋습니다. 이 파일을 복사할 겁니다. 파일에는 여러분이 입력해야 할 값이 몇 가지 있습니다. API 키를 붙여 넣으세요. SEC는 API를 호출하는 사람이 누구인지 알아야 하므로 이름과 이메일을 입력해야 합니다. 누가 호출하는지 확인하기 위한 것일 뿐입니다. 기본적으로 그게 전부입니다.</p>
+<p>이 작업을 모두 마치면 다음 단계로 넘어가겠습니다. 여기까지 모두 따라오고 계신가요? <code>.env.local</code>에 API 키를 입력했고, EDGAR 식별자(identifier)도 입력하셨나요?</p>
+<p>손을 들어 확인해 볼게요. 몇 분이나 따라오고 계신가요? Wi-Fi가 되는 분은요?</p>
+<p>좋습니다. 적어도 한 분은 계시네요. MVP입니다. 네?</p>
+<p>저장소의 QR 코드요? 이거요?</p>
+<p>Rohan, 마이크를 넘겨주시겠어요?</p>
+<p>네, 감사합니다. 자격 증명이 있는 슬라이드요? 바로 그겁니다. 설정 부분—이거요?</p>
+<p>감사합니다. Wi-Fi가 없는 분들이 계시니, 저희를 멈춰 세우고 질문해 주세요. 그래야 최소한 더 상호작용적으로 진행하면서 개념을 이해하고, 실습이 끝난 뒤 여러분의 시간에 직접 구축할 수 있도록 도와드릴 수 있습니다.</p>
+<p>이것은 research-desk 디렉터리를 클론하고 이동한 다음 <code>bun run dev</code>를 실행했을 때 시작되는 앱입니다. 여러분이 보게 될 웹사이트입니다.</p>
+<p>질문해도 될까요?</p>
+<p>네. 잘 보이지는 않지만 궁금한 점이 있습니다. Claude가 에이전트를 처리하고 관리한다고 할 때, 이건 어디에서 실행되나요? AWS에서 실행되나요?</p>
+<p>좋은 질문입니다. 저희 자체 인프라에서 실행할 예정입니다. 현재는 저희가 직접 운영하는 퍼스트파티(first-party) 상품이 있지만, AWS 크레딧을 사용해 AWS에서 실행하고 싶다면 AWS 기반 클라우드 플랫폼도 제공합니다.</p>
+<p>또한 저희는 셀프 호스팅 샌드박스도 제공합니다. Vercel, Modal, Daytona 같은 여러 제공업체나 그 밖의 다양한 서비스를 통해 여러분의 샌드박스를 직접 가져오고 싶다면 그렇게 할 수 있습니다. Google Cloud와 AWS를 사용해 해당 환경에서 샌드박스를 실행할 수도 있습니다.</p>
+<p>좋습니다. 데모를 계속하겠습니다. 다음으로 이 버튼을 누르면 에이전트가 생성됩니다. 두 가지를 만들게 됩니다. 하나는 Priyanka가 설명한 환경으로, 샌드박스가 어떤 모습일지 정의하는 템플릿 역할을 합니다.</p>
+<p>이번 데모에서는 몇 개의 웹사이트에 접근할 수 있도록 하겠습니다. 주로 SEC입니다. 미리 정의된 Python 패키지를 사용해 SEC에 접근할 수 있도록 Python 패키지도 몇 개 추가하겠습니다.</p>
+<p>에이전트도 생성합니다. 아주 기본적인 에이전트가 만들어질 겁니다. 현재는 도구가 없습니다. 프롬프트만 있습니다. 기본 도구는 있지만 스킬도 없고 하위 에이전트 조정도 없으며, 그런 기능은 아무것도 없습니다.</p>
+<p>Claude에게 계속 진행해서 애플리케이션에서 이 에이전트와 대화할 수 있는 인터페이스를 구현하도록 하겠습니다.</p>
+<p>Priyanka가 설명했듯이 세션과 통신하는 주된 방법은 이벤트 스트림(event stream)을 이용하는 것입니다. 에이전트가 여러분에게 보내는 모든 이벤트를 해당 스트림에서 수신하고, 엔드포인트를 사용해 이벤트를 다시 보낼 수 있습니다. 이러한 채팅 형태의 애플리케이션에서 통신 중 발생하는 모든 일은 이 스트림에서 이루어집니다.</p>
+<p>여기서 Claude가 제가 채팅 상자에서 Enter를 눌렀을 때, 제가 보내는 콘텐츠와 함께 사용자 메시지 이벤트를 해당 세션으로 전송하도록 구현하고 있는 것을 볼 수 있습니다. 그런 다음 백엔드에서 SSE 스트림을 제 브라우저로 전달합니다. API와의 스트림 연결을 통해 들어오는 이벤트를 수신한 다음 프런트엔드로 직접 다시 스트리밍해서 보기 좋은 방식으로 렌더링할 수 있게 합니다.</p>
+<p>Claude가 작업을 완료하면 이 데스크 탭으로 가서 에이전트에게 인사할 수 있을 겁니다. 모든 것이 제대로 작동했다면—잘 되기를 바랍니다—이제 에이전트와 대화하고 있는 것을 확인할 수 있습니다.</p>
+<p>채팅과 비슷한 애플리케이션을 만들고 싶다면 여기서 멈추면 됩니다. 아주 좋죠. 하지만 우리는 더 많은 일을 하고 싶습니다. Claude Managed Agents의 핵심은 단지 몇 분 동안이 아니라, 몇 시간, 며칠, 몇 주, 심지어 몇 달 동안 장시간 비동기 작업(long-running asynchronous tasks)을 수행할 수 있다는 것입니다.</p>
+<p>그럼 다음에 무엇을 해야 하는지 살펴보겠습니다.</p>
+<p>다음으로 할 일은 에이전트를 확장하는 것입니다. 에이전트에 SEC를 호출할 수 있는 기능을 주고 싶습니다. 멀티 에이전트 조정(multi-agent coordination)을 사용해서 세션이 특정 작업에 더 전문적이고 능숙한 하위 에이전트(subagents)에게 일을 위임할 수 있도록 하려는 것입니다.</p>
+<p>지능의 사다리를 한 단계 더 올라가고 싶습니다. 그럼 그렇게 해보죠.</p>
+<p><code>workshop next</code>라고 입력하면 Claude가 하위 에이전트를 사용하도록 에이전트를 업그레이드하는 프로비저닝 방식(provisioning scheme)을 구현합니다. 여기에 하나의 스킬(skill)을 부여할 겁니다. 이 스킬은 다음을 할 수 있게 해줍니다…</p>
+<p>SEC와 대화하는 것입니다. Python 패키지를 사용하는 방법을 설명했고, 호출할 때 EDGAR 신원 정보(EDGAR identity)를 사용해야 한다는 점도 설명했습니다. 그 모든 내용을 설명했고, 워크숍 후반에 사용할 커스텀 도구(custom tool)도 제공할 겁니다.</p>
+<p>이 커스텀 도구를 사용하면 수석 리서치 에이전트에게 여러 세션을 생성하고, 일종의 맞춤형 하네스(custom harness)를 통해 조정하라고 지시할 수 있습니다. 지금 Claude가 여기서 하는 일이 바로 이것입니다. 진행 상황을 업데이트하고, Dispatch Analysis라는 커스텀 도구를 만들고 있습니다. 이 부분은 잠시 후에 다시 살펴보겠습니다.</p>
+<p>여기에 스키마(schema)를 제공합니다. Claude는 메인 에이전트의 설명을 업데이트해서 해당 에이전트의 새 버전을 만듭니다. 이 새 버전에는, 오, PagerDuty가 있네요.</p>
+<p>이 새 버전에는 작업을 위임할 수 있는 몇 개의 서로 다른 하위 에이전트와 자기 자신에 대한 참조가 포함됩니다. 따라서 메인 에이전트가 동일한 프롬프트(prompt)를 사용하는 자신의 복사본을 생성하고 싶을 때 그렇게 할 수 있습니다. 이는 중요합니다. 세션이 어떤 종류의 작업을 수행하게 될지 반드시 알 수는 없지만, 하위 에이전트를 띄워 작업을 수행하게 하고 싶다는 일반적인 생각은 있을 수 있기 때문입니다. 그러므로 자기 자신에 대한 참조를 정의할 수 있습니다. 그러면 Claude가 자기 자신을 위한 하위 에이전트를 생성할 수 있습니다.</p>
+<p>중요한 점은 이 질문이 과거에도 나온 적이 있다는 것입니다. 해당 세션의 대화 기록(transcript)을 하위 에이전트에 복사하는 것은 아닙니다. 도구 설명, 스키마, 프롬프트만 하위 에이전트로 복사합니다. 좋습니다. 이제 여기로 들어가면 새 에이전트가 보일 겁니다.</p>
+<p>아, 먼저 프로비저닝해야 할 것 같네요. 설정 화면에 “Staff the desk”라고 적힌 버튼이 있어야 합니다. 이 버튼을 누르면 실제로 실행됩니다.</p>
+<p>좋아요. 이건 전에 실행한 적이 있습니다. 여러분에게 다시 만들어 보여드릴 수 있도록 스킬을 삭제하겠습니다. 마술 같은 요리 방송식 진행을 해보려 했는데, 괜찮습니다.</p>
+<p>좋습니다. 스킬을 삭제하겠습니다. Claude에게 다시 프로비저닝해달라고 요청하겠습니다. 그러면 이 모든 리소스를 만들고, 여기에서 생성된 모든 하위 에이전트와 스킬을 확인할 수 있게 됩니다.</p>
+<p>메모리 저장소(memory store)입니다. 이러한 세션을 위해 세션 간에 공유할 수 있는 장기 실행 메모리 저장소(long-running memory store)도 지원합니다. 이를 사용하면 서로 다른 세션이 서로 다른 금융 상품에 대해 학습하고, 그 지식을 서로 공유할 수 있습니다. 이 워크숍이 끝날 때, 여러 세션과 며칠, 몇 달, 몇 년에 걸쳐 장기 실행 메모리를 사용해 에이전트를 계속 개선하는 방법을 보여드리겠습니다.</p>
+<p>좋습니다. 이제 에이전트에 우리가 설명한 스킬이 있는 것을 볼 수 있을 겁니다. 각 하위 에이전트에는 자체 프롬프트, 도구, 권한이 있습니다. 또한 프롬프트와 모델도 있습니다.</p>
+<p>이제 이 새로운 전용 하위 에이전트를 사용해 첫 번째 비동기 장기 실행 작업을 수행할 준비가 된 것 같습니다.</p>
+<p>그럼 Claude에게 다음 단계로 넘어가라고 말해보겠습니다. 다음으로 할 일은 채팅과 비슷한 애플리케이션이 아니라 좀 더 비동기적인 방식으로 Claude에게 이렇게 말하는 것입니다. “이 금융 상품을 조사하고, 내가 정의하고 중요하게 생각하는 형식으로 보고서를 작성해줘.” 이를 위해 outcome이라는 것을 사용하겠습니다. Outcome은 우리가 자기 감독(self-supervision)을 구현한 방식입니다.</p>
+<p>Outcome에서는 Claude에게 이렇게 말합니다. “이것이 네 작업이다. 이것이 작업을 평가하기 위한 루브릭(rubric)이다.” Claude는 작업을 수행하고, 작업이 완료됐다고 판단하면 하위 에이전트에게 루브릭과 Claude가 수행한 작업을 검토하고, 제대로 수행했는지와 작업을 완료했는지를 평가하도록 요청합니다. 제대로 했다면 좋습니다. 그렇지 않다면 다시 시도합니다.</p>
+<p>여기서 Claude가 구현하는 것은 기본적으로 사용자가 정의한 outcome 이벤트(user-defined outcome event)입니다. UI에서 특정 티커(ticker)에 대해 세션을 시작할 때마다, 특정 루브릭, 최대 반복 횟수, 해당 작업에 대한 설명이 포함된 이 사용자 정의 outcome을 전송하도록 하는 것입니다. UI는 제가 보여드리겠습니다.</p>
+<p>그러면 Claude가 우리 대신 해당 작업을 실행합니다. UI에서는 어떤 모습일까요? 이 스코어카드(scorecard)를 보면 Claude에게 “Nvidia를 분석해줘”라고 말할 수 있습니다.</p>
+<p>부탁해. 좋아요. 그러면 NVIDIA 분석을 수행할 세션이 시작됩니다. 이 작업은 시간이 좀 걸립니다. 요리 방송식 진행을 하면서 이전 세션에서 어떤 일이 일어났는지 보여드리겠습니다. 대략 10분 정도 걸릴 겁니다.</p>
+<p>하지만 이건 어제 실행한 작업입니다. 여기서 먼저 Claude에게 이렇게 말합니다. “이것은 outcome이다. Nvidia의 가장 최근 분기 보고서를 분석해줘. EDGAR 신원 정보를 사용해야 한다. EDGAR 신원 정보는 여기에 있다. 너에게는 메모리가 있으니, 이전에 분석을 수행했는지 확인하고 이미 알고 있는 내용을 다시 제출하거나 조사하지 말고 그 내용을 사용해라. 내가 관심 있는 가장 최근 양식을 찾아 그것을 대상으로 분석을 수행해라. 그리고 두 가지 결과물을 만들어라. 해당 회사에 대한 메모를 내 메모리에 작성하고, 잘 정의되고 구조화된 출력 형식으로 스코어카드를 작성해라. 그리고 그것을 지정된 파일 위치에 저장해라.”</p>
+<p>그런 다음 Claude가 작업을 시작했습니다. 도구를 호출하기 시작했죠. 메모리 저장소에서 메모를 찾지 못했습니다. 몇 군데를 확인한 다음 이렇게 판단했습니다. “좋아, 무엇을 해야 할지 알겠어. 하위 에이전트를 활용해서 이 작업의 대부분을 처리하겠어.”</p>
+<p>“금융 전문가 분석 에이전트, 또는 추출기(extractor)를 생성하고, 위험 평가 분석 에이전트도 생성하겠습니다.” 콘솔에서는 이 모든 과정을 완전히 관찰할 수 있습니다. 여기 있는 각각의 행은 하나의 스레드(thread)를 나타내고, 스레드는 하위 에이전트가 수행한 작업을 의미합니다.</p>
+<p>각 하위 에이전트는 작업을 수행하고, 완료되면 메인 에이전트에게 이렇게 알렸습니다. “요청한 작업의 결과는 다음과 같습니다.” 그러면 메인 에이전트가 깨어나 하위 에이전트로부터 정보를 받고, 필요한 모든 자료를 제출하고, 결과물을 생성했습니다. 지정한 JSON 파일을 만들고 메모리도 업데이트했는지 확인했습니다. 그런 다음 자기 감독이 시작됐습니다. 정의한 outcome이 충족되고 있는지 검증하기 위해 하위 에이전트를 실행했습니다.</p>
+<p>하위 에이전트는 루브릭을 살펴봤습니다. 세션에서 수행된 모든 작업과 생성된 산출물을 분석했습니다. 마지막에는 다음과 같이 결론 내렸습니다. 충족되었다. 스코어카드가 전달되었고, 숫자들이 잘 정의되어 있으며, 메모리 업데이트도 정확하고, 모든 것이 좋아 보였습니다. 아직 실행 중인 것 같지만, 완료되면 여기에서 각 티커에 대한 표를 볼 수 있을 겁니다. 세션에서 보고서와 스코어카드를 추출하고 다운로드할 수 있기 때문입니다. 이를 데이터베이스에 넣으면 됩니다. 이 데모에서는 로컬에 저장했지만, 무슨 의미인지 이해하셨을 겁니다.</p>
+<p>좋습니다. 그런데 한 번에 100개나 10개의 티커를 처리하고 싶다면 어떨까요? 에이전트와 채팅해서 커스텀 하네스를 만들고, 각 티커의 작업을 서로 다른 세션에 위임한 다음, 모든 작업이 완료되면 결과를 집계해 여러 개의 점수를 제공할 수 있다면 좋지 않을까요?</p>
+<p>그것이 다음에 할 일입니다. 우리가 만든 도구, 즉 커스텀 도구를 활용해 서버에 맞춤형 오케스트레이션 하네스(custom orchestration harness)를 구축하겠습니다. 메인 에이전트와 대화하다 보면 어느 순간 메인 에이전트가 이렇게 판단할 겁니다. “좋아, 작업을 수행하기 위해 서로 다른 세션 10개를 생성해야겠어.”</p>
+<p>그렇게 하겠습니다. 아, 단계를 하나 건너뛰었네요. 죄송합니다. 먼저 스킬을 업데이트하겠습니다. 이 스킬이 업데이트할 수 있는 실제 산출물(live artifact)이라는 점을 보여드리고 싶었습니다. 스킬을 개선할 수 있습니다. 이 경우에는 새로운 양식을 살펴보는 기능을 추가합니다. 그러면 이후 해당 스킬을 참조하는 모든 새 세션이 새로운 정보를 받게 됩니다.</p>
+<p>이는 지속적으로 업데이트할 수 있는 기능입니다. 이전 세션을 살펴보고 성능이 어땠는지 확인할 수 있습니다. 이 데모의 마지막에 이를 보게 될 겁니다. 이는 우리가 드리밍(dreaming)이라고 부르는 방식으로 발생합니다. 지금 일어나고 있는 일이 바로 그것입니다. 이제 오케스트레이션 부분으로 넘어가겠습니다. 스킬이 게시되었으니, 여기로 가면 확인할 수 있을 것 같습니다.</p>
+<p>지금까지 질문 있나요? 내용이 많다는 건 알고 있습니다. Travis, 여기 질문이 하나 있습니다.</p>
+<p>크레딧을 받는 데 얼마나 걸리는지 물어보러 온 분이 있었는데요. 5분이면 됩니다. 양식에는 1~2일이라고 적혀 있는 걸 알고 있지만, 5분 안에 확인할 수 있을 겁니다.</p>
+<p>리서치 에이전트가 SEC에서 가져오는 데이터에 접근하려면 어떻게 되는지 궁금했습니다. 일종의 자격 증명(credential)이 필요한가요? 그리고 해당 자격 증명을 주입하거나 중개하는 방식(credential injection or brokering)이 어떻게 작동하는지도 설명해 주실 건가요?</p>
+<p>네. SEC의 경우 이메일과 이름만 있으면 됩니다. 이 데모에서는 이를 프롬프트에 직접 주입합니다. 하지만 실제 프로덕션 애플리케이션에서는 Vault라는 것을 사용합니다. Vault의 작동 방식은 환경 변수에 주입하고 싶은 시크릿을 정의한 다음, 실제 시크릿을 넣는 대신 플레이스홀더(placeholder)를 넣는 것입니다.</p>
+<p>그런 다음 Claude가 작업을 수행하다가 해당 환경 변수를 사용하려고 하면, 그저 플레이스홀더 값을 주입합니다. Egress에서는 그 시크릿에 대해 허용된 것으로 지정한 호스트 도메인에서만 이를 실제 값으로 교체합니다. 예를 들어 “내 슈퍼 시크릿 환경 변수는 SEC에서만 사용할 수 있어”라고 했는데 Claude가 이를 anthropic.com에서 사용하려고 한다면, 값을 주입하지 않고 교체도 하지 않습니다. 하지만 SEC.gov에 호출을 시도하면 그때는 실제 값으로 교체합니다.</p>
+<p>기본적으로 API처럼 사용할 수도 있고, 콘솔에서 사용할 수도 있습니다. 볼트(vault)를 만들고 이름을 지정하기만 하면 됩니다. ID를 받게 되고, 그 ID를 세션에 포함하면 저희가 MCP나 CLI로 인증할 수 있습니다. 예를 들어 샌드박스에 Google Workspace CLI를 설치한 다음, API 키를 환경 자격 증명으로 저희에게 제공할 수 있습니다. 다시 말하지만 Gabe가 설명한 것과 같은 방식을 따릅니다.</p>
+<p>볼트는 이 부분에서 OAuth 자격 증명도 지원합니다. Gabe, 콘솔에서 볼트 생성 과정을 간단히 보여주시겠어요?</p>
+<p>네. 여기서 볼트를 만들 수 있고, 볼트 안에 자격 증명을 묶어 넣습니다. MCP OAuth를 사용할 수도 있습니다. 예를 들어 Notion을 사용할 수 있죠. OAuth를 위한 사전 정의 항목도 몇 가지 있습니다.</p>
+<p>세션을 참조할 때마다 해당 볼트 ID를 주입하면, 모든 자격 증명이 세션에 묶여 들어갑니다. 자격 증명에서 지정한 도메인 중 하나를 사용하려고 할 때마다 플레이스홀더 대신 실제 자격 증명으로 교체합니다.</p>
+<p>간단한 질문이 있습니다. 기능 중 어떤 부분이 Claude Agents SDK에 포함되어 있고, 어떤 부분이 그 바깥에 있나요?</p>
+<p>무슨 뜻인지 명확히 설명해 주시겠어요? Agent SDK가 있잖아요. 이 기능이 Agent SDK 위에 구축된 것이라고 생각합니다. 기능 중 어떤 부분이 Agent SDK 계층에 있고 어떤 부분이 그 바깥에 있는지 알고 싶습니다.</p>
+<p>Agent SDK는 더 많은 기능을 위한 패키지로, 헤드리스 Claude Code 버전(headless Claude Code version)과 비슷합니다. 저희가 그 일반화된 버전을 구축했습니다. Agent SDK의 장점과 교훈에서 많은 영감을 얻었지만, 코딩에만 특화된 것이 아니라 더 범용적인 하니스를 다시 구축했습니다. 일종의 포크(fork)라고 할 수 있습니다.</p>
+<p>네, 기본적으로 자체 하니스입니다. Agent SDK는 어디서든 가져다 실행할 수 있는 바이너리 형태의 Claude Code와 비슷합니다. 이것은 저희 클라우드에서 실행되는 완전 호스팅형 솔루션이고, Claude Code 하니스에서 많은 영감을 받은 자체 하니스를 사용합니다. 전반적인 개선 사항에 대해서는 자주 서로 소통하고 있습니다.</p>
+<p>아까 뒤쪽에서 손을 드신 분이 또 계셨네요. 여기 질문이 있습니다.</p>
+<p>네, 질문이 두 개 더 있습니다. 감사합니다. 여러 에이전트를 오케스트레이션할 때, 에이전트들이 루프에 빠져 생성하거나 협업하는 과정에서 많은 토큰을 소비하지 않도록 막는 가드레일이 있나요?</p>
+<p>그중 일부는 여러분이 직접 오케스트레이션하고 해결하도록 맡겨 두고 있습니다. 이런 커스텀 하니스를 구축한다면 다른 프로바이더를 사용하는 것도 막지 않습니다. 여러 프로바이더를 사용하는 시스템을 만들고 싶다면, “세션당 이 금액 이상은 사용하지 마” 또는 “세션당 이 토큰 수 이상은 사용하지 마”라고 지정할 수 있는 더 세밀한 예산 제어 기능을 검토하고 있습니다. 하지만 현재는 제공하지 않는 기능입니다.</p>
+<p>네, 말씀하세요. 질문 하나 더 받겠습니다.</p>
+<p>조금 전에 콘솔에서 관리자와 하위 에이전트의 트랜스크립트를 보여주셨고, 각자가 무엇을 하고 있는지 확인할 수 있었습니다. 만약 실수를 발견하거나, 잘못된 방향으로 가고 있거나, 기록을 변경하고 싶다면 이를 수정하거나 특정 시점으로 돌아가 추가 지침을 주고 다시 시작할 방법이 있나요?</p>
+<p>에이전트를 조정할 수는 있습니다. 여기서 “send event”라고 하고 새로운 <code>user.message</code> 이벤트를 보내면 에이전트를 조정할 수 있을 것 같습니다. 메시지는 대기열에 들어갑니다. 한 번에 메시지 열 개를 보내도 괜찮습니다. 현재 되감은 다음 다시 앞으로 진행하는 기능은 없지만, 사람들이 원한다면 분명 검토할 사항입니다.</p>
+<p>세션 포킹(session forking)이 바로 지금 요청하신 기능입니다. 몇몇 고객이 요청한 적이 있고, 로드맵에 포함되어 있으므로 언젠가는 제공할 수 있기를 바랍니다.</p>
+<p>감사합니다.</p>
+<p>네, 여기에도 손을 드신 분이 몇 분 계시네요. 마이크를 건네주시겠어요? 네, 감사합니다, Rohan. 말씀하세요.</p>
+<p>이 모든 것이 클라우드에서 실행된다고 가정할 때, 여러 에이전트 사이에 집단 지식(collective knowledge)을 구축할 계획이 있나요? 이 특정 애플리케이션에서 사용자 열 명이 있다고 하면—</p>
+<p>말씀을 조금 더 크게 해주시겠어요? 잘 들리지 않습니다.</p>
+<p>이 모든 것이 클라우드에서 실행되고, 이 애플리케이션이 수십 명 또는 수백 명의 사용자에게 배포되며, 모두 금융 리서치에 사용한다고 가정해 보겠습니다. 집단 메모리가 있나요? 세션 로그가 있다는 것은 알고 있습니다. 검토 중인 기능인가요, 아니면 이에 대한 로드맵이 있나요?</p>
+<p>현재도 있습니다. 실제로 이 데모에서 사용하고 있습니다. 세션 간에 지식을 공유할 수 있게 해주는 메모리 스토어(memory store)를 사용합니다. 여기서 각 에이전트가 지금까지 수행한 작업에 관한 개별 정보를 각각 채워 넣고 있는 것을 볼 수 있습니다.</p>
+<p>그런 다음 마지막에 드리밍(dreaming)을 사용해 시간이 지나면서 이 지식을 통합하는 방법을 보여드리겠습니다. 여러 에이전트가 서로 다른 엣지 케이스를 마주하고 서로에게서 집단적으로 학습함에 따라 메모리 스토어를 지속적으로 개선할 수 있습니다.</p>
+<p>이 부분에 이어서 질문하겠습니다. 이 데이터를 Anthropic의 인프라에 저장하나요?</p>
+<p>맞습니다.</p>
+<p>이를 분리해서 실행하고 싶다고 해보죠. AWS Bedrock에서 실행하면서 샌드박싱을 위해 자체 클러스터 등에 자체 데이터를 보유하는 경우입니다. 셀프 호스팅을 언급하셨는데, 종속성이 얼마나 큰가요?</p>
+<p>얼마나 유연한가요?</p>
+<p>모두 API 기반입니다. 메모리를 추출해 원한다면 다른 시스템에 넣을 수 있습니다. 현재 세션에서 다른 메모리 프로바이더를 기본으로 지원하지는 않지만, 이를 위한 MCP나 커스텀 도구를 구축할 수 있습니다. 저라면 그렇게 할 것 같습니다.</p>
+<p>또한 사용자 수준 또는 조직 수준의 메모리를 갖는 것에 관한 첫 질문에 덧붙이자면, 여러 메모리 스토어를 연결할 수 있습니다. 사용자 수준 메모리 스토어와 조직 전체 메모리 스토어를 각각 두고, 둘 다 각 세션에 가져오는 방식을 생각할 수 있습니다. 사용자 수준 메모리와 조직 수준 메모리를 모두 수집하기 시작할 수 있습니다.</p>
+<p>Gabe가 말했듯이 이 중 어느 것도 종속되는 구조가 아닙니다. 원한다면 데이터를 가져가 다른 곳에서 사용할 수 있습니다. 모든 것이 API 호출입니다.</p>
+<p>네, 질문이 있습니다. 에이전트 워크플로를 살펴보면서 그레이더(grader)가 메인 에이전트 수준에 있다는 것을 보았습니다. 이런 하위 에이전트 작업은 어떻게 만들고, 그 작업 사이의 메모리도 어떻게 관리하나요?</p>
+<p>좋은 질문입니다. 여기에는 두 가지 측면이 있습니다. 저희가 구축한 방식에서 하위 에이전트는 컨텍스트를 보강하고 서로 협력해 세션의 기능을 활용하도록 설계되었습니다.</p>
+<p>결과 정의는 전체 세션 수준에서 이루어집니다. 결과를 정의하고 “내가 달성하기를 원하는 것은 이것이다”라고 말합니다. 그러면 메인 에이전트가 하위 에이전트를 사용해 작업을 수행합니다. 하위 에이전트들 사이에서 협업하고, 최종적으로 “완료했습니다”라고 말합니다. 현재는 하위 결과를 정의하는 기능을 지원하지 않습니다.</p>
+<p>추가 질문입니다. 이 드리밍 기능을 사용하면 하위 에이전트가 잘못된 방향으로 벗어난 작업을 수행한 경우 어떻게 학습하나요?</p>
+<p>현재 드리밍은 메모리 스토어로 제한되어 있습니다. 잠시 후 보여드리겠습니다. 기본적으로 드리밍은 여러 세션에서 생성된 트랜스크립트와 메모리를 분석하여 메모리를 업데이트하고, 이후의 에이전트가 무엇을 검색해야 하는지 알 수 있도록 작동합니다.</p>
+<p>이를 스킬, 프롬프트, 에이전트 정의까지 계속 확장해 지속적인 학습 기능을 제공하는 것도 생각해볼 수 있습니다. 하지만 현재는 메모리 스토어에만 적용됩니다.</p>
+<p>여기 손을 드신 분이 계시네요. 그다음에 다시 질문으로 돌아가겠습니다.</p>
+<p>안녕하세요. 회사 데이터를 기존 스토어나 RAG 등에 보유하고 있고, 이를 커스텀 CLI나 MCP를 통해 이런 유형의 에이전트에 노출하고 싶다면, 환경에 안전하게 넣는 방법은 무엇인가요?</p>
+<p>좋은 질문입니다. 두 가지 방법이 있습니다. API를 사용하는 CLI나 MCP를 통해 접근할 수 있다면, MCP를 만들고 인증 볼트에 접근할 수 있도록 지정하면 됩니다. 그러면 MCP를 직접 호출할 수 있습니다.</p>
+<p>MCP를 인터넷에 노출하고 싶지 않다면 MCP 터널(MCP tunnels)이라는 기능이 있습니다. 이를 사용하면 네트워크에서 저희 네트워크로 터널을 만들 수 있으므로 MCP를 인터넷에 노출하지 않아도 됩니다. 그런 방식으로 처리할 수 있습니다.</p>
+<p>그것도 너무 큰 장벽이라면 셀프 호스팅 샌드박스를 지원합니다. 자체 샌드박스를 가져올 수 있고, 이 샌드박스는 여러분의 네트워크와 피어링되어 애플리케이션과 서비스에 접근할 수 있습니다. 에이전트는 여러분이 관리하고 호스팅하는 샌드박스를 호출하고, 그런 방식으로 리소스에 접근할 수 있습니다.</p>
+<p>환경의 종속성에 관해 질문이 있습니다. 종속성을 불러올 수 있는 것을 봤는데, 런타임에 불러오나요, 아니면 환경이 생성되기 직전에 불러오나요?</p>
+<p>생성 시점에 불러옵니다. 그런 다음 캐시하고, 샌드박스를 다시 인스턴스화할 때 해당 환경을 재사용합니다.</p>
+<p>내부 종속성을 지정할 수 있나요, 아니면 NPM 패키지를 선택해야 하나요?</p>
+<p>현재는 모두 NPM, Cargo, Pip 등을 통해 접근할 수 있어야 합니다. 하지만 파일을 세션에 직접 업로드하거나, 원하는 경우 GitHub 저장소를 사용해 설치할 수도 있습니다.</p>
+<p>알겠습니다.</p>
+<p>그리고 한 가지 더 있습니다. 배포(deployments)입니다. 배포 탭이 보이네요.</p>
+<p>네, 네. 이제 다루려고 합니다. 그 부분까지 진행하겠습니다. 먼저 데모를 계속하고, 잠시 후 질문을 더 받겠습니다.</p>
+</details>
+</body></html>
