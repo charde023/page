@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Why Stark builds the factory before the prototype is done | Johannes Schaback</title>
+<meta name="description" content="빠른 출시와 대량생산 준비의 충돌을 줄이려면 제조 가능성과 대량 조달 가능성을 설계·부품 결정 초기에 함께 검토해야 한다는 주장."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">Sequoia Capital 학습노트</div><h1>Why Stark builds the factory before the prototype is done | Johannes Schaback</h1>
+<div class="meta">원작자 Johannes Schaback · 업로드 2026-10-30 · 1.2분 · <a href="https://youtu.be/qwgiMe4SwF4" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 4분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<p>이 영상의 중심 문제는 <strong>빨리 보여줄 수 있는 제품</strong>과 <strong>실제로 많이 만들 수 있는 제품</strong>이 같지 않을 수 있다는 점이다. 화자는 프로그램을 시작할 때 시장에 내놓는 속도와 대량생산 준비라는 두 목표를 함께 최적화한다고 말한다. 속도만 앞세우면 시연품은 빨리 나올 수 있지만, 나중에 같은 제품을 대량으로 만들기 어려워질 수 있기 때문이다.</p>
+<figure data-visual-kind="process" style="margin:1.25rem 0;">
+  <div style="display:grid;gap:10px;max-width:760px;margin:0 auto;font-size:16px;line-height:1.5;">
+    <div style="padding:14px;border:2px solid #315b7d;border-radius:10px;background:#eef6fc;min-width:0;overflow-wrap:anywhere;">
+      <strong>1. 동시에 잡으려는 두 목표</strong>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:8px;margin-top:8px;">
+        <div style="padding:10px;border:1px solid #6d8da6;border-radius:8px;background:#fff;min-width:0;overflow-wrap:anywhere;">시장에 빨리 내놓기<br><small>시장 출시 시간 단축</small></div>
+        <div style="padding:10px;border:1px solid #6d8da6;border-radius:8px;background:#fff;min-width:0;overflow-wrap:anywhere;">많이 만들 준비하기<br><small>생산 준비도 확보</small></div>
+      </div>
+    </div>
+    <div aria-hidden="true" style="text-align:center;font-size:24px;line-height:1;">↓</div>
+    <div style="padding:14px;border:2px solid #806515;border-radius:10px;background:#fff8dc;min-width:0;overflow-wrap:anywhere;"><strong>2. 제조 문제를 앞당겨 검토</strong><br>시제품 완성 뒤가 아니라 설계와 부품 결정 초기에 제조 가능성을 묻는다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:24px;line-height:1;">↓</div>
+    <div style="padding:14px;border:2px solid #5c477b;border-radius:10px;background:#f5f0fb;min-width:0;overflow-wrap:anywhere;"><strong>3. 공급망 조건도 함께 판단</strong><br>최고 성능인지뿐 아니라 필요한 수량을 실제로 조달할 수 있는지 본다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:24px;line-height:1;">↓</div>
+    <div style="padding:14px;border:2px solid #39704a;border-radius:10px;background:#eef9f1;min-width:0;overflow-wrap:anywhere;"><strong>4. 화자가 노리는 결과</strong><br>빠른 출시를 추구하면서도 이후 대량생산을 어렵게 만드는 결정을 줄인다.</div>
+  </div>
+  <figcaption style="margin-top:10px;color:#444;">두 목표를 설계 초기의 제조·조달 판단으로 연결한 개념 흐름이다. 성과가 검증됐다는 수치 그래프가 아니다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 첫 상자는 서로 경쟁할 수 있는 두 목표이고, 가운데 두 상자는 화자가 제시한 대응 방식이다. 마지막 상자는 측정된 성과가 아니라 그 방식이 지향하는 결과다.</p>
+<p>화자가 쓰는 표현은 <strong>제조 가능성을 왼쪽으로 옮긴다(shift left on manufacturability)</strong>이다. 여기서 왼쪽은 시간 순서상 앞부분을 뜻한다. 제조 문제를 뒤늦게 발견하면 고쳐야 할 일이 빚처럼 쌓인다는 설명이다. 화자는 속도만 최적화한 사례를 설명하며 Formula One 자동차는 하나만 만들기 때문에 빠르게 준비할 수 있지만 대량생산은 거의 하지 않는다고 말한다. 이 사례는 화자의 설명이며 별도 자료로 검증된 일반 사실은 아니다.</p>
+<p>부품 선택에서도 같은 원리가 적용된다. 화자는 항상 가장 뛰어나고 최첨단인 카메라를 사는 대신, 성능이 상위 사분위에 들 만큼 좋으면서 실제로 대량 조달할 수 있는 카메라를 산다고 말한다. 즉, <strong>최고 성능 하나만 보는 판단</strong>에서 <strong>충분히 좋은 성능과 공급 가능성을 함께 보는 판단</strong>으로 기준을 바꾼다.</p>
+<figure data-visual-kind="comparison" style="margin:1.25rem 0;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px;font-size:16px;line-height:1.5;">
+    <section style="padding:14px;border:2px solid #9a4b43;border-radius:10px;background:#fff3f1;min-width:0;overflow-wrap:anywhere;">
+      <strong>출시 속도만 최적화</strong>
+      <hr style="border:0;border-top:1px solid #c98d87;">
+      <strong>초기 결과:</strong> 보여주고 시연할 프로젝트를 빨리 만들 수 있음<br>
+      <strong>빠진 질문:</strong> 같은 것을 대량으로 만들 수 있는가?<br>
+      <strong>화자가 말한 위험:</strong> 나중에 제조하기 매우 어려워질 수 있음
+    </section>
+    <section style="padding:14px;border:2px solid #39704a;border-radius:10px;background:#eef9f1;min-width:0;overflow-wrap:anywhere;">
+      <strong>출시 속도와 생산 준비를 함께 최적화</strong>
+      <hr style="border:0;border-top:1px solid #83af8f;">
+      <strong>초기 질문:</strong> 이 설계와 부품을 많이 만들거나 구할 수 있는가?<br>
+      <strong>카메라 기준:</strong> 상위 사분위 성능과 대량 조달 가능성<br>
+      <strong>화자의 원칙:</strong> 제조·공급 문제를 결정 초기에 반영
+    </section>
+  </div>
+  <figcaption style="margin-top:10px;color:#444;">속도만 보는 접근과 생산 준비까지 함께 보는 접근을 같은 기준으로 비교한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 데스크톱에서는 왼쪽과 오른쪽을 같은 줄끼리 비교하고, 모바일에서는 첫 카드 다음에 둘째 카드를 읽는다. 오른쪽이 언제나 더 빠르다는 뜻이 아니라, 화자가 두 목표의 충돌을 줄이기 위해 쓰는 판단 기준을 보여준다.</p>
+<ul>
+<li><strong>[원문 주장]</strong> 화자는 제조 가능성을 앞당겨 검토하고, 부품 선택 초기부터 공급망과 대량 조달 가능성을 고려한다고 말한다.</li>
+<li><strong>[해석]</strong> 대량생산 준비는 시제품 뒤에 붙이는 마무리가 아니라 초기 설계 제약으로 다뤄야 한다는 뜻이다.</li>
+<li><strong>[경계]</strong> 이 전사에는 공장 건설 과정, 카메라 모델·필요 수량·평가 방식, 적용 성과가 없다. 제목의 “시제품이 끝나기 전에 공장을 짓는다”는 표현도 본문에서 구체적으로 설명되지 않는다.</li>
+</ul>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>빨리 시연할 수 있다는 사실만으로 대량생산 준비가 끝난 것은 아니다.</li>
+<li>제조 가능성을 설계와 부품 결정 초기에 검토하는 것이 <code>shift left on manufacturability</code>다.</li>
+<li>화자는 최고 성능보다 충분히 좋은 성능과 대량 조달 가능성을 함께 본다고 말한다.</li>
+<li>이 영상은 의사결정 원칙을 설명하지만 실제 성과를 검증하는 수치는 제공하지 않는다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>빠른 시장 출시와 대량생산 준비가 충돌할 때, 설계와 부품 선택의 순서를 어떻게 바꿔야 하는가?</strong></p>
+</blockquote>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<div class="callout callout-example"><div class="ct">가상 적용 장면</div>
+<p>다음 장면은 원문의 카메라 선택 원리를 눈에 보이게 재구성한 <strong>가상 예시</strong>이며, 영상에 등장한 실제 사건이 아니다.</p>
+<p>엔지니어가 두 카메라 후보 자료를 본다. 한쪽은 최첨단 여부가 중심이지만 대량 조달 근거가 제시되지 않았다. 다른 쪽은 화자가 말한 상위 사분위 성능에 해당하며 필요한 수량을 조달할 수 있다. 화자의 원칙을 적용하면 두 번째 후보를 선택한다.</p>
+</div>
+<p><code>"최고 성능만 보고 부품을 고르면 이후 대량 조달이 어려울 수 있다"</code> <strong>문제</strong><br>
+→ <code>"제조 가능성과 공급망 조건을 부품 결정 초기에 함께 검토한다"</code> <strong>작동 방식</strong><br>
+→ <code>"대량생산 준비를 반영한 후보를 선택한다"</code> <strong>의도한 결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">한 대를 준비하는 경주차와 반복 생산할 제품</div>
+<p>화자는 Formula One 자동차를 한 대만 빠르게 준비하는 경우에 빗댄다. 한 번 보여줄 물건이라면 반복 생산 절차를 충분히 준비하지 않아도 되지만, 같은 물건을 많이 만들어야 한다면 제조 방법과 부품 공급을 일찍 확인해야 한다는 설명이다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> Formula One에 관한 “하나만 만든다”는 표현은 화자의 단순화된 사례이며 별도로 검증되지 않았다. 또한 이 비유만으로 실제 제품의 생산량, 품질, 비용 또는 공급 위험을 판단할 수는 없다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>두 가지 최적화 목표</strong></td>
+<td>빨리 내놓으면서 많이 만들 준비도 하기</td>
+<td>시장 출시 시간과 생산 준비도(<code>time to market</code>·<code>production readiness</code>)를 함께 최적화하는 것</td>
+<td>빨리 시연하면 생산 준비도 자동으로 끝난다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>제조 가능성의 조기 검토</strong></td>
+<td>나중에 만들 수 있을지 지금 묻기</td>
+<td>제조 가능성을 개발 과정 앞부분으로 옮기는 것(<code>shift left on manufacturability</code>)</td>
+<td>공장을 먼저 완성했다는 뜻으로만 해석하는 것</td>
+</tr>
+<tr>
+<td><strong>공급망을 포함한 부품 결정</strong></td>
+<td>좋은 부품을 필요한 만큼 구할 수 있는지도 보기</td>
+<td>초기 부품 선택에서 공급망 탄력성과 대량 조달 가능성을 반영하는 것</td>
+<td>항상 최고 성능 부품을 선택해야 안전하다고 생각하는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>시장 출시 속도만 최적화하면 왜 나중에 제조 문제가 생길 수 있는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>시연 가능한 결과를 빨리 만드는 결정과 같은 제품을 대량으로 반복 생산하는 결정은 요구 조건이 다를 수 있다. 화자에 따르면 제조 가능성을 초기에 검토하지 않으면 고쳐야 할 일이 뒤에 빚처럼 쌓이고, 빠르게 만든 프로젝트가 실제로는 제조하기 어려워질 수 있다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>“가장 뛰어난 카메라”와 화자가 선택한다는 “상위 사분위이면서 대량 조달 가능한 카메라”는 판단 기준이 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>첫 판단은 최고 성능과 최첨단 여부에 무게를 둔다. 두 번째 판단은 충분히 높은 성능뿐 아니라 실제로 많은 수량을 구할 수 있는지도 함께 본다. 원문은 특정 모델이나 성능 측정법을 제시하지 않으므로 어느 카메라가 더 낫다고 독립적으로 판정할 수는 없다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>다음 부품이나 도구 후보를 평가한다면, 최고 성능 외에 무엇을 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>필요한 규모에서 실제로 조달하거나 반복 사용할 수 있는지, 그 근거가 무엇인지 확인한다. 다만 필요한 수량·기간·성능 기준은 적용 대상에 맞게 먼저 정해야 한다. APOM이나 현재 시스템에 어떤 후보가 있는지는 제공된 자료만으로 알 수 없다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 확장성은 마지막 검사가 아니라 초기 선택 기준이다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 시장 출시 시간과 생산 준비도를 함께 최적화하며, 제조 가능성을 앞당겨 검토한다고 말한다. 카메라 선택에서도 최첨단 여부보다 상위 사분위 성능과 대량 조달 가능성을 함께 본다고 주장한다.</li>
+<li><strong>[해석]</strong> 시제품 이후에 확장성을 붙이려 하기보다 설계와 부품 선택 순간부터 반복 생산 조건을 제약으로 두는 원칙이다.</li>
+<li><strong>[경계]</strong> <code>74초</code>와 <code>1.2분</code>은 환산 후 반올림하면 일치하며, “두 목표”도 실제로 두 항목이 열거되어 수량 충돌은 없다. 반면 제목의 공장 건설 표현은 전사에서 구체화되지 않는다. Formula One 주장과 카메라의 상위 사분위 평가·대량 조달 수량·성과는 검증 자료가 없다. META 설명은 Johannes Schaback을 Stark 공동창업자로 부르지만 구조화된 <code>provenance.affiliation</code>은 비어 있다. 원작자 후보도 화자 이름과 SNS를 근거로 한 추정이며, META에는 확인 가능한 SNS 링크가 제공되지 않았다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 원문의 시연품과 생산 가능 제품의 차이는, 한 번 답을 따라 하는 것과 반복해서 설명·적용하는 학습의 차이와 구조가 닮았다.</li>
+<li><strong>통찰:</strong> 이해 여부를 첫 정답만으로 판단하지 않고, 새 사례에서 같은 원리를 다시 설명할 수 있는지 확인하는 가설로 옮길 수 있다.</li>
+<li><strong>질문/행동:</strong> 학습자가 자료를 덮고 “왜 최고 성능만 고르면 안 되는가”를 새 사례로 설명하게 해 본다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 원문은 성능, 출시 속도, 제조 가능성, 공급 가능성 사이의 자원 배분 문제를 다룬다. APOM의 현재 부품·재고 상태는 자료에 없다.</li>
+<li><strong>통찰:</strong> 이커머스나 물류에 적용한다면 최고 사양보다 필요한 규모에서 반복 확보할 수 있는지를 함께 보는 검증 전 가설이 된다.</li>
+<li><strong>질문/행동:</strong> 다음 실제 후보가 생길 때 필요한 규모의 공급 가능성을 증명하는 자료가 있는지 묻는다.</li>
+</ul>
+<h3>마케터 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> “최첨단”은 강한 주장이고, “대량 조달 가능”은 운영 증거가 필요한 주장이다.</li>
+<li><strong>통찰:</strong> 상세페이지에서 최고라는 표현만 강조하기보다 실제 공급 가능성을 보여주는 근거가 있는지 구분해야 한다. 원문 자체에는 그 증거 자료가 없다.</li>
+<li><strong>질문/행동:</strong> 상위 사분위와 대량 조달 가능성을 주장하려면 어떤 평가 기준과 확인 자료가 필요한지 먼저 적는다.</li>
+</ul>
+<h3>AI/SW 학습자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 카메라 선택 원리는 최고 성능의 모델·도구와 필요한 규모에서 반복 실행 가능한 모델·도구를 구분하는 문제와 닮았다.</li>
+<li><strong>통찰:</strong> 기술 이름만 비교하지 않고 실제 작업량에서 이용 가능성과 반복 실행 가능성을 함께 시험하는 가설로 전이할 수 있다.</li>
+<li><strong>질문/행동:</strong> 다음 도구 평가에서 최고 결과뿐 아니라 필요한 작업량을 지속 처리할 수 있는지도 같은 표에 기록한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"빠른 시연 뒤에 제조·조달 문제를 발견할 수 있음"</code> <strong>문제</strong><br>
+→ <code>"대량생산을 준비하는 프로그램과 담당 조직의 재작업 위험 감소"</code> <strong>수혜자: 생산 전환을 맡는 조직</strong><br>
+→ <code>"초기 검토 시간과 공급 가능성 근거 제공"</code> <strong>지불자 또는 자원 제공자: 엔지니어링·구매 의사결정자</strong><br>
+→ <code>"필요 규모에서 조달 가능하다는 근거가 확인된 최종 후보 수"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 다음 실제 부품이나 도구 선택 1건에서 최종 후보별로 성능 기준과 필요한 규모의 조달·이용 가능 근거를 한 장에 기록한다.</li>
+<li><strong>측정 1개:</strong> 필요한 규모의 조달·이용 가능 근거가 확인된 최종 후보 수.</li>
+<li><strong>중단 기준 1개:</strong> 확인된 최종 후보 수가 <code>0개</code>이면 선택을 확대하거나 확정하지 않고 멈춘다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>두 목표</td>
+<td>시장 출시 시간과 생산 준비도를 함께 최적화한다고 말한다.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>목표의 충돌</td>
+<td>속도만 추구하면 시연품은 빨리 만들 수 있지만 제조가 어려워질 수 있다고 주장한다.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>제조 가능성의 조기 검토</td>
+<td>제조 문제를 앞당겨 다루지 않으면 나중에 고쳐야 할 빚이 쌓인다고 설명한다.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>카메라 선택</td>
+<td>최첨단 제품보다 상위 사분위 성능과 대량 조달 가능성을 함께 본다고 말한다.</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 프로그램 시작의 두 목표</h3>
+<p>화자는 프로그램을 시작할 때 두 가지를 최적화한다고 말한다.</p>
+<ol>
+<li>시장에 내놓는 시간</li>
+<li>생산 준비도</li>
+</ol>
+<p>두 목표는 부분적으로 경쟁할 수 있다. 시장 출시 시간만 최적화하면 보여주고 시연할 프로젝트는 비교적 빨리 만들 수 있지만, 이후 제조가 매우 어려울 수 있다는 주장이다.</p>
+<h3>2. Formula One 사례</h3>
+<p>화자는 Formula One 자동차는 하나만 만들며 빠르게 준비하지만 대량으로는 거의 생산하지 않는다고 설명한다. 이 사례는 빠른 단일 결과와 대량생산 준비의 차이를 보여주기 위해 사용됐다.</p>
+<p>다만 이 주장은 전사 속 화자의 설명일 뿐이며, 생산 방식이나 수량에 관한 독립 자료는 제공되지 않았다.</p>
+<h3>3. 제조 가능성을 앞으로 옮기기</h3>
+<p>화자는 엔지니어링 관점에서 제조 가능성을 개발 과정 앞부분으로 옮겨야 한다고 말한다. 그러지 않으면 나중에 해결해야 할 빚이 쌓인다는 설명이다.</p>
+<p>여기서 언급된 빚은 금전 부채가 아니라 초기에 처리하지 않은 제조 문제와 재작업을 가리키는 표현이다. 전사는 실제 재작업 횟수나 비용을 제시하지 않는다.</p>
+<h3>4. 공급망과 카메라 선택</h3>
+<p>부품 구매를 결정하는 순간부터 공급망 탄력성이 중요한 역할을 한다는 것이 화자의 주장이다. 카메라의 경우 항상 가장 뛰어나고 최첨단인 제품을 고르지는 않으며, 매우 좋고 상위 사분위에 속하면서 실제로 대량 조달할 수 있는 제품을 산다고 말한다.</p>
+<p>특정 카메라 모델, 필요 수량, 성능 평가 기준, 공급업체 또는 실제 성과는 제시되지 않았다.</p>
+<h3>수치·고유명사·수량 대조</h3>
+<ul>
+<li>영상 길이 <code>74초</code>와 <code>1.2분</code>은 <code>74 ÷ 60 ≈ 1.23분</code>이므로 반올림 범위에서 일치한다.</li>
+<li>“두 목표”라는 수량 표현 뒤에 시장 출시 시간과 생산 준비도 두 항목이 열거되어 개수 불일치는 없다.</li>
+<li>제목에는 Stark와 “시제품이 끝나기 전에 공장을 짓는다”는 표현이 있지만, 제공된 전사는 공장 건설 시점이나 실행 내용을 설명하지 않는다.</li>
+<li>META 설명은 Johannes Schaback을 Stark 공동창업자로 표현하지만 <code>provenance.affiliation</code>은 비어 있어 소속은 frontmatter에 추정 기입하지 않았다.</li>
+<li><code>provenance.creator</code>의 Johannes Schaback은 보존했지만, provenance note는 원본 링크를 확인하지 못했고 화자 이름과 SNS를 근거로 추정했다고 밝힌다. META의 <code>social_links</code>에는 확인 가능한 링크가 없다.</li>
+<li>카메라의 “상위 사분위”에는 평가 항목과 표본이 없고, “대량”에도 구체적인 수량이 없다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>META channel/uploader 원문: Sequoia Capital · Why Stark builds the factory before the prototype is done | Johannes Schaback · https://www.youtube.com/watch?v=qwgiMe4SwF4 · 전사: 제공된 SOURCE_TRANSCRIPT, 생성 방식 미상<br>
+원작자 후보: Johannes Schaback. provenance note는 원본 영상 링크가 확인되지 않았으며 화자 이름과 SNS를 근거로 한 추정이라고 밝힌다. 확인 가능한 SNS 링크와 소속 값은 제공되지 않았다. META의 채널명은 원작자나 제작 주체의 확인 근거로 해석하지 않았다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>실제 규모의 대량 생산으로 전환하려면 어떻게 해야 할까요? 프로그램을 시작할 때는 두 가지 목표가 있습니다. 첫째는 출시까지 걸리는 시간을 최적화하는 것이고, 둘째는 생산 준비도(production readiness)를 최적화하는 것입니다.</p>
+<p>이 두 목표는 종종 부분적으로 상충합니다. 출시까지 걸리는 시간만 최적화하면 비교적 빠르게 보여주고 시연할 수 있는 프로젝트를 완성할 수 있지만, 그다음에는 제조하기가 매우 어려워질 수 있습니다. 예를 들어 포뮬러 원(Formula One) 자동차는 한 대만 제작합니다. 준비를 마치기 위해 매우 빠르게 진행하지만, 대량으로 생산하는 경우는 거의 없습니다.</p>
+<p>따라서 엔지니어링 관점에서는 다음과 같은 일이 일어나야 합니다. 제조 가능성(manufacturability)을 개발 초기 단계로 앞당겨야 합니다(shift left). 이것은 매우 중요합니다. 그렇지 않으면 나중에 해결해야 할 부채가 누적되고, 그 과정은 사실상 시작에 불과하기 때문입니다.</p>
+<p>구매할 부품을 결정하는 순간부터 공급망 회복탄력성(supply chain resilience)이 초기 의사결정 과정에서 매우 큰 역할을 합니다. 따라서 예를 들어 항상 가장 뛰어나고 최첨단인 카메라를 구매하는 것은 아닙니다. 매우 우수하고 상위 사분위권(top quartile)에 속하면서도 실제로 대량 조달이 가능한 제품을 구매합니다.</p>
+</details>
+</body></html>

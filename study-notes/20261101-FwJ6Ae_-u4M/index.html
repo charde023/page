@@ -1,0 +1,482 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>[한글자막] 바이브 코딩, 이렇게 싸도 될까? GPT-6.1 Terra vs Opus 5.5</title>
+<meta name="description" content="같은 프롬프트로 두 AI 모델을 비교한 사례를 통해 비용·속도·벤치마크와 실제 사용 품질을 함께 판단하는 법을 배운다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>[한글자막] 바이브 코딩, 이렇게 싸도 될까? GPT-6.1 Terra vs Opus 5.5</h1>
+<div class="meta">업로드 2026-11-01 · 11.8분 · <a href="https://youtu.be/FwJ6Ae_-u4M" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<h3>큰 그림: 싼 모델이 좋은가가 아니라, 어디까지 충분한가</h3>
+<p>이 영상은 GPT-6.1 Terra와 Claude Opus 5.5에 같은 프롬프트를 주고 게임·시뮬레이션·웹사이트를 만들게 한 뒤, 속도와 비용뿐 아니라 결과물을 직접 사용했을 때의 느낌까지 비교한다. 화자가 제시한 평균 제작 시간은 Terra가 <strong>23분 43초</strong>, Opus 5.5가 <strong>43분 52초</strong>다. 출력 토큰은 Terra가 Opus의 약 3분의 1이었고, 해당 제작 실험의 총 달러 사용량은 12분의 1보다 적었다고 화자는 말한다.</p>
+<p>하지만 비용이 12분의 1이라고 해서 품질도 12분의 1로 낮지는 않았다. 지구 위 폭풍을 보여주는 <strong>Storm Watch</strong>에서는 화자가 Terra의 지구본 디자인을 더 좋아했고, Opus는 더 깊은 확대와 풍부한 효과를 제공했다. 반면 레이싱 게임에서는 Opus 쪽이 더 재미있고 조작이 자연스러웠으며, 시계 랜딩 페이지 <strong>Meridian</strong>에서는 복잡한 3D 구성과 시각적 완성도에서 Opus가 크게 앞섰다고 평가했다.</p>
+<p>따라서 영상의 핵심은 “어느 모델이 무조건 더 좋은가”가 아니다. <strong>작업이 요구하는 품질 수준이 어디까지인지 먼저 정하고, 그 수준을 충족하는 가장 빠르고 저렴한 선택지를 찾으라</strong>는 이야기다. 간단하거나 반복적인 작업에서는 저비용 모델의 속도와 비용이 큰 이점이 될 수 있지만, 재미·조작감·복잡한 디자인처럼 숫자 하나로 판단하기 어려운 품질이 중요하면 더 비싼 모델이 실제 가치에서 앞설 수 있다.</p>
+<figure data-visual-kind="map" style="max-width:900px;margin:1.5rem auto;padding:1rem;border:1px solid #94a3b8;border-radius:14px;background:#f8fafc;color:#0f172a;">
+  <div style="padding:0.9rem;border:2px solid #334155;border-radius:10px;text-align:center;font-weight:700;overflow-wrap:anywhere;">
+    중심 질문: 싼 모델의 결과가 내 작업에 충분한가?
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.5rem;line-height:2;">↓</div>
+  <div style="padding:0.9rem;border:1px solid #64748b;border-radius:10px;text-align:center;overflow-wrap:anywhere;">
+    비교 조건 주장: 같은 프롬프트와 같은 도구 조건, 각 모델의 최대 추론 강도
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.5rem;line-height:2;">↓</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:0.8rem;">
+    <div style="padding:0.9rem;border:1px solid #2563eb;border-radius:10px;background:#eff6ff;overflow-wrap:anywhere;">
+      <strong>효율 측면</strong><br>
+      제작 시간, 출력 토큰, 달러 비용, 벤치마크 점수
+    </div>
+    <div style="padding:0.9rem;border:1px solid #7c3aed;border-radius:10px;background:#f5f3ff;overflow-wrap:anywhere;">
+      <strong>사용 품질 측면</strong><br>
+      디자인 완성도, 조작감, 재미, 기능, 실제 사용 의향
+    </div>
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.5rem;line-height:2;">↓</div>
+  <div style="padding:0.9rem;border:2px solid #166534;border-radius:10px;background:#f0fdf4;text-align:center;overflow-wrap:anywhere;">
+    작업별 필수 기준을 충족하면 저비용 모델을 쓰고, 부족하면 고품질 모델을 검토한다.
+  </div>
+  <figcaption style="margin-top:0.9rem;color:#334155;font-size:0.95rem;">
+    영상의 비교를 작업 조건, 효율, 체감 품질, 선택 판단의 관계로 정리한 전체 지도
+  </figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 가운데 두 상자는 서로 대체하는 지표가 아니다. 비용과 점수가 좋아도 사용 경험이 부족할 수 있고, 품질이 높아도 추가 비용이 그 작업에 필요하지 않을 수 있다. 이 도식은 영상의 사례를 정리한 개념도이며 새로운 수치 자료가 아니다.</p>
+<h3>같은 가격표로 판단할 수 없는 실제 결과</h3>
+<p>화자의 실사용 평가는 작업마다 달랐다. 별도 시연에서는 high 모드의 Terra가 그림판(Paint)에서 샘 올트먼을 그리며 클릭과 드래그를 비교적 빠르게 수행했다. 화자는 이 관찰과 앞서 언급한 속도와 비용을 근거로 Terra가 컴퓨터 조작에 적합하다고 평가했다.</p>
+<ul>
+<li><strong>Storm Watch:</strong> Terra의 지구본 디자인은 화자의 취향에 더 맞았다. Opus는 더 깊게 확대할 수 있었고 소용돌이와 효과를 더 잘 처리하는 듯하다고 평가했다. 한쪽이 완전히 우세하다기보다 기능과 표현의 강점이 달랐다.</li>
+<li><strong>The Long Night:</strong> 배·등대·거친 바다를 보여주는 시뮬레이션이다. Terra의 물에는 격자무늬가 보였고, Opus도 압도적으로 좋지는 않았지만 화자는 조금 더 낫다고 봤다.</li>
+<li><strong>마인크래프트형 결과:</strong> 두 모델 모두 상당한 결과를 냈다고 평가했다. 화자는 이런 시험이 사실상 포화됐다고 주장했지만, 영상은 전체 모델을 검증한 자료를 제시하지 않는다.</li>
+<li><strong>Neon Racing 또는 Neon Drift:</strong> Terra 결과는 쉽게 이길 수 있었고 로켓이 도로 위를 달리는 설정과 사용자 경험이 어색했다. Opus 결과는 조작과 상호작용이 더 자연스럽고 실제로 플레이하고 싶을 만큼 재미있었다고 화자는 말했다.</li>
+<li><strong>Meridian 시계 랜딩 페이지:</strong> Terra도 스크롤 애니메이션과 움직이는 기어를 만들었지만, Opus는 더 많은 구성요소와 높은 시각적 정밀도, 색상 변경 기능을 보여줬다. 복잡한 3D 디자인에서는 Opus가 뚜렷하게 앞섰다는 것이 화자의 결론이다.</li>
+</ul>
+<p>표가 화면보다 넓으면 표 내부를 좌우로 이동해 읽는다.</p>
+<figure data-visual-kind="comparison" style="max-width:980px;margin:1.5rem auto;">
+  <div style="overflow-x:auto;border:1px solid #94a3b8;border-radius:12px;">
+    <table style="width:100%;min-width:760px;border-collapse:collapse;background:#ffffff;color:#0f172a;">
+      <thead>
+        <tr style="background:#e2e8f0;">
+          <th style="padding:0.75rem;border:1px solid #cbd5e1;text-align:left;">사례</th>
+          <th style="padding:0.75rem;border:1px solid #cbd5e1;text-align:left;">Terra에 대한 화자 평가</th>
+          <th style="padding:0.75rem;border:1px solid #cbd5e1;text-align:left;">Opus에 대한 화자 평가</th>
+          <th style="padding:0.75rem;border:1px solid #cbd5e1;text-align:left;">갈린 기준</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;"><strong>Storm Watch</strong></td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">지구본 디자인을 더 선호</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">확대·효과·시뮬레이션 기능이 풍부</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">취향과 기능</td>
+        </tr>
+        <tr>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;"><strong>The Long Night</strong></td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">인상적이지만 물의 격자무늬가 보임</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">조금 더 나아 보이나 압도적이지 않음</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">표현의 세부 품질</td>
+        </tr>
+        <tr>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;"><strong>레이싱 게임</strong></td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">쉽고 설정과 UX가 어색함</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">조작이 자연스럽고 실제로 재미있음</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">재미·난이도·조작감</td>
+        </tr>
+        <tr>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;"><strong>Meridian</strong></td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">기본 애니메이션과 기어 표현</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">복잡한 3D 구성과 높은 시각적 완성도</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">고난도 디자인</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption style="margin-top:0.75rem;color:#334155;font-size:0.95rem;">
+    네 가지 제작 사례에서 화자가 관찰하거나 주관적으로 평가한 차이
+  </figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽 사례부터 오른쪽 판단 기준까지 한 행씩 읽는다. 이것은 객관적인 전체 순위표가 아니라, 화자가 해당 결과물을 직접 조작하며 내린 평가를 비교한 표다.</p>
+<h3>벤치마크는 지도이고, 실제 사용은 현장이다</h3>
+<p>영상 후반부는 표준화된 시험인 <strong>벤치마크</strong>를 살핀다. 벤치마크는 여러 모델을 같은 규칙으로 시험해 상대적 위치를 비교하는 도구다. 그중 비용을 가로축, 점수를 세로축에 놓으면 <strong>더 싸면서 점수가 높은 왼쪽 위</strong>가 유리하다.</p>
+<p>화자는 GPT-6.1 Terra가 Agent’s Last Exam v1에서 비용 대비 점수가 좋은 경계에 있다고 설명한다. 이때 다른 선택지보다 더 싸고 더 높은 점수를 동시에 얻기 어려운 경계를 <strong>파레토 전선(Pareto frontier)</strong>이라고 부른다. 화자의 그래프 해석에 따르면 최고 추론 설정의 Terra는 약 1달러에 약 60%를 기록하고, Opus 5.5는 약 9달러에 몇 퍼센트포인트 더 높은 성능을 냈다. 그는 이를 Opus 성능의 약 97%를 9분의 1 비용으로 얻는 선택이라고 해석했다.</p>
+<p>화자는 비전 평가와 사실 오류율도 다룬다. 비전은 모델이 이미지를 읽고 다루는 능력이며, 사실 오류율은 답변에 사실 오류가 포함된 비율이다. 사실 오류율 그래프에서는 낮을수록 좋다. 화자는 Terra가 표시된 비교에서 좋은 위치에 있다고 보고 일상 대화, 초기 조사, 보고서 초안에 적합하다고 추천했다.</p>
+<p>그러나 화자 자신도 벤치마크만으로 모델을 손에 쥐었을 때의 느낌을 알기 어렵다고 말한다. 실제 사례에서도 점수와 비용만으로는 레이싱 게임의 재미나 시계 페이지의 시각적 완성도를 설명하지 못했다. 따라서 벤치마크는 후보를 좁히는 지도이고, 최종 선택에는 자신의 실제 작업으로 만든 결과물을 확인하는 절차가 필요하다.</p>
+<figure data-visual-kind="process" style="max-width:820px;margin:1.5rem auto;padding:1rem;border:1px solid #94a3b8;border-radius:14px;background:#fff;color:#0f172a;">
+  <div style="padding:0.85rem;border:2px solid #334155;border-radius:10px;text-align:center;overflow-wrap:anywhere;">
+    1. 실제 작업과 반드시 지켜야 할 품질 기준을 정한다.
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.5rem;line-height:2;">↓</div>
+  <div style="padding:0.85rem;border:1px solid #2563eb;border-radius:10px;background:#eff6ff;text-align:center;overflow-wrap:anywhere;">
+    2. 비용·속도·표준 점수로 저비용 후보를 고른다.
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.5rem;line-height:2;">↓</div>
+  <div style="padding:0.85rem;border:1px solid #7c3aed;border-radius:10px;background:#f5f3ff;text-align:center;overflow-wrap:anywhere;">
+    3. 실제 결과에서 기능·오류·조작감·디자인을 확인한다.
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:1.5rem;line-height:2;">↓</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:0.8rem;">
+    <div style="padding:0.85rem;border:2px solid #166534;border-radius:10px;background:#f0fdf4;overflow-wrap:anywhere;">
+      <strong>필수 기준 충족</strong><br>
+      저비용 후보를 유지한다.
+    </div>
+    <div style="padding:0.85rem;border:2px solid #9f1239;border-radius:10px;background:#fff1f2;overflow-wrap:anywhere;">
+      <strong>필수 기준 미달</strong><br>
+      더 높은 품질의 후보를 검토한다.
+    </div>
+  </div>
+  <figcaption style="margin-top:0.9rem;color:#334155;font-size:0.95rem;">
+    영상의 사례를 바탕으로 재구성한 작업별 모델 선택 과정
+  </figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 1번부터 아래로 진행한다. 마지막 두 상자는 선택의 분기다. 비용이 싸다는 이유만으로 유지하거나, 비싸다는 이유만으로 올리는 것이 아니라 미리 정한 필수 기준의 충족 여부로 판단한다. 이 과정은 영상 사례에서 도출한 편집 해석이며, 화자가 제시한 공식 절차는 아니다.</p>
+<h3>이 비교를 그대로 일반화하면 안 되는 이유</h3>
+<p>이 영상은 다양한 실제 결과물을 보여준다는 장점이 있지만, 한 제작자의 프롬프트와 평가에 근거한다. 재미와 디자인 평가는 특히 화자의 취향을 포함한다. 프롬프트 전문, 채점표, 반복 실행 횟수, 실패 사례 전체가 제공된 전사에는 나타나지 않으므로 모든 코딩 작업의 보편적인 우열로 확대할 수 없다.</p>
+<p>또한 전사 안에는 확인이 필요한 충돌과 조건 차이가 있다.</p>
+<ul>
+<li>화자는 두 모델이 <strong>같은 도구</strong>를 썼다고 말하면서도, 각자의 코딩 실행 환경으로 Terra는 Codex, Opus는 Claude Code를 썼다고 설명한다. 공통 도구와 서로 다른 실행 환경의 정확한 범위가 불명확하다.</li>
+<li>벤치마크를 “<strong>a couple</strong>” 살펴보겠다고 했지만 실제로는 <strong>Agent’s Last Exam v1, 비전 평가, 사실 오류율의 세 항목</strong>을 다룬다. 통상 두 개를 가리키는 표현과 실제 열거 개수가 맞지 않는다.</li>
+<li>Agent’s Last Exam 그래프의 비용축이 <strong>8달러까지</strong>라고 설명한 뒤 Opus 5.5 지점을 <strong>약 9달러</strong>라고 말한다. 축 범위와 읽어 낸 값이 충돌한다.</li>
+<li>제작 사례에서는 비용이 Opus의 <strong>12분의 1 미만</strong>이라고 했지만 벤치마크에서는 <strong>9분의 1 또는 약 11%</strong>라고 말한다. 서로 다른 작업과 평가 조건이므로 같은 비용비율로 합치면 안 된다.</li>
+<li>비전 평가에서는 Terra를 시각·3D 관련 작업에 추천하지만, 직접 만든 고난도 3D 디자인 사례에서는 Opus가 크게 앞섰다고 평가한다. 이미지 이해와 3D 결과물 생성은 다른 작업일 수 있으나, 전사만으로 정확한 평가 범위를 확정할 수 없다.</li>
+<li>레이싱 게임 이름을 화자가 <strong>Neon Racing 또는 Neon Drift</strong>라고 부르므로 정확한 이름이 하나로 확정되지 않는다.</li>
+</ul>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>모델은 전체 순위가 아니라 <strong>내 작업의 필수 품질을 충족하는지</strong>로 선택해야 한다.</li>
+<li>비용·속도·벤치마크가 좋은 모델도 재미, 조작감, 복잡한 디자인에서는 더 비싼 모델보다 부족할 수 있다.</li>
+<li>벤치마크는 후보를 좁히는 자료이고, 최종 판단에는 같은 실제 작업으로 만든 결과물 평가가 필요하다.</li>
+<li>이 영상의 수치와 평가는 한 제작자의 조건에 따른 주장이고, 수량·축 범위·비교 조건에 확인되지 않은 충돌이 있다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>비용이 크게 다른 두 AI 모델 중에서, 내 작업에 맞는 모델을 어떻게 선택해야 할까?</strong></p>
+</blockquote>
+<ul>
+<li>비용 대비 점수와 실제 사용 품질은 왜 따로 봐야 하는가?</li>
+<li>저비용 모델에서 고품질 모델로 바꿔야 할 기준은 무엇인가?</li>
+<li>이 영상의 결론을 일반화하기 전에 어떤 충돌과 조건을 확인해야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>같은 요청으로 두 레이싱 게임을 만들었다. 한 게임은 더 싸고 빠르게 완성됐지만 너무 쉽게 이기고 설정과 조작이 어색했다. 다른 게임은 더 비쌌지만 조작이 자연스럽고 화자가 실제로 플레이하고 싶다고 느꼈다. 이 장면은 “실행된다”와 “쓸 가치가 있다”가 다를 수 있음을 보여준다.</p>
+<p><code>"낮은 비용과 높은 벤치마크만으로 모델을 고른다"</code> <strong>문제</strong><br>
+→ <code>"실제 작업의 기능·오류·사용 경험을 필수 기준으로 확인한다"</code> <strong>작동 방식</strong><br>
+→ <code>"기준을 충족하는 가장 효율적인 모델을 작업별로 선택한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">초안 담당자와 전문 제작자</div>
+<p>빠르고 저렴한 담당자가 대부분의 초안을 충분히 처리하고, 복잡한 디자인이나 높은 완성도가 꼭 필요한 일만 전문 제작자에게 넘기는 것과 닮았다. 중요한 것은 직급이나 단가가 아니라 각 작업의 합격 기준이다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> AI 모델은 사람처럼 고정된 숙련도와 책임을 가진 존재가 아니다. 프롬프트, 도구, 실행 환경, 추론 설정에 따라 같은 모델의 결과도 달라질 수 있으므로 사람의 임금이나 경력과 일대일로 대응하면 안 된다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>작업 기준 선택</strong></td>
+<td>내 일에 충분한 모델 고르기</td>
+<td>실제 작업량과 필수 품질 기준을 중심으로 후보를 평가하는 workload 기반 선택</td>
+<td>모든 작업에 통하는 모델 순위가 있다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>비용·품질 절충</strong></td>
+<td>더 싸게 얻는 대신 무엇을 포기하는지 보기</td>
+<td>비용, 속도, 점수, 체감 품질 사이의 trade-off</td>
+<td>비용이 10분의 1이면 품질도 10분의 1이라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>실사용 평가</strong></td>
+<td>직접 만들어 보고 써 보기</td>
+<td>실제 산출물의 기능·오류·사용 경험을 확인하는 hands-on evaluation</td>
+<td>한 번 실행됐으면 품질도 검증됐다고 보는 것</td>
+</tr>
+<tr>
+<td><strong>파레토 전선</strong></td>
+<td>더 싸고 더 좋은 대안이 동시에 없는 경계</td>
+<td>한 지표를 개선하려면 다른 지표의 희생이 필요한 비지배 해의 경계</td>
+<td>그래프에서 가장 위에 있는 모델이 무조건 최선이라는 뜻</td>
+</tr>
+<tr>
+<td><strong>벤치마크</strong></td>
+<td>같은 시험지로 비교하기</td>
+<td>정해진 조건과 채점 방식으로 모델 성능을 비교하는 표준화 평가</td>
+<td>실제 사용감과 모든 작업 품질을 그대로 예측한다고 믿는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>Terra가 비용과 속도에서 유리해도 레이싱 게임과 복잡한 시계 페이지에서는 Opus가 더 높게 평가된 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>시간·토큰·달러 비용은 제작 효율을 나타내지만, 게임의 재미와 조작감, 3D 디자인의 완성도까지 자동으로 측정하지는 않는다. 화자의 사례에서는 작업이 복잡해지고 정성적인 품질이 중요해질수록 Opus의 결과가 더 높게 평가됐다. 다만 이는 해당 프롬프트와 화자의 평가에 따른 결과다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>벤치마크에서 비용 대비 점수가 좋은 것과 실제 작업에서 더 좋은 모델인 것은 어떻게 다른가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>벤치마크는 동일한 규칙으로 모델을 비교해 후보를 좁히는 데 유용하다. 실제 작업 평가는 사용자가 필요한 기능, 오류 수준, 디자인, 조작감까지 확인한다. 전자는 비교 가능한 지도이고, 후자는 특정 작업이 실제 합격 기준을 충족하는지 보는 현장 점검이다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 자동화나 코딩 작업에 두 모델을 시험한다면 무엇을 먼저 정해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>먼저 반드시 작동해야 하는 기능, 허용할 오류, 검수 시간, 사용자 경험처럼 작업의 필수 기준을 정한다. 그다음 같은 입력과 가능한 한 같은 평가 조건으로 후보를 실행하고, 비용뿐 아니라 필수 기준 통과 여부를 비교한다. 저비용 후보가 기준을 충족하면 유지하고, 미달한 항목의 가치가 추가 비용보다 클 때만 고품질 후보를 검토한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 가격 차이와 가치 차이는 비례하지 않는다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 제작 실험에서 Terra의 평균 시간이 23분 43초, Opus의 평균 시간이 43분 52초였고 출력 토큰은 약 3분의 1, 총 달러 사용량은 12분의 1 미만이라고 주장했다. 동시에 Storm Watch의 Terra 결과가 Opus 품질의 12분의 1은 아니라고 평가했다.</li>
+<li><strong>[해석]</strong> 저비용 모델이 필수 기준을 충족하는 작업에서는 가격 차이보다 큰 효율을 얻을 수 있다. 품질을 하나의 전체 점수로 보지 말고 작업별 합격선으로 나눠야 한다.</li>
+<li><strong>[경계]</strong> 제작 횟수, 프롬프트 전문, 개별 비용 계산식이 전사에 없다. 12분의 1 미만이라는 제작 비용과 벤치마크의 9분의 1 또는 11% 비용은 조건이 다르므로 하나의 일반 비율로 합치면 안 된다.</li>
+</ul>
+<h3>2. 실제 사용 품질은 표준 점수 밖에서 갈린다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 Terra가 비용 대비 벤치마크 점수에서 유리하다고 설명했지만, 레이싱 게임의 재미와 Meridian의 복잡한 3D 디자인에서는 Opus가 훨씬 낫다고 평가했다.</li>
+<li><strong>[해석]</strong> 벤치마크가 우수해도 사용자가 실제로 원하는 경험을 충족한다고 단정할 수 없다. 후보 선정에는 표준 점수를 쓰고, 최종 선택에는 실제 작업 평가를 더해야 한다.</li>
+<li><strong>[경계]</strong> 재미와 디자인 평가는 주관적이다. 화자는 비전·3D 관련 작업에 Terra를 추천하면서도 고난도 3D 제작 사례에서는 Opus가 우세하다고 말한다. 이미지 이해 평가와 3D 생성 작업의 차이가 전사에서 충분히 분리되지 않았다.</li>
+</ul>
+<h3>3. 비교 조건과 수량 표현부터 검증해야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 같은 프롬프트와 같은 도구 조건이라고 말했지만 Codex와 Claude Code라는 서로 다른 코딩 실행 환경을 사용했다고 설명했다. 또 벤치마크를 “a couple”이라고 수량화한 뒤 Agent’s Last Exam v1, 비전 평가, 사실 오류율의 세 평가를 다뤘다.</li>
+<li><strong>[해석]</strong> 모델 비교를 재현하려면 결과보다 먼저 프롬프트, 도구, 실행 환경, 평가 항목의 개수를 명확하게 고정해야 한다.</li>
+<li><strong>[경계]</strong> “같은 도구”가 공통 도구 접근권을 뜻하는지 전체 실행 환경을 뜻하는지 확인되지 않는다. “a couple”과 실제 세 항목의 열거 개수가 불일치한다. Agent’s Last Exam 비용축도 8달러까지라고 설명한 뒤 Opus를 약 9달러로 읽어 수치가 충돌한다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 표준 점수와 실제 게임·웹사이트 사용 경험이 다른 결과를 줄 수 있음을 보여준다.</li>
+<li><strong>통찰:</strong> 학습도 시험 점수만으로 끝내지 않고, 보지 않은 사례를 설명하거나 실제 과제를 수행할 수 있는지 확인해야 한다. 다만 모델 평가와 사람의 학습 평가는 동일하지 않다.</li>
+<li><strong>질문/행동:</strong> 학습자가 개념을 외웠는지가 아니라 새로운 사례의 선택 기준을 자기 말로 설명하는지 확인한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 더 저렴한 자원이 필요한 품질을 충족하면 비용과 대기 시간을 줄일 수 있지만, 품질 미달은 검수·재작업·사용자 경험의 손실을 만들 수 있다.</li>
+<li><strong>통찰:</strong> APOM·이커머스·물류에 적용할 수 있는지는 아직 검증되지 않았다. 적용한다면 모든 업무에 한 모델을 고정하지 말고, 업무별 필수 기준과 실패 비용을 먼저 비교하는 가설로 다뤄야 한다.</li>
+<li><strong>질문/행동:</strong> 어떤 가상 업무에서 저비용 후보의 절감액보다 재작업 위험이 더 커지는지 시험한다.</li>
+</ul>
+<h3>마케터 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> “12분의 1 미만의 비용”은 강한 프레이밍이지만, 레이싱 게임과 Meridian 사례는 가격만으로 전달되지 않는 품질 차이를 보여준다.</li>
+<li><strong>통찰:</strong> 카피에서 비용 수치와 결과 장면을 함께 보여주되, 한 제작자의 조건이라는 범위를 숨기지 않아야 한다. 주장과 시연은 증거 강도가 다르다.</li>
+<li><strong>질문/행동:</strong> 비용 절감 문구 옆에 동일 조건, 합격 기준, 실패 사례를 함께 공개할 수 있는지 묻는다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 같은 작업에서 모델의 제작 시간, 비용, 토큰, 기능, 오류, 사용 경험을 비교하는 문제는 자동화와 에이전트 선택에 직접 연결된다.</li>
+<li><strong>통찰:</strong> 모델 이름이나 전체 순위보다 실제 작업량과 병목을 기준으로 평가해야 한다. 정상 실행뿐 아니라 품질 미달, 재시도, 검수 시간도 판단에 포함할 필요가 있다.</li>
+<li><strong>질문/행동:</strong> 대표 작업에 사전 합격 기준을 만들고 저비용 후보가 그 기준을 통과하는지 먼저 시험한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"모델 가격이나 벤치마크만 보고 선택해 과잉 비용 또는 품질 미달이 생김"</code> <strong>문제</strong><br>
+→ <code>"필요한 품질을 더 적은 비용과 대기 시간으로 얻음"</code> <strong>수혜자: 모델을 사용하는 작업자와 결과물의 최종 사용자</strong><br>
+→ <code>"모델 비용·실행 시간·검수 노력·신뢰를 제공"</code> <strong>지불자 또는 자원 제공자: 운영 주체와 검수자</strong><br>
+→ <code>"사전에 정한 필수 기준을 통과한 결과의 비율"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 앞으로 검토할 대표 코딩 작업 5건을 저비용 후보와 고품질 후보에 같은 입력으로 실행하고, 사전에 정한 필수 체크로 결과를 평가한다.</li>
+<li><strong>측정 1개:</strong> 저비용 후보 결과의 필수 체크 통과율</li>
+<li><strong>중단 기준 1개:</strong> 저비용 후보의 필수 체크 통과율이 80% 미만이면 해당 작업군으로 확대하지 않는다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>비교 조건과 효율</td>
+<td>같은 프롬프트 조건에서 Terra가 더 빠르고 적은 토큰과 비용을 사용했다고 주장</td>
+</tr>
+<tr>
+<td>2</td>
+<td>시뮬레이션과 게임</td>
+<td>단순한 전체 우열 없이 기능·취향·재미에 따라 평가가 갈림</td>
+</tr>
+<tr>
+<td>3</td>
+<td>복잡한 디자인</td>
+<td>레이싱 게임과 Meridian에서 Opus가 크게 앞섰다는 평가</td>
+</tr>
+<tr>
+<td>4</td>
+<td>컴퓨터 조작</td>
+<td>Terra가 Paint 앱을 빠르게 조작하는 사례와 화자의 기대</td>
+</tr>
+<tr>
+<td>5</td>
+<td>벤치마크</td>
+<td>비용 대비 점수, 비전, 사실 오류율을 해석하며 Terra의 효율을 강조</td>
+</tr>
+<tr>
+<td>6</td>
+<td>결론과 경계</td>
+<td>대부분의 일반 작업에는 Terra, 최고 수준 디자인에는 Opus라는 화자의 결론과 자료의 충돌</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 비교 조건과 제작 효율</h3>
+<p>화자는 GPT-6.1 Terra와 Claude Opus 5.5에 같은 프롬프트를 주고 같은 도구를 사용하게 했다고 설명한다. 각 모델은 최대 추론 강도로 실행됐으며 Terra는 Codex, Opus는 Claude Code를 사용했다. “같은 도구”라는 표현과 서로 다른 코딩 실행 환경의 범위는 전사만으로 구분되지 않는다.</p>
+<p>화자가 제시한 평균 제작 시간은 다음과 같다.</p>
+<ul>
+<li>GPT-6.1 Terra: 23분 43초</li>
+<li>Claude Opus 5.5: 43분 52초</li>
+<li>Terra의 총 출력 토큰: Opus의 약 3분의 1</li>
+<li>해당 제작 실험에서 Terra의 달러 사용량: Opus의 12분의 1 미만이라는 화자의 추정</li>
+</ul>
+<p>이 수치는 화자가 랜딩 페이지에서 제시한 결과이며, 반복 횟수와 계산 세부는 전사에 없다.</p>
+<h3>2. Storm Watch와 The Long Night</h3>
+<p>Storm Watch는 지구 위 폭풍과 예상 경로, 낮과 밤의 변화를 보여주는 시뮬레이션이다. 화자는 Terra의 지구본 디자인을 더 좋아했지만, Opus는 확대 범위와 소용돌이·효과 표현이 더 나아 보인다고 말했다. 최종적으로 기능의 종류가 달라 어느 쪽이 더 낫다고 말하기 어렵다고 평가했다.</p>
+<p>The Long Night는 배, 등대, 강풍과 거친 바다를 보여준다. Terra 결과의 물에는 격자무늬가 보였고, Opus도 매우 뛰어나지는 않았지만 화자는 조금 더 낫다고 봤다. 두 사례에서 화자는 Opus가 12배 더 좋지는 않다는 표현을 반복했다.</p>
+<h3>3. 마인크래프트, 레이싱 게임, Meridian</h3>
+<p>마인크래프트형 시험에서는 두 모델 모두 상당한 결과를 만들었다고 평가했다. 화자는 거의 모든 모델이 뛰어난 결과를 내므로 이 시험이 포화됐다고 주장했지만, 이를 뒷받침하는 전체 모델 자료는 전사에 없다.</p>
+<p>레이싱 게임의 이름은 Neon Racing 또는 Neon Drift로 불린다. Terra 게임은 조작과 설정이 어색하고 너무 쉽게 이길 수 있었다. Opus 게임은 더 자연스러운 상호작용과 부스트 기능을 제공했고, 화자는 실제로 플레이할 수 있을 만큼 재미있다고 평가했다.</p>
+<p>Meridian 시계 랜딩 페이지에서 Terra는 스크롤 애니메이션과 움직이는 기어를 만들었다. Opus 결과는 더 많은 구성요소, 높은 시각적 정밀도, 복잡한 3D 레이아웃과 색상 변경 기능을 보여줬다. 화자는 높은 수준의 3D 복잡성과 디자인에서는 Opus가 분명히 앞선다고 결론 내렸다.</p>
+<h3>4. 컴퓨터 조작 사례</h3>
+<p>영상은 Terra가 Paint 앱에서 Sam Altman의 이미지를 만드는 사례를 소개한다. 모델이 클릭하고 드래그하며 비교적 빠르게 작업하는 모습이다. 화자는 결과가 정확히 닮지는 않았지만 가깝다고 평가했다.</p>
+<p>전사에서는 Rohit이 이 사례를 게시한 사람으로 소개되며, Greg Brockman이 Terra의 컴퓨터 사용 속도가 사람의 비보조 사용보다 빠르게 느껴지는 질적 문턱을 넘었다고 말했다는 인용이 나온다. 화자는 대부분의 경우 이 평가에 동의하며, 컴퓨터 조작이 개선되면 지식 업무의 활용 가능성이 넓어진다고 주장한다. 이는 화자와 인용된 인물의 평가이며 독립적으로 검증된 결론은 아니다.</p>
+<h3>5. 세 가지로 열거된 벤치마크 설명</h3>
+<p>화자는 벤치마크를 “a couple” 살펴보겠다고 말하지만 실제 전사에서 다룬 항목은 다음 세 가지다.</p>
+<ol>
+<li>Agent’s Last Exam v1</li>
+<li>비전 평가</li>
+<li>사실 오류율</li>
+</ol>
+<p>통상 두 개를 뜻하는 “a couple”과 실제 세 항목의 열거가 일치하지 않는다.</p>
+<p>Agent’s Last Exam v1은 비용을 가로축, 점수를 세로축에 놓은 그래프로 설명된다. 화자는 가로축이 8달러까지라고 말한 뒤 Opus 5.5를 약 9달러 지점으로 설명해 축 범위와 값이 충돌한다.</p>
+<p>화자의 대략적인 그래프 해석은 다음과 같다.</p>
+<ul>
+<li>GPT-5.6 Terra: 약 4달러 비용에 약 50% 점수</li>
+<li>GPT-6.1 Terra의 낮은 설정: 약 10센트에 50%를 넘는 점수</li>
+<li>GPT-6.1 Terra의 높은 설정: 약 1.25달러에 약 60%</li>
+<li>Opus 5.5: 약 9달러이며 Terra보다 몇 퍼센트포인트 높은 점수</li>
+<li>화자의 해석: Terra가 Opus 성능의 약 97%를 9분의 1 또는 약 11% 비용으로 제공</li>
+</ul>
+<p>마지막 요약에서는 이 성능 비율을 약 95~97%라고 다시 표현한다. 97%는 이 범위에 포함되지만, 모두 화자가 그래프를 대략 읽어 산출한 표현이다.</p>
+<p>비전 평가에서는 Terra가 비용 대비 좋은 위치에 있다고 설명한다. 화자는 이미지 입력이나 3D 디자인 조정에 추천하지만, 앞선 제작 사례의 복잡한 3D 결과에서는 Opus가 크게 앞섰다고 평가했다. 평가 대상이 이미지 이해인지 결과물 생성인지 구체적인 조건을 분리해 확인해야 한다.</p>
+<p>사실 오류율 그래프는 낮을수록 좋다고 설명한다. 화자는 표시된 모델 중 Terra가 가장 좋다고 보고 일상 대화, 초기 조사, 보고서 초안에 추천한다. 전사에는 평가 표본과 사실 오류의 판정 방식이 나오지 않는다.</p>
+<h3>6. 화자의 결론과 남는 경계</h3>
+<p>화자는 컴퓨터 조작과 대부분의 일반적인 작업에 Terra를 사용하면 Codex 예산을 더 오래 활용할 수 있다고 결론 내린다. 반면 최고 수준의 디자인 품질에서는 Opus 5.5가 크게 앞선다고 말한다.</p>
+<p>이 결론을 적용할 때 남는 경계는 다음과 같다.</p>
+<ul>
+<li>같은 프롬프트 외에 도구 접근권과 실행 환경이 정확히 같았는지 불명확하다.</li>
+<li>제작 실험의 12분의 1 미만 비용과 벤치마크의 9분의 1 비용은 서로 다른 조건이다.</li>
+<li>재미와 디자인 평가는 화자의 주관을 포함한다.</li>
+<li>“a couple”이라는 표현과 실제 세 벤치마크 항목의 개수가 맞지 않는다.</li>
+<li>그래프 비용축의 8달러 상한 설명과 Opus의 약 9달러 값이 충돌한다.</li>
+<li>메타데이터의 provenance.creator는 비어 있지만 전사 도입부는 Nick Saraf를 비교 수행자로 지목한다.</li>
+<li>META의 provenance.affiliation은 <code>Openai</code>로 기재됐으나, provenance.note는 원작자 출처를 화자 이름과 SNS를 기준으로 추정했고 원본 영상 링크를 확인하지 못했다고 밝힌다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · [한글자막] 바이브 코딩, 이렇게 싸도 될까? GPT-6.1 Terra vs Opus 5.5 · https://www.youtube.com/watch?v=FwJ6Ae_-u4M · 전사: 제공된 SOURCE_TRANSCRIPT(방식 미기재)</p>
+<p>원작자 표기는 전사 도입부의 Nick Saraf를 보존했다. 다만 META의 provenance.creator는 비어 있으며, provenance.note는 화자 이름과 SNS를 기준으로 추정한 출처이고 원본 영상 링크를 확인하지 못했다고 밝힌다. 소속 <code>Openai</code> 역시 META의 provenance.affiliation 원문을 보존한 값으로, 확정된 소속으로 검증되지 않았다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>저렴한 AI 모델로 쓸 만한 게임과 웹사이트를 만들 수 있을까요? Nick Saraf가 GPT-6.1 Terra와 Claude Opus 5.5에 같은 프롬프트를 주고 비교했습니다. Terra는 더 빠르고 저렴했지만, 게임의 재미와 복잡한 디자인에서는 결과가 갈렸습니다.</p>
+<p>제가 여기서 보여드릴 것은 다양한 작업에서 GPT-6.1 Terra의 품질과 Claude Opus 5.5의 품질을 비교하는 랜딩 페이지입니다. 여기서 제가 설정한 조건은 두 모델이 동일한 프롬프트를 받아야 한다는 것이었습니다.</p>
+<p>또한 동일한 도구를 사용해야 했고, 각자 최대 노력(max effort) 설정으로 자체 코딩 하네스(coding harness)를 사용할 수 있었습니다. 즉 GPT-6.1 Terra는 Codex를 사용하고, Claude Opus 5.5는 Claude Code를 사용하며, 둘은 실제로 동시에 실행됩니다. 여기서 제가 하고 싶은 것은 그 결과가 실제로 어떤 모습이었는지 보여드리는 것입니다.</p>
+<p>보시다시피 GPT-6.1 Terra는 평균 23분 43초가 걸린 반면, Claude Opus 5.5는 43분 52초가 걸렸습니다. 여기서 가장 먼저 보이는 것은 Terra의 평균 빌드 시간이 훨씬 빠르다는 점입니다. Opus 5.5의 절반 정도입니다. 또한 총 출력 토큰 수는 3분의 1이었습니다.</p>
+<p>그러니까 훨씬 더 빠르게 작업을 끝냈을 뿐만 아니라, 토큰도 약 3분의 1만 사용했습니다. GPT-6.1 Terra의 비용 역시 Opus 5.5의 일부에 불과하다는 점을 감안하면, 총 비용은 아마 12분의 1도 안 될 겁니다.</p>
+<p>먼저 보여드리고 싶은 것은 Storm Watch입니다. 시간에 따라 지구에서 발생하고 있는 다양한 폭풍을 실시간으로 분석해 보여주는 페이지입니다. 태양이 지구 주위를 움직이면서—아니면 지구가 태양 주위를 움직이면서—햇빛과 어둠이 진행되는 것도 볼 수 있습니다. 내가 뭐지, 빌어먹을 니콜라우스 코페르니쿠스인가?</p>
+<p>여러 폭풍을 클릭하면 예상 경로와 폭풍에 포함된 정보도 보여줍니다. 전체적으로 정말 아름다운 시뮬레이션입니다. 아무리 깊이 들어가도 되는 건 아니지만, 상당히 깊이까지 살펴볼 수 있습니다. 솔직히 이 정도로 아름다운 것은 거의 본 적이 없습니다. 뉴스 일기예보라면 언제든 이걸 보겠습니다.</p>
+<p>이제 Opus 5.5와 비교해 보죠. 솔직히 GPT-6.1 Terra의 지구본이 더 마음에 듭니다. 디자인도 GPT-6.1 Terra 쪽이 더 좋습니다. 하지만 아주 깊이 확대할 수 있다는 점은 확실히 볼 만합니다. 전체 소용돌이와 효과의 수를 조금 더 잘 처리하는 것처럼 보이기도 합니다.</p>
+<p>꽤 좋습니다. 원한다면 요소들을 끄고 아름다운 지구만 볼 수도 있습니다. 화면을 움직이면서 이 시뮬레이션을 고품질로 감상할 수도 있습니다.</p>
+<p>어느 쪽이 더 낫다고 말하기는 어렵습니다. 여기서는 서로 조금 다른 수준의 기능을 제공하는 것 같습니다. 하지만 GPT-6.1 Terra의 비용이 이쪽의 12분의 1이라고 해도, 품질이 12분의 1인 것은 절대 아닙니다.</p>
+<p>The Long Night라는 시뮬레이션은 어떨까요? 여기 배와 등대, 그리고 강한 폭풍이 있습니다. 시네마틱 카메라로 전환해 보겠습니다.</p>
+<p>그다음 바다의 거친 정도를 바꿔 보죠. 오늘은 꽤 잔잔해 보입니다. 그리고 실제 허리케인이 몰아치고 있습니다. 정말 멋집니다. 물 표현으로 상을 받기는 어려울 것 같습니다. 분명히 격자 패턴이 보이기 때문이죠. 그래도 모델이 애초에 이런 것을 만들 수 있다는 사실 자체가 상당히 인상적이라고 생각합니다.</p>
+<p>이걸 Opus 5.5와 비교해 보면, 이쪽도 그렇게 잘 만들지는 못했다는 것을 알 수 있습니다. 아마 이건 해당 프롬프트가 허용한 범위로 제한된 것 같습니다. 배 위로 가서 장면을 시네마틱하게 만들 수도 있습니다. 조명도 원하는 대로 조절할 수 있습니다. 네, 확실히 조금 더 나아 보이지만, 역시 12배 더 좋은 것은 아닙니다.</p>
+<p>의무적으로 마인크래프트 테스트도 해봐야 합니다. 지금 보여드리는 것처럼 꽤 괜찮습니다. 절대 끔찍하지 않습니다. 이 강아지를 거의 마음대로 원하는 형태로 지을 수 있다는 점이 마음에 듭니다. 꽤 재미있네요.</p>
+<p>죽은 말을 계속 때리지는 않겠습니다. 이쪽은 Opus 5.5인데, 횃불 같은 것을 잔뜩 놓을 수 있는 것 같습니다. 제 생각에는 저게 횃불인 것 같네요. 어우.</p>
+<p>저 위에 서면 어떻게 될까요? 좀 무섭네요. 이게 의도된 기능인지는 잘 모르겠습니다. 그래도 마인크래프트 벤치마크는 이제 거의 포화 상태라고 할 수 있을 것 같습니다. 사실상 모든 모델이 정말 눈에 띄는 결과를 낼 수 있으니까요.</p>
+<p>이건 Neon Racing, 또는 Neon Drift입니다. Opus 5.5와 Terra 6.1에게 각각 마리오 카트 스타일의 게임을 만들게 했습니다. UX가 조금 이상하다는 점은 말해두겠습니다. 하지만 스페이스 키를 누르고 있으면 꽤 좋아집니다.</p>
+<p>그리고 네, 여기서는 확실히 이기기 어려운 게임이 아닙니다. 보세요, 제가 이미 다른 사람들을 완전히 박살 내고 있습니다. 표현이 좀 거칠었네요. 멋지게 드리프트도 하고 있습니다. 이런 게임은 잘 생각해서 만든 것 같지는 않습니다. 왜 제가 빌어먹을 로켓선을 타고 있고, 그 로켓선이 도로 위를 날아다니는 걸까요?</p>
+<p>이걸 Opus 5.5와 비교해 보죠. 솔직히 말하면 Opus 5.5가 훨씬 더 잘 만들었다고 생각합니다. 상호작용도 훨씬 좋습니다. 부스트도 사용할 수 있습니다. 와, 이건 정말 재미있네요. 여기서 스페이스를 누를 때마다 조금씩 부스트되는 것 같습니다.</p>
+<p>그리고 저도 실제로 이기고 있지는 않습니다. 그러니 품질이 12배라고 말할 수는 없지만, 게임은 사실 정량적으로 평가하는 게 아니잖아요? 정성적인 평가에 가깝습니다. 이쪽이 훨씬 비싸기는 하지만, 이 게임은 실제로 플레이할 것 같습니다. 그런 점에서는 꽤 매력적입니다. Terra 게임은 아마 절대 플레이하지 않을 것 같습니다.</p>
+<p>전체적으로 무슨 일이 일어나고 있는지 훨씬 더 직관적으로 이해할 수 있어서 좋습니다. 하지만 랜딩 페이지도 빼놓을 수 없죠. 이건 GPT-6.1 Terra가 만든 Meridian 버전입니다. 시계 랜딩 페이지입니다. 아래로 스크롤해 보겠습니다. 여기 있는 모든 에셋은 GPT-6.1 Terra가 전부 디자인했습니다. 멋진 3D 요소는 없습니다. 전부 GPT-6.1 Terra가 만든 것입니다.</p>
+<p>전체적으로 스크롤 애니메이션은 4년 전이라면 인상적이었을 겁니다. 이제는 조금 진부해졌죠. 그래도 이 기어들이 실제로 시계를 돌리는 모습은 여전히 꽤 멋집니다. Opus 5.5와 비교해 보겠습니다. 방금 로드했는데, 오른쪽에 시계가 보이지 않습니다. 의도된 것인지, 뭔가 고장 난 것인지는 모르겠습니다.</p>
+<p>하지만 이쪽은 품질이 훨씬 높습니다. 비교가 안 될 정도입니다. 와! 물론 어떤 식으로든 디자인된 에셋, SVG 같은 것일 겁니다. 하지만 세상에, 이 3D 레이아웃이 훨씬 더 낫지 않나요? 구성 요소도 훨씬 많을 뿐 아니라 시각적 충실도(visual fidelity)도 훨씬 높습니다.</p>
+<p>원한다면 색상도 바꿀 수 있는 것 같습니다. 어우, 좋네요. Opus가 이 사이트로 정말 제대로 해냈습니다. Terra는 이런 것과는 비교조차 할 수 없습니다.</p>
+<p>이걸 통해 무엇을 알 수 있었을까요? GPT-6.1 Terra는 어느 정도 복잡성까지는 훌륭한 것 같습니다. 특히 3D 복잡성이 높아지면 Opus 5.5가 Terra를 완전히 압도했습니다. 이 시연의 목적은 1D 작업, 2D 작업, 그리고 궁극적으로 3D 작업과 게임 디자인을 보여드리는 것이었습니다. 그리고 이 모든 영역에서 높은 수준으로 갈수록 Opus 5.5가 최고라는 점은 분명하다고 생각합니다.</p>
+<p>하지만 GPT-6.1 Terra도 여전히 상당히 쓸모가 있습니다. 특히 비용과 작업을 처리하는 속도를 고려하면 컴퓨터 사용(computer use) 분야에서 그렇습니다. 주로 컴퓨터 사용에 Terra를 활용한 정말 멋진 사례가 많이 있는데, 제 예상과도 잘 맞습니다.</p>
+<p>이 영상은 전혀 빨리 감기한 것이 아닙니다. 기본적으로 Terra에게 그림판(Paint) 앱에서 샘 올트먼의 이미지를 만들라고 했습니다. 실제로 고성능 모드(high mode)로 실행되고 있고, 꽤 잘하고 있는 것을 볼 수 있습니다. 클릭하고, 드래그하고, 이런 작업을 상당히 빠르게 수행하고 있습니다.</p>
+<p>조금 건너뛰어 보겠습니다. 꼭 샘 올트먼과 정확히 닮아 보이지는 않을 수도 있지만, 꽤 비슷하다고 생각합니다. 이건 OpenAI 창립자 중 한 명인 Rohit이 만든 것입니다. 여기 Greg Brockman은 이렇게 말합니다. “Terra를 통한 컴퓨터 사용은 질적인 임계점을 넘었습니다. 도움 없이 제가 할 수 있는 것보다 컴퓨터를 더 빠르게 사용하는 것처럼 느껴집니다.” 대부분의 경우 저도 그 말에 동의합니다.</p>
+<p>네, 샘 올트먼과 동료들이 뭔가 제대로 해내고 있다고 말해두죠. 정말 많은 일을 잘하지만, 우리는 컴퓨터 사용에 특히 큰 기대를 걸고 있습니다. 저도 컴퓨터 사용에 기대가 큽니다. 솔직히 많은 모델에서 다소 불편했던 부분 중 하나라고 생각합니다. 컴퓨터 사용이 사실상 해결되면 지식 노동(knowledge work) 애플리케이션이 많이 열리게 됩니다.</p>
+<p>여기 멋진 GPT-6.1 Terra 랜딩 페이지가 있습니다. 이제 벤치마크 몇 가지를 살펴보겠습니다. 요즘은 벤치마크 자체가 그다지 가치 있거나 중요하지 않다는 점을 알아두셨으면 합니다. 실제로 모델을 직접 사용했을 때 어떤 느낌인지 알아내는 것은 거의 불가능합니다. 하지만 표준화된 평가에서 다른 모델과 비교해 어느 정도 순위에 있는지 이해하기 위해서는, 적어도 큰 틀에서 이런 자료를 살펴보는 것이 어느 정도 유익하고 가치가 있습니다.</p>
+<p>먼저 여기 Agent's Last Exam v1 그래프부터 보겠습니다. 이런 그래프를 처음 보시는 분들을 위해 설명하자면, 비용과 점수를 비교한 그래프입니다. 모델이 여러분이 요청한 작업을 수행할 때 달러당 얼마나 효율적인지를 보여줍니다.</p>
+<p>보시다시피 여기서 x축은 비용입니다. 오른쪽으로 갈수록 비용이 훨씬 더 높아집니다. 최대 8달러까지 올라갑니다. y축은 점수입니다. 표준화된 벤치마크인 Agent's Last Exam 벤치마크에서 점수가 35%부터 시작해 최대 65%까지 올라갑니다. 논리적으로 생각하면 AI 에이전트가 원하는 위치는 이 그래프의 왼쪽 위 구석입니다. 제가 표시한 초록색 선은 지우겠습니다. 그러면 보시기 편할 겁니다. 당연히 왼쪽 위에 있을수록 더 저렴하면서도 점수는 더 높습니다.</p>
+<p>가장 먼저 바로 보이는 것은 여기 있는 이전 버전의 GPT-5.6 Terra가 점수와 비용 양쪽 모두에서 그다지 좋지 않았다는 점입니다. 점수가 아마 50% 정도인 작업에 비용이 최대 4달러까지 들었습니다. GPT-6.1 Terra는 정확도 또는 점수와 비용이 완벽하게 조합된 지점인 이른바 파레토 프런티어(Pareto frontier)를 사실상 이끌고 있습니다. 상당히 높은 위치에 있습니다.</p>
+<p>정말 흥미로운 점은 가장 낮은 사고 모드와 가장 높은 사고 모드 사이에 비용 차이가 그리 크지 않다는 것입니다. 여기서 성능은 분명히 향상되지만 비용은 거의 증가하지 않는 것을 볼 수 있습니다. 비용은 약 10센트에서 50%가 넘는 점수로 올라가고, 약 10센트에서 55%가 넘는 점수로 올라간 뒤, 약 1.25달러에서 60% 정도의 점수를 기록합니다.</p>
+<p>이건 정말 좋습니다. 무슨 뜻인지 아직 잘 모르시겠다면, 이 모델은 실제로 대부분의 작업에서 GPT-6.1 Sol보다 뛰어나다는 뜻입니다. 물론 최대 모드의 GPT-6.1 Sol이 Terra의 낮은 모드보다 더 나은 경우도 있습니다. 하지만 Terra에서 가장 높거나 최대 수준의 사고 변형을 보면, 적어도 OpenAI 모델 중에서는 사실상 이 그래프의 최상단에 있습니다.</p>
+<p>이 모델이 밀리는 유일한 경우는 Opus 5.5입니다. 물론 점수를 몇 퍼센트포인트 더 얻을 수는 있겠지만, 그 대가가 얼마인가요? 그렇죠. Terra는 약 1달러인 반면, 여기서 Opus 5.5는 약 9달러입니다. 즉, 비용의 9분의 1, 또는 비용의 약 11%만으로 성능의 약 97%를 얻는다는 뜻입니다.</p>
+<p>그리고 많은 사람이 기꺼이 선택할 만한 절충안입니다. 비전(vision) 성능도 정말 뛰어납니다. 여기서도 GPT-6.1 Terra는 전반적으로 파레토 프런티어(Pareto frontier)의 왼쪽 위에 위치합니다. 즉, 특히 이전 모델인 GPT-5.6 Terra와 비교하면 시각과 관련된 모든 작업에 사용하기에 훌륭한 모델이라는 뜻입니다. 입력할 이미지가 있거나 3D 디자인 등을 서로 조율해야 한다면, 바로 이 모델을 사용하고 싶을 것입니다.</p>
+<p>마지막으로 사실 오류율입니다. 이 그래프를 보지 못하셨다면, 여기서도 비용은 x축에 있으며 0부터 대략 60센트까지 올라갑니다. 사실 오류가 하나라도 있는 답변은 y축에 표시됩니다. 지난 그래프와 달리 여기서는 낮을수록 더 좋습니다. 모델의 점수가 낮을수록 출력 하나당 사실 오류가 적다는 뜻입니다.</p>
+<p>그리고 현재 사실 보고 능력에서는 Terra가 모든 모델 중 가장 뛰어난 성능을 보인다는 것을 확인할 수 있습니다. 이는 특히 초기 조사와 보고서 초안 작성에서 대부분의 대화에 일상적으로 사용할 모델로 Terra를 선택하고 싶다는 뜻입니다. 결론적으로 저는 컴퓨터 사용(computer use)과 90백분위수 수준의 애플리케이션 대부분에 GPT-6.1 Terra를 사용할 것입니다. Codex 예산을 훨씬 더 효율적으로 활용할 수 있고, 전반적으로 상당히 탄탄한 모델입니다.</p>
+<p>다만 품질의 최상위 수준에서는, 특히 일부 디자인 작업에서 Claude Opus 5.5와 비교하면 상대가 되지 않습니다. 어쩔 수 없는 부분입니다. 지난 예시의 에이전트에서 보았듯이, 비용의 11%만으로 Claude Opus 5.5 성능의 약 95~97%를 얻는 식의 절충을 하게 될 것입니다. 여러분, 이것이 바로 레버리지(leverage)입니다.</p>
+</details>
+</body></html>

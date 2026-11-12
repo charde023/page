@@ -1,0 +1,423 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>[한글자막] 세상에서 가장 짧은 클로드 코드 강의 | 설치부터 실전 활용까지 (자막·마무리 수정)</title>
+<meta name="description" content="Claude Code의 폴더·작업 모드·모델·세션·기억·스킬·커넥터·서브에이전트를 하나의 작업 흐름으로 이해한다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>[한글자막] 세상에서 가장 짧은 클로드 코드 강의 | 설치부터 실전 활용까지 (자막·마무리 수정)</h1>
+<div class="meta">업로드 2026-11-04 · 4.8분 · <a href="https://youtu.be/uOcO1QNmJOA" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<h3>큰 그림: 채팅이 아니라 작업 환경을 맡기는 과정</h3>
+<p>이 영상은 Claude Code를 처음 여는 단계부터 반복 작업과 병렬 작업에 활용하는 단계까지 빠르게 훑는다. 영상의 설명에서 일반 채팅은 대화가 중심이지만, Claude Code는 사용자가 선택한 폴더 안의 파일을 만들거나 바꿀 수 있다. 따라서 핵심은 좋은 문장을 한 번 입력하는 데서 끝나지 않는다. <strong>어디에서 작업하게 할지, 얼마나 자율적으로 움직이게 할지, 무엇을 다음 세션에도 남길지, 잘된 절차를 어떻게 재사용할지</strong>를 함께 정해야 한다.</p>
+<p>화자는 빈 폴더를 만든 뒤 원하는 결과를 일상어로 요청하라고 권한다. 예를 들어 청소 회사의 예약 양식이 있는 간단한 웹사이트를 만들어 달라고 말할 수 있다. 작업이 잘못된 방향으로 가면 중지 버튼을 누르거나 수정 지시를 보낼 수 있다고 설명한다.</p>
+<figure data-visual-kind="process" style="max-width:760px;margin:1.5rem auto;padding:1rem;border:1px solid #94a3b8;border-radius:12px;background:#f8fafc;">
+  <div role="img" aria-label="Claude Code 작업 흐름: 작업 공간 선택, 결과 요청, 자율성 조절, 맥락 관리, 재사용과 확장" style="display:flex;flex-direction:column;align-items:stretch;gap:0.45rem;">
+    <div style="padding:0.8rem;border:2px solid #1d4ed8;border-radius:9px;background:#dbeafe;overflow-wrap:anywhere;"><strong>1. 작업 공간</strong><br>빈 폴더를 만들고 Claude Code가 파일을 다룰 범위를 선택한다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;color:#334155;">↓</div>
+    <div style="padding:0.8rem;border:2px solid #0369a1;border-radius:9px;background:#e0f2fe;overflow-wrap:anywhere;"><strong>2. 결과 요청</strong><br>세부 절차보다 만들고 싶은 결과를 일상어로 설명한다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;color:#334155;">↓</div>
+    <div style="padding:0.8rem;border:2px solid #0f766e;border-radius:9px;background:#ccfbf1;overflow-wrap:anywhere;"><strong>3. 통제 수준</strong><br>Manual·Plan·Auto 중 작업 전에 얼마나 확인받을지 정한다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;color:#334155;">↓</div>
+    <div style="padding:0.8rem;border:2px solid #7c3aed;border-radius:9px;background:#ede9fe;overflow-wrap:anywhere;"><strong>4. 맥락과 기억</strong><br>세션을 적절히 나누고 반복 정보는 CLAUDE.md에 남긴다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;color:#334155;">↓</div>
+    <div style="padding:0.8rem;border:2px solid #a16207;border-radius:9px;background:#fef3c7;overflow-wrap:anywhere;"><strong>5. 재사용과 확장</strong><br>스킬·커넥터·서브에이전트·예약 작업으로 작업 범위를 넓힌다.</div>
+  </div>
+  <figcaption style="margin-top:0.85rem;color:#334155;">영상이 소개한 기능을 ‘시작 → 통제 → 기억 → 확장’의 작업 흐름으로 묶은 전체 지도다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 각 단계는 독립 기능 목록이 아니라 다음 판단의 기반이다. 다만 영상의 소개 순서를 이해하기 위한 개념도이며, 모든 기능을 반드시 이 순서로 설치해야 한다는 뜻은 아니다.</p>
+<h3>1. 먼저 작업 범위와 원하는 결과를 정한다</h3>
+<p>화자는 앱을 설치하고 계정을 만든 뒤 <code>Local</code>에서 빈 폴더를 열라고 설명한다. 이 폴더는 Claude가 파일을 만들고 수정하는 작업 공간이다. 결과를 요청할 때는 모든 단계를 미리 지시하기보다, 원하는 최종 상태를 설명하라고 권한다.</p>
+<p>영상 속 사례는 아파트 이사를 돕기 위한 3D 시각화다. 화자는 평면도와 매물 사진을 주고 3D 시각화를 요청했으며, 결과적으로 Amazon 상품을 찾아 가상 공간에 배치하는 일까지 수행했다고 주장한다. 이는 가능한 활용 사례로 제시된 것이지, 같은 입력이면 누구에게나 같은 결과가 보장된다는 검증 자료는 아니다.</p>
+<h3>2. 자율성은 편리함과 위험을 함께 바꾼다</h3>
+<p>작업 모드는 Claude가 변경 전에 얼마나 자주 사용자를 기다리는지 정한다. 화자는 대부분의 작업에 Auto를 권하지만, 파일 삭제처럼 위험한 변경 가능성도 함께 언급한다. 따라서 “더 자율적이면 무조건 더 좋다”가 아니라, <strong>빠른 진행과 중간 확인 사이에서 통제 수준을 고르는 문제</strong>로 이해해야 한다.</p>
+<p>표가 화면보다 넓으면 표 안에서 좌우로 이동해 읽는다.</p>
+<figure data-visual-kind="comparison" style="max-width:900px;margin:1.5rem auto;">
+  <div style="overflow-x:auto;border:1px solid #94a3b8;border-radius:10px;background:#fff;">
+    <table style="border-collapse:collapse;width:100%;min-width:700px;">
+      <thead>
+        <tr style="background:#e2e8f0;">
+          <th style="padding:0.75rem;border:1px solid #94a3b8;text-align:left;">모드</th>
+          <th style="padding:0.75rem;border:1px solid #94a3b8;text-align:left;">변경 전 확인</th>
+          <th style="padding:0.75rem;border:1px solid #94a3b8;text-align:left;">영상의 설명</th>
+          <th style="padding:0.75rem;border:1px solid #94a3b8;text-align:left;">살펴볼 위험</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;"><strong>Manual</strong></td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">변경할 때마다 묻는다.</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">사용자가 자주 승인한다.</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">확인이 잦아 진행이 끊길 수 있다.</td>
+        </tr>
+        <tr style="background:#f8fafc;">
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;"><strong>Plan</strong></td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">계획 뒤 승인을 기다린다.</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">조사와 상세한 실행 계획을 만들되 바로 실행하지 않는다.</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">계획이 그럴듯해도 실제 변경 결과는 별도로 확인해야 한다.</td>
+        </tr>
+        <tr>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;"><strong>Auto</strong></td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">거의 스스로 진행한다.</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">화자는 두 번째 AI가 작업을 계속 점검한다고 설명한다.</td>
+          <td style="padding:0.75rem;border:1px solid #cbd5e1;">화자도 파일 삭제 가능성을 언급한다.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption style="margin-top:0.75rem;color:#334155;">가로축은 확인 방식과 영상의 설명, 위험을 비교하고 세로축은 세 작업 모드를 비교한다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 세 모드를 대조하고, 왼쪽에서 오른쪽으로 승인 방식과 위험을 연결한다. “두 번째 AI가 계속 점검한다”는 영상의 설명이며, 안전을 보장한다는 독립 검증은 제공되지 않았다.</p>
+<p>모드와 별도로 실제 작업 모델과 생각에 쓰는 노력 수준도 고를 수 있다고 소개한다. 영상에는 Haiku, Sonnet, Opus가 나오며, 화자는 각각 저렴한 선택지, 중간 선택지, 가장 비싸지만 강력한 선택지로 설명한다. 노력 수준은 답하기 전에 문제를 얼마나 오래 생각할지와 연결된다고 말한다. 화자는 이를 중간이나 높음으로 설정하지만, 사용량 한도가 있으므로 비용과 품질을 함께 봐야 한다고 강조한다.</p>
+<h3>3. 긴 대화가 곧 좋은 기억은 아니다</h3>
+<p>영상은 Claude와의 대화 하나를 세션이라고 부르고, 한 세션 안의 내용을 맥락이라고 설명한다. 화자에 따르면 Claude는 대화할 때마다 세션의 전체 맥락을 다시 읽기 때문에, 세션이 길어지면 느려지고 비싸지며 품질도 낮아질 수 있다.</p>
+<p>반대로 새 세션은 이전 세션을 자동으로 기억하지 않는다고 설명한다. 반복해서 필요한 작업 정보는 <code>CLAUDE.md</code> 파일에 남길 수 있다. <code>/init</code> 명령을 입력하면 현재 작업 공간을 바탕으로 이 파일을 자동 생성한다고 소개한다.</p>
+<figure data-visual-kind="process" style="max-width:760px;margin:1.5rem auto;padding:1rem;border:1px solid #94a3b8;border-radius:12px;background:#f8fafc;">
+  <div role="img" aria-label="주제가 바뀌면 새 세션을 열고 CLAUDE.md에서 반복 정보를 읽어 필요한 맥락으로 작업하는 과정" style="display:flex;flex-direction:column;gap:0.45rem;">
+    <div style="padding:0.8rem;border-radius:9px;background:#fee2e2;border:2px solid #b91c1c;overflow-wrap:anywhere;"><strong>감지</strong><br>주제가 바뀌거나 새로운 것을 만들기 시작한다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;">↓</div>
+    <div style="padding:0.8rem;border-radius:9px;background:#e0f2fe;border:2px solid #0369a1;overflow-wrap:anywhere;"><strong>세션 분리</strong><br>화자는 긴 기존 세션을 계속 쓰지 말고 새 세션을 권한다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;">↓</div>
+    <div style="padding:0.8rem;border-radius:9px;background:#ede9fe;border:2px solid #7c3aed;overflow-wrap:anywhere;"><strong>반복 정보 복구</strong><br>새 세션 시작 시 읽을 정보를 CLAUDE.md에 저장한다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;">↓</div>
+    <div style="padding:0.8rem;border-radius:9px;background:#dcfce7;border:2px solid #15803d;overflow-wrap:anywhere;"><strong>목표</strong><br>불필요하게 긴 맥락을 줄이면서 필요한 작업 규칙은 유지한다.</div>
+  </div>
+  <figcaption style="margin-top:0.85rem;color:#334155;">긴 세션을 기억 장치로 쓰는 대신, 세션을 나누고 반복 정보는 파일로 넘기는 구조다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 새 세션은 불필요한 이전 대화를 줄이고, <code>CLAUDE.md</code>는 반복해서 필요한 정보를 다시 공급하는 역할로 구분한다. 실제 속도·비용·품질 변화의 수치는 영상에 나오지 않는다.</p>
+<h3>4. 잘된 한 번을 반복 가능한 작업으로 바꾼다</h3>
+<p>파일 변경 뒤 보이는 더하기·빼기 표시는 추가하거나 제거한 줄을 나타낸다고 설명한다. 웹사이트나 시각 앱은 오른쪽 브라우저 창에서 결과를 보고 피드백할 수 있다고 한다.</p>
+<p>원하는 결과를 한 번 만들었다면, 화자는 그 절차를 스킬로 저장하라고 권한다. 스킬은 반복 작업을 위한 저장된 지시문이며 <code>SKILL.md</code> 파일에 보관된다고 설명한다. 영상에서는 영상 편집, 고객 제안서 발송, 팟캐스트 발행, 시각화, 게임 제작을 예로 든다.</p>
+<p>그다음 커넥터로 GitHub, Slack, Linear, Asana, Trello 같은 외부 도구를 연결하고, 서브에이전트에 옆 작업을 맡겨 주 작업과 동시에 처리할 수 있다고 소개한다. 화자는 서브에이전트를 사용해 웹사이트 100개를 웹사이트 하나를 만들 때와 거의 같은 시간에 만들었다고 주장한다. 마지막으로 예약 작업, 휴대전화 원격 제어, 결과를 보여주는 정적 웹페이지 형태의 아티팩트를 제시한다.</p>
+<figure data-visual-kind="process" style="max-width:760px;margin:1.5rem auto;padding:1rem;border:1px solid #94a3b8;border-radius:12px;background:#fff;">
+  <div role="img" aria-label="일회 작업에서 스킬, 커넥터, 서브에이전트, 예약과 공유로 확장되는 소개 순서" style="display:flex;flex-direction:column;gap:0.45rem;">
+    <div style="padding:0.8rem;border-left:6px solid #475569;background:#f1f5f9;overflow-wrap:anywhere;"><strong>일회 작업</strong> — 원하는 결과를 한 번 만든다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;">↓</div>
+    <div style="padding:0.8rem;border-left:6px solid #7c3aed;background:#f3e8ff;overflow-wrap:anywhere;"><strong>스킬</strong> — 성공한 지시와 절차를 파일로 저장한다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;">↓</div>
+    <div style="padding:0.8rem;border-left:6px solid #0369a1;background:#e0f2fe;overflow-wrap:anywhere;"><strong>커넥터</strong> — 외부 앱을 작업에 연결한다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;">↓</div>
+    <div style="padding:0.8rem;border-left:6px solid #0f766e;background:#ccfbf1;overflow-wrap:anywhere;"><strong>서브에이전트</strong> — 옆 작업을 나눠 동시에 처리한다.</div>
+    <div aria-hidden="true" style="text-align:center;font-size:1.4rem;">↓</div>
+    <div style="padding:0.8rem;border-left:6px solid #a16207;background:#fef3c7;overflow-wrap:anywhere;"><strong>예약·원격·아티팩트</strong> — 자리를 비운 동안 실행하고 결과를 확인하거나 공유한다.</div>
+  </div>
+  <figcaption style="margin-top:0.85rem;color:#334155;">영상이 기능을 소개한 순서를 일회 작업에서 재사용·병렬화·원격 실행으로 넓어지는 흐름으로 재구성했다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 아래로 갈수록 작업 범위와 자율성이 커진다. 이 그림은 소개 순서이지 필수 성숙도 단계가 아니다. 병렬 작업이 빨라질수록 검토량, 사용량, 외부 도구 권한도 함께 살펴야 한다는 점은 별도로 검증해야 한다.</p>
+<h3>전체 통찰과 경계</h3>
+<p>이 영상의 중심은 기능 이름을 외우는 데 있지 않다. Claude Code를 쓴다는 것은 <strong>작업 공간, 결과 정의, 승인 방식, 모델 사용량, 세션 맥락, 반복 지시, 외부 도구 권한, 병렬 작업</strong>을 한 시스템으로 다루는 일이다. 특히 새 세션과 <code>CLAUDE.md</code>를 구분하면 “모든 대화를 길게 유지해야 기억한다”는 생각에서 벗어날 수 있다.</p>
+<p>다만 영상은 짧은 입문 소개이며 독립적인 성능 시험은 아니다. 월 약 20달러라는 가격, Mac·Windows 지원 상태, 모델 구성, UI, 사용량 정책은 영상 제작 시점의 설명이다. Auto 모드의 감시 방식, 긴 세션의 성능 저하 정도, 웹사이트 100개를 하나와 비슷한 시간에 만들었다는 수치도 검증 조건이 제시되지 않았다.</p>
+<p>원작자 정보에도 불확실성이 있다. 제공된 전사 도입부는 Nick Saraev를 화자로 소개하지만 META의 <code>provenance.creator</code>는 비어 있다. META의 출처 메모도 화자 이름과 SNS를 기준으로 한 추정이며 원본 영상 링크를 확인하지 못했다고 밝힌다. <code>Claude</code>라는 소속 후보는 META의 <code>provenance.affiliation</code> 값을 보존한 것이며 실제 소속으로 독립 확인된 것은 아니다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>Claude Code는 선택한 폴더의 파일을 다루므로, 요청 내용뿐 아니라 작업 범위와 승인 방식도 정해야 한다.</li>
+<li>Manual·Plan·Auto는 변경 전에 사용자가 얼마나 개입할지를 조절하며, 높은 자율성은 검토와 위험 관리 필요를 없애지 않는다.</li>
+<li>긴 세션을 계속 쓰는 것과 <code>CLAUDE.md</code>에 반복 정보를 저장하는 것은 다른 전략이다.</li>
+<li>잘된 작업은 스킬로 저장할 수 있고, 커넥터·서브에이전트·예약 작업은 범위와 자율성을 더 넓힌다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>Claude Code를 처음 시작할 때 폴더·모드·세션·기억·재사용 도구를 어떻게 하나의 안전한 작업 흐름으로 묶을 수 있을까?</strong></p>
+</blockquote>
+<ul>
+<li>왜 결과만 요청하는 것보다 작업 폴더와 승인 방식을 함께 정해야 하는가?</li>
+<li>긴 세션과 <code>CLAUDE.md</code>는 어떤 역할 차이가 있는가?</li>
+<li>스킬과 서브에이전트로 확장하기 전에 무엇을 확인해야 하는가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>빈 테스트 폴더를 연 뒤 “예약 양식이 있는 간단한 웹사이트를 만들어 달라”고 결과를 요청한다. 실행 전에는 작업 모드를 정하고, 진행 중에는 변경 내역과 화면을 확인한다. 결과가 좋다면 반복 지시를 스킬로 저장하고, 새 주제는 새 세션에서 시작한다.</p>
+<p><code>"파일을 바꿀 수 있는 도구에 범위·승인 기준·기억 구조가 없다"</code> <strong>문제</strong><br>
+→ <code>"폴더와 모드를 정하고, 세션은 나누며, 반복 정보는 파일과 스킬로 저장한다"</code> <strong>작동 방식</strong><br>
+→ <code>"일회 요청을 검토 가능한 반복 작업으로 바꾼다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">작업장을 운영하는 감독자</div>
+<p>폴더는 작업 구역, 모드는 감독자가 결재하는 빈도, <code>CLAUDE.md</code>는 새 교대조가 먼저 읽는 작업 수첩, 스킬은 표준 작업 절차, 커넥터는 외부 장비, 서브에이전트는 옆 작업을 맡는 보조 인력에 대응한다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 사람 작업자는 상황과 책임을 인간적으로 이해하지만 AI의 출력과 감시는 오류 가능성을 없애지 않는다. <code>CLAUDE.md</code>도 인간의 지속적인 기억이 아니라 새 세션에서 읽을 수 있도록 저장한 파일이다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude Code</strong></td>
+<td>파일을 직접 다루는 작업 도구</td>
+<td>영상에서 채팅과 달리 선택한 폴더의 파일을 만들고 수정할 수 있다고 소개한 기능</td>
+<td>대화만 하므로 파일에는 영향을 주지 않는다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>작업 모드</strong></td>
+<td>AI가 행동 전에 얼마나 자주 묻는지 정하는 설정</td>
+<td>Manual·Plan·Auto로 승인과 자율성의 정도를 조절하는 선택지</td>
+<td>Auto를 선택하면 위험한 변경이 불가능하다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>세션과 맥락</strong></td>
+<td>한 번의 대화와 그 안에 쌓인 내용</td>
+<td>대화 하나가 세션이고 그 안의 정보 전체가 맥락이라는 영상의 설명</td>
+<td>세션이 길수록 항상 더 정확하다고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>CLAUDE.md</strong></td>
+<td>새 세션이 읽을 작업 수첩</td>
+<td>반복해서 필요한 작업 정보를 저장해 세션 시작 때 읽게 하는 파일</td>
+<td>이전 대화 전체를 자동으로 기억하는 장치라고 생각하는 것</td>
+</tr>
+<tr>
+<td><strong>스킬</strong></td>
+<td>잘된 작업법을 저장한 지시문</td>
+<td>반복 작업을 위해 <code>SKILL.md</code> 파일에 저장하는 지시 묶음</td>
+<td>한 번 성공한 결과가 검토 없이 모든 상황에 그대로 통한다고 생각하는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>화자는 왜 주제가 바뀌거나 새로운 것을 만들 때 새 세션을 시작하라고 권하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>화자에 따르면 한 세션의 전체 맥락을 대화할 때마다 다시 읽으므로, 긴 세션은 느리고 비싸지며 품질도 낮아질 수 있다. 따라서 새 주제는 새 세션으로 분리하고, 계속 필요한 정보만 <code>CLAUDE.md</code> 같은 파일에 남기는 편이 낫다고 주장한다. 다만 변화의 크기를 보여주는 측정치는 영상에 없다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>Plan 모드와 Auto 모드는 무엇이 다르며, Auto를 안전 보장 기능으로 이해하면 안 되는 이유는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>Plan은 조사와 실행 계획을 만든 뒤 사용자 승인을 기다린다. Auto는 거의 스스로 작업하며 화자는 별도의 AI가 점검한다고 설명한다. 그러나 같은 영상에서 파일 삭제 가능성도 언급하므로, 감시 기능이 위험을 완전히 제거한다고 해석하면 안 된다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>차드가 새로운 파일 자동화를 시험한다면, 바로 실제 업무 폴더에서 Auto 모드를 쓰기 전에 무엇을 정해야 할까?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>실제 시스템 상태를 가정하지 말고 빈 테스트 폴더에서 시작한다. 먼저 원하는 결과와 수정 가능한 범위, 완료 조건을 적고, 승인 시점과 중단 방법을 정한다. 결과가 반복 가능하고 의도하지 않은 변경이 없는지 확인한 뒤에만 스킬이나 더 높은 자율성을 검토한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 자율성은 설정 하나가 아니라 검토 구조다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 Manual·Plan·Auto를 설명하고 대부분의 작업에 Auto를 권하면서도, 파일 삭제 같은 위험한 작업 가능성을 언급한다.</li>
+<li><strong>[해석]</strong> 자율성을 높일수록 사용자의 역할이 사라지는 것이 아니라, 사전 범위 설정과 사후 검토로 이동한다.</li>
+<li><strong>[경계]</strong> Auto의 두 번째 AI가 “계속 점검한다”는 설명은 독립 검증되지 않았다. 위험의 종류와 발생률도 영상에 제시되지 않았다.</li>
+</ul>
+<h3>2. 기억과 긴 대화는 같은 것이 아니다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 긴 세션이 느리고 비싸며 품질이 낮아질 수 있으므로 새 주제에는 새 세션을 쓰고, 반복 정보는 <code>CLAUDE.md</code>에 저장하라고 말한다.</li>
+<li><strong>[해석]</strong> 기억해야 할 규칙과 일회성 대화를 분리하면 맥락을 무작정 쌓는 대신 필요한 정보만 다시 공급할 수 있다.</li>
+<li><strong>[경계]</strong> 속도·비용·품질이 어느 길이부터 얼마나 변하는지 수치가 없다. <code>/init</code>의 생성 방식과 파일 읽기 동작도 영상 제작 시점의 설명이다.</li>
+</ul>
+<h3>3. 병렬화 주장은 검토 비용과 함께 읽어야 한다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 서브에이전트를 이용해 웹사이트 100개를 하나를 만들 때와 거의 같은 시간에 만들었다고 주장한다.</li>
+<li><strong>[해석]</strong> 서로 독립적인 옆 작업은 병렬화 후보가 될 수 있지만, 생성 속도와 결과 검증 속도는 따로 측정해야 한다.</li>
+<li><strong>[경계]</strong> 사이트의 규모, 품질 기준, 수정 횟수, 사용량과 검토 시간은 제시되지 않았다. 전사의 세 모델명과 다섯 커넥터 예시는 열거 수와 총개수의 충돌은 없지만, 전체 선택지 수를 뜻하지 않는다. 원작자는 전사에서 Nick Saraev로 소개되지만 META의 creator 값은 비어 있고 출처도 추정으로 표시되어 있다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 빈 폴더, 작업 모드, 기억 파일, 스킬 순서로 초보자가 구분해야 할 기능을 제시한다.</li>
+<li><strong>통찰:</strong> 기능 이름을 외웠는지보다, 새 작업에서 폴더·승인 방식·세션 분리 이유를 설명하고 선택하는지를 보면 이해를 관찰할 수 있다.</li>
+<li><strong>질문/행동:</strong> 학습자에게 같은 요청을 Manual과 Plan 중 어디서 시작할지 고르게 하고 이유를 말하게 한다.</li>
+</ul>
+<h3>사업가 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 모델과 노력 수준은 사용량에, 자율 모드는 위험에, 스킬과 서브에이전트는 반복 작업과 처리량에 연결된다.</li>
+<li><strong>통찰:</strong> APOM에 이미 적용됐다는 근거는 없다. 다만 검증 전 가상 적용으로, 반복 업무를 자동화할 때 생성 시간뿐 아니라 검토 시간과 잘못된 변경의 위험도 자원 비용으로 볼 수 있다.</li>
+<li><strong>질문/행동:</strong> 후보 업무에서 “반복 빈도는 높고 결과 확인은 쉬운가?”를 먼저 묻는다.</li>
+</ul>
+<h3>마케터 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 월 약 20달러, 아파트 3D 시각화, 웹사이트 100개 같은 강한 숫자와 장면으로 효용을 보여준다.</li>
+<li><strong>통찰:</strong> 구체적인 장면과 수치는 기억을 돕지만, 상세페이지에 옮길 때는 조건·기간·품질 기준을 함께 제시해야 과장을 줄일 수 있다.</li>
+<li><strong>질문/행동:</strong> 주장 옆에 입력 자료, 작업 범위, 완료 기준, 수정 횟수 중 어떤 증거를 붙일 수 있는지 확인한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 폴더 권한, 승인 모드, 맥락 길이, 스킬, 외부 도구 연결, 병렬 작업은 에이전트 운영에서 직접 시험할 수 있는 요소다.</li>
+<li><strong>통찰:</strong> 도구 이름보다 작업 범위, 승인 지점, 맥락 비용, 실패 시 중단 방법을 기준으로 구성해야 한다.</li>
+<li><strong>질문/행동:</strong> 빈 테스트 폴더에서 완료 조건을 정한 한 작업을 실행하고, 변경 내역이 조건과 맞는지 확인한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"초보자가 파일 작업형 AI의 범위·승인·기억 구조를 모르고 시작한다"</code> <strong>문제</strong><br>
+→ <code>"작은 작업을 검토 가능한 흐름으로 수행한다"</code> <strong>수혜자: Claude Code를 처음 쓰는 사용자와 결과를 확인할 협업자</strong><br>
+→ <code>"구독료·작업 시간·파일 접근 권한·검토 시간을 제공한다"</code> <strong>지불자 또는 자원 제공자: 사용자 또는 도입을 결정한 조직</strong><br>
+→ <code>"사전에 정한 완료 조건의 충족 수가 늘어난다"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 빈 테스트 폴더에서 완료 조건 5개를 먼저 적고, 작은 웹페이지 또는 문서 생성 작업 1건을 실행해 변경 결과를 확인한다.</li>
+<li><strong>측정 1개:</strong> 사전에 적은 완료 조건 5개 중 충족한 조건 수</li>
+<li><strong>중단 기준 1개:</strong> 충족한 조건이 4개 미만이면 실제 업무 폴더나 더 높은 자율성으로 확대하지 않는다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>설치와 폴더</td>
+<td>앱 설치, 계정 생성, 빈 작업 폴더 선택</td>
+</tr>
+<tr>
+<td>2</td>
+<td>결과 중심 요청</td>
+<td>세부 단계보다 원하는 결과를 일상어로 설명</td>
+</tr>
+<tr>
+<td>3</td>
+<td>모드·모델·사용량</td>
+<td>승인 수준과 모델·노력 수준 선택</td>
+</tr>
+<tr>
+<td>4</td>
+<td>세션과 기억</td>
+<td>긴 맥락을 줄이고 <code>CLAUDE.md</code>로 반복 정보 보존</td>
+</tr>
+<tr>
+<td>5</td>
+<td>변경 확인</td>
+<td>추가·삭제 줄 수와 브라우저 화면으로 결과 확인</td>
+</tr>
+<tr>
+<td>6</td>
+<td>스킬과 외부 도구</td>
+<td>반복 지시 저장, 커넥터·플러그인·사용자 정의 모드 연결</td>
+</tr>
+<tr>
+<td>7</td>
+<td>병렬·예약·공유</td>
+<td>서브에이전트, 예약 작업, 원격 제어, 아티팩트</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 설치하고 작업 폴더 열기</h3>
+<p>화자는 <code>Claude.com/download</code>에서 앱을 내려받으라고 안내한다. 영상 제작 시점에는 Mac과 Windows에서 사용할 수 있다고 설명한다. 설치 후 계정을 만들고, Chat과 Claude Code를 구분한다. Chat은 대화가 중심이고 파일을 바꿀 수 없지만 Claude Code는 파일을 바꿀 수 있다고 말한다.</p>
+<p>무료 요금제에서는 업그레이드를 요청하며 Claude Code의 비용이 월 약 20달러라고 주장한다. 가격과 요금제는 시점에 따라 달라질 수 있으며 영상 설명란도 화면과 요금이 원본 제작 시점 기준이라고 밝힌다.</p>
+<p>바탕화면 등에 빈 폴더를 만들고 <code>Local</code>과 <code>Open Folder</code>를 눌러 그 폴더를 선택한다. 이 폴더가 Claude가 파일을 만들고 수정할 위치가 된다.</p>
+<h3>2. 원하는 결과를 설명하기</h3>
+<p>화자는 일상어로 원하는 것을 입력하되, 일반적으로 단계보다 결과를 설명하라고 권한다. 예시는 청소 회사용 간단한 웹사이트와 예약 양식이다.</p>
+<p>아파트 이사 사례에서는 평면도와 매물 사진을 주고 3D 시각화를 요청했다고 말한다. 결과가 Amazon 상품까지 찾아 주소로 주문할 수 있게 하고 가상 집에 배치했다고 주장한다. 잘못된 방향으로 가면 중지 버튼을 누르거나 수정 지시를 보낼 수 있다고 설명한다.</p>
+<h3>3. 모드, 모델, 노력 수준</h3>
+<ul>
+<li><strong>Manual:</strong> 변경하려 할 때마다 사용자에게 묻는다.</li>
+<li><strong>Plan:</strong> 조사하고 상세한 계획을 만들지만 승인 전에는 실행하지 않는다.</li>
+<li><strong>Auto:</strong> 거의 스스로 작업하며, 화자는 두 번째 AI가 위험 행동을 점검한다고 설명한다.</li>
+</ul>
+<p>화자는 거의 모든 작업에 Auto를 권하지만, Claude가 컴퓨터의 파일을 삭제할 수도 있다고 언급한다.</p>
+<p>영상에 나오는 모델은 Haiku, Sonnet, Opus 세 가지다. 화자는 Haiku를 가장 저렴한 선택지, Sonnet을 중간, Opus를 가장 비싸지만 가장 강력한 선택지로 소개한다. 노력 수준은 답변 전 생각하는 시간과 연결된다고 설명하며 자신은 보통 중간이나 높음으로 둔다고 말한다. 이 설정들은 사용량과 연결되고, 정해진 사용량을 넘으면 더 쓸 수 없다고 설명한다.</p>
+<h3>4. 세션, 맥락, CLAUDE.md</h3>
+<p>화자는 Claude와의 대화 하나를 세션, 세션 안의 전체 내용을 맥락이라고 부른다. 새 세션은 이전 세션을 기억하지 않으므로 별도 기억 장치가 필요하다고 설명한다.</p>
+<p><code>CLAUDE.md</code>는 세션 시작 때 Claude가 읽을 수 있는 정보를 저장하는 파일이다. <code>/init</code>을 입력하면 지금까지 작업 공간에서 한 일을 바탕으로 이 파일을 자동 생성한다고 소개한다.</p>
+<p>화자는 Claude가 대화할 때마다 세션 전체를 다시 읽는다고 주장한다. 이 때문에 긴 세션이 더 느리고 비싸며 보통 품질도 낮아진다고 말한다. 주제를 바꾸거나 새로운 것을 만들 때 새 세션을 시작하면 시간과 비용을 아낄 수 있다고 권한다.</p>
+<h3>5. 파일 변경과 화면 확인</h3>
+<p>파일을 바꾸면 더하기와 빼기 표시가 나타나며, 이는 추가하거나 삭제한 줄 수라고 설명한다. 내부 구현을 항상 이해할 필요는 없지만 변경 내역을 더 깊이 볼 때 유용하다고 말한다.</p>
+<p>웹사이트나 시각 앱을 만들 때는 오른쪽 브라우저 창에서 현재 모습을 보고 추가 피드백을 줄 수 있다고 소개한다.</p>
+<h3>6. 스킬, 커넥터, 플러그인</h3>
+<p>스킬은 반복 작업을 위해 저장한 지시 묶음이며 <code>SKILL.md</code> 파일에 보관된다고 설명한다. 화자는 영상 편집, 고객 제안서 발송, 팟캐스트 발행, 시각화, 게임 제작 스킬을 가지고 있다고 말한다. 원하는 작업을 먼저 수행한 뒤 Claude에게 이를 스킬로 만들어 달라고 요청하는 방법을 권한다.</p>
+<p>더하기 버튼에서 <code>Add Connectors</code>를 누르면 외부 앱을 연결할 수 있다고 설명한다. 예시로 GitHub, Slack, Linear, Asana, Trello 다섯 이름을 든다. 이는 예시 목록이며 전체 커넥터 수를 뜻하지 않는다.</p>
+<p>사용자 정의 플러그인과 사용자 정의 모드도 설치해 Claude Code가 답을 만드는 방식을 바꿀 수 있다고 소개한다.</p>
+<h3>7. 서브에이전트, 예약 작업, 원격 제어, 아티팩트</h3>
+<p>서브에이전트는 주 Claude가 다른 일을 하는 동안 옆 작업을 맡아 병렬로 처리한다. 화자는 이를 통해 같은 시간당 더 많은 일을 할 수 있다고 설명한다.</p>
+<p>구체적으로 서브에이전트를 사용해 웹사이트 100개를 하나를 만들 때와 거의 같은 시간에 만들었다고 주장한다. 사이트의 범위와 품질, 수정 시간, 검토 조건은 제시되지 않는다.</p>
+<p><code>Scheduled</code>에서 사용자가 자리를 비운 동안 실행할 작업을 만들 수 있다고 한다. 휴대전화에 Claude를 설치하고 원격 제어 기능으로 밖에서도 대화할 수 있다고 설명한다.</p>
+<p>작업이 끝나면 아티팩트를 요청하라고 권한다. 영상에서 아티팩트는 결과를 시각화하고 친구나 동료에게 공유할 수 있는 간단한 정적 웹페이지로 설명된다.</p>
+<h3>숫자·이름·출처 대조 결과</h3>
+<ul>
+<li>영상 길이는 META에서 288초, 즉 4.8분으로 일치한다.</li>
+<li>월 비용은 “약 20달러” 한 번만 제시되며 다른 가격과의 직접 충돌은 없다. 현재 가격으로 독립 검증되지는 않았다.</li>
+<li>Haiku·Sonnet·Opus 세 이름이 나오며 전사의 “몇 가지 유형”과 열거 수가 충돌하지 않는다.</li>
+<li>GitHub·Slack·Linear·Asana·Trello 다섯 곳은 예시로 제시됐으며 총개수를 다섯 개라고 주장한 것은 아니다.</li>
+<li>“웹사이트 100개 대 하나”는 화자의 성능 주장이다. 비교 조건과 품질 기준이 없어 일반화할 수 없다.</li>
+<li>전사 도입부는 Nick Saraev를 화자로 소개하지만 META의 <code>provenance.creator</code>는 비어 있다. META의 출처 메모는 화자 이름과 SNS를 근거로 한 추정이며 원본 링크를 확인하지 못했다고 밝힌다.</li>
+<li>META의 <code>provenance.affiliation</code>에는 <code>Claude</code>가 기록되어 있어 후보 소속으로 보존했지만, 실제 소속을 확인하는 독립 근거는 제공되지 않았다.</li>
+<li>제목의 “세상에서 가장 짧은”은 비교 근거가 제시되지 않은 제목 표현이다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · [한글자막] 세상에서 가장 짧은 클로드 코드 강의 | 설치부터 실전 활용까지 (자막·마무리 수정) · https://www.youtube.com/watch?v=uOcO1QNmJOA · 전사: 제공된 SOURCE_TRANSCRIPT(생성 방식 미상)</p>
+<p>원작자 후보는 전사 도입부의 Nick Saraev이며, META에는 원본 링크를 확인하지 못한 추정이라고 적혀 있다. <code>Claude</code> 소속도 META에 보존된 후보 정보로 실제 소속이 독립 확인된 것은 아니다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>Claude Code를 처음 써보고 싶지만 어디서 시작해야 할지 막막하신가요? Nick Saraev가 설치부터 폴더 설정, 작업 모드와 모델 선택까지 빠르게 짚어줍니다. 기억을 남기는 방법과 스킬, 커넥터, 서브에이전트도 소개하는데요. 처음 접하는 분들이 각 기능의 역할을 파악하는 데 도움이 될 겁니다.</p>
+<p>먼저 Claude.com/download로 가서 앱을 다운로드하세요. 현재 Mac이나 Windows에서 사용할 수 있습니다. 설치하고 앱을 연 다음 계정을 만드세요. 모르셨다면, Claude는 모기업인 Anthropic이 만든 AI입니다. 앱을 열면 탭이 보일 겁니다. Chat은 대화용으로, 출시 당시의 ChatGPT와 상당히 비슷하지만 실제로 파일을 변경할 수는 없습니다.</p>
+<p>Claude Code는 파일을 변경할 수 있고, 오늘 사용할 것은 바로 이것입니다. 무료 요금제라면 업그레이드하라는 안내가 나옵니다. Claude Code는 한 달에 약 20달러이며, 여러분이 지금까지 쓴 20달러 중 최고의 지출이 될 겁니다. 다음으로 데스크톱 어딘가에 비어 있는 새 폴더를 만드세요. 그 폴더가 Claude가 파일을 만들고 수정하는 장소가 됩니다. 프롬프트 상자에서 Local을 클릭한 다음 Open Folder를 클릭하고, 방금 만든 폴더를 선택하세요.</p>
+<p>이제 원하는 것을 일상적인 영어로 입력하고 Enter를 누르기만 하면 됩니다. 예를 들어, “청소 업체를 위한 예약 양식이 있는 간단한 웹사이트를 만들어 줘”라고 할 수 있습니다. 일반적으로는 목표 결과를 설명하고, 거기까지 가는 단계는 설명하지 않는 것이 좋습니다. 그 부분은 Claude가 대개 알아서 해결할 수 있습니다. 예를 들어 제가 이사를 준비하기 위해 아파트의 3D 시각화(3D visualization)를 만들 때는 이렇게만 말했습니다. “Claude야, 여기 평면도와 매물 사진 여러 장이 있어. 3D 시각화를 만들어 줄래?”</p>
+<p>그러자 Claude는 제가 주소로 원클릭 주문할 수 있는 제품을 Amazon에서 여러 개 찾아냈고, 그것들로 집 내부까지 채워 넣었습니다. 그 과정에서 어느 순간 일이 잘못된 방향으로 진행된다면, 중지 버튼을 클릭해서 멈추거나 수정 사항을 입력해 반영할 수 있습니다.</p>
+<p>다음으로 모드를 선택해야 합니다. 모드는 Claude가 여러분에게 묻기 전에 혼자서 얼마나 작업할지를 결정합니다. 모드 선택기는 프롬프트 상자 바로 아래에 있습니다. Manual은 Claude가 변경하려 할 때마다 여러분에게 물어봅니다. Plan을 선택하면 Claude가 주변을 살펴보고 여러 조사를 진행하며 아주 상세한 로드맵을 만들지만, 여러분이 승인하기 전에는 진행하지 않습니다. 마지막으로 Auto는 Claude가 거의 완전히 혼자 작업하도록 해 주지만, 두 번째 AI가 Claude가 나쁜 일을 하고 있지는 않은지 계속 확인합니다. 이는 중요한데, Claude가 하는 일 중에는 컴퓨터의 파일을 잠재적으로 삭제하는 것처럼 조금 위험한 작업도 있기 때문입니다.</p>
+<p>저는 거의 모든 경우에 Auto를 사용하는 것을 권장합니다. 그다음에는 모델을 선택할 수 있습니다. 이것은 실제로 작업을 수행하는 AI 모델입니다. 현재 몇 가지 유형이 있습니다. Haiku는 가장 저렴하고, Sonnet은 중간 정도이며, Opus는 가장 비싸지만 가장 강력합니다. 답변하기 전에 Claude가 문제를 얼마나 오래 생각할지에 해당하는 effort 설정도 있습니다. 저는 보통 전반적으로 medium이나 high로 설정합니다. 이 조절 항목들은 사용량과 관련되므로 중요합니다. Claude가 사용을 중단시키기 전까지 사용할 수 있는 양이 정해져 있기 때문입니다.</p>
+<p>이제 Claude에 기억을 부여하세요. Claude와의 모든 대화를 세션(session)이라고 하며, 어떤 형태로든 기억이 없으면 새 세션은 이전 세션에서 무엇을 이야기했는지 기억하지 못합니다.</p>
+<p>이를 위한 간단한 방법은 CLAUDE.md라는 파일을 만드는 것입니다. 이 파일에는 Claude가 각 세션을 시작할 때 읽을 수 있는 정보가 저장됩니다. <code>/init</code>을 입력하면 아주 쉽게 만들 수 있으며, 지금까지 작업 공간에서 수행한 내용을 바탕으로 CLAUDE.md가 자동으로 생성됩니다. 세션에 포함된 모든 것을 컨텍스트(context)라고 하며, Claude는 대화할 때마다 말 그대로 그 전체 내용을 매번 다시 읽어야 합니다.</p>
+<p>따라서 세션이 길어지면 속도가 느려지고 비용이 더 들며, 대개 품질도 낮아집니다. 주제를 바꾸거나 새로운 것을 만들고 있다면 항상 새 세션을 시작하세요. 시간과 비용을 많이 절약할 수 있습니다. Claude가 파일을 변경하면 플러스 기호와 마이너스 기호가 붙은 여러 카운터가 나타납니다. 이는 Claude가 변경한 파일에 추가하거나 삭제한 줄을 나타냅니다. 대부분의 경우 내부에서 무슨 일이 일어나는지 실제로 알 필요는 없지만, 더 자세히 살펴보고 싶을 때 유용합니다.</p>
+<p>웹사이트나 시각적 앱을 만들고 있다면, 오른쪽에 브라우저 창이 나타나 Claude가 앱이 어떻게 보이는지 실제로 보여 줄 수 있습니다. 이를 활용해 더 많은 피드백을 주고 앱을 수정할 수 있습니다. 마음에 드는 것을 어느 정도 만들었다면 그것을 스킬(skill)로 바꾸세요. 스킬은 여러분이 수행하는 작업을 위해 저장해 둔 지침 모음입니다. 스킬은 SKILL.md 파일에 저장됩니다. 예를 들어 저는 이 영상과 같은 방식으로 YouTube 영상을 편집하는 스킬이나, 고객에게 제안서를 보내는 스킬을 가지고 있습니다. 팟캐스트를 게시하거나 시각화를 만들고, 심지어 이런 멋진 비디오 게임을 만드는 스킬도 있습니다. 이를 제대로 만드는 가장 쉬운 방법은 원하는 작업을 수행한 다음 Claude에게 “이걸 스킬로 만들어 줘”라고 말하는 것입니다.</p>
+<p>다음으로 여러 도구를 연결할 수 있습니다. 플러스 버튼을 클릭한 다음 Add Connectors를 클릭하기만 하면 됩니다. 커넥터(connector)는 Claude가 여러분처럼 다른 앱을 사용할 수 있도록 해 줍니다. 예로는 GitHub, Slack, Linear, Asana, Trello 등이 있습니다. 셀 수 없을 만큼 더 많은 도구가 있습니다.</p>
+<p>사용자 지정 플러그인과 사용자 지정 모드를 설치해 Claude Code가 답변을 생성하는 방식을 바꿀 수도 있습니다. 이 모든 것을 익히고 나면 Claude를 한 개 이상 동시에 실행할 수 있습니다. Claude는 서브에이전트(subagent)에게 부가 작업을 맡기는 방식으로 이를 수행합니다. 서브에이전트는 메인 Claude 스레드가 다른 작업을 하는 동안 작업을 수행할 수 있으며, 작업 흐름을 병렬화하거나 단위 시간당 훨씬 더 많은 일을 처리할 수 있게 해 줍니다.</p>
+<p>예를 들어 저는 서브에이전트를 사용해 웹사이트 100개를 만들었는데, 한 개를 만드는 데 걸린 시간과 거의 같은 시간이 걸렸습니다. 마지막으로 Scheduled를 클릭한 다음 여러분이 없어도 실행되는 작업을 만들어, 자리를 비운 동안 Claude가 일하도록 할 수 있습니다. 리모컨 기능을 사용하면 휴대폰으로도 작업을 확인할 수 있습니다. 휴대폰에 Claude를 다운로드하기만 하면 헬스장에 있거나 다른 일을 하는 동안에도 Claude와 대화할 수 있습니다. Claude가 무언가를 끝내면 artifact를 요청하는 것을 권장합니다. artifact는 Claude가 작업한 내용을 시각화할 수 있게 해 주는 간단한 정적 웹페이지입니다. 이를 친구, 동료 또는 원하는 누구와도 공유할 수 있습니다.</p>
+<p>타이머를 확인해 보세요. 훨씬 더 심층적인 버전을 원하신다면 제 채널에서 이런 내용을 전부 다루고 있습니다. 시청해 주셔서 정말 감사하고, 이 내용이 여러분의 삶에 도움이 되었다면 좋아요와 구독을 부탁드립니다.</p>
+</details>
+</body></html>

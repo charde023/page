@@ -1,0 +1,448 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>게리 탄, AI 에이전트는 2년 안에 모든 걸 바꿀 겁니다</title>
+<meta name="description" content="AI 에이전트가 긴 맥락과 자율적 실행으로 일, 재교육, 개인화 피드의 통제권을 어떻게 바꿀 수 있는지 게리 탄의 주장과 한계를 함께 살핀다."><meta name="theme-color" content="#2563eb">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#f7f9fc;--surface:#fff;--text:#1f2a44;--text-soft:#5a6b87;--border:#e3e9f3;
+--accent:#2563eb;--accent-soft:#dbeafe;--orange:#ef6c00;--shadow:0 1px 2px rgba(31,42,68,.04),0 8px 24px rgba(31,42,68,.06)}
+*{box-sizing:border-box}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+line-height:1.65;max-width:820px;margin:0 auto;padding:32px 24px 96px;color:var(--text);background:var(--bg);
+font-size:17px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:var(--accent)}
+.header{margin:-32px -24px 28px;padding:34px 28px 24px;background:linear-gradient(160deg,#e0ecff 0%,#f1f6ff 55%,#fff 100%);border-bottom:1px solid var(--border)}
+.header .eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+color:var(--accent);background:var(--surface);padding:4px 10px;border-radius:999px;border:1px solid var(--accent-soft);margin-bottom:12px}
+.header h1{margin:0;font-size:1.7rem;line-height:1.32}
+.meta{margin-top:10px;color:var(--text-soft);font-size:.92rem}
+.callout{margin:18px 0;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+.callout .ct{font-weight:700;font-size:.86rem;margin-bottom:6px;color:var(--accent)}
+.callout-info{border-left:4px solid var(--accent)}
+.callout-summary{border-left:4px solid var(--orange)}.callout-summary .ct{color:var(--orange)}
+.callout-cite{border-left:4px solid #94a3b8;background:#f8fafc}
+details{margin:18px 0;padding:12px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details[open] summary{margin-bottom:10px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:var(--text)}
+figure[data-visual-kind]{max-width:100%;min-width:0;overflow-x:auto}
+h2{margin-top:32px;font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{margin-top:24px;font-size:1.1rem}
+code{background:#eef2f9;padding:1px 5px;border-radius:5px;font-size:.9em}
+.back{display:inline-block;margin-bottom:8px;font-size:.9rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;
+border:1px solid var(--accent-soft);color:var(--accent);background:var(--surface);margin-bottom:6px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.filters input{position:absolute;opacity:0;pointer-events:none}
+.filters label{cursor:pointer;font-size:.86rem;font-weight:600;padding:6px 14px;border-radius:999px;
+border:1px solid var(--border);background:var(--surface);color:var(--text-soft);user-select:none}
+@media(max-width:600px){
+body{padding:24px 16px 72px;font-size:16px;word-break:normal;overflow-wrap:anywhere}
+.header{margin:-24px -16px 24px;padding:28px 18px 20px}.header h1{font-size:1.45rem}
+table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:8rem}
+}
+</style></head><body>
+<div class="header"><a class="back" href="../">← 학습노트 목록</a>
+<div class="eyebrow">TechBridge-KR 학습노트</div><h1>게리 탄, AI 에이전트는 2년 안에 모든 걸 바꿀 겁니다</h1>
+<div class="meta">업로드 2026-11-06 · 12.8분 · <a href="https://youtu.be/UIMTEGqP3ys" target="_blank" rel="noopener">원본 영상 ↗</a></div></div>
+<h2>먼저 읽는 쉬운 요약</h2>
+<div class="callout callout-abstract"><div class="ct">처음 보는 사람을 위한 읽기 안내</div>
+<p><strong>영상 미시청 기준 · 약 8분 · 선수지식: 없음</strong>
+이 부분만 읽어도 아래 중심 질문에 자기 말로 답할 수 있게 설명한다.</p>
+</div>
+<h3>큰 그림: 채팅 도구가 아니라 일을 맡기는 기반</h3>
+<p>이 영상에서 게리 탄으로 소개된 화자는 AI를 단순히 질문에 답하는 채팅으로 보면 핵심을 놓친다고 주장한다. 그가 말하는 <strong>AI 에이전트</strong>는 많은 자료를 한꺼번에 참고하고, 사용자의 목표와 과거 맥락을 바탕으로 여러 단계를 이어서 처리하며, 때로는 다음 행동을 먼저 제안하는 도구다. 그는 기업이 에이전트를 부가 기능이 아니라 일하는 방식 전체를 받치는 기반, 즉 <strong>핵심 운영체제</strong>처럼 봐야 한다고 말한다.</p>
+<p>영상의 흐름은 여기서 세 방향으로 뻗는다. 첫째, 긴 맥락과 어느 정도의 자율성을 가진 에이전트가 실제 업무를 어떻게 바꿀 수 있는가. 둘째, 이런 도구가 일자리를 없앨지 아니면 기존 분야 지식을 새로운 사업과 연결할지. 셋째, 개인이 통제하는 AI가 소셜 미디어 피드와 정보 선택권을 되찾게 할 수 있는가다.</p>
+<figure data-visual-kind="map">
+<div role="img" aria-label="채팅 중심 인식에서 AI 에이전트의 능력과 사회적 영향으로 이어지는 전체 지도" style="width:100%;max-width:860px;margin:1rem auto;box-sizing:border-box;overflow-wrap:anywhere;">
+  <div style="padding:14px;border:2px solid #9a3412;border-radius:10px;background:#fff7ed;text-align:center;box-sizing:border-box;">
+    <strong>출발 문제</strong><br>AI를 한 번 묻고 한 번 답하는 채팅으로만 본다
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:24px;line-height:1.4;">↓</div>
+  <div style="padding:16px;border:2px solid #1d4ed8;border-radius:12px;background:#eff6ff;box-sizing:border-box;">
+    <div style="text-align:center;margin-bottom:12px;"><strong>영상이 그리는 AI 에이전트</strong></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px;">
+      <div style="min-width:0;padding:12px;border:1px solid #60a5fa;border-radius:8px;background:#ffffff;"><strong>긴 맥락</strong><br>메일·문서·과거 기록처럼 흩어진 자료를 함께 참고</div>
+      <div style="min-width:0;padding:12px;border:1px solid #60a5fa;border-radius:8px;background:#ffffff;"><strong>이어지는 실행</strong><br>검색, 전사, 분류, 주제 추출 같은 단계를 연결</div>
+      <div style="min-width:0;padding:12px;border:1px solid #60a5fa;border-radius:8px;background:#ffffff;"><strong>선제적 도움</strong><br>사용자의 목표를 바탕으로 다음 문제나 선택지를 먼저 제안</div>
+    </div>
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:24px;line-height:1.4;">↓</div>
+  <div style="padding:16px;border:2px solid #166534;border-radius:12px;background:#f0fdf4;box-sizing:border-box;">
+    <div style="text-align:center;margin-bottom:12px;"><strong>화자가 예상하거나 희망하는 변화</strong></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px;">
+      <div style="min-width:0;padding:12px;border:1px solid #4ade80;border-radius:8px;background:#ffffff;"><strong>업무</strong><br>준비와 분석을 더 넓은 자료 위에서 수행</div>
+      <div style="min-width:0;padding:12px;border:1px solid #4ade80;border-radius:8px;background:#ffffff;"><strong>재교육</strong><br>분야 경험과 AI의 코딩·추론 능력을 결합</div>
+      <div style="min-width:0;padding:12px;border:1px solid #4ade80;border-radius:8px;background:#ffffff;"><strong>정보 통제</strong><br>플랫폼 대신 개인 AI가 피드를 중개</div>
+      <div style="min-width:0;padding:12px;border:1px solid #4ade80;border-radius:8px;background:#ffffff;"><strong>시장 구조</strong><br>소수 기업 집중에 맞설 개방형 선택지 모색</div>
+    </div>
+  </div>
+</div>
+<figcaption>AI를 채팅으로만 보는 문제에서 출발해, 에이전트의 세 능력과 화자가 예상하는 네 가지 변화로 이어지는 전체 개념 지도다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 파란 영역은 영상이 에이전트의 특징으로 제시한 내용이고, 초록 영역은 그 특징이 만들 수 있다고 화자가 전망하거나 희망한 결과다. 실제 보급이나 효과를 측정한 수치 그래프가 아니라 발언 구조를 정리한 개념도다.</p>
+<h3>1. 긴 자료를 기억하는 것만으로는 에이전트가 아니다</h3>
+<p>화자는 사람이 머릿속에서 동시에 다룰 수 있는 것을 “일곱 개 ± 세 개” 정도라고 표현한 반면, AI는 천 페이지, 즉 해리 포터 책 세 권가량을 한꺼번에 붙잡고 필요한 사실을 찾아 종합할 수 있다고 설명한다. 또 1년 뒤에는 이 범위가 다섯 권, 열 권, 스무 권으로 늘어날 수 있다고 전망한다. 이 숫자들은 영상 속 화자의 비유와 예측이며 독립적으로 검증된 측정값은 아니다.</p>
+<p>진행자는 여기서 중요한 반문을 한다. 많은 자료에서 사실을 찾는 일은 정보 검색일 뿐인데, 무엇이 그것을 <strong>에이전트</strong>로 만드는가? 영상의 답은 단순한 기억 용량보다 <strong>연속적인 실행과 어느 정도의 자율성</strong>에 가깝다. 에이전트는 필요한 자료를 모으고, 여러 단계를 수행하고, 사용자에게 다음 선택을 제안할 수 있어야 한다는 것이다.</p>
+<p>화자는 OpenClaw를 언급하며 Claude Code와 Codex가 반복 가능성과 안전을 중시하는 과정에서 인간과 함께 일하는 듯한 에이전트의 장점을 일부 포기한다고 주장한다. 그러나 안전성과 반복 가능성이 실제로 어느 정도 희생되는지, OpenClaw가 더 나은지는 이 영상에서 비교 시험하지 않는다.</p>
+<p>표가 화면보다 넓으면 표 영역만 좌우로 이동해 읽는다.</p>
+<figure data-visual-kind="comparison">
+<div style="overflow-x:auto;width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:10px;">
+<table style="width:100%;min-width:700px;border-collapse:collapse;margin:0;">
+<thead>
+<tr style="background:#f1f5f9;">
+<th style="padding:10px;border:1px solid #cbd5e1;text-align:left;">구분</th>
+<th style="padding:10px;border:1px solid #cbd5e1;text-align:left;">채팅·자료 검색으로만 볼 때</th>
+<th style="padding:10px;border:1px solid #cbd5e1;text-align:left;">영상이 그리는 에이전트</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:10px;border:1px solid #cbd5e1;"><strong>기본 역할</strong></td>
+<td style="padding:10px;border:1px solid #cbd5e1;">질문에 답하거나 자료를 찾는다</td>
+<td style="padding:10px;border:1px solid #cbd5e1;">목표를 받아 여러 작업을 이어서 처리한다</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #cbd5e1;"><strong>참고 범위</strong></td>
+<td style="padding:10px;border:1px solid #cbd5e1;">현재 대화와 주어진 자료 중심</td>
+<td style="padding:10px;border:1px solid #cbd5e1;">메일·문서·기록 등 넓은 개인 또는 조직 맥락</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #cbd5e1;"><strong>행동 방식</strong></td>
+<td style="padding:10px;border:1px solid #cbd5e1;">사람의 다음 지시를 기다린다</td>
+<td style="padding:10px;border:1px solid #cbd5e1;">다음 단계나 놓친 문제를 먼저 제안할 수 있다</td>
+</tr>
+<tr>
+<td style="padding:10px;border:1px solid #cbd5e1;"><strong>핵심 조건</strong></td>
+<td style="padding:10px;border:1px solid #cbd5e1;">좋은 답변과 검색 결과</td>
+<td style="padding:10px;border:1px solid #cbd5e1;">맥락, 실행 권한, 비용, 안전, 반복 가능성의 균형</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption>단순 채팅·검색과 영상이 제시하는 AI 에이전트의 차이를 역할, 참고 범위, 행동 방식, 운영 조건으로 비교했다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 왼쪽 두 번째 열은 요청에 반응하는 도구, 오른쪽 열은 목표를 받아 여러 단계를 수행하는 도구다. 차이는 지능의 이름보다 <strong>무슨 자료에 접근하며 어디까지 행동할 수 있는가</strong>에 있다.</p>
+<h3>2. 실제 사례는 강력하지만 접근 비용과 민감 정보 문제가 남는다</h3>
+<p>화자는 자신의 에이전트가 이메일, Dropbox, Apple Notes뿐 아니라 20년 전까지 거슬러 올라가는 치료 기록도 읽었다고 말한다. 인터뷰 직전에는 약 15분 동안 진행자의 인기 팟캐스트 열 편을 내려받아 전사하고, 화자를 구분한 뒤, 줄과 시간대별로 주요 주제를 뽑았다고 설명한다.</p>
+<p>이 사례는 긴 맥락과 연속 실행이 어떻게 준비 시간을 줄일 수 있는지 보여준다. 동시에 도구가 개인 기록 전체를 읽으려면 넓은 접근 권한이 필요하다는 사실도 드러낸다. 화자는 이런 경험을 위해 토큰 비용으로 연간 약 10만~20만 달러를 쓴다고 말하며, 누구나 감당할 수 없는 특권이라고 인정한다. 따라서 “모두가 곧 사용한다”는 전망이 성립하려면 가격과 사용 난도가 크게 낮아져야 한다.</p>
+<p>그는 약 2~3년 안에 모두가 이런 도구를 쓰게 될 것이라고 전망한다. 제목의 “2년 안”과 실제 발언의 “약 2~3년”은 범위가 다르므로 같은 예측으로 뭉개면 안 된다.</p>
+<h3>3. 일자리 문제에 대한 답은 확신이 아니라 희망이다</h3>
+<p>화자는 AI가 일자리를 늘릴지 확실히 알지 못하며 자신은 미래를 보는 사람이 아니라고 선을 긋는다. 단기적으로 일자리가 늘지 않을 수 있고, AI 때문에 불필요해지는 직무와 큰 재교육 문제가 생길 수 있다고도 인정한다. 기술을 멈추기보다 오용을 다루고 사람들이 도구를 제대로 배우게 하자는 것이 그의 입장이다.</p>
+<p>그가 공개했다고 설명한 gstack은 Claude Code를 대표, 디자이너, 리뷰어, 품질 검사 담당이 있는 가상 개발팀처럼 쓰게 하는 설정 모음이다. 화자는 이를 통해 이전보다 400배의 산출물을 얻을 수 있다고 주장하지만, 영상은 이 배수를 측정한 조건이나 비교 기준을 제시하지 않는다.</p>
+<p>재교육에 관한 핵심 생각은 <strong>기존 분야 지식을 버리는 대신 AI 능력과 결합하라</strong>는 것이다. 예를 들어 의료비 청구 업무를 아는 사람이 AI로 소프트웨어를 만드는 사람과 협업하거나 스스로 도구를 배워, 자신이 아는 문제를 해결하는 회사를 시작할 수 있다고 말한다.</p>
+<figure data-visual-kind="process">
+<div role="img" aria-label="개인의 경험과 AI 능력을 결합해 새로운 일이나 사업으로 이어지는 과정" style="width:100%;max-width:720px;margin:1rem auto;box-sizing:border-box;overflow-wrap:anywhere;">
+  <div style="padding:13px;border:2px solid #7c3aed;border-radius:10px;background:#faf5ff;text-align:center;">
+    <strong>자신만의 경험과 분야 지식</strong><br>직업, 생활사, 취미, 현장에서 본 문제
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:24px;">↓</div>
+  <div style="padding:13px;border:2px solid #2563eb;border-radius:10px;background:#eff6ff;text-align:center;">
+    <strong>AI의 코딩·추론 능력과 결합</strong><br>협업하거나 직접 도구 사용법을 익힌다
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:24px;">↓</div>
+  <div style="padding:13px;border:2px solid #047857;border-radius:10px;background:#ecfdf5;text-align:center;">
+    <strong>가까운 문제를 새 방식으로 해결</strong><br>기존 업무와 같거나 “두 클릭 떨어진” 영역에서 시도
+  </div>
+  <div aria-hidden="true" style="text-align:center;font-size:24px;">↓</div>
+  <div style="padding:13px;border:2px solid #b45309;border-radius:10px;background:#fffbeb;text-align:center;">
+    <strong>화자의 기대</strong><br>시작할 수 있는 바닥은 올라가고, 도달 가능한 천장은 높아진다
+  </div>
+</div>
+<figcaption>화자가 제시한 재교육의 논리다. 기존 경험을 없애는 대신 AI 능력과 결합해 새로운 업무나 창업으로 옮기는 흐름을 보여준다.</figcaption>
+</figure>
+
+<p><strong>읽는 법:</strong> 위에서 아래로 읽는다. 마지막 단계는 이미 입증된 사회적 결과가 아니라 화자의 기대다. 특히 400배 생산성과 일자리 증가를 이 흐름의 확정 결과로 보면 안 된다.</p>
+<h3>4. 개인 AI가 정보 선택권을 되찾게 할 수 있는가</h3>
+<p>영상 후반부는 소셜 미디어로 이동한다. 현재는 플랫폼 기업이 피드 알고리즘과 사업 모델을 통제하지만, 화자는 사용자가 직접 조정하는 개인 AI가 앱 대신 API를 통해 콘텐츠를 받아 걸러주는 미래를 상상한다. 사용자는 전국 정치 이야기는 보지 않고 지역 정치만 보는 식으로 자신의 목표를 정할 수 있다. 가까운 사람들과 필터 기준을 함께 만들 가능성도 제시한다.</p>
+<p>이것은 현재 구현된 결과가 아니라 미래 구상이다. 개인 AI가 사용자를 잘 안다고 해서 자동으로 유익한 피드를 만든다는 증거도 영상에는 없다. 다만 통제의 위치를 “플랫폼이 정한 알고리즘”에서 “사용자가 설정한 중개자”로 옮기려는 발상은 분명하다.</p>
+<p>화자는 다음 브라우저 전쟁이 AI 에이전트를 중심으로 일어나고, 시장이 운영체제처럼 양강 구조가 될 수 있다고 전망한다. 이어지는 대화에는 <strong>양강</strong>, 진행자의 <strong>두세 곳</strong>, AI 업계 관계자가 말했다는 <strong>다섯 왕</strong>이 모두 등장하지만 어떤 기업이 어느 집합에 속하는지는 정리되지 않는다. 시장이 이미 다섯 곳에 집중됐다는 말과 앞으로 둘로 재편된다는 전망을 구분해야 한다.</p>
+<p>그가 바라는 대안은 개인 AI를 위한 Linux 같은 개방형 운영체제다. 누구나 선택할 만큼 쉽고 저렴한 오픈소스 선택지가 필요하다는 희망이지, 이미 그런 대안이 널리 보급됐다는 보고가 아니다.</p>
+<h3>여기까지만 이해하면 충분</h3>
+<ul>
+<li>AI 에이전트의 핵심은 많은 자료를 기억하는 것만이 아니라, 목표를 받아 여러 단계를 이어서 실행하고 다음 행동을 제안하는 데 있다.</li>
+<li>화자의 실제 사용 사례는 강력하지만 연간 10만~20만 달러라는 비용과 민감한 개인 기록에 대한 접근 권한이 보급 조건으로 남는다.</li>
+<li>일자리 증가, 400배 산출물, 2~3년 내 보편화는 검증된 결과가 아니라 화자의 주장·희망·전망이다.</li>
+<li>개인 AI와 개방형 운영체제 구상은 플랫폼이 가진 정보 통제권을 사용자에게 옮기려는 시도지만, 시장 참여자 수와 시행 시점은 발언 안에서도 정리되지 않았다.</li>
+</ul>
+<h2>오늘 대답할 질문</h2>
+<blockquote>
+<p><strong>AI 에이전트는 일반 채팅과 무엇이 다르며, 그 차이가 일과 정보 통제권을 어떻게 바꿀 수 있는가?</strong></p>
+</blockquote>
+<ul>
+<li>긴 맥락과 자율적 실행은 각각 어떤 역할을 하는가?</li>
+<li>보편화 전망이 실현되려면 비용·안전·사용 편의성에서 무엇이 달라져야 하는가?</li>
+<li>화자의 주장 가운데 이미 한 일, 앞으로의 전망, 개인적 희망은 무엇인가?</li>
+</ul>
+<h2>요약을 덮고 내 답</h2>
+<div class="callout callout-question"><div class="ct">방금 요약을 덮고 설명해 보자</div>
+<ul>
+<li>내 답:</li>
+<li>말이 막힌 지점:</li>
+<li>이 글을 읽고 고쳐 쓸 부분:</li>
+</ul>
+</div>
+<h2>한 장면으로 이해하기</h2>
+<p>인터뷰 직전, 화자는 에이전트에게 진행자의 인기 팟캐스트 열 편을 준비 자료로 만들게 했다고 말한다. 에이전트는 약 15분 동안 자료를 내려받고 전사한 뒤 화자를 구분하고 주요 주제를 추출했다.</p>
+<p><code>"인터뷰 준비에 필요한 자료가 많고 시간이 짧다"</code> <strong>문제</strong><br>
+→ <code>"자료 수집·전사·화자 구분·주제 추출을 연속 실행한다"</code> <strong>작동 방식</strong><br>
+→ <code>"화자가 대화 전에 주요 주제를 파악한다"</code> <strong>결과</strong></p>
+<h2>비유와 깨지는 지점</h2>
+<div class="callout callout-example"><div class="ct">어깨 위에서 먼저 챙겨주는 조수</div>
+<p>화자는 개인 AI를 사용자의 과거와 목표를 알고 옆에서 돕는 “Jiminy Cricket”에 비유한다. 질문을 받을 때만 답하는 검색창보다, 필요한 자료를 챙기고 다음 선택지를 먼저 말해 주는 조수에 가깝다는 뜻이다.</p>
+</div>
+<p><strong>비유가 깨지는 지점:</strong> 사람 조수처럼 보인다고 해서 실제로 사람과 같은 이해와 판단을 한다는 뜻은 아니다. 넓은 자료 접근에는 권한과 비용이 필요하며, 영상도 안전성과 반복 가능성의 긴장을 언급하지만 결과 품질이나 위험을 비교 검증하지 않는다.</p>
+<h2>정확한 이름 붙이기</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>쉬운 말</th>
+<th>정확한 말</th>
+<th>흔한 오해</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AI 에이전트</strong></td>
+<td>목표를 받고 여러 일을 이어서 하는 AI</td>
+<td>넓은 맥락을 참고해 여러 단계의 작업을 어느 정도 자율적으로 수행하는 도구라는 영상의 정의</td>
+<td>대화 답변이 길거나 검색을 잘하면 모두 에이전트라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>작업 기억</strong></td>
+<td>지금 일할 때 한꺼번에 참고할 수 있는 범위</td>
+<td>현재 작업에서 바로 꺼내 종합할 수 있는 맥락의 크기</td>
+<td>저장된 모든 자료를 항상 정확히 이해한다는 뜻으로 보는 것</td>
+</tr>
+<tr>
+<td><strong>자율적 실행</strong></td>
+<td>다음 지시를 기다리지 않고 작업을 이어감</td>
+<td>목표에 따라 자료 수집·가공·제안 같은 단계를 연결하는 성질</td>
+<td>아무 감독 없이 모든 결정을 맡겨도 된다는 뜻으로 보는 것</td>
+</tr>
+<tr>
+<td><strong>개인 인지 필터</strong></td>
+<td>내가 정한 기준으로 피드를 거르는 중개자</td>
+<td>개인 AI가 API를 통해 받은 콘텐츠를 사용자의 목표에 맞춰 중개한다는 구상</td>
+<td>이미 효과가 검증된 소셜 미디어 제품이라고 보는 것</td>
+</tr>
+<tr>
+<td><strong>개방형 개인 AI 운영체제</strong></td>
+<td>누구나 고르고 고칠 수 있는 개인 AI 기반</td>
+<td>화자가 Linux에 빗대어 희망한 쉽고 저렴한 오픈소스 개인 AI 기반</td>
+<td>현재 널리 보급된 완성 시스템으로 보는 것</td>
+</tr>
+</tbody>
+</table>
+<h2>내가 설명해 보기</h2>
+<h3>1. 원인</h3>
+<p><strong>화자는 왜 AI를 채팅 기능이 아니라 핵심 운영체제로 봐야 한다고 말하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>채팅은 현재 질문에 답하는 기능에 가깝지만, 화자가 그리는 에이전트는 이메일·문서·기록 같은 넓은 맥락을 참고하고 여러 작업을 연속으로 실행한다. 이 능력이 조직의 준비, 분석, 의사결정 방식 전체에 들어가면 하나의 부가 기능보다 일하는 기반에 가까워진다는 주장이다.</p>
+</details>
+<h3>2. 대조</h3>
+<p><strong>많은 문서에서 사실을 찾는 검색과 AI 에이전트의 차이는 무엇인가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>검색은 필요한 정보를 찾아 돌려주는 데 중심이 있다. 영상이 말하는 에이전트는 찾은 정보를 종합하고, 전사·분류·주제 추출 같은 다음 단계를 이어서 수행하며, 사용자의 목표에 따라 다음 행동까지 제안한다. 다만 실제 자율성의 범위와 품질은 영상에서 시험하지 않았다.</p>
+</details>
+<h3>3. 적용</h3>
+<p><strong>새 AI 도구를 평가할 때 “에이전트”라는 이름보다 먼저 무엇을 확인해야 하는가?</strong></p>
+<details><summary>모범 답안 보기</summary>
+<p>처리할 실제 작업을 먼저 정한 뒤 필요한 맥락, 실행 단계, 접근 권한, 감독 지점, 비용과 완료 기준을 확인해야 한다. 긴 자료를 읽는 능력만 필요한지, 여러 단계를 실제로 이어서 수행해야 하는지도 구분한다. 민감 정보가 필요한 작업이라면 편의성보다 권한 범위와 안전 조건을 먼저 따져야 한다.</p>
+</details>
+<h2>이번 글의 통찰</h2>
+<h3>1. 에이전트의 가치는 기억 용량보다 실행 구조에서 나온다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 천 페이지 또는 해리 포터 세 권가량의 자료를 붙잡는 능력을 설명했고, 인터뷰 준비에서는 팟캐스트 열 편의 수집·전사·화자 구분·주제 추출을 약 15분에 처리했다고 말했다.</li>
+<li><strong>[해석]</strong> 큰 맥락은 재료이고, 실제 가치는 그 재료를 여러 작업 단계로 연결해 사용 가능한 결과로 바꾸는 데서 생긴다.</li>
+<li><strong>[경계]</strong> 일곱 개 ± 세 개, 천 페이지, 1년 뒤 다섯·열·스무 권이라는 수치는 화자의 설명과 전망이다. 15분 사례도 화자의 자기 보고이며 품질·비교 기준은 제시되지 않았다.</li>
+</ul>
+<h3>2. 보편화 전망과 현재 접근성 사이에는 큰 간격이 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 약 2~3년 안에 모두가 에이전트를 사용할 것으로 전망하면서, 자신의 경험에는 연간 약 10만~20만 달러의 토큰 비용이 든다고 말했다.</li>
+<li><strong>[해석]</strong> 보편화의 핵심 조건은 기능 추가만이 아니라 비용, 사용 난도, 안전한 자료 접근을 함께 낮추는 것이다.</li>
+<li><strong>[경계]</strong> 제목은 “2년 안”이지만 실제 발언은 “약 2~3년”이다. 둘을 같은 기간으로 바꾸면 안 된다. 한국어 해설은 Jiminy Cricket을 “피노키오의 말하는 앵무새”라고 부연하지만 영어 발화에는 이 설명이 없으므로 해당 부연은 별도 검증이 필요하다.</li>
+</ul>
+<h3>3. 개인 통제와 시장 집중은 동시에 커질 수 있다</h3>
+<ul>
+<li><strong>[원문]</strong> 화자는 사용자가 조정하는 개인 AI 필터와 Linux 같은 오픈소스 개인 AI를 희망하는 한편, 다음 브라우저 전쟁과 AI 에이전트 시장의 양강화를 전망했다.</li>
+<li><strong>[해석]</strong> 개인화 기술이 사용자에게 통제권을 줄 수도 있지만, 그 중개 도구 자체가 소수 공급자에게 집중되면 새로운 의존이 생길 수 있다.</li>
+<li><strong>[경계]</strong> 대화에는 양강, 진행자의 “두세 곳”, 업계 관계자의 표현이라는 “다섯 왕”이 함께 나오며 다섯 곳의 명단도 제시되지 않는다. “내년”의 기준이 되는 원 인터뷰 날짜도 확인되지 않는다. META에는 원본 인터뷰 링크가 없고 화자 이름과 SNS를 기준으로 출처를 추정했다는 메모만 있어 원작자와 원소속을 확정할 수 없다.</li>
+</ul>
+<h2>차드의 4렌즈</h2>
+<h3>교육자 · 구조적 비유</h3>
+<ul>
+<li><strong>관련성:</strong> 화자는 단순 검색과 여러 단계를 수행하는 에이전트를 구분하고, 분야 지식과 AI 능력을 결합해야 한다고 말한다.</li>
+<li><strong>통찰:</strong> 학습자가 용어를 기억하는 것보다 새로운 사례에서 자료 수집, 종합, 다음 행동의 차이를 설명하는지가 이해의 증거가 될 수 있다.</li>
+<li><strong>질문/행동:</strong> 같은 자료 검색 사례를 주고, 어느 시점부터 에이전트라고 부를 수 있는지 근거와 함께 설명하게 한다.</li>
+</ul>
+<h3>사업가 · 영감</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 생산성, 토큰 비용, 민감 자료 접근, 재교육과 새로운 사업 기회를 함께 다룬다.</li>
+<li><strong>통찰:</strong> APOM의 현재 시스템 상태는 출처에 없으므로 직접 적용을 단정할 수 없다. 가상 적용에서는 “AI인가”보다 특정 업무의 시간·품질·권한 위험이 비용을 넘는지 확인해야 한다.</li>
+<li><strong>질문/행동:</strong> 비민감한 반복 업무 하나를 가정하고, 에이전트에 필요한 자료와 권한을 최소 범위로 줄여도 가치가 남는지 묻는다.</li>
+</ul>
+<h3>마케터 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 천 페이지, 15분, 10편, 연간 10만~20만 달러, 400배처럼 기억에 남는 숫자가 주장을 강하게 만든다.</li>
+<li><strong>통찰:</strong> 구체적인 숫자는 설득력을 높이지만 자기 보고, 전망, 검증 결과를 구분하지 않으면 과장이 된다.</li>
+<li><strong>질문/행동:</strong> 숫자를 카피에 쓰기 전에 측정 조건, 비교 대상, 시행 상태를 함께 보여줄 수 있는지 확인한다.</li>
+</ul>
+<h3>AI/SW 학습자 · 직접 전이</h3>
+<ul>
+<li><strong>관련성:</strong> 영상은 맥락 크기, 자율성, 반복 가능성, 안전, 토큰 비용을 에이전트 선택의 긴장 관계로 제시한다.</li>
+<li><strong>통찰:</strong> 도구 이름보다 실제 작업량과 병목을 기준으로 평가해야 한다. 긴 맥락이 필요한지, 다단계 실행이 필요한지, 사람이 어디서 승인해야 하는지를 분리해 시험할 수 있다.</li>
+<li><strong>질문/행동:</strong> 동일한 비민감 작업을 채팅 방식과 에이전트 방식으로 실행해 사전 완료 기준 충족 수를 비교한다.</li>
+</ul>
+<h2>가치 지도</h2>
+<p><code>"흩어진 자료를 반복해서 찾고 여러 작업 단계를 사람이 직접 연결해야 한다"</code> <strong>문제</strong><br>
+→ <code>"더 짧은 준비 과정과 넓은 맥락에서 도움을 받는다"</code> <strong>수혜자: 지식 노동자와 분야 전문가</strong><br>
+→ <code>"자료·시간·접근 권한·토큰 비용을 제공한다"</code> <strong>지불자 또는 자원 제공자: 사용자 또는 조직</strong><br>
+→ <code>"사전에 정한 작업 완료 기준을 충족한 수"</code> <strong>가치 지표</strong></p>
+<h2>작은 실험 하나</h2>
+<ul>
+<li><strong>행동 1개:</strong> 비민감한 조사·요약 작업 하나를 정해 같은 입력과 사전 완료 기준 5개로 일반 채팅 방식과 에이전트 방식을 각각 한 번 실행한다.</li>
+<li><strong>측정 1개:</strong> 각 방식이 충족한 완료 기준 수인 0~5개.</li>
+<li><strong>중단 기준 1개:</strong> 에이전트 방식의 완료 기준 충족 수가 채팅 방식보다 많지 않으면 확대하지 않고 멈춘다.</li>
+</ul>
+<h2>더 깊이 읽기</h2>
+<details>
+<summary><strong>상세 정리 펼치기</strong> — 수치·화자별 주장·근거·원래 흐름</summary>
+<h3>한눈에 보기</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>섹션</th>
+<th>요지</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>채팅을 넘어선 에이전트</td>
+<td>긴 조직 맥락과 연속 실행을 핵심 운영 기반으로 본다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>에이전트의 실제 사용</td>
+<td>개인 자료 전체와 팟캐스트 열 편을 활용한 준비 사례를 말한다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>비용과 보편화</td>
+<td>현재 비용은 매우 높지만 2~3년 내 보편화를 전망한다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>일자리와 gstack</td>
+<td>단기 고용 충격을 인정하면서 재교육과 창업을 희망한다</td>
+</tr>
+<tr>
+<td>5</td>
+<td>개인 AI와 소셜 미디어</td>
+<td>사용자가 통제하는 AI가 피드를 중개하는 미래를 제안한다</td>
+</tr>
+<tr>
+<td>6</td>
+<td>시장 집중과 오픈소스</td>
+<td>양강·두세 곳·다섯 왕이 함께 언급되며 Linux형 대안을 희망한다</td>
+</tr>
+<tr>
+<td>7</td>
+<td>검증 경계</td>
+<td>수치, 시점, 시장 참여자 수, 원본 출처의 불확실성을 보존한다</td>
+</tr>
+</tbody>
+</table>
+<h3>1. 채팅을 넘어선 에이전트</h3>
+<p>진행자는 AI 에이전트를 부가 기능이 아니라 핵심 운영체제로 봐야 한다는 화자의 관점을 묻는다. 화자는 YC의 운영 방식을 다시 만들기 시작했다며, Straylight라는 내부 에이전트가 지원한 창업자, 이메일, 지원서의 맥락을 가진다고 주장한다.</p>
+<p>사람이 머릿속에 유지할 수 있는 범위를 일곱 개 ± 세 개로, AI가 다룰 수 있는 범위를 천 페이지 또는 해리 포터 세 권으로 비유한다. 1년 뒤에는 다섯 권, 열 권, 스무 권까지 늘어날 수 있다고 전망한다.</p>
+<p>진행자는 이것이 단순 자료 검색과 무엇이 다른지 묻는다. 화자는 Peter Steinberger의 OpenClaw를 언급하고, Claude Code와 Codex가 반복 가능성과 안전을 중시하면서 인간과 함께 일하는 듯한 에이전트의 일부 장점을 포기한다고 주장한다. 한국어 해설은 OpenClaw를 컴퓨터에서 실행하고 메신저로 일을 맡길 수 있는 오픈소스 개인 AI 에이전트라고 설명한다.</p>
+<h3>2. 에이전트의 실제 사용</h3>
+<p>화자는 에이전트가 자신의 이메일, Dropbox, Apple Notes와 20년 전까지의 치료 기록을 읽었다고 말한다.</p>
+<p>인터뷰 직전 약 15분 동안 진행자의 인기 팟캐스트 열 편을 내려받아 전사하고, 화자를 구분하고, 줄과 시간대별로 주요 주제를 추출했다고 설명한다. 이 사례는 화자의 자기 보고이며 결과의 정확도와 기존 방식의 소요 시간은 제시되지 않는다.</p>
+<h3>3. 비용과 보편화</h3>
+<p>화자는 에이전트가 사용자를 알고 먼저 달려가 선택지를 제안하는 조수가 될 것이라고 말한다. 약 2~3년 안에 모두가 사용하게 될 것이라는 전망도 제시한다.</p>
+<p>현재 같은 경험을 위해 자신은 토큰 비용으로 연간 약 10만~20만 달러를 쓴다고 말한다. 이를 누구나 누릴 수 없는 특권으로 인정하며, 자신이 아는 여러 CEO는 비용을 감당할 수 있어 비슷하게 사용한다고 주장한다.</p>
+<h3>4. 일자리와 gstack</h3>
+<p>화자는 AI가 일자리를 늘릴지 확실히 모른다고 밝힌다. 기술에는 문제가 있고 AI 안전도 걱정해야 하지만, 기술 자체를 멈추기보다 사람의 오용을 다뤄야 한다는 입장이다.</p>
+<p>일자리 증가는 자신의 희망이며 단기적으로는 그렇지 않을 수 있다고 말한다. AI 때문에 불필요해지는 직무와 큰 재교육 문제가 생길 수 있다고 인정한다.</p>
+<p>gstack은 Claude Code 사용법을 가르치기 위해 만든 오픈소스 프로젝트로 소개된다. 화자는 YC 창업자들이 이전보다 400배의 산출물을 얻는 자신의 작업 구성을 적용하게 하려 했다고 말한다. 한국어 해설은 gstack을 대표, 디자이너, 리뷰어, 품질 검사 담당이 있는 가상 개발팀처럼 Claude Code를 쓰게 하는 설정 모음으로 설명한다.</p>
+<p>재교육 사례로 의료비 청구 담당자를 든다. 분야 지식을 가진 사람이 소프트웨어 생산 능력을 가진 22세와 협업하거나 직접 도구를 익혀, 기존 업무와 같거나 가까운 문제를 해결하는 회사를 시작하기를 바란다고 말한다. 개인의 직업 경험, 생활사, 희귀한 취미에 AI의 코딩·추론 능력을 결합하면 시작의 바닥은 높아지고 천장은 열린다는 주장이다.</p>
+<h3>5. 개인 AI와 소셜 미디어</h3>
+<p>진행자는 사람을 분열시키고 분노하게 하기보다 사회를 강하게 만드는 소셜 미디어를 미래 사례로 제안한다.</p>
+<p>화자는 개인 AI가 이를 가능하게 할 수 있다고 말한다. Facebook이나 Instagram 앱을 직접 쓰는 대신 해당 서비스가 API가 되고, 사용자가 통제하는 AI가 콘텐츠를 받아 개인의 목표에 맞게 거르는 구상이다. 가까운 사람들과 필터 기준을 함께 만들 가능성도 제시한다.</p>
+<p>화자는 자신의 현재 목표가 자기 개선이며 전국 정치는 보지 않고 지역 정치만 보고 싶을 수 있다고 예를 든다. 진행자는 기존 개인화 알고리즘도 분노와 분열을 이용하는 사업 모델에 묶였다고 반박한다. 화자는 차이가 플랫폼 기업이 아니라 개인이 통제한다는 데 있다고 답한다.</p>
+<h3>6. 시장 집중과 오픈소스</h3>
+<p>화자는 개인 AI의 변화를 개인용 컴퓨터 혁명에 비유하며 Steve Jobs의 1984년 Mac 광고와 IBM을 언급한다.</p>
+<p>그는 “내년”이 다음 브라우저 전쟁을 결정하는 해가 될 수 있고, AI 에이전트 시장이 운영체제처럼 양강 구조가 될 것이라고 전망한다. 진행자는 Anthropic, OpenAI, Gemini를 언급하며 두세 곳으로 통합되는지를 묻는다.</p>
+<p>화자는 이미 그런 상태라고 답하며, 전년도 AI 연구소 관계자들이 “다섯 왕”이라는 표현을 사용했다고 말한다. 그러나 다섯 곳의 명단과 양강 전망과의 관계는 설명하지 않는다.</p>
+<p>대응 방법으로 정책, 투자, 차세대 인재 지원, 시장 개방, 오픈소스를 말한다. 최종적으로는 개인 AI를 위한 Linux 같은 개방형 운영체제가 쉽고 저렴해져 모두가 선택할 수 있기를 희망한다.</p>
+<h3>7. 검증 경계</h3>
+<ul>
+<li><strong>[경계] 기간 충돌:</strong> 제목은 “2년 안”이지만 영어 발언은 “약 2~3년”이다.</li>
+<li><strong>[경계] 시장 수량 충돌:</strong> 화자의 “양강”, 진행자의 “두세 곳”, 업계 표현이라는 “다섯 왕”이 함께 나온다. 다섯 곳의 명단은 제시되지 않아 하나의 시장 구조로 확정할 수 없다.</li>
+<li><strong>[경계] 상대 시점:</strong> “1년 뒤”, “내년”, “전년도”의 기준이 되는 원 인터뷰 날짜가 제공되지 않았다. 업로드일만으로 달력 연도를 확정하면 안 된다.</li>
+<li><strong>[경계] 자기 보고 수치:</strong> 15분, 팟캐스트 10편, 치료 기록 20년, 연간 10만~20만 달러, 400배 산출물은 화자의 주장 또는 영상 해설이며 독립 검증 자료가 없다.</li>
+<li><strong>[경계] 기억 비유:</strong> 일곱 개 ± 세 개, 천 페이지, 해리 포터 세 권과 향후 다섯·열·스무 권은 화자의 설명과 전망이다.</li>
+<li><strong>[경계] 고유명사 부연:</strong> 영어 발화는 Jiminy Cricket이라는 이름을 사용한다. 한국어 해설이 덧붙인 “피노키오의 말하는 앵무새”라는 설명은 영어 발화에서 확인되지 않는다.</li>
+<li><strong>[경계] 시행 상태:</strong> 개인 AI 피드, 다음 브라우저 전쟁, 시장 양강화, 개인 AI용 Linux, 일자리 증가는 이미 검증된 결과가 아니라 전망·희망·구상이다.</li>
+<li><strong>[경계] 출처 계보:</strong> META의 provenance.creator와 provenance.affiliation은 비어 있다. provenance.note에는 <code>채널이 원본 영상 링크를 안 검 — 화자 이름+SNS 기준 추정 출처</code>라고 적혀 있어 원작자와 원소속을 확정할 수 없다.</li>
+</ul>
+</details>
+<h2>출처</h2>
+<div class="callout callout-cite"><div class="ct">원문</div>
+<p>Tech Bridge · 게리 탄, AI 에이전트는 2년 안에 모든 걸 바꿀 겁니다 · https://www.youtube.com/watch?v=UIMTEGqP3ys · 전사: 제공된 SOURCE_TRANSCRIPT의 영어 인터뷰와 한국어 해설 혼합본, 세부 전사 방식은 META에 명시되지 않음. META에는 원본 영상 링크가 없고 <code>화자 이름+SNS 기준 추정 출처</code>라는 불확실성이 기록되어 있다.</p>
+</div>
+<hr>
+<h2>교정 전사 (한국어)</h2>
+<details><summary>전체 전사 펼치기</summary>
+<p>AI는 그냥 대화하는 채팅일까요? 스타트업 투자사 Y Combinator의 대표 게리 탄은 그보다 훨씬 큰 거라고 말해요. 이번 영상에서는 그가 직접 쓰는 AI 에이전트, 2~3년 안에 모두가 쓰게 될 거라는 전망, 그리고 일자리와 소셜 미디어 다섯 왕 이야기를 차례로 들어볼게요.</p>
+<p>AI의 다음 단계일지도 모를 것, 바로 AI 에이전트(AI agents)에 대해 이야기해 보죠.</p>
+<p>그리고 AI 에이전트를 하나의 기능(feature)으로 보는 기업에는 투자하고 싶지 않다고 말씀하셨죠. AI 에이전트를 핵심 운영체제(core operating system)로 보길 원한다고요. 이것이 AI에 대해 이야기할 때 우리의 생각을 어떻게 바꾼다고 보시는지 설명해 주세요.</p>
+<p>네, 물론이죠. 조금 공상과학 같아지겠지만, 저희도 YC에서 운영 방식을 재구축하면서 이런 변화를 직접 보기 시작했습니다. 사람들이 가장 많이 잘못 생각하는 것은 AI가 그저 채팅이라고 생각하는 겁니다. 하지만 AI는 그보다 훨씬 더 많은 일을 할 수 있습니다. 예를 들어 지금 저희에게는 스트레이라이트(Straylight)라는 내부 AI 에이전트가 있습니다. 일종의 성격도 있고, 회사의 두뇌도 갖고 있죠. 저희가 지금까지 투자한 모든 창업자, 저희에게 이메일을 보낸 모든 사람, 모든 지원서에 대한 전체 맥락을 실제로 갖고 있습니다.</p>
+<p>흥미로운 기술적 관점에서 제가 생각하는 방식은, 인간은 머릿속에서 대략 7±3개 정도의 사항만 추적할 수 있다는 겁니다. AI 에이전트란 이미 매우 지능적입니다. 1,000페이지 분량을 쌓아 두고 유지할 수 있죠. 제가 열한 살인 아이에게 설명할 때는 해리 포터 책 세 권 정도라고 생각해 보라고 했습니다.</p>
+<p>건초 더미에서 바늘을 찾을 수 있습니다. 그 해리 포터 책 세 권에 나오는 어떤 페이지, 어떤 사실, 어떤 일이든 모두 알고, 종합하고, 활용할 수 있습니다. 작업 기억(working memory)이 엄청나게 큰 겁니다.</p>
+<p>그리고 중요한 것은, 1년만 지나도 AI 에이전트의 두뇌에 들어갈 내용이 해리 포터 책 세 권이 아니라 다섯 권, 열 권, 스무 권이 될 거라는 점입니다. 그러면 AI 에이전트가 다룰 수 있는 대상의 범위는 훨씬 더 커집니다.</p>
+<p>정리하면 사람은 머릿속에 일곱 개 안팎만 담지만 AI 에이전트는 천 페이지를 한 번에 붙잡고 일한다는 거예요. 여기서 작업 기억은 지금 당장 꺼내 쓰는 기억의 크기를 말해요.</p>
+<p>잠깐만요. 더 나은 예를 들어서 좀 더 구체적으로 설명해 주세요. 해리 포터 책 세 권에서 데이터를 검색하는 것도 꽤 멋지긴 합니다. 하지만 그건—제 말은, 그냥 데이터 검색일 뿐이잖아요. 무엇이 어떤 것을 에이전트(agent)로 만드는 건가요?</p>
+<p>저라면 OpenClaw의 피터 스타인버거(Peter Steinberger)가 알아낸 점을 들겠습니다. Claude Code나 Codex를 사용해 보면, 지금은 반복 가능성과 안전성에 지나치게 신경 쓰고 있어서, AI 에이전트와 함께 작업할 때의 아름다운 부분을 사실상 희생하고 있다고 생각합니다. AI 에이전트는 기본적으로 인간과 아주 비슷해질 수 있고, 인간적인 특성까지 어느 정도 갖게 되니까요.</p>
+<p>Peter Steinberger가 만든 OpenClaw라는 도구는 오픈소스 개인 AI 에이전트예요. 내 컴퓨터에서 돌아가고 메신저로 일을 맡길 수 있어요. 여기서 반복 가능성은 같은 요청에 늘 같은 결과가 나오는 성질이에요.</p>
+<p>그럼 에이전트에게 무엇을 하라고 시키는지 말씀해 주세요.</p>
+<p>아, 정말 많은데요. 제가 한 일 중 하나는 에이전트가 제 이메일과 Dropbox를 전부 읽게 한 겁니다. Apple 메모도 전부 읽게 했고, 심지어 20년 전부터의 제 치료 기록까지 읽게 했어요. 예를 들어 당신과 이야기할 준비를 하는 데도 사용했습니다. 너무 메타적인 이야기는 하지 않자면, 이 대담을 시작하기 약 15분 전에 당신이 지금까지 진행한 인기 팟캐스트 10편을 다운로드하고 녹취할 수 있었어요. 그리고 실제로 화자 분리(diarization)까지 했습니다. LLM이 한 줄씩, 타임스탬프 단위로 살펴보며 주요 주제를 뽑아냈고, 그게 제게 정말 큰 도움이 됐습니다.</p>
+<p>그런 일을 여러분이 일상에서 하는 거의 모든 일에 적용하고, 에이전트가 어느 정도 더 자율적으로 처리하게 되는 건 피할 수 없어 보입니다. 2~3년 안에는 모두가 그렇게 하게 될 거라고 생각해요. 그리고 정말 멋지게 느껴질 겁니다. 언제나 어깨 위에 지미니 크리켓(Jiminy Cricket)이 앉아 있다고 생각해 보세요. 여러분이 하고 싶은 거의 모든 일을 알고, 곁에서 도와주는 존재인 거죠. 게다가 꽤—실제로 한발 앞서서 “이건 어떠세요?”라고 말하거나, 앞에 놓인 상황을 내다볼 수 있도록 도와줄 겁니다.</p>
+<p>지금은 비용이 너무 비싼 이유가—말 그대로 너무 비싸기 때문입니다. 이런 경험을 하려면 저는 1년에 토큰(tokens) 비용으로 대략 10만~20만 달러를 씁니다. 그러니 모든 사람이 그렇게 할 수 있는 건 아니라는 점이 엄청난 특권이라는 걸 알고 있어요. 제가 아는 많은 CEO들도 그렇게 하고 있고, 그들은 그럴 여력이 있습니다.</p>
+<p>지미니 크리켓은 동화 《피노키오》에 나오는 말하는 귀뚜라미입니다. 토큰은 사람들이 글을 작성할 때 사용하는 AI 단위이며, 사용하려면 비용이 듭니다.</p>
+<p>AI, 특히 지금 설명하신 에이전트가 결국 일자리를 없애게 될까요? 아니면 사회의 일자리 수를 엄청나게 늘리게 될까요?</p>
+<p>제 희망은—확실히 아는 건 아니고, 제가 미래를 내다볼 수 있는 것도 아니지만—기술이 지나치게 악마화되어 왔다고 생각합니다. 물론 문제가 있고, AI 안전은 우리가 걱정해야 할 사안입니다. 하지만 그 문제를 해결하는 방법은 기술 자체가 아예 등장하지 못하게 막는 것이 아닙니다. 사람들이 실제로 기술을 사용할 때 벌이는 남용과 오용을 직접 해결해야 합니다.</p>
+<p>하지만 일자리를 만들어낼 거라고 생각하나요? AI 때문에 일자리가 더 많아질까요?</p>
+<p>물론 그게 제 희망입니다. 그렇죠? 단기적으로는 그렇지 않을 수도 있고, 그건 상당히 답답한 일입니다. 그래서 제가 오픈 소스(open source)를 개발하고 사람들이 AI를 사용하는 방법을 가르치려 해온 이유 중 하나가 바로 그것입니다. 예를 들어 제 오픈 소스 프로젝트인 gstack은, YC 창업자들에게 Claude Code를 사용해 이전보다 400배 많은 결과물을 만들어내는 방법을 가르치려 한다면 어떻게 해야 할까라는 질문에서 거꾸로 출발한 겁니다. 그들이 Claude Code에 그냥 넣기만 하면 제가 사용해서 그런 결과를 얻었던 것과 똑같은 스택을 사용할 수 있는 프로젝트였죠.</p>
+<p>gstack은 게리 탄이 GitHub에 공개한 Claude Code용 설정 모음이에요. Claude Code를 대표, 디자이너, 리뷰어, 품질 검사 담당이 있는 가상 개발 팀처럼 쓰게 해줘요. 400배라는 숫자는 게리 탄 본인의 주장이에요.</p>
+<p>그런 것들은 사람들이 도구를 제대로 사용하는 법을 배우게 하는 데 필요하다고 생각해요.</p>
+<p>그리고 AI가 그 직무를 불필요하게 만들었기 때문에 일자리를 잃는 사람들도 생길 거예요. 여기에는 대규모 재교육 문제가 있다고 생각합니다. 하지만 gstack 같은 것, 또는 지금 나와 있는 여러 노력들이 그 문제를 해결할 수 있다고 봐요. 그렇죠? 그런 맥락이 있다면, 여러분이 X라는 직업에 종사하고 있었다고 해봅시다. 예를 들어 의료비 청구 담당자라고 해보죠.</p>
+<p>제가 바라는 건 그런 사람이 스물두 살인 누군가와 짝을 이룰 수 있게 되는 거예요. 한 사람은 해당 분야의 전문 지식을 갖고 있고, 다른 사람은 이전보다 400배나 많은 소프트웨어를 만드는 방법을 정말, 정말 잘 아는 거죠.</p>
+<p>그 분야를 속속들이 아는 사람이 더 젊은 사람과 짝을 이루거나, 혹은 스스로 그 방법을 익힐 수도 있겠죠. 저는 그들이 그 분야에서 회사를 시작할 수 있기를 바랍니다. 어쩌면 예전에 하던 일을 그대로 할 수도 있고, 어쩌면 두 번 클릭만 하면 닿을 수 있는 다른 일일 수도 있어요. 어느 쪽이든 주체성의 양을 늘려야 합니다. 우리가 사람들이 하기를 바라는 건 자신의 과거와 삶 속으로 들어가는 거예요.</p>
+<p>자신만이 알고 있는 건 무엇인가? 어떤 삶을 살아왔는가? 어떤 남들이 잘 모르는 취미를 갖고 있는가? 아무도 보지 못한 무엇을 본 적이 있는가?</p>
+<p>그리고 그걸 놀라운 능력과 결합하는 거죠. 단지 코딩하는 능력뿐 아니라, 생각하고 추론하는 능력과요. 그래서 바닥은 올라간다고 생각합니다. 반대로 천장은 하늘 높이 올라가죠. 정리하면 내 경험과 분야 지식에 AI의 코딩과 추론 능력을 더하자는 거예요. 그러면 누구나 시작할 수 있는 바닥은 올라가고 갈 수 있는 천장은 아주 높아진다는 거죠. 이어서 진행자는 우리가 바라는 미래의 예로 우리를 갈라놓지 않는 소셜 미디어를 꺼내요.</p>
+<p>한 가지 예를 들어볼게요. 우리를 분열시키고 격분하게 만드는 대신, 사회로서 더 강해지도록 돕는 소셜 미디어를 갖는 겁니다.</p>
+<p>저는 그게 충분히 가능하다고 생각해요. 실제로 개인 에이전트라는 발상은 그렇게 할 수 있는 아주 직접적인 방법입니다. 다시 메타 이야기로 돌아가 보죠. 그렇죠? 메타는 알고리즘을 통제하는 거대한 기업이고, 우리 모두 어느 정도는 그들이 알고리즘을 통제하지 않았으면 한다고 생각해요. 이제는 그들이 통제할 필요가 없을지도 모릅니다.</p>
+<p>그러니 여러분이 통제하고 프로그래밍하는 개인 AI를 상상해볼 수 있어요. 페이스북 앱이나 인스타그램 앱을 내려받는 게 아닙니다. 그것들은 그저 API일 뿐이에요.</p>
+<p>소셜 네트워크는 갖고 있지만, 그 소셜 네트워크가 여러분 자신의 인지 필터를 통해 매개되는 거죠. 무엇을 보고 싶은지 정한 다음, 그 내용을 거기에 넣는 겁니다. 그리고 그 필터는 여러분뿐 아니라 여러분과 가장 가까운 사람들이 프로그래밍할 수도 있겠죠.</p>
+<p>저는 이것이 뇌 속으로 무엇이 들어오는지를 통제하는 권한을 다시 자기 손에 넣을 수 있는 한 가지 사례라고 생각해요. 예전에는 사실 가능하지 않았던 일이죠. 평범한 사람이 앉아서 자신에게 직접 유익한 알고리즘을 스스로 프로그래밍할 수 있을까 하는 생각조차도요. 우선 사람들은 프로그래밍하는 법을 모르고, 무엇보다 그게 어떤 모습일지도 알 수 없어요. 너무 복잡하니까요. 하지만 AI 에이전트, 특히 코딩할 수 있는 AI 에이전트가 등장하면, 그 에이전트는 여러분을 알고 여러분의 목표가 무엇인지도 알게 될 겁니다. 지금 제 한 해의 목표는 그저 제 자신을 개선하는 데 집중하는 거예요.</p>
+<p>국가 정치에 관한 내용은 보고 싶지 않아요. 지역 도시 정치에만 관심이 있을 수도 있죠. 핵심은 앱이 정한 피드를 그대로 보는 대신 내가 조정하는 개인 AI가 내용을 받아서 걸러준다는 거예요. API는 프로그램끼리 정보를 주고받는 통로예요.</p>
+<p>하지만 과거에도 그런 것들은 있었잖아요. 개인화된 소셜 미디어도 있었고요. 그런데 알고리즘은 우리를 격분시키거나 분열시킬 때 가장 잘 작동하는 비즈니스 모델을 갖고 있죠.</p>
+<p>맞아요. 그리고 그 비즈니스 모델은 다른 누군가, 즉 거대 기술 기업이 운영하고 있으며, 그게 그들의 통제력과 힘입니다. 그래서 개인적으로 저는 스티브 잡스가 1984년에 했던 일과 같은, 개인용 컴퓨터 혁명에 더 가까운 일이 일어나기를 바랍니다. 최초의 맥 광고를 기억한다면, 1984가 꼭 《1984》처럼 될 필요는 없다는 내용이었죠. 빅 블루, IBM이 모든 것을 차지할 필요는 없습니다.</p>
+<p>그리고 저는 내년이 차세대 브라우저 전쟁이 벌어지는 결정적인 해 가운데 하나가 될 거라고 생각해요. 그건 AI 에이전트 양강 구도가 될 겁니다. 운영체제와 비슷한 방식으로 흘러갈 것 같아요. 아마 맥이 있을 것이고, 아마 PC도 있을 겁니다.</p>
+<p>그러면 앤트로픽, 오픈AI, 제미나이 같은 회사들이 결국 두세 곳으로 통합될 거라고 말하는 건가요? 그건 꽤 끔찍하지 않을까요?</p>
+<p>저는 우리가 이미 그런 상황에 와 있다고 생각해요. 지난해 AI 연구소 몇 곳에 있는 친구들이 ‘다섯 왕’에 대해 이야기했는데, 사실 꽤 놀라운 전망입니다. 미래의 모든 가치, 말 그대로 모든 상업적 가치가 뻗어나가는 빛의 원뿔이—</p>
+<p>그렇다면 그걸 뒤흔들기 위해 무엇을 할 수 있나요?</p>
+<p>우리는 매일 노력하고 있죠. 정책을 통해서든, 차세대 인재를 찾고 그들이 성장하도록 돕는 직접적인 자금 지원 수단이 되어서든, 그들에게 시장이 열려 있도록 보장해서든, 또 오픈 소스가 존재하도록 보장해서든요. 제가 바라는 건 개인 AI를 위한 리눅스가 생기는 겁니다. 기본적으로 오픈 소스 운영체제인 거죠.</p>
+<p>맞아요. 그리고 모든 사람이 선택할 만큼 충분히 사용하기 쉽고 저렴하기만 하면 됩니다. 저는 그게 가능하다고 생각해요. 정리하면, 게리 탄은 AI 에이전트가 나를 알고 나를 먼저 도와주는 챗봇이 될 거라고 말합니다. 그는 2~3년 안에 모두가 AI 에이전트를 사용하게 될 것이라고 말하며, 그것이 그의 전망입니다. 따라서 사용하기 쉽고 저렴한 선택지를 마련하는 것이 중요합니다.</p>
+<p>영상이 도움이 되셨다면 구독과 좋아요 부탁드립니다. 시청해주셔서 감사합니다. 다음 영상에서 뵙겠습니다.</p>
+</details>
+</body></html>
